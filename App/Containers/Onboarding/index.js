@@ -60,7 +60,10 @@ class OnboardingScreen extends Component {
                                 source={this.state.isPlaying ? Images.pause : Images.play} />
                         </TouchableOpacity>
 
-                        <Button text={'SIGN IN'} />
+                        <Button
+                            text={'SIGN IN'}
+                            onPress={() => this.props.navigation.navigate('LoginScreen')}
+                        />
 
                         <View style={{ height: vs(12) }} />
 
@@ -68,6 +71,7 @@ class OnboardingScreen extends Component {
                             text={'CONTINUE'}
                             backgroundColor={Colors.white}
                             textColor={Colors.black}
+                            onPress={() => this.props.navigation.navigate('ExploreScreen')}
                         />
                     </View>
                 </SafeAreaView>

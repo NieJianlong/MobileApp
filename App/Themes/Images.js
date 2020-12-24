@@ -6,6 +6,12 @@ const images = {
   videoOnboarding: require('../Images/onboarding.mp4'),
   play: require('../Images/play.png'),
   pause: require('../Images/pause.png'),
+  location: require('../Images/location-filled.png'),
+  add1: require('../Images/add_medium.png'),
+  search: require('../Images/search.png'),
+  crossBold: require('../Images/cross_bold.png'),
+  crossMedium: require('../Images/cross_medium.png'),
+  view: require('../Images/view.png'),
 }
 
 export default images

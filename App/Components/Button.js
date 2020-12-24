@@ -8,6 +8,7 @@ import {
 import { ScaledSheet } from 'react-native-size-matters'
 import { Fonts, Colors } from '../Themes'
 import PropTypes from 'prop-types'
+import AppConfig from '../Config/AppConfig'
 
 class Button extends Component {
     render() {
@@ -18,6 +19,7 @@ class Button extends Component {
             backgroundColor,
             textColor,
             disabledColor,
+            prefixIcon
         } = this.props
 
         return (
@@ -25,6 +27,10 @@ class Button extends Component {
                 disabled={disabled}
                 style={[styles.container, { backgroundColor: backgroundColor }]}
                 onPress={onPress}>
+                {
+                    prefixIcon &&
+                    <Image style={[styles.icon, {tintColor: textColor}]} source={prefixIcon} />
+                }
                 <Text
                     style={[styles.txt, { color: textColor ?? Colors.white }]}
                 >{text}</Text>
@@ -50,17 +56,22 @@ Button.defaultProps = {
 
 const styles = ScaledSheet.create({
     container: {
-        height: '36@vs',
+        height: '40@vs',
         backgroundColor: '#7FFFD4',
-        borderRadius: '18@s',
+        borderRadius: '20@s',
         justifyContent: 'center',
         alignItems: 'center',
+        flexDirection: 'row'
     },
     txt: {
         color: 'rgb(24,24,101)',
-        fontSize: '14@s',
+        fontSize: AppConfig.fontSize,
         fontFamily: Fonts.semibold,
     },
+    icon: {
+        width: '20@s',
+        height: '20@s',
+        marginRight: '5@s'
+    }
 })
-
 export default Button

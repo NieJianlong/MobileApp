@@ -10,7 +10,14 @@ const colors = {
     background: '#F8F9FA',
     success: '#00DAA1',
     warning: '#FF8B00',
-    error: '#E42526'
+    error: '#E42526',
+    grey80: '#546171',
+    grey60: '#969EA8',
+    grey40: '#BBC0C6',
+    grey20: '#DDDFE3',
+    grey10: '#EEEFF1',
+    secondary00: '#409AEF',
+    secondary01: '#ECF5FD'
 }
 
 export default colors

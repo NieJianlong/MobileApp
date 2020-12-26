@@ -7,7 +7,6 @@ import {
     Keyboard
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import {
     TextInput,
@@ -87,7 +86,7 @@ class LoginScreen extends Component {
                                 <Text style={styles.txtAction}>I FORGOT MY PASSWORD</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('RegisterScreen')}>
                                 <Text style={styles.txtAction}>REGISTER</Text>
                             </TouchableOpacity>
                         </View>

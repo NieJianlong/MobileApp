@@ -4,6 +4,7 @@ import Highlighter from './Highlighter'
 import LocationSearchBox from './LocationSearchBox'
 import PasswordInput from './PasswordInput'
 import TextInput from './TextInput'
+import AppBar from './AppBar'
 
 export {
     BottomSheet,
@@ -11,5 +12,6 @@ export {
     Highlighter,
     LocationSearchBox,
     PasswordInput,
-    TextInput
+    TextInput,
+    AppBar
 }

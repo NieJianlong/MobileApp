@@ -1,3 +1,5 @@
+import { s, vs } from 'react-native-size-matters'
+
 import Fonts from './Fonts'
 import Metrics from './Metrics'
 import Colors from './Colors'
@@ -45,6 +47,23 @@ const ApplicationStyles = {
       ...Fonts.style.h2,
       fontSize: 14,
       color: Colors.text
+    },
+    txtAction: {
+      fontFamily: Fonts.semibold,
+      color: Colors.primary,
+      fontSize: s(15)
+    },
+    heading2Bold: {
+      fontSize: s(24),
+      fontFamily: Fonts.primary,
+      color: Colors.black,
+      fontWeight: '600'
+    },
+    heading4Regular: {
+      fontSize: s(16),
+      fontFamily: Fonts.primary,
+      color: Colors.black,
+      fontWeight: '400'
     }
   },
   darkLabelContainer: {
@@ -75,7 +94,7 @@ const ApplicationStyles = {
     borderColor: Colors.ember,
     alignItems: 'center',
     textAlign: 'center'
-  }
+  },
 }
 
 export default ApplicationStyles

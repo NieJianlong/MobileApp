@@ -12,6 +12,7 @@ const images = {
   crossBold: require('../Images/cross_bold.png'),
   crossMedium: require('../Images/cross_medium.png'),
   view: require('../Images/view.png'),
+  arrow_left: require('../Images/arrow_medium_left.png'),
 }
 
 export default images

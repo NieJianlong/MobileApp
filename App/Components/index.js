@@ -5,6 +5,7 @@ import LocationSearchBox from './LocationSearchBox'
 import PasswordInput from './PasswordInput'
 import TextInput from './TextInput'
 import AppBar from './AppBar'
+import Switch from './Switch'
 
 export {
     BottomSheet,
@@ -13,5 +14,6 @@ export {
     LocationSearchBox,
     PasswordInput,
     TextInput,
-    AppBar
+    AppBar,
+    Switch
 }

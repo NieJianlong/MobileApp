@@ -4,27 +4,28 @@ import {
     StatusBar,
     Text,
     TouchableOpacity,
-    Keyboard
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { vs } from 'react-native-size-matters'
 
 import {
     TextInput,
     Button,
     PasswordInput,
-    AppBar
+    AppBar,
+    Switch
 } from '../../Components'
 
 import { Colors, Images } from '../../Themes'
 import styles from './styles'
-import { vs } from 'react-native-size-matters'
+
 
 class RegisterScreen extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            keyboardHeight: 0,
+            
         }
     }
 
@@ -72,6 +73,17 @@ class RegisterScreen extends Component {
                             style={styles.textInput}
                             placeholder={'Enter your password'}
                         />
+
+                        <View style={styles.switch}>
+                            <Switch />
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('LegalScreen')}>
+                                <Text style={styles.txtAccept}>I accept
+                            <Text style={styles.txtPrivacy}> Privacy Policy </Text>
+                                and
+                            <Text style={styles.txtPrivacy}> Terms of use</Text>
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
 
                         <View style={{ flex: 1 }} />
 

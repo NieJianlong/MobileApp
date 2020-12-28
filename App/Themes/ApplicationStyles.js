@@ -53,8 +53,31 @@ const ApplicationStyles = {
       color: Colors.primary,
       fontSize: s(15)
     },
+    txtRegular: {
+      fontSize: s(14),
+      fontFamily: Fonts.primary,
+      color: Colors.grey80,
+    },
     heading2Bold: {
       fontSize: s(24),
+      fontFamily: Fonts.primary,
+      color: Colors.black,
+      fontWeight: '600'
+    },
+    heading3Bold: {
+      fontSize: s(18),
+      fontFamily: Fonts.primary,
+      color: Colors.black,
+      fontWeight: '600'
+    },
+    heading4Bold: {
+      fontSize: s(16),
+      fontFamily: Fonts.primary,
+      color: Colors.black,
+      fontWeight: '600'
+    },
+    heading5Bold: {
+      fontSize: s(14),
       fontFamily: Fonts.primary,
       color: Colors.black,
       fontWeight: '600'

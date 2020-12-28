@@ -46,6 +46,22 @@ export default ScaledSheet.create({
     btnSignin: {
         paddingTop: '20@vs',
         alignSelf: 'center',
-        marginBottom: '10@vs'
+        marginBottom: isIphoneX() ? 0 : '10@vs'
+    },
+    switch: {
+        marginTop: '24@vs',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    txtAccept: {
+        fontFamily: Fonts.primary,
+        color: Colors.black,
+        fontSize: '14@s',
+    },
+    txtPrivacy: {
+        fontFamily: Fonts.primary,
+        color: Colors.black,
+        fontSize: '14@s',
+        fontWeight: '600'
     }
 })

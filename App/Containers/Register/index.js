@@ -25,7 +25,7 @@ class RegisterScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            
+
         }
     }
 
@@ -87,9 +87,13 @@ class RegisterScreen extends Component {
 
                         <View style={{ flex: 1 }} />
 
-                        <Button text={'REGISTER'} />
+                        <Button
+                            onPress={() => this.props.navigation.navigate('ExploreScreen')}
+                            text={'REGISTER'} />
 
-                        <TouchableOpacity style={styles.btnSignin}>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.goBack()}
+                            style={styles.btnSignin}>
                             <Text style={styles.txtAction}>SIGN IN</Text>
                         </TouchableOpacity>
                     </View>

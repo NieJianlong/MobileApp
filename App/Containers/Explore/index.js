@@ -12,10 +12,13 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Animated from 'react-native-reanimated'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-import Button from '../../Components/Button'
-import BottomSheet from '../../Components/BottomSheet'
-import LocationSearchBox from '../../Components/LocationSearchBox'
-import TextInput from '../../Components/TextInput'
+import {
+    Button,
+    BottomSheet,
+    LocationSearchBox,
+    TextInput,
+    Alert
+} from '../../Components'
 
 import { Colors, Images } from '../../Themes'
 import styles from './styles'
@@ -30,6 +33,7 @@ class ExploreScreen extends Component {
             showLocationSheet: true,
             showAddLocationSheet: false,
             showAddAddressSheet: false,
+            showAccountActivatedAlert: true,
         }
     }
 
@@ -65,6 +69,16 @@ class ExploreScreen extends Component {
                 this.addAddressSheet.snapTo(1)
             }
         })
+    }
+
+    toggleAccountActivatedAlert = () => {
+        if (this.state.showAccountActivatedAlert) {
+            setTimeout(() => {
+                this.setState({ showAccountActivatedAlert: false })
+            }, 2100)
+        } else {
+            this.setState({ showAccountActivatedAlert: true })
+        }
     }
 
     renderAddressSheet() {
@@ -225,6 +239,7 @@ class ExploreScreen extends Component {
 
                 {this.renderAddAddressSheet()}
 
+                {/* background for bottom sheet */}
                 {
                     (this.state.showLocationSheet || this.state.showAddLocationSheet || this.state.showAddAddressSheet) &&
                     <TouchableWithoutFeedback
@@ -244,6 +259,13 @@ class ExploreScreen extends Component {
                         />
                     </TouchableWithoutFeedback>
                 }
+
+                <Alert
+                    visible={this.state.showAccountActivatedAlert}
+                    message={'Your account has been activated successfully'}
+                    color={Colors.success}
+                    onDismiss={this.toggleAccountActivatedAlert}
+                />
             </View>
         )
     }

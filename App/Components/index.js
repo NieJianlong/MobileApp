@@ -6,6 +6,7 @@ import PasswordInput from './PasswordInput'
 import TextInput from './TextInput'
 import AppBar from './AppBar'
 import Switch from './Switch'
+import Alert from './Alert'
 
 export {
     BottomSheet,
@@ -15,5 +16,6 @@ export {
     PasswordInput,
     TextInput,
     AppBar,
-    Switch
+    Switch,
+    Alert,
 }

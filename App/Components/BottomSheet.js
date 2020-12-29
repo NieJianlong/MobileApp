@@ -9,12 +9,8 @@ import { isIphoneX } from 'react-native-iphone-x-helper'
 
 import { Fonts, Colors } from '../Themes'
 import AppConfig from '../Config/AppConfig'
-import Animated from 'react-native-reanimated'
 
 class BottomSheet extends Component {
-
-    fall = new Animated.Value(1)
-
     render() {
         const {
             snapPoints,

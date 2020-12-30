@@ -10,7 +10,7 @@ import { Fonts, Colors } from '../Themes'
 import PropTypes from 'prop-types'
 import AppConfig from '../Config/AppConfig'
 
-class Button extends Component {
+class RadiusButton extends Component {
     render() {
         const {
             text,
@@ -25,11 +25,11 @@ class Button extends Component {
         return (
             <TouchableOpacity
                 disabled={disabled}
-                style={[styles.container, { backgroundColor: backgroundColor }, disabled && { opacity: 0.25 }]}
+                style={[styles.container, { backgroundColor: backgroundColor }]}
                 onPress={onPress}>
                 {
                     prefixIcon &&
-                    <Image style={[styles.icon, { tintColor: textColor }]} source={prefixIcon} />
+                    <Image style={[styles.icon, {tintColor: textColor}]} source={prefixIcon} />
                 }
                 <Text
                     style={[styles.txt, { color: textColor ?? Colors.white }]}
@@ -40,7 +40,7 @@ class Button extends Component {
 }
 
 
-Button.propTypes = {
+RadiusButton.propTypes = {
     text: PropTypes.string,
     onPress: PropTypes.any,
     disabled: PropTypes.bool,
@@ -49,19 +49,21 @@ Button.propTypes = {
     disabledColor: PropTypes.string,
 }
 
-Button.defaultProps = {
+RadiusButton.defaultProps = {
     backgroundColor: Colors.primary,
     textColor: Colors.white,
 }
 
 const styles = ScaledSheet.create({
     container: {
-        height: '40@vs',
+        height: '32@vs',
+        width: 'auto',
         backgroundColor: '#7FFFD4',
         borderRadius: '20@s',
         justifyContent: 'center',
         alignItems: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        paddingHorizontal: '10@s',
     },
     txt: {
         color: 'rgb(24,24,101)',
@@ -74,4 +76,4 @@ const styles = ScaledSheet.create({
         marginRight: '5@s'
     }
 })
-export default Button
+export default RadiusButton

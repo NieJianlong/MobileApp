@@ -65,7 +65,7 @@ class LegalScreen extends Component {
                         {this.renderSegmentedControl()}
 
                         <Text style={styles.heading2Bold}>{this.state.tabIndex === 0 ? 'Terms & Conditions' : 'Privacy Policy'}</Text>
-                        <Text style={styles.heading4Regular}>
+                        <Text style={styles.heading4Bold}>
                             Last updated: May 21, 2018
                         </Text>
 

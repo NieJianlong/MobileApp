@@ -83,7 +83,7 @@ const ApplicationStyles = {
       fontWeight: '600'
     },
     heading4Regular: {
-      fontSize: s(16),
+      fontSize: s(15),
       fontFamily: Fonts.primary,
       color: Colors.black,
       fontWeight: '400'

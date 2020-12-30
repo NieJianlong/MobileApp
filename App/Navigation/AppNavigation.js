@@ -9,6 +9,7 @@ import ExploreScreen from '../Containers/Explore'
 import LoginScreen from '../Containers/Login'
 import RegisterScreen from '../Containers/Register'
 import LegalScreen from '../Containers/Legal'
+import OTPScreen from '../Containers/OTP'
 
 const PrimaryNav = createStackNavigator({
     LaunchScreen: { screen: LaunchScreen },
@@ -16,7 +17,8 @@ const PrimaryNav = createStackNavigator({
     ExploreScreen: { screen: ExploreScreen },
     LoginScreen: { screen: LoginScreen },
     RegisterScreen: { screen: RegisterScreen },
-    LegalScreen: { screen: LegalScreen }
+    LegalScreen: { screen: LegalScreen },
+    OTPScreen: { screen: OTPScreen },
 }, {
     // Default config for all screens
     headerMode: 'none',

@@ -50,25 +50,44 @@ class Alert extends Component {
             title,
             color,
             visible,
-            onDismiss
+            onDismiss,
+            action
         } = this.props
 
         if (visible) {
             return (
                 <Animated.View style={[styles.container, { opacity: this.state.fadeAnim }]}>
-                    <SafeAreaView edges={['top', 'left', 'right']}
+                    <SafeAreaView
+                        edges={['top', 'left', 'right']}
                         style={styles.safeAreaView}
                     >
                         <View style={[styles.line, { backgroundColor: color }]} />
                         {
                             title ?
                                 <View style={styles.contentContainer}>
-                                    <Text style={styles.txt}>{title}</Text>
-                                    <Text style={styles.txt}>{message}</Text>
+                                    <View style={styles.row}>
+                                        <Text style={[styles.txtTitle, { color: color }]}>{title}</Text>
+
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                onDismiss()
+                                                this.fadeOut()
+                                            }}>
+                                            <Image style={styles.icClose} source={Images.crossMedium} />
+                                        </TouchableOpacity>
+                                    </View>
+                                    <Text style={styles.txtMsg}>{message}</Text>
+
+                                    {
+                                        action &&
+                                        <View style={styles.actionContainer}>
+                                            {action()}
+                                        </View>
+                                    }
                                 </View> :
                                 <View style={styles.contentContainer}>
                                     <View style={styles.row}>
-                                        <Text style={styles.txt}>{message}</Text>
+                                        <Text style={styles.txtTitle}>{message}</Text>
 
                                         <TouchableOpacity
                                             onPress={() => {
@@ -80,9 +99,8 @@ class Alert extends Component {
                                     </View>
                                 </View>
                         }
-
                     </SafeAreaView>
-                </Animated.View>
+                </Animated.View >
             )
         } else return null
     }
@@ -128,8 +146,11 @@ const styles = ScaledSheet.create({
         paddingHorizontal: AppConfig.paddingHorizontal,
         paddingVertical: '10@vs'
     },
-    txt: {
+    txtTitle: {
         ...ApplicationStyles.screen.heading4Bold
+    },
+    txtMsg: {
+        ...ApplicationStyles.screen.heading4Regular
     },
     icClose: {
         width: '20@s',
@@ -140,6 +161,10 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
+    },
+    actionContainer: {
+        marginTop: '10@vs',
+        marginBottom: '5@vs'
     }
 })
 export default Alert

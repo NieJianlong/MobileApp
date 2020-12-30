@@ -88,7 +88,7 @@ class RegisterScreen extends Component {
                         <View style={{ flex: 1 }} />
 
                         <Button
-                            onPress={() => this.props.navigation.navigate('ExploreScreen')}
+                            onPress={() => this.props.navigation.navigate('OTPScreen')}
                             text={'REGISTER'} />
 
                         <TouchableOpacity

@@ -17,7 +17,8 @@ import {
     BottomSheet,
     LocationSearchBox,
     TextInput,
-    Alert
+    Alert,
+    RadiusButton
 } from '../../Components'
 
 import { Colors, Images } from '../../Themes'
@@ -30,10 +31,11 @@ class ExploreScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            showLocationSheet: true,
+            showLocationSheet: false,
             showAddLocationSheet: false,
             showAddAddressSheet: false,
-            showAccountActivatedAlert: true,
+            showAccountActivatedSuccessfullyAlert: false,
+            showAccountActivateAlert: false
         }
     }
 
@@ -71,14 +73,18 @@ class ExploreScreen extends Component {
         })
     }
 
-    toggleAccountActivatedAlert = () => {
-        if (this.state.showAccountActivatedAlert) {
+    toggleAccountActivatedSuccessfullyAlert = () => {
+        if (this.state.showAccountActivatedSuccessfullyAlert) {
             setTimeout(() => {
-                this.setState({ showAccountActivatedAlert: false })
+                this.setState({ showAccountActivatedSuccessfullyAlert: false })
             }, 2100)
         } else {
-            this.setState({ showAccountActivatedAlert: true })
+            this.setState({ showAccountActivatedSuccessfullyAlert: true })
         }
+    }
+
+    toggleActivateAccountAlert = () => {
+
     }
 
     renderAddressSheet() {
@@ -196,6 +202,34 @@ class ExploreScreen extends Component {
         )
     }
 
+    renderAccountActivatedSuccessfullyAlert() {
+        return (
+            <Alert
+                visible={this.state.showAccountActivatedSuccessfullyAlert}
+                message={'Your account has been activated successfully'}
+                color={Colors.success}
+                onDismiss={this.toggleAccountActivatedSuccessfullyAlert}
+            />
+        )
+    }
+
+    renderActivateAccountAlert() {
+        return (
+            <Alert
+                visible={this.state.showAccountActivateAlert}
+                title={'Activate First'}
+                message={'You\'ve successfully registered your account. Please check your email for the activation link so can make full use of your account.'}
+                color={Colors.secondary00}
+                onDismiss={this.toggleActivateAccountAlert}
+                action={() =>
+                    <View style={{width: s(120)}}>
+                        <RadiusButton text={'RESEND EMAIL'} />
+                    </View>
+                }
+            />
+        )
+    }
+
     renderHeader() {
         return (
             <View style={styles.header}>
@@ -260,12 +294,9 @@ class ExploreScreen extends Component {
                     </TouchableWithoutFeedback>
                 }
 
-                <Alert
-                    visible={this.state.showAccountActivatedAlert}
-                    message={'Your account has been activated successfully'}
-                    color={Colors.success}
-                    onDismiss={this.toggleAccountActivatedAlert}
-                />
+                {this.renderAccountActivatedSuccessfullyAlert()}
+
+                {this.renderActivateAccountAlert()}
             </View>
         )
     }

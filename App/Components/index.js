@@ -7,6 +7,7 @@ import TextInput from './TextInput'
 import AppBar from './AppBar'
 import Switch from './Switch'
 import Alert from './Alert'
+import RadiusButton from './RadiusButton'
 
 export {
     BottomSheet,
@@ -18,4 +19,5 @@ export {
     AppBar,
     Switch,
     Alert,
+    RadiusButton,
 }

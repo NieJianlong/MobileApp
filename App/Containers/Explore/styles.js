@@ -51,5 +51,36 @@ export default ScaledSheet.create({
     },
     textInput: {
         marginBottom: '20@vs'
+    },
+    categoryItemContainer: {
+        paddingHorizontal: '12@s',
+        paddingBottom: '5@vs',
+
+        borderBottomColor: Colors.primary,
+        borderBottomWidth: 2
+    },
+    selectedCategoryIndicator: {
+        width: '100%', 
+        height: 2, 
+        backgroundColor: Colors.primary,
+        marginTop: '5@vs'
+    },
+    categryContainer: {
+        marginTop: '3@vs',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    icAdd: {
+        width: '25@s',
+        height: '25@s',
+        marginBottom: '5@vs'
+    },
+    btnAddContainer: {
+        width: '100@s',
+        alignItems: 'flex-end'
+    },
+    v1: {
+        position: 'absolute',
+        right: 0,
     }
 })

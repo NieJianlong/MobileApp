@@ -56,7 +56,7 @@ class Alert extends Component {
 
         if (visible) {
             return (
-                <Animated.View style={[styles.container, { opacity: this.state.fadeAnim }]}>
+                <Animated.View useNativeDriver={true} style={[styles.container, { opacity: this.state.fadeAnim }]}>
                     <SafeAreaView
                         edges={['top', 'left', 'right']}
                         style={styles.safeAreaView}

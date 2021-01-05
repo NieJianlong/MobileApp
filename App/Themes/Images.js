@@ -13,6 +13,13 @@ const images = {
   crossMedium: require('../Images/cross_medium.png'),
   view: require('../Images/view.png'),
   arrow_left: require('../Images/arrow_medium_left.png'),
+  packageFilled: require('../Images/package_filled.png'),
+  packageMed: require('../Images/package_med.png'),
+  cartFilled: require('../Images/cart_filled.png'),
+  cartMed: require('../Images/cart_med.png'),
+  likeFilled: require('../Images/like_filled.png'),
+  likeMed: require('../Images/like_med.png'),
+  dots: require('../Images/dots_med.png'),
 }
 
 export default images

@@ -27,16 +27,20 @@ class CustomTextInput extends Component {
             style,
             onFocus,
             onBlur,
+            onChangeText,
+            showError,
+            errorMessage,
         } = this.props
 
         return (
             <View>
-                <View style={[styles.container, style]}>
+                <View style={[styles.container, style, showError && styles.errorContainer]}>
                     <TextInput
                         placeholder={placeholder}
                         style={styles.textInput}
                         onFocus={onFocus}
                         onBlur={onBlur}
+                        onChangeText={onChangeText}
                     />
                     {/* {
                         this.state.keyword !== '' &&
@@ -47,6 +51,10 @@ class CustomTextInput extends Component {
                         </TouchableOpacity>
                     } */}
                 </View>
+                {
+                    errorMessage &&
+                    <Text style={styles.errorText}>{errorMessage}</Text>
+                }
             </View>
         )
     }
@@ -71,6 +79,9 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         paddingHorizontal: '10@s'
+    },
+    errorContainer: {
+        borderColor: Colors.error
     },
     icSearch: {
         width: '25@s',
@@ -97,6 +108,13 @@ const styles = ScaledSheet.create({
         fontSize: '14@s',
         fontFamily: Fonts.primary,
         color: Colors.black
+    },
+    errorText: {
+        fontFamily: Fonts.primary,
+        color: Colors.error,
+        fontSize: '14@s',
+        marginTop: '3@vs',
+        marginLeft: '15@s'
     }
 })
 export default CustomTextInput

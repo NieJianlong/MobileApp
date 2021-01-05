@@ -7,16 +7,17 @@ import {
     Keyboard
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { vs } from 'react-native-size-matters'
 
 import {
     TextInput,
     Button,
-    PasswordInput
+    PasswordInput,
+    Alert,
 } from '../../Components'
 
 import { Colors, Images } from '../../Themes'
 import styles from './styles'
-import { vs } from 'react-native-size-matters'
 
 class LoginScreen extends Component {
 
@@ -24,6 +25,7 @@ class LoginScreen extends Component {
         super(props)
         this.state = {
             keyboardHeight: 0,
+            showResetPasswordAlert: false,
         }
 
         Keyboard.addListener('keyboardWillShow', this._keyboardWillShow)
@@ -39,6 +41,10 @@ class LoginScreen extends Component {
         Keyboard.removeListener('keyboardWillHide', this._keyboardWillHide)
     }
 
+    toggleResetPasswordAlert = () => {
+        this.setState({ showResetPasswordAlert: !this.state.showResetPasswordAlert })
+    }
+
     _keyboardWillShow = (e) => {
         this.setState({
             keyboardHeight: e.endCoordinates.height
@@ -49,6 +55,18 @@ class LoginScreen extends Component {
         this.setState({
             keyboardHeight: 0
         })
+    }
+
+    renderResetPasswordAlert() {
+        return (
+            <Alert
+                visible={this.state.showResetPasswordAlert}
+                title={'Email/SMS Sent'}
+                message={'We have sent you an email, please use the link on it to proceed with your new password creation.'}
+                color={Colors.secondary00}
+                onDismiss={this.toggleResetPasswordAlert}
+            />
+        )
     }
 
     render() {
@@ -79,10 +97,15 @@ class LoginScreen extends Component {
 
                         <View style={{ height: this.state.keyboardHeight - vs(100) }} />
 
-                        <Button text={'SIGN IN'} />
+                        <Button
+                            onPress={() => {
+                                this.props.navigation.navigate('MainScreen')
+                            }}
+                            text={'SIGN IN'}
+                        />
 
                         <View style={styles.row}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('ForgotPasswordScreen')}>
                                 <Text style={styles.txtAction}>I FORGOT MY PASSWORD</Text>
                             </TouchableOpacity>
 
@@ -92,6 +115,8 @@ class LoginScreen extends Component {
                         </View>
                     </View>
                 </SafeAreaView>
+
+                {this.renderResetPasswordAlert()}
             </View>
         )
     }

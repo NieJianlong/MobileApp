@@ -5,12 +5,15 @@ import {
     Image,
     Text,
     TouchableWithoutFeedback,
-    TouchableOpacity
+    TouchableOpacity,
+    ScrollView,
+    FlatList
 } from 'react-native'
 import { vs, s } from 'react-native-size-matters'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Animated from 'react-native-reanimated'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import LinearGradient from 'react-native-linear-gradient'
 
 import {
     Button,
@@ -35,7 +38,9 @@ class ExploreScreen extends Component {
             showAddLocationSheet: false,
             showAddAddressSheet: false,
             showAccountActivatedSuccessfullyAlert: false,
-            showAccountActivateAlert: false
+            showAccountActivateAlert: false,
+
+            selectedCategory: 0
         }
     }
 
@@ -222,7 +227,7 @@ class ExploreScreen extends Component {
                 color={Colors.secondary00}
                 onDismiss={this.toggleActivateAccountAlert}
                 action={() =>
-                    <View style={{width: s(120)}}>
+                    <View style={{ width: s(120) }}>
                         <RadiusButton text={'RESEND EMAIL'} />
                     </View>
                 }
@@ -244,6 +249,42 @@ class ExploreScreen extends Component {
         )
     }
 
+    renderCategories() {
+        return (
+            <View style={styles.categryContainer}>
+                <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={categories}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item, index }) => {
+                        const isFocused = this.state.selectedCategory === index
+                        return (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.setState({ selectedCategory: index })
+                                }}
+                                style={[styles.categoryItemContainer, !isFocused && { borderBottomColor: 'transparent' }]}>
+                                <Text style={[styles.heading5Bold, { color: isFocused ? Colors.primary : Colors.grey60 }]}>
+                                    {item}
+                                </Text>
+                            </TouchableOpacity>
+                        )
+                    }}
+                />
+                <LinearGradient
+                    colors={['#ffffff00', Colors.background]}
+                    start={{x: 0.0, y: 0.0}} end={{x: 1.0, y: 0.0}}
+                    style={styles.v1}
+                >
+                    <TouchableOpacity style={styles.btnAddContainer}>
+                        <Image source={Images.add1} style={styles.icAdd} />
+                    </TouchableOpacity>
+                </LinearGradient>
+            </View>
+        )
+    }
+
     renderBody() {
         return (
             <View>
@@ -261,9 +302,11 @@ class ExploreScreen extends Component {
                     style={styles.mainContainer}
                     edges={['bottom', 'top', 'left', 'right']}>
 
-                    {this.renderHeader()}
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        {this.renderHeader()}
 
-                    {this.renderBody()}
+                        {this.renderCategories()}
+                    </ScrollView>
 
                 </SafeAreaView>
 
@@ -303,3 +346,5 @@ class ExploreScreen extends Component {
 }
 
 export default ExploreScreen
+
+const categories = ['All', 'Announcements', 'Electronics', 'Food & Beverage', 'Fashion']

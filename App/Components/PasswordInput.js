@@ -21,27 +21,35 @@ class PasswordInput extends Component {
     }
 
     render() {
-        
+
         const {
             placeholder,
-            style
+            style,
+            showError,
+            errorMessage,
+            onChangeText,
         } = this.props
 
         return (
             <View>
-                <View style={[styles.container, style]}>
+                <View style={[styles.container, style, showError && styles.errorContainer]}>
                     <TextInput
                         placeholder={placeholder}
                         style={styles.textInput}
                         secureTextEntry={!this.state.showPassword}
+                        onChangeText={onChangeText}
                     />
                     <TouchableOpacity
                         style={styles.btnView}
                         onPress={() => this.setState({ showPassword: !this.state.showPassword })}
                     >
-                        <Image source={Images.view} style={[styles.icView, this.state.showPassword && {tintColor: Colors.grey80}]} />
+                        <Image source={Images.view} style={[styles.icView, this.state.showPassword && { tintColor: Colors.grey80 }]} />
                     </TouchableOpacity>
                 </View>
+                {
+                    (errorMessage && showError) &&
+                    <Text style={styles.errorText}>{errorMessage}</Text>
+                }
             </View>
         )
     }
@@ -67,6 +75,9 @@ const styles = ScaledSheet.create({
         flexDirection: 'row',
         paddingHorizontal: '10@s'
     },
+    errorContainer: {
+        borderColor: Colors.error
+    },
     icSearch: {
         width: '25@s',
         height: '25@s',
@@ -90,6 +101,13 @@ const styles = ScaledSheet.create({
         fontSize: '14@s',
         fontFamily: Fonts.primary,
         color: Colors.black
+    },
+    errorText: {
+        fontFamily: Fonts.primary,
+        color: Colors.error,
+        fontSize: '14@s',
+        marginTop: '3@vs',
+        marginLeft: '15@s'
     }
 })
 export default PasswordInput

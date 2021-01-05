@@ -8,6 +8,7 @@ import AppBar from './AppBar'
 import Switch from './Switch'
 import Alert from './Alert'
 import RadiusButton from './RadiusButton'
+import MaterialTextInput from './MaterialTextInput'
 
 export {
     BottomSheet,
@@ -20,4 +21,5 @@ export {
     Switch,
     Alert,
     RadiusButton,
+    MaterialTextInput
 }

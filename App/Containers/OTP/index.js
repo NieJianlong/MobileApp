@@ -9,7 +9,8 @@ import {
     Keyboard
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import OTPInputView from '@twotalltotems/react-native-otp-input'
+import { isIphoneX } from 'react-native-iphone-x-helper'
+import { vs } from 'react-native-size-matters'
 
 import {
     AppBar,
@@ -18,8 +19,7 @@ import {
 import { Colors } from '../../Themes'
 
 import styles from './styles'
-import { isIphoneX } from 'react-native-iphone-x-helper'
-import { vs } from 'react-native-size-matters'
+
 
 class OTPScreen extends Component {
 
@@ -152,7 +152,13 @@ class OTPScreen extends Component {
                         this.state.field3 === '' ||
                         this.state.field4 === ''
                     }
-                    onPress={() => this.props.navigation.navigate('ExploreScreen')}
+                    onPress={() => {
+                        if (this.props.navigation.state.params.fromScreen === 'ForgotPasswordScreen') {
+                            this.props.navigation.navigate('CreateNewPasswordScreen')
+                        } else {
+                            this.props.navigation.navigate('ExploreScreen')
+                        }
+                    }}
                     text={'VALIDATE'} />
 
                 <View style={{ height: this.state.keyboardHeight > 0 ? this.state.keyboardHeight : isIphoneX() ? 0 : vs(15) }} />

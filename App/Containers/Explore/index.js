@@ -21,11 +21,13 @@ import {
     LocationSearchBox,
     TextInput,
     Alert,
-    RadiusButton
+    RadiusButton,
+    StarRating
 } from '../../Components'
 
 import { Colors, Images } from '../../Themes'
 import styles from './styles'
+import AppConfig from '../../Config/AppConfig'
 
 class ExploreScreen extends Component {
 
@@ -40,7 +42,8 @@ class ExploreScreen extends Component {
             showAccountActivatedSuccessfullyAlert: false,
             showAccountActivateAlert: false,
 
-            selectedCategory: 0
+            selectedCategory: 0,
+            showProductAsRows: true
         }
     }
 
@@ -253,6 +256,7 @@ class ExploreScreen extends Component {
         return (
             <View style={styles.categryContainer}>
                 <FlatList
+                    contentContainerStyle={styles.categoryListContainer}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     data={categories}
@@ -273,8 +277,8 @@ class ExploreScreen extends Component {
                     }}
                 />
                 <LinearGradient
-                    colors={['#ffffff00', Colors.background]}
-                    start={{x: 0.0, y: 0.0}} end={{x: 1.0, y: 0.0}}
+                    colors={['#ffffff00', Colors.white]}
+                    start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 0.0 }}
                     style={styles.v1}
                 >
                     <TouchableOpacity style={styles.btnAddContainer}>
@@ -285,10 +289,118 @@ class ExploreScreen extends Component {
         )
     }
 
-    renderBody() {
+    renderAddressBar() {
+        return (
+            <View style={styles.addressBarContainer} >
+                <View style={styles.row}>
+                    <Image source={Images.locationMed} style={styles.icLocation} />
+                    <Text style={styles.heading5Regular}>Deliver to - Tanil Nadu 12345</Text>
+                    <View style={styles.areaContainer}>
+                        <Text style={styles.heading6Bold}>Area 4</Text>
+                    </View>
+                </View>
+
+                <TouchableOpacity>
+                    <Image source={Images.arrow_left} style={styles.icArrowDown} />
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    renderStickyParts() {
         return (
             <View>
+                {this.renderCategories()}
+                {this.renderAddressBar()}
+            </View>
+        )
+    }
 
+
+
+    renderSortBar() {
+        return (
+            <View style={styles.sortBarContainer} >
+                <TouchableOpacity style={styles.row}>
+                    <Image source={Images.arrow_left} style={styles.icArrowDown2} />
+                    <Text style={styles.txtBold}>Last Added</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => {
+                    this.setState({ showProductAsRows: !this.state.showProductAsRows })
+                }}>
+                    <Image
+                        source={this.state.showProductAsRows ? Images.sortRows : Images.sortSquares}
+                        style={styles.icSort}
+                    />
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    renderProduct = (item, index) => {
+        return (
+            <View style={styles.productContainer} key={index.toString()}>
+                <View style={[styles.row, { paddingHorizontal: AppConfig.paddingHorizontal }]}>
+                    <Image source={{ uri: item.picture }} style={styles.productImage} />
+
+                    <View style={styles.v2}>
+                        <View>
+                            <Text style={styles.heading4Bold}>{item.name}</Text>
+                            <StarRating rating={item.rating} ratingCount={item.ratingCount} />
+                        </View>
+                        <View style={styles.row}>
+                            <View style={styles.v3}>
+                                <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
+                                <Text style={styles.txtRetailPrice}>${item.retailPrice}</Text>
+                            </View>
+
+                            <View style={styles.v3}>
+                                <Text style={[styles.txtNoteBold, { color: Colors.black }]}>WHOLE SALE PRICE</Text>
+                                <Text style={styles.txtWholesalePrice}>${item.wholesalePrice}</Text>
+                            </View>
+
+                            <View style={styles.percentOffContainer}>
+                                <Text style={[styles.heading6Bold, { color: Colors.secondary00 }]}>30% OFF</Text>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+
+                <View style={styles.v4}>
+                    <View>
+                        <Text style={styles.txtOrderClose}>Order closes on:</Text>
+                        <Text style={styles.heading6Regular}>{item.orderClose}</Text>
+                    </View>
+
+                    <View style={styles.row}>
+                        <Image source={Images.stock} style={styles.icStock} />
+                        <Text style={styles.txtOrderNumber}>{item.orderCount}/{item.inStock}</Text>
+                        <TouchableOpacity>
+                            <Image source={Images.info2} style={styles.icInfo} />
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.row}>
+                        <TouchableOpacity>
+                            <Image source={Images.likeMed} style={styles.icShare} />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity>
+                            <Image source={Images.share} style={styles.icShare} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        )
+    }
+
+    renderProducList() {
+        return (
+            <View style={styles.prodListContainer}>
+                {
+                    products.map((item, index) => this.renderProduct(item, index))
+                }
             </View>
         )
     }
@@ -302,10 +414,16 @@ class ExploreScreen extends Component {
                     style={styles.mainContainer}
                     edges={['bottom', 'top', 'left', 'right']}>
 
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <ScrollView
+                        stickyHeaderIndices={[1]}
+                        showsVerticalScrollIndicator={false}>
                         {this.renderHeader()}
 
-                        {this.renderCategories()}
+                        {this.renderStickyParts()}
+
+                        {this.renderSortBar()}
+
+                        {this.renderProducList()}
                     </ScrollView>
 
                 </SafeAreaView>
@@ -348,3 +466,72 @@ class ExploreScreen extends Component {
 export default ExploreScreen
 
 const categories = ['All', 'Announcements', 'Electronics', 'Food & Beverage', 'Fashion']
+
+const products = [
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 4.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    }
+]

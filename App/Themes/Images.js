@@ -20,6 +20,15 @@ const images = {
   likeFilled: require('../Images/like_filled.png'),
   likeMed: require('../Images/like_med.png'),
   dots: require('../Images/dots_med.png'),
+  locationMed: require('../Images/location_medium.png'),
+  sortRows: require('../Images/sort-rows.png'),
+  sortSquares: require('../Images/sort-squares.png'),
+  starFilled: require('../Images/star_filled.png'),
+  stock: require('../Images/pie-chart.png'),
+  share: require('../Images/connect_medium.png'),
+  info1: require('../Images/info_01.png'),
+  info2: require('../Images/info_02.png'),
+  verification: require('../Images/verification.png'),
 }
 
 export default images

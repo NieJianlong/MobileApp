@@ -76,8 +76,8 @@ const styles = ScaledSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingBottom: isIphoneX() ? '0@vs' : '10@vs',
-        paddingTop: '10@vs'
+        paddingBottom: isIphoneX() ? '0@vs' : '8@vs',
+        paddingTop: '8@vs'
     },
     iconContainer: {
         flex: 1,
@@ -85,8 +85,8 @@ const styles = ScaledSheet.create({
         justifyContent: 'center',
     },
     icon: {
-        width: '35@s',
-        height: '35@s',
+        width: '30@s',
+        height: '30@s',
         tintColor: Colors.grey60
     }
 })

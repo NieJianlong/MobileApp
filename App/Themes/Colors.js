@@ -17,7 +17,8 @@ const colors = {
     grey20: '#DDDFE3',
     grey10: '#EEEFF1',
     secondary00: '#409AEF',
-    secondary01: '#ECF5FD'
+    secondary01: '#ECF5FD',
+    star: '#FDD446'
 }
 
 export default colors

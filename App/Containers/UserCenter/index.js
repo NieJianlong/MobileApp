@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-07 16:12:07
- * @LastEditTime: 2021-01-07 20:40:49
+ * @LastEditTime: 2021-01-07 20:55:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /MobileApp/App/Containers/UserCenter/index.js
@@ -22,8 +22,8 @@ import MediumImage from '../../Images/usercenter/Medium.png';
 import SettingImage from '../../Images/usercenter/setting.png';
 import StarImage from '../../Images/usercenter/star.png';
 import colors from '../../Themes/Colors';
+import UserHeader from './UserHeader';
 
-const textTip = "You haven't add any personal \n details yet";
 const items = [
   {
     title: 'Salami Credit',
@@ -66,14 +66,8 @@ const buttons = [
 function index(props) {
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <SafeAreaView>
-          <Text style={styles.nosign}>{textTip}</Text>
-        </SafeAreaView>
-        <View style={styles.signbtn}>
-          <Button text="SIGN IN"></Button>
-        </View>
-      </View>
+      <UserHeader></UserHeader>
+     
       {/* All the items usercenter */}
       <View style={styles.itemContainer}>
         {items.map((item, index) => (

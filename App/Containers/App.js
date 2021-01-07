@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import RootContainer from './Root'
+import UserCenter from './UserCenter';
 
 class App extends Component {
+    
     render() {
         return (
-            <RootContainer />
+          <RootContainer />
+            // <UserCenter></UserCenter>
         )
     }
 }

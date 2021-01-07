@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-01-06 22:25:12
- * @LastEditTime: 2021-01-07 18:55:35
+ * @LastEditTime: 2021-01-07 21:53:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /MobileApp/App/Navigation/AppNavigation.js
@@ -22,7 +22,7 @@ import OTPScreen from '../Containers/OTP'
 import ForgotPasswordScreen from '../Containers/ForgotPassword'
 import CreateNewPasswordScreen from '../Containers/CreateNewPassword'
 import UserCenter from '../Containers/UserCenter'
-
+import NavigationService from './NavigationService';
 import TabBar from './TabBar'
 
 const TabNav = createBottomTabNavigator({
@@ -57,4 +57,16 @@ const PrimaryNav = createStackNavigator({
     }
 })
 
-export default createAppContainer(PrimaryNav)
+
+  const AppContainer = createAppContainer(PrimaryNav);
+  export default class AppRouter extends React.Component {
+    render() {
+      return (
+        <AppContainer
+          ref={navigatorRef => {
+            NavigationService.setTopLevelNavigator(navigatorRef);
+          }}
+        />
+      );
+    }
+  }

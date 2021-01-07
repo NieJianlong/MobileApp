@@ -1,9 +1,9 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-07 17:09:47
- * @LastEditTime: 2021-01-07 18:52:08
+ * @LastEditTime: 2021-01-07 20:30:06
  * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
+ * @Description: UserCenter item 
  * @FilePath: /MobileApp/App/Containers/UserCenter/ItemBox.js
  */
 import React from 'react';
@@ -15,7 +15,7 @@ function ItemBox(props) {
     return (
        
             <View style={styles.container}>
-                <Image source={icon}></Image>
+                <Image style={styles.icon} source={icon}></Image>
                 <Text style={styles.itemText}>{title}</Text>
             </View>
        
@@ -25,9 +25,16 @@ function ItemBox(props) {
 export default ItemBox;
 
 const styles = ScaledSheet.create({
+    icon:{
+        width:'100%',
+        height:'30@s',
+        marginBottom:10,
+        resizeMode:'contain'
+    },
     container: {
      height:'94@s',
      width:'94@s',
+     justifyContent:'center',
      backgroundColor:'white',
      borderRadius:'18@s',
      marginTop:'15@s',

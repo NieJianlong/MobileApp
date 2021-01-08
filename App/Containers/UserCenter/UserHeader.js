@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-07 20:46:07
- * @LastEditTime: 2021-01-07 22:10:19
+ * @LastEditTime: 2021-01-07 22:16:06
  * @LastEditors: Please set LastEditors
  * @Description: User center header layout
  * @FilePath: /MobileApp/App/Containers/UserCenter/UserHeader.js
@@ -24,7 +24,7 @@ import NavigationService from '../../Navigation/NavigationService'
  */
 function UserHeader(props) {
   const textTip = "You haven't add any personal \n details yet";
-  const [islogin, setIslogin] = useState(true);
+  const [islogin, setIslogin] = useState(false);
   return (
     <View style={styles.headerContainer}>
       {islogin ? (

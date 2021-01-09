@@ -24,6 +24,7 @@ import {
     RadiusButton,
     StarRating
 } from '../../Components'
+import CheckBox from './CheckBox'
 
 import { Colors, Images } from '../../Themes'
 import styles from './styles'
@@ -41,9 +42,11 @@ class ExploreScreen extends Component {
             showAddAddressSheet: false,
             showAccountActivatedSuccessfullyAlert: false,
             showAccountActivateAlert: false,
+            showSortBySheet: false,
 
             selectedCategory: 0,
-            showProductAsRows: true
+            showProductAsRows: true,
+            sortOption: 1,
         }
     }
 
@@ -77,6 +80,16 @@ class ExploreScreen extends Component {
                 this.addAddressSheet.snapTo(0)
             } else {
                 this.addAddressSheet.snapTo(1)
+            }
+        })
+    }
+
+    toggleSortBySheet = () => {
+        this.setState({ showSortBySheet: !this.state.showSortBySheet }, () => {
+            if (this.state.showSortBySheet) {
+                this.sortBySheet.snapTo(0)
+            } else {
+                this.sortBySheet.snapTo(1)
             }
         })
     }
@@ -210,6 +223,36 @@ class ExploreScreen extends Component {
         )
     }
 
+    renderSortBySheet() {
+        return (
+            <BottomSheet
+                customRef={ref => {
+                    this.sortBySheet = ref
+                }}
+                onCloseEnd={() => this.setState({ showSortBySheet: false })}
+                callbackNode={this.fall}
+                snapPoints={[vs(320), 0]}
+                initialSnap={this.state.showSortBySheet ? 0 : 1}
+                title={'Sort By'}>
+                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    {
+                        sortOptions.map((i, index) => {
+                            return (
+                                <View key={index.toString()}>
+                                    <View style={{ height: vs(12) }} />
+                                    <CheckBox
+                                        defaultValue={this.state.sortOption === index}
+                                        onSwitch={(t) => this.setState({ sortOption: index })}
+                                        label={i} />
+                                </View>
+                            )
+                        })
+                    }
+                </View>
+            </BottomSheet>
+        )
+    }
+
     renderAccountActivatedSuccessfullyAlert() {
         return (
             <Alert
@@ -316,14 +359,14 @@ class ExploreScreen extends Component {
         )
     }
 
-
-
     renderSortBar() {
         return (
             <View style={styles.sortBarContainer} >
-                <TouchableOpacity style={styles.row}>
+                <TouchableOpacity
+                    onPress={this.toggleSortBySheet}
+                    style={styles.row}>
                     <Image source={Images.arrow_left} style={styles.icArrowDown2} />
-                    <Text style={styles.txtBold}>Last Added</Text>
+                    <Text style={styles.txtBold}>{sortOptions[this.state.sortOption]}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => {
@@ -341,31 +384,59 @@ class ExploreScreen extends Component {
     renderProduct = (item, index) => {
         return (
             <View style={styles.productContainer} key={index.toString()}>
-                <View style={[styles.row, { paddingHorizontal: AppConfig.paddingHorizontal }]}>
-                    <Image source={{ uri: item.picture }} style={styles.productImage} />
+                {
+                    this.state.showProductAsRows ?
+                        <View style={[styles.row, { paddingHorizontal: AppConfig.paddingHorizontal }]}>
+                            <Image source={{ uri: item.picture }} style={styles.productImage} />
 
-                    <View style={styles.v2}>
-                        <View>
-                            <Text style={styles.heading4Bold}>{item.name}</Text>
-                            <StarRating rating={item.rating} ratingCount={item.ratingCount} />
+                            <View style={styles.v2}>
+                                <View>
+                                    <Text style={styles.heading4Bold}>{item.name}</Text>
+                                    <StarRating rating={item.rating} ratingCount={item.ratingCount} />
+                                </View>
+                                <View style={styles.row}>
+                                    <View style={styles.v3}>
+                                        <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
+                                        <Text style={styles.txtRetailPrice}>${item.retailPrice}</Text>
+                                    </View>
+
+                                    <View style={styles.v3}>
+                                        <Text style={[styles.txtNoteBold, { color: Colors.black }]}>WHOLE SALE PRICE</Text>
+                                        <Text style={styles.txtWholesalePrice}>${item.wholesalePrice}</Text>
+                                    </View>
+
+                                    <View style={styles.percentOffContainer}>
+                                        <Text style={[styles.heading6Bold, { color: Colors.secondary00 }]}>30% OFF</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </View> :
+                        <View style={[{ paddingHorizontal: AppConfig.paddingHorizontal }]}>
+                            <Image source={{ uri: item.picture }} style={styles.productImageBig} />
+
+                            <View style={styles.v2}>
+                                <View>
+                                    <Text style={styles.heading4Bold}>{item.name}</Text>
+                                    <StarRating rating={item.rating} ratingCount={item.ratingCount} />
+                                </View>
+                                <View style={styles.row}>
+                                    <View style={styles.v3}>
+                                        <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
+                                        <Text style={styles.txtRetailPrice}>${item.retailPrice}</Text>
+                                    </View>
+
+                                    <View style={styles.v3}>
+                                        <Text style={[styles.txtNoteBold, { color: Colors.black }]}>WHOLE SALE PRICE</Text>
+                                        <Text style={styles.txtWholesalePrice}>${item.wholesalePrice}</Text>
+                                    </View>
+
+                                    <View style={styles.percentOffContainer}>
+                                        <Text style={[styles.heading6Bold, { color: Colors.secondary00 }]}>30% OFF</Text>
+                                    </View>
+                                </View>
+                            </View>
                         </View>
-                        <View style={styles.row}>
-                            <View style={styles.v3}>
-                                <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
-                                <Text style={styles.txtRetailPrice}>${item.retailPrice}</Text>
-                            </View>
-
-                            <View style={styles.v3}>
-                                <Text style={[styles.txtNoteBold, { color: Colors.black }]}>WHOLE SALE PRICE</Text>
-                                <Text style={styles.txtWholesalePrice}>${item.wholesalePrice}</Text>
-                            </View>
-
-                            <View style={styles.percentOffContainer}>
-                                <Text style={[styles.heading6Bold, { color: Colors.secondary00 }]}>30% OFF</Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>
+                }
 
                 <View style={styles.v4}>
                     <View>
@@ -412,7 +483,7 @@ class ExploreScreen extends Component {
 
                 <SafeAreaView
                     style={styles.mainContainer}
-                    edges={['bottom', 'top', 'left', 'right']}>
+                    edges={['top', 'left', 'right']}>
 
                     <ScrollView
                         stickyHeaderIndices={[1]}
@@ -434,9 +505,15 @@ class ExploreScreen extends Component {
 
                 {this.renderAddAddressSheet()}
 
+                {this.renderSortBySheet()}
+
                 {/* background for bottom sheet */}
                 {
-                    (this.state.showLocationSheet || this.state.showAddLocationSheet || this.state.showAddAddressSheet) &&
+                    (this.state.showLocationSheet ||
+                        this.state.showAddLocationSheet ||
+                        this.state.showAddAddressSheet ||
+                        this.state.showSortBySheet
+                    ) &&
                     <TouchableWithoutFeedback
                         onPress={() => {
 
@@ -466,6 +543,13 @@ class ExploreScreen extends Component {
 export default ExploreScreen
 
 const categories = ['All', 'Announcements', 'Electronics', 'Food & Beverage', 'Fashion']
+
+const sortOptions = [
+    'About to be completed',
+    'Last added',
+    'Price: low to high',
+    'Price: high to low',
+]
 
 const products = [
     {

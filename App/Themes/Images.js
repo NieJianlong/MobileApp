@@ -29,6 +29,7 @@ const images = {
   info1: require('../Images/info_01.png'),
   info2: require('../Images/info_02.png'),
   verification: require('../Images/verification.png'),
+  check: require('../Images/check2.png'),
   userDocImage:require('../Images/usercenter/Document.png'),
   userIconImage:require('../Images/usercenter/Icon.png'),
   userLogoImage:require('../Images/usercenter/Logo.png'),

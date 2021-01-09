@@ -10,7 +10,7 @@ export default ScaledSheet.create({
     },
     mainContainer: {
         flex: 1,
-        //paddingHorizontal: AppConfig.paddingHorizontal
+        //paddingHorizontal: AppConfig.paddingHorizontal,
     },
     greyBackground: {
         position: 'absolute',
@@ -158,6 +158,10 @@ export default ScaledSheet.create({
     productImage: {
         width: '88@s',
         height: '88@s'
+    },
+    productImageBig: {
+        width: '300@s',
+        height: '300@s'
     },
     v2: {
         justifyContent: 'space-between',

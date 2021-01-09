@@ -35,6 +35,13 @@ const images = {
   userMediumImage:require('../Images/usercenter/Medium.png'),
   userSettingImage:require('../Images/usercenter/setting.png'),
   userStarImage:require('../Images/usercenter/star.png'),
+  userPayImage:require('../Images/usercenter/pay.png'),
+  userUPayImage:require('../Images/usercenter/upay.png'),
+  userBillingImage:require('../Images/usercenter/billing.png'),
+  userUBillingImage:require('../Images/usercenter/ubiling.png'),
+  userPurchaseImage:require('../Images/usercenter/purchase.png'),
+  userAddressImage:require('../Images/usercenter/address.png'),
+  userUAddressImage:require('../Images/usercenter/uaddress.png')
 }
 
 export default images

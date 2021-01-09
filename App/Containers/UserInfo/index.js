@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-08 15:54:53
- * @LastEditTime: 2021-01-08 17:51:39
+ * @LastEditTime: 2021-01-09 11:02:15
  * @LastEditors: Please set LastEditors
  * @Description: UserInfo Screen
  * @FilePath: /MobileApp/App/Containers/UserInfo/index.js
@@ -14,6 +14,7 @@ import AppConfig from '../../Config/AppConfig';
 import {AppBar} from '../../Components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import colors from '../../Themes/Colors';
+import HorizontalMenu from './HorizontalMenu';
 
 class index extends React.Component {
   
@@ -28,7 +29,7 @@ class index extends React.Component {
         <View >
           <UserHeader></UserHeader>
         </View>
-        
+        <HorizontalMenu></HorizontalMenu>
       </View>
     );
   }

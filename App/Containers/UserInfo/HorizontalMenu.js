@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-08 17:53:05
- * @LastEditTime: 2021-01-09 12:56:40
+ * @LastEditTime: 2021-01-09 13:10:57
  * @LastEditors: Please set LastEditors
  * @Description: UserInfo Horizontal Menu
  * @FilePath: /MobileApp/App/Containers/UserInfo/HorizontalMenu.js
@@ -16,6 +16,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import colors from '../../Themes/Colors';
 import DynamicTabView from './DynamicTabView';
 import images from '../../Themes/Images';
+import NoPurchase from './NoPurchase';
 
 class HorizontalMenu extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class HorizontalMenu extends React.Component {
         title: '1 Click Purchasing',
         icon: images.userPurchaseImage,
         selectedIcon: images.userPurchaseImage,
+        screen:NoPurchase,
         key: 'item1',
         color: 'blue',
       },
@@ -58,19 +60,10 @@ class HorizontalMenu extends React.Component {
   _renderItem = (item, index) => {
     console.log('renderItem', index);
     return (
-      <View
-        key={item['key']}
-        style={{backgroundColor: item['color'], flex: 1}}
-      />
+      <NoPurchase/>
     );
   };
-  _costomBar = ({item, index}) => {
-    return (
-      <View style={{backgroundColor: 'yellow', height: 60, width: 200}}>
-        <Text>{item.title}</Text>
-      </View>
-    );
-  };
+
   render() {
     return (
       <DynamicTabView
@@ -83,7 +76,6 @@ class HorizontalMenu extends React.Component {
         noHighlightStyle={{color:'gray'}}
         headerTextStyle={styles.headerText}
         onChangeTab={this.onChangeTab}
-        customTabbar={this._costomBar}
         headerUnderlayColor={'transparent'}
       />
     );

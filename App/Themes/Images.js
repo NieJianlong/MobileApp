@@ -41,7 +41,11 @@ const images = {
   userUBillingImage:require('../Images/usercenter/ubiling.png'),
   userPurchaseImage:require('../Images/usercenter/purchase.png'),
   userAddressImage:require('../Images/usercenter/address.png'),
-  userUAddressImage:require('../Images/usercenter/uaddress.png')
+  userUAddressImage:require('../Images/usercenter/uaddress.png'),
+  
+  userLogoutImage:require('../Images/usercenter/logout.png'),
+  userChangePwdImage:require('../Images/usercenter/changepwd.png'),
+  userRightBtnImage:require('../Images/usercenter/rightarrow.png')
 }
 
 export default images

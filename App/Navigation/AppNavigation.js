@@ -1,11 +1,3 @@
-/*
- * @Author: your name
- * @Date: 2021-01-06 22:25:12
- * @LastEditTime: 2021-01-07 21:53:49
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: /MobileApp/App/Navigation/AppNavigation.js
- */
 import * as React from 'react'
 
 import { createAppContainer } from 'react-navigation'
@@ -22,6 +14,7 @@ import OTPScreen from '../Containers/OTP'
 import ForgotPasswordScreen from '../Containers/ForgotPassword'
 import CreateNewPasswordScreen from '../Containers/CreateNewPassword'
 import UserCenter from '../Containers/UserCenter'
+import UserInfoScreen from '../Containers/UserInfo'
 import NavigationService from './NavigationService';
 import TabBar from './TabBar'
 
@@ -38,13 +31,14 @@ const TabNav = createBottomTabNavigator({
 })
 
 const PrimaryNav = createStackNavigator({
-    LaunchScreen: { screen: LaunchScreen },
+    LaunchScreen: { screen: LaunchScreen,headerMode: "node",navigationOptions:{headerShown:false} },
     MainScreen: { screen: TabNav },
-    OnboardingScreen: { screen: OnboardingScreen },
+    OnboardingScreen: { screen: OnboardingScreen,headerMode: "node",navigationOptions:{headerShown:false} },
     ExploreScreen: { screen: ExploreScreen },
     LoginScreen: { screen: LoginScreen },
     RegisterScreen: { screen: RegisterScreen },
     LegalScreen: { screen: LegalScreen },
+    UserInfoScreen: { screen: UserInfoScreen,headerMode: "screen",navigationOptions:{headerShown:true} },
     OTPScreen: { screen: OTPScreen },
     ForgotPasswordScreen: { screen: ForgotPasswordScreen },
     CreateNewPasswordScreen: { screen: CreateNewPasswordScreen }

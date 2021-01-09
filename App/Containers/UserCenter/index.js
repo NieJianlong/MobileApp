@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-07 16:12:07
- * @LastEditTime: 2021-01-07 20:55:16
+ * @LastEditTime: 2021-01-09 09:28:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /MobileApp/App/Containers/UserCenter/index.js
@@ -15,39 +15,34 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Fonts from '../../Themes/Fonts';
 import AppConfig from '../../Config/AppConfig';
 import ItemBox from './ItemBox';
-import DocImage from '../../Images/usercenter/Document.png';
-import IconImage from '../../Images/usercenter/Icon.png';
-import LogoImage from '../../Images/usercenter/Logo.png';
-import MediumImage from '../../Images/usercenter/Medium.png';
-import SettingImage from '../../Images/usercenter/setting.png';
-import StarImage from '../../Images/usercenter/star.png';
 import colors from '../../Themes/Colors';
 import UserHeader from './UserHeader';
+import images from '../../Themes/Images';
 
 const items = [
   {
     title: 'Salami Credit',
-    icon: LogoImage,
+    icon: images.userLogoImage,
   },
   {
     title: 'Notifications',
-    icon: IconImage,
+    icon: images.userIconImage,
   },
   {
     title: 'Settings',
-    icon: SettingImage,
+    icon: images.userSettingImage,
   },
   {
     title: 'Support',
-    icon: MediumImage,
+    icon: images.userMediumImage,
   },
   {
     title: 'Feedback',
-    icon: StarImage,
+    icon: images.userStarImage,
   },
   {
     title: 'Legal',
-    icon: DocImage,
+    icon: images.userDocImage,
   },
 ];
 const buttons = [
@@ -66,7 +61,7 @@ const buttons = [
 function index(props) {
   return (
     <View style={styles.container}>
-      <UserHeader></UserHeader>
+      <UserHeader needSafeArea></UserHeader>
      
       {/* All the items usercenter */}
       <View style={styles.itemContainer}>

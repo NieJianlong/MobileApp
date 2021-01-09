@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-07 20:46:07
- * @LastEditTime: 2021-01-07 22:16:06
+ * @LastEditTime: 2021-01-09 09:30:36
  * @LastEditors: Please set LastEditors
  * @Description: User center header layout
  * @FilePath: /MobileApp/App/Containers/UserCenter/UserHeader.js
@@ -15,7 +15,7 @@ import AppConfig from '../../Config/AppConfig';
 import {Button} from '../../Components';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import NavigationService from '../../Navigation/NavigationService'
+import NavigationService from '../../Navigation/NavigationService';
 /**
  *
  * UserHeader
@@ -23,36 +23,17 @@ import NavigationService from '../../Navigation/NavigationService'
  * @return View
  */
 function UserHeader(props) {
+  const {needSafeArea} = props;
   const textTip = "You haven't add any personal \n details yet";
-  const [islogin, setIslogin] = useState(false);
+  const [islogin, setIslogin] = useState(true);
   return (
     <View style={styles.headerContainer}>
       {islogin ? (
-        <SafeAreaView>
-          <TouchableOpacity onPress={()=>{NavigationService.navigate("LoginScreen",{})}}>
-            <View style={styles.userinfo}>
-              <Image
-                style={styles.avatar}
-                source={{uri: 'http://measure.3vyd.com//uPic/oplutv.png'}}
-              />
-              <View style={styles.textinfo}>
-                <Text style={styles.myaccount}>My Account</Text>
-                <View style={styles.emailContainer}>
-                  <Image
-                    style={styles.email}
-                    source={require('../../Images/usercenter/email.png')}></Image>
-                  <Text style={styles.emailtext}>1317272927@qq.com</Text>
-                </View>
-                <View style={styles.emailContainer}>
-                  <Image
-                    style={styles.email}
-                    source={require('../../Images/usercenter/phone.png')}></Image>
-                  <Text style={styles.emailtext}>17706398976</Text>
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>
-        </SafeAreaView>
+        needSafeArea ? (
+          <SafeAreaView style={styles.toppart}>{userInfo()}</SafeAreaView>
+        ) : (
+          userInfo()
+        )
       ) : (
         <View>
           <SafeAreaView>
@@ -67,8 +48,43 @@ function UserHeader(props) {
   );
 }
 
+function userInfo(params) {
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        NavigationService.navigate('UserInfoScreen', {});
+      }}>
+      <View style={styles.userinfo}>
+        <Image
+          style={styles.avatar}
+          source={{uri: 'http://measure.3vyd.com//uPic/oplutv.png'}}
+        />
+        <View style={styles.textinfo}>
+          <Text style={styles.myaccount}>My Account</Text>
+          <View style={styles.emailContainer}>
+            <Image
+              style={styles.email}
+              source={require('../../Images/usercenter/email.png')}></Image>
+            <Text style={styles.emailtext}>1317272927@qq.com</Text>
+          </View>
+          <View style={styles.emailContainer}>
+            <Image
+              style={styles.email}
+              source={require('../../Images/usercenter/phone.png')}></Image>
+            <Text style={styles.emailtext}>17706398976</Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
 export default UserHeader;
 const styles = ScaledSheet.create({
+  toppart: {
+    backgroundColor: colors.background,
+    height: '140@vs',
+  },
   emailContainer: {
     flexDirection: 'row',
     marginTop: '3@vs',
@@ -97,6 +113,7 @@ const styles = ScaledSheet.create({
     marginTop: '15@s',
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: 'white',
   },
   avatar: {
     width: '56@s',
@@ -112,7 +129,7 @@ const styles = ScaledSheet.create({
   },
   signbtn: {marginTop: '20@vs'},
   headerContainer: {
-    backgroundColor: 'white',
+    backgroundColor: colors.background,
     justifyContent: 'space-around',
     paddingHorizontal: AppConfig.paddingHorizontal,
     paddingBottom: '15@vs',

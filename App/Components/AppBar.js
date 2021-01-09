@@ -10,7 +10,9 @@ import { Fonts, Colors } from '../Themes'
 import PropTypes from 'prop-types'
 
 import AppConfig from '../Config/AppConfig'
-import { Images } from '../Themes'
+import { Images } from '../Themes';
+import NavigationService from '../Navigation/NavigationService';
+
 
 class AppBar extends Component {
     render() {
@@ -19,10 +21,16 @@ class AppBar extends Component {
             rightButton,
             onPressBack,
         } = this.props
-
+         
         return (
             <View style={styles.container}>
-                <TouchableOpacity onPress={onPressBack}>
+                <TouchableOpacity onPress={()=>{
+                    if (onPressBack) {
+                        onPressBack();
+                    }else {
+                        NavigationService.goBack();
+                    }
+                }}>
                     <Image style={styles.icBack} source={Images.arrow_left} />
                 </TouchableOpacity>
                 {

@@ -36,7 +36,7 @@ function NoPurchase(props) {
       lefticon: images.userChangePwdImage,
       text: 'Change Password',
       righticon: images.userRightBtnImage,
-      onPress: () => {},
+      onPress: () => {NavigationService.navigate("ChangePasswordScreen")},
       hasline: true,
     },
     {

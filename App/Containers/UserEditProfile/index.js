@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-09 15:07:39
- * @LastEditTime: 2021-01-09 16:16:04
+ * @LastEditTime: 2021-01-09 16:22:04
  * @LastEditors: Please set LastEditors
  * @Description: edit user profile
  * @FilePath: /MobileApp/App/Containers/UserEditProfile/index.js
@@ -55,7 +55,7 @@ function index(props) {
         </View>
       </ScrollView>
       <SafeAreaView style={styles.bottom}>
-      <TouchableOpacity onPress={()=>{NavigationService.navigate('')}}>
+      <TouchableOpacity onPress={()=>{NavigationService.navigate('DeleteAccountMessageScreen')}}>
           <Text style={styles.removeText}>
              REMOVE ACCOUNT
           </Text>

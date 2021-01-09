@@ -1,4 +1,12 @@
 /*
+ * @Author: JianLong Nie
+ * @Date: 2021-01-09 16:30:32
+ * @LastEditTime: 2021-01-09 16:30:33
+ * @LastEditors: Please set LastEditors
+ * @Description: Text tips
+ * @FilePath: /MobileApp/App/Containers/UserInfo/TextTip.js
+ */
+/*
  * @Author: Jianlong Nie
  * @Date: 2021-01-09 13:03:18
  * @LastEditTime: 2021-01-09 14:34:12
@@ -19,53 +27,37 @@ import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
 import ListItem from './ListItem';
 import metrics from '../../Themes/Metrics';
-import TextTip from './TextTip';
 
-function NoPurchase(props) {
-  const textTip = "You haven't added a default \n purchase preference yet";
-  const subTextTip =
-    'Select a default address and payment method to \n activate 1 click purchasing';
-  const param = {
-    textTip,
-    subTextTip,
-    needButton: true,
-    btnMsg: 'ADD 1 CLICK PURCHASING PREFERENCES',
-  };
-  const items = [
-    {
-      lefticon: images.userChangePwdImage,
-      text: 'Change Password',
-      righticon: images.userRightBtnImage,
-      onPress: () => {},
-      hasline: true,
-    },
-    {
-      lefticon: images.userLogoutImage,
-      text: 'Logout',
-      righticon: images.userRightBtnImage,
-      onPress: () => {},
-      hasline: false,
-    },
-  ];
+
+function TextTip(props) {
+    const {textTip,subTextTip,needButton,btnMsg} = props;
+//   const textTip = "You haven't added a default \n purchase preference yet";
+//   const subTextTip =
+//     'Select a default address and payment method to \n activate 1 click purchasing';
+  
   return (
-    <View style={{flex: 1, width: metrics.screenWidth}}>
-      <TextTip {...param}></TextTip>
-
-      <SafeAreaView style={styles.bottomlist}>
-        {items.map((item, index) => {
-          return <ListItem key={`listitem` + index} {...item}></ListItem>;
-        })}
-      </SafeAreaView>
+    <View style={{flex:1,width:metrics.screenWidth}}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.nosign}>{textTip}</Text>
+        <Text style={[styles.subTextTip]}>{subTextTip}</Text>
+        <View style={styles.signbtn}>
+          {
+              needButton&&<Button
+              onPress={() => {}}
+              text={btnMsg}></Button>
+          }
+        </View>
+      </View>
     </View>
   );
 }
 
-export default NoPurchase;
+export default TextTip;
 const styles = ScaledSheet.create({
-  bottomlist: {
-    position: 'absolute',
-    bottom: 0,
-    width: metrics.screenWidth,
+  bottomlist:{
+      position:'absolute',
+      bottom:0,
+      width:metrics.screenWidth
   },
   nosign: {
     fontSize: '22@s',

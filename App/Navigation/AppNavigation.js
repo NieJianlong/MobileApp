@@ -16,6 +16,7 @@ import CreateNewPasswordScreen from '../Containers/CreateNewPassword'
 import UserCenter from '../Containers/UserCenter'
 import UserInfoScreen from '../Containers/UserInfo'
 import UserEditProfileScreen from '../Containers/UserEditProfile'
+import DeleteAccountMessageScreen from '../Containers/DeleteAccountMessage'
 import NavigationService from './NavigationService';
 import TabBar from './TabBar'
 
@@ -40,7 +41,8 @@ const PrimaryNav = createStackNavigator({
     RegisterScreen: { screen: RegisterScreen },
     LegalScreen: { screen: LegalScreen },
     UserInfoScreen: { screen: UserInfoScreen},
-    UserEditProfileScreen:{screen:UserEditProfileScreen},
+    UserEditProfileScreen:{ screen: UserEditProfileScreen},
+    DeleteAccountMessageScreen:{ screen:DeleteAccountMessageScreen},
     OTPScreen: { screen: OTPScreen },
     ForgotPasswordScreen: { screen: ForgotPasswordScreen },
     CreateNewPasswordScreen: { screen: CreateNewPasswordScreen }

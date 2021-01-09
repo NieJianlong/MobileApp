@@ -45,7 +45,8 @@ const images = {
   userEditBtnImage:require('../Images/usercenter/userEdit.png'),
   userLogoutImage:require('../Images/usercenter/logout.png'),
   userChangePwdImage:require('../Images/usercenter/changepwd.png'),
-  userRightBtnImage:require('../Images/usercenter/rightarrow.png')
+  userRightBtnImage:require('../Images/usercenter/rightarrow.png'),
+  userTrashImage:require('../Images/usercenter/trash.png')
 }
 
 export default images

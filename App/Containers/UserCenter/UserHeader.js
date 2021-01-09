@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-07 20:46:07
- * @LastEditTime: 2021-01-09 09:30:36
+ * @LastEditTime: 2021-01-09 15:22:28
  * @LastEditors: Please set LastEditors
  * @Description: User center header layout
  * @FilePath: /MobileApp/App/Containers/UserCenter/UserHeader.js
@@ -16,23 +16,22 @@ import {Button} from '../../Components';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
 import NavigationService from '../../Navigation/NavigationService';
-/**
- *
- * UserHeader
- * @param {*} {token}
- * @return View
- */
+import images from '../../Themes/Images';
+import UserAvatar from "./UserAvatar";
+
 function UserHeader(props) {
-  const {needSafeArea} = props;
+  const {needSafeArea, needEdit} = props;
   const textTip = "You haven't add any personal \n details yet";
   const [islogin, setIslogin] = useState(true);
   return (
     <View style={styles.headerContainer}>
       {islogin ? (
         needSafeArea ? (
-          <SafeAreaView style={styles.toppart}>{userInfo()}</SafeAreaView>
+          <SafeAreaView style={styles.toppart}>
+            {userInfo(needEdit)}
+          </SafeAreaView>
         ) : (
-          userInfo()
+          userInfo(needEdit)
         )
       ) : (
         <View>
@@ -48,19 +47,25 @@ function UserHeader(props) {
   );
 }
 
-function userInfo(params) {
+function userInfo(needEdit) {
   return (
     <TouchableOpacity
       onPress={() => {
         NavigationService.navigate('UserInfoScreen', {});
       }}>
       <View style={styles.userinfo}>
-        <Image
-          style={styles.avatar}
-          source={{uri: 'http://measure.3vyd.com//uPic/oplutv.png'}}
-        />
+        <UserAvatar uri='http://measure.3vyd.com//uPic/oplutv.png'></UserAvatar>
         <View style={styles.textinfo}>
-          <Text style={styles.myaccount}>My Account</Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={styles.myaccount}>My Account</Text>
+            {needEdit && (
+              <TouchableOpacity onPress={()=>{NavigationService.navigate('UserEditProfileScreen')}}>
+                <Image
+                  style={styles.editImage}
+                  source={images.userEditBtnImage}></Image>
+              </TouchableOpacity>
+            )}
+          </View>
           <View style={styles.emailContainer}>
             <Image
               style={styles.email}
@@ -81,6 +86,10 @@ function userInfo(params) {
 
 export default UserHeader;
 const styles = ScaledSheet.create({
+  editImage: {
+    width: '20@s',
+    height: '20@s',
+  },
   toppart: {
     backgroundColor: colors.background,
     height: '140@vs',
@@ -105,6 +114,7 @@ const styles = ScaledSheet.create({
   },
   textinfo: {
     paddingHorizontal: AppConfig.paddingHorizontal,
+    flex: 1,
   },
   userinfo: {
     paddingHorizontal: AppConfig.paddingHorizontal,

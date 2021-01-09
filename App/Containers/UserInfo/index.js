@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-08 15:54:53
- * @LastEditTime: 2021-01-09 11:02:15
+ * @LastEditTime: 2021-01-09 14:57:59
  * @LastEditors: Please set LastEditors
  * @Description: UserInfo Screen
  * @FilePath: /MobileApp/App/Containers/UserInfo/index.js
@@ -27,7 +27,7 @@ class index extends React.Component {
           <AppBar></AppBar>
           </SafeAreaView>
         <View >
-          <UserHeader></UserHeader>
+          <UserHeader needEdit></UserHeader>
         </View>
         <HorizontalMenu></HorizontalMenu>
       </View>

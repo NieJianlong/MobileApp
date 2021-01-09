@@ -10,6 +10,8 @@ import { ScaledSheet } from 'react-native-size-matters'
 import PropTypes from 'prop-types'
 
 import { Fonts, Colors, Images } from '../Themes'
+import colors from '../Themes/Colors'
+import fonts from '../Themes/Fonts'
 
 class CustomTextInput extends Component {
 
@@ -30,11 +32,17 @@ class CustomTextInput extends Component {
             onChangeText,
             showError,
             errorMessage,
+            hasTitle,
+            title
         } = this.props
 
         return (
             <View>
                 <View style={[styles.container, style, showError && styles.errorContainer]}>
+                    <View style={{flex:1}}>
+                    {
+                        hasTitle&&<Text style={styles.title}>{title}</Text>
+                    }
                     <TextInput
                         placeholder={placeholder}
                         style={styles.textInput}
@@ -42,6 +50,8 @@ class CustomTextInput extends Component {
                         onBlur={onBlur}
                         onChangeText={onChangeText}
                     />
+                    </View>
+                   
                     {/* {
                         this.state.keyword !== '' &&
                         <TouchableOpacity
@@ -69,6 +79,14 @@ CustomTextInput.defaultProps = {
 }
 
 const styles = ScaledSheet.create({
+    title:{
+        color:colors.grey40,
+        paddingHorizontal:'8@s',
+        fontFamily:fonts.primary,
+        fontSize: '12@s',
+        marginTop:-3,
+        marginBottom:-3
+    },
     container: {
         height: '40@vs',
         backgroundColor: Colors.white,
@@ -107,7 +125,7 @@ const styles = ScaledSheet.create({
         height: '100%',
         fontSize: '14@s',
         fontFamily: Fonts.primary,
-        color: Colors.black
+        color: Colors.black,
     },
     errorText: {
         fontFamily: Fonts.primary,

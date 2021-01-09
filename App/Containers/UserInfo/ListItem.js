@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-09 14:12:56
- * @LastEditTime: 2021-01-09 14:36:04
+ * @LastEditTime: 2021-01-09 14:52:45
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /MobileApp/App/Containers/UserInfo/ListItem.js
@@ -25,9 +25,7 @@ function ListItem(props) {
           <Image style={styles.itemicon} source={lefticon} />
           <Text>{text}</Text>
         </View>
-        <View>
-          <Image style={styles.rightbtn} source={righticon} />
-        </View>
+        
       </View>
     </TouchableOpacity>
   );

@@ -42,7 +42,7 @@ const images = {
   userPurchaseImage:require('../Images/usercenter/purchase.png'),
   userAddressImage:require('../Images/usercenter/address.png'),
   userUAddressImage:require('../Images/usercenter/uaddress.png'),
-  
+  userEditBtnImage:require('../Images/usercenter/userEdit.png'),
   userLogoutImage:require('../Images/usercenter/logout.png'),
   userChangePwdImage:require('../Images/usercenter/changepwd.png'),
   userRightBtnImage:require('../Images/usercenter/rightarrow.png')

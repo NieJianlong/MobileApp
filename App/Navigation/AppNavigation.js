@@ -15,6 +15,7 @@ import ForgotPasswordScreen from '../Containers/ForgotPassword'
 import CreateNewPasswordScreen from '../Containers/CreateNewPassword'
 import UserCenter from '../Containers/UserCenter'
 import UserInfoScreen from '../Containers/UserInfo'
+import UserEditProfileScreen from '../Containers/UserEditProfile'
 import NavigationService from './NavigationService';
 import TabBar from './TabBar'
 
@@ -31,14 +32,15 @@ const TabNav = createBottomTabNavigator({
 })
 
 const PrimaryNav = createStackNavigator({
-    LaunchScreen: { screen: LaunchScreen,headerMode: "node",navigationOptions:{headerShown:false} },
+    LaunchScreen: { screen: LaunchScreen },
     MainScreen: { screen: TabNav },
-    OnboardingScreen: { screen: OnboardingScreen,headerMode: "node",navigationOptions:{headerShown:false} },
+    OnboardingScreen: { screen: OnboardingScreen },
     ExploreScreen: { screen: ExploreScreen },
     LoginScreen: { screen: LoginScreen },
     RegisterScreen: { screen: RegisterScreen },
     LegalScreen: { screen: LegalScreen },
-    UserInfoScreen: { screen: UserInfoScreen,headerMode: "screen",navigationOptions:{headerShown:true} },
+    UserInfoScreen: { screen: UserInfoScreen},
+    UserEditProfileScreen:{screen:UserEditProfileScreen},
     OTPScreen: { screen: OTPScreen },
     ForgotPasswordScreen: { screen: ForgotPasswordScreen },
     CreateNewPasswordScreen: { screen: CreateNewPasswordScreen }

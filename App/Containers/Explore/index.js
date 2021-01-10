@@ -5,12 +5,15 @@ import {
     Image,
     Text,
     TouchableWithoutFeedback,
-    TouchableOpacity
+    TouchableOpacity,
+    ScrollView,
+    FlatList
 } from 'react-native'
 import { vs, s } from 'react-native-size-matters'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Animated from 'react-native-reanimated'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import LinearGradient from 'react-native-linear-gradient'
 
 import {
     Button,
@@ -18,11 +21,14 @@ import {
     LocationSearchBox,
     TextInput,
     Alert,
-    RadiusButton
+    RadiusButton,
+    StarRating
 } from '../../Components'
+import CheckBox from './CheckBox'
 
 import { Colors, Images } from '../../Themes'
 import styles from './styles'
+import AppConfig from '../../Config/AppConfig'
 
 class ExploreScreen extends Component {
 
@@ -35,7 +41,12 @@ class ExploreScreen extends Component {
             showAddLocationSheet: false,
             showAddAddressSheet: false,
             showAccountActivatedSuccessfullyAlert: false,
-            showAccountActivateAlert: false
+            showAccountActivateAlert: false,
+            showSortBySheet: false,
+
+            selectedCategory: 0,
+            showProductAsRows: true,
+            sortOption: 1,
         }
     }
 
@@ -69,6 +80,16 @@ class ExploreScreen extends Component {
                 this.addAddressSheet.snapTo(0)
             } else {
                 this.addAddressSheet.snapTo(1)
+            }
+        })
+    }
+
+    toggleSortBySheet = () => {
+        this.setState({ showSortBySheet: !this.state.showSortBySheet }, () => {
+            if (this.state.showSortBySheet) {
+                this.sortBySheet.snapTo(0)
+            } else {
+                this.sortBySheet.snapTo(1)
             }
         })
     }
@@ -202,6 +223,36 @@ class ExploreScreen extends Component {
         )
     }
 
+    renderSortBySheet() {
+        return (
+            <BottomSheet
+                customRef={ref => {
+                    this.sortBySheet = ref
+                }}
+                onCloseEnd={() => this.setState({ showSortBySheet: false })}
+                callbackNode={this.fall}
+                snapPoints={[vs(320), 0]}
+                initialSnap={this.state.showSortBySheet ? 0 : 1}
+                title={'Sort By'}>
+                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    {
+                        sortOptions.map((i, index) => {
+                            return (
+                                <View key={index.toString()}>
+                                    <View style={{ height: vs(12) }} />
+                                    <CheckBox
+                                        defaultValue={this.state.sortOption === index}
+                                        onSwitch={(t) => this.setState({ sortOption: index })}
+                                        label={i} />
+                                </View>
+                            )
+                        })
+                    }
+                </View>
+            </BottomSheet>
+        )
+    }
+
     renderAccountActivatedSuccessfullyAlert() {
         return (
             <Alert
@@ -222,7 +273,7 @@ class ExploreScreen extends Component {
                 color={Colors.secondary00}
                 onDismiss={this.toggleActivateAccountAlert}
                 action={() =>
-                    <View style={{width: s(120)}}>
+                    <View style={{ width: s(120) }}>
                         <RadiusButton text={'RESEND EMAIL'} />
                     </View>
                 }
@@ -244,10 +295,183 @@ class ExploreScreen extends Component {
         )
     }
 
-    renderBody() {
+    renderCategories() {
+        return (
+            <View style={styles.categryContainer}>
+                <FlatList
+                    contentContainerStyle={styles.categoryListContainer}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={categories}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item, index }) => {
+                        const isFocused = this.state.selectedCategory === index
+                        return (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.setState({ selectedCategory: index })
+                                }}
+                                style={[styles.categoryItemContainer, !isFocused && { borderBottomColor: 'transparent' }]}>
+                                <Text style={[styles.heading5Bold, { color: isFocused ? Colors.primary : Colors.grey60 }]}>
+                                    {item}
+                                </Text>
+                            </TouchableOpacity>
+                        )
+                    }}
+                />
+                <LinearGradient
+                    colors={['#ffffff00', Colors.white]}
+                    start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 0.0 }}
+                    style={styles.v1}
+                >
+                    <TouchableOpacity style={styles.btnAddContainer}>
+                        <Image source={Images.add1} style={styles.icAdd} />
+                    </TouchableOpacity>
+                </LinearGradient>
+            </View>
+        )
+    }
+
+    renderAddressBar() {
+        return (
+            <View style={styles.addressBarContainer} >
+                <View style={styles.row}>
+                    <Image source={Images.locationMed} style={styles.icLocation} />
+                    <Text style={styles.heading5Regular}>Deliver to - Tanil Nadu 12345</Text>
+                    <View style={styles.areaContainer}>
+                        <Text style={styles.heading6Bold}>Area 4</Text>
+                    </View>
+                </View>
+
+                <TouchableOpacity>
+                    <Image source={Images.arrow_left} style={styles.icArrowDown} />
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    renderStickyParts() {
         return (
             <View>
+                {this.renderCategories()}
+                {this.renderAddressBar()}
+            </View>
+        )
+    }
 
+    renderSortBar() {
+        return (
+            <View style={styles.sortBarContainer} >
+                <TouchableOpacity
+                    onPress={this.toggleSortBySheet}
+                    style={styles.row}>
+                    <Image source={Images.arrow_left} style={styles.icArrowDown2} />
+                    <Text style={styles.txtBold}>{sortOptions[this.state.sortOption]}</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => {
+                    this.setState({ showProductAsRows: !this.state.showProductAsRows })
+                }}>
+                    <Image
+                        source={this.state.showProductAsRows ? Images.sortRows : Images.sortSquares}
+                        style={styles.icSort}
+                    />
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    renderProduct = (item, index) => {
+        return (
+            <View style={styles.productContainer} key={index.toString()}>
+                {
+                    this.state.showProductAsRows ?
+                        <View style={[styles.row, { paddingHorizontal: AppConfig.paddingHorizontal }]}>
+                            <Image source={{ uri: item.picture }} style={styles.productImage} />
+
+                            <View style={styles.v2}>
+                                <View>
+                                    <Text style={styles.heading4Bold}>{item.name}</Text>
+                                    <StarRating rating={item.rating} ratingCount={item.ratingCount} />
+                                </View>
+                                <View style={styles.row}>
+                                    <View style={styles.v3}>
+                                        <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
+                                        <Text style={styles.txtRetailPrice}>${item.retailPrice}</Text>
+                                    </View>
+
+                                    <View style={styles.v3}>
+                                        <Text style={[styles.txtNoteBold, { color: Colors.black }]}>WHOLE SALE PRICE</Text>
+                                        <Text style={styles.txtWholesalePrice}>${item.wholesalePrice}</Text>
+                                    </View>
+
+                                    <View style={styles.percentOffContainer}>
+                                        <Text style={[styles.heading6Bold, { color: Colors.secondary00 }]}>30% OFF</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </View> :
+                        <View style={[{ paddingHorizontal: AppConfig.paddingHorizontal }]}>
+                            <Image source={{ uri: item.picture }} style={styles.productImageBig} />
+
+                            <View style={styles.v2}>
+                                <View>
+                                    <Text style={styles.heading4Bold}>{item.name}</Text>
+                                    <StarRating rating={item.rating} ratingCount={item.ratingCount} />
+                                </View>
+                                <View style={styles.row}>
+                                    <View style={styles.v3}>
+                                        <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
+                                        <Text style={styles.txtRetailPrice}>${item.retailPrice}</Text>
+                                    </View>
+
+                                    <View style={styles.v3}>
+                                        <Text style={[styles.txtNoteBold, { color: Colors.black }]}>WHOLE SALE PRICE</Text>
+                                        <Text style={styles.txtWholesalePrice}>${item.wholesalePrice}</Text>
+                                    </View>
+
+                                    <View style={styles.percentOffContainer}>
+                                        <Text style={[styles.heading6Bold, { color: Colors.secondary00 }]}>30% OFF</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                }
+
+                <View style={styles.v4}>
+                    <View>
+                        <Text style={styles.txtOrderClose}>Order closes on:</Text>
+                        <Text style={styles.heading6Regular}>{item.orderClose}</Text>
+                    </View>
+
+                    <View style={styles.row}>
+                        <Image source={Images.stock} style={styles.icStock} />
+                        <Text style={styles.txtOrderNumber}>{item.orderCount}/{item.inStock}</Text>
+                        <TouchableOpacity>
+                            <Image source={Images.info2} style={styles.icInfo} />
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.row}>
+                        <TouchableOpacity>
+                            <Image source={Images.likeMed} style={styles.icShare} />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity>
+                            <Image source={Images.share} style={styles.icShare} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        )
+    }
+
+    renderProducList() {
+        return (
+            <View style={styles.prodListContainer}>
+                {
+                    products.map((item, index) => this.renderProduct(item, index))
+                }
             </View>
         )
     }
@@ -259,11 +483,19 @@ class ExploreScreen extends Component {
 
                 <SafeAreaView
                     style={styles.mainContainer}
-                    edges={['bottom', 'top', 'left', 'right']}>
+                    edges={['top', 'left', 'right']}>
 
-                    {this.renderHeader()}
+                    <ScrollView
+                        stickyHeaderIndices={[1]}
+                        showsVerticalScrollIndicator={false}>
+                        {this.renderHeader()}
 
-                    {this.renderBody()}
+                        {this.renderStickyParts()}
+
+                        {this.renderSortBar()}
+
+                        {this.renderProducList()}
+                    </ScrollView>
 
                 </SafeAreaView>
 
@@ -273,9 +505,15 @@ class ExploreScreen extends Component {
 
                 {this.renderAddAddressSheet()}
 
+                {this.renderSortBySheet()}
+
                 {/* background for bottom sheet */}
                 {
-                    (this.state.showLocationSheet || this.state.showAddLocationSheet || this.state.showAddAddressSheet) &&
+                    (this.state.showLocationSheet ||
+                        this.state.showAddLocationSheet ||
+                        this.state.showAddAddressSheet ||
+                        this.state.showSortBySheet
+                    ) &&
                     <TouchableWithoutFeedback
                         onPress={() => {
 
@@ -303,3 +541,81 @@ class ExploreScreen extends Component {
 }
 
 export default ExploreScreen
+
+const categories = ['All', 'Announcements', 'Electronics', 'Food & Beverage', 'Fashion']
+
+const sortOptions = [
+    'About to be completed',
+    'Last added',
+    'Price: low to high',
+    'Price: high to low',
+]
+
+const products = [
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 4.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    }
+]

@@ -58,6 +58,17 @@ const ApplicationStyles = {
       fontFamily: Fonts.primary,
       color: Colors.grey80,
     },
+    txtNoteBold: {
+      fontSize: s(7),
+      fontFamily: Fonts.primary,
+      color: Colors.grey60,
+    },
+    txtBold: {
+      fontSize: s(14),
+      fontFamily: Fonts.primary,
+      color: Colors.grey80,
+      fontWeight: '600'
+    },
     heading2Bold: {
       fontSize: s(24),
       fontFamily: Fonts.primary,
@@ -71,13 +82,19 @@ const ApplicationStyles = {
       fontWeight: '600'
     },
     heading4Bold: {
-      fontSize: s(15),
+      fontSize: s(14),
       fontFamily: Fonts.primary,
       color: Colors.black,
       fontWeight: '600'
     },
     heading5Bold: {
-      fontSize: s(14),
+      fontSize: s(13),
+      fontFamily: Fonts.primary,
+      color: Colors.black,
+      fontWeight: '600'
+    },
+    heading6Bold: {
+      fontSize: s(11),
       fontFamily: Fonts.primary,
       color: Colors.black,
       fontWeight: '600'
@@ -87,6 +104,16 @@ const ApplicationStyles = {
       fontFamily: Fonts.primary,
       color: Colors.black,
       fontWeight: '400'
+    },
+    heading5Regular: {
+      fontSize: s(13),
+      fontFamily: Fonts.primary,
+      color: Colors.black,
+    },
+    heading6Regular: {
+      fontSize: s(11),
+      fontFamily: Fonts.primary,
+      color: Colors.black,
     }
   },
   darkLabelContainer: {

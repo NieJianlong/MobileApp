@@ -1,64 +1,50 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import {
     Text,
     View,
-    Image,
     TouchableOpacity
 } from 'react-native'
 import { ScaledSheet } from 'react-native-size-matters'
 import { Fonts, Colors } from '../Themes'
-import PropTypes from 'prop-types'
 
-import AppConfig from '../Config/AppConfig'
-import { Images } from '../Themes'
+function Switch(props) {
 
-class Switch extends Component {
+    const [active, setActive] = useState(false)
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            active: false
-        }
-    }
+    const {
+        disabled,
+        label,
+    } = props
 
-    render() {
-        const {
-            defaultValue,
-            onSwitch,
-            disabled,
-            label,
-        } = this.props
+    if (!disabled) {
+        return (
+            <View style={styles.row}>
+                <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => setActive(!active)}>
+                    {
+                        active ?
+                            <View style={styles.activeContainer}>
+                                <View style={styles.activeCircle} />
+                            </View> :
+                            <View style={styles.inactiveContainer}>
+                                <View style={styles.inactiveCircle} />
+                            </View>
+                    }
+                </TouchableOpacity>
 
-        if (!disabled) {
-            return (
-                <View style={styles.row}>
-                    <TouchableOpacity
-                        activeOpacity={1}
-                        onPress={() => this.setState({ active: !this.state.active })}>
-                        {
-                            this.state.active ?
-                                <View style={styles.activeContainer}>
-                                    <View style={styles.activeCircle} />
-                                </View> :
-                                <View style={styles.inactiveContainer}>
-                                    <View style={styles.inactiveCircle} />
-                                </View>
-                        }
-                    </TouchableOpacity>
-
-                    <Text style={styles.label}>{label}</Text>
+                <Text style={styles.label}>{label}</Text>
+            </View>
+        )
+    } else {
+        return (
+            <View style={styles.row}>
+                <View style={styles.disabledContainer}>
+                    <View style={styles.disabledCircle} />
                 </View>
-            )
-        } else {
-            return (
-                <View style={styles.row}>
-                    <View style={styles.disabledContainer}>
-                        <View style={styles.disabledCircle} />
-                    </View>
-                    <Text style={styles.label}>{label}</Text>
-                </View>
-            )
-        }
+                <Text style={styles.label}>{label}</Text>
+            </View>
+        )
     }
 }
 
@@ -134,4 +120,5 @@ const styles = ScaledSheet.create({
         marginLeft: '8@s'
     }
 })
+
 export default Switch

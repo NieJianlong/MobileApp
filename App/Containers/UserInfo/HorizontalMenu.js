@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-08 17:53:05
- * @LastEditTime: 2021-01-09 20:03:14
+ * @LastEditTime: 2021-01-10 11:31:51
  * @LastEditors: Please set LastEditors
  * @Description: UserInfo Horizontal Menu
  * @FilePath: /MobileApp/App/Containers/UserInfo/HorizontalMenu.js
@@ -14,6 +14,7 @@ import DynamicTabView from './DynamicTabView';
 import images from '../../Themes/Images';
 import NoPurchase from './NoPurchase';
 import TextTip from './TextTip';
+import NavigationService from '../../Navigation/NavigationService';
 
 class HorizontalMenu extends React.Component {
   constructor(props) {
@@ -39,7 +40,7 @@ class HorizontalMenu extends React.Component {
         subTextTip:"You haven´t add any personal address yet",
         needButton: true,
         btnMsg: 'ADD ADDRESS',
-        onPress:()=>{}
+        onPress:()=>{NavigationService.navigate("AddNewAddressScreen")}
       },
       {
         title: 'My Payment Methods',

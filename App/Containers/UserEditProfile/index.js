@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-09 15:07:39
- * @LastEditTime: 2021-01-09 16:22:04
+ * @LastEditTime: 2021-01-10 11:26:59
  * @LastEditors: Please set LastEditors
  * @Description: edit user profile
  * @FilePath: /MobileApp/App/Containers/UserEditProfile/index.js
@@ -45,9 +45,9 @@ function index(props) {
           <UserAvatar uri="http://measure.3vyd.com//uPic/JRD5RT.png"></UserAvatar>
         </View>
         <View style={styles.contentContainer}>
-          {inputs.map((item) => {
+          {inputs.map((item,index) => {
             return (
-              <View style={{height:80,justifyContent:'center'}}>
+              <View key={index} style={{height:80,justifyContent:'center'}}>
                 <TextInput hasTitle {...item}></TextInput>
               </View>
             );

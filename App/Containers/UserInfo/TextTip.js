@@ -30,7 +30,7 @@ import metrics from '../../Themes/Metrics';
 
 
 function TextTip(props) {
-    const {textTip,subTextTip,needButton,btnMsg} = props;
+    const {textTip,subTextTip,needButton,btnMsg,onPress} = props;
 //   const textTip = "You haven't added a default \n purchase preference yet";
 //   const subTextTip =
 //     'Select a default address and payment method to \n activate 1 click purchasing';
@@ -43,7 +43,7 @@ function TextTip(props) {
         <View style={styles.signbtn}>
           {
               needButton&&<Button
-              onPress={() => {}}
+              onPress={onPress}
               text={btnMsg}></Button>
           }
         </View>

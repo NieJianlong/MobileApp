@@ -16,7 +16,7 @@ function index(props) {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const inputs = [
     {
-      placeholder: 'Enter your Current Password',
+      placeholder: 'Address Name (ex. home)*',
       onChangeText: (text) => setPassword(text),
       showError: false,
       errorMessage: null,
@@ -59,17 +59,13 @@ function index(props) {
             return (
                <TouchableOpacity onPress={()=>alert('success')}>
                    <Text style={styles.update}>
-                       UPDATE
+                       SAVE
                    </Text>
                </TouchableOpacity> 
             );
         }}/>
         <View style={styles.bodyContainer}>
-          <Text style={styles.heading2Bold}>Change my password</Text>
-          <Text style={[styles.heading4Regular, {color: Colors.grey80}]}>
-            For security reasons please first enter your current password.
-          </Text>
-
+          <Text style={styles.heading2Bold}>Add new address</Text>
           <View>
             {inputs.map((item, index) => {
               return (

@@ -1,22 +1,19 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-08 17:53:05
- * @LastEditTime: 2021-01-09 13:10:57
+ * @LastEditTime: 2021-01-09 20:03:14
  * @LastEditors: Please set LastEditors
  * @Description: UserInfo Horizontal Menu
  * @FilePath: /MobileApp/App/Containers/UserInfo/HorizontalMenu.js
  */
 import React from 'react';
 import {View, ScrollView, Text} from 'react-native';
-import UserHeader from '../UserCenter/UserHeader';
 import {ScaledSheet, s, vs} from 'react-native-size-matters';
-import AppConfig from '../../Config/AppConfig';
-import {AppBar, Button} from '../../Components';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import colors from '../../Themes/Colors';
 import DynamicTabView from './DynamicTabView';
 import images from '../../Themes/Images';
 import NoPurchase from './NoPurchase';
+import TextTip from './TextTip';
 
 class HorizontalMenu extends React.Component {
   constructor(props) {
@@ -31,36 +28,52 @@ class HorizontalMenu extends React.Component {
         selectedIcon: images.userPurchaseImage,
         screen:NoPurchase,
         key: 'item1',
-        color: 'blue',
+    
       },
       {
         title: 'My Addresses',
         icon: images.userUAddressImage,
         selectedIcon: images.userAddressImage,
         key: 'item2',
-        color: 'blue',
+        textTip:"Your address list is empty",
+        subTextTip:"You haven´t add any personal address yet",
+        needButton: true,
+        btnMsg: 'ADD ADDRESS',
+        onPress:()=>{}
       },
       {
         title: 'My Payment Methods',
         icon: images.userUPayImage,
         selectedIcon: images.userPayImage,
         key: 'item3',
-        color: 'blue',
+        textTip:"You haven't added any payment \n method yet",
+        subTextTip:"Add a payment method to be able to use it in your next  purchases",
+        needButton: true,
+        btnMsg: 'ADD  NEW PAYMENT METHOD',
+        onPress:()=>{}
+
       },
       {
         title: 'My Billing Details',
         icon: images.userUBillingImage,
         selectedIcon: images.userBillingImage,
         key: 'item4',
-        color: 'yellow',
+        textTip:"You have not added \n billing details yet",
+        subTextTip:"Add your billing details to use in your next purchase",
+        needButton: true,
+        btnMsg: 'ADD BILLING DETAILS',
+        onPress:()=>{}
       },
     ];
   }
 
   _renderItem = (item, index) => {
     console.log('renderItem', index);
+    if (item.key=='item1') {
+      return <NoPurchase></NoPurchase>;
+    }
     return (
-      <NoPurchase/>
+      <TextTip {...item}></TextTip>
     );
   };
 
@@ -91,9 +104,6 @@ const styles = ScaledSheet.create({
   container: {
     flex: 1,
   },
-  // `headerContainer: {
-  //   marginTop: 16
-  // },`
   headerText: {
     color: 'white',
   },

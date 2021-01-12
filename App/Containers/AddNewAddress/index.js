@@ -3,7 +3,13 @@ import {View, StatusBar, Text, Keyboard, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {isIphoneX} from 'react-native-iphone-x-helper';
 import {vs} from 'react-native-size-matters';
-import {AppBar, Button, TextInput, PasswordInput, Switch} from '../../Components';
+import {
+  AppBar,
+  Button,
+  TextInput,
+  PasswordInput,
+  Switch,
+} from '../../Components';
 import {Colors, Metrics} from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
@@ -20,19 +26,26 @@ function index(props) {
   const [pincode, setPincode] = useState('');
   const [country, setCountry] = useState('');
   const [disable, setDisable] = useState(true);
-  useEffect(()=>{
-    if (name.length==0||streetName.length==0||door.length==0||city.length==0||mstate.length==0||pincode.length==0||country.length==0) {
+  useEffect(() => {
+    if (
+      name.length == 0 ||
+      streetName.length == 0 ||
+      door.length == 0 ||
+      city.length == 0 ||
+      mstate.length == 0 ||
+      pincode.length == 0 ||
+      country.length == 0
+    ) {
       setDisable(true);
-    }else{
+    } else {
       setDisable(false);
     }
-    
-  },[name,streetName,streetNum,door,city,mstate,pincode,country]);
+  }, [name, streetName, streetNum, door, city, mstate, pincode, country]);
   const radioProps = {
-    text:'Set as default address',
-    prefixIcon:images.userToggleOff,
-    backgroundColor:'transparent',
-    textColor:colors.black
+    text: 'Set as default address',
+    prefixIcon: images.userToggleOff,
+    backgroundColor: 'transparent',
+    textColor: colors.black,
   };
   const inputs = [
     {
@@ -93,6 +106,11 @@ function index(props) {
     },
   ];
 
+  const {
+    navigation: {
+      state: {params},
+    },
+  } = props;
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -102,8 +120,24 @@ function index(props) {
         <AppBar
           rightButton={() => {
             return (
-              <TouchableOpacity disabled={disable} onPress={() => alert('success')}>
-                <Text style={disable?styles.disupdate:styles.update}>SAVE</Text>
+              <TouchableOpacity
+                disabled={disable}
+                onPress={() => {
+                  params.callback({
+                    name,
+                    streetName,
+                    streetNum,
+                    door,
+                    city,
+                    mstate,
+                    pincode,
+                    country,
+                  });
+                  NavigationService.goBack();
+                }}>
+                <Text style={disable ? styles.disupdate : styles.update}>
+                  SAVE
+                </Text>
               </TouchableOpacity>
             );
           }}
@@ -118,9 +152,9 @@ function index(props) {
             }}>
             {inputs.map((item, index) => {
               return (
-                <View style={{width: item.type == 'short' ? '48%' : '100%'}}>
+                <View key={index} style={{width: item.type == 'short' ? '48%' : '100%'}}>
                   <TextInput
-                    key={index}
+                    
                     style={{marginTop: vs(18)}}
                     {...item}
                   />
@@ -128,9 +162,9 @@ function index(props) {
               );
             })}
           </View>
-         <View style={{marginTop:20}}>
-           <Switch label="Set as default address"></Switch>
-         </View>
+          <View style={{marginTop: 20}}>
+            <Switch label="Set as default address"></Switch>
+          </View>
         </View>
       </SafeAreaView>
     </View>

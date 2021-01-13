@@ -10,6 +10,7 @@ import Alert from './Alert'
 import RadiusButton from './RadiusButton'
 import MaterialTextInput from './MaterialTextInput'
 import StarRating from './StarRating'
+import Picker from './Picker'
 
 export {
     BottomSheet,
@@ -23,5 +24,6 @@ export {
     Alert,
     RadiusButton,
     MaterialTextInput,
-    StarRating
+    StarRating,
+    Picker
 }

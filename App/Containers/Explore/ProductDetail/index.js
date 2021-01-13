@@ -5,7 +5,8 @@ import {
     Image,
     ScrollView,
     TouchableOpacity,
-    Text
+    Text,
+    Dimensions
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { s, vs } from 'react-native-size-matters'
@@ -13,7 +14,8 @@ import Collapsible from 'react-native-collapsible'
 
 import {
     Switch,
-    StarRating
+    StarRating,
+    Picker
 } from '../../../Components'
 
 import { Images, Colors } from '../../../Themes'
@@ -21,17 +23,53 @@ import AppConfig from '../../../Config/AppConfig'
 import styles from './styles'
 import NavigationService from '../../../Navigation/NavigationService'
 
+const { height } = Dimensions.get('window')
+
 class ProductDetailScreen extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            showDescription: false
+            showHeaderTabs: false,
+            showDescription: false,
+            tabIndex: 0,
         }
     }
 
     componentDidMount() {
 
+    }
+
+    handleScroll = (event) => {
+        let threshold = height / 4
+        let y = event.nativeEvent.contentOffset.y
+        console.log(y)
+        if (y > threshold && !this.state.showHeaderTabs) {
+            this.setState({ showHeaderTabs: true })
+        } else if (y <= threshold && this.state.showHeaderTabs) {
+            this.setState({ showHeaderTabs: false })
+        }
+    }
+
+    renderHeaderTabs() {
+        return (
+            <SafeAreaView style={styles.headerTabsSafeArea} edges={['top']}>
+                <View style={styles.headerTabsContainer}>
+                    {
+                        tabs.map((i, index) =>
+                            <TouchableOpacity
+                                style={[styles.headerTabItem,
+                                this.state.tabIndex === index && { borderBottomColor: Colors.primary }]}>
+                                <Text
+                                    style={[styles.heading5Bold,
+                                    { color: this.state.tabIndex === index ? Colors.primary : Colors.grey60 }]}>
+                                    {i}
+                                </Text>
+                            </TouchableOpacity>)
+                    }
+                </View>
+            </SafeAreaView>
+        )
     }
 
     renderProductImages() {
@@ -158,6 +196,24 @@ class ProductDetailScreen extends Component {
                     </Text>
                 </View>
 
+                <Picker
+                    style={styles.picker}
+                    title={'Size'}
+                    value={'256GB'}
+                />
+
+                <Picker
+                    style={styles.picker}
+                    title={'Style'}
+                    value={'OnePlus 8 Pro'}
+                />
+
+                <Picker
+                    style={styles.picker}
+                    title={'Color'}
+                    value={'Black'}
+                />
+
             </View>
         )
     }
@@ -169,13 +225,20 @@ class ProductDetailScreen extends Component {
                 <SafeAreaView
                     style={styles.mainContainer}
                     edges={['top', 'left', 'right']}>
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <ScrollView 
+                        onScroll={this.handleScroll}
+                        scrollEventThrottle={60}
+                        showsVerticalScrollIndicator={false}>
+
                         {this.renderProductImages()}
 
                         {this.renderProductInfo()}
 
                         {this.renderOptions()}
+
                     </ScrollView>
+
+                    {this.state.showHeaderTabs && this.renderHeaderTabs()}
                 </SafeAreaView>
             </View>
         )
@@ -195,3 +258,5 @@ const product = {
     inStock: 100,
     orderCount: 24
 }
+
+const tabs = ['Details', 'Related', 'Seller', 'Review']

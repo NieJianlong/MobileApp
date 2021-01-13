@@ -141,6 +141,36 @@ export default ScaledSheet.create({
         backgroundColor: Colors.grey10,
         paddingVertical: '10@vs',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        borderRadius: '3@s'
+    },
+    picker: {
+        marginTop: '15@vs'
+    },
+    headerTabsSafeArea: {
+        position: 'absolute',
+        top: 0,
+        width: '100%',
+        backgroundColor: 'white',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    headerTabsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        paddingHorizontal: AppConfig.paddingHorizontal,
+    },
+    headerTabItem: {
+        borderBottomWidth: 2,
+        borderBottomColor: Colors.white,
+        alignSelf: 'flex-end',
+        height: '30@vs'
     }
 })

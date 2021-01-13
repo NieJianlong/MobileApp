@@ -54,7 +54,7 @@ const ApplicationStyles = {
       fontSize: s(15)
     },
     txtRegular: {
-      fontSize: s(14),
+      fontSize: s(13),
       fontFamily: Fonts.primary,
       color: Colors.grey80,
     },
@@ -106,7 +106,7 @@ const ApplicationStyles = {
       fontWeight: '400'
     },
     heading5Regular: {
-      fontSize: s(13),
+      fontSize: s(12.5),
       fontFamily: Fonts.primary,
       color: Colors.black,
     },

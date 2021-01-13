@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs'
 import LaunchScreen from '../Containers/Launch'
 import OnboardingScreen from '../Containers/Onboarding'
 import ExploreScreen from '../Containers/Explore'
+import ProductDetailScreen from '../Containers/Explore/ProductDetail'
 import LoginScreen from '../Containers/Login'
 import RegisterScreen from '../Containers/Register'
 import LegalScreen from '../Containers/Legal'
@@ -19,6 +20,7 @@ import UserEditProfileScreen from '../Containers/UserEditProfile'
 import DeleteAccountMessageScreen from '../Containers/DeleteAccountMessage'
 import NavigationService from './NavigationService';
 import ChangePasswordScreen from '../Containers/ChangePassword';
+
 import TabBar from './TabBar'
 
 const TabNav = createBottomTabNavigator({
@@ -38,6 +40,7 @@ const PrimaryNav = createStackNavigator({
     MainScreen: { screen: TabNav },
     OnboardingScreen: { screen: OnboardingScreen },
     ExploreScreen: { screen: ExploreScreen },
+    ProductDetailScreen: { screen: ProductDetailScreen },
     LoginScreen: { screen: LoginScreen },
     RegisterScreen: { screen: RegisterScreen },
     LegalScreen: { screen: LegalScreen },

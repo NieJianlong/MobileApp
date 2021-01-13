@@ -24,11 +24,12 @@ import {
     RadiusButton,
     StarRating
 } from '../../Components'
-import CheckBox from './CheckBox'
+import CheckBox from './Components/CheckBox'
 
 import { Colors, Images } from '../../Themes'
 import styles from './styles'
 import AppConfig from '../../Config/AppConfig'
+import NavigationService from '../../Navigation/NavigationService'
 
 class ExploreScreen extends Component {
 
@@ -383,7 +384,10 @@ class ExploreScreen extends Component {
 
     renderProduct = (item, index) => {
         return (
-            <View style={styles.productContainer} key={index.toString()}>
+            <TouchableOpacity 
+                onPress={() => NavigationService.navigate('ProductDetailScreen')}
+                style={styles.productContainer} 
+                key={index.toString()}>
                 {
                     this.state.showProductAsRows ?
                         <View style={[styles.row, { paddingHorizontal: AppConfig.paddingHorizontal }]}>
@@ -462,7 +466,7 @@ class ExploreScreen extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     }
 

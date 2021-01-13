@@ -6,9 +6,8 @@ import {
     Image
 } from 'react-native'
 import { ScaledSheet } from 'react-native-size-matters'
-import { Fonts, Colors, ApplicationStyles, Images } from '../../Themes'
-import AppConfig from '../../Config/AppConfig'
-import { set } from 'lodash'
+import { Fonts, Colors, ApplicationStyles, Images } from '../../../Themes'
+import AppConfig from '../../../Config/AppConfig'
 
 function CheckBox(props) {
 

@@ -26,6 +26,7 @@ function index(props) {
   const [pincode, setPincode] = useState('');
   const [country, setCountry] = useState('');
   const [disable, setDisable] = useState(true);
+  const [hastitle, setHasTitle] = useState(false);
   useEffect(() => {
     if (
       name.length == 0 ||
@@ -50,6 +51,7 @@ function index(props) {
   const inputs = [
     {
       placeholder: 'Address Name (ex. home)*',
+    
       onChangeText: (text) => setName(text),
       showError: false,
       errorMessage: null,
@@ -111,6 +113,10 @@ function index(props) {
       state: {params},
     },
   } = props;
+  // if (params.title=="EDIT ADDRESS") {
+  //   setHasTitle(tru);
+  // }
+  
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -143,7 +149,7 @@ function index(props) {
           }}
         />
         <View style={styles.bodyContainer}>
-          <Text style={styles.heading2Bold}>Add new address</Text>
+          <Text style={styles.heading2Bold}>{params.title}</Text>
           <View
             style={{
               flexDirection: 'row',

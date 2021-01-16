@@ -6,9 +6,9 @@
  * @Description: UserInfo Horizontal Menu
  * @FilePath: /MobileApp/App/Containers/UserInfo/HorizontalMenu.js
  */
-import React, {useState} from 'react';
-import {View, FlatList, Text, Image} from 'react-native';
-import {ScaledSheet, s, vs} from 'react-native-size-matters';
+import React, { useState } from 'react';
+import { View, FlatList, Text, Image } from 'react-native';
+import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import colors from '../../Themes/Colors';
 import DynamicTabView from './DynamicTabView';
 import images from '../../Themes/Images';
@@ -16,90 +16,22 @@ import NoPurchase from './NoPurchase';
 import TextTip from './TextTip';
 import NavigationService from '../../Navigation/NavigationService';
 import AppConfig from '../../Config/AppConfig';
-import {Fonts} from '../../Themes';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { Fonts } from '../../Themes';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import fonts from '../../Themes/Fonts';
-import {Button} from '../../Components';
-import {SafeAreaView} from 'react-navigation';
+import { Button } from '../../Components';
+import { SafeAreaView } from 'react-navigation';
+import {AddressTestData,MenuConfig} from './Config'
 
-const testData = [
-  {
-    title: 'Home',
-    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
-    isDefault: true,
-  },
-  {
-    title: 'Work',
-    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
-    isDefault: false,
-  },
-  {
-    title: 'Home',
-    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
-    isDefault: false,
-  },
-  {
-    title: 'Work',
-    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
-    isDefault: false,
-  },
-];
+
 
 function HorizontalMenu(props) {
   const [defaultIndex, setDefaultIndex] = useState(0);
   const [addresses, setAddresses] = useState([]);
-  const data = [
-    {
-      title: '1 Click Purchasing',
-      icon: images.userPurchaseImage,
-      selectedIcon: images.userPurchaseImage,
-      screen: NoPurchase,
-      key: 'Purchasing',
-    },
-    {
-      title: 'My Addresses',
-      icon: images.userUAddressImage,
-      selectedIcon: images.userAddressImage,
-      key: 'Addresses',
-      textTip: 'Your address list is empty',
-      subTextTip: 'You haven´t add any personal address yet',
-      needButton: true,
-      btnMsg: 'ADD ADDRESS',
-      onPress: () => {
-        NavigationService.navigate('AddNewAddressScreen', {
-          callback: (address) => {
-            setAddresses(testData);
-          },
-        });
-      },
-    },
-    {
-      title: 'My Payment Methods',
-      icon: images.userUPayImage,
-      selectedIcon: images.userPayImage,
-      key: 'Payment',
-      textTip: "You haven't added any payment \n method yet",
-      subTextTip:
-        'Add a payment method to be able to use it in your next  purchases',
-      needButton: true,
-      btnMsg: 'ADD  NEW PAYMENT METHOD',
-      onPress: () => {},
-    },
-    {
-      title: 'My Billing Details',
-      icon: images.userUBillingImage,
-      selectedIcon: images.userBillingImage,
-      key: 'Billing',
-      textTip: 'You have not added \n billing details yet',
-      subTextTip: 'Add your billing details to use in your next purchase',
-      needButton: true,
-      btnMsg: 'ADD BILLING DETAILS',
-      onPress: () => {},
-    },
-  ];
+  
   return (
     <DynamicTabView
-      data={data}
+      data={MenuConfig}
       renderTab={(item, index) => {
         console.log('renderItem', index);
         let component = <NoPurchase />;
@@ -109,10 +41,10 @@ function HorizontalMenu(props) {
             break;
           case 'Addresses':
             if (addresses.length > 0) {
-              component = flatListView(testData);
+              component = flatListView(item, AddressTestData);
             } else {
               //component = flatListView(addresses);
-              component =<TextTip {...item}></TextTip>;
+              component = <TextTip {...item} callback={()=>setAddresses(AddressTestData)}></TextTip>;
             }
             break;
           case 'Payment':
@@ -130,8 +62,8 @@ function HorizontalMenu(props) {
       defaultIndex={defaultIndex}
       containerStyle={styles.container}
       headerBackgroundColor={'white'}
-      highlightStyle={{color: 'white'}}
-      noHighlightStyle={{color: 'gray'}}
+      highlightStyle={{ color: 'white' }}
+      noHighlightStyle={{ color: 'gray' }}
       headerTextStyle={styles.headerText}
       // onChangeTab={this.onChangeTab}
       headerUnderlayColor={'transparent'}
@@ -139,16 +71,19 @@ function HorizontalMenu(props) {
   );
 }
 
-function flatListView(data) {
+function flatListView(item, data) {
+  const { itemActions: { setDefault,
+    doEdit,
+    doDelete } } = item;
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <FlatList
         data={data}
-        renderItem={({item}) => {
+        renderItem={({ item }) => {
           return (
-            <View style={{paddingHorizontal: AppConfig.paddingHorizontal}}>
+            <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
               <View style={styles.item}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Text style={styles.itemTitle}>{item.title}</Text>
                   {item.isDefault && (
                     <Image style={styles.icon} source={images.check}></Image>
@@ -164,19 +99,19 @@ function flatListView(data) {
                       <Text style={styles.itemTips}>Default address</Text>
                     </View>
                   ) : (
-                    <TouchableOpacity style={styles.itemSetDefault}>
-                      <Text style={styles.setDefaultText}>SET AS DEFAULT</Text>
-                    </TouchableOpacity>
-                  )}
+                      <TouchableOpacity style={styles.itemSetDefault} onPress={setDefault}>
+                        <Text style={styles.setDefaultText}>SET AS DEFAULT</Text>
+                      </TouchableOpacity>
+                    )}
 
-                  <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity>
+                  <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity onPress={(item) => doEdit(item)}>
                       <Image
                         style={styles.editImage}
                         source={images.userAddressEditImage}
                       />
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={(item) => doDelete(item)}>
                       <Image
                         style={styles.editImage}
                         source={images.userAddressTrashImage}
@@ -188,7 +123,7 @@ function flatListView(data) {
             </View>
           );
         }}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item,index) => `listItem${index}`}
       />
       <SafeAreaView
         style={{
@@ -196,7 +131,7 @@ function flatListView(data) {
           marginBottom: vs(20),
           marginTop: vs(20),
         }}>
-        <Button text="ADD NEW ADDRESS"></Button>
+        <Button text={item.extra} onPress={item.onPress}></Button>
       </SafeAreaView>
     </View>
   );

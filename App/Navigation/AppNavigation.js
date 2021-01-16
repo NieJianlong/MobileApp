@@ -21,6 +21,7 @@ import AddNewAddressScreen from '../Containers/AddNewAddress';
 import NavigationService from './NavigationService';
 import ChangePasswordScreen from '../Containers/ChangePassword';
 import AddPaymentMethodScreen from '../Containers/AddPaymentMethod';
+import AddCreditScreen from '../Containers/AddCredit';
 import TabBar from './TabBar';
 
 
@@ -52,6 +53,7 @@ const PrimaryNav = createStackNavigator({
     AddNewAddressScreen:{ screen:AddNewAddressScreen},
     ForgotPasswordScreen: { screen: ForgotPasswordScreen },
     AddPaymentMethodScreen: {screen: AddPaymentMethodScreen},
+    AddCreditScreen:{screen:AddCreditScreen},
     CreateNewPasswordScreen: { screen: CreateNewPasswordScreen }
 }, {
     // Default config for all screens

@@ -73,7 +73,11 @@ export const AddressTestData = [
         'Add a payment method to be able to use it in your next  purchases',
       needButton: true,
       btnMsg: 'ADD  NEW PAYMENT METHOD',
-      onPress: () => { },
+      onPress: (callback) => {
+        NavigationService.navigate('AddPaymentMethodScreen', {
+          callback
+        });
+      },
     },
     {
       title: 'My Billing Details',

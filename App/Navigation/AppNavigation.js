@@ -20,7 +20,9 @@ import DeleteAccountMessageScreen from '../Containers/DeleteAccountMessage'
 import AddNewAddressScreen from '../Containers/AddNewAddress';
 import NavigationService from './NavigationService';
 import ChangePasswordScreen from '../Containers/ChangePassword';
-import TabBar from './TabBar'
+import AddPaymentMethodScreen from '../Containers/AddPaymentMethod';
+import TabBar from './TabBar';
+
 
 const TabNav = createBottomTabNavigator({
     ExploreScreen: { screen: ExploreScreen },
@@ -49,6 +51,7 @@ const PrimaryNav = createStackNavigator({
     OTPScreen: { screen: OTPScreen },
     AddNewAddressScreen:{ screen:AddNewAddressScreen},
     ForgotPasswordScreen: { screen: ForgotPasswordScreen },
+    AddPaymentMethodScreen: {screen: AddPaymentMethodScreen},
     CreateNewPasswordScreen: { screen: CreateNewPasswordScreen }
 }, {
     // Default config for all screens

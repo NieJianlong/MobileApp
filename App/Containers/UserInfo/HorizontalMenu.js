@@ -36,7 +36,7 @@ const testData = [
   {
     title: 'Home',
     subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
-    isDefault: true,
+    isDefault: false,
   },
   {
     title: 'Work',
@@ -47,7 +47,7 @@ const testData = [
 
 function HorizontalMenu(props) {
   const [defaultIndex, setDefaultIndex] = useState(0);
-  const [addresses, setAddresses] = useState([{}, {}]);
+  const [addresses, setAddresses] = useState([]);
   const data = [
     {
       title: '1 Click Purchasing',
@@ -68,7 +68,7 @@ function HorizontalMenu(props) {
       onPress: () => {
         NavigationService.navigate('AddNewAddressScreen', {
           callback: (address) => {
-            setAddresses([address]);
+            setAddresses(testData);
           },
         });
       },
@@ -109,10 +109,10 @@ function HorizontalMenu(props) {
             break;
           case 'Addresses':
             if (addresses.length > 0) {
-              component = flatListView(addresses);
+              component = flatListView(testData);
             } else {
-              component = flatListView(addresses);
-              //<TextTip {...item}></TextTip>;
+              //component = flatListView(addresses);
+              component =<TextTip {...item}></TextTip>;
             }
             break;
           case 'Payment':
@@ -143,7 +143,7 @@ function flatListView(data) {
   return (
     <View style={{flex: 1}}>
       <FlatList
-        data={testData}
+        data={data}
         renderItem={({item}) => {
           return (
             <View style={{paddingHorizontal: AppConfig.paddingHorizontal}}>

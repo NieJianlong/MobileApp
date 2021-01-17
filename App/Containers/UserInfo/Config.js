@@ -87,7 +87,9 @@ export const MenuConfig = [
           item,
         });
       },
-      doDelete: (item) => {},
+      doDelete: (showRemoveSheet) => {
+        showRemoveSheet();
+      },
     },
   },
   {

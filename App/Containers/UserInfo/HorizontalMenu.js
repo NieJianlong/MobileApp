@@ -19,7 +19,7 @@ import AppConfig from '../../Config/AppConfig';
 import { Fonts } from '../../Themes';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import fonts from '../../Themes/Fonts';
-import { Button } from '../../Components';
+import { Button, BottomSheet } from '../../Components';
 import { SafeAreaView } from 'react-navigation';
 import { AddressTestData, MenuConfig, PaymentTestData } from './Config';
 import { AlertContext } from './index';
@@ -71,7 +71,18 @@ function HorizontalMenu(props) {
               component = (
                 <TextTip
                   {...item}
-                  callback={(item) => setPayments(PaymentTestData)}
+                  callback={(item) => {
+                    setPayments(PaymentTestData);
+                    dispatch({
+                      type: 'changAlertState',
+                      payload: {
+                        visible: true,
+                        message: 'New payment method added..',
+                        color: colors.success,
+                        title: 'Success',
+                      },
+                    });
+                  }}
                 ></TextTip>
               );
             }
@@ -102,6 +113,7 @@ function flatListView(item, data, isPayment = false) {
   const {
     itemActions: { setDefault, doEdit, doDelete },
   } = item;
+  const { dispatch } = useContext(AlertContext);
   return (
     <View style={{ flex: 1 }}>
       <FlatList
@@ -157,7 +169,16 @@ function flatListView(item, data, isPayment = false) {
                       </TouchableOpacity>
                     )}
 
-                    <TouchableOpacity onPress={(item) => doDelete(item)}>
+                    <TouchableOpacity
+                      onPress={(item) =>
+                        doDelete(() => {
+                          dispatch({
+                            type: 'showPaymentRemoveSheet',
+                            payload: { showSheet: true },
+                          });
+                        })
+                      }
+                    >
                       <Image
                         style={styles.editImage}
                         source={images.userAddressTrashImage}

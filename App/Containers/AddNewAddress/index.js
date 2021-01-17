@@ -129,16 +129,19 @@ function index(props) {
               <TouchableOpacity
                 disabled={disable}
                 onPress={() => {
-                  params.callback({
-                    name,
-                    streetName,
-                    streetNum,
-                    door,
-                    city,
-                    mstate,
-                    pincode,
-                    country,
-                  });
+                  if (params.callback) {
+                    params.callback({
+                      name,
+                      streetName,
+                      streetNum,
+                      door,
+                      city,
+                      mstate,
+                      pincode,
+                      country,
+                    });
+                  }
+                 
                   NavigationService.goBack();
                 }}>
                 <Text style={disable ? styles.disupdate : styles.update}>

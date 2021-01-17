@@ -6,39 +6,31 @@
  * @Description: UserInfo Screen
  * @FilePath: /MobileApp/App/Containers/UserInfo/index.js
  */
-import React, { useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import UserHeader from '../UserCenter/UserHeader';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import AppConfig from '../../Config/AppConfig';
-import { AppBar, Alert } from '../../Components';
+import { AppBar } from '../../Components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import colors from '../../Themes/Colors';
 import HorizontalMenu from './HorizontalMenu';
-export const AlertContext = React.createContext('AlertContext');
-function index(props) {
-  const [visible, setVisible] = useState(false);
 
-  return (
-    <AlertContext.Provider value={'ddd'}>
+class index extends React.Component {
+  /* render function, etc */
+  render() {
+    return (
       <View style={styles.container}>
         <SafeAreaView style={{ maxHeight: 64 }}>
           <AppBar></AppBar>
         </SafeAreaView>
-
         <View>
           <UserHeader needEdit></UserHeader>
         </View>
-        <Alert
-          visible={visible}
-          message={'Your account has been activated successfully'}
-          color={colors.success}
-          // onDismiss={this.toggleAccountActivatedSuccessfullyAlert}
-        />
         <HorizontalMenu></HorizontalMenu>
       </View>
-    </AlertContext.Provider>
-  );
+    );
+  }
 }
 
 export default index;

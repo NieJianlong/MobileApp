@@ -6,7 +6,7 @@
  * @Description: UserInfo Horizontal Menu
  * @FilePath: /MobileApp/App/Containers/UserInfo/HorizontalMenu.js
  */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, FlatList, Text, Image } from 'react-native';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import colors from '../../Themes/Colors';
@@ -22,12 +22,14 @@ import fonts from '../../Themes/Fonts';
 import { Button } from '../../Components';
 import { SafeAreaView } from 'react-navigation';
 import { AddressTestData, MenuConfig, PaymentTestData } from './Config';
+import { AlertContext } from './index';
 
 function HorizontalMenu(props) {
   const [defaultIndex, setDefaultIndex] = useState(0);
   const [addresses, setAddresses] = useState([]);
   const [payments, setPayments] = useState([]);
-
+  const AlertContext = useContext(AlertContext);
+  debugger;
   return (
     <DynamicTabView
       data={MenuConfig}

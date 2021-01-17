@@ -21,6 +21,7 @@ import { Colors, Metrics } from '../../Themes';
 import styles from './styles';
 import images from '../../Themes/Images';
 import { ScrollView } from 'react-native-gesture-handler';
+import Nav from '../../Navigation/NavigationService';
 
 function index(props) {
   const payments = [
@@ -61,11 +62,21 @@ function index(props) {
             {payments.map((item, index) => {
               return (
                 <View
+                  key={`paymengt${index}`}
                   style={{
                     maxHeight: 110,
                   }}
                 >
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={(item) => {
+                      Nav.navigate('AddCreditScreen', {
+                        callback: () => {
+                          Nav.goBack();
+                          params.callback();
+                        },
+                      });
+                    }}
+                  >
                     <Image source={item.image} style={styles.item} />
                   </TouchableOpacity>
                 </View>

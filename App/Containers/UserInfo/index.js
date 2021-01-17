@@ -7,26 +7,24 @@
  * @FilePath: /MobileApp/App/Containers/UserInfo/index.js
  */
 import React from 'react';
-import {View} from 'react-native';
+import { View } from 'react-native';
 import UserHeader from '../UserCenter/UserHeader';
-import {ScaledSheet, s, vs} from 'react-native-size-matters';
+import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import AppConfig from '../../Config/AppConfig';
-import {AppBar} from '../../Components';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { AppBar } from '../../Components';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import colors from '../../Themes/Colors';
 import HorizontalMenu from './HorizontalMenu';
 
 class index extends React.Component {
-  
-
   /* render function, etc */
   render() {
     return (
       <View style={styles.container}>
-        <SafeAreaView style={{maxHeight:64}}>
+        <SafeAreaView style={{ maxHeight: 64 }}>
           <AppBar></AppBar>
-          </SafeAreaView>
-        <View >
+        </SafeAreaView>
+        <View>
           <UserHeader needEdit></UserHeader>
         </View>
         <HorizontalMenu></HorizontalMenu>
@@ -37,10 +35,8 @@ class index extends React.Component {
 
 export default index;
 const styles = ScaledSheet.create({
-    
   container: {
-   
-    backgroundColor:colors.background,
-    flex:1
+    backgroundColor: colors.background,
+    flex: 1,
   },
 });

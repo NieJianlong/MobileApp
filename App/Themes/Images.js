@@ -54,7 +54,9 @@ const images = {
   userPayMethod2Image:require('../Images/usercenter/pay2.png'),
   userPayMethod3Image:require('../Images/usercenter/pay3.png'),
   userPayMethod4Image:require('../Images/usercenter/pay4.png'),
-  userPayMethod5Image:require('../Images/usercenter/pay5.png')
+  userPayMethod5Image:require('../Images/usercenter/pay5.png'),
+  userPayTypeImage:require('../Images/usercenter/Cardtype.png'),
+
 }
 
 export default images

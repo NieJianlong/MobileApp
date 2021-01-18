@@ -172,5 +172,18 @@ export default ScaledSheet.create({
         borderBottomColor: Colors.white,
         alignSelf: 'flex-end',
         height: '30@vs'
+    },
+    relatedProductsContainer: {
+        backgroundColor: Colors.background
+    },
+    relatedProductsHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'baseline',
+        paddingHorizontal: AppConfig.paddingHorizontal
+    },
+    relatedProductsList: {
+        paddingHorizontal: AppConfig.paddingHorizontal,
+        marginVertical: '10@vs'
     }
 })

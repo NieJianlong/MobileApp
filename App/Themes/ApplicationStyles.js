@@ -76,7 +76,7 @@ const ApplicationStyles = {
       fontWeight: '600'
     },
     heading3Bold: {
-      fontSize: s(18),
+      fontSize: s(17),
       fontFamily: Fonts.primary,
       color: Colors.black,
       fontWeight: '600'

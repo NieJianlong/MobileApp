@@ -6,7 +6,8 @@ import {
     ScrollView,
     TouchableOpacity,
     Text,
-    Dimensions
+    Dimensions,
+    FlatList
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { s, vs } from 'react-native-size-matters'
@@ -22,6 +23,8 @@ import { Images, Colors } from '../../../Themes'
 import AppConfig from '../../../Config/AppConfig'
 import styles from './styles'
 import NavigationService from '../../../Navigation/NavigationService'
+
+import ProductItem from '../Components/ProductItem'
 
 const { height } = Dimensions.get('window')
 
@@ -218,6 +221,32 @@ class ProductDetailScreen extends Component {
         )
     }
 
+    renderRelatedProducts() {
+        return (
+            <View style={styles.relatedProductsContainer}>
+                <View style={styles.relatedProductsHeader}>
+                    <Text style={styles.heading3Bold}>Related products</Text>
+
+                    <TouchableOpacity>
+                        <Text
+                            style={[styles.heading5Bold, { color: Colors.secondary00 }]}>
+                            See all
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                <FlatList
+                    contentContainerStyle={styles.relatedProductsList}
+                    showsHorizontalScrollIndicator={false}
+                    horizontal
+                    data={relatedProducs}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item, index }) => <ProductItem product={item} size={'S'} />}
+                    ItemSeparatorComponent={() => <View style={{ width: s(15) }} />}
+                />
+            </View>
+        )
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -225,7 +254,7 @@ class ProductDetailScreen extends Component {
                 <SafeAreaView
                     style={styles.mainContainer}
                     edges={['top', 'left', 'right']}>
-                    <ScrollView 
+                    <ScrollView
                         onScroll={this.handleScroll}
                         scrollEventThrottle={60}
                         showsVerticalScrollIndicator={false}>
@@ -235,6 +264,8 @@ class ProductDetailScreen extends Component {
                         {this.renderProductInfo()}
 
                         {this.renderOptions()}
+
+                        {this.renderRelatedProducts()}
 
                     </ScrollView>
 
@@ -258,5 +289,41 @@ const product = {
     inStock: 100,
     orderCount: 24
 }
+
+const relatedProducs = [
+    {
+        name: 'iPhone 11',
+        picture: 'https://www.pngmart.com/files/13/iPhone-12-PNG-HD.png',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://www.pngmart.com/files/13/iPhone-12-PNG-HD.png',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://www.pngmart.com/files/13/iPhone-12-PNG-HD.png',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+]
 
 const tabs = ['Details', 'Related', 'Seller', 'Review']

@@ -11,6 +11,8 @@ import RadiusButton from './RadiusButton'
 import MaterialTextInput from './MaterialTextInput'
 import StarRating from './StarRating'
 import Picker from './Picker'
+import QuantitySelector from './QuantitySelector'
+import DescriptionText from './DescriptionText'
 
 export {
     BottomSheet,
@@ -25,5 +27,7 @@ export {
     RadiusButton,
     MaterialTextInput,
     StarRating,
-    Picker
+    Picker,
+    QuantitySelector,
+    DescriptionText
 }

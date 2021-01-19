@@ -30,6 +30,7 @@ const images = {
   info2: require('../Images/info_02.png'),
   verification: require('../Images/verification.png'),
   check: require('../Images/check2.png'),
+  less: require('../Images/less_med.png'),
   userDocImage:require('../Images/usercenter/Document.png'),
   userIconImage:require('../Images/usercenter/Icon.png'),
   userLogoImage:require('../Images/usercenter/Logo.png'),
@@ -47,7 +48,8 @@ const images = {
   userLogoutImage:require('../Images/usercenter/logout.png'),
   userChangePwdImage:require('../Images/usercenter/changepwd.png'),
   userRightBtnImage:require('../Images/usercenter/rightarrow.png'),
-  userTrashImage:require('../Images/usercenter/trash.png')
+  userTrashImage:require('../Images/usercenter/trash.png'),
+  
 }
 
 export default images

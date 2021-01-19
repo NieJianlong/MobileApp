@@ -14,18 +14,27 @@ class StarRating extends Component {
     render() {
         const {
             rating,
-            ratingCount
+            ratingCount,
+            style,
+            fullMode
         } = this.props
 
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, style]}>
                 <Image source={Images.starFilled} style={rating >= 1 ? styles.filledStar : styles.emptyStar} />
                 <Image source={Images.starFilled} style={rating >= 2 ? styles.filledStar : styles.emptyStar} />
                 <Image source={Images.starFilled} style={rating >= 3 ? styles.filledStar : styles.emptyStar} />
                 <Image source={Images.starFilled} style={rating >= 4 ? styles.filledStar : styles.emptyStar} />
                 <Image source={Images.starFilled} style={rating == 5 ? styles.filledStar : styles.emptyStar} />
 
-                <Text style={styles.txtRatingCount}>{ratingCount}</Text>
+                {
+                    fullMode ?
+                        <Text style={styles.txtRatingCount}>{rating} ({ratingCount} Reviews)</Text>
+                        :
+                        <Text style={styles.txtRatingCount}>{ratingCount}</Text>
+                }
+
+
             </View>
         )
     }
@@ -61,6 +70,10 @@ const styles = ScaledSheet.create({
         ...ApplicationStyles.screen.heading6Regular,
         color: Colors.black,
         marginLeft: '3@s'
+    },
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center'
     }
 })
 export default StarRating

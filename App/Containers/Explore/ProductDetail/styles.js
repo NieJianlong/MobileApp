@@ -1,6 +1,7 @@
 import { ScaledSheet } from 'react-native-size-matters'
 import { ApplicationStyles, Colors, Fonts } from '../../../Themes'
 import AppConfig from '../../../Config/AppConfig'
+import { isIphoneX } from 'react-native-iphone-x-helper'
 
 export default ScaledSheet.create({
     ...ApplicationStyles.screen,
@@ -185,5 +186,74 @@ export default ScaledSheet.create({
     relatedProductsList: {
         paddingHorizontal: AppConfig.paddingHorizontal,
         marginVertical: '10@vs'
+    },
+    footerSafeArea: {
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        backgroundColor: Colors.white,
+        paddingHorizontal: AppConfig.paddingHorizontal,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        paddingTop: '15@vs',
+        paddingBottom: isIphoneX() ? 0 : '10@vs'
+    },
+    rowSpaceBetween: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    icCart: {
+        width: '28@s',
+        height: '28@s',
+        tintColor: Colors.primary,
+        marginRight: '5@s'
+    },
+    btnBuyNow: {
+        width: '165@s',
+        height: '48@vs',
+        backgroundColor: Colors.primary,
+        borderRadius: '30@s',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: '10@s'
+    },
+    priceContainer: {
+        backgroundColor: Colors.primary01,
+        paddingHorizontal: '7@s',
+        paddingVertical: '4@vs',
+        borderRadius: '20@s'
+    },
+    sellerAvatarContainer: {
+        width: '30@s',
+        height: '30@s',
+        borderRadius: '15@s',
+        overflow: 'hidden',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: '10@s'
+    },
+    sellerAvatar: {
+        width: '30@s',
+        height: '30@s'
+    },
+    storeInfoContainer: {
+        paddingHorizontal: AppConfig.paddingHorizontal,
+        paddingTop: '10@vs',
+        paddingBottom: '10@vs',
+        backgroundColor: Colors.white
+    },
+    productReviewContainer: {
+        paddingHorizontal: AppConfig.paddingHorizontal,
+        paddingTop: '10@vs',
+        paddingBottom: '10@vs',
+        backgroundColor: Colors.white
     }
 })

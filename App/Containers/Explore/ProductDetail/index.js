@@ -16,8 +16,11 @@ import Collapsible from 'react-native-collapsible'
 import {
     Switch,
     StarRating,
-    Picker
+    Picker,
+    QuantitySelector,
+    DescriptionText
 } from '../../../Components'
+import { currencyFormatter } from '../../../Utils/Currency'
 
 import { Images, Colors } from '../../../Themes'
 import AppConfig from '../../../Config/AppConfig'
@@ -25,6 +28,7 @@ import styles from './styles'
 import NavigationService from '../../../Navigation/NavigationService'
 
 import ProductItem from '../Components/ProductItem'
+import Review from '../Components/Review'
 
 const { height } = Dimensions.get('window')
 
@@ -34,8 +38,11 @@ class ProductDetailScreen extends Component {
         super(props)
         this.state = {
             showHeaderTabs: false,
+            showFooter: false,
             showDescription: false,
             tabIndex: 0,
+            quantity: 1,
+            totalPrice: 0,
         }
     }
 
@@ -46,12 +53,15 @@ class ProductDetailScreen extends Component {
     handleScroll = (event) => {
         let threshold = height / 4
         let y = event.nativeEvent.contentOffset.y
-        console.log(y)
         if (y > threshold && !this.state.showHeaderTabs) {
-            this.setState({ showHeaderTabs: true })
+            this.setState({ showHeaderTabs: true, showFooter: false })
         } else if (y <= threshold && this.state.showHeaderTabs) {
-            this.setState({ showHeaderTabs: false })
+            this.setState({ showHeaderTabs: false, showFooter: false })
         }
+    }
+
+    handleScrollEnd = (event) => {
+        this.setState({ showFooter: true })
     }
 
     renderHeaderTabs() {
@@ -70,6 +80,36 @@ class ProductDetailScreen extends Component {
                                 </Text>
                             </TouchableOpacity>)
                     }
+                </View>
+            </SafeAreaView>
+        )
+    }
+
+    renderFooter() {
+        return (
+            <SafeAreaView style={styles.footerSafeArea} edges={['bottom']}>
+                <QuantitySelector
+                    minimumValue={1}
+                    maximumValue={100}
+                    value={this.state.quantity}
+                    onChange={(value) => this.setState({ quantity: value })}
+                />
+
+                <View style={{ height: vs(15) }} />
+
+                <View style={styles.rowSpaceBetween}>
+                    <TouchableOpacity style={styles.row}>
+                        <Image source={Images.cartMed} style={styles.icCart} />
+                        <Text style={[styles.txtBold, { color: Colors.primary }]}>ADD TO CART</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.btnBuyNow}>
+                        <Text style={[styles.txtBold, { color: Colors.white }]}>BUY NOW</Text>
+
+                        <View style={styles.priceContainer}>
+                            <Text style={[styles.txtRegular, { color: Colors.white }]}>{currencyFormatter.format(this.state.quantity * product.wholesalePrice)}</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </SafeAreaView>
         )
@@ -170,21 +210,12 @@ class ProductDetailScreen extends Component {
                     </View>
                 </View>
 
-                <TouchableOpacity
-                    onPress={() => this.setState({ showDescription: !this.state.showDescription })}
-                    style={styles.descriptionContainer}>
-                    <Text style={styles.txtRegular}>
-                        This is the product description vero eos et accusamus et iusto odio dignissimos ducimus
-                        qui bl... <Text style={{ color: Colors.secondary00 }}>{this.state.showDescription ? 'Less' : 'Read more'}</Text>
-                    </Text>
-
-                    <Collapsible collapsed={!this.state.showDescription}>
-                        <Text style={styles.txtRegular}>
-                            This is the product description vero eos et accusamus et iusto odio dignissimos ducimus
-                            qui blad
-                        </Text>
-                    </Collapsible>
-                </TouchableOpacity>
+                <DescriptionText
+                    style={styles.descriptionContainer}
+                    text={'This is the product description vero eos et accusamus et iusto odio dignissimos ducimus' +
+                        'qui blad. This is the product description vero eos et accusamus et iusto odio dignissimos ducimus' +
+                        'qui blad'}
+                />
             </View>
         )
     }
@@ -247,6 +278,49 @@ class ProductDetailScreen extends Component {
         )
     }
 
+    renderStoreInfo() {
+        return (
+            <View style={styles.storeInfoContainer}>
+                <View style={styles.rowSpaceBetween}>
+                    <View style={styles.row}>
+                        <View style={styles.sellerAvatarContainer}>
+                            <Image source={{ uri: product.seller.avatar }} style={styles.sellerAvatar} />
+                        </View>
+                        <Text style={styles.heading5Bold}>{product.seller.name}</Text>
+                    </View>
+
+                    <TouchableOpacity>
+                        <Text style={[styles.heading5Bold, { color: Colors.secondary00 }]}>VISIT STORE</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <StarRating 
+                    fullMode
+                    style={{ marginTop: vs(10) }}
+                    rating={product.seller.rating} 
+                    ratingCount={product.seller.ratingCount} />
+
+                <DescriptionText
+                    style={{ marginTop: vs(10) }}
+                    text={product.seller.description}
+                />
+            </View>
+        )
+    }
+
+    renderProductReview() {
+        return (
+            <View style={styles.productReviewContainer}>
+                <Text style={styles.heading3Bold}>Product Reviews</Text>
+
+                <Review 
+                    rating={product.rating}
+                    ratingCount={product.ratingCount}
+                    ratingDetail={product.ratingDetail} />
+            </View>
+        )
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -255,7 +329,9 @@ class ProductDetailScreen extends Component {
                     style={styles.mainContainer}
                     edges={['top', 'left', 'right']}>
                     <ScrollView
+                        contentContainerStyle={{ paddingBottom: vs(120) }}
                         onScroll={this.handleScroll}
+                        onMomentumScrollEnd={this.handleScrollEnd}
                         scrollEventThrottle={60}
                         showsVerticalScrollIndicator={false}>
 
@@ -267,9 +343,15 @@ class ProductDetailScreen extends Component {
 
                         {this.renderRelatedProducts()}
 
+                        {this.renderStoreInfo()}
+
+                        {this.renderProductReview()}
+
                     </ScrollView>
 
                     {this.state.showHeaderTabs && this.renderHeaderTabs()}
+
+                    {this.state.showFooter && this.renderFooter()}
                 </SafeAreaView>
             </View>
         )
@@ -281,20 +363,34 @@ export default ProductDetailScreen
 const product = {
     name: 'iPhone 11',
     picture: 'https://www.pngmart.com/files/13/iPhone-12-PNG-HD.png',
-    rating: 3.0,
-    ratingCount: 124,
+    rating: 3.5,
+    ratingCount: 624,
+    ratingDetail: {
+        oneStar: 41,
+        twoStar: 150,
+        threeStar: 50,
+        fourStar: 74,
+        fiveStar: 309,
+    },
     retailPrice: 2345,
     wholesalePrice: 1542,
     orderClose: '22/12/2020',
     inStock: 100,
-    orderCount: 24
+    orderCount: 24,
+    seller: {
+        avatar: 'https://pbs.twimg.com/profile_images/631366930960551936/MswTZv39_400x400.png',
+        name: 'thegioididong',
+        description: 'Thegioididong.com là thương hiệu thuộc Công ty Cổ phần Thế giới di động, Tên tiếng Anh là Mobile World JSC, (mã Chứng Khoán: MWG) là một tập đoàn bán lẻ tại Việt Nam với lĩnh vực kinh doanh chính là bán lẻ điện thoại di động, thiết bị số và điện tử tiêu dùng[2]. Theo nghiên cứu của EMPEA, thống kê thị phần bán lẻ điện thoại di động tại Việt Nam năm 2014 thì Thế giới di động hiện chiếm 25% và là doanh nghiệp lớn nhất trong lĩnh vực của mình.',
+        rating: 4.2,
+        ratingCount: 1024,  
+    }
 }
 
 const relatedProducs = [
     {
         name: 'iPhone 11',
         picture: 'https://www.pngmart.com/files/13/iPhone-12-PNG-HD.png',
-        rating: 3.0,
+        rating: 3.5,
         ratingCount: 124,
         retailPrice: 2345,
         wholesalePrice: 1542,

@@ -42,7 +42,7 @@ function HorizontalMenu(props) {
             break;
           case 'Addresses':
             if (addresses.length > 0) {
-              component = flatListView(item, AddressTestData);
+              component = flatListView(item, AddressTestData, true, dispatch);
             } else {
               //component = flatListView(addresses);
               component = (
@@ -66,7 +66,7 @@ function HorizontalMenu(props) {
             break;
           case 'Payment':
             if (payments.length > 0) {
-              component = flatListView(item, PaymentTestData, true);
+              component = flatListView(item, PaymentTestData, true, dispatch);
             } else {
               component = (
                 <TextTip
@@ -109,11 +109,10 @@ function HorizontalMenu(props) {
   );
 }
 
-function flatListView(item, data, isPayment = false) {
+function flatListView(item, data, isPayment = false, dispatch) {
   const {
     itemActions: { setDefault, doEdit, doDelete },
   } = item;
-  const { dispatch } = useContext(AlertContext);
   return (
     <View style={{ flex: 1 }}>
       <FlatList

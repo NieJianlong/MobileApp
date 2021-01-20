@@ -29,6 +29,12 @@ function HorizontalMenu(props) {
   const [addresses, setAddresses] = useState([]);
   const [payments, setPayments] = useState([]);
   const { dispatch } = useContext(AlertContext);
+  const showSheet = () => {
+    dispatch({
+      type: 'showPaymentRemoveSheet',
+      payload: { showSheet: true },
+    });
+  };
 
   return (
     <DynamicTabView
@@ -42,7 +48,7 @@ function HorizontalMenu(props) {
             break;
           case 'Addresses':
             if (addresses.length > 0) {
-              component = flatListView(item, AddressTestData, true, dispatch);
+              component = flatListView(item, AddressTestData);
             } else {
               //component = flatListView(addresses);
               component = (
@@ -66,7 +72,7 @@ function HorizontalMenu(props) {
             break;
           case 'Payment':
             if (payments.length > 0) {
-              component = flatListView(item, PaymentTestData, true, dispatch);
+              component = flatListView(item, PaymentTestData, true, showSheet);
             } else {
               component = (
                 <TextTip
@@ -109,7 +115,7 @@ function HorizontalMenu(props) {
   );
 }
 
-function flatListView(item, data, isPayment = false, dispatch) {
+function flatListView(item, data, isPayment = false, showSheet = () => {}) {
   const {
     itemActions: { setDefault, doEdit, doDelete },
   } = item;
@@ -169,14 +175,9 @@ function flatListView(item, data, isPayment = false, dispatch) {
                     )}
 
                     <TouchableOpacity
-                      onPress={(item) =>
-                        doDelete(() => {
-                          dispatch({
-                            type: 'showPaymentRemoveSheet',
-                            payload: { showSheet: true },
-                          });
-                        })
-                      }
+                      onPress={(item) => {
+                        showSheet();
+                      }}
                     >
                       <Image
                         style={styles.editImage}
@@ -280,7 +281,8 @@ const styles = ScaledSheet.create({
     marginTop: '15@vs',
     backgroundColor: colors.white,
     borderRadius: '16@s',
-    height: '128@vs',
-    padding: AppConfig.paddingHorizontal,
+    height: '122@vs',
+    paddingHorizontal: AppConfig.paddingHorizontal,
+    justifyContent: 'center',
   },
 });

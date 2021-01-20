@@ -47,7 +47,6 @@ function index(props) {
       state: { params },
     },
   } = props;
-
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -72,7 +71,9 @@ function index(props) {
                       Nav.navigate('AddCreditScreen', {
                         callback: () => {
                           Nav.goBack();
-                          params.callback();
+                          if (typeof params.callback == 'function') {
+                            params.callback();
+                          }
                         },
                       });
                     }}

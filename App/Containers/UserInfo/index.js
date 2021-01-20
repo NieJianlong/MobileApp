@@ -10,7 +10,6 @@ import React, { useReducer, useEffect, useRef } from 'react';
 import { View, Animated, Image, TouchableWithoutFeedback } from 'react-native';
 import UserHeader from '../UserCenter/UserHeader';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
-import AppConfig from '../../Config/AppConfig';
 import { AppBar, Alert, BottomSheet, Button } from '../../Components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import colors from '../../Themes/Colors';
@@ -29,6 +28,9 @@ const initialState = {
   showSheet: false,
 };
 function reducer(state, action) {
+  console.log('====================================');
+  console.log({ ...state, ...action.payload });
+  console.log('====================================');
   switch (action.type) {
     case 'changAlertState':
       return { ...state, ...action.payload };
@@ -44,17 +46,8 @@ function index(props) {
     { visible, message, color, onDismiss, title, showSheet },
     dispatch,
   ] = useReducer(reducer, initialState);
+  const sheetEl = useRef(null);
   fall = new Animated.Value(0);
-  useEffect(() => {
-    dispatch({
-      type: 'changAlertState',
-      payload: {
-        action: () => {
-          dispatch({ type: 'changAlertState', payload: { visible: false } });
-        },
-      },
-    });
-  }, []);
   useEffect(() => {
     if (visible) {
       setTimeout(() => {
@@ -64,7 +57,7 @@ function index(props) {
   }, [visible]);
   return (
     <AlertContext.Provider value={{ dispatch }}>
-      {/* {showSheet && renderSheet()} */}
+      {showSheet && renderSheet(sheetEl, dispatch)}
       <View style={styles.container}>
         <SafeAreaView style={{ maxHeight: 64 }}>
           <AppBar></AppBar>
@@ -72,17 +65,9 @@ function index(props) {
         <View>
           <UserHeader needEdit></UserHeader>
         </View>
-        <Alert
-          visible={visible}
-          message={message}
-          title={title}
-          color={color}
-          onDismiss={onDismiss}
-        />
         <HorizontalMenu></HorizontalMenu>
       </View>
-
-      {/* {showSheet && (
+      {showSheet && (
         <TouchableWithoutFeedback onPress={() => {}}>
           <Animated.View
             style={{
@@ -99,19 +84,40 @@ function index(props) {
             }}
           />
         </TouchableWithoutFeedback>
-      )} */}
+      )}
+      {visible && (
+        <Alert
+          visible={true}
+          message={message}
+          title={title}
+          color={color}
+          onDismiss={onDismiss}
+        />
+      )}
     </AlertContext.Provider>
   );
 }
-function renderSheet() {
-  const sheetEl = useRef(null);
+function renderSheet(sheetEl, dispatch) {
   const tips = {
     textTip: 'Remove Payment Method',
     subTextTip: 'This action cannot be undone,\n are you sure?',
     needButton: true,
     btnMsg: 'SURE!',
-    onPress: () => {},
-    callback: () => {},
+    onPress: (callback) => {
+      callback();
+    },
+    callback: () => {
+      dispatch({
+        type: 'changAlertState',
+        payload: {
+          visible: true,
+          message: 'You have successfully removed your payment method.',
+          color: colors.secondary00,
+          title: 'Payment method removed',
+          showSheet: false,
+        },
+      });
+    },
   };
   return (
     <BottomSheet
@@ -128,7 +134,6 @@ function renderSheet() {
           source={images.userCreditCardImage}
         ></Image>
       </View>
-
       <View
         style={{
           flex: 2,
@@ -138,7 +143,6 @@ function renderSheet() {
         <View style={{ flex: 1, marginLeft: s(-15) }}>
           <TextTip {...tips}></TextTip>
         </View>
-
         <Button
           backgroundColor="transparent"
           text="CANCEL"

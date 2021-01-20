@@ -1,8 +1,14 @@
-import React, {Component, useState, useEffect} from 'react';
-import {View, StatusBar, Text, Keyboard, TouchableOpacity} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {isIphoneX} from 'react-native-iphone-x-helper';
-import {vs} from 'react-native-size-matters';
+import React, { Component, useState, useEffect } from 'react';
+import {
+  View,
+  StatusBar,
+  Text,
+  Keyboard,
+  TouchableOpacity,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { isIphoneX } from 'react-native-iphone-x-helper';
+import { vs } from 'react-native-size-matters';
 import {
   AppBar,
   Button,
@@ -10,7 +16,7 @@ import {
   PasswordInput,
   Switch,
 } from '../../Components';
-import {Colors, Metrics} from '../../Themes';
+import { Colors, Metrics } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
@@ -51,7 +57,7 @@ function index(props) {
   const inputs = [
     {
       placeholder: 'Address Name (ex. home)*',
-    
+
       onChangeText: (text) => setName(text),
       showError: false,
       errorMessage: null,
@@ -110,26 +116,25 @@ function index(props) {
 
   const {
     navigation: {
-      state: {params},
+      state: { params },
     },
   } = props;
-  // if (params.title=="EDIT ADDRESS") {
-  //   setHasTitle(tru);
-  // }
-  
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}>
+        edges={['top', 'right', 'left', 'bottom']}
+      >
         <AppBar
           rightButton={() => {
             return (
               <TouchableOpacity
                 disabled={disable}
                 onPress={() => {
-                  if (params.callback) {
+                  debugger;
+                  if (typeof params.callback == 'function') {
                     params.callback({
                       name,
                       streetName,
@@ -141,9 +146,10 @@ function index(props) {
                       country,
                     });
                   }
-                 
+
                   NavigationService.goBack();
-                }}>
+                }}
+              >
                 <Text style={disable ? styles.disupdate : styles.update}>
                   SAVE
                 </Text>
@@ -158,20 +164,20 @@ function index(props) {
               flexDirection: 'row',
               flexWrap: 'wrap',
               justifyContent: 'space-between',
-            }}>
+            }}
+          >
             {inputs.map((item, index) => {
               return (
-                <View key={index} style={{width: item.type == 'short' ? '48%' : '100%'}}>
-                  <TextInput
-                    
-                    style={{marginTop: vs(18)}}
-                    {...item}
-                  />
+                <View
+                  key={index}
+                  style={{ width: item.type == 'short' ? '48%' : '100%' }}
+                >
+                  <TextInput style={{ marginTop: vs(18) }} {...item} />
                 </View>
               );
             })}
           </View>
-          <View style={{marginTop: 20}}>
+          <View style={{ marginTop: 20 }}>
             <Switch label="Set as default address"></Switch>
           </View>
         </View>

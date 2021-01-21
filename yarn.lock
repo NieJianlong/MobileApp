@@ -5996,7 +5996,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.5.10, prop-types@^15.5.9, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@>=15.6.1, prop-types@^15.5.10, prop-types@^15.5.9, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -6091,6 +6091,11 @@ react-native-collapsible@^1.5.3:
   dependencies:
     prop-types "^15.6.2"
 
+react-native-component-inview@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-component-inview/-/react-native-component-inview-1.0.2.tgz#da2140bb6c89f40706695ffaed2efbb007f491e7"
+  integrity sha512-BlzgpZDxpGx+5MQD0xA1jKzlej/0tOw72DEIHVb7FOEaGduXkWMIKag+nf50jgbez0S7qAFRH53ctF6q5xrrBw==
+
 react-native-gesture-handler@^1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.9.0.tgz#e441b1c0277c3fd4ca3e5c58fdd681e2f0ceddf0"
@@ -6150,6 +6155,13 @@ react-native-screens@^2.16.1:
   version "2.16.1"
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.16.1.tgz#b105a127378d90018a46daf0c2f6518fca60c06f"
   integrity sha512-WZ7m0sBDVaHbBnlHxwQnUlI6KNfQKHq+Unfw+VBuAlnSXvT+aw6Bb/K2bUlHzBgvrPjwY3Spc7ZERFuTwRLLwg==
+
+react-native-scroll-into-view@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-scroll-into-view/-/react-native-scroll-into-view-1.0.3.tgz#a71f807dff5fa2b9e76422df19d7ef63caabb931"
+  integrity sha512-WBrgzLSvmSgi+LMHOch87TKwk8vMDwlyMhXGagf3BDOTSP4aVmHQ3PUuiIIWo2wK6jexHnPasN0LeA48Qvzxkw==
+  dependencies:
+    prop-types ">=15.6.1"
 
 react-native-size-matters@^0.3.1:
   version "0.3.1"

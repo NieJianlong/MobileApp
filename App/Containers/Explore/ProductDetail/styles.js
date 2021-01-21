@@ -35,7 +35,7 @@ export default ScaledSheet.create({
     },
     row1: {
         position: 'absolute',
-        top: 0, left: 0,
+        top: '10@vs', left: 0,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',

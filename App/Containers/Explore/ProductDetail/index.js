@@ -13,7 +13,10 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { s, vs } from 'react-native-size-matters'
 import Collapsible from 'react-native-collapsible'
+import InView from 'react-native-component-inview'
+import { ScrollIntoView, wrapScrollView } from 'react-native-scroll-into-view'
 import moment from 'moment'
+import { range } from 'lodash'
 
 import {
     Switch,
@@ -34,6 +37,9 @@ import ProductItem from '../Components/ProductItem'
 import Review from '../Components/Review'
 
 const { height } = Dimensions.get('window')
+const Sections = range(0, 4)
+// Wrap the original ScrollView
+const CustomScrollView = wrapScrollView(ScrollView)
 
 class ProductDetailScreen extends Component {
 
@@ -52,6 +58,22 @@ class ProductDetailScreen extends Component {
     componentDidMount() {
 
     }
+
+    sectionsRefs = Sections.map(_section => React.createRef())
+
+    scrollSectionIntoView = (section) => {
+        this.sectionsRefs[section].current.scrollIntoView(
+            {
+                align: 'top',
+                insets: {
+                    top: vs(35),
+                    bottom: 0,
+                }
+            }
+        )
+    }
+
+    setTabIndex = (index) => this.setState({ tabIndex: index })
 
     handleScroll = (event) => {
         let threshold = height / 4
@@ -77,6 +99,7 @@ class ProductDetailScreen extends Component {
                                 key={index.toString()}
                                 onPress={() => {
                                     this.setState({ tabIndex: index })
+                                    this.scrollSectionIntoView(index)
                                 }}
                                 style={[styles.headerTabItem,
                                 this.state.tabIndex === index && { borderBottomColor: Colors.primary }]}>
@@ -162,68 +185,74 @@ class ProductDetailScreen extends Component {
 
     renderProductInfo() {
         return (
-            <View style={styles.infoContainer}>
-                <View style={styles.v2}>
-                    <View>
-                        <Text style={styles.heading2Bold}>{product.name}</Text>
-                        <StarRating rating={product.rating} ratingCount={product.ratingCount} />
-                    </View>
-                    <View style={[styles.row, { marginTop: vs(8) }]}>
-                        <View style={styles.v3}>
-                            <Text style={[styles.heading6Bold, { color: Colors.grey60 }]}>RETAIL PRICE</Text>
-                            <Text style={styles.txtRetailPrice}>${product.retailPrice}</Text>
+            <InView onChange={(isVisible) => {
+                if (isVisible) {
+                    this.setState({ tabIndex: 0 })
+                }
+            }}>
+                <View style={styles.infoContainer}>
+                    <View style={styles.v2}>
+                        <View>
+                            <Text style={styles.heading2Bold}>{product.name}</Text>
+                            <StarRating rating={product.rating} ratingCount={product.ratingCount} />
                         </View>
+                        <View style={[styles.row, { marginTop: vs(8) }]}>
+                            <View style={styles.v3}>
+                                <Text style={[styles.heading6Bold, { color: Colors.grey60 }]}>RETAIL PRICE</Text>
+                                <Text style={styles.txtRetailPrice}>${product.retailPrice}</Text>
+                            </View>
 
-                        <View style={styles.v3}>
-                            <Text style={[styles.heading6Bold, { color: Colors.black }]}>WHOLE SALE PRICE</Text>
-                            <Text style={styles.txtWholesalePrice}>${product.wholesalePrice}</Text>
-                        </View>
+                            <View style={styles.v3}>
+                                <Text style={[styles.heading6Bold, { color: Colors.black }]}>WHOLE SALE PRICE</Text>
+                                <Text style={styles.txtWholesalePrice}>${product.wholesalePrice}</Text>
+                            </View>
 
-                        <View style={styles.percentOffContainer}>
-                            <Text style={[styles.heading6Bold, { color: Colors.secondary00 }]}>30% OFF</Text>
-                        </View>
+                            <View style={styles.percentOffContainer}>
+                                <Text style={[styles.heading6Bold, { color: Colors.secondary00 }]}>30% OFF</Text>
+                            </View>
 
-                        <Text style={[styles.heading5Regular, { marginLeft: s(8) }]}>
-                            Save ${product.retailPrice - product.wholesalePrice}
-                        </Text>
-                    </View>
-
-                    <View style={[styles.row, { marginVertical: vs(10) }]}>
-                        <Text style={styles.heading5Regular}>
-                            Delivery fee: <Text style={{ color: Colors.primary }}>$14.90</Text>
-                        </Text>
-
-                        <View style={[styles.row, { marginLeft: s(10) }]}>
-                            <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
-                                Pick up from seller
+                            <Text style={[styles.heading5Regular, { marginLeft: s(8) }]}>
+                                Save ${product.retailPrice - product.wholesalePrice}
                             </Text>
-                            <Switch />
+                        </View>
+
+                        <View style={[styles.row, { marginVertical: vs(10) }]}>
+                            <Text style={styles.heading5Regular}>
+                                Delivery fee: <Text style={{ color: Colors.primary }}>$14.90</Text>
+                            </Text>
+
+                            <View style={[styles.row, { marginLeft: s(10) }]}>
+                                <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
+                                    Pick up from seller
+                            </Text>
+                                <Switch />
+                            </View>
                         </View>
                     </View>
-                </View>
 
-                <View style={styles.v4}>
-                    <View style={{ marginRight: s(10) }}>
-                        <Text style={styles.heading6Regular}>Order closes on:</Text>
-                        <Text style={styles.txtRegular}>{product.orderClose}</Text>
+                    <View style={styles.v4}>
+                        <View style={{ marginRight: s(10) }}>
+                            <Text style={styles.heading6Regular}>Order closes on:</Text>
+                            <Text style={styles.txtRegular}>{product.orderClose}</Text>
+                        </View>
+
+                        <View style={styles.row}>
+                            <Image source={Images.stock} style={styles.icStock} />
+                            <Text style={styles.txtOrderNumber}>{product.orderCount}/{product.inStock}</Text>
+                            <TouchableOpacity>
+                                <Image source={Images.info2} style={styles.icInfo} />
+                            </TouchableOpacity>
+                        </View>
                     </View>
 
-                    <View style={styles.row}>
-                        <Image source={Images.stock} style={styles.icStock} />
-                        <Text style={styles.txtOrderNumber}>{product.orderCount}/{product.inStock}</Text>
-                        <TouchableOpacity>
-                            <Image source={Images.info2} style={styles.icInfo} />
-                        </TouchableOpacity>
-                    </View>
+                    <DescriptionText
+                        style={styles.descriptionContainer}
+                        text={'This is the product description vero eos et accusamus et iusto odio dignissimos ducimus' +
+                            'qui blad. This is the product description vero eos et accusamus et iusto odio dignissimos ducimus' +
+                            'qui blad'}
+                    />
                 </View>
-
-                <DescriptionText
-                    style={styles.descriptionContainer}
-                    text={'This is the product description vero eos et accusamus et iusto odio dignissimos ducimus' +
-                        'qui blad. This is the product description vero eos et accusamus et iusto odio dignissimos ducimus' +
-                        'qui blad'}
-                />
-            </View>
+            </InView>
         )
     }
 
@@ -261,69 +290,88 @@ class ProductDetailScreen extends Component {
 
     renderRelatedProducts() {
         return (
-            <View style={styles.relatedProductsContainer}>
-                <View style={styles.relatedProductsHeader}>
-                    <Text style={styles.heading3Bold}>Related products</Text>
+            <InView onChange={(isVisible) => {
+                if (isVisible) {
+                    //this.setState({ tabIndex: 1 })
+                }
+            }}>
+                <View style={styles.relatedProductsContainer}>
+                    <View style={styles.relatedProductsHeader}>
+                        <Text style={styles.heading3Bold}>Related products</Text>
 
-                    <TouchableOpacity>
-                        <Text
-                            style={[styles.heading5Bold, { color: Colors.secondary00 }]}>
-                            See all
+                        <TouchableOpacity>
+                            <Text
+                                style={[styles.heading5Bold, { color: Colors.secondary00 }]}>
+                                See all
                         </Text>
-                    </TouchableOpacity>
+                        </TouchableOpacity>
+                    </View>
+                    <FlatList
+                        contentContainerStyle={styles.relatedProductsList}
+                        showsHorizontalScrollIndicator={false}
+                        horizontal
+                        data={relatedProducs}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item, index }) => <ProductItem product={item} size={'S'} />}
+                        ItemSeparatorComponent={() => <View style={{ width: s(15) }} />}
+                    />
                 </View>
-                <FlatList
-                    contentContainerStyle={styles.relatedProductsList}
-                    showsHorizontalScrollIndicator={false}
-                    horizontal
-                    data={relatedProducs}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item, index }) => <ProductItem product={item} size={'S'} />}
-                    ItemSeparatorComponent={() => <View style={{ width: s(15) }} />}
-                />
-            </View>
+            </InView>
         )
     }
 
     renderStoreInfo() {
         return (
-            <View style={styles.storeInfoContainer}>
-                <View style={styles.rowSpaceBetween}>
-                    <View style={styles.row}>
-                        <View style={styles.sellerAvatarContainer}>
-                            <Image source={{ uri: product.seller.avatar }} style={styles.sellerAvatar} />
+            <InView onChange={(isVisible) => {
+                if (isVisible) {
+                    //this.setState({ tabIndex: 2 })
+                }
+            }}>
+                <View style={styles.storeInfoContainer}>
+                    <View style={styles.rowSpaceBetween}>
+                        <View style={styles.row}>
+                            <View style={styles.sellerAvatarContainer}>
+                                <Image source={{ uri: product.seller.avatar }} style={styles.sellerAvatar} />
+                            </View>
+                            <Text style={styles.heading5Bold}>{product.seller.name}</Text>
                         </View>
-                        <Text style={styles.heading5Bold}>{product.seller.name}</Text>
+
+                        <TouchableOpacity>
+                            <Text style={[styles.heading5Bold, { color: Colors.secondary00 }]}>VISIT STORE</Text>
+                        </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity>
-                        <Text style={[styles.heading5Bold, { color: Colors.secondary00 }]}>VISIT STORE</Text>
-                    </TouchableOpacity>
+                    <StarRating
+                        fullMode
+                        style={{ marginTop: vs(10) }}
+                        rating={product.seller.rating}
+                        ratingCount={product.seller.ratingCount} />
+
+                    <DescriptionText
+                        style={{ marginTop: vs(10) }}
+                        text={product.seller.description}
+                    />
                 </View>
-
-                <StarRating
-                    fullMode
-                    style={{ marginTop: vs(10) }}
-                    rating={product.seller.rating}
-                    ratingCount={product.seller.ratingCount} />
-
-                <DescriptionText
-                    style={{ marginTop: vs(10) }}
-                    text={product.seller.description}
-                />
-            </View>
+            </InView>
         )
     }
 
     renderProductReview() {
         return (
             <View style={styles.productReviewContainer}>
-                <Text style={styles.heading3Bold}>Product Reviews</Text>
 
-                <Review
-                    rating={product.rating}
-                    ratingCount={product.ratingCount}
-                    ratingDetail={product.ratingDetail} />
+                <InView onChange={(isVisible) => {
+                    if (isVisible) {
+                        //this.setState({ tabIndex: 3 })
+                    }
+                }}>
+                    <Text style={styles.heading3Bold}>Product Reviews</Text>
+
+                    <Review
+                        rating={product.rating}
+                        ratingCount={product.ratingCount}
+                        ratingDetail={product.ratingDetail} />
+                </InView>
 
                 <View style={{ height: vs(15) }} />
 
@@ -432,6 +480,55 @@ class ProductDetailScreen extends Component {
         )
     }
 
+    renderSectionDetails() {
+        return (
+            <ScrollIntoView
+                align={'top'}
+                key={'section0'}
+                ref={this.sectionsRefs[0]}
+            >
+                {this.renderProductImages()}
+
+                {this.renderProductInfo()}
+
+                {this.renderOptions()}
+            </ScrollIntoView>
+        )
+    }
+
+    renderSectionRelated() {
+        return (
+            <ScrollIntoView
+                key={'section1'}
+                ref={this.sectionsRefs[1]}
+            >
+                {this.renderRelatedProducts()}
+            </ScrollIntoView>
+        )
+    }
+
+    renderSectionSeller() {
+        return (
+            <ScrollIntoView
+                key={'section2'}
+                ref={this.sectionsRefs[2]}
+            >
+                {this.renderStoreInfo()}
+            </ScrollIntoView>
+        )
+    }
+
+    renderSectionReview() {
+        return (
+            <ScrollIntoView
+                key={'section3'}
+                ref={this.sectionsRefs[3]}
+            >
+                {this.renderProductReview()}
+            </ScrollIntoView>
+        )
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -439,26 +536,21 @@ class ProductDetailScreen extends Component {
                 <SafeAreaView
                     style={styles.mainContainer}
                     edges={['top', 'left', 'right']}>
-                    <ScrollView
+                    <CustomScrollView
                         contentContainerStyle={{ paddingBottom: vs(150) }}
                         onScroll={this.handleScroll}
                         onMomentumScrollEnd={this.handleScrollEnd}
                         scrollEventThrottle={60}
                         showsVerticalScrollIndicator={false}>
 
-                        {this.renderProductImages()}
+                        {this.renderSectionDetails()}
 
-                        {this.renderProductInfo()}
+                        {this.renderSectionRelated()}
 
-                        {this.renderOptions()}
+                        {this.renderSectionSeller()}
 
-                        {this.renderRelatedProducts()}
-
-                        {this.renderStoreInfo()}
-
-                        {this.renderProductReview()}
-
-                    </ScrollView>
+                        {this.renderSectionReview()}
+                    </CustomScrollView>
 
                     {this.state.showHeaderTabs && this.renderHeaderTabs()}
 

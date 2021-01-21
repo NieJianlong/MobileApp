@@ -232,8 +232,8 @@ export default ScaledSheet.create({
         borderRadius: '20@s'
     },
     sellerAvatarContainer: {
-        width: '30@s',
-        height: '30@s',
+        width: '20@s',
+        height: '20@s',
         borderRadius: '15@s',
         overflow: 'hidden',
         justifyContent: 'center',
@@ -241,8 +241,8 @@ export default ScaledSheet.create({
         marginRight: '10@s'
     },
     sellerAvatar: {
-        width: '30@s',
-        height: '30@s'
+        width: '20@s',
+        height: '20@s'
     },
     storeInfoContainer: {
         paddingHorizontal: AppConfig.paddingHorizontal,
@@ -255,5 +255,21 @@ export default ScaledSheet.create({
         paddingTop: '10@vs',
         paddingBottom: '10@vs',
         backgroundColor: Colors.white
+    },
+    commentContainer: {
+        marginBottom: '15@vs'
+    },
+    btnGrey: {
+        backgroundColor: Colors.grey80,
+        paddingHorizontal: '15@s',
+        paddingVertical: '5@vs',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: '20@vs'
+    },
+    commentPhoto: {
+        width: '120@s',
+        height: '120@s',
+        marginRight: '15@s'
     }
 })

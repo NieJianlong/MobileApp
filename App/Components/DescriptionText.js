@@ -14,7 +14,8 @@ function DescriptionText(props) {
 
     const {
         text,
-        style
+        style,
+        previewLength
     } = props
 
     return (
@@ -22,7 +23,7 @@ function DescriptionText(props) {
             onPress={() => setActive(!active)}
             style={style}>
             <Text style={styles.text}>
-                {active ? text : text.substring(0, 105) + '...'}
+                {active ? text : text.substring(0, previewLength ?? 105) + '...'}
                 <Text style={{ color: Colors.secondary00 }}>{active ? ' Less' : ' Read more'}</Text>
             </Text>
         </TouchableOpacity>

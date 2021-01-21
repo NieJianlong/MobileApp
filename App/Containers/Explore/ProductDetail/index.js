@@ -7,18 +7,21 @@ import {
     TouchableOpacity,
     Text,
     Dimensions,
-    FlatList
+    FlatList,
+    ImageBackground
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { s, vs } from 'react-native-size-matters'
 import Collapsible from 'react-native-collapsible'
+import moment from 'moment'
 
 import {
     Switch,
     StarRating,
     Picker,
     QuantitySelector,
-    DescriptionText
+    DescriptionText,
+    Button
 } from '../../../Components'
 import { currencyFormatter } from '../../../Utils/Currency'
 
@@ -71,6 +74,10 @@ class ProductDetailScreen extends Component {
                     {
                         tabs.map((i, index) =>
                             <TouchableOpacity
+                                key={index.toString()}
+                                onPress={() => {
+                                    this.setState({ tabIndex: index })
+                                }}
                                 style={[styles.headerTabItem,
                                 this.state.tabIndex === index && { borderBottomColor: Colors.primary }]}>
                                 <Text
@@ -294,10 +301,10 @@ class ProductDetailScreen extends Component {
                     </TouchableOpacity>
                 </View>
 
-                <StarRating 
+                <StarRating
                     fullMode
                     style={{ marginTop: vs(10) }}
-                    rating={product.seller.rating} 
+                    rating={product.seller.rating}
                     ratingCount={product.seller.ratingCount} />
 
                 <DescriptionText
@@ -313,10 +320,114 @@ class ProductDetailScreen extends Component {
             <View style={styles.productReviewContainer}>
                 <Text style={styles.heading3Bold}>Product Reviews</Text>
 
-                <Review 
+                <Review
                     rating={product.rating}
                     ratingCount={product.ratingCount}
                     ratingDetail={product.ratingDetail} />
+
+                <View style={{ height: vs(15) }} />
+
+                {
+                    comments.map((comment, index) =>
+                        <View key={index.toString()} style={styles.commentContainer}>
+                            <View style={[styles.row, { marginBottom: vs(5) }]}>
+                                <View style={styles.sellerAvatarContainer}>
+                                    <Image source={{ uri: comment.user.avatar }} style={styles.sellerAvatar} />
+                                </View>
+                                <Text style={styles.heading5Bold}>{comment.user.name}</Text>
+                            </View>
+                            <View style={styles.row}>
+                                <StarRating rating={comment.comment.rating} />
+                                <Text style={styles.heading6Regular}>{moment(comment.comment.createdDate).fromNow()}</Text>
+                            </View>
+
+                            <Text style={[styles.heading5Bold, { marginTop: vs(5) }]}>{comment.comment.title}</Text>
+
+                            <DescriptionText
+                                previewLength={150}
+                                text={'At vero eoset accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium' +
+                                    'voluptatum deleniti atque corrupti quos dolores et quas mol' + 'At vero eoset accusamus et iusto' +
+                                    'odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas mol'
+                                }
+                            />
+
+                            {
+                                comment.comment.photos.length > 0 &&
+                                <View style={{ marginTop: vs(10) }}>
+                                    <FlatList
+                                        horizontal
+                                        showsHorizontalScrollIndicator={false}
+                                        data={comment.comment.photos}
+                                        renderItem={({ item, index }) =>
+                                            <ImageBackground
+                                                key={index.toString()}
+                                                borderRadius={5}
+                                                source={{ uri: item }}
+                                                style={styles.commentPhoto}
+                                            />
+                                        }
+                                    />
+                                </View>
+
+                            }
+
+                            <View style={[styles.row, { marginTop: vs(15) }]}>
+                                <TouchableOpacity style={styles.btnGrey}>
+                                    <Text style={[styles.heading5Bold, { color: Colors.white }]}>
+                                        HELPFUL ({comment.comment.like})
+                                    </Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={{ marginLeft: s(20) }}>
+                                    <Text style={[styles.heading5Bold, { color: Colors.grey60 }]}>
+                                        REPORT
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            {
+                                comment.comment.reply.length > 0 &&
+                                <View style={{ marginLeft: s(15), marginTop: vs(20) }}>
+                                    {
+                                        comment.comment.reply.map((item, index) =>
+                                            <View key={index.toString()}>
+                                                <View style={[styles.row, { marginBottom: vs(5) }]}>
+                                                    <View style={styles.sellerAvatarContainer}>
+                                                        <Image source={{ uri: item.user.avatar }} style={styles.sellerAvatar} />
+                                                    </View>
+                                                    <Text style={styles.heading5Bold}>{item.user.name}</Text>
+                                                </View>
+
+                                                <DescriptionText
+                                                    previewLength={150}
+                                                    text={'At vero eoset accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium' +
+                                                        'voluptatum deleniti atque corrupti quos dolores et quas mol' + 'At vero eoset accusamus et iusto' +
+                                                        'odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas mol'
+                                                    }
+                                                />
+
+                                                <View style={[styles.row, { marginTop: vs(15) }]}>
+                                                    <TouchableOpacity style={styles.btnGrey}>
+                                                        <Text style={[styles.heading5Bold, { color: Colors.white }]}>
+                                                            HELPFUL ({comment.comment.like})
+                                                </Text>
+                                                    </TouchableOpacity>
+
+                                                    <TouchableOpacity style={{ marginLeft: s(20) }}>
+                                                        <Text style={[styles.heading5Bold, { color: Colors.grey60 }]}>
+                                                            REPORT
+                                                </Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                            </View>
+                                        )
+                                    }
+                                </View>
+                            }
+
+                        </View>
+                    )
+                }
             </View>
         )
     }
@@ -329,7 +440,7 @@ class ProductDetailScreen extends Component {
                     style={styles.mainContainer}
                     edges={['top', 'left', 'right']}>
                     <ScrollView
-                        contentContainerStyle={{ paddingBottom: vs(120) }}
+                        contentContainerStyle={{ paddingBottom: vs(150) }}
                         onScroll={this.handleScroll}
                         onMomentumScrollEnd={this.handleScrollEnd}
                         scrollEventThrottle={60}
@@ -362,7 +473,7 @@ export default ProductDetailScreen
 
 const product = {
     name: 'iPhone 11',
-    picture: 'https://www.pngmart.com/files/13/iPhone-12-PNG-HD.png',
+    picture: 'https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png',
     rating: 3.5,
     ratingCount: 624,
     ratingDetail: {
@@ -382,14 +493,14 @@ const product = {
         name: 'thegioididong',
         description: 'Thegioididong.com là thương hiệu thuộc Công ty Cổ phần Thế giới di động, Tên tiếng Anh là Mobile World JSC, (mã Chứng Khoán: MWG) là một tập đoàn bán lẻ tại Việt Nam với lĩnh vực kinh doanh chính là bán lẻ điện thoại di động, thiết bị số và điện tử tiêu dùng[2]. Theo nghiên cứu của EMPEA, thống kê thị phần bán lẻ điện thoại di động tại Việt Nam năm 2014 thì Thế giới di động hiện chiếm 25% và là doanh nghiệp lớn nhất trong lĩnh vực của mình.',
         rating: 4.2,
-        ratingCount: 1024,  
+        ratingCount: 1024,
     }
 }
 
 const relatedProducs = [
     {
         name: 'iPhone 11',
-        picture: 'https://www.pngmart.com/files/13/iPhone-12-PNG-HD.png',
+        picture: 'https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png',
         rating: 3.5,
         ratingCount: 124,
         retailPrice: 2345,
@@ -400,7 +511,7 @@ const relatedProducs = [
     },
     {
         name: 'iPhone 11',
-        picture: 'https://www.pngmart.com/files/13/iPhone-12-PNG-HD.png',
+        picture: 'https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png',
         rating: 3.0,
         ratingCount: 124,
         retailPrice: 2345,
@@ -411,7 +522,7 @@ const relatedProducs = [
     },
     {
         name: 'iPhone 11',
-        picture: 'https://www.pngmart.com/files/13/iPhone-12-PNG-HD.png',
+        picture: 'https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png',
         rating: 3.0,
         ratingCount: 124,
         retailPrice: 2345,
@@ -420,6 +531,55 @@ const relatedProducs = [
         inStock: 100,
         orderCount: 24
     },
+]
+
+const comments = [
+    {
+        user: {
+            name: 'Asley',
+            avatar: 'https://pbs.twimg.com/profile_images/631366930960551936/MswTZv39_400x400.png'
+        },
+        comment: {
+            title: 'Absolutely love it!',
+            content: 'At vero eoset accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas mol.',
+            createdDate: '2019-09-12',
+            rating: 4.5,
+            photos: [],
+            like: 123,
+            reply: []
+        }
+    },
+    {
+        user: {
+            name: 'Brian',
+            avatar: 'https://pbs.twimg.com/profile_images/631366930960551936/MswTZv39_400x400.png'
+        },
+        comment: {
+            title: 'Absolutely love it!',
+            content: 'At vero eoset accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas mol.',
+            createdDate: '2020-12-12',
+            rating: 4.5,
+            like: 13,
+            photos: [
+                'https://www.europeanceo.com/wp-content/uploads/2019/09/Private-islands.jpg',
+                'https://cdn.britannica.com/15/162615-131-0CBB2CBE/island-Caribbean.jpg',
+                'https://thumbor.thedailymeal.com/ZZtexrWGOq6hJ7jOzleSrg9P_1Q=/870x565/https://www.theactivetimes.com/sites/default/files/2019/07/15/shutterstock_526092568.jpg',
+                'https://a0.muscache.com/im/pictures/3d554f6c-6efa-422a-a5d6-6c442abe81a4.jpg?aki_policy=x_large',
+            ],
+            reply: [{
+                user: {
+                    name: 'Apple',
+                    avatar: 'https://pbs.twimg.com/profile_images/631366930960551936/MswTZv39_400x400.png'
+                },
+                comment: {
+                    title: '',
+                    content: 'At vero eoset accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas mol.',
+                    createdDate: '2020-18-1',
+                    like: 3
+                }
+            }]
+        }
+    }
 ]
 
 const tabs = ['Details', 'Related', 'Seller', 'Review']

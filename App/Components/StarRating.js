@@ -33,8 +33,6 @@ class StarRating extends Component {
                         :
                         <Text style={styles.txtRatingCount}>{ratingCount}</Text>
                 }
-
-
             </View>
         )
     }

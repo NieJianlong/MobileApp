@@ -7,7 +7,14 @@
  * @FilePath: /MobileApp/App/Containers/UserInfo/index.js
  */
 import React, { useReducer, useEffect, useRef } from 'react';
-import { View, Animated, Image, TouchableWithoutFeedback } from 'react-native';
+import {
+  View,
+  Animated,
+  Image,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import UserHeader from '../UserCenter/UserHeader';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import { AppBar, Alert, BottomSheet, Button } from '../../Components';
@@ -16,6 +23,7 @@ import colors from '../../Themes/Colors';
 import HorizontalMenu from './HorizontalMenu';
 import images from '../../Themes/Images';
 import TextTip from './TextTip';
+import fonts from '../../Themes/Fonts';
 
 export const AlertContext = React.createContext({});
 const initialState = {
@@ -60,7 +68,19 @@ function index(props) {
       {showSheet && renderSheet(sheetEl, dispatch)}
       <View style={styles.container}>
         <SafeAreaView style={{ maxHeight: 64 }}>
-          <AppBar></AppBar>
+          <AppBar
+            rightButton={() => {
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    NavigationService.goBack();
+                  }}
+                >
+                  <Text style={styles.update}>EDIT</Text>
+                </TouchableOpacity>
+              );
+            }}
+          />
         </SafeAreaView>
         <View>
           <UserHeader needEdit></UserHeader>
@@ -164,5 +184,10 @@ const styles = ScaledSheet.create({
   container: {
     backgroundColor: colors.background,
     flex: 1,
+  },
+  update: {
+    color: colors.primary,
+    fontSize: '12@vs',
+    fontFamily: fonts.primary,
   },
 });

@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import { vs, s } from 'react-native-size-matters';
@@ -37,7 +38,7 @@ function index(props) {
   const [country, setCountry] = useState('');
   const [company, setCompany] = useState('');
   const [taxid, setTaxid] = useState('');
-
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [disable, setDisable] = useState(true);
   const [hastitle, setHasTitle] = useState(false);
   useEffect(() => {
@@ -45,10 +46,10 @@ function index(props) {
       console.log('====================================');
       console.log('输出键盘高度：' + e.endCoordinates.height);
       console.log('====================================');
-      // setKeyboardHeight(e.endCoordinates.height);
+      setKeyboardHeight(e.endCoordinates.height);
     };
     const keyboardHide = (e) => {
-      // setKeyboardHeight(0);
+      setKeyboardHeight(0);
     };
     Keyboard.addListener('keyboardWillShow', keyboardShow);
     Keyboard.addListener('keyboardWillHide', keyboardHide);
@@ -214,7 +215,7 @@ function index(props) {
             );
           }}
         />
-        <KeyboardAvoidingView
+        <KeyboardAwareScrollView
           keyboardVerticalOffset={50}
           behavior="position"
           style={{ flex: 1 }}
@@ -247,7 +248,7 @@ function index(props) {
               })}
             </View>
           </View>
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </View>
   );

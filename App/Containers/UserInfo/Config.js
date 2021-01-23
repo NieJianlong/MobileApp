@@ -24,6 +24,20 @@ export const AddressTestData = [
     isDefault: false,
   },
 ];
+export const BillDetail = {
+  firstName: 'John',
+  lastName: 'Roots',
+  phoneOrEmailNum: '1317272927@qq.com',
+  streetName: 'Tamil Nadu Street, 12345',
+  streetNum: '666',
+  door: '7-703',
+  city: 'QingDao',
+  mstate: 'ShanDong',
+  postcode: '27009',
+  country: 'China',
+  company: 'MaShangBan',
+  taxid: 'dsds',
+};
 let replaceChars = function (str, length, fromBegin, mask) {
   mask = mask ? mask : '*';
   let replacement = '';
@@ -128,6 +142,12 @@ export const MenuConfig = [
         callback,
         title: 'Please enter your billing details',
       });
+    },
+    extra: '',
+    itemActions: {
+      setDefault: (item) => {},
+      doEdit: (item) => {},
+      doDelete: (item) => {},
     },
   },
 ];

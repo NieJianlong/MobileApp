@@ -22,6 +22,7 @@ import NavigationService from './NavigationService';
 import ChangePasswordScreen from '../Containers/ChangePassword';
 import AddPaymentMethodScreen from '../Containers/AddPaymentMethod';
 import AddCreditScreen from '../Containers/AddCredit';
+import AddBillingDetailsScreen from '../Containers/AddBillingDetails';
 import TabBar from './TabBar';
 
 const TabNav = createBottomTabNavigator(
@@ -56,6 +57,7 @@ const PrimaryNav = createStackNavigator(
     AddPaymentMethodScreen: { screen: AddPaymentMethodScreen },
     AddCreditScreen: { screen: AddCreditScreen },
     CreateNewPasswordScreen: { screen: CreateNewPasswordScreen },
+    AddBillingDetailsScreen: { screen: AddBillingDetailsScreen },
   },
   {
     // Default config for all screens

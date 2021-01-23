@@ -123,6 +123,11 @@ export const MenuConfig = [
     subTextTip: 'Add your billing details to use in your next purchase',
     needButton: true,
     btnMsg: 'ADD BILLING DETAILS',
-    onPress: () => {},
+    onPress: (callback) => {
+      NavigationService.navigate('AddBillingDetailsScreen', {
+        callback,
+        title: 'Please enter your billing details',
+      });
+    },
   },
 ];

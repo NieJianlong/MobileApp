@@ -214,30 +214,40 @@ function index(props) {
             );
           }}
         />
-        <View style={styles.bodyContainer}>
-          <Text style={styles.heading2Bold}>{params.title}</Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              justifyContent: 'space-between',
-            }}
-          >
-            {inputs.map((item, index) => {
-              return (
-                <View
-                  key={index}
-                  style={{ width: item.type == 'short' ? '48%' : '100%' }}
-                >
-                  <TextInput style={{ marginTop: vs(18) }} {...item} />
-                </View>
-              );
-            })}
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={50}
+          behavior="position"
+          style={{ flex: 1 }}
+          enabled
+          contentContainerStyle={{ flex: 1 }}
+        >
+          <View style={styles.bodyContainer}>
+            <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
+              {params.title}
+            </Text>
+            <View style={{ marginTop: 20 }}>
+              <Switch label="Use the same info as my personal details"></Switch>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                justifyContent: 'space-between',
+              }}
+            >
+              {inputs.map((item, index) => {
+                return (
+                  <View
+                    key={index}
+                    style={{ width: item.type == 'short' ? '48%' : '100%' }}
+                  >
+                    <TextInput style={{ marginTop: vs(18) }} {...item} />
+                  </View>
+                );
+              })}
+            </View>
           </View>
-          <View style={{ marginTop: 20 }}>
-            <Switch label="Set as default address"></Switch>
-          </View>
-        </View>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </View>
   );

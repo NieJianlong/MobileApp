@@ -22,24 +22,42 @@ import AppConfig from '../../Config/AppConfig';
 import TextTip from '../UserInfo/TextTip';
 import metrics from '../../Themes/Metrics';
 
-const shareIcons = [
-  { src: images.userShareIcon1Image, onPress: () => {} },
-  { src: images.userShareIcon2Image, onPress: () => {} },
-  { src: images.userShareIcon3Image, onPress: () => {} },
-  { src: images.userShareIcon4Image, onPress: () => {} },
-  { src: images.userShareIcon5Image, onPress: () => {} },
-  { src: images.userShareIcon6Image, onPress: () => {} },
-];
 const invitedUsers = [
   {
-    email: 'usernme.lastname@mail.com',
-    msg: 'hasn’t registered yet',
+    email: 'Notification Title',
+    msg: 'Notification description',
     avatar: 'https://measure.3vyd.com/uPic/Grey 32.png',
+    readed: false,
   },
   {
-    email: 'usernme.lastname@mail.com',
-    msg: 'hasn’t registered yet',
+    email: 'Notification Title',
+    msg: 'Notification description',
     avatar: 'https://measure.3vyd.com/uPic/Grey 32.png',
+    readed: false,
+  },
+  {
+    email: 'Notification Title',
+    msg: 'Notification description',
+    avatar: 'https://measure.3vyd.com/uPic/Grey 32.png',
+    readed: false,
+  },
+  {
+    email: 'Notification Title',
+    msg: 'Notification description',
+    avatar: 'https://measure.3vyd.com/uPic/Grey 32.png',
+    readed: true,
+  },
+  {
+    email: 'Notification Title',
+    msg: 'Notification description',
+    avatar: 'https://measure.3vyd.com/uPic/Grey 32.png',
+    readed: true,
+  },
+  {
+    email: 'Notification Title',
+    msg: 'Notification description',
+    avatar: 'https://measure.3vyd.com/uPic/Grey 32.png',
+    readed: true,
   },
 ];
 
@@ -54,39 +72,80 @@ function index(props) {
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
       >
-        <AppBar />
+        <AppBar
+          rightButton={() => (
+            <TouchableOpacity onPress={() => {}}>
+              <Text style={styles.update}>CLEAR ALL</Text>
+            </TouchableOpacity>
+          )}
+        />
         <FlatList
           data={invitedUsers}
           ListHeaderComponent={() => listHeader(setShowSheet)}
           renderItem={({ item }) => {
             return (
-              <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+              <View
+                style={{
+                  backgroundColor: 'white',
+                  paddingHorizontal: AppConfig.paddingHorizontal,
+                  marginTop: s(8),
+                  opacity: item.readed ? 0.7 : 1,
+                }}
+              >
                 <View
                   style={{
                     flexDirection: 'row',
-                    borderBottomWidth: 0.2,
-                    borderBottomColor: colors.grey80,
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}
                 >
-                  <Image
-                    style={styles.shareIcon}
-                    source={{
-                      uri: 'https://measure.3vyd.com/uPic/uuuuuuuno.png',
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
                     }}
-                  ></Image>
-                  <View style={{ marginLeft: 15 }}>
-                    <Text style={[styles.balanceTxt, { fontSize: s(14) }]}>
-                      {item.email}
-                    </Text>
-                    <Text
+                  >
+                    <View
                       style={[
-                        styles.balanceTxt,
-                        { color: colors.grey60, fontSize: s(14) },
+                        styles.dot,
+                        {
+                          backgroundColor: item.readed
+                            ? 'transparent'
+                            : colors.primary,
+                        },
                       ]}
-                    >
-                      {item.msg}
-                    </Text>
+                    ></View>
+                    <Image
+                      style={styles.shareIcon}
+                      source={{
+                        uri: 'https://measure.3vyd.com/uPic/iphone.png',
+                      }}
+                    ></Image>
+                    <View style={{ marginLeft: 15 }}>
+                      <Text style={[styles.balanceTxt, { fontSize: s(15) }]}>
+                        {item.email}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.balanceTxt,
+                          { color: colors.grey60, fontSize: s(14) },
+                        ]}
+                      >
+                        {item.msg}
+                      </Text>
+                    </View>
                   </View>
+                  <Text
+                    style={[
+                      styles.balanceTxt,
+                      {
+                        color: colors.grey60,
+                        fontSize: s(14),
+                      },
+                    ]}
+                  >
+                    2h ago
+                  </Text>
                 </View>
               </View>
             );

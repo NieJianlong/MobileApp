@@ -1,4 +1,4 @@
-import { ScaledSheet } from 'react-native-size-matters';
+import { ScaledSheet, vs } from 'react-native-size-matters';
 import { ApplicationStyles, Colors, Fonts } from '../../Themes';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import AppConfig from '../../Config/AppConfig';
@@ -24,6 +24,7 @@ export default ScaledSheet.create({
   },
   bodyContainer: {
     flex: 1,
+    height: '80@vs',
     paddingHorizontal: '15@s',
     paddingBottom: isIphoneX() ? '5@vs' : '20@vs',
   },
@@ -41,35 +42,25 @@ export default ScaledSheet.create({
     justifyContent: 'space-between',
     paddingVertical: AppConfig.paddingHorizontal,
   },
-  iconsContainer:{
-    flexDirection:'row',
-    justifyContent:'space-between'
+  iconsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  shareIcon:{
-    width:'45@s',
-    height:'45@s',
-    resizeMode:'contain',
-    margin:5
+  shareIcon: {
+    width: '45@s',
+    height: '54@s',
+    resizeMode: 'contain',
+    margin: 5,
   },
-  balanceTipTxt: {
-    color: colors.grey80,
-    fontFamily: fonts.primary,
-    fontSize: '12@s',
+  dot: {
+    width: '8@s',
+    height: '8@s',
+    borderRadius: '4@s',
+    backgroundColor: colors.primary,
   },
-  balanceTxt: {
-    color: colors.black,
-    fontFamily: fonts.primary,
-    fontSize: '24@s',
-  },
-  useBalanceTxt: {
-    color: '#CC0000',
-    fontFamily: fonts.primary,
-    fontSize: '14@s',
-  },
-
-  btnResendCode: {
-    paddingTop: '20@vs',
-    alignSelf: 'center',
-    marginBottom: '10@vs',
+  update: {
+    color: Colors.primary,
+    fontSize: '12@vs',
+    fontFamily: Fonts.primary,
   },
 });

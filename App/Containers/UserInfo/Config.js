@@ -64,15 +64,39 @@ export const PaymentTestData = [
     expires: 'Expires 09/2022',
     isDefault: true,
   },
+  {
+    title: replaceChars('s887765453433887', 10, true, '*'),
+    subTitle: 'John Smith \nExpires 09/2022',
+    type: 'credit',
+    expires: 'Expires 09/2022',
+    isDefault: false,
+  },
+  {
+    title: replaceChars('s887765453433887', 10, true, '*'),
+    subTitle: 'John Smith \nExpires 09/2022',
+    type: 'credit',
+    expires: 'Expires 09/2022',
+    isDefault: false,
+  },
 ];
 
 export const MenuConfig = [
   {
     title: '1 Click Purchasing',
     icon: images.userPurchaseImage,
+    textTip: "You haven't added a default \n purchase preference yet",
+    subTextTip:
+      'Select a default address and payment method to \n activate 1 click purchasing',
+    needButton: true,
+    btnMsg: 'ADD 1 CLICK PURCHASING PREFERENCES',
     selectedIcon: images.userPurchaseImage,
     screen: NoPurchase,
     key: 'Purchasing',
+    onPress: (callback) => {
+      NavigationService.navigate('OneClickPurchaseScreen', {
+        callback,
+      });
+    },
   },
   {
     title: 'My Addresses',

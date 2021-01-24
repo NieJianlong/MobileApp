@@ -50,7 +50,7 @@ function HorizontalMenu(props) {
         let component = <NoPurchase />;
         switch (item.key) {
           case 'Purchasing':
-            component = <NoPurchase />;
+            component = <NoPurchase {...item}/>;
             break;
           case 'Addresses':
             if (addresses.length > 0) {
@@ -116,6 +116,7 @@ function HorizontalMenu(props) {
                         message: 'Billing details added!',
                         color: colors.success,
                         title: 'Success',
+                        rightButtonShow: true,
                       },
                     });
                   }}
@@ -136,7 +137,21 @@ function HorizontalMenu(props) {
       highlightStyle={{ color: 'white' }}
       noHighlightStyle={{ color: 'gray' }}
       headerTextStyle={styles.headerText}
-      // onChangeTab={this.onChangeTab}
+      onChangeTab={(index) => {
+        if (index != 4) {
+          dispatch({
+            type: 'rightButtonShow',
+            payload: false,
+          });
+        } else {
+          if (billDetails) {
+            dispatch({
+              type: 'rightButtonShow',
+              payload: true,
+            });
+          }
+        }
+      }}
       headerUnderlayColor={'transparent'}
     />
   );

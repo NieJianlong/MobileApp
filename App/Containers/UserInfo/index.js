@@ -24,6 +24,7 @@ import HorizontalMenu from './HorizontalMenu';
 import images from '../../Themes/Images';
 import TextTip from './TextTip';
 import fonts from '../../Themes/Fonts';
+import NavigationService from '../../Navigation/NavigationService';
 
 export const AlertContext = React.createContext({});
 const initialState = {
@@ -34,6 +35,7 @@ const initialState = {
   onDismiss: () => {},
   action: () => {},
   showSheet: false,
+  rightButtonShow: false,
 };
 function reducer(state, action) {
   console.log('====================================');
@@ -44,6 +46,8 @@ function reducer(state, action) {
       return { ...state, ...action.payload };
     case 'showPaymentRemoveSheet':
       return { ...state, ...action.payload };
+    case 'rightButtonShow':
+      return { ...state, rightButtonShow: action.payload };
     default:
       throw new Error();
   }
@@ -51,7 +55,7 @@ function reducer(state, action) {
 
 function index(props) {
   const [
-    { visible, message, color, onDismiss, title, showSheet },
+    { visible, message, color, onDismiss, title, showSheet, rightButtonShow },
     dispatch,
   ] = useReducer(reducer, initialState);
   const sheetEl = useRef(null);
@@ -70,15 +74,29 @@ function index(props) {
         <SafeAreaView style={{ maxHeight: 64 }}>
           <AppBar
             rightButton={() => {
-              return (
+              return rightButtonShow ? (
                 <TouchableOpacity
                   onPress={() => {
-                    NavigationService.goBack();
+                    NavigationService.navigate('EditBillingDetailsScreen', {
+                      saveCallback: () => {},
+                      removeCallback: () => {
+                        dispatch({
+                          type: 'changAlertState',
+                          payload: {
+                            visible: true,
+                            message:
+                              'You have successfully removed your billing address.',
+                            color: colors.secondary00,
+                            title: 'Billing Details removed',
+                          },
+                        });
+                      },
+                    });
                   }}
                 >
                   <Text style={styles.update}>EDIT</Text>
                 </TouchableOpacity>
-              );
+              ) : null;
             }}
           />
         </SafeAreaView>

@@ -6,13 +6,13 @@
  * @Description: User haven't added a default purchase preference yet
  * @FilePath: /MobileApp/App/Containers/UserInfo/NoPurchase.js
  */
-import React, {useState} from 'react';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {ScaledSheet, s, vs} from 'react-native-size-matters';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import Fonts from '../../Themes/Fonts';
 import AppConfig from '../../Config/AppConfig';
-import {Button} from '../../Components';
+import { Button } from '../../Components';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
 import NavigationService from '../../Navigation/NavigationService';
@@ -22,21 +22,14 @@ import metrics from '../../Themes/Metrics';
 import TextTip from './TextTip';
 
 function NoPurchase(props) {
-  const textTip = "You haven't added a default \n purchase preference yet";
-  const subTextTip =
-    'Select a default address and payment method to \n activate 1 click purchasing';
-  const param = {
-    textTip,
-    subTextTip,
-    needButton: true,
-    btnMsg: 'ADD 1 CLICK PURCHASING PREFERENCES',
-  };
   const items = [
     {
       lefticon: images.userChangePwdImage,
       text: 'Change Password',
       righticon: images.userRightBtnImage,
-      onPress: () => {NavigationService.navigate("ChangePasswordScreen")},
+      onPress: () => {
+        NavigationService.navigate('ChangePasswordScreen');
+      },
       hasline: true,
     },
     {
@@ -48,9 +41,8 @@ function NoPurchase(props) {
     },
   ];
   return (
-    <View style={{flex: 1, width: metrics.screenWidth}}>
-      <TextTip {...param}></TextTip>
-
+    <View style={{ flex: 1, width: metrics.screenWidth }}>
+      <TextTip {...props}></TextTip>
       <SafeAreaView style={styles.bottomlist}>
         {items.map((item, index) => {
           return <ListItem key={`listitem` + index} {...item}></ListItem>;
@@ -82,7 +74,7 @@ const styles = ScaledSheet.create({
     color: colors.grey80,
     marginBottom: '10@vs',
   },
-  signbtn: {marginTop: '20@vs'},
+  signbtn: { marginTop: '20@vs' },
   headerContainer: {
     backgroundColor: colors.background,
     justifyContent: 'space-around',

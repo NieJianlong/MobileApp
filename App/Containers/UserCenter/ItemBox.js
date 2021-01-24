@@ -1,18 +1,22 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-07 17:09:47
- * @LastEditTime: 2021-01-07 21:38:37
+ * @LastEditTime: 2021-01-24 14:16:54
  * @LastEditors: Please set LastEditors
  * @Description: UserCenter item
  * @FilePath: /MobileApp/App/Containers/UserCenter/ItemBox.js
  */
 import React from 'react';
-import {View, Text, Image} from 'react-native';
-import {ScaledSheet, s, vs} from 'react-native-size-matters';
+import { View, Text, Image } from 'react-native';
+import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
-
+/**
+ * @description:user center item，like "Salami Credit"、"Notifications"……
+ * @param {*} props
+ * @return {*}
+ */
 function ItemBox(props) {
-  const {title, icon} = props;
+  const { title, icon } = props;
   return (
     <View style={styles.container}>
       <Image style={styles.icon} source={icon}></Image>

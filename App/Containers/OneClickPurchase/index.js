@@ -18,7 +18,11 @@ import AppConfig from '../../Config/AppConfig';
 import metrics from '../../Themes/Metrics';
 import fonts from '../../Themes/Fonts';
 import { PaymentTestData } from '../UserInfo/Config';
-
+/**
+ * @description: 1 Click purchase Screen
+ * @param {*} props
+ * @return {*}
+ */
 function index(props) {
   const {
     navigation: {

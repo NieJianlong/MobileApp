@@ -1,17 +1,17 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-07 16:12:07
- * @LastEditTime: 2021-01-09 09:28:05
+ * @LastEditTime: 2021-01-24 14:17:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /MobileApp/App/Containers/UserCenter/index.js
  */
 import React from 'react';
-import {View, Text} from 'react-native';
-import {ScaledSheet, s, vs} from 'react-native-size-matters';
+import { View, Text } from 'react-native';
+import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import Colors from '../../Themes/Colors';
-import {Button} from '../../Components';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { Button } from '../../Components';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Fonts from '../../Themes/Fonts';
 import AppConfig from '../../Config/AppConfig';
 import ItemBox from './ItemBox';
@@ -57,12 +57,16 @@ const buttons = [
     onPress: () => {},
   },
 ];
-
+/**
+ * @description: User Center Screen
+ * @param {*} props
+ * @return {*}
+ */
 function index(props) {
   return (
     <View style={styles.container}>
       <UserHeader needSafeArea></UserHeader>
-     
+
       {/* All the items usercenter */}
       <View style={styles.itemContainer}>
         {items.map((item, index) => (
@@ -86,11 +90,11 @@ const styles = ScaledSheet.create({
     fontWeight: 'bold',
     marginTop: '20@vs',
   },
-  buttonContainer:{
+  buttonContainer: {
     paddingHorizontal: AppConfig.paddingHorizontal,
-    height:'100@vs',
-    justifyContent:'space-around',
-    marginTop:'30@vs'
+    height: '100@vs',
+    justifyContent: 'space-around',
+    marginTop: '30@vs',
   },
   itemContainer: {
     flexDirection: 'row',
@@ -98,7 +102,7 @@ const styles = ScaledSheet.create({
     paddingHorizontal: AppConfig.paddingHorizontal,
     justifyContent: 'space-around',
   },
-  signbtn: {marginTop: '20@vs'},
+  signbtn: { marginTop: '20@vs' },
   header: {
     backgroundColor: 'white',
     justifyContent: 'space-around',

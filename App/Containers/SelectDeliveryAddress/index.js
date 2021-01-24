@@ -18,7 +18,11 @@ import AppConfig from '../../Config/AppConfig';
 import metrics from '../../Themes/Metrics';
 import fonts from '../../Themes/Fonts';
 import { AddressTestData } from '../UserInfo/Config';
-
+/**
+ * @description: The user selects the shipping address page
+ * @param {*} props
+ * @return {*}
+ */
 function index(props) {
   const {
     navigation: {

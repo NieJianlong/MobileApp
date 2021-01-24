@@ -27,6 +27,11 @@ import images from '../../Themes/Images';
 import AppConfig from '../../Config/AppConfig';
 import metrics from '../../Themes/Metrics';
 
+/**
+ * @description: Edit Billing detail Screen
+ * @param {*} props
+ * @return {*}
+ */
 function index(props) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -40,26 +45,26 @@ function index(props) {
   const [country, setCountry] = useState('');
   const [company, setCompany] = useState('');
   const [taxid, setTaxid] = useState('');
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  // const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [disable, setDisable] = useState(true);
   const [hastitle, setHasTitle] = useState(false);
-  useEffect(() => {
-    const keyboardShow = (e) => {
-      console.log('====================================');
-      console.log('输出键盘高度：' + e.endCoordinates.height);
-      console.log('====================================');
-      setKeyboardHeight(e.endCoordinates.height);
-    };
-    const keyboardHide = (e) => {
-      setKeyboardHeight(0);
-    };
-    Keyboard.addListener('keyboardWillShow', keyboardShow);
-    Keyboard.addListener('keyboardWillHide', keyboardHide);
-    return () => {
-      Keyboard.removeListener('keyboardWillShow', keyboardShow);
-      Keyboard.removeListener('keyboardWillHide', keyboardHide);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const keyboardShow = (e) => {
+  //     console.log('====================================');
+  //     console.log('输出键盘高度：' + e.endCoordinates.height);
+  //     console.log('====================================');
+  //     setKeyboardHeight(e.endCoordinates.height);
+  //   };
+  //   const keyboardHide = (e) => {
+  //     setKeyboardHeight(0);
+  //   };
+  //   Keyboard.addListener('keyboardWillShow', keyboardShow);
+  //   Keyboard.addListener('keyboardWillHide', keyboardHide);
+  //   return () => {
+  //     Keyboard.removeListener('keyboardWillShow', keyboardShow);
+  //     Keyboard.removeListener('keyboardWillHide', keyboardHide);
+  //   };
+  // }, []);
   useEffect(() => {
     console.log('====================================');
     console.log('屏幕高度' + Metrics.screenHeight);

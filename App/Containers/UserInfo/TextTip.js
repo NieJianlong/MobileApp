@@ -1,7 +1,7 @@
 /*
  * @Author: JianLong Nie
  * @Date: 2021-01-09 16:30:32
- * @LastEditTime: 2021-01-09 16:30:33
+ * @LastEditTime: 2021-01-24 14:11:56
  * @LastEditors: Please set LastEditors
  * @Description: Text tips
  * @FilePath: /MobileApp/App/Containers/UserInfo/TextTip.js
@@ -27,13 +27,13 @@ import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
 import ListItem from './ListItem';
 import metrics from '../../Themes/Metrics';
-
+/**
+ * @description:Prompt component, user user does not add address information, do not add payment information when the display
+ * @param {*} props
+ * @return {*}
+ */
 function TextTip(props) {
   const { textTip, subTextTip, needButton, btnMsg, onPress, callback } = props;
-  //   const textTip = "You haven't added a default \n purchase preference yet";
-  //   const subTextTip =
-  //     'Select a default address and payment method to \n activate 1 click purchasing';
-
   return (
     <View style={{ flex: 1, width: metrics.screenWidth }}>
       <View style={styles.headerContainer}>

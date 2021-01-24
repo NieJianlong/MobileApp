@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-08 17:53:05
- * @LastEditTime: 2021-01-12 23:00:52
+ * @LastEditTime: 2021-01-24 14:08:19
  * @LastEditors: Please set LastEditors
  * @Description: UserInfo Horizontal Menu
  * @FilePath: /MobileApp/App/Containers/UserInfo/HorizontalMenu.js
@@ -29,10 +29,19 @@ import {
 } from './Config';
 import { AlertContext } from './index';
 
+/**
+ * @description: Tab menu, with animation effect
+ * @param {*} props
+ * @return {*}
+ */
 function HorizontalMenu(props) {
+  // selected menu index
   const [defaultIndex, setDefaultIndex] = useState(0);
+  // current address
   const [addresses, setAddresses] = useState([]);
+  // current payments
   const [payments, setPayments] = useState([]);
+  // my bill details
   const [billDetails, setBillDetails] = useState(null);
   const { dispatch } = useContext(AlertContext);
   const showSheet = () => {
@@ -50,7 +59,7 @@ function HorizontalMenu(props) {
         let component = <NoPurchase />;
         switch (item.key) {
           case 'Purchasing':
-            component = <NoPurchase {...item}/>;
+            component = <NoPurchase {...item} />;
             break;
           case 'Addresses':
             if (addresses.length > 0) {
@@ -156,7 +165,14 @@ function HorizontalMenu(props) {
     />
   );
 }
-
+/**
+ * @description:Display my address, list of my payment methods, display bill detail
+ * @param {*} item Menu Item with a special configuration
+ * @param {*} data FlatList data
+ * @param {*} isPayment Distinguish between payment method list and address list
+ * @param {*} showSheet Display the Acction Sheet for the home page
+ * @return {*}
+ */
 function flatListView(item, data, isPayment = false, showSheet = () => {}) {
   const {
     itemActions: { setDefault, doEdit, doDelete },

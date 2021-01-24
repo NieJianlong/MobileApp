@@ -2,6 +2,11 @@ import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
 import NoPurchase from './NoPurchase';
 
+/**
+ * @description: address test data
+ * @param {*}
+ * @return {*}
+ */
 export const AddressTestData = [
   {
     title: 'Home',

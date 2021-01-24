@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-09 13:03:18
- * @LastEditTime: 2021-01-09 14:34:12
+ * @LastEditTime: 2021-01-24 14:10:52
  * @LastEditors: Please set LastEditors
  * @Description: User haven't added a default purchase preference yet
  * @FilePath: /MobileApp/App/Containers/UserInfo/NoPurchase.js
@@ -20,7 +20,11 @@ import images from '../../Themes/Images';
 import ListItem from './ListItem';
 import metrics from '../../Themes/Metrics';
 import TextTip from './TextTip';
-
+/**
+ * @description:This component is displayed when the user does not purchase it
+ * @param {*} props
+ * @return {*}
+ */
 function NoPurchase(props) {
   const items = [
     {

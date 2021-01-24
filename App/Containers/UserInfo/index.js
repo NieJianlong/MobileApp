@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-08 15:54:53
- * @LastEditTime: 2021-01-09 14:57:59
+ * @LastEditTime: 2021-01-24 14:03:12
  * @LastEditors: Please set LastEditors
  * @Description: UserInfo Screen
  * @FilePath: /MobileApp/App/Containers/UserInfo/index.js
@@ -26,7 +26,9 @@ import TextTip from './TextTip';
 import fonts from '../../Themes/Fonts';
 import NavigationService from '../../Navigation/NavigationService';
 
+//Alert Context, which controls the display and hiding of an alert, for example, Add Address Success
 export const AlertContext = React.createContext({});
+//reducer,useContext+useReducer,It is easy for child components to control parent components
 const initialState = {
   visible: false,
   message: '',
@@ -52,7 +54,11 @@ function reducer(state, action) {
       throw new Error();
   }
 }
-
+/**
+ * @description: userInfo screen
+ * @param {*} props
+ * @return {*}
+ */
 function index(props) {
   const [
     { visible, message, color, onDismiss, title, showSheet, rightButtonShow },
@@ -135,6 +141,12 @@ function index(props) {
     </AlertContext.Provider>
   );
 }
+/**
+ * @description: action sheet,like remove payment method
+ * @param {*} sheetEl
+ * @param {*} dispatch
+ * @return {*}
+ */
 function renderSheet(sheetEl, dispatch) {
   const tips = {
     textTip: 'Remove Payment Method',

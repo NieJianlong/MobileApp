@@ -17,7 +17,7 @@ import images from '../../Themes/Images';
 import AppConfig from '../../Config/AppConfig';
 import metrics from '../../Themes/Metrics';
 import fonts from '../../Themes/Fonts';
-import { PaymentTestData } from '../UserInfo/Config';
+import { AddressTestData } from '../UserInfo/Config';
 
 function index(props) {
   const {
@@ -36,10 +36,8 @@ function index(props) {
         <AppBar
           rightButton={() => {
             return (
-              <TouchableOpacity onPress={() => {
-                NavigationService.navigate('SelectDeliveryAddressScreen');
-              }}>
-                <Text style={styles.update}>NEXT</Text>
+              <TouchableOpacity onPress={() => {}}>
+                <Text style={styles.update}>SAVE</Text>
               </TouchableOpacity>
             );
           }}
@@ -47,36 +45,16 @@ function index(props) {
 
         <View style={styles.bodyContainer}>
           <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
-            1 Click Purchasing preference
+            Select a default delivery address
           </Text>
-          <View style={{ marginTop: 20 }}>
-            <Text
-              style={{
-                color: colors.grey80,
-                fontSize: s(14),
-                fontFamily: fonts.primary,
-              }}
-            >{`This is an explanatory text on how this \n functionality works`}</Text>
-          </View>
-          <Text
-            style={[
-              styles.heading2Bold,
-              { fontSize: s(18), marginVertical: AppConfig.paddingHorizontal },
-            ]}
-          >
-            Select a default payment method
-          </Text>
+
           <FlatList
-            data={PaymentTestData}
-            style={{ height: metrics.screenHeight - vs(220) }}
+            data={AddressTestData}
+            style={{ height: metrics.screenHeight - vs(120) }}
             renderItem={({ item }) => {
               return (
                 <View style={styles1.item}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Image
-                      style={styles1.paytypeIcon}
-                      source={images.userPayTypeImage}
-                    ></Image>
                     <Text style={styles1.itemTitle}>{item.title}</Text>
                     {item.isDefault && (
                       <Image style={styles1.icon} source={images.check}></Image>
@@ -101,6 +79,12 @@ function index(props) {
                     )}
 
                     <View style={{ flexDirection: 'row' }}>
+                      <TouchableOpacity onPress={(item) => doEdit(item)}>
+                        <Image
+                          style={styles1.editImage}
+                          source={images.userAddressEditImage}
+                        />
+                      </TouchableOpacity>
                       <TouchableOpacity
                         onPress={(item) => {
                           showSheet();
@@ -131,7 +115,7 @@ function index(props) {
           <Button
             onPress={() => params.removeCallback()}
             textColor="white"
-            text="ADD  NEW PAYMENT METHOD"
+            text="ADD NEW ADDRESS"
             backgroundColor={colors.grey80}
           ></Button>
         </SafeAreaView>

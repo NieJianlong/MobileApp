@@ -32,7 +32,7 @@ export default ScaledSheet.create({
   },
   item: {
     marginTop: '15@vs',
-    backgroundColor: colors.white,
+    backgroundColor: 'white',
     borderRadius: '16@s',
     height: '122@vs',
     paddingHorizontal: AppConfig.paddingHorizontal,

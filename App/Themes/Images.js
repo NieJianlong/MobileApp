@@ -57,6 +57,12 @@ const images = {
   userPayMethod5Image: require('../Images/usercenter/pay5.png'),
   userPayTypeImage: require('../Images/usercenter/Cardtype.png'),
   userCreditCardImage: require('../Images/usercenter/credit_card.png'),
+  userShareIcon1Image: require('../Images/usercenter/fb.png'),
+  userShareIcon2Image: require('../Images/usercenter/whats.png'),
+  userShareIcon3Image: require('../Images/usercenter/iconG.png'),
+  userShareIcon4Image: require('../Images/usercenter/twitter.png'),
+  userShareIcon5Image: require('../Images/usercenter/link.png'),
+  userShareIcon6Image: require('../Images/usercenter/iconadd.png'),
 };
 
 export default images;

@@ -26,7 +26,7 @@ import AddBillingDetailsScreen from '../Containers/AddBillingDetails';
 import EditBillingDetailsScreen from '../Containers/EditBillingDetails';
 import OneClickPurchaseScreen from '../Containers/OneClickPurchase';
 import SelectDeliveryAddressScreen from '../Containers/SelectDeliveryAddress';
-
+import SalamiCreditScreen from '../Containers/SalamiCredit';
 import TabBar from './TabBar';
 
 const TabNav = createBottomTabNavigator(
@@ -65,11 +65,13 @@ const PrimaryNav = createStackNavigator(
     EditBillingDetailsScreen: { screen: EditBillingDetailsScreen },
     OneClickPurchaseScreen: { screen: OneClickPurchaseScreen },
     SelectDeliveryAddressScreen: { screen: SelectDeliveryAddressScreen },
+    SalamiCreditScreen: { screen: SalamiCreditScreen },
+    UserCenter: { screen: UserCenter },
   },
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'UserInfoScreen',
+    initialRouteName: 'SalamiCreditScreen',
     navigationOptions: {},
   }
 );

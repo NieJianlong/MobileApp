@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-07 16:12:07
- * @LastEditTime: 2021-01-24 14:17:23
+ * @LastEditTime: 2021-01-24 14:39:25
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /MobileApp/App/Containers/UserCenter/index.js
@@ -18,11 +18,15 @@ import ItemBox from './ItemBox';
 import colors from '../../Themes/Colors';
 import UserHeader from './UserHeader';
 import images from '../../Themes/Images';
+import NavigationService from '../../Navigation/NavigationService';
 
 const items = [
   {
     title: 'Salami Credit',
     icon: images.userLogoImage,
+    onPress: () => {
+      NavigationService.navigate('SalamiCreditScreen');
+    },
   },
   {
     title: 'Notifications',

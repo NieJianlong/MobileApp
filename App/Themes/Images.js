@@ -63,6 +63,11 @@ const images = {
   userShareIcon4Image: require('../Images/usercenter/twitter.png'),
   userShareIcon5Image: require('../Images/usercenter/link.png'),
   userShareIcon6Image: require('../Images/usercenter/iconadd.png'),
+  userFlagImage: require('../Images/usercenter/Flag.png'),
+  userNotiImage: require('../Images/usercenter/noti.png'),
+  userNotiSImage: require('../Images/usercenter/notis.png'),
+  userFilledImage: require('../Images/usercenter/Filled.png'),
+  userFilledSImage: require('../Images/usercenter/Filleds.png'),
 };
 
 export default images;

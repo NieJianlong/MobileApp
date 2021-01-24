@@ -1,7 +1,7 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-07 16:12:07
- * @LastEditTime: 2021-01-24 14:39:25
+ * @LastEditTime: 2021-01-24 21:00:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /MobileApp/App/Containers/UserCenter/index.js
@@ -31,6 +31,9 @@ const items = [
   {
     title: 'Notifications',
     icon: images.userIconImage,
+    onPress: () => {
+      NavigationService.navigate('NotificationsScreen');
+    },
   },
   {
     title: 'Settings',

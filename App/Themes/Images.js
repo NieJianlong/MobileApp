@@ -34,6 +34,7 @@ const images = {
   returnPolicy1: require('../Images/size-replacement.png'),
   returnPolicy2: require('../Images/manufactoring-defects.png'),
   returnPolicy3: require('../Images/wrong-product.png'),
+  mail: require('../Images/mail.png'),
   userDocImage: require('../Images/usercenter/Document.png'),
   userIconImage: require('../Images/usercenter/Icon.png'),
   userLogoImage: require('../Images/usercenter/Logo.png'),

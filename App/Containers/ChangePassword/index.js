@@ -1,5 +1,5 @@
 import React, {Component, useState, useEffect} from 'react';
-import {View, StatusBar, Text, Keyboard} from 'react-native';
+import {View, StatusBar, Text, Keyboard,TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {isIphoneX} from 'react-native-iphone-x-helper';
 import {vs} from 'react-native-size-matters';
@@ -55,24 +55,36 @@ function index(props) {
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}>
-        <AppBar />
+        <AppBar rightButton={()=>{
+            return (
+               <TouchableOpacity onPress={()=>alert('success')}>
+                   <Text style={styles.update}>
+                       UPDATE
+                   </Text>
+               </TouchableOpacity> 
+            );
+        }}/>
         <View style={styles.bodyContainer}>
           <Text style={styles.heading2Bold}>Change my password</Text>
           <Text style={[styles.heading4Regular, {color: Colors.grey80}]}>
             For security reasons please first enter your current password.
           </Text>
 
-        <View>
-        {inputs.map((item) => {
-            return <PasswordInput style={{ marginTop: vs(18) }} {...item} />
-        }
-            
-          )}
-        </View>
+          <View>
+            {inputs.map((item, index) => {
+              return (
+                <PasswordInput
+                  key={index}
+                  style={{marginTop: vs(18)}}
+                  {...item}
+                />
+              );
+            })}
+          </View>
 
-        <View style={{position:'absolute',bottom:0,left:0,right:0}}>
+          <View style={{position: 'absolute', bottom: 0, left: 0, right: 0}}>
             <Button
-              backgroundColor='transparent'
+              backgroundColor="transparent"
               textColor={colors.grey80}
               onPress={() => {
                 NavigationService.navigate('');

@@ -49,7 +49,9 @@ const images = {
   userChangePwdImage:require('../Images/usercenter/changepwd.png'),
   userRightBtnImage:require('../Images/usercenter/rightarrow.png'),
   userTrashImage:require('../Images/usercenter/trash.png'),
-  
+  returnPolicy1: require('../Images/size-replacement.png'),
+  returnPolicy2: require('../Images/manufactoring-defects.png'),
+  returnPolicy3: require('../Images/wrong-product.png'),
 }
 
 export default images

@@ -24,7 +24,8 @@ import {
     Picker,
     QuantitySelector,
     DescriptionText,
-    Button
+    Button,
+    Progress
 } from '../../../Components'
 import { currencyFormatter } from '../../../Utils/Currency'
 
@@ -237,6 +238,12 @@ class ProductDetailScreen extends Component {
                         </View>
 
                         <View style={styles.row}>
+                            <Progress
+                                currentValue={24}
+                                maximumValue={100}
+                                style={{ marginHorizontal: s(10) }}
+                            />
+
                             <Image source={Images.stock} style={styles.icStock} />
                             <Text style={styles.txtOrderNumber}>{product.orderCount}/{product.inStock}</Text>
                             <TouchableOpacity>
@@ -245,12 +252,39 @@ class ProductDetailScreen extends Component {
                         </View>
                     </View>
 
-                    <DescriptionText
-                        style={styles.descriptionContainer}
-                        text={'This is the product description vero eos et accusamus et iusto odio dignissimos ducimus' +
-                            'qui blad. This is the product description vero eos et accusamus et iusto odio dignissimos ducimus' +
-                            'qui blad'}
-                    />
+                    <View style={[styles.v2, { paddingTop: vs(15) }]}>
+                        <Text style={styles.heading3Bold}>Product Description</Text>
+                        <DescriptionText
+                            style={styles.descriptionContainer}
+                            text={'This is the product description vero eos et accusamus et iusto odio dignissimos ducimus' +
+                                'qui blad. This is the product description vero eos et accusamus et iusto odio dignissimos ducimus' +
+                                'qui blad'}
+                        />
+                    </View>
+
+                    <View style={[styles.v2, { paddingTop: vs(15) }]}>
+                        <Text style={styles.heading3Bold}>Details & Highlights</Text>
+                        <View style={styles.row}>
+                            <Text style={styles.txtDot}>•</Text>
+                            <Text style={styles.txtRegular}>
+                                Vero eos et accusamus et iusto odio dignissimos
+                            </Text>
+                        </View>
+
+                        <View style={styles.row}>
+                            <Text style={styles.txtDot}>•</Text>
+                            <Text style={styles.txtRegular}>
+                                Vero eos et accusamus et iusto odio dignissimos
+                            </Text>
+                        </View>
+
+                        <View style={styles.row}>
+                            <Text style={styles.txtDot}>•</Text>
+                            <Text style={styles.txtRegular}>
+                                Vero eos et accusamus et iusto odio dignissimos
+                            </Text>
+                        </View>
+                    </View>
                 </View>
             </InView>
         )
@@ -262,8 +296,14 @@ class ProductDetailScreen extends Component {
 
                 <View style={styles.noteContainer}>
                     <Text style={styles.heading6Regular}>
-                        You have 7 days from receipt of the product to return it
+                        Covered by Seller Name 7 day return policy, for:
                     </Text>
+
+                    <View style={[styles.rowSpaceBetween, { marginTop: vs(15) }]}>
+                        <Image resizeMode={'contain'} style={styles.returnPolicyImage} source={Images.returnPolicy3} />
+                        <Image resizeMode={'contain'} style={styles.returnPolicyImage} source={Images.returnPolicy2} />
+                        <Image resizeMode={'contain'} style={styles.returnPolicyImage} source={Images.returnPolicy1} />
+                    </View>
                 </View>
 
                 <Picker

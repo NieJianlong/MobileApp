@@ -13,6 +13,7 @@ import StarRating from './StarRating'
 import Picker from './Picker'
 import QuantitySelector from './QuantitySelector'
 import DescriptionText from './DescriptionText'
+import Progress from './Progress'
 
 export {
     BottomSheet,
@@ -29,5 +30,6 @@ export {
     StarRating,
     Picker,
     QuantitySelector,
-    DescriptionText
+    DescriptionText,
+    Progress
 }

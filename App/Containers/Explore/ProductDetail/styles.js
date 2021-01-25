@@ -103,7 +103,7 @@ export default ScaledSheet.create({
         borderTopWidth: 2,
         borderTopColor: Colors.grey10,
         marginTop: '5@vs',
-        paddingTop: '10@vs'
+        paddingTop: '10@vs',
     },
     icStock: {
         width: '22@s',
@@ -130,8 +130,7 @@ export default ScaledSheet.create({
         paddingBottom: '15@vs'
     },
     descriptionContainer: {
-        paddingHorizontal: AppConfig.paddingHorizontal,
-        marginTop: '10@vs'
+        marginTop: '5@vs'
     },
     optionContainer: {
         paddingVertical: AppConfig.paddingHorizontal,
@@ -271,5 +270,16 @@ export default ScaledSheet.create({
         width: '120@s',
         height: '120@s',
         marginRight: '15@s'
+    },
+    txtDot: {
+        fontSize: '25@s',
+        marginRight: '8@s',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        lineHeight: '25@s'
+    },
+    returnPolicyImage: {
+        width: '90@s',
+        height: '60@s'
     }
 })

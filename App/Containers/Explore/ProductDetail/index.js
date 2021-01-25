@@ -39,6 +39,7 @@ import NavigationService from '../../../Navigation/NavigationService'
 
 import ProductItem from '../Components/ProductItem'
 import Review from '../Components/Review'
+import ColorOptionItem from '../Components/ColorOptionItem'
 
 const { height } = Dimensions.get('window')
 const Sections = range(0, 4)
@@ -58,8 +59,10 @@ class ProductDetailScreen extends Component {
             tabIndex: 0,
             quantity: 1,
             totalPrice: 0,
+            colorIndex: 0,
 
-            showPickupFromSellerSheet: false
+            showPickupFromSellerSheet: false,
+            showColorSheet: true,
         }
     }
 
@@ -103,6 +106,16 @@ class ProductDetailScreen extends Component {
                 this.pickupFromSellerSheet.snapTo(0)
             } else {
                 this.pickupFromSellerSheet.snapTo(1)
+            }
+        })
+    }
+
+    toggleColorSheet = () => {
+        this.setState({ showColorSheet: !this.state.showColorSheet }, () => {
+            if (this.state.showColorSheet) {
+                this.colorSheet.snapTo(0)
+            } else {
+                this.colorSheet.snapTo(1)
             }
         })
     }
@@ -625,6 +638,34 @@ class ProductDetailScreen extends Component {
         )
     }
 
+    renderColorSheet() {
+        return (
+            <BottomSheet
+                customRef={ref => {
+                    this.pickupFromSellerSheet = ref
+                }}
+                onCloseEnd={() => this.setState({ showColorSheet: false })}
+                callbackNode={this.fall}
+                snapPoints={[vs(390), 0]}
+                initialSnap={this.state.showColorSheet ? 0 : 1}
+                title={'Color'}>
+                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    {
+                        product.colors.map((item, index) =>
+                            <ColorOptionItem
+                                defaultValue={this.state.colorIndex === index}
+                                onSwitch={() => { this.setState({ colorIndex: index }) }}
+                                label={item.name}
+                                style={{ marginBottom: vs(16) }}
+                                available={item.available}
+                            />
+                        )
+                    }
+                </View>
+            </BottomSheet>
+        )
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -655,11 +696,13 @@ class ProductDetailScreen extends Component {
 
                 {/* background for bottom sheet */}
                 <BottomSheetBackground
-                    visible={this.state.showPickupFromSellerSheet}
+                    visible={this.state.showPickupFromSellerSheet || this.state.showColorSheet}
                     controller={this.fall}
                 />
 
                 {this.renderPickupFromSellerSheet()}
+
+                {this.renderColorSheet()}
             </View>
         )
     }
@@ -690,7 +733,13 @@ const product = {
         description: 'Thegioididong.com là thương hiệu thuộc Công ty Cổ phần Thế giới di động, Tên tiếng Anh là Mobile World JSC, (mã Chứng Khoán: MWG) là một tập đoàn bán lẻ tại Việt Nam với lĩnh vực kinh doanh chính là bán lẻ điện thoại di động, thiết bị số và điện tử tiêu dùng[2]. Theo nghiên cứu của EMPEA, thống kê thị phần bán lẻ điện thoại di động tại Việt Nam năm 2014 thì Thế giới di động hiện chiếm 25% và là doanh nghiệp lớn nhất trong lĩnh vực của mình.',
         rating: 4.2,
         ratingCount: 1024,
-    }
+    },
+    colors: [
+        {name: 'Onyx Black', available: true},
+        {name: 'Glaciar Green', available: true},
+        {name: 'Interstella Glow', available: true},
+        {name: 'Blue', available: false}
+    ]
 }
 
 const relatedProducs = [

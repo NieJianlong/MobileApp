@@ -1,7 +1,7 @@
 /*
  * @Author: JianLong Nie
  * @Date: 2021-01-09 16:30:32
- * @LastEditTime: 2021-01-09 16:30:33
+ * @LastEditTime: 2021-01-24 14:11:56
  * @LastEditors: Please set LastEditors
  * @Description: Text tips
  * @FilePath: /MobileApp/App/Containers/UserInfo/TextTip.js
@@ -14,38 +14,35 @@
  * @Description: User haven't added a default purchase preference yet
  * @FilePath: /MobileApp/App/Containers/UserInfo/NoPurchase.js
  */
-import React, {useState} from 'react';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {ScaledSheet, s, vs} from 'react-native-size-matters';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import Fonts from '../../Themes/Fonts';
 import AppConfig from '../../Config/AppConfig';
-import {Button} from '../../Components';
+import { Button } from '../../Components';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
 import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
 import ListItem from './ListItem';
 import metrics from '../../Themes/Metrics';
-
-
+/**
+ * @description:Prompt component, user user does not add address information, do not add payment information when the display
+ * @param {*} props
+ * @return {*}
+ */
 function TextTip(props) {
-    const {textTip,subTextTip,needButton,btnMsg} = props;
-//   const textTip = "You haven't added a default \n purchase preference yet";
-//   const subTextTip =
-//     'Select a default address and payment method to \n activate 1 click purchasing';
-  
+  const { textTip, subTextTip, needButton, btnMsg, onPress, callback } = props;
   return (
-    <View style={{flex:1,width:metrics.screenWidth}}>
+    <View style={{ flex: 1, width: metrics.screenWidth }}>
       <View style={styles.headerContainer}>
         <Text style={styles.nosign}>{textTip}</Text>
         <Text style={[styles.subTextTip]}>{subTextTip}</Text>
         <View style={styles.signbtn}>
-          {
-              needButton&&<Button
-              onPress={() => {}}
-              text={btnMsg}></Button>
-          }
+          {needButton && (
+            <Button onPress={() => onPress(callback)} text={btnMsg}></Button>
+          )}
         </View>
       </View>
     </View>
@@ -54,11 +51,6 @@ function TextTip(props) {
 
 export default TextTip;
 const styles = ScaledSheet.create({
-  bottomlist:{
-      position:'absolute',
-      bottom:0,
-      width:metrics.screenWidth
-  },
   nosign: {
     fontSize: '22@s',
     textAlign: 'center',
@@ -74,7 +66,7 @@ const styles = ScaledSheet.create({
     color: colors.grey80,
     marginBottom: '10@vs',
   },
-  signbtn: {marginTop: '20@vs'},
+  signbtn: { marginTop: '20@vs' },
   headerContainer: {
     backgroundColor: colors.background,
     justifyContent: 'space-around',

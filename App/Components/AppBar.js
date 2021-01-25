@@ -6,7 +6,7 @@ import {
     TouchableOpacity
 } from 'react-native'
 import { ScaledSheet } from 'react-native-size-matters'
-import { Fonts, Colors } from '../Themes'
+import { Fonts, Colors, ApplicationStyles } from '../Themes'
 import PropTypes from 'prop-types'
 
 import AppConfig from '../Config/AppConfig'
@@ -20,19 +20,24 @@ class AppBar extends Component {
             showLogo,
             rightButton,
             onPressBack,
+            title
         } = this.props
-         
+
         return (
             <View style={styles.container}>
-                <TouchableOpacity onPress={()=>{
+                <TouchableOpacity onPress={() => {
                     if (onPressBack) {
                         onPressBack();
-                    }else {
+                    } else {
                         NavigationService.goBack();
                     }
                 }}>
                     <Image style={styles.icBack} source={Images.arrow_left} />
                 </TouchableOpacity>
+                {
+                    title &&
+                    <Text style={styles.title}>{title}</Text>
+                }
                 {
                     showLogo &&
                     <Image source={Images.logo3} style={styles.logo} resizeMode={'contain'} />
@@ -84,5 +89,8 @@ const styles = ScaledSheet.create({
         width: '140@s',
         tintColor: Colors.primary,
     },
+    title: {
+        ...ApplicationStyles.screen.heading5Regular
+    }
 })
 export default AppBar

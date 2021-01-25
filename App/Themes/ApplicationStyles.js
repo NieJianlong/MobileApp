@@ -54,7 +54,7 @@ const ApplicationStyles = {
       fontSize: s(15)
     },
     txtRegular: {
-      fontSize: s(14),
+      fontSize: s(13),
       fontFamily: Fonts.primary,
       color: Colors.grey80,
     },
@@ -64,9 +64,15 @@ const ApplicationStyles = {
       color: Colors.grey60,
     },
     txtBold: {
-      fontSize: s(14),
+      fontSize: s(12.5),
       fontFamily: Fonts.primary,
       color: Colors.grey80,
+      fontWeight: '600'
+    },
+    txtHeroBold: {
+      fontSize: s(44),
+      fontFamily: Fonts.primary,
+      color: Colors.black,
       fontWeight: '600'
     },
     heading2Bold: {
@@ -76,7 +82,7 @@ const ApplicationStyles = {
       fontWeight: '600'
     },
     heading3Bold: {
-      fontSize: s(18),
+      fontSize: s(17),
       fontFamily: Fonts.primary,
       color: Colors.black,
       fontWeight: '600'
@@ -106,7 +112,7 @@ const ApplicationStyles = {
       fontWeight: '400'
     },
     heading5Regular: {
-      fontSize: s(13),
+      fontSize: s(12.5),
       fontFamily: Fonts.primary,
       color: Colors.black,
     },

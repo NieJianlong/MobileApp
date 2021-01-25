@@ -7,6 +7,8 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import LaunchScreen from '../Containers/Launch';
 import OnboardingScreen from '../Containers/Onboarding';
 import ExploreScreen from '../Containers/Explore';
+import ProductDetailScreen from '../Containers/Explore/ProductDetail';
+import ProductGalleryScreen from '../Containers/Explore/ProductGallery';
 import LoginScreen from '../Containers/Login';
 import RegisterScreen from '../Containers/Register';
 import LegalScreen from '../Containers/Legal';
@@ -50,6 +52,8 @@ const PrimaryNav = createStackNavigator(
     MainScreen: { screen: TabNav },
     OnboardingScreen: { screen: OnboardingScreen },
     ExploreScreen: { screen: ExploreScreen },
+    ProductDetailScreen: { screen: ProductDetailScreen },
+    ProductGalleryScreen: { screen: ProductGalleryScreen },
     LoginScreen: { screen: LoginScreen },
     RegisterScreen: { screen: RegisterScreen },
     LegalScreen: { screen: LegalScreen },
@@ -85,7 +89,7 @@ export default class AppRouter extends React.Component {
   render() {
     return (
       <AppContainer
-        ref={(navigatorRef) => {
+        ref={navigatorRef => {
           NavigationService.setTopLevelNavigator(navigatorRef);
         }}
       />

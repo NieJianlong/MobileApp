@@ -7,7 +7,7 @@ import { ScaledSheet, s } from 'react-native-size-matters'
 import BottomSheetLib from 'reanimated-bottom-sheet'
 import { isIphoneX } from 'react-native-iphone-x-helper'
 
-import { Fonts, Colors } from '../Themes'
+import { Fonts, Colors, ApplicationStyles } from '../Themes'
 import AppConfig from '../Config/AppConfig'
 
 class BottomSheet extends Component {
@@ -80,8 +80,8 @@ const styles = ScaledSheet.create({
         alignItems: 'center'
     },
     title: {
+        ...ApplicationStyles.screen.heading3Bold,
         color: Colors.black,
-        fontSize: AppConfig.fontSize,
         fontFamily: Fonts.semibold,
         textAlign: 'center',
         flex: 1

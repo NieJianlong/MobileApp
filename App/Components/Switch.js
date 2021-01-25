@@ -14,6 +14,7 @@ function Switch(props) {
     const {
         disabled,
         label,
+        onSwitch,
     } = props
 
     if (!disabled) {
@@ -21,7 +22,10 @@ function Switch(props) {
             <View style={styles.row}>
                 <TouchableOpacity
                     activeOpacity={1}
-                    onPress={() => setActive(!active)}>
+                    onPress={() => {
+                        setActive(!active)
+                        onSwitch(!active)
+                    }}>
                     {
                         active ?
                             <View style={styles.activeContainer}>
@@ -57,10 +61,13 @@ Switch.defaultProps = {
 
 }
 
+const WIDTH = '44@s'
+const HEIGHT = '22@s'
+
 const styles = ScaledSheet.create({
     activeContainer: {
-        width: '48@s',
-        height: '24@s',
+        width: WIDTH,
+        height: HEIGHT,
         borderRadius: '15@s',
         borderWidth: '2@s',
         borderColor: Colors.primary,
@@ -71,14 +78,14 @@ const styles = ScaledSheet.create({
         padding: '2@s'
     },
     activeCircle: {
-        width: '16@s',
-        height: '16@s',
+        width: '14@s',
+        height: '14@s',
         borderRadius: '16@s',
         backgroundColor: Colors.white
     },
     inactiveContainer: {
-        width: '48@s',
-        height: '24@s',
+        width: WIDTH,
+        height: HEIGHT,
         borderRadius: '15@s',
         borderWidth: '2@s',
         borderColor: Colors.grey40,
@@ -87,8 +94,8 @@ const styles = ScaledSheet.create({
         padding: '2@s'
     },
     inactiveCircle: {
-        width: '16@s',
-        height: '16@s',
+        width: '14@s',
+        height: '14@s',
         borderRadius: '16@s',
         backgroundColor: Colors.grey40
     },

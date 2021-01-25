@@ -14,6 +14,7 @@ function Switch(props) {
     const {
         disabled,
         label,
+        onSwitch,
     } = props
 
     if (!disabled) {
@@ -21,7 +22,10 @@ function Switch(props) {
             <View style={styles.row}>
                 <TouchableOpacity
                     activeOpacity={1}
-                    onPress={() => setActive(!active)}>
+                    onPress={() => {
+                        setActive(!active)
+                        onSwitch(!active)
+                    }}>
                     {
                         active ?
                             <View style={styles.activeContainer}>

@@ -281,5 +281,22 @@ export default ScaledSheet.create({
     returnPolicyImage: {
         width: '90@s',
         height: '60@s'
+    },
+    pickupLocationContainer: {
+        backgroundColor: Colors.white,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: '15@s',
+        paddingVertical: '10@vs',
+        borderRadius: '15@s',
+        borderWidth: 1,
+        borderColor: Colors.grey10,
+        marginBottom: '20@vs',
+        marginTop: '20@vs'
+    },
+    pickupLocationIcon: {
+        width: '28@s',
+        height: '28@s',
+        tintColor: Colors.grey40,
     }
 })

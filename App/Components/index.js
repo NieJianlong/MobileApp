@@ -14,6 +14,7 @@ import Picker from './Picker'
 import QuantitySelector from './QuantitySelector'
 import DescriptionText from './DescriptionText'
 import Progress from './Progress'
+import BottomSheetBackground from './BottomSheetBackground'
 
 export {
     BottomSheet,
@@ -31,5 +32,6 @@ export {
     Picker,
     QuantitySelector,
     DescriptionText,
-    Progress
+    Progress,
+    BottomSheetBackground,
 }

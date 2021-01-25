@@ -17,9 +17,11 @@ function Progress(props) {
         style
     } = props
 
+    const percentage = Math.round(currentValue * 100 / maximumValue) + '%'
+
     return (
         <View style={[styles.container, style]}>
-            
+            <View style={[styles.bar, { width: percentage }]} />
         </View>
     )
 }
@@ -41,7 +43,15 @@ const styles = ScaledSheet.create({
         width: MAX_WIDTH,
         height: BAR_HEIGHT,
         borderRadius: '3@vs',
-        backgroundColor: Colors.secondary01
+        backgroundColor: Colors.secondary01,
+        flexDirection: 'row'
+    },
+    bar: {
+        position: 'absolute',
+        left: 0, top: 0,
+        height: BAR_HEIGHT,
+        borderRadius: '3@vs',
+        backgroundColor: Colors.secondary00
     }
 })
 

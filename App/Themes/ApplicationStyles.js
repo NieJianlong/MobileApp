@@ -54,7 +54,7 @@ const ApplicationStyles = {
       fontSize: s(15)
     },
     txtRegular: {
-      fontSize: s(12.5),
+      fontSize: s(13),
       fontFamily: Fonts.primary,
       color: Colors.grey80,
     },

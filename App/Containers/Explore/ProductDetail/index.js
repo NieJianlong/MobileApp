@@ -8,10 +8,11 @@ import {
     Text,
     Dimensions,
     FlatList,
-    ImageBackground
+    ImageBackground,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { s, vs } from 'react-native-size-matters'
+import Animated from 'react-native-reanimated'
 import Collapsible from 'react-native-collapsible'
 import InView from 'react-native-component-inview'
 import { ScrollIntoView, wrapScrollView } from 'react-native-scroll-into-view'
@@ -25,7 +26,9 @@ import {
     QuantitySelector,
     DescriptionText,
     Button,
-    Progress
+    Progress,
+    BottomSheet,
+    BottomSheetBackground
 } from '../../../Components'
 import { currencyFormatter } from '../../../Utils/Currency'
 
@@ -44,6 +47,8 @@ const CustomScrollView = wrapScrollView(ScrollView)
 
 class ProductDetailScreen extends Component {
 
+    fall = new Animated.Value(0)
+
     constructor(props) {
         super(props)
         this.state = {
@@ -53,6 +58,8 @@ class ProductDetailScreen extends Component {
             tabIndex: 0,
             quantity: 1,
             totalPrice: 0,
+
+            showPickupFromSellerSheet: false
         }
     }
 
@@ -88,6 +95,16 @@ class ProductDetailScreen extends Component {
 
     handleScrollEnd = (event) => {
         this.setState({ showFooter: true })
+    }
+
+    togglePickupFromSellerSheet = () => {
+        this.setState({ showPickupFromSellerSheet: !this.state.showPickupFromSellerSheet }, () => {
+            if (this.state.showPickupFromSellerSheet) {
+                this.pickupFromSellerSheet.snapTo(0)
+            } else {
+                this.pickupFromSellerSheet.snapTo(1)
+            }
+        })
     }
 
     renderHeaderTabs() {
@@ -226,7 +243,13 @@ class ProductDetailScreen extends Component {
                                 <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
                                     Pick up from seller
                             </Text>
-                                <Switch />
+                                <Switch
+                                    onSwitch={(t) => {
+                                        if (t) {
+                                            this.togglePickupFromSellerSheet()
+                                        }
+                                    }}
+                                />
                             </View>
                         </View>
                     </View>
@@ -569,6 +592,37 @@ class ProductDetailScreen extends Component {
         )
     }
 
+    renderPickupFromSellerSheet() {
+        return (
+            <BottomSheet
+                customRef={ref => {
+                    this.pickupFromSellerSheet = ref
+                }}
+                onCloseEnd={() => this.setState({ showPickupFromSellerSheet: false })}
+                callbackNode={this.fall}
+                snapPoints={[vs(290), 0]}
+                initialSnap={this.state.showPickupFromSellerSheet ? 0 : 1}
+                title={'Pick up from seller'}>
+                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    <Text style={[styles.txtRegular, { textAlign: 'center' }]}>
+                        This is the seller's address where you have to{'\n'}go to pick up your order
+                    </Text>
+
+                    <View style={styles.pickupLocationContainer}>
+                        <Image style={styles.pickupLocationIcon} source={Images.locationMed} />
+
+                        <View style={{ marginLeft: s(10) }}>
+                            <Text style={styles.heading5Bold}>Seller Address 00</Text>
+                            <Text style={styles.txtRegular}>Tamil Nadu 12345, Area 4</Text>
+                        </View>
+                    </View>
+
+                    <Button onPress={this.togglePickupFromSellerSheet} text={'OK'} />
+                </View>
+            </BottomSheet>
+        )
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -596,6 +650,14 @@ class ProductDetailScreen extends Component {
 
                     {this.state.showFooter && this.renderFooter()}
                 </SafeAreaView>
+
+                {/* background for bottom sheet */}
+                <BottomSheetBackground
+                    visible={this.state.showPickupFromSellerSheet}
+                    controller={this.fall}
+                />
+
+                {this.renderPickupFromSellerSheet()}
             </View>
         )
     }

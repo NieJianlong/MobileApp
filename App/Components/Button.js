@@ -56,7 +56,7 @@ Button.defaultProps = {
 
 const styles = ScaledSheet.create({
     container: {
-        height: '40@vs',
+        height: '44@vs',
         backgroundColor: '#7FFFD4',
         borderRadius: '20@s',
         justifyContent: 'center',

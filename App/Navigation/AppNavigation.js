@@ -8,6 +8,7 @@ import LaunchScreen from '../Containers/Launch'
 import OnboardingScreen from '../Containers/Onboarding'
 import ExploreScreen from '../Containers/Explore'
 import ProductDetailScreen from '../Containers/Explore/ProductDetail'
+import ProductGalleryScreen from '../Containers/Explore/ProductGallery'
 import LoginScreen from '../Containers/Login'
 import RegisterScreen from '../Containers/Register'
 import LegalScreen from '../Containers/Legal'
@@ -24,52 +25,53 @@ import ChangePasswordScreen from '../Containers/ChangePassword';
 import TabBar from './TabBar'
 
 const TabNav = createBottomTabNavigator({
-    ExploreScreen: { screen: ExploreScreen },
-    PackageScreen: { screen: ExploreScreen },
-    CartScreen: { screen: ExploreScreen },
-    FollowScreen: { screen: ExploreScreen },
-    MenuScreen: { screen: UserCenter }
+  ExploreScreen: { screen: ExploreScreen },
+  PackageScreen: { screen: ExploreScreen },
+  CartScreen: { screen: ExploreScreen },
+  FollowScreen: { screen: ExploreScreen },
+  MenuScreen: { screen: UserCenter }
 }, {
-    tabBarComponent: (props) => (
-        <TabBar {...props} />
-    )
+  tabBarComponent: (props) => (
+    <TabBar {...props} />
+  )
 })
 
 const PrimaryNav = createStackNavigator({
-    LaunchScreen: { screen: LaunchScreen },
-    MainScreen: { screen: TabNav },
-    OnboardingScreen: { screen: OnboardingScreen },
-    ExploreScreen: { screen: ExploreScreen },
-    ProductDetailScreen: { screen: ProductDetailScreen },
-    LoginScreen: { screen: LoginScreen },
-    RegisterScreen: { screen: RegisterScreen },
-    LegalScreen: { screen: LegalScreen },
-    UserInfoScreen: { screen: UserInfoScreen},
-    UserEditProfileScreen:{ screen: UserEditProfileScreen},
-    DeleteAccountMessageScreen:{ screen:DeleteAccountMessageScreen},
-    ChangePasswordScreen:{screen:ChangePasswordScreen},
-    OTPScreen: { screen: OTPScreen },
-    ForgotPasswordScreen: { screen: ForgotPasswordScreen },
-    CreateNewPasswordScreen: { screen: CreateNewPasswordScreen }
+  LaunchScreen: { screen: LaunchScreen },
+  MainScreen: { screen: TabNav },
+  OnboardingScreen: { screen: OnboardingScreen },
+  ExploreScreen: { screen: ExploreScreen },
+  ProductDetailScreen: { screen: ProductDetailScreen },
+  ProductGalleryScreen: { screen: ProductGalleryScreen },
+  LoginScreen: { screen: LoginScreen },
+  RegisterScreen: { screen: RegisterScreen },
+  LegalScreen: { screen: LegalScreen },
+  UserInfoScreen: { screen: UserInfoScreen },
+  UserEditProfileScreen: { screen: UserEditProfileScreen },
+  DeleteAccountMessageScreen: { screen: DeleteAccountMessageScreen },
+  ChangePasswordScreen: { screen: ChangePasswordScreen },
+  OTPScreen: { screen: OTPScreen },
+  ForgotPasswordScreen: { screen: ForgotPasswordScreen },
+  CreateNewPasswordScreen: { screen: CreateNewPasswordScreen }
 }, {
-    // Default config for all screens
-    headerMode: 'none',
-    initialRouteName: 'LaunchScreen',
-    navigationOptions: {
+  // Default config for all screens
+  headerMode: 'none',
+  initialRouteName: 'LaunchScreen',
+  navigationOptions: {
 
-    }
+  }
 })
 
 
-  const AppContainer = createAppContainer(PrimaryNav);
-  export default class AppRouter extends React.Component {
-    render() {
-      return (
-        <AppContainer
-          ref={navigatorRef => {
-            NavigationService.setTopLevelNavigator(navigatorRef);
-          }}
-        />
-      );
-    }
+const AppContainer = createAppContainer(PrimaryNav);
+export default class AppRouter extends React.Component {
+  render() {
+    return (
+      <AppContainer
+        ref={navigatorRef => {
+          NavigationService.setTopLevelNavigator(navigatorRef);
+        }}
+      />
+    );
   }
+}

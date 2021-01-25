@@ -193,9 +193,11 @@ class ProductDetailScreen extends Component {
                         </TouchableOpacity>
                     </View>
 
-                    <View style={styles.photoNumberContainer}>
+                    <TouchableOpacity
+                        onPress={() => NavigationService.navigate('ProductGalleryScreen')}
+                        style={styles.photoNumberContainer}>
                         <Text style={styles.photoNumberTxt}>1/4</Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
             </View>
         )

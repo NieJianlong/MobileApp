@@ -9,7 +9,11 @@ import {
 } from "react-native";
 import DynamicTabViewScrollHeader from "./DynamicTabViewScrollHeader";
 import PropTypes from "prop-types";
-
+/**
+ * @description: Custom Tab Menu component
+ * @param {*}
+ * @return {*}
+ */
 class DynamicTabView extends React.Component {
   constructor(props) {
     super(props);

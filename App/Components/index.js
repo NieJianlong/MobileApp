@@ -15,6 +15,7 @@ import QuantitySelector from './QuantitySelector'
 import DescriptionText from './DescriptionText'
 import Progress from './Progress'
 import BottomSheetBackground from './BottomSheetBackground'
+import SegmentedControl from './SegmentedControl'
 
 export {
     BottomSheet,
@@ -34,4 +35,5 @@ export {
     DescriptionText,
     Progress,
     BottomSheetBackground,
+    SegmentedControl,
 }

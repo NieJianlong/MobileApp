@@ -10,7 +10,8 @@ import { Fonts, Colors, ApplicationStyles, Images } from '../../../Themes'
 import AppConfig from '../../../Config/AppConfig'
 import NavigationService from '../../../Navigation/NavigationService'
 import {
-    StarRating
+    StarRating,
+    Progress
 } from '../../../Components'
 
 function ProductItem(props) {
@@ -89,6 +90,11 @@ function ProductItem(props) {
                         <Text style={styles.txtOrderClose}>Order closes on:</Text>
                         <Text style={styles.heading6Regular}>{product.orderClose}</Text>
                     </View>
+
+                    <Progress
+                        maximumValue={product.inStock}
+                        currentValue={product.orderCountt}
+                    />
 
                     <View style={styles.row}>
                         <Image source={Images.stock} style={styles.icStock} />

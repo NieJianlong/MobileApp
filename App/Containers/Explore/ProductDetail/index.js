@@ -62,7 +62,7 @@ class ProductDetailScreen extends Component {
             colorIndex: 0,
 
             showPickupFromSellerSheet: false,
-            showColorSheet: true,
+            showColorSheet: false,
         }
     }
 
@@ -218,11 +218,12 @@ class ProductDetailScreen extends Component {
 
     renderProductInfo() {
         return (
-            <InView onChange={(isVisible) => {
-                if (isVisible) {
-                    this.setState({ tabIndex: 0 })
-                }
-            }}>
+            <InView
+                onChange={(isVisible) => {
+                    if (isVisible) {
+                        this.setState({ tabIndex: 0 })
+                    }
+                }}>
                 <View style={styles.infoContainer}>
                     <View style={styles.v2}>
                         <View>
@@ -284,7 +285,7 @@ class ProductDetailScreen extends Component {
 
                             <Image source={Images.stock} style={styles.icStock} />
                             <Text style={styles.txtOrderNumber}>{product.orderCount}/{product.inStock}</Text>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => NavigationService.navigate('ProductInfoScreen')}>
                                 <Image source={Images.info2} style={styles.icInfo} />
                             </TouchableOpacity>
                         </View>
@@ -357,6 +358,7 @@ class ProductDetailScreen extends Component {
                 />
 
                 <Picker
+                    onPress={this.toggleColorSheet}
                     style={styles.picker}
                     title={'Color'}
                     value={'Black'}
@@ -368,11 +370,12 @@ class ProductDetailScreen extends Component {
 
     renderRelatedProducts() {
         return (
-            <InView onChange={(isVisible) => {
-                if (isVisible) {
-                    //this.setState({ tabIndex: 1 })
-                }
-            }}>
+            <InView
+                onChange={(isVisible) => {
+                    if (isVisible) {
+                        //this.setState({ tabIndex: 1 })
+                    }
+                }}>
                 <View style={styles.relatedProductsContainer}>
                     <View style={styles.relatedProductsHeader}>
                         <Text style={styles.heading3Bold}>Related products</Text>
@@ -400,11 +403,12 @@ class ProductDetailScreen extends Component {
 
     renderStoreInfo() {
         return (
-            <InView onChange={(isVisible) => {
-                if (isVisible) {
-                    //this.setState({ tabIndex: 2 })
-                }
-            }}>
+            <InView
+                onChange={(isVisible) => {
+                    if (isVisible) {
+                        //this.setState({ tabIndex: 2 })
+                    }
+                }}>
                 <View style={styles.storeInfoContainer}>
                     <View style={styles.rowSpaceBetween}>
                         <View style={styles.row}>
@@ -642,7 +646,7 @@ class ProductDetailScreen extends Component {
         return (
             <BottomSheet
                 customRef={ref => {
-                    this.pickupFromSellerSheet = ref
+                    this.colorSheet = ref
                 }}
                 onCloseEnd={() => this.setState({ showColorSheet: false })}
                 callbackNode={this.fall}
@@ -735,10 +739,10 @@ const product = {
         ratingCount: 1024,
     },
     colors: [
-        {name: 'Onyx Black', available: true},
-        {name: 'Glaciar Green', available: true},
-        {name: 'Interstella Glow', available: true},
-        {name: 'Blue', available: false}
+        { name: 'Onyx Black', available: true },
+        { name: 'Glaciar Green', available: true },
+        { name: 'Interstella Glow', available: true },
+        { name: 'Blue', available: false }
     ]
 }
 

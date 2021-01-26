@@ -9,6 +9,7 @@ import OnboardingScreen from '../Containers/Onboarding';
 import ExploreScreen from '../Containers/Explore';
 import ProductDetailScreen from '../Containers/Explore/ProductDetail';
 import ProductGalleryScreen from '../Containers/Explore/ProductGallery';
+import ProductInfoScreen from '../Containers/Explore/ProductInfo';
 import LoginScreen from '../Containers/Login';
 import RegisterScreen from '../Containers/Register';
 import LegalScreen from '../Containers/Legal';
@@ -54,6 +55,7 @@ const PrimaryNav = createStackNavigator(
     ExploreScreen: { screen: ExploreScreen },
     ProductDetailScreen: { screen: ProductDetailScreen },
     ProductGalleryScreen: { screen: ProductGalleryScreen },
+    ProductInfoScreen: { screen: ProductInfoScreen },
     LoginScreen: { screen: LoginScreen },
     RegisterScreen: { screen: RegisterScreen },
     LegalScreen: { screen: LegalScreen },

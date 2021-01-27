@@ -2,19 +2,16 @@ import React, { Component } from 'react'
 import {
     View,
     StatusBar,
-    Image,
-    ScrollView,
+    Text
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Images } from '../../../Themes'
 import styles from './styles'
 
 import {
     AppBar,
     SegmentedControl
 } from '../../../Components'
-import AppConfig from '../../../Config/AppConfig'
 
 class ProductInfoScreen extends Component {
 
@@ -25,10 +22,21 @@ class ProductInfoScreen extends Component {
     renderBody() {
         return (
             <View style={styles.body}>
-                <SegmentedControl 
+                <SegmentedControl
                     label1={'EXPLANATORY VIDEO'}
                     label2={'GEOGRAPHIC AREA'}
                 />
+
+                <Text style={styles.txtTitle}>
+                    How our social purchasing system works
+                </Text>
+
+                <Text style={styles.txtContent}>
+                    This is an explanatory text about how the social
+                    ecommerce system works lorem ipsum simply dummy text
+                    of the printing and typesetting industry. Lorem Ipsum
+                    has been the industry's standard dummy text ever.
+                </Text>
             </View>
         )
     }

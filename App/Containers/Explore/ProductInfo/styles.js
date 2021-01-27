@@ -16,5 +16,15 @@ export default ScaledSheet.create({
     body: {
         paddingHorizontal: AppConfig.paddingHorizontal,
         paddingVertical: '10@vs'
+    },
+    txtTitle: {
+        ...ApplicationStyles.screen.heading2Bold,
+        textAlign: 'center',
+        lineHeight: '32@s'
+    },
+    txtContent: {
+        ...ApplicationStyles.screen.txtRegular,
+        textAlign: 'center',
+        marginTop: '10@vs'
     }
 })

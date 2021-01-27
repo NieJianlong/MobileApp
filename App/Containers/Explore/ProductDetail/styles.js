@@ -247,13 +247,13 @@ export default ScaledSheet.create({
         paddingHorizontal: AppConfig.paddingHorizontal,
         paddingTop: '10@vs',
         paddingBottom: '10@vs',
-        backgroundColor: Colors.white
+        backgroundColor: Colors.background
     },
     productReviewContainer: {
         paddingHorizontal: AppConfig.paddingHorizontal,
         paddingTop: '10@vs',
         paddingBottom: '10@vs',
-        backgroundColor: Colors.white
+        backgroundColor: Colors.background
     },
     commentContainer: {
         marginBottom: '15@vs'
@@ -298,5 +298,42 @@ export default ScaledSheet.create({
         width: '28@s',
         height: '28@s',
         tintColor: Colors.grey40,
+    },
+    chatContainer: {
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderColor: Colors.grey10,
+        paddingVertical: '15@vs',
+        marginTop: '20@vs',
+        alignItems: 'center',
+    },
+    chatIcon: {
+        width: '16@s',
+        height: '16@s',
+        tintColor: Colors.white
+    },
+    chatButton: {
+        width: '35@s',
+        height: '35@s',
+        borderRadius: '20@s',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    chatIconsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        width: '280@s',
+    },
+    icAdd: {
+        width: '26@s',
+        height: '26@s',
+        tintColor: Colors.grey80
+    },
+    userReviewContainer: {
+        backgroundColor: Colors.white,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: '30@vs',
+        borderRadius: '15@s'
     }
 })

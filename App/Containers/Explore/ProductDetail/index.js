@@ -56,10 +56,12 @@ class ProductDetailScreen extends Component {
             showHeaderTabs: false,
             showFooter: false,
             showDescription: false,
+
             tabIndex: 0,
             quantity: 1,
             totalPrice: 0,
             colorIndex: 0,
+            isPurchased: true,
 
             showPickupFromSellerSheet: false,
             showColorSheet: false,
@@ -329,6 +331,44 @@ class ProductDetailScreen extends Component {
         )
     }
 
+    renderChatOptions() {
+        return (
+            <View style={styles.chatContainer}>
+                <View style={styles.chatIconsContainer}>
+                    <TouchableOpacity style={[styles.chatButton, { backgroundColor: Colors.facebook }]}>
+                        <Image source={Images.facebook} style={styles.chatIcon} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.chatButton, { backgroundColor: Colors.whatsapp }]}>
+                        <Image source={Images.whatsapp} style={styles.chatIcon} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.chatButton, { backgroundColor: Colors.google }]}>
+                        <Image source={Images.google} style={styles.chatIcon} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.chatButton, { backgroundColor: Colors.twitter }]}>
+                        <Image source={Images.twitter} style={styles.chatIcon} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.chatButton, { backgroundColor: Colors.grey10 }]}>
+                        <Image source={Images.add1} style={styles.icAdd} />
+                    </TouchableOpacity>
+                </View>
+
+                <Text style={[styles.txtBold, { marginTop: vs(20), marginBottom: vs(15) }]}>
+                    You can chat here with seller and co-buyers:
+                </Text>
+
+                <View style={{ width: '100%' }}>
+                    <Button
+                        backgroundColor={Colors.grey80}
+                        text={'CHAT'} />
+                </View>
+            </View>
+        )
+    }
+
     renderOptions() {
         return (
             <View style={styles.optionContainer}>
@@ -344,6 +384,8 @@ class ProductDetailScreen extends Component {
                         <Image resizeMode={'contain'} style={styles.returnPolicyImage} source={Images.returnPolicy1} />
                     </View>
                 </View>
+
+                {this.state.isPurchased && this.renderChatOptions()}
 
                 <Picker
                     style={styles.picker}
@@ -438,6 +480,19 @@ class ProductDetailScreen extends Component {
         )
     }
 
+    renderUserReview() {
+        return (
+            <View style={styles.userReviewContainer}>
+                <Text style={styles.heading4Bold}>Rate and review this product</Text>
+                <Text style={styles.txtRegular}>Share your experience</Text>
+
+                <View style={{ height: vs(20) }} />
+
+                <StarRating ratingMode />
+            </View>
+        )
+    }
+
     renderProductReview() {
         return (
             <View style={styles.productReviewContainer}>
@@ -454,6 +509,10 @@ class ProductDetailScreen extends Component {
                         ratingCount={product.ratingCount}
                         ratingDetail={product.ratingDetail} />
                 </InView>
+
+                <View style={{ height: vs(15) }} />
+
+                {this.state.isPurchased && this.renderUserReview()}
 
                 <View style={{ height: vs(15) }} />
 

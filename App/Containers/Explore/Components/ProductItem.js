@@ -158,7 +158,11 @@ function ProductItem(props) {
                     </View>
                 </View>
 
-                <View style={[styles.row, {paddingHorizontal: s(8), marginTop: vs(5)}]}>
+                <View style={[styles.row, { paddingHorizontal: s(8), marginTop: vs(5) }]}>
+                    <Progress
+                        maximumValue={product.inStock}
+                        currentValue={product.orderCountt}
+                    />
                     <Image source={Images.stock} style={styles.icStockSmall} />
                     <Text style={styles.heading6Regular}>{product.orderCount}/{product.inStock}</Text>
                 </View>
@@ -305,7 +309,8 @@ const styles = ScaledSheet.create({
     icStockSmall: {
         width: '15@s',
         height: '15@s',
-        tintColor: Colors.grey60
+        tintColor: Colors.grey60,
+        marginLeft: '10@s'
     }
 })
 

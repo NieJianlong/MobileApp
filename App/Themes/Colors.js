@@ -18,7 +18,11 @@ const colors = {
     grey10: '#EEEFF1',
     secondary00: '#409AEF',
     secondary01: '#ECF5FD',
-    star: '#FDD446'
+    star: '#FDD446',
+    facebook: '#0084FF',
+    whatsapp: '#75CF6C',
+    google: '#EA4335',
+    twitter: '#00A2F9'
 }
 
 export default colors

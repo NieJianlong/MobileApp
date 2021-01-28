@@ -79,7 +79,7 @@ const PrimaryNav = createStackNavigator(
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'LaunchScreen',
+    initialRouteName: 'SettingScreen',
     navigationOptions: {},
   }
 );
@@ -89,7 +89,7 @@ export default class AppRouter extends React.Component {
   render() {
     return (
       <AppContainer
-        ref={navigatorRef => {
+        ref={(navigatorRef) => {
           NavigationService.setTopLevelNavigator(navigatorRef);
         }}
       />

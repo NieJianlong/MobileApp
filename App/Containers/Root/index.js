@@ -1,33 +1,61 @@
-import React, { Component, useContext, useEffect, useReducer } from 'react';
-import { View, StatusBar } from 'react-native';
-import { Alert } from '../../Components';
+import React, {
+  Component,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+} from 'react';
+import {
+  View,
+  StatusBar,
+  Animated,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import { Alert, BottomSheet } from '../../Components';
 import AppNavigation from '../../Navigation/AppNavigation';
 import colors from '../../Themes/Colors';
+import { ScaledSheet, s, vs } from 'react-native-size-matters';
 
 export const AlertContext = React.createContext({});
 const initialState = {
-  visible: false,
-  message: '',
-  title: '',
-  color: colors.success,
-  onDismiss: () => {},
+  alert: {
+    visible: false,
+    message: '',
+    title: '',
+    color: colors.success,
+    onDismiss: () => {},
+  },
+  actionSheet: {
+    showSheet: false,
+    children: null,
+    height: 200,
+    onCloseEnd: () => {},
+  },
 };
 function reducer(state, action) {
-  console.log('====================================');
-  console.log({ ...state, ...action.payload });
-  console.log('====================================');
   switch (action.type) {
     case 'changAlertState':
-      return { ...state, ...action.payload };
+      return { ...state, alert: { ...action.payload } };
+    case 'changSheetState':
+      return {
+        ...state,
+        actionSheet: { ...state.actionSheet, ...action.payload },
+      };
     default:
       throw new Error();
   }
 }
 function RootContainer() {
-  const [{ visible, message, color, onDismiss, title }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [
+    {
+      alert: { visible, message, color, onDismiss, title },
+      actionSheet: { showSheet, children, height, onCloseEnd },
+    },
+    dispatch,
+  ] = useReducer(reducer, initialState);
+
+  const sheetEl = useRef(null);
+  const fall = new Animated.Value(0);
   useEffect(() => {
     if (visible) {
       setTimeout(() => {
@@ -48,8 +76,43 @@ function RootContainer() {
           onDismiss={onDismiss}
         />
       </View>
+      {showSheet && (
+        <BottomSheet
+          customRef={sheetEl}
+          onCloseEnd={() => {
+            debugger;
+            dispatch({
+              type: 'changSheetState',
+              payload: { showSheet: false },
+            });
+          }}
+          // callbackNode={new Animated.Value(0)}
+          snapPoints={[vs(height), 0]}
+          initialSnap={0}
+          // title={'Add your delivery address'}
+        >
+          {children()}
+        </BottomSheet>
+      )}
+      {showSheet && (
+        <TouchableWithoutFeedback onPress={() => {}}>
+          <Animated.View
+            style={{
+              width: '100%',
+              height: '100%',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              alignItems: 'center',
+              backgroundColor: 'rgb(29,29,29)',
+              opacity: Animated.add(0.85, Animated.multiply(-1.0, fall)),
+            }}
+          />
+        </TouchableWithoutFeedback>
+      )}
     </AlertContext.Provider>
   );
 }
-
 export default RootContainer;

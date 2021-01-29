@@ -32,6 +32,7 @@ import SalamiCreditScreen from '../Containers/SalamiCredit';
 import NotificationsScreen from '../Containers/Notifications';
 import SettingScreen from '../Containers/Setting';
 import SelectCountryOrLanguageScreen from '../Containers/SelectCountryOrLanguage';
+import CustomerSupportScreen from '../Containers/CustomerSupport';
 import TabBar from './TabBar';
 
 const TabNav = createBottomTabNavigator(
@@ -77,11 +78,12 @@ const PrimaryNav = createStackNavigator(
     NotificationsScreen: { screen: NotificationsScreen },
     SettingScreen: { screen: SettingScreen },
     SelectCountryOrLanguageScreen: { screen: SelectCountryOrLanguageScreen },
+    CustomerSupportScreen: { screen: CustomerSupportScreen },
   },
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'SettingScreen',
+    initialRouteName: 'UserCenter',
     navigationOptions: {},
   }
 );

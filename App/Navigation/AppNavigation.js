@@ -31,6 +31,7 @@ import SelectDeliveryAddressScreen from '../Containers/SelectDeliveryAddress';
 import SalamiCreditScreen from '../Containers/SalamiCredit';
 import NotificationsScreen from '../Containers/Notifications';
 import SettingScreen from '../Containers/Setting';
+import SelectCountryOrLanguageScreen from '../Containers/SelectCountryOrLanguage';
 import TabBar from './TabBar';
 
 const TabNav = createBottomTabNavigator(
@@ -75,6 +76,7 @@ const PrimaryNav = createStackNavigator(
     UserCenter: { screen: UserCenter },
     NotificationsScreen: { screen: NotificationsScreen },
     SettingScreen: { screen: SettingScreen },
+    SelectCountryOrLanguageScreen: { screen: SelectCountryOrLanguageScreen },
   },
   {
     // Default config for all screens

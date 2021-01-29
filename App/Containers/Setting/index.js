@@ -21,6 +21,7 @@ import images from '../../Themes/Images';
 import AppConfig from '../../Config/AppConfig';
 import metrics from '../../Themes/Metrics';
 import DynamicTabView from '../UserInfo/DynamicTabView';
+import CountryLanguage from './CountryLanguage';
 
 export const MenuConfig = [
   {
@@ -62,18 +63,20 @@ function index(props) {
         <DynamicTabView
           data={MenuConfig}
           renderTab={(item, index) => {
+            let cmp = <View></View>;
             switch (item.key) {
               case 'Country':
+                cmp = <CountryLanguage></CountryLanguage>;
                 break;
               case 'Notifications':
                 break;
               case 'Permissions':
-                  break;
+                break;
 
               default:
                 break;
             }
-            return <View />;
+            return cmp;
           }}
           defaultIndex={defaultIndex}
           containerStyle={{

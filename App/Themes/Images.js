@@ -73,6 +73,10 @@ const images = {
   userFilledImage: require('../Images/usercenter/Filled.png'),
   userFilledSImage: require('../Images/usercenter/Filleds.png'),
   userMoreRightImage: require('../Images/usercenter/Right.png'),
+  userLoveImage: require('../Images/usercenter/Love.png'),
+  userMedImage: require('../Images/usercenter/Med.png'),
+  userSadImage: require('../Images/usercenter/Sad.png'),
+  userFacebookImage: require('../Images/usercenter/feedback.png'),
 };
 
 export default images;

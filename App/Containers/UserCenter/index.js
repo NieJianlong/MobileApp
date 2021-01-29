@@ -53,7 +53,7 @@ const items = [
     title: 'Feedback',
     icon: images.userStarImage,
     onPress: () => {
-      NavigationService.navigate('CustomerSupportScreen');
+      NavigationService.navigate('FeedbackScreen');
     },
   },
   {

@@ -72,6 +72,7 @@ const images = {
   userNotiSImage: require('../Images/usercenter/notis.png'),
   userFilledImage: require('../Images/usercenter/Filled.png'),
   userFilledSImage: require('../Images/usercenter/Filleds.png'),
+  userMoreRightImage: require('../Images/usercenter/Right.png'),
 };
 
 export default images;

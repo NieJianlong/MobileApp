@@ -22,6 +22,8 @@ import AppConfig from '../../Config/AppConfig';
 import metrics from '../../Themes/Metrics';
 import DynamicTabView from '../UserInfo/DynamicTabView';
 import CountryLanguage from './CountryLanguage';
+import Notifications from './Notifications';
+import Permissions from './Permissions';
 
 export const MenuConfig = [
   {
@@ -69,8 +71,10 @@ function index(props) {
                 cmp = <CountryLanguage></CountryLanguage>;
                 break;
               case 'Notifications':
+                cmp = <Notifications></Notifications>;
                 break;
               case 'Permissions':
+                cmp = <Permissions></Permissions>;
                 break;
 
               default:

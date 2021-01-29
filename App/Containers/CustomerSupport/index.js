@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   View,
   ScrollView,
@@ -15,8 +15,10 @@ import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
 import { AppBar, TextInput } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
+import { AlertContext } from '../Root/index';
 
 function index(props) {
+  const { dispatch } = useContext(AlertContext);
   return (
     <View
       style={{
@@ -40,6 +42,16 @@ function index(props) {
               <TouchableOpacity
                 onPress={() => {
                   NavigationService.goBack();
+                  dispatch({
+                    type: 'changAlertState',
+                    payload: {
+                      visible: true,
+                      message:
+                        "We'll study this and get back to you as soon as possible.",
+                      color: colors.success,
+                      title: 'Message sent!',
+                    },
+                  });
                 }}
               >
                 <Text

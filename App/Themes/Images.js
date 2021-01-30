@@ -77,6 +77,8 @@ const images = {
   userMedImage: require('../Images/usercenter/Med.png'),
   userSadImage: require('../Images/usercenter/Sad.png'),
   userFacebookImage: require('../Images/usercenter/feedback.png'),
+  shopcartAddImage: require('../Images/shoppingcart/add.png'),
+  shopcartRemoveImage: require('../Images/shoppingcart/remove.png'),
 };
 
 export default images;

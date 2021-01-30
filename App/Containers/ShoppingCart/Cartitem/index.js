@@ -1,10 +1,13 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Image } from 'react-native';
+import { Text, View, TouchableOpacity, Image, TextInput } from 'react-native';
 import { s, ScaledSheet, vs } from 'react-native-size-matters';
 import { Fonts, Colors, ApplicationStyles, Images } from '../../../Themes';
 import AppConfig from '../../../Config/AppConfig';
 import NavigationService from '../../../Navigation/NavigationService';
 import { StarRating } from '../../../Components';
+import images from '../../../Themes/Images';
+import colors from '../../../Themes/Colors';
+import fonts from '../../../Themes/Fonts';
 
 function index(props) {
   const { product, onPress } = props;
@@ -52,26 +55,23 @@ function index(props) {
       </View>
 
       <View style={styles.v4}>
-        <View>
-          <Text style={styles.txtOrderClose}>Order closes on:</Text>
-          <Text style={styles.heading6Regular}>{product.orderClose}</Text>
+        <View style={styles.counter}>
+          <TouchableOpacity>
+            <Image style={styles.cartadd} source={images.shopcartRemoveImage} />
+          </TouchableOpacity>
+          <TextInput style={styles.cartinput} value="1" />
+          <TouchableOpacity>
+            <Image style={styles.cartadd} source={images.shopcartAddImage} />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.row}>
-          <Image source={Images.stock} style={styles.icStock} />
-          <Text style={styles.txtOrderNumber}>
-            {product.orderCount}/{product.inStock}
-          </Text>
-          <TouchableOpacity>
-            <Image source={Images.info2} style={styles.icInfo} />
+          <TouchableOpacity style={styles.removebtn}>
+            <Text style={styles.removetext}>REMOVE</Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <TouchableOpacity>
-            <Image source={Images.likeMed} style={styles.icShare} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={Images.share} style={styles.icShare} />
+          <View style={{ width: s(15) }} />
+          <TouchableOpacity style={[styles.removebtn, { width: s(60) }]}>
+            <Text style={styles.removetext}>EDIT</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -79,9 +79,49 @@ function index(props) {
   );
 }
 
-
 const styles = ScaledSheet.create({
   ...ApplicationStyles.screen,
+  counter: {
+    height: '32@s',
+    width: '96@s',
+    borderRadius: '40@s',
+    borderColor: '#DDDFE3',
+    borderWidth: 1,
+    backgroundColor: '#F8F9FA',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: '5@s',
+  },
+  cartadd: {
+    width: '25@s',
+    height: '25@s',
+    resizeMode: 'contain',
+  },
+  removebtn: {
+    width: '86@s',
+    height: '32@s',
+    borderColor: '#DDDFE3',
+    borderWidth: 1,
+    borderRadius: '40@s',
+  },
+  removetext: {
+    textAlign: 'center',
+    height: '30@s',
+    lineHeight: '30@s',
+    color: colors.grey80,
+    fontWeight: '600',
+    fontFamily: fonts.primary,
+    fontSize: '14@s',
+  },
+  cartinput: {
+    width: '32@s',
+    height: '32@s',
+    backgroundColor: 'white',
+    textAlign: 'center',
+    borderWidth: 1,
+    borderColor: '#DDDFE3',
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -170,8 +210,8 @@ const styles = ScaledSheet.create({
   },
   productInfoSmall: {
     paddingHorizontal: '8@s',
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.grey10,
+    // borderBottomWidth: 1,
+    // borderBottomColor: Colors.grey10,
     paddingBottom: '8@vs',
   },
   productImageSmall: {

@@ -35,6 +35,7 @@ function index(props) {
           renderItem={({ item }) => (
             <CartItem key={index.toString()} product={item} size={'M'} />
           )}
+          keyExtractor={(item,index)=>`lll${index}`}
         />
       </SafeAreaView>
     </View>

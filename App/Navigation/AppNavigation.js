@@ -34,13 +34,14 @@ import SettingScreen from '../Containers/Setting';
 import SelectCountryOrLanguageScreen from '../Containers/SelectCountryOrLanguage';
 import CustomerSupportScreen from '../Containers/CustomerSupport';
 import FeedbackScreen from '../Containers/Feedback';
+import ShoppingCartScreen from '../Containers/ShoppingCart';
 import TabBar from './TabBar';
 
 const TabNav = createBottomTabNavigator(
   {
     ExploreScreen: { screen: ExploreScreen },
     PackageScreen: { screen: ExploreScreen },
-    CartScreen: { screen: ExploreScreen },
+    CartScreen: { screen: ShoppingCartScreen },
     FollowScreen: { screen: ExploreScreen },
     MenuScreen: { screen: UserCenter },
   },
@@ -81,6 +82,7 @@ const PrimaryNav = createStackNavigator(
     SelectCountryOrLanguageScreen: { screen: SelectCountryOrLanguageScreen },
     CustomerSupportScreen: { screen: CustomerSupportScreen },
     FeedbackScreen: { screen: FeedbackScreen },
+    ShoppingCartScreen: { screen: ShoppingCartScreen },
   },
   {
     // Default config for all screens

@@ -87,7 +87,7 @@ const PrimaryNav = createStackNavigator(
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'LaunchScreen',
+    initialRouteName: 'ShoppingCartScreen',
     navigationOptions: {},
   }
 );

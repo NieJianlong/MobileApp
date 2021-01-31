@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   StatusBar,
   FlatList,
+  SectionList,
 } from 'react-native';
 import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
@@ -17,6 +18,8 @@ import { AppBar, SearchBox } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import CheckBox from '../Explore/Components/CheckBox';
 import metrics from '../../Themes/Metrics';
+import { ApplicationStyles, Colors, Fonts } from '../../Themes';
+
 const countries = () =>
   [0, 1, 2, 3, 4, 5, 6, 7, 8].map((item) => `Country ${item}`);
 
@@ -25,6 +28,38 @@ const languages = () =>
 
 function index(props) {
   const [selectValue, setSelectValue] = useState('');
+
+  const [state, setState] = useState({
+    selected: {
+      Size: '256GB',
+      Style: 'OnePlus 8',
+      Color: 'Onyx Black',
+    },
+    datas: [
+      {
+        title: 'Size',
+        data: [
+          { title: '256GB', price: '+$145' },
+          { title: '128GB', price: '-$45' },
+        ],
+      },
+      {
+        title: 'Style',
+        data: [
+          { title: 'OnePlus 8 Pro', price: '+$125' },
+          { title: 'OnePlus 8', price: '-$45' },
+        ],
+      },
+      {
+        title: 'Color',
+        data: [
+          { title: 'Onyx Black', price: '+$125', color: '#292929' },
+          { title: 'Glaciar Green', price: '-$45', color: '#96E9E0' },
+          { title: 'Ultramarine Blue', price: '-$45', color: '#9CACE5' },
+        ],
+      },
+    ],
+  });
   return (
     <View
       style={{
@@ -65,10 +100,32 @@ function index(props) {
           }}
         />
         <View style={{ height: metrics.screenHeight - vs(64) }}>
-          <FlatList
+          <SectionList
+            extraData={state}
             contentContainerStyle={{ paddingBottom: vs(44) }}
-            data={countries()}
-            renderItem={({ item }, index) => {
+            sections={state.datas}
+            renderSectionHeader={({ section: { title } }) => (
+              <View
+                style={{
+                  paddingHorizontal: s(18),
+                  height: 50,
+                  justifyContent: 'center',
+                  backgroundColor: '#F8F9FA',
+                }}
+              >
+                <Text
+                  style={[
+                    ApplicationStyles.screen.heading4Bold,
+                    { marginTop: 20 },
+                  ]}
+                >
+                  {title}
+                </Text>
+              </View>
+            )}
+            renderItem={({ item, section, separators }, index) => {
+              const sectionTitle = section.title;
+              const selectedValue = state.selected[sectionTitle];
               debugger;
               return (
                 <View
@@ -76,9 +133,15 @@ function index(props) {
                 >
                   <View style={{ height: vs(12) }} />
                   <CheckBox
-                    defaultValue={selectValue == item}
-                    onSwitch={(t) => setSelectValue(item)}
-                    label={item}
+                    defaultValue={selectedValue == item.title}
+                    onSwitch={(t) => {
+                      debugger;
+                      const selectedDic = state.selected;
+                      selectedDic[sectionTitle] = item.title;
+                      console.log({ ...state, selected: { ...selectedDic } });
+                      setState({ ...state, selected: { ...selectedDic } });
+                    }}
+                    label={item.title}
                   />
                 </View>
               );

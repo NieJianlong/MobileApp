@@ -29,9 +29,7 @@ function index(props) {
           $490 (30%)
         </Text>
       </View>
-      <View style={{marginTop:vs(25)}}>
-        <Button text="PROCEED TO CHECKOUT"></Button>
-      </View>
+     
     </View>
   );
 }

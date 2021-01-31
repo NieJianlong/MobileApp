@@ -79,6 +79,7 @@ const images = {
   userFacebookImage: require('../Images/usercenter/feedback.png'),
   shopcartAddImage: require('../Images/shoppingcart/add.png'),
   shopcartRemoveImage: require('../Images/shoppingcart/remove.png'),
+  shopcartInfoImage: require('../Images/shoppingcart/info.png'),
 };
 
 export default images;

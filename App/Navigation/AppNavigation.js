@@ -35,6 +35,7 @@ import SelectCountryOrLanguageScreen from '../Containers/SelectCountryOrLanguage
 import CustomerSupportScreen from '../Containers/CustomerSupport';
 import FeedbackScreen from '../Containers/Feedback';
 import ShoppingCartScreen from '../Containers/ShoppingCart';
+import EditShoppingCartScreen from '../Containers/EditShoppingCart';
 import TabBar from './TabBar';
 
 const TabNav = createBottomTabNavigator(
@@ -83,11 +84,12 @@ const PrimaryNav = createStackNavigator(
     CustomerSupportScreen: { screen: CustomerSupportScreen },
     FeedbackScreen: { screen: FeedbackScreen },
     ShoppingCartScreen: { screen: ShoppingCartScreen },
+    EditShoppingCartScreen: { screen: EditShoppingCartScreen },
   },
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'LaunchScreen',
+    initialRouteName: 'ShoppingCartScreen',
     navigationOptions: {},
   }
 );

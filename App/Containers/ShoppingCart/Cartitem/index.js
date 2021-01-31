@@ -23,10 +23,14 @@ function index(props) {
         <View style={styles.v2}>
           <View>
             <Text style={styles.heading4Bold}>{product.name}</Text>
-            <StarRating
-              rating={product.rating}
-              ratingCount={product.ratingCount}
-            />
+            <Text
+              style={[
+                styles.heading4Bold,
+                { fontSize: s(12), color: colors.grey80 },
+              ]}
+            >
+              Selected product options goes here
+            </Text>
           </View>
           <View style={styles.row}>
             <View style={styles.v3}>
@@ -70,7 +74,12 @@ function index(props) {
             <Text style={styles.removetext}>REMOVE</Text>
           </TouchableOpacity>
           <View style={{ width: s(15) }} />
-          <TouchableOpacity style={[styles.removebtn, { width: s(60) }]}>
+          <TouchableOpacity
+            onPress={() => {
+              NavigationService.navigate('EditShoppingCartScreen');
+            }}
+            style={[styles.removebtn, { width: s(60) }]}
+          >
             <Text style={styles.removetext}>EDIT</Text>
           </TouchableOpacity>
         </View>

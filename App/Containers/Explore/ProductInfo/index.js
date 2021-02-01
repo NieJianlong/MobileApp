@@ -25,6 +25,7 @@ class ProductInfoScreen extends Component {
                 <SegmentedControl
                     label1={'EXPLANATORY VIDEO'}
                     label2={'GEOGRAPHIC AREA'}
+                    onSwitch={() => { }}
                 />
 
                 <Text style={styles.txtTitle}>

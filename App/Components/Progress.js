@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {
     Text,
     View,
-    TouchableOpacity
+    TouchableOpacity,
 } from 'react-native'
 import { ScaledSheet, s, vs } from 'react-native-size-matters'
 import { Fonts, Colors } from '../Themes'
@@ -14,14 +14,16 @@ function Progress(props) {
     const {
         maximumValue,
         currentValue,
-        style
+        style,
+        barWidth,
+        barHeight,
     } = props
 
     const percentage = Math.round(currentValue * 100 / maximumValue) + '%'
 
     return (
-        <View style={[styles.container, style]}>
-            <View style={[styles.bar, { width: percentage }]} />
+        <View style={[styles.container, style, { width: barWidth ?? MAX_WIDTH, height: barHeight ?? BAR_HEIGHT }]}>
+            <View style={[styles.bar, { width: percentage, height: barHeight ?? BAR_HEIGHT }]} />
         </View>
     )
 }

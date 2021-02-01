@@ -93,7 +93,9 @@ function ProductItem(props) {
 
                     <Progress
                         maximumValue={product.inStock}
-                        currentValue={product.orderCountt}
+                        currentValue={product.orderCount}
+                        barWidth={s(60)}
+                        barHeight={vs(6)}
                     />
 
                     <View style={styles.row}>

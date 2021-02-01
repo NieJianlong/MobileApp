@@ -118,7 +118,7 @@ class ExploreScreen extends Component {
                 }}
                 onCloseEnd={() => this.setState({ showLocationSheet: false })}
                 callbackNode={this.fall}
-                snapPoints={[vs(190), 0]}
+                snapPoints={[vs(210), 0]}
                 initialSnap={this.state.showLocationSheet ? 0 : 1}
                 title={'Add your delivery address'}>
                 <View style={{ flex: 1, justifyContent: 'flex-end' }}>
@@ -290,7 +290,7 @@ class ExploreScreen extends Component {
 
                 <Image source={Images.logo3} style={styles.logo} resizeMode={'contain'} />
 
-                <TouchableOpacity onPress={this.toggleAddressSheet}>
+                <TouchableOpacity onPress={() => { NavigationService.navigate('ProductSearchScreen') }}>
                     <Image source={Images.search} style={styles.icSearch} />
                 </TouchableOpacity>
             </View>
@@ -345,7 +345,7 @@ class ExploreScreen extends Component {
                     </View>
                 </View>
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={this.toggleAddressSheet}>
                     <Image source={Images.arrow_left} style={styles.icArrowDown} />
                 </TouchableOpacity>
             </View>

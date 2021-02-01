@@ -41,11 +41,12 @@ class OnboardingScreen extends Component {
                     ref={(ref) => {
                         this.player = ref
                     }}
-                    source={Images.videoOnboarding}
+                    source={{ uri: 'http://www.exit109.com/~dnn/clips/RW20seconds_1.mp4' }}
                     style={styles.backgroundVideo}
                     resizeMode={'cover'}
                     repeat
                     paused={!this.state.isPlaying}
+                    muted
                 />
                 <SafeAreaView
                     style={styles.safeArea}

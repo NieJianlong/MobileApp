@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { s, vs } from 'react-native-size-matters'
 import Animated from 'react-native-reanimated'
 import Collapsible from 'react-native-collapsible'
+import Carousel from 'react-native-snap-carousel'
 import InView from 'react-native-component-inview'
 import { ScrollIntoView, wrapScrollView } from 'react-native-scroll-into-view'
 import moment from 'moment'
@@ -30,7 +31,6 @@ import {
     BottomSheet,
     BottomSheetBackground
 } from '../../../Components'
-import { currencyFormatter } from '../../../Utils/Currency'
 
 import { Images, Colors } from '../../../Themes'
 import AppConfig from '../../../Config/AppConfig'
@@ -43,6 +43,8 @@ import ColorOptionItem from '../Components/ColorOptionItem'
 
 const { height } = Dimensions.get('window')
 const Sections = range(0, 4)
+const sliderWidth = Dimensions.get('window').width
+const carouselItemWidth = Dimensions.get('window').width
 // Wrap the original ScrollView
 const CustomScrollView = wrapScrollView(ScrollView)
 
@@ -58,6 +60,7 @@ class ProductDetailScreen extends Component {
             showDescription: false,
 
             tabIndex: 0,
+            photoIndex: 0,
             quantity: 1,
             totalPrice: 0,
             colorIndex: 0,
@@ -170,7 +173,7 @@ class ProductDetailScreen extends Component {
                         <Text style={[styles.txtBold, { color: Colors.white }]}>BUY NOW</Text>
 
                         <View style={styles.priceContainer}>
-                            <Text style={[styles.txtRegular, { color: Colors.white }]}>{currencyFormatter.format(this.state.quantity * product.wholesalePrice)}</Text>
+                            <Text style={[styles.txtRegular, { color: Colors.white }]}>{this.state.quantity * product.wholesalePrice}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -178,15 +181,33 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    renderProductImages() {
+    _renderImageItem = ({ item, index }) => {
         return (
-            <View style={styles.imagesContainer}>
+            <TouchableOpacity onPress={() => NavigationService.navigate('ProductGalleryScreen', { fullscreenMode: true })}>
                 <Image
                     resizeMode={'contain'}
                     source={{ uri: product.picture }}
                     style={styles.prodImage}
                 />
+            </TouchableOpacity>
+        )
+    }
 
+    onSnapToItem = (index) => {
+        this.setState({ photoIndex: index })
+    }
+
+    renderProductImages() {
+        return (
+            <View style={styles.imagesContainer}>
+                <Carousel
+                    ref={(c) => { this._carousel = c; }}
+                    data={product.photoUrls}
+                    renderItem={this._renderImageItem}
+                    sliderWidth={sliderWidth}
+                    itemWidth={carouselItemWidth}
+                    onSnapToItem={this.onSnapToItem}
+                />
                 <View style={styles.row1}>
                     <TouchableOpacity onPress={NavigationService.goBack} style={styles.btnRoundContainer}>
                         <Image style={styles.btnRoundIcon} source={Images.arrow_left} />
@@ -209,9 +230,9 @@ class ProductDetailScreen extends Component {
                     </View>
 
                     <TouchableOpacity
-                        onPress={() => NavigationService.navigate('ProductGalleryScreen')}
+                        onPress={() => NavigationService.navigate('ProductGalleryScreen', { fullscreenMode: false })}
                         style={styles.photoNumberContainer}>
-                        <Text style={styles.photoNumberTxt}>1/4</Text>
+                        <Text style={styles.photoNumberTxt}>{this.state.photoIndex + 1}/{product.photoUrls.length}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -776,6 +797,12 @@ export default ProductDetailScreen
 const product = {
     name: 'iPhone 11',
     picture: 'https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png',
+    photoUrls: [
+        'https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png',
+        'https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png',
+        'https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png',
+        'https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png',
+    ],
     rating: 3.5,
     ratingCount: 624,
     ratingDetail: {

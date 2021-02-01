@@ -16,6 +16,7 @@ import DescriptionText from './DescriptionText'
 import Progress from './Progress'
 import BottomSheetBackground from './BottomSheetBackground'
 import SegmentedControl from './SegmentedControl'
+import ProductSearchBox from './ProductSearchBox'
 
 export {
     BottomSheet,
@@ -36,4 +37,5 @@ export {
     Progress,
     BottomSheetBackground,
     SegmentedControl,
+    ProductSearchBox,
 }

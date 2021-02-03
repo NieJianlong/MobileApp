@@ -22,14 +22,15 @@ import {
     TextInput,
     Alert,
     RadiusButton,
-    StarRating
+    StarRating,
+    ProductSearchBox
 } from '../../Components'
 import CheckBox from './Components/CheckBox'
 import ProductItem from './Components/ProductItem'
+import ShareOptionList from './Components/ShareOptionList'
 
 import { Colors, Images } from '../../Themes'
 import styles from './styles'
-import AppConfig from '../../Config/AppConfig'
 import NavigationService from '../../Navigation/NavigationService'
 
 class ExploreScreen extends Component {
@@ -45,10 +46,12 @@ class ExploreScreen extends Component {
             showAccountActivatedSuccessfullyAlert: false,
             showAccountActivateAlert: false,
             showSortBySheet: false,
+            showShareSheet: false,
 
             selectedCategory: 0,
             showProductAsRows: true,
             sortOption: 1,
+            keyword: ''
         }
     }
 
@@ -92,6 +95,16 @@ class ExploreScreen extends Component {
                 this.sortBySheet.snapTo(0)
             } else {
                 this.sortBySheet.snapTo(1)
+            }
+        })
+    }
+
+    toggleShareSheet = () => {
+        this.setState({ showShareSheet: !this.state.showShareSheet }, () => {
+            if (this.state.showShareSheet) {
+                this.shareSheet.snapTo(0)
+            } else {
+                this.shareSheet.snapTo(1)
             }
         })
     }
@@ -255,6 +268,24 @@ class ExploreScreen extends Component {
         )
     }
 
+    renderShareSheet() {
+        return (
+            <BottomSheet
+                customRef={ref => {
+                    this.shareSheet = ref
+                }}
+                onCloseEnd={() => this.setState({ showShareSheet: false })}
+                callbackNode={this.fall}
+                snapPoints={[vs(580), 0]}
+                initialSnap={this.state.showShareSheet ? 0 : 1}
+                title={'Share to'}>
+                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    <ShareOptionList />
+                </View>
+            </BottomSheet>
+        )
+    }
+
     renderAccountActivatedSuccessfullyAlert() {
         return (
             <Alert
@@ -283,18 +314,40 @@ class ExploreScreen extends Component {
         )
     }
 
+    onSearch = (keyword) => {
+        this.setState({ keyword })
+    }
+
     renderHeader() {
-        return (
-            <View style={styles.header}>
-                <View style={styles.icSearch} />
+        if (this.state.keyword === '') {
+            return (
+                <View style={styles.header}>
+                    <View style={styles.icSearch} />
 
-                <Image source={Images.logo3} style={styles.logo} resizeMode={'contain'} />
+                    <Image source={Images.logo3} style={styles.logo} resizeMode={'contain'} />
 
-                <TouchableOpacity onPress={() => { NavigationService.navigate('ProductSearchScreen') }}>
-                    <Image source={Images.search} style={styles.icSearch} />
-                </TouchableOpacity>
-            </View>
-        )
+                    <TouchableOpacity
+                        onPress={() => {
+                            NavigationService.navigate('ProductSearchScreen', {
+                                onSearch: this.onSearch
+                            })
+                        }}
+                    >
+                        <Image source={Images.search} style={styles.icSearch} />
+                    </TouchableOpacity>
+                </View>
+            )
+        } else {
+            return (
+                <View style={[styles.header, { paddingVertical: vs(10) }]}>
+                    <ProductSearchBox
+                        disabled={true}
+                        keyword={this.state.keyword}
+                        onPressDelete={() => this.setState({ keyword: '' })}
+                    />
+                </View>
+            )
+        }
     }
 
     renderCategories() {
@@ -386,6 +439,7 @@ class ExploreScreen extends Component {
     renderProduct = (item, index) => {
         return (
             <ProductItem
+                onPressShare={this.toggleShareSheet}
                 key={index.toString()}
                 product={item}
                 size={this.state.showProductAsRows ? 'M' : 'L'}
@@ -434,12 +488,15 @@ class ExploreScreen extends Component {
 
                 {this.renderSortBySheet()}
 
+                {this.renderShareSheet()}
+
                 {/* background for bottom sheet */}
                 {
                     (this.state.showLocationSheet ||
                         this.state.showAddLocationSheet ||
                         this.state.showAddAddressSheet ||
-                        this.state.showSortBySheet
+                        this.state.showSortBySheet ||
+                        this.state.showShareSheet
                     ) &&
                     <TouchableWithoutFeedback
                         onPress={() => {

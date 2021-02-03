@@ -5,6 +5,7 @@ import {
     Image,
     TouchableOpacity,
     TextInput,
+    Dimensions
 } from 'react-native'
 import { ScaledSheet, s } from 'react-native-size-matters'
 import PropTypes from 'prop-types'
@@ -13,21 +14,26 @@ import Highlighter from './Highlighter'
 
 import { Fonts, Colors, Images } from '../Themes'
 import NavigationService from '../Navigation/NavigationService'
+import AppConfig from '../Config/AppConfig'
 
-const results = ['street Jump', 'street Boro', 'street Bleard', 'street Laurence']
+const { width, height } = Dimensions.get('window')
+
+const results = ['iphone 12', 'iphone 12 mini', 'iphone 12 pro', 'iphone 12 pro max']
 
 class ProductSearchBox extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            keyword: ''
+            keyword: this.props.keyword ?? ''
         }
     }
 
     render() {
         const {
-            onPressAddAddressManually
+            disabled,
+            onPressDelete,
+            onSelect,
         } = this.props
 
         return (
@@ -38,6 +44,7 @@ class ProductSearchBox extends Component {
                     </TouchableOpacity>
 
                     <TextInput
+                        editable={!disabled}
                         placeholder={'Search products'}
                         value={this.state.keyword}
                         style={styles.textInput}
@@ -48,7 +55,10 @@ class ProductSearchBox extends Component {
                     {
                         this.state.keyword !== '' &&
                         <TouchableOpacity
-                            onPress={() => this.setState({ keyword: '' })}
+                            onPress={() => {
+                                this.setState({ keyword: '' })
+                                onPressDelete && onPressDelete()
+                            }}
                             style={styles.btnDelete}>
                             <Image source={Images.crossMedium} style={styles.icDelete} />
                         </TouchableOpacity>
@@ -56,11 +66,14 @@ class ProductSearchBox extends Component {
                 </View>
 
                 {
-                    this.state.keyword !== '' &&
+                    (this.state.keyword !== '' && !disabled) &&
                     <View style={styles.listResultContainer}>
                         {
                             results.map((item, index) =>
-                                <TouchableOpacity key={index.toString()} style={styles.itemResultContainer}>
+                                <TouchableOpacity
+                                    onPress={() => onSelect(item)}
+                                    key={index.toString()}
+                                    style={styles.itemResultContainer}>
                                     <Highlighter
                                         style={styles.textResult}
                                         highlightStyle={{ fontWeight: '600' }}
@@ -94,7 +107,8 @@ const styles = ScaledSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
-        paddingHorizontal: '10@s'
+        paddingHorizontal: '10@s',
+        width: width - 2 * AppConfig.paddingHorizontal
     },
     icSearch: {
         width: '22@s',

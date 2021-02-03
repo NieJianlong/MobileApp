@@ -1,6 +1,9 @@
+import { Dimensions } from 'react-native'
 import { ScaledSheet } from 'react-native-size-matters'
 import AppConfig from '../../Config/AppConfig'
 import { ApplicationStyles, Colors, Fonts } from '../../Themes'
+
+const { width, height } = Dimensions.get('window')
 
 export default ScaledSheet.create({
     ...ApplicationStyles.screen,
@@ -23,7 +26,8 @@ export default ScaledSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: Colors.white,
-        paddingHorizontal: AppConfig.paddingHorizontal
+        paddingHorizontal: AppConfig.paddingHorizontal,
+        height: '50@vs'
     },
     icSearch: {
         width: '30@s',

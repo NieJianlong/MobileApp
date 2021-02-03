@@ -11,8 +11,9 @@ import { ScaledSheet, s } from 'react-native-size-matters'
 import PropTypes from 'prop-types'
 
 import Highlighter from './Highlighter'
+import Button from './Button'
 
-import { Fonts, Colors, Images } from '../Themes'
+import { Fonts, Colors, Images, ApplicationStyles } from '../Themes'
 import NavigationService from '../Navigation/NavigationService'
 import AppConfig from '../Config/AppConfig'
 
@@ -25,8 +26,13 @@ class ProductSearchBox extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            keyword: this.props.keyword ?? ''
+            keyword: this.props.keyword ?? '',
+            results: []
         }
+    }
+
+    getResults = (keyword) => {
+        return results.filter(i => i.toLowerCase().includes(keyword.toLowerCase()))
     }
 
     render() {
@@ -49,7 +55,7 @@ class ProductSearchBox extends Component {
                         value={this.state.keyword}
                         style={styles.textInput}
                         onChangeText={(text) => {
-                            this.setState({ keyword: text })
+                            this.setState({ keyword: text, results: this.getResults(text) })
                         }}
                     />
                     {
@@ -69,7 +75,7 @@ class ProductSearchBox extends Component {
                     (this.state.keyword !== '' && !disabled) &&
                     <View style={styles.listResultContainer}>
                         {
-                            results.map((item, index) =>
+                            this.state.results.map((item, index) =>
                                 <TouchableOpacity
                                     onPress={() => onSelect(item)}
                                     key={index.toString()}
@@ -82,6 +88,24 @@ class ProductSearchBox extends Component {
                                 </TouchableOpacity>
                             )
                         }
+                    </View>
+                }
+
+                {
+                    (this.state.results.length === 0 && !disabled) &&
+                    <View style={styles.noResultContainer}>
+                        <View>
+                            <Text style={styles.txt1}>
+                                We have not found results for your search
+                            </Text>
+                            <Text style={styles.txt2}>
+                                Check the text entered in your search or
+                            </Text>
+                        </View>
+
+                        <Button
+                            onPress={() => NavigationService.goBack()}
+                            text={'CONTINUE EXPLORING'} />
                     </View>
                 }
             </View>
@@ -162,6 +186,22 @@ const styles = ScaledSheet.create({
         fontSize: '15@s',
         fontFamily: Fonts.primary,
         color: Colors.secondary00
+    },
+    noResultContainer: {
+        marginTop: '25@vs',
+        justifyContent: 'center',
+    },
+    txt1: {
+        ...ApplicationStyles.screen.heading2Bold,
+        textAlign: 'center',
+        lineHeight: '32@s'
+    },
+    txt2: {
+        ...ApplicationStyles.screen.heading4Regular,
+        textAlign: 'center',
+        color: Colors.grey80,
+        marginTop: '10@vs',
+        marginBottom: '20@vs'
     }
 })
 export default ProductSearchBox

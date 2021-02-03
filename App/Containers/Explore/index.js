@@ -379,7 +379,9 @@ class ExploreScreen extends Component {
                     start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 0.0 }}
                     style={styles.v1}
                 >
-                    <TouchableOpacity style={styles.btnAddContainer}>
+                    <TouchableOpacity
+                        onPress={() => NavigationService.navigate('EditCategoriesScreen')}
+                        style={styles.btnAddContainer}>
                         <Image source={Images.add1} style={styles.icAdd} />
                     </TouchableOpacity>
                 </LinearGradient>

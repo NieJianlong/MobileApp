@@ -24,6 +24,7 @@ function ProductItem(props) {
         size,
         product,
         onPress,
+        onPressShare
     } = props
 
     if (size === 'M' || size == 'L') {
@@ -111,7 +112,7 @@ function ProductItem(props) {
                             <Image source={Images.likeMed} style={styles.icShare} />
                         </TouchableOpacity>
 
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={onPressShare}>
                             <Image source={Images.share} style={styles.icShare} />
                         </TouchableOpacity>
                     </View>

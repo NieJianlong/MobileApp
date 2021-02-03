@@ -19,7 +19,7 @@ const colors = {
     secondary00: '#409AEF',
     secondary01: '#ECF5FD',
     star: '#FDD446',
-    facebook: '#0084FF',
+    facebook: '#3B5998',
     whatsapp: '#75CF6C',
     google: '#EA4335',
     twitter: '#00A2F9'

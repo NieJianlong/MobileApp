@@ -80,6 +80,8 @@ const images = {
   shopcartAddImage: require('../Images/shoppingcart/add.png'),
   shopcartRemoveImage: require('../Images/shoppingcart/remove.png'),
   shopcartInfoImage: require('../Images/shoppingcart/info.png'),
+  shopcartSubImage: require('../Images/shoppingcart/sub.png'),
+  shopcartOrImage: require('../Images/shoppingcart/Or.png'),
 };
 
 export default images;

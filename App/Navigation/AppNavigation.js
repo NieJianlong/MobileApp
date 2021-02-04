@@ -36,6 +36,9 @@ import CustomerSupportScreen from '../Containers/CustomerSupport';
 import FeedbackScreen from '../Containers/Feedback';
 import ShoppingCartScreen from '../Containers/ShoppingCart';
 import EditShoppingCartScreen from '../Containers/EditShoppingCart';
+import CheckoutNoAuthScreen from '../Containers/CheckoutNoAuth';
+import CheckOutPersonalDetailsScreen from '../Containers/CheckOutPersonalDetails';
+import CheckoutBillingDetailsScreen from '../Containers/CheckoutBillingDetails';
 import TabBar from './TabBar';
 
 const TabNav = createBottomTabNavigator(
@@ -85,11 +88,14 @@ const PrimaryNav = createStackNavigator(
     FeedbackScreen: { screen: FeedbackScreen },
     ShoppingCartScreen: { screen: ShoppingCartScreen },
     EditShoppingCartScreen: { screen: EditShoppingCartScreen },
+    CheckoutNoAuthScreen: { screen: CheckoutNoAuthScreen },
+    CheckOutPersonalDetailsScreen: { screen: CheckOutPersonalDetailsScreen },
+    CheckoutBillingDetailsScreen: { screen: CheckoutBillingDetailsScreen },
   },
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'ShoppingCartScreen',
+    initialRouteName: 'CheckOutPersonalDetailsScreen',
     navigationOptions: {},
   }
 );

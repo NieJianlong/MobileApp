@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext, useReducer } from 'react';
 import {
   StatusBar,
   View,
@@ -20,8 +20,14 @@ import { s, vs } from 'react-native-size-matters';
 import AppConfig from '../../Config/AppConfig';
 import colors from '../../Themes/Colors';
 import images from '../../Themes/Images';
-const datas = () =>
-  [0, 1, 2, 3, 4].map(() => ({
+import NavigationService from '../../Navigation/NavigationService';
+
+//Alert Context, which controls the display and hiding of an alert, for example, Add Address Success
+export const CartContext = React.createContext({});
+//reducer,useContext+useReducer,It is easy for child components to control parent components
+const initialState = {
+  datas: [0, 1, 2, 3, 4].map((item, index) => ({
+    id: index,
     name: 'iPhone 11',
     picture:
       'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
@@ -32,111 +38,155 @@ const datas = () =>
     orderClose: '22/12/2020',
     inStock: 100,
     orderCount: 24,
-  }));
-
+    count: 1,
+  })),
+};
+function reducer(state, action) {
+  const datas = state.datas;
+  switch (action.type) {
+    case 'addCartCount':
+      return {
+        ...state,
+        datas: datas.map((item) => {
+          if (item.id == action.payload) {
+            item.count = item.count + 1;
+          }
+          return item;
+        }),
+      };
+    case 'subCartCount':
+      return {
+        ...state,
+        datas: datas.map((item) => {
+          if (item.id == action.payload) {
+            item.count = item.count - 1;
+          }
+          return item;
+        }),
+      };
+    case 'revomeCartCount':
+      const index = datas.findIndex((item) => item.id == action.payload);
+      datas.splice(index, 1);
+      return { ...state, datas };
+    default:
+      throw new Error();
+  }
+}
 function index(props) {
+  const [{ datas }, dispatch] = useReducer(reducer, initialState);
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView
-        style={styles.mainContainer}
-        edges={['top', 'left', 'right']}
-      >
-        <SectionList
-          sections={[{ title: '', data: datas() }]}
-          contentContainerStyle={{ paddingBottom: 60 }}
-          renderSectionHeader={() => (
-            <View
-              style={{
-                paddingHorizontal: AppConfig.paddingHorizontal,
-                backgroundColor: 'white',
-                height: 80,
-              }}
-            >
-              <Button text="PROCEED TO CHECKOUT"></Button>
-            </View>
-          )}
-          renderSectionFooter={() => (
-            <View
-              style={{
-                paddingHorizontal: AppConfig.paddingHorizontal,
-                backgroundColor: 'white',
-                height: 80,
-              }}
-            >
-              <TouchableOpacity
-                style={{
-                  borderRadius: s(40),
-                  backgroundColor: colors.grey80,
-                  width: s(170),
-                  height: s(32),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginTop: -25,
-                }}
-              >
-                <Text
-                  style={[
-                    styles.heading4Bold,
-                    { color: 'white', textAlign: 'center' },
-                  ]}
-                >
-                  PAY DURING DELIVERY
-                </Text>
-              </TouchableOpacity>
+    <CartContext.Provider value={{ dispatch }}>
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" />
+        <SafeAreaView
+          style={styles.mainContainer}
+          edges={['top', 'left', 'right']}
+        >
+          <SectionList
+            sections={datas.length > 0 ? [{ title: '', data: datas }] : []}
+            ListEmptyComponent={() => {
+              return <Empty />;
+            }}
+            contentContainerStyle={{ paddingBottom: 60 }}
+            renderSectionHeader={() => (
               <View
                 style={{
-                  marginTop: 30,
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  paddingHorizontal: AppConfig.paddingHorizontal,
+                  backgroundColor: 'white',
+                  height: 80,
                 }}
               >
-                <Image
+                <Button onPress={()=>{
+                  NavigationService.navigate('CheckoutNoAuthScreen');
+                }} text="PROCEED TO CHECKOUT"></Button>
+              </View>
+            )}
+            renderSectionFooter={() => (
+              <View
+                style={{
+                  paddingHorizontal: AppConfig.paddingHorizontal,
+                  backgroundColor: 'white',
+                  height: 80,
+                }}
+              >
+                <TouchableOpacity
                   style={{
-                    width: s(28),
-                    height: s(28),
-                    resizeMode: 'contain',
-                    marginRight: s(10),
+                    borderRadius: s(40),
+                    backgroundColor: colors.grey80,
+                    width: s(170),
+                    height: s(32),
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: -25,
                   }}
-                  source={images.shopcartInfoImage}
-                />
-                <View>
-                  <Text style={[styles.txtRegular, { color: colors.grey80 }]}>
-                    Remember that you will get your product once the
+                >
+                  <Text
+                    style={[
+                      styles.heading4Bold,
+                      { color: 'white', textAlign: 'center' },
+                    ]}
+                  >
+                    PAY DURING DELIVERY
                   </Text>
-                  <View style={styles.row}>
+                </TouchableOpacity>
+                <View
+                  style={{
+                    marginTop: 30,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    style={{
+                      width: s(28),
+                      height: s(28),
+                      resizeMode: 'contain',
+                      marginRight: s(10),
+                    }}
+                    source={images.shopcartInfoImage}
+                  />
+                  <View>
                     <Text style={[styles.txtRegular, { color: colors.grey80 }]}>
-                      number of slices has been reached
+                      Remember that you will get your product once the
                     </Text>
-                    <TouchableOpacity>
+                    <View style={styles.row}>
                       <Text
-                        style={[
-                          styles.txtRegular,
-                          { color: colors.secondary00, paddingLeft: 6 },
-                        ]}
+                        style={[styles.txtRegular, { color: colors.grey80 }]}
                       >
-                        Learn more
+                        number of slices has been reached
                       </Text>
-                    </TouchableOpacity>
+                      <TouchableOpacity>
+                        <Text
+                          style={[
+                            styles.txtRegular,
+                            { color: colors.secondary00, paddingLeft: 6 },
+                          ]}
+                        >
+                          Learn more
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
               </View>
-            </View>
-          )}
-          stickyHeaderIndices={0}
-          ListHeaderComponent={() => (
-            <View style={{ backgroundColor: 'white' }}>
-              <AddressBar />
-              <CartSummary />
-            </View>
-          )}
-          renderItem={({ item }) => (
-            <CartItem key={index.toString()} product={item} />
-          )}
-          keyExtractor={(item, index) => `lll${index}`}
-        />
-      </SafeAreaView>
-    </View>
+            )}
+            stickyHeaderIndices={0}
+            ListHeaderComponent={() => {
+              return datas.length > 0 ? (
+                <View style={{ backgroundColor: 'white' }}>
+                  <AddressBar />
+                  <CartSummary />
+                </View>
+              ) : null;
+            }}
+            renderItem={({ item }) => (
+              <CartItem key={index.toString()} product={item} />
+            )}
+            keyExtractor={(item, index) => `lll${index}`}
+          />
+        </SafeAreaView>
+      </View>
+    </CartContext.Provider>
   );
 }
 

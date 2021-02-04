@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Text, View, TouchableOpacity, Image, TextInput } from 'react-native';
 import { s, ScaledSheet, vs } from 'react-native-size-matters';
 import { Fonts, Colors, ApplicationStyles, Images } from '../../../Themes';
@@ -8,9 +8,14 @@ import { StarRating } from '../../../Components';
 import images from '../../../Themes/Images';
 import colors from '../../../Themes/Colors';
 import fonts from '../../../Themes/Fonts';
+import { CartContext } from '../index';
+import { AlertContext } from '../../Root/index';
 
 function index(props) {
+  const { dispatch } = useContext(CartContext);
+  const Alert = useContext(AlertContext);
   const { product, onPress } = props;
+
   return (
     <TouchableOpacity
       onPress={() => NavigationService.navigate('ProductDetailScreen')}
@@ -60,17 +65,59 @@ function index(props) {
 
       <View style={styles.v4}>
         <View style={styles.counter}>
-          <TouchableOpacity>
-            <Image style={styles.cartadd} source={images.shopcartRemoveImage} />
+          <TouchableOpacity
+            onPress={() => {
+              if (product.count == 1) {
+                dispatch({ type: 'revomeCartCount', payload: product.id });
+                Alert.dispatch({
+                  type: 'changAlertState',
+                  payload: {
+                    visible: true,
+                    message: '',
+                    color: colors.secondary00,
+                    title: 'Removed item',
+                  },
+                });
+              } else {
+                dispatch({ type: 'subCartCount', payload: product.id });
+              }
+            }}
+          >
+            <Image
+              style={styles.cartadd}
+              source={
+                product.count == 1
+                  ? images.shopcartRemoveImage
+                  : images.shopcartSubImage
+              }
+            />
           </TouchableOpacity>
-          <TextInput style={styles.cartinput} value="1" />
-          <TouchableOpacity>
+          <TextInput style={styles.cartinput} value={product.count + ''} />
+          <TouchableOpacity
+            onPress={() => {
+              dispatch({ type: 'addCartCount', payload: product.id });
+            }}
+          >
             <Image style={styles.cartadd} source={images.shopcartAddImage} />
           </TouchableOpacity>
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={styles.removebtn}>
+          <TouchableOpacity
+            style={styles.removebtn}
+            onPress={() => {
+              dispatch({ type: 'revomeCartCount', payload: product.id });
+              Alert.dispatch({
+                type: 'changAlertState',
+                payload: {
+                  visible: true,
+                  message: '',
+                  color: colors.secondary00,
+                  title: 'Removed item',
+                },
+              });
+            }}
+          >
             <Text style={styles.removetext}>REMOVE</Text>
           </TouchableOpacity>
           <View style={{ width: s(15) }} />

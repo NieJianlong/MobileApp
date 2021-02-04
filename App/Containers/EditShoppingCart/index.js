@@ -126,7 +126,7 @@ function index(props) {
             renderItem={({ item, section, separators }, index) => {
               const sectionTitle = section.title;
               const selectedValue = state.selected[sectionTitle];
-              debugger;
+
               return (
                 <View
                   style={{ paddingHorizontal: AppConfig.paddingHorizontal }}
@@ -135,7 +135,7 @@ function index(props) {
                   <CheckBox
                     defaultValue={selectedValue == item.title}
                     onSwitch={(t) => {
-                      debugger;
+
                       const selectedDic = state.selected;
                       selectedDic[sectionTitle] = item.title;
                       console.log({ ...state, selected: { ...selectedDic } });

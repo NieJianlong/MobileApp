@@ -179,7 +179,6 @@ function flatListView(item, data, isPayment = false, showSheet = () => {}) {
     key,
   } = item;
 
-  debugger;
 
   return (
     <View style={{ flex: 1 }}>
@@ -202,7 +201,6 @@ function flatListView(item, data, isPayment = false, showSheet = () => {}) {
           }
         }}
         renderItem={({ item }) => {
-          debugger;
           return (
             <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
               <View

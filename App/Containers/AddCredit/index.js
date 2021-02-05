@@ -100,7 +100,7 @@ function index(props) {
                   date,
                   cvv,
                 });
-                NavigationService.goBack();
+                // NavigationService.goBack();
               }}
             >
               <Text style={disable ? styles.disupdate : styles.update}>

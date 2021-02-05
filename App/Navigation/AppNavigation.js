@@ -39,6 +39,8 @@ import EditShoppingCartScreen from '../Containers/EditShoppingCart';
 import CheckoutNoAuthScreen from '../Containers/CheckoutNoAuth';
 import CheckOutPersonalDetailsScreen from '../Containers/CheckOutPersonalDetails';
 import CheckoutBillingDetailsScreen from '../Containers/CheckoutBillingDetails';
+import AddCheckoutPaymentMethodScreen from '../Containers/AddCheckoutPaymentMethod';
+import CheckoutResumeScreen from '../Containers/CheckoutResume';
 import TabBar from './TabBar';
 
 const TabNav = createBottomTabNavigator(
@@ -91,11 +93,13 @@ const PrimaryNav = createStackNavigator(
     CheckoutNoAuthScreen: { screen: CheckoutNoAuthScreen },
     CheckOutPersonalDetailsScreen: { screen: CheckOutPersonalDetailsScreen },
     CheckoutBillingDetailsScreen: { screen: CheckoutBillingDetailsScreen },
+    AddCheckoutPaymentMethodScreen: { screen: AddCheckoutPaymentMethodScreen },
+    CheckoutResumeScreen: { screen: CheckoutResumeScreen },
   },
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'CheckOutPersonalDetailsScreen',
+    initialRouteName: 'CheckoutResumeScreen',
     navigationOptions: {},
   }
 );

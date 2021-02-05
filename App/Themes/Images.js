@@ -43,7 +43,9 @@ const images = {
   userPayImage: require('../Images/usercenter/pay.png'),
   userUPayImage: require('../Images/usercenter/upay.png'),
   userBillingImage: require('../Images/usercenter/billing.png'),
+
   userUBillingImage: require('../Images/usercenter/ubiling.png'),
+  userDeliverytoImage: require('../Images/usercenter/deliveryto.png'),
   userPurchaseImage: require('../Images/usercenter/purchase.png'),
   userAddressImage: require('../Images/usercenter/address.png'),
   userUAddressImage: require('../Images/usercenter/uaddress.png'),
@@ -59,6 +61,7 @@ const images = {
   userPayMethod3Image: require('../Images/usercenter/pay3.png'),
   userPayMethod4Image: require('../Images/usercenter/pay4.png'),
   userPayMethod5Image: require('../Images/usercenter/pay5.png'),
+  userPayMethod6Image: require('../Images/usercenter/pay6.png'),
   userPayTypeImage: require('../Images/usercenter/Cardtype.png'),
   userCreditCardImage: require('../Images/usercenter/credit_card.png'),
   userShareIcon1Image: require('../Images/usercenter/fb.png'),

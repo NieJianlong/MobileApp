@@ -29,6 +29,9 @@ function index(props) {
       image: images.userPayMethod2Image,
     },
     {
+      image: images.userPayMethod6Image,
+    },
+    {
       image: images.userPayMethod1Image,
     },
     {
@@ -68,14 +71,10 @@ function index(props) {
                 >
                   <TouchableOpacity
                     onPress={(item) => {
-                      debugger;
                       Nav.navigate('AddCreditScreen', {
                         callback: () => {
-                          debugger;
-                          Nav.pop(2);
-                          if (typeof params.callback == 'function') {
-                            params.callback();
-                          }
+                          Nav.navigate('CheckoutResumeScreen');
+                          // Nav.goBack();
                         },
                       });
                     }}

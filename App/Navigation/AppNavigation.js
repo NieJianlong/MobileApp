@@ -101,7 +101,7 @@ const PrimaryNav = createStackNavigator(
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'InSufficientSalamiCreditScreen',
+    initialRouteName: 'CheckoutResumeScreen',
     navigationOptions: {},
   }
 );

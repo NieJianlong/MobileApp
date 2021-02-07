@@ -9,6 +9,7 @@ import CartItem from './Cartitem';
 import metrics from '../../Themes/Metrics';
 import BottomSummary from './Summary';
 import DeliverInfo from './DeliverInfo';
+import NavigationService from '../../Navigation/NavigationService';
 
 function index(props) {
   const [orders, setOrders] = useState(
@@ -75,7 +76,12 @@ function index(props) {
             paddingTop: vs(15),
           }}
         >
-          <Button text="PROCEED"></Button>
+          <Button
+            onPress={() => {
+              NavigationService.navigate('CheckoutPaymentCompletedScreen');
+            }}
+            text="PROCEED"
+          ></Button>
         </View>
       </SafeAreaView>
     </View>

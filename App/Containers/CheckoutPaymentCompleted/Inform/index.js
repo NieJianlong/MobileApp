@@ -7,6 +7,8 @@ import { ApplicationStyles } from '../../../Themes';
 import colors from '../../../Themes/Colors';
 import images from '../../../Themes/Images';
 import CartItem from '../Cartitem';
+import ProductItem from '../ProductItem';
+
 const shareIcons = [
   { src: images.userShareIcon1Image, onPress: () => {} },
   { src: images.userShareIcon2Image, onPress: () => {} },
@@ -85,10 +87,18 @@ function index(props) {
         ))}
       </View>
       <Text
-        style={[ApplicationStyles.screen.heading4Bold, { fontSize: s(18) }]}
+        style={[
+          ApplicationStyles.screen.heading4Bold,
+          { fontSize: s(18), marginVertical: 10 },
+        ]}
       >
         Who bought this item also bought...
       </Text>
+      <View>
+        {orders.map((item, index) => (
+          <ProductItem key={index.toString()} product={item} />
+        ))}
+      </View>
     </View>
   );
 }

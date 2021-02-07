@@ -85,6 +85,8 @@ const images = {
   shopcartInfoImage: require('../Images/shoppingcart/info.png'),
   shopcartSubImage: require('../Images/shoppingcart/sub.png'),
   shopcartOrImage: require('../Images/shoppingcart/Or.png'),
+  shopcartLogoImage: require('../Images/redlogo.png'),
+  chatIconImage: require('../Images/chaticon.png'),
 };
 
 export default images;

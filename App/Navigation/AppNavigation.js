@@ -42,6 +42,7 @@ import CheckoutBillingDetailsScreen from '../Containers/CheckoutBillingDetails';
 import AddCheckoutPaymentMethodScreen from '../Containers/AddCheckoutPaymentMethod';
 import CheckoutResumeScreen from '../Containers/CheckoutResume';
 import InSufficientSalamiCreditScreen from '../Containers/InSufficientSalamiCredit';
+import CheckoutPaymentCompletedScreen from '../Containers/CheckoutPaymentCompleted';
 import TabBar from './TabBar';
 
 const TabNav = createBottomTabNavigator(
@@ -97,11 +98,12 @@ const PrimaryNav = createStackNavigator(
     AddCheckoutPaymentMethodScreen: { screen: AddCheckoutPaymentMethodScreen },
     CheckoutResumeScreen: { screen: CheckoutResumeScreen },
     InSufficientSalamiCreditScreen: { screen: InSufficientSalamiCreditScreen },
+    CheckoutPaymentCompletedScreen: { screen: CheckoutPaymentCompletedScreen },
   },
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'CheckoutResumeScreen',
+    initialRouteName: 'CheckoutPaymentCompletedScreen',
     navigationOptions: {},
   }
 );

@@ -103,7 +103,7 @@ const PrimaryNav = createStackNavigator(
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'CheckoutPaymentCompletedScreen',
+    initialRouteName: 'CheckoutResumeScreen',
     navigationOptions: {},
   }
 );

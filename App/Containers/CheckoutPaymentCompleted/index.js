@@ -2,6 +2,7 @@ import React from 'react';
 import { View, ScrollView, StatusBar, Image, SafeAreaView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { s } from 'react-native-size-matters';
+import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
 import TextTip from '../UserInfo/TextTip';
 import Inform from './Inform';
@@ -34,7 +35,11 @@ function index(props) {
             style={{ width: s(136), height: s(32), resizeMode: 'contain' }}
             source={images.shopcartLogoImage}
           />
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              NavigationService.navigate('ExploreScreen');
+            }}
+          >
             <Image
               style={{ width: s(30), height: s(30), resizeMode: 'contain' }}
               source={images.crossMedium}

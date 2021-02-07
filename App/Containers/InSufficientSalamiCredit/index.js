@@ -17,15 +17,16 @@ import { AppBar } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
 import { ApplicationStyles } from '../../Themes';
+import metrics from '../../Themes/Metrics';
 
 function index(props) {
   const payments = [
     {
       image: images.userPayMethod2Image,
       onPress: () => {
-        Nav.navigate('AddCreditScreen', {
+        NavigationService.navigate('AddCreditScreen', {
           callback: () => {
-            Nav.navigate('CheckoutResumeScreen');
+            NavigationService.navigate('CheckoutResumeScreen');
             // Nav.goBack();
           },
         });
@@ -80,6 +81,8 @@ function index(props) {
           </Text>
           <FlatList
             data={payments}
+            showsVerticalScrollIndicator={false}
+            style={{ height: metrics.screenHeight - 200 }}
             ListHeaderComponent={() => {
               return (
                 <View>
@@ -145,7 +148,7 @@ function index(props) {
                     <Text
                       style={[
                         ApplicationStyles.screen.subtitle,
-                        { marginTop: 10, color: colors.grey80 ,fontSize:16},
+                        { marginTop: 10, color: colors.grey80, fontSize: 16 },
                       ]}
                     >
                       You don’t have enough salami credit, select a payment
@@ -168,9 +171,9 @@ function index(props) {
                       if (item.onPress) {
                         item.onPress();
                       } else {
-                        Nav.navigate('AddCreditScreen', {
+                        NavigationService.navigate('AddCreditScreen', {
                           callback: () => {
-                            Nav.navigate('CheckoutResumeScreen');
+                            NavigationService.navigate('CheckoutResumeScreen');
                             // Nav.goBack();
                           },
                         });

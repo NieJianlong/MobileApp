@@ -200,7 +200,7 @@ function index(props) {
               <TouchableOpacity
                 disabled={disable}
                 onPress={() => {
-                  NavigationService.navigate('AddPaymentMethodScreen');
+                  NavigationService.navigate('AddCheckoutPaymentMethodScreen');
                 }}
               >
                 <Text style={disable ? styles.disupdate : styles.update}>

@@ -44,7 +44,9 @@ function index(props) {
     },
     {
       image: images.userPayMethod1Image,
-      onPress: () => {},
+      onPress: () => {
+        Nav.navigate('CheckoutResumeScreen');
+      },
     },
     {
       image: images.userPayMethod3Image,

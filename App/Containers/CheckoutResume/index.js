@@ -11,7 +11,6 @@ import BottomSummary from './Summary';
 import DeliverInfo from './DeliverInfo';
 
 function index(props) {
-
   const [orders, setOrders] = useState(
     [0, 1, 2, 3, 4].map((item, index) => ({
       id: index,
@@ -51,12 +50,12 @@ function index(props) {
         >
           <DeliverInfo />
           <View>
-            {orders.map((item) => (
+            {orders.map((item, index) => (
               <CartItem key={index.toString()} product={item} />
             ))}
           </View>
 
-          <BottomSummary promoCode={promoCode} />
+          <BottomSummary />
         </ScrollView>
       </SafeAreaView>
       <SafeAreaView

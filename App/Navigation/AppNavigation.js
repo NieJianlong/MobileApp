@@ -13,6 +13,7 @@ import ProductInfoScreen from '../Containers/Explore/ProductInfo';
 import ProductSearchScreen from '../Containers/Explore/Search';
 import EditCategoriesScreen from '../Containers/Explore/Categories/Edit';
 import ChooseCategoriesScreen from '../Containers/Explore/Categories/Choose';
+import RateOrderScreen from '../Containers/Explore/RateOrder'
 import LoginScreen from '../Containers/Login';
 import RegisterScreen from '../Containers/Register';
 import LegalScreen from '../Containers/Legal';
@@ -62,6 +63,7 @@ const PrimaryNav = createStackNavigator(
     ProductSearchScreen: { screen: ProductSearchScreen },
     EditCategoriesScreen: { screen: EditCategoriesScreen },
     ChooseCategoriesScreen: { screen: ChooseCategoriesScreen },
+    RateOrderScreen: { screen: RateOrderScreen },
     LoginScreen: { screen: LoginScreen },
     RegisterScreen: { screen: RegisterScreen },
     LegalScreen: { screen: LegalScreen },

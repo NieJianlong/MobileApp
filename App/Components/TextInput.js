@@ -18,7 +18,7 @@ class CustomTextInput extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            
+
         }
     }
 
@@ -33,25 +33,33 @@ class CustomTextInput extends Component {
             showError,
             errorMessage,
             hasTitle,
-            title
+            title,
+            multiline
         } = this.props
 
         return (
             <View>
-                <View style={[styles.container, style, showError && styles.errorContainer]}>
-                    <View style={{flex:1}}>
-                    {
-                        hasTitle&&<Text style={styles.title}>{title}</Text>
-                    }
-                    <TextInput
-                        placeholder={placeholder}
-                        style={styles.textInput}
-                        onFocus={onFocus}
-                        onBlur={onBlur}
-                        onChangeText={onChangeText}
-                    />
+                <View style={[
+                    styles.container,
+                    style,
+                    showError && styles.errorContainer,
+                    multiline && styles.multilineContainer,
+                ]}>
+                    <View style={{ flex: 1 }}>
+                        {
+                            hasTitle && <Text style={styles.title}>{title}</Text>
+                        }
+                        <TextInput
+                            placeholder={placeholder}
+                            style={styles.textInput}
+                            onFocus={onFocus}
+                            onBlur={onBlur}
+                            onChangeText={onChangeText}
+                            multiline={multiline}
+                            numberOfLines={multiline ? 5 : 1}
+                        />
                     </View>
-                   
+
                     {/* {
                         this.state.keyword !== '' &&
                         <TouchableOpacity
@@ -79,13 +87,13 @@ CustomTextInput.defaultProps = {
 }
 
 const styles = ScaledSheet.create({
-    title:{
-        color:colors.grey40,
-        paddingHorizontal:'8@s',
-        fontFamily:fonts.primary,
+    title: {
+        color: colors.grey40,
+        paddingHorizontal: '8@s',
+        fontFamily: fonts.primary,
         fontSize: '12@s',
-        marginTop:-3,
-        marginBottom:-3
+        marginTop: -3,
+        marginBottom: -3
     },
     container: {
         height: '40@vs',
@@ -97,6 +105,10 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         paddingHorizontal: '10@s'
+    },
+    multilineContainer: {
+        height: '150@vs',
+        paddingVertical: '5@vs'
     },
     errorContainer: {
         borderColor: Colors.error

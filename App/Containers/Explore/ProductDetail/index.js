@@ -503,14 +503,16 @@ class ProductDetailScreen extends Component {
 
     renderUserReview() {
         return (
-            <View style={styles.userReviewContainer}>
+            <TouchableOpacity
+                onPress={() => NavigationService.navigate('RateOrderScreen')}
+                style={styles.userReviewContainer}>
                 <Text style={styles.heading4Bold}>Rate and review this product</Text>
                 <Text style={styles.txtRegular}>Share your experience</Text>
 
                 <View style={{ height: vs(20) }} />
 
                 <StarRating ratingMode />
-            </View>
+            </TouchableOpacity>
         )
     }
 

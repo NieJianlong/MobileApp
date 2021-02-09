@@ -43,7 +43,7 @@ class RateOrderScreen extends Component {
             includeBase64: true,
             multiple: true
         }).then(image => {
-            let images = [...this.state.images, ...image]
+            let images = [...image, ...this.state.images]
             this.setState({ images })
         })
     }
@@ -53,7 +53,8 @@ class RateOrderScreen extends Component {
             cropping: true,
             includeBase64: true,
         }).then(image => {
-
+            let images = [...image, ...this.state.images]
+            this.setState({ images })
         })
     }
 

@@ -17,6 +17,7 @@ import Progress from './Progress'
 import BottomSheetBackground from './BottomSheetBackground'
 import SegmentedControl from './SegmentedControl'
 import ProductSearchBox from './ProductSearchBox'
+import Selector from './Selector'
 
 export {
     BottomSheet,
@@ -38,4 +39,5 @@ export {
     BottomSheetBackground,
     SegmentedControl,
     ProductSearchBox,
+    Selector,
 }

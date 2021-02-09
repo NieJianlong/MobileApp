@@ -590,7 +590,9 @@ class ProductDetailScreen extends Component {
                                     </Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={{ marginLeft: s(20) }}>
+                                <TouchableOpacity
+                                    onPress={() => NavigationService.navigate('ReportScreen')}
+                                    style={{ marginLeft: s(20) }}>
                                     <Text style={[styles.heading5Bold, { color: Colors.grey60 }]}>
                                         REPORT
                                     </Text>

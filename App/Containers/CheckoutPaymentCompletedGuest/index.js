@@ -17,6 +17,7 @@ import images from '../../Themes/Images';
 import metrics from '../../Themes/Metrics';
 import TextTip from '../UserInfo/TextTip';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import NavigationService from '../../Navigation/NavigationService';
 
 function index(props) {
   const data = {
@@ -84,12 +85,20 @@ function index(props) {
             marginTop: 35,
           }}
         >
-          <Button text="REGISTER" />
+          <Button
+            text="REGISTER"
+            onPress={() => {
+              NavigationService.navigate('ExploreScreen');
+            }}
+          />
           <View style={{ marginTop: 30 }}>
             <Button
               backgroundColor="transparent"
               text="CLOSE WITHOUT AN ACCOUNT"
               textColor={colors.grey80}
+              onPress={() => {
+                NavigationService.navigate('ExploreScreen');
+              }}
             />
           </View>
         </View>

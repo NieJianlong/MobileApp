@@ -10,6 +10,7 @@ export default ScaledSheet.create({
     },
     mainContainer: {
         flex: 1,
+        
         //paddingHorizontal: AppConfig.paddingHorizontal,
     },
     greyBackground: {

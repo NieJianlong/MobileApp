@@ -21,6 +21,8 @@ import AppConfig from '../../Config/AppConfig';
 import colors from '../../Themes/Colors';
 import images from '../../Themes/Images';
 import NavigationService from '../../Navigation/NavigationService';
+import { AlertContext } from '../Root/index';
+import TextTip from '../UserInfo/TextTip';
 
 //Alert Context, which controls the display and hiding of an alert, for example, Add Address Success
 export const CartContext = React.createContext({});
@@ -43,6 +45,7 @@ const initialState = {
 };
 function reducer(state, action) {
   const datas = state.datas;
+
   switch (action.type) {
     case 'addCartCount':
       return {
@@ -73,7 +76,9 @@ function reducer(state, action) {
   }
 }
 function index(props) {
+  const [paidDuringDelivery, setPaidDuringDeliver] = useState(false);
   const [{ datas }, dispatch] = useReducer(reducer, initialState);
+  const sheetContext = useContext(AlertContext);
   return (
     <CartContext.Provider value={{ dispatch }}>
       <View style={styles.container}>
@@ -96,9 +101,12 @@ function index(props) {
                   height: 80,
                 }}
               >
-                <Button onPress={()=>{
-                  NavigationService.navigate('CheckoutNoAuthScreen');
-                }} text="PROCEED TO CHECKOUT"></Button>
+                <Button
+                  onPress={() => {
+                    NavigationService.navigate('CheckoutNoAuthScreen');
+                  }}
+                  text="PROCEED TO CHECKOUT"
+                ></Button>
               </View>
             )}
             renderSectionFooter={() => (
@@ -109,26 +117,104 @@ function index(props) {
                   height: 80,
                 }}
               >
-                <TouchableOpacity
-                  style={{
-                    borderRadius: s(40),
-                    backgroundColor: colors.grey80,
-                    width: s(170),
-                    height: s(32),
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginTop: -25,
-                  }}
-                >
-                  <Text
-                    style={[
-                      styles.heading4Bold,
-                      { color: 'white', textAlign: 'center' },
-                    ]}
+                {!paidDuringDelivery ? (
+                  <TouchableOpacity
+                    onPress={() => setPaidDuringDeliver(true)}
+                    style={{
+                      borderRadius: s(40),
+                      backgroundColor: colors.grey80,
+                      width: s(170),
+                      height: s(32),
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginTop: -25,
+                    }}
                   >
-                    PAY DURING DELIVERY
-                  </Text>
-                </TouchableOpacity>
+                    <Text
+                      style={[
+                        styles.heading4Bold,
+                        { color: 'white', textAlign: 'center' },
+                      ]}
+                    >
+                      PAY DURING DELIVERY
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <View style={{ flexDirection: 'row' }}>
+                      <Text
+                        style={[
+                          styles.txtRegular,
+                          { fontSize: s(14), color: colors.black },
+                        ]}
+                      >
+                        Product paid during delivery.
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => {
+                          sheetContext.dispatch({
+                            type: 'changSheetState',
+                            payload: {
+                              showSheet: true,
+                              height: 300,
+                              children: () => {
+                                const data = {
+                                  textTip: 'Paying during delivery',
+                                  subTextTip:
+                                    'This is an explanatory text about this feature, lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professo.',
+                                  needButton: true,
+                                  btnMsg: 'OK',
+                                  onPress: () => {
+                                    sheetContext.dispatch({
+                                      type: 'changSheetState',
+                                      payload: {
+                                        showSheet: false,
+                                      },
+                                    });
+                                  },
+                                };
+                                return (
+                                  <View
+                                    style={{
+                                      height: 320,
+                                      marginLeft: -AppConfig.paddingHorizontal,
+                                    }}
+                                  >
+                                    <TextTip {...data} />
+                                  </View>
+                                );
+                              },
+                            },
+                          });
+                        }}
+                      >
+                        <Text
+                          style={[
+                            styles.txtRegular,
+                            { color: colors.secondary00, paddingLeft: 6 },
+                          ]}
+                        >
+                          Details
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    <TouchableOpacity>
+                      <Text
+                        style={[
+                          styles.txtRegular,
+                          { color: colors.secondary00, paddingLeft: 6 },
+                        ]}
+                      >
+                        PAY NOW
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
                 <View
                   style={{
                     marginTop: 30,
@@ -179,9 +265,9 @@ function index(props) {
                 </View>
               ) : null;
             }}
-            renderItem={({ item }) => (
-              <CartItem key={index.toString()} product={item} />
-            )}
+            renderItem={({ item }) => {
+              return <CartItem product={item} />;
+            }}
             keyExtractor={(item, index) => `lll${index}`}
           />
         </SafeAreaView>

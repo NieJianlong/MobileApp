@@ -23,7 +23,6 @@ import {
 import { Colors, Images } from '../../../Themes'
 import NavigationService from '../../../Navigation/NavigationService'
 
-
 class ReportScreen extends Component {
 
     constructor(props) {

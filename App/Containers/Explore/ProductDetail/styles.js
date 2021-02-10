@@ -335,5 +335,13 @@ export default ScaledSheet.create({
         alignItems: 'center',
         paddingVertical: '30@vs',
         borderRadius: '15@s'
+    },
+    v5: {
+        width: '47%'
+    },
+    btnRow: {
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        marginTop: '20@vs'
     }
 })

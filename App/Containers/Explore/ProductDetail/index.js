@@ -69,6 +69,7 @@ class ProductDetailScreen extends Component {
 
             showPickupFromSellerSheet: false,
             showColorSheet: false,
+            showAddToCartSheet: false,
 
             showReviewSentAlert: false,
             showReportSentAlert: false,
@@ -149,6 +150,16 @@ class ProductDetailScreen extends Component {
         })
     }
 
+    toggleAddToCartSheet = () => {
+        this.setState({ showAddToCartSheet: !this.state.showAddToCartSheet }, () => {
+            if (this.state.showAddToCartSheet) {
+                this.addToCartSheet.snapTo(0)
+            } else {
+                this.addToCartSheet.snapTo(1)
+            }
+        })
+    }
+
     renderReviewSentAlert() {
         return (
             <Alert
@@ -212,12 +223,14 @@ class ProductDetailScreen extends Component {
                 <View style={{ height: vs(15) }} />
 
                 <View style={styles.rowSpaceBetween}>
-                    <TouchableOpacity style={styles.row}>
+                    <TouchableOpacity style={styles.row} onPress={this.toggleAddToCartSheet}>
                         <Image source={Images.cartMed} style={styles.icCart} />
                         <Text style={[styles.txtBold, { color: Colors.primary }]}>ADD TO CART</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.btnBuyNow}>
+                    <TouchableOpacity
+                        onPress={() => NavigationService.navigate('OrderPlacedScreen')}
+                        style={styles.btnBuyNow}>
                         <Text style={[styles.txtBold, { color: Colors.white }]}>BUY NOW</Text>
 
                         <View style={styles.priceContainer}>
@@ -802,6 +815,46 @@ class ProductDetailScreen extends Component {
         )
     }
 
+    renderAddToCartSheet() {
+        return (
+            <BottomSheet
+                customRef={ref => {
+                    this.addToCartSheet = ref
+                }}
+                onCloseEnd={() => this.setState({ showAddToCartSheet: false })}
+                callbackNode={this.fall}
+                snapPoints={[vs(290), 0]}
+                initialSnap={this.state.showAddToCartSheet ? 0 : 1}
+                title={'An item has been added to your cart'}>
+                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    <Text style={[styles.txtRegular, { textAlign: 'center', marginBottom: vs(25) }]}>
+                        There are now 2 items in your cart
+                    </Text>
+
+                    <Button onPress={this.toggleAddToCartSheet} text={'GO TO CHECKOUT'} />
+
+                    <View style={styles.btnRow}>
+                        <View style={styles.v5}>
+                            <Button
+                                onPress={this.toggleAddToCartSheet}
+                                text={'CONTINUE'}
+                                backgroundColor={Colors.grey80}
+                            />
+                        </View>
+
+                        <View style={styles.v5}>
+                            <Button
+                                text={'VIEW CART'}
+                                backgroundColor={Colors.grey80}
+                            />
+                        </View>
+
+                    </View>
+                </View>
+            </BottomSheet>
+        )
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -832,13 +885,18 @@ class ProductDetailScreen extends Component {
 
                 {/* background for bottom sheet */}
                 <BottomSheetBackground
-                    visible={this.state.showPickupFromSellerSheet || this.state.showColorSheet}
+                    visible={this.state.showPickupFromSellerSheet ||
+                        this.state.showColorSheet ||
+                        this.state.showAddToCartSheet
+                    }
                     controller={this.fall}
                 />
 
                 {this.renderPickupFromSellerSheet()}
 
                 {this.renderColorSheet()}
+
+                {this.renderAddToCartSheet()}
 
                 {this.renderReviewSentAlert()}
 

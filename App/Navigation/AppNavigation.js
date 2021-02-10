@@ -9,6 +9,13 @@ import OnboardingScreen from '../Containers/Onboarding';
 import ExploreScreen from '../Containers/Explore';
 import ProductDetailScreen from '../Containers/Explore/ProductDetail';
 import ProductGalleryScreen from '../Containers/Explore/ProductGallery';
+import ProductInfoScreen from '../Containers/Explore/ProductInfo';
+import ProductSearchScreen from '../Containers/Explore/Search';
+import EditCategoriesScreen from '../Containers/Explore/Categories/Edit';
+import ChooseCategoriesScreen from '../Containers/Explore/Categories/Choose';
+import RateOrderScreen from '../Containers/Explore/RateOrder'
+import ReportScreen from '../Containers/Explore/Report'
+import OrderPlacedScreen from '../Containers/Explore/OrderPlaced'
 import LoginScreen from '../Containers/Login';
 import RegisterScreen from '../Containers/Register';
 import LegalScreen from '../Containers/Legal';
@@ -54,6 +61,13 @@ const PrimaryNav = createStackNavigator(
     ExploreScreen: { screen: ExploreScreen },
     ProductDetailScreen: { screen: ProductDetailScreen },
     ProductGalleryScreen: { screen: ProductGalleryScreen },
+    ProductInfoScreen: { screen: ProductInfoScreen },
+    ProductSearchScreen: { screen: ProductSearchScreen },
+    EditCategoriesScreen: { screen: EditCategoriesScreen },
+    ChooseCategoriesScreen: { screen: ChooseCategoriesScreen },
+    RateOrderScreen: { screen: RateOrderScreen },
+    ReportScreen: { screen: ReportScreen },
+    OrderPlacedScreen: { screen: OrderPlacedScreen },
     LoginScreen: { screen: LoginScreen },
     RegisterScreen: { screen: RegisterScreen },
     LegalScreen: { screen: LegalScreen },

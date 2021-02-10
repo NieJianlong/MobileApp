@@ -10,7 +10,8 @@ import { Fonts, Colors, ApplicationStyles, Images } from '../../../Themes'
 import AppConfig from '../../../Config/AppConfig'
 import NavigationService from '../../../Navigation/NavigationService'
 import {
-    StarRating
+    StarRating,
+    Progress
 } from '../../../Components'
 
 function ProductItem(props) {
@@ -23,6 +24,7 @@ function ProductItem(props) {
         size,
         product,
         onPress,
+        onPressShare
     } = props
 
     if (size === 'M' || size == 'L') {
@@ -90,6 +92,13 @@ function ProductItem(props) {
                         <Text style={styles.heading6Regular}>{product.orderClose}</Text>
                     </View>
 
+                    <Progress
+                        maximumValue={product.inStock}
+                        currentValue={product.orderCount}
+                        barWidth={s(60)}
+                        barHeight={vs(6)}
+                    />
+
                     <View style={styles.row}>
                         <Image source={Images.stock} style={styles.icStock} />
                         <Text style={styles.txtOrderNumber}>{product.orderCount}/{product.inStock}</Text>
@@ -103,7 +112,7 @@ function ProductItem(props) {
                             <Image source={Images.likeMed} style={styles.icShare} />
                         </TouchableOpacity>
 
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={onPressShare}>
                             <Image source={Images.share} style={styles.icShare} />
                         </TouchableOpacity>
                     </View>
@@ -152,7 +161,11 @@ function ProductItem(props) {
                     </View>
                 </View>
 
-                <View style={[styles.row, {paddingHorizontal: s(8), marginTop: vs(5)}]}>
+                <View style={[styles.row, { paddingHorizontal: s(8), marginTop: vs(5) }]}>
+                    <Progress
+                        maximumValue={product.inStock}
+                        currentValue={product.orderCount}
+                    />
                     <Image source={Images.stock} style={styles.icStockSmall} />
                     <Text style={styles.heading6Regular}>{product.orderCount}/{product.inStock}</Text>
                 </View>
@@ -299,7 +312,8 @@ const styles = ScaledSheet.create({
     icStockSmall: {
         width: '15@s',
         height: '15@s',
-        tintColor: Colors.grey60
+        tintColor: Colors.grey60,
+        marginLeft: '10@s'
     }
 })
 

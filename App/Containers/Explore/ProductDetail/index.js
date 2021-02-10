@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { s, vs } from 'react-native-size-matters'
 import Animated from 'react-native-reanimated'
 import Collapsible from 'react-native-collapsible'
+import Carousel from 'react-native-snap-carousel'
 import InView from 'react-native-component-inview'
 import { ScrollIntoView, wrapScrollView } from 'react-native-scroll-into-view'
 import moment from 'moment'
@@ -28,9 +29,9 @@ import {
     Button,
     Progress,
     BottomSheet,
-    BottomSheetBackground
+    BottomSheetBackground,
+    Alert,
 } from '../../../Components'
-import { currencyFormatter } from '../../../Utils/Currency'
 
 import { Images, Colors } from '../../../Themes'
 import AppConfig from '../../../Config/AppConfig'
@@ -39,9 +40,12 @@ import NavigationService from '../../../Navigation/NavigationService'
 
 import ProductItem from '../Components/ProductItem'
 import Review from '../Components/Review'
+import ColorOptionItem from '../Components/ColorOptionItem'
 
 const { height } = Dimensions.get('window')
 const Sections = range(0, 4)
+const sliderWidth = Dimensions.get('window').width
+const carouselItemWidth = Dimensions.get('window').width
 // Wrap the original ScrollView
 const CustomScrollView = wrapScrollView(ScrollView)
 
@@ -55,16 +59,45 @@ class ProductDetailScreen extends Component {
             showHeaderTabs: false,
             showFooter: false,
             showDescription: false,
+
             tabIndex: 0,
+            photoIndex: 0,
             quantity: 1,
             totalPrice: 0,
+            colorIndex: 0,
+            isPurchased: true,
 
-            showPickupFromSellerSheet: false
+            showPickupFromSellerSheet: false,
+            showColorSheet: false,
+            showAddToCartSheet: false,
+
+            showReviewSentAlert: false,
+            showReportSentAlert: false,
         }
     }
 
     componentDidMount() {
 
+    }
+
+    toggleReviewSentAlert = () => {
+        if (this.state.showReviewSentAlert) {
+            setTimeout(() => {
+                this.setState({ showReviewSentAlert: false })
+            }, 2100)
+        } else {
+            this.setState({ showReviewSentAlert: true })
+        }
+    }
+
+    toggleReportSentAlert = () => {
+        if (this.state.showReportSentAlert) {
+            setTimeout(() => {
+                this.setState({ showReportSentAlert: false })
+            }, 2100)
+        } else {
+            this.setState({ showReportSentAlert: true })
+        }
     }
 
     sectionsRefs = Sections.map(_section => React.createRef())
@@ -107,6 +140,50 @@ class ProductDetailScreen extends Component {
         })
     }
 
+    toggleColorSheet = () => {
+        this.setState({ showColorSheet: !this.state.showColorSheet }, () => {
+            if (this.state.showColorSheet) {
+                this.colorSheet.snapTo(0)
+            } else {
+                this.colorSheet.snapTo(1)
+            }
+        })
+    }
+
+    toggleAddToCartSheet = () => {
+        this.setState({ showAddToCartSheet: !this.state.showAddToCartSheet }, () => {
+            if (this.state.showAddToCartSheet) {
+                this.addToCartSheet.snapTo(0)
+            } else {
+                this.addToCartSheet.snapTo(1)
+            }
+        })
+    }
+
+    renderReviewSentAlert() {
+        return (
+            <Alert
+                visible={this.state.showReviewSentAlert}
+                title={'Thanks for your review!'}
+                message={'Your review has been added successfully'}
+                color={Colors.success}
+                onDismiss={this.toggleReviewSentAlert}
+            />
+        )
+    }
+
+    renderReportSentAlert() {
+        return (
+            <Alert
+                visible={this.state.showReportSentAlert}
+                title={'Thanks for your report!'}
+                message={'Your report has been sent successfully'}
+                color={Colors.success}
+                onDismiss={this.toggleReviewSentAlert}
+            />
+        )
+    }
+
     renderHeaderTabs() {
         return (
             <SafeAreaView style={styles.headerTabsSafeArea} edges={['top']}>
@@ -146,16 +223,18 @@ class ProductDetailScreen extends Component {
                 <View style={{ height: vs(15) }} />
 
                 <View style={styles.rowSpaceBetween}>
-                    <TouchableOpacity style={styles.row}>
+                    <TouchableOpacity style={styles.row} onPress={this.toggleAddToCartSheet}>
                         <Image source={Images.cartMed} style={styles.icCart} />
                         <Text style={[styles.txtBold, { color: Colors.primary }]}>ADD TO CART</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.btnBuyNow}>
+                    <TouchableOpacity
+                        onPress={() => NavigationService.navigate('OrderPlacedScreen')}
+                        style={styles.btnBuyNow}>
                         <Text style={[styles.txtBold, { color: Colors.white }]}>BUY NOW</Text>
 
                         <View style={styles.priceContainer}>
-                            <Text style={[styles.txtRegular, { color: Colors.white }]}>{currencyFormatter.format(this.state.quantity * product.wholesalePrice)}</Text>
+                            <Text style={[styles.txtRegular, { color: Colors.white }]}>{this.state.quantity * product.wholesalePrice}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -163,15 +242,33 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    renderProductImages() {
+    _renderImageItem = ({ item, index }) => {
         return (
-            <View style={styles.imagesContainer}>
+            <TouchableOpacity onPress={() => NavigationService.navigate('ProductGalleryScreen', { fullscreenMode: true })}>
                 <Image
                     resizeMode={'contain'}
                     source={{ uri: product.picture }}
                     style={styles.prodImage}
                 />
+            </TouchableOpacity>
+        )
+    }
 
+    onSnapToItem = (index) => {
+        this.setState({ photoIndex: index })
+    }
+
+    renderProductImages() {
+        return (
+            <View style={styles.imagesContainer}>
+                <Carousel
+                    ref={(c) => { this._carousel = c; }}
+                    data={product.photoUrls}
+                    renderItem={this._renderImageItem}
+                    sliderWidth={sliderWidth}
+                    itemWidth={carouselItemWidth}
+                    onSnapToItem={this.onSnapToItem}
+                />
                 <View style={styles.row1}>
                     <TouchableOpacity onPress={NavigationService.goBack} style={styles.btnRoundContainer}>
                         <Image style={styles.btnRoundIcon} source={Images.arrow_left} />
@@ -194,9 +291,9 @@ class ProductDetailScreen extends Component {
                     </View>
 
                     <TouchableOpacity
-                        onPress={() => NavigationService.navigate('ProductGalleryScreen')}
+                        onPress={() => NavigationService.navigate('ProductGalleryScreen', { fullscreenMode: false })}
                         style={styles.photoNumberContainer}>
-                        <Text style={styles.photoNumberTxt}>1/4</Text>
+                        <Text style={styles.photoNumberTxt}>{this.state.photoIndex + 1}/{product.photoUrls.length}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -205,11 +302,12 @@ class ProductDetailScreen extends Component {
 
     renderProductInfo() {
         return (
-            <InView onChange={(isVisible) => {
-                if (isVisible) {
-                    this.setState({ tabIndex: 0 })
-                }
-            }}>
+            <InView
+                onChange={(isVisible) => {
+                    if (isVisible) {
+                        this.setState({ tabIndex: 0 })
+                    }
+                }}>
                 <View style={styles.infoContainer}>
                     <View style={styles.v2}>
                         <View>
@@ -271,7 +369,7 @@ class ProductDetailScreen extends Component {
 
                             <Image source={Images.stock} style={styles.icStock} />
                             <Text style={styles.txtOrderNumber}>{product.orderCount}/{product.inStock}</Text>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => NavigationService.navigate('ProductInfoScreen')}>
                                 <Image source={Images.info2} style={styles.icInfo} />
                             </TouchableOpacity>
                         </View>
@@ -315,6 +413,44 @@ class ProductDetailScreen extends Component {
         )
     }
 
+    renderChatOptions() {
+        return (
+            <View style={styles.chatContainer}>
+                <View style={styles.chatIconsContainer}>
+                    <TouchableOpacity style={[styles.chatButton, { backgroundColor: Colors.facebook }]}>
+                        <Image source={Images.facebook} style={styles.chatIcon} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.chatButton, { backgroundColor: Colors.whatsapp }]}>
+                        <Image source={Images.whatsapp} style={styles.chatIcon} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.chatButton, { backgroundColor: Colors.google }]}>
+                        <Image source={Images.google} style={styles.chatIcon} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.chatButton, { backgroundColor: Colors.twitter }]}>
+                        <Image source={Images.twitter} style={styles.chatIcon} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.chatButton, { backgroundColor: Colors.grey10 }]}>
+                        <Image source={Images.add1} style={styles.icAdd} />
+                    </TouchableOpacity>
+                </View>
+
+                <Text style={[styles.txtBold, { marginTop: vs(20), marginBottom: vs(15) }]}>
+                    You can chat here with seller and co-buyers:
+                </Text>
+
+                <View style={{ width: '100%' }}>
+                    <Button
+                        backgroundColor={Colors.grey80}
+                        text={'CHAT'} />
+                </View>
+            </View>
+        )
+    }
+
     renderOptions() {
         return (
             <View style={styles.optionContainer}>
@@ -331,6 +467,8 @@ class ProductDetailScreen extends Component {
                     </View>
                 </View>
 
+                {this.state.isPurchased && this.renderChatOptions()}
+
                 <Picker
                     style={styles.picker}
                     title={'Size'}
@@ -344,6 +482,7 @@ class ProductDetailScreen extends Component {
                 />
 
                 <Picker
+                    onPress={this.toggleColorSheet}
                     style={styles.picker}
                     title={'Color'}
                     value={'Black'}
@@ -355,11 +494,12 @@ class ProductDetailScreen extends Component {
 
     renderRelatedProducts() {
         return (
-            <InView onChange={(isVisible) => {
-                if (isVisible) {
-                    //this.setState({ tabIndex: 1 })
-                }
-            }}>
+            <InView
+                onChange={(isVisible) => {
+                    if (isVisible) {
+                        //this.setState({ tabIndex: 1 })
+                    }
+                }}>
                 <View style={styles.relatedProductsContainer}>
                     <View style={styles.relatedProductsHeader}>
                         <Text style={styles.heading3Bold}>Related products</Text>
@@ -387,11 +527,12 @@ class ProductDetailScreen extends Component {
 
     renderStoreInfo() {
         return (
-            <InView onChange={(isVisible) => {
-                if (isVisible) {
-                    //this.setState({ tabIndex: 2 })
-                }
-            }}>
+            <InView
+                onChange={(isVisible) => {
+                    if (isVisible) {
+                        //this.setState({ tabIndex: 2 })
+                    }
+                }}>
                 <View style={styles.storeInfoContainer}>
                     <View style={styles.rowSpaceBetween}>
                         <View style={styles.row}>
@@ -421,6 +562,21 @@ class ProductDetailScreen extends Component {
         )
     }
 
+    renderUserReview() {
+        return (
+            <TouchableOpacity
+                onPress={() => NavigationService.navigate('RateOrderScreen', { onPost: this.toggleReviewSentAlert })}
+                style={styles.userReviewContainer}>
+                <Text style={styles.heading4Bold}>Rate and review this product</Text>
+                <Text style={styles.txtRegular}>Share your experience</Text>
+
+                <View style={{ height: vs(20) }} />
+
+                <StarRating ratingMode />
+            </TouchableOpacity>
+        )
+    }
+
     renderProductReview() {
         return (
             <View style={styles.productReviewContainer}>
@@ -437,6 +593,10 @@ class ProductDetailScreen extends Component {
                         ratingCount={product.ratingCount}
                         ratingDetail={product.ratingDetail} />
                 </InView>
+
+                <View style={{ height: vs(15) }} />
+
+                {this.state.isPurchased && this.renderUserReview()}
 
                 <View style={{ height: vs(15) }} />
 
@@ -491,7 +651,9 @@ class ProductDetailScreen extends Component {
                                     </Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={{ marginLeft: s(20) }}>
+                                <TouchableOpacity
+                                    onPress={() => NavigationService.navigate('ReportScreen', { onSubmit: this.toggleReportSentAlert })}
+                                    style={{ marginLeft: s(20) }}>
                                     <Text style={[styles.heading5Bold, { color: Colors.grey60 }]}>
                                         REPORT
                                     </Text>
@@ -625,6 +787,74 @@ class ProductDetailScreen extends Component {
         )
     }
 
+    renderColorSheet() {
+        return (
+            <BottomSheet
+                customRef={ref => {
+                    this.colorSheet = ref
+                }}
+                onCloseEnd={() => this.setState({ showColorSheet: false })}
+                callbackNode={this.fall}
+                snapPoints={[vs(390), 0]}
+                initialSnap={this.state.showColorSheet ? 0 : 1}
+                title={'Color'}>
+                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    {
+                        product.colors.map((item, index) =>
+                            <ColorOptionItem
+                                defaultValue={this.state.colorIndex === index}
+                                onSwitch={() => { this.setState({ colorIndex: index }) }}
+                                label={item.name}
+                                style={{ marginBottom: vs(16) }}
+                                available={item.available}
+                            />
+                        )
+                    }
+                </View>
+            </BottomSheet>
+        )
+    }
+
+    renderAddToCartSheet() {
+        return (
+            <BottomSheet
+                customRef={ref => {
+                    this.addToCartSheet = ref
+                }}
+                onCloseEnd={() => this.setState({ showAddToCartSheet: false })}
+                callbackNode={this.fall}
+                snapPoints={[vs(290), 0]}
+                initialSnap={this.state.showAddToCartSheet ? 0 : 1}
+                title={'An item has been added to your cart'}>
+                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    <Text style={[styles.txtRegular, { textAlign: 'center', marginBottom: vs(25) }]}>
+                        There are now 2 items in your cart
+                    </Text>
+
+                    <Button onPress={this.toggleAddToCartSheet} text={'GO TO CHECKOUT'} />
+
+                    <View style={styles.btnRow}>
+                        <View style={styles.v5}>
+                            <Button
+                                onPress={this.toggleAddToCartSheet}
+                                text={'CONTINUE'}
+                                backgroundColor={Colors.grey80}
+                            />
+                        </View>
+
+                        <View style={styles.v5}>
+                            <Button
+                                text={'VIEW CART'}
+                                backgroundColor={Colors.grey80}
+                            />
+                        </View>
+
+                    </View>
+                </View>
+            </BottomSheet>
+        )
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -655,11 +885,22 @@ class ProductDetailScreen extends Component {
 
                 {/* background for bottom sheet */}
                 <BottomSheetBackground
-                    visible={this.state.showPickupFromSellerSheet}
+                    visible={this.state.showPickupFromSellerSheet ||
+                        this.state.showColorSheet ||
+                        this.state.showAddToCartSheet
+                    }
                     controller={this.fall}
                 />
 
                 {this.renderPickupFromSellerSheet()}
+
+                {this.renderColorSheet()}
+
+                {this.renderAddToCartSheet()}
+
+                {this.renderReviewSentAlert()}
+
+                {this.renderReportSentAlert()}
             </View>
         )
     }
@@ -670,6 +911,12 @@ export default ProductDetailScreen
 const product = {
     name: 'iPhone 11',
     picture: 'https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png',
+    photoUrls: [
+        'https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png',
+        'https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png',
+        'https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png',
+        'https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png',
+    ],
     rating: 3.5,
     ratingCount: 624,
     ratingDetail: {
@@ -690,7 +937,13 @@ const product = {
         description: 'Thegioididong.com là thương hiệu thuộc Công ty Cổ phần Thế giới di động, Tên tiếng Anh là Mobile World JSC, (mã Chứng Khoán: MWG) là một tập đoàn bán lẻ tại Việt Nam với lĩnh vực kinh doanh chính là bán lẻ điện thoại di động, thiết bị số và điện tử tiêu dùng[2]. Theo nghiên cứu của EMPEA, thống kê thị phần bán lẻ điện thoại di động tại Việt Nam năm 2014 thì Thế giới di động hiện chiếm 25% và là doanh nghiệp lớn nhất trong lĩnh vực của mình.',
         rating: 4.2,
         ratingCount: 1024,
-    }
+    },
+    colors: [
+        { name: 'Onyx Black', available: true },
+        { name: 'Glaciar Green', available: true },
+        { name: 'Interstella Glow', available: true },
+        { name: 'Blue', available: false }
+    ]
 }
 
 const relatedProducs = [

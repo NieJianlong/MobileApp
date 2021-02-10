@@ -38,18 +38,30 @@ const items = [
   {
     title: 'Settings',
     icon: images.userSettingImage,
+    onPress: () => {
+      NavigationService.navigate('SettingScreen');
+    },
   },
   {
     title: 'Support',
     icon: images.userMediumImage,
+    onPress: () => {
+      NavigationService.navigate('CustomerSupportScreen');
+    },
   },
   {
     title: 'Feedback',
     icon: images.userStarImage,
+    onPress: () => {
+      NavigationService.navigate('FeedbackScreen');
+    },
   },
   {
     title: 'Legal',
     icon: images.userDocImage,
+    onPress: () => {
+      NavigationService.navigate('CustomerSupportScreen');
+    },
   },
 ];
 const buttons = [

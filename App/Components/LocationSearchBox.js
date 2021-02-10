@@ -23,9 +23,7 @@ class LocationSearchBox extends Component {
             keyword: ''
         }
     }
-
     render() {
-
         const {
             onPressAddAddressManually
         } = this.props

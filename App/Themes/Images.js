@@ -53,7 +53,9 @@ const images = {
   userPayImage: require('../Images/usercenter/pay.png'),
   userUPayImage: require('../Images/usercenter/upay.png'),
   userBillingImage: require('../Images/usercenter/billing.png'),
+
   userUBillingImage: require('../Images/usercenter/ubiling.png'),
+  userDeliverytoImage: require('../Images/usercenter/deliveryto.png'),
   userPurchaseImage: require('../Images/usercenter/purchase.png'),
   userAddressImage: require('../Images/usercenter/address.png'),
   userUAddressImage: require('../Images/usercenter/uaddress.png'),
@@ -69,6 +71,7 @@ const images = {
   userPayMethod3Image: require('../Images/usercenter/pay3.png'),
   userPayMethod4Image: require('../Images/usercenter/pay4.png'),
   userPayMethod5Image: require('../Images/usercenter/pay5.png'),
+  userPayMethod6Image: require('../Images/usercenter/pay6.png'),
   userPayTypeImage: require('../Images/usercenter/Cardtype.png'),
   userCreditCardImage: require('../Images/usercenter/credit_card.png'),
   userShareIcon1Image: require('../Images/usercenter/fb.png'),
@@ -82,6 +85,19 @@ const images = {
   userNotiSImage: require('../Images/usercenter/notis.png'),
   userFilledImage: require('../Images/usercenter/Filled.png'),
   userFilledSImage: require('../Images/usercenter/Filleds.png'),
+  userMoreRightImage: require('../Images/usercenter/Right.png'),
+  userLoveImage: require('../Images/usercenter/Love.png'),
+  userMedImage: require('../Images/usercenter/Med.png'),
+  userSadImage: require('../Images/usercenter/Sad.png'),
+  userFacebookImage: require('../Images/usercenter/feedback.png'),
+  shopcartAddImage: require('../Images/shoppingcart/add.png'),
+  shopcartRemoveImage: require('../Images/shoppingcart/remove.png'),
+  shopcartInfoImage: require('../Images/shoppingcart/info.png'),
+  shopcartSubImage: require('../Images/shoppingcart/sub.png'),
+  shopcartOrImage: require('../Images/shoppingcart/Or.png'),
+  shopcartLogoImage: require('../Images/redlogo.png'),
+  chatIconImage: require('../Images/chaticon.png'),
+  shopBagimage: require('../Images/shoppingcart/shop_bag.png'),
 };
 
 export default images;

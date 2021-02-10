@@ -37,6 +37,11 @@ class RateOrderScreen extends Component {
 
     }
 
+    onPost = () => {
+        this.props.navigation.state.params.onPost()
+        NavigationService.goBack()
+    }
+
     onPressGallery = () => {
         ImagePicker.openPicker({
             //cropping: true,
@@ -74,7 +79,7 @@ class RateOrderScreen extends Component {
                 <AppBar
                     title={'Rate Order'}
                     rightButton={() =>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={this.onPost}>
                             <Text style={styles.txtSave}>POST</Text>
                         </TouchableOpacity>
                     }

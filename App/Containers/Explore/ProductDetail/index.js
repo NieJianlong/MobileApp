@@ -29,7 +29,8 @@ import {
     Button,
     Progress,
     BottomSheet,
-    BottomSheetBackground
+    BottomSheetBackground,
+    Alert,
 } from '../../../Components'
 
 import { Images, Colors } from '../../../Themes'
@@ -68,11 +69,34 @@ class ProductDetailScreen extends Component {
 
             showPickupFromSellerSheet: false,
             showColorSheet: false,
+
+            showReviewSentAlert: false,
+            showReportSentAlert: false,
         }
     }
 
     componentDidMount() {
 
+    }
+
+    toggleReviewSentAlert = () => {
+        if (this.state.showReviewSentAlert) {
+            setTimeout(() => {
+                this.setState({ showReviewSentAlert: false })
+            }, 2100)
+        } else {
+            this.setState({ showReviewSentAlert: true })
+        }
+    }
+
+    toggleReportSentAlert = () => {
+        if (this.state.showReportSentAlert) {
+            setTimeout(() => {
+                this.setState({ showReportSentAlert: false })
+            }, 2100)
+        } else {
+            this.setState({ showReportSentAlert: true })
+        }
     }
 
     sectionsRefs = Sections.map(_section => React.createRef())
@@ -123,6 +147,30 @@ class ProductDetailScreen extends Component {
                 this.colorSheet.snapTo(1)
             }
         })
+    }
+
+    renderReviewSentAlert() {
+        return (
+            <Alert
+                visible={this.state.showReviewSentAlert}
+                title={'Thanks for your review!'}
+                message={'Your review has been added successfully'}
+                color={Colors.success}
+                onDismiss={this.toggleReviewSentAlert}
+            />
+        )
+    }
+
+    renderReportSentAlert() {
+        return (
+            <Alert
+                visible={this.state.showReportSentAlert}
+                title={'Thanks for your report!'}
+                message={'Your report has been sent successfully'}
+                color={Colors.success}
+                onDismiss={this.toggleReviewSentAlert}
+            />
+        )
     }
 
     renderHeaderTabs() {
@@ -504,7 +552,7 @@ class ProductDetailScreen extends Component {
     renderUserReview() {
         return (
             <TouchableOpacity
-                onPress={() => NavigationService.navigate('RateOrderScreen')}
+                onPress={() => NavigationService.navigate('RateOrderScreen', { onPost: this.toggleReviewSentAlert })}
                 style={styles.userReviewContainer}>
                 <Text style={styles.heading4Bold}>Rate and review this product</Text>
                 <Text style={styles.txtRegular}>Share your experience</Text>
@@ -591,7 +639,7 @@ class ProductDetailScreen extends Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
-                                    onPress={() => NavigationService.navigate('ReportScreen')}
+                                    onPress={() => NavigationService.navigate('ReportScreen', { onSubmit: this.toggleReportSentAlert })}
                                     style={{ marginLeft: s(20) }}>
                                     <Text style={[styles.heading5Bold, { color: Colors.grey60 }]}>
                                         REPORT
@@ -791,6 +839,10 @@ class ProductDetailScreen extends Component {
                 {this.renderPickupFromSellerSheet()}
 
                 {this.renderColorSheet()}
+
+                {this.renderReviewSentAlert()}
+
+                {this.renderReportSentAlert()}
             </View>
         )
     }

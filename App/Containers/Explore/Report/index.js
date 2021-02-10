@@ -37,12 +37,17 @@ class ReportScreen extends Component {
 
     }
 
+    onSubmit = () => {
+        this.props.navigation.state.params.onSubmit()
+        NavigationService.goBack()
+    }
+
     renderHeader() {
         return (
             <View style={styles.header}>
                 <AppBar
                     rightButton={() =>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={this.onSubmit}>
                             <Text style={styles.txtSave}>SUBMIT</Text>
                         </TouchableOpacity>
                     }

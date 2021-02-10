@@ -13,9 +13,9 @@ import ProductInfoScreen from '../Containers/Explore/ProductInfo';
 import ProductSearchScreen from '../Containers/Explore/Search';
 import EditCategoriesScreen from '../Containers/Explore/Categories/Edit';
 import ChooseCategoriesScreen from '../Containers/Explore/Categories/Choose';
-import RateOrderScreen from '../Containers/Explore/RateOrder'
-import ReportScreen from '../Containers/Explore/Report'
-import OrderPlacedScreen from '../Containers/Explore/OrderPlaced'
+import RateOrderScreen from '../Containers/Explore/RateOrder';
+import ReportScreen from '../Containers/Explore/Report';
+import OrderPlacedScreen from '../Containers/Explore/OrderPlaced';
 import LoginScreen from '../Containers/Login';
 import RegisterScreen from '../Containers/Register';
 import LegalScreen from '../Containers/Legal';
@@ -38,13 +38,26 @@ import SelectDeliveryAddressScreen from '../Containers/SelectDeliveryAddress';
 import SalamiCreditScreen from '../Containers/SalamiCredit';
 import NotificationsScreen from '../Containers/Notifications';
 import SettingScreen from '../Containers/Setting';
+import SelectCountryOrLanguageScreen from '../Containers/SelectCountryOrLanguage';
+import CustomerSupportScreen from '../Containers/CustomerSupport';
+import FeedbackScreen from '../Containers/Feedback';
+import ShoppingCartScreen from '../Containers/ShoppingCart';
+import EditShoppingCartScreen from '../Containers/EditShoppingCart';
+import CheckoutNoAuthScreen from '../Containers/CheckoutNoAuth';
+import CheckOutPersonalDetailsScreen from '../Containers/CheckOutPersonalDetails';
+import CheckoutBillingDetailsScreen from '../Containers/CheckoutBillingDetails';
+import AddCheckoutPaymentMethodScreen from '../Containers/AddCheckoutPaymentMethod';
+import CheckoutResumeScreen from '../Containers/CheckoutResume';
+import InSufficientSalamiCreditScreen from '../Containers/InSufficientSalamiCredit';
+import CheckoutPaymentCompletedScreen from '../Containers/CheckoutPaymentCompleted';
+import CheckoutPaymentCompletedGuestScreen from '../Containers/CheckoutPaymentCompletedGuest';
 import TabBar from './TabBar';
 
 const TabNav = createBottomTabNavigator(
   {
     ExploreScreen: { screen: ExploreScreen },
     PackageScreen: { screen: ExploreScreen },
-    CartScreen: { screen: ExploreScreen },
+    CartScreen: { screen: ShoppingCartScreen },
     FollowScreen: { screen: ExploreScreen },
     MenuScreen: { screen: UserCenter },
   },
@@ -89,6 +102,21 @@ const PrimaryNav = createStackNavigator(
     UserCenter: { screen: UserCenter },
     NotificationsScreen: { screen: NotificationsScreen },
     SettingScreen: { screen: SettingScreen },
+    SelectCountryOrLanguageScreen: { screen: SelectCountryOrLanguageScreen },
+    CustomerSupportScreen: { screen: CustomerSupportScreen },
+    FeedbackScreen: { screen: FeedbackScreen },
+    ShoppingCartScreen: { screen: ShoppingCartScreen },
+    EditShoppingCartScreen: { screen: EditShoppingCartScreen },
+    CheckoutNoAuthScreen: { screen: CheckoutNoAuthScreen },
+    CheckOutPersonalDetailsScreen: { screen: CheckOutPersonalDetailsScreen },
+    CheckoutBillingDetailsScreen: { screen: CheckoutBillingDetailsScreen },
+    AddCheckoutPaymentMethodScreen: { screen: AddCheckoutPaymentMethodScreen },
+    CheckoutResumeScreen: { screen: CheckoutResumeScreen },
+    InSufficientSalamiCreditScreen: { screen: InSufficientSalamiCreditScreen },
+    CheckoutPaymentCompletedScreen: { screen: CheckoutPaymentCompletedScreen },
+    CheckoutPaymentCompletedGuestScreen: {
+      screen: CheckoutPaymentCompletedGuestScreen,
+    },
   },
   {
     // Default config for all screens
@@ -103,7 +131,7 @@ export default class AppRouter extends React.Component {
   render() {
     return (
       <AppContainer
-        ref={navigatorRef => {
+        ref={(navigatorRef) => {
           NavigationService.setTopLevelNavigator(navigatorRef);
         }}
       />

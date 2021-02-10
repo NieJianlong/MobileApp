@@ -27,18 +27,38 @@ function index(props) {
   const payments = [
     {
       image: images.userPayMethod2Image,
+      onPress: () => {
+        Nav.navigate('AddCreditScreen', {
+          callback: () => {
+            Nav.navigate('CheckoutResumeScreen');
+            // Nav.goBack();
+          },
+        });
+      },
+    },
+    {
+      image: images.userPayMethod6Image,
+      onPress: () => {
+        Nav.navigate('InSufficientSalamiCreditScreen');
+      },
     },
     {
       image: images.userPayMethod1Image,
+      onPress: () => {
+        Nav.navigate('CheckoutResumeScreen');
+      },
     },
     {
       image: images.userPayMethod3Image,
+      onPress: () => {},
     },
     {
       image: images.userPayMethod4Image,
+      onPress: () => {},
     },
     {
       image: images.userPayMethod5Image,
+      onPress: () => {},
     },
   ];
 
@@ -67,17 +87,17 @@ function index(props) {
                   }}
                 >
                   <TouchableOpacity
-                    onPress={(item) => {
-                      debugger;
-                      Nav.navigate('AddCreditScreen', {
-                        callback: () => {
-                          debugger;
-                          Nav.pop(2);
-                          if (typeof params.callback == 'function') {
-                            params.callback();
-                          }
-                        },
-                      });
+                    onPress={() => {
+                      if (item.onPress) {
+                        item.onPress();
+                      } else {
+                        Nav.navigate('AddCreditScreen', {
+                          callback: () => {
+                            Nav.navigate('CheckoutResumeScreen');
+                            // Nav.goBack();
+                          },
+                        });
+                      }
                     }}
                   >
                     <Image source={item.image} style={styles.item} />

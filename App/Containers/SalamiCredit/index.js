@@ -111,7 +111,7 @@ function index(props) {
             />
           </TouchableWithoutFeedback>
         )}
-        {showSheet && renderSheet(sheetEl,setShowSheet)}
+        {showSheet && renderSheet(sheetEl, setShowSheet)}
       </SafeAreaView>
     </View>
   );
@@ -216,7 +216,7 @@ function listHeader(setShowSheet) {
  * @param {*} dispatch
  * @return {*}
  */
-function renderSheet(sheetEl,setShowSheet) {
+function renderSheet(sheetEl, setShowSheet) {
   const tips = {
     textTip: 'About Salami Credit',
     subTextTip:

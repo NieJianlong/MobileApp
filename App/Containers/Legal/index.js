@@ -9,7 +9,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import {
-    AppBar
+    AppBar,
+    SegmentedControl
 } from '../../Components'
 
 import styles from './styles'
@@ -28,22 +29,12 @@ class LegalScreen extends Component {
     }
 
     renderSegmentedControl() {
-        const { tabIndex } = this.state
         return (
-            <View style={styles.segmentedContainer}>
-                <TouchableOpacity
-                    activeOpacity={1}
-                    onPress={() => this.setState({ tabIndex: 0 })}
-                    style={tabIndex === 0 ? styles.activeItem : styles.inactiveItem}>
-                    <Text style={tabIndex === 0 ? styles.activeText : styles.inactiveText}>TERMS & CONDITIONS</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    activeOpacity={1}
-                    onPress={() => this.setState({ tabIndex: 1 })}
-                    style={tabIndex === 1 ? styles.activeItem : styles.inactiveItem}>
-                    <Text style={tabIndex === 1 ? styles.activeText : styles.inactiveText}>PRIVACY POLICY</Text>
-                </TouchableOpacity>
-            </View>
+            <SegmentedControl
+                label1={'TERMS & CONDITIONS'}
+                label2={'PRIVACY POLICY'}
+                onSwitch={(t) => this.setState({ tabIndex: t })}
+            />
         )
     }
 

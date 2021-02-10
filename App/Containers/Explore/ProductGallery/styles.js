@@ -11,5 +11,13 @@ export default ScaledSheet.create({
         width: '100%',
         height: '300@vs',
         marginTop: '15@vs'
+    },
+    indicatorContainer: {
+        position: 'absolute',
+        alignSelf: 'center',
+        top: '20@vs'
+    },
+    indicator: {
+        ...ApplicationStyles.screen.txtRegular
     }
 })

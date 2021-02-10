@@ -29,11 +29,11 @@ function Selector(props) {
     return (
         <View>
             <View style={[styles.container, style, showError && styles.errorContainer]}>
-                <View>
+                <TouchableOpacity onPress={() => setActive(!active)}>
                     <Text style={[styles.txtPlaceholder, value !== '' && { color: Colors.black }]}>
                         {value !== '' ? value : placeholder}
                     </Text>
-                </View>
+                </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => setActive(!active)}>
                     <Image
@@ -48,6 +48,7 @@ function Selector(props) {
                 active &&
                 data.map((item, index) =>
                     <TouchableOpacity
+                        key={index.toString()}
                         onPress={() => {
                             setValue(item)
                             setActive(false)

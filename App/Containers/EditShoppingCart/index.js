@@ -129,20 +129,37 @@ function index(props) {
 
               return (
                 <View
-                  style={{ paddingHorizontal: AppConfig.paddingHorizontal }}
+                  style={{
+                    paddingHorizontal: AppConfig.paddingHorizontal,
+                  }}
                 >
                   <View style={{ height: vs(12) }} />
                   <CheckBox
                     defaultValue={selectedValue == item.title}
                     onSwitch={(t) => {
-
                       const selectedDic = state.selected;
                       selectedDic[sectionTitle] = item.title;
                       console.log({ ...state, selected: { ...selectedDic } });
                       setState({ ...state, selected: { ...selectedDic } });
                     }}
+                    hasIcon={section.title == 'Color'}
+                    iconColor={item.color}
                     label={item.title}
                   />
+                  {selectedValue != item.title && (
+                    <Text
+                      style={[
+                        { position: 'absolute', top: vs(25), right: 40 },
+                        {
+                          color: colors.grey40,
+                          fontSize: vs(14),
+                          fontFamily: fonts.primary,
+                        },
+                      ]}
+                    >
+                      {item.price}
+                    </Text>
+                  )}
                 </View>
               );
             }}

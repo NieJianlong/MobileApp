@@ -40,9 +40,11 @@ function index(props) {
         <AppBar
           rightButton={() => {
             return (
-              <TouchableOpacity onPress={() => {
-                NavigationService.navigate('SelectDeliveryAddressScreen');
-              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  NavigationService.navigate('SelectDeliveryAddressScreen');
+                }}
+              >
                 <Text style={styles.update}>NEXT</Text>
               </TouchableOpacity>
             );
@@ -72,7 +74,8 @@ function index(props) {
           </Text>
           <FlatList
             data={PaymentTestData}
-            style={{ height: metrics.screenHeight - vs(220) }}
+            style={{ height: metrics.screenHeight - vs(300) }}
+            showsVerticalScrollIndicator={false}
             renderItem={({ item }) => {
               return (
                 <View style={styles1.item}>

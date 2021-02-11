@@ -54,7 +54,8 @@ function index(props) {
 
           <FlatList
             data={AddressTestData}
-            style={{ height: metrics.screenHeight - vs(120) }}
+            style={{ height: metrics.screenHeight - vs(180) }}
+            showsVerticalScrollIndicator={false}
             renderItem={({ item }) => {
               return (
                 <View style={styles1.item}>

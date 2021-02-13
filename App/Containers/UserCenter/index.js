@@ -7,7 +7,7 @@
  * @FilePath: /MobileApp/App/Containers/UserCenter/index.js
  */
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StatusBar } from 'react-native';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import Colors from '../../Themes/Colors';
 import { Button } from '../../Components';
@@ -84,6 +84,7 @@ const buttons = [
 function index(props) {
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       <UserHeader needSafeArea></UserHeader>
 
       {/* All the items usercenter */}

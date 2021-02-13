@@ -17,6 +17,7 @@ import colors from '../../Themes/Colors';
 import fonts from '../../Themes/Fonts';
 import UserAvatar from '../UserCenter/UserAvatar';
 import NavigationService from '../../Navigation/NavigationService';
+import images from '../../Themes/Images';
 
 const inputs = [
   { title: 'First Name' },
@@ -47,6 +48,15 @@ function index(props) {
       <ScrollView>
         <View style={styles.contentContainer}>
           <UserAvatar uri="http://measure.3vyd.com//uPic/JRD5RT.png"></UserAvatar>
+          <Image
+            style={{
+              width: s(30),
+              height: s(30),
+              marginTop: s(-20),
+              marginLeft: s(30),
+            }}
+            source={images.userUploadImage}
+          />
         </View>
         <View style={styles.contentContainer}>
           {inputs.map((item, index) => {

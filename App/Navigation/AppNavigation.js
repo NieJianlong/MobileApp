@@ -44,6 +44,7 @@ import CheckoutResumeScreen from '../Containers/CheckoutResume';
 import InSufficientSalamiCreditScreen from '../Containers/InSufficientSalamiCredit';
 import CheckoutPaymentCompletedScreen from '../Containers/CheckoutPaymentCompleted';
 import CheckoutPaymentCompletedGuestScreen from '../Containers/CheckoutPaymentCompletedGuest';
+import ChatScreen from '../Containers/Chat';
 import TabBar from './TabBar';
 
 const TabNav = createBottomTabNavigator(
@@ -103,11 +104,12 @@ const PrimaryNav = createStackNavigator(
     CheckoutPaymentCompletedGuestScreen: {
       screen: CheckoutPaymentCompletedGuestScreen,
     },
+    ChatScreen: { screen: ChatScreen },
   },
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'UserCenter',
+    initialRouteName: 'ChatScreen',
     navigationOptions: {},
   }
 );

@@ -16,6 +16,7 @@ import ChooseCategoriesScreen from '../Containers/Explore/Categories/Choose';
 import RateOrderScreen from '../Containers/Explore/RateOrder';
 import ReportScreen from '../Containers/Explore/Report';
 import OrderPlacedScreen from '../Containers/Explore/OrderPlaced';
+import OrderScreen from '../Containers/Orders/MainScreen'
 import LoginScreen from '../Containers/Login';
 import RegisterScreen from '../Containers/Register';
 import LegalScreen from '../Containers/Legal';
@@ -56,7 +57,7 @@ import TabBar from './TabBar';
 const TabNav = createBottomTabNavigator(
   {
     ExploreScreen: { screen: ExploreScreen },
-    PackageScreen: { screen: ExploreScreen },
+    PackageScreen: { screen: OrderScreen },
     CartScreen: { screen: ShoppingCartScreen },
     FollowScreen: { screen: ExploreScreen },
     MenuScreen: { screen: UserCenter },

@@ -11,8 +11,9 @@ import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import colors from '../../../Themes/Colors';
 import { AppBar, Button, Switch } from '../../../Components';
 
+import fonts from '../../../Themes/Fonts';
 import images from '../../../Themes/Images';
-import { ApplicationStyles } from '../../../Themes';
+import { ApplicationStyles } from '../../../Themes'; 
 
 function index(props) {
   const [promoCode, setPromoCode] = useState('');

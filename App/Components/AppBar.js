@@ -18,6 +18,7 @@ class AppBar extends Component {
     render() {
         const {
             showLogo,
+            hideBackButton,
             rightButton,
             onPressBack,
             title
@@ -25,15 +26,20 @@ class AppBar extends Component {
 
         return (
             <View style={styles.container}>
-                <TouchableOpacity onPress={() => {
-                    if (onPressBack) {
-                        onPressBack();
-                    } else {
-                        NavigationService.goBack();
-                    }
-                }}>
-                    <Image style={styles.icBack} source={Images.arrow_left} />
-                </TouchableOpacity>
+                {
+                    hideBackButton ?
+                        <View style={styles.dummyBackBtn} /> :
+                        <TouchableOpacity
+                            onPress={() => {
+                                if (onPressBack) {
+                                    onPressBack();
+                                } else {
+                                    NavigationService.goBack();
+                                }
+                            }}>
+                            <Image style={styles.icBack} source={Images.arrow_left} />
+                        </TouchableOpacity>
+                }
                 {
                     title &&
                     <Text style={styles.title}>{title}</Text>
@@ -91,6 +97,11 @@ const styles = ScaledSheet.create({
     },
     title: {
         ...ApplicationStyles.screen.heading5Regular
+    },
+    dummyBackBtn: {
+        width: '20@s',
+        height: '20@s',
+        //marginRight: '5@s'
     }
 })
 export default AppBar

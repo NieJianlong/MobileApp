@@ -109,7 +109,7 @@ const PrimaryNav = createStackNavigator(
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'ChatScreen',
+    initialRouteName: 'LaunchScreen',
     navigationOptions: {},
   }
 );

@@ -94,6 +94,7 @@ function index(props) {
           keyExtractor={(item, index) => `list${index}`}
         ></FlatList>
         {showSheet && (
+          
           <TouchableWithoutFeedback onPress={() => {}}>
             <Animated.View
               style={{

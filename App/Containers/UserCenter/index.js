@@ -7,7 +7,7 @@
  * @FilePath: /MobileApp/App/Containers/UserCenter/index.js
  */
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StatusBar } from 'react-native';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
 import Colors from '../../Themes/Colors';
 import { Button } from '../../Components';
@@ -84,6 +84,7 @@ const buttons = [
 function index(props) {
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       <UserHeader needSafeArea></UserHeader>
 
       {/* All the items usercenter */}
@@ -94,7 +95,9 @@ function index(props) {
       </View>
       <View style={styles.buttonContainer}>
         {buttons.map((item, index) => (
-          <Button key={`button` + index} {...item}></Button>
+          <View style={{ marginTop: 15 }}>
+            <Button key={`button` + index} {...item}></Button>
+          </View>
         ))}
       </View>
     </View>
@@ -111,7 +114,7 @@ const styles = ScaledSheet.create({
   },
   buttonContainer: {
     paddingHorizontal: AppConfig.paddingHorizontal,
-    height: '100@vs',
+    height: '130@vs',
     justifyContent: 'space-around',
     marginTop: '30@vs',
   },

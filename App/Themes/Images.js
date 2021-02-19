@@ -100,6 +100,13 @@ const images = {
   shopBagimage: require('../Images/shoppingcart/shop_bag.png'),
   userUploadImage: require('../Images/usercenter/upload.png'),
   dotsImage: require('../Images/dots.png'),
+  orderDetailImage: require('../Images/myorders/orderdetail.png'),
+  orderInvoiceImage: require('../Images/myorders/invoice.png'),
+  orderWriteReviewImage: require('../Images/myorders/writereview.png'),
+  orderEvaluateSellerImage: require('../Images/myorders/evaluateseller.png'),
+  orderTrackImage: require('../Images/myorders/trackorder.png'),
+  orderCancelImage: require('../Images/myorders/cancelorder.png'),
+  orderReturnImage: require('../Images/myorders/returnproduct.png'),
 };
 
 export default images;

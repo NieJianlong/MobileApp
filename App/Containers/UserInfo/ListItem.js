@@ -16,7 +16,7 @@ import fonts from '../../Themes/Fonts';
  * @return {*}
  */
 function ListItem(props) {
-  const { lefticon, text, righticon, onPress, hasline } = props;
+  const { lefticon, text, righticon, onPress, hasline, leftStyle } = props;
   return (
     <TouchableOpacity onPress={() => onPress()}>
       <View
@@ -27,9 +27,10 @@ function ListItem(props) {
         ]}
       >
         <View style={styles.item}>
-          <Image style={styles.itemicon} source={lefticon} />
+          <Image style={[styles.itemicon,leftStyle]} source={lefticon} />
           <Text>{text}</Text>
         </View>
+        <Image style={[styles.rightbtn, {}]} source={righticon} />
       </View>
     </TouchableOpacity>
   );

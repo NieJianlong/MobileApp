@@ -7,6 +7,7 @@ import images from '../../../Themes/Images';
 import colors from '../../../Themes/Colors';
 
 function index(props) {
+  const { orderStatus } = props;
   const [datas, setDatas] = useState([
     {
       icon: images.userDeliverytoImage,
@@ -87,7 +88,9 @@ function index(props) {
           marginTop: 20,
         }}
       >
-        <Text style={styles.title}>Your order</Text>
+        <Text style={styles.title}>
+          {orderStatus == 1 ? 'Order placed on Oct 24, 2020' : 'Your order'}
+        </Text>
         <TouchableOpacity>
           <Image
             style={styles.editImage}

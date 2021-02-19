@@ -40,7 +40,9 @@ const items = [
     lefticon: images.orderDetailImage,
     text: 'Order details',
     righticon: images.userRightBtnImage,
-    onPress: () => {},
+    onPress: () => {
+      NavigationService.navigate('CheckoutResumeScreen', { orderStatus: 1 });
+    },
     hasline: true,
   },
   {

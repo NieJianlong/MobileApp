@@ -11,7 +11,16 @@ import BottomSummary from './Summary';
 import DeliverInfo from './DeliverInfo';
 import NavigationService from '../../Navigation/NavigationService';
 
+//orderStatus：1,completed
 function index(props) {
+  const {
+    navigation: {
+      state: {
+        params: { orderStatus },
+      },
+    },
+  } = props;
+
   const [orders, setOrders] = useState(
     [0, 1, 2, 3, 4].map((item, index) => ({
       id: index,
@@ -42,48 +51,56 @@ function index(props) {
     >
       <StatusBar barStyle="dark-content" />
       <SafeAreaView edges={['top', 'right', 'left', 'bottom']}>
-        <AppBar title="Review your details" />
+        <AppBar
+          title={orderStatus == 1 ? 'Order 782788' : 'Review your details'}
+        />
         <ScrollView
           style={{
             paddingHorizontal: AppConfig.paddingHorizontal,
-            height: metrics.screenHeight - 220,
+            height:
+              orderStatus == 1
+                ? metrics.screenHeight - 60
+                : metrics.screenHeight - 220,
           }}
+          contentContainerStyle={{ paddingBottom: 60 }}
         >
-          <DeliverInfo />
+          <DeliverInfo orderStatus={orderStatus}/>
           <View>
             {orders.map((item, index) => (
               <CartItem key={index.toString()} product={item} />
             ))}
           </View>
 
-          <BottomSummary />
+          <BottomSummary orderStatus={orderStatus} />
         </ScrollView>
       </SafeAreaView>
-      <SafeAreaView
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      >
-        <View
+      {orderStatus != 1 && (
+        <SafeAreaView
           style={{
-            height: vs(80),
-            width: '100%',
-            backgroundColor: colors.white,
-            paddingHorizontal: AppConfig.paddingHorizontal,
-            paddingTop: vs(15),
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
           }}
         >
-          <Button
-            onPress={() => {
-              NavigationService.navigate('CheckoutPaymentCompletedScreen');
+          <View
+            style={{
+              height: vs(80),
+              width: '100%',
+              backgroundColor: colors.white,
+              paddingHorizontal: AppConfig.paddingHorizontal,
+              paddingTop: vs(15),
             }}
-            text="PROCEED"
-          ></Button>
-        </View>
-      </SafeAreaView>
+          >
+            <Button
+              onPress={() => {
+                NavigationService.navigate('CheckoutPaymentCompletedScreen');
+              }}
+              text="PROCEED"
+            ></Button>
+          </View>
+        </SafeAreaView>
+      )}
     </View>
   );
 }

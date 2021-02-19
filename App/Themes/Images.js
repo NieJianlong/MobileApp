@@ -107,6 +107,9 @@ const images = {
   orderTrackImage: require('../Images/myorders/trackorder.png'),
   orderCancelImage: require('../Images/myorders/cancelorder.png'),
   orderReturnImage: require('../Images/myorders/returnproduct.png'),
+  orderVideoImage: require('../Images/myorders/Video.png'),
+  orderDocImage: require('../Images/myorders/Doc.png'),
+  orderLinkImage: require('../Images/myorders/Link.png'),
 };
 
 export default images;

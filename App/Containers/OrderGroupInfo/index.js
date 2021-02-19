@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   ScrollView,
@@ -17,6 +17,8 @@ import NavigationService from '../../Navigation/NavigationService';
 import CartItem from './Cartitem';
 import ListItem from '../UserInfo/ListItem';
 import images from '../../Themes/Images';
+import { ApplicationStyles } from '../../Themes';
+import ProductItem from '../CheckoutPaymentCompleted/ProductItem';
 
 const productInfo = {
   id: index,
@@ -85,7 +87,42 @@ const items = [
   },
 ];
 
+const medias = [
+  {
+    title: '',
+    image: images.orderVideoImage,
+  },
+  {
+    title: '',
+    image: images.orderDocImage,
+  },
+  {
+    title: '',
+    image: images.orderLinkImage,
+  },
+  {
+    title: '',
+    image: images.orderVideoImage,
+  },
+];
+
 function index(props) {
+  const [orders, setOrders] = useState(
+    [0, 1].map((item, index) => ({
+      id: index,
+      name: 'Product Name',
+      picture:
+        'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+      rating: 3.0,
+      ratingCount: 124,
+      retailPrice: 2345,
+      wholesalePrice: 1542,
+      orderClose: '22/12/2020',
+      inStock: 100,
+      orderCount: 24,
+      count: 1,
+    }))
+  );
   return (
     <View
       style={{
@@ -104,8 +141,13 @@ function index(props) {
         edges={['top', 'right', 'left', 'bottom']}
       >
         <AppBar title="Group Info" />
-        <ScrollView>
-          <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+        <ScrollView
+          contentContainerStyle={{
+            paddingBottom: vs(50),
+          }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View>
             <CartItem product={productInfo} />
           </View>
           {items.map((item, index) => {
@@ -122,7 +164,57 @@ function index(props) {
               ></ListItem>
             );
           })}
-          <Text style={styles.txt3}>Who bought this item also bought...</Text>
+          <View>
+            <Text
+              style={{
+                ...ApplicationStyles.screen.heading3Bold,
+                marginVertical: vs(15),
+                paddingHorizontal: AppConfig.paddingHorizontal,
+              }}
+            >
+              Media, Links and Docs
+            </Text>
+            <ScrollView
+              horizontal={true} // 横向
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingRight: AppConfig.paddingHorizontal,
+              }}
+              style={{ paddingRight: AppConfig.paddingHorizontal }}
+            >
+              {medias.map((item) => {
+                return (
+                  <View style={{ marginLeft: AppConfig.paddingHorizontal }}>
+                    <Image
+                      style={{
+                        width: s(90),
+                        height: s(90),
+                        resizeMode: 'contain',
+                      }}
+                      source={item.image}
+                    />
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </View>
+          <View style={{ marginTop: vs(15) }}>
+            <Text
+              style={{
+                ...ApplicationStyles.screen.heading3Bold,
+                paddingHorizontal: AppConfig.paddingHorizontal,
+                fontSize: s(15),
+                marginVertical: s(15),
+              }}
+            >
+              Who bought this items also bought below items:
+            </Text>
+            <View>
+              {orders.map((item, index) => (
+                <ProductItem key={index.toString()} product={item} />
+              ))}
+            </View>
+          </View>
         </ScrollView>
       </SafeAreaView>
     </View>

@@ -15,6 +15,7 @@ import images from '../../../Themes/Images';
 import { ApplicationStyles } from '../../../Themes';
 
 function index(props) {
+  const { orderStatus } = props;
   const [promoCode, setPromoCode] = useState('');
   const [promoStatus, setPromoStatus] = useState('');
   const [summaries, setSummaries] = useState([
@@ -57,64 +58,67 @@ function index(props) {
       }}
     >
       <Text style={styles.title}>Order Summary</Text>
-      <View
-        style={
-          promoStatus == 'success'
-            ? styles.promoSuccess
-            : promoStatus == 'failure'
-            ? styles.promoCodeFailure
-            : styles.promoCode
-        }
-      >
-        <TextInput
-          editable={promoStatus != 'success'}
-          onFocus={() => {
-            setPromoStatus('');
-          }}
-          style={[
-            ApplicationStyles.screen.txtRegular,
+      {orderStatus != 1 && (
+        <View
+          style={
             promoStatus == 'success'
-              ? styles.promoInputSuccess
+              ? styles.promoSuccess
               : promoStatus == 'failure'
-              ? styles.promoInputFailure
-              : styles.promoInput,
-          ]}
-          onChangeText={(text) => setPromoCode(text)}
-          value={promoCode}
-          placeholder="Add a Promo Code"
-        />
-        {promoCode.length > 0 && promoStatus != 'success' && (
-          <TouchableOpacity
-            onPress={() => {
-              if (promoCode == '1111') {
-                setPromoStatus('success');
-              } else {
-                setPromoStatus('failure');
-              }
+              ? styles.promoCodeFailure
+              : styles.promoCode
+          }
+        >
+          <TextInput
+            editable={promoStatus != 'success'}
+            onFocus={() => {
+              setPromoStatus('');
             }}
-            style={{
-              width: s(112),
-              backgroundColor: colors.grey80,
-              height: vs(48),
-              borderRadius: s(40),
-            }}
-          >
-            <Text
-              style={[
-                ApplicationStyles.screen.heading4Bold,
-                {
-                  color: 'white',
-
-                  lineHeight: vs(48),
-                  textAlign: 'center',
-                },
-              ]}
+            style={[
+              ApplicationStyles.screen.txtRegular,
+              promoStatus == 'success'
+                ? styles.promoInputSuccess
+                : promoStatus == 'failure'
+                ? styles.promoInputFailure
+                : styles.promoInput,
+            ]}
+            onChangeText={(text) => setPromoCode(text)}
+            value={promoCode}
+            placeholder="Add a Promo Code"
+          />
+          {promoCode.length > 0 && promoStatus != 'success' && (
+            <TouchableOpacity
+              onPress={() => {
+                if (promoCode == '1111') {
+                  setPromoStatus('success');
+                } else {
+                  setPromoStatus('failure');
+                }
+              }}
+              style={{
+                width: s(112),
+                backgroundColor: colors.grey80,
+                height: vs(48),
+                borderRadius: s(40),
+              }}
             >
-              APPLY
-            </Text>
-          </TouchableOpacity>
-        )}
-      </View>
+              <Text
+                style={[
+                  ApplicationStyles.screen.heading4Bold,
+                  {
+                    color: 'white',
+
+                    lineHeight: vs(48),
+                    textAlign: 'center',
+                  },
+                ]}
+              >
+                APPLY
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
+
       {promoStatus == 'failure' && (
         <Text
           style={
@@ -162,59 +166,64 @@ function index(props) {
           </View>
         );
       })}
-      <View
-        style={{
-          marginTop: 30,
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}
-      >
-        <Image
+      {
+        orderStatus!=1&& <View>
+        <View
           style={{
-            width: s(28),
-            height: s(28),
-            resizeMode: 'contain',
-            marginRight: s(10),
+            marginTop: 30,
+            flexDirection: 'row',
+            alignItems: 'center',
           }}
-          source={images.shopcartInfoImage}
-        />
-        <View>
-          <Text
-            style={[
-              ApplicationStyles.screen.txtRegular,
-              { color: colors.grey80 },
-            ]}
-          >
-            Remember that you will get your product once the
-          </Text>
-          <View style={{ flexDirection: 'row' }}>
+        >
+          <Image
+            style={{
+              width: s(28),
+              height: s(28),
+              resizeMode: 'contain',
+              marginRight: s(10),
+            }}
+            source={images.shopcartInfoImage}
+          />
+          <View>
             <Text
               style={[
                 ApplicationStyles.screen.txtRegular,
                 { color: colors.grey80 },
               ]}
             >
-              number of slices has been reached
+              Remember that you will get your product once the
             </Text>
-            <TouchableOpacity>
+            <View style={{ flexDirection: 'row' }}>
               <Text
                 style={[
                   ApplicationStyles.screen.txtRegular,
-                  { color: colors.secondary00, paddingLeft: 6 },
+                  { color: colors.grey80 },
                 ]}
               >
-                Learn more
+                number of slices has been reached
               </Text>
-            </TouchableOpacity>
+              <TouchableOpacity>
+                <Text
+                  style={[
+                    ApplicationStyles.screen.txtRegular,
+                    { color: colors.secondary00, paddingLeft: 6 },
+                  ]}
+                >
+                  Learn more
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-      <View style={{ marginTop: 20 }}>
-        <Switch
-          onSwitch={() => {}}
-          label="Use the same info as my personal details"
-        ></Switch>
-      </View>
+        <View style={{ marginTop: 20 }}>
+          <Switch
+            onSwitch={() => {}}
+            label="Use the same info as my personal details"
+          ></Switch>
+        </View>
+        </View>
+      }
+     
     </View>
   );
 }

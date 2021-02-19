@@ -26,7 +26,7 @@ function index(props) {
       onPress: () => {
         NavigationService.navigate('AddCreditScreen', {
           callback: () => {
-            NavigationService.navigate('CheckoutResumeScreen');
+            NavigationService.navigate('CheckoutResumeScreen',{orderStatus:0});
             // Nav.goBack();
           },
         });
@@ -173,7 +173,7 @@ function index(props) {
                       } else {
                         NavigationService.navigate('AddCreditScreen', {
                           callback: () => {
-                            NavigationService.navigate('CheckoutResumeScreen');
+                            NavigationService.navigate('CheckoutResumeScreen',{orderStatus:0});
                             // Nav.goBack();
                           },
                         });

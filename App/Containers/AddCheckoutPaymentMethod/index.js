@@ -30,7 +30,7 @@ function index(props) {
       onPress: () => {
         Nav.navigate('AddCreditScreen', {
           callback: () => {
-            Nav.navigate('CheckoutResumeScreen');
+            Nav.navigate('CheckoutResumeScreen',{orderStatus:0});
             // Nav.goBack();
           },
         });
@@ -45,7 +45,7 @@ function index(props) {
     {
       image: images.userPayMethod1Image,
       onPress: () => {
-        Nav.navigate('CheckoutResumeScreen');
+        Nav.navigate('CheckoutResumeScreen',{orderStatus:0});
       },
     },
     {
@@ -93,7 +93,7 @@ function index(props) {
                       } else {
                         Nav.navigate('AddCreditScreen', {
                           callback: () => {
-                            Nav.navigate('CheckoutResumeScreen');
+                            Nav.navigate('CheckoutResumeScreen',{orderStatus:0});
                             // Nav.goBack();
                           },
                         });

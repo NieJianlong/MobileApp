@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component, useState, useEffect, useContext } from 'react';
 import {
   View,
   StatusBar,
@@ -18,6 +18,7 @@ import AppConfig from '../../Config/AppConfig';
 import metrics from '../../Themes/Metrics';
 import fonts from '../../Themes/Fonts';
 import { AddressTestData } from '../UserInfo/Config';
+import { AlertContext } from '../Root/index';
 /**
  * @description: The user selects the shipping address page
  * @param {*} props
@@ -29,6 +30,8 @@ function index(props) {
       state: { params },
     },
   } = props;
+  const [selectIndex, setSelectIndex] = useState(999);
+  const context = useContext(AlertContext);
 
   return (
     <View style={styles.container}>
@@ -40,7 +43,21 @@ function index(props) {
         <AppBar
           rightButton={() => {
             return (
-              <TouchableOpacity onPress={() => {}}>
+              <TouchableOpacity
+                onPress={() => {
+                  NavigationService.pop(2);
+                  context.dispatch({
+                    type: 'changAlertState',
+                    payload: {
+                      visible: true,
+                      message:
+                        'You have successfully activated 1 click purchasing method.',
+                      color: colors.success,
+                      title: '1 Click Purchasing Activated!',
+                    },
+                  });
+                }}
+              >
                 <Text style={styles.update}>SAVE</Text>
               </TouchableOpacity>
             );
@@ -54,54 +71,67 @@ function index(props) {
 
           <FlatList
             data={AddressTestData}
-            style={{ height: metrics.screenHeight - vs(120) }}
-            renderItem={({ item }) => {
+            style={{ height: metrics.screenHeight - vs(180) }}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item, index }) => {
               return (
-                <View style={styles1.item}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={styles1.itemTitle}>{item.title}</Text>
-                    {item.isDefault && (
-                      <Image style={styles1.icon} source={images.check}></Image>
-                    )}
-                  </View>
-                  <View>
-                    <Text style={styles1.itemSubTitle}>{item.subTitle}</Text>
-                  </View>
-                  <View style={styles1.itemBottom}>
-                    {item.isDefault ? (
-                      <View style={styles1.itemTipsContainer}>
-                        <Text style={styles1.itemTips}>
-                          Default payment method
-                        </Text>
-                      </View>
-                    ) : (
-                      <TouchableOpacity style={styles1.itemSetDefault}>
-                        <Text style={styles1.setDefaultText}>
-                          SET AS DEFAULT
-                        </Text>
-                      </TouchableOpacity>
-                    )}
+                <TouchableOpacity onPress={() => setSelectIndex(index)}>
+                  <View
+                    style={[
+                      styles1.item,
+                      { borderWidth: selectIndex == index ? 2 : 0 },
+                    ]}
+                  >
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
+                      <Text style={styles1.itemTitle}>{item.title}</Text>
+                      {item.isDefault && (
+                        <Image
+                          style={styles1.icon}
+                          source={images.check}
+                        ></Image>
+                      )}
+                    </View>
+                    <View>
+                      <Text style={styles1.itemSubTitle}>{item.subTitle}</Text>
+                    </View>
+                    <View style={styles1.itemBottom}>
+                      {item.isDefault ? (
+                        <View style={styles1.itemTipsContainer}>
+                          <Text style={styles1.itemTips}>
+                            Default payment method
+                          </Text>
+                        </View>
+                      ) : (
+                        <TouchableOpacity style={styles1.itemSetDefault}>
+                          <Text style={styles1.setDefaultText}>
+                            SET AS DEFAULT
+                          </Text>
+                        </TouchableOpacity>
+                      )}
 
-                    <View style={{ flexDirection: 'row' }}>
-                      <TouchableOpacity onPress={(item) => doEdit(item)}>
-                        <Image
-                          style={styles1.editImage}
-                          source={images.userAddressEditImage}
-                        />
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={(item) => {
-                          showSheet();
-                        }}
-                      >
-                        <Image
-                          style={styles1.editImage}
-                          source={images.userAddressTrashImage}
-                        />
-                      </TouchableOpacity>
+                      <View style={{ flexDirection: 'row' }}>
+                        <TouchableOpacity onPress={(item) => doEdit(item)}>
+                          <Image
+                            style={styles1.editImage}
+                            source={images.userAddressEditImage}
+                          />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={(item) => {
+                            showSheet();
+                          }}
+                        >
+                          <Image
+                            style={styles1.editImage}
+                            source={images.userAddressTrashImage}
+                          />
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               );
             }}
             keyExtractor={(item, index) => `listItem${index}`}
@@ -218,5 +248,6 @@ const styles1 = ScaledSheet.create({
     height: '122@vs',
     paddingHorizontal: AppConfig.paddingHorizontal,
     justifyContent: 'center',
+    borderColor: '#409AEF',
   },
 });

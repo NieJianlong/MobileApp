@@ -18,6 +18,7 @@ import AppConfig from '../../Config/AppConfig';
 import metrics from '../../Themes/Metrics';
 import fonts from '../../Themes/Fonts';
 import { PaymentTestData } from '../UserInfo/Config';
+import { set } from 'react-native-reanimated';
 /**
  * @description: 1 Click purchase Screen
  * @param {*} props
@@ -29,7 +30,7 @@ function index(props) {
       state: { params },
     },
   } = props;
-
+  const [selectIndex, setSelectIndex] = useState(999);
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -40,9 +41,11 @@ function index(props) {
         <AppBar
           rightButton={() => {
             return (
-              <TouchableOpacity onPress={() => {
-                NavigationService.navigate('SelectDeliveryAddressScreen');
-              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  NavigationService.navigate('SelectDeliveryAddressScreen');
+                }}
+              >
                 <Text style={styles.update}>NEXT</Text>
               </TouchableOpacity>
             );
@@ -72,52 +75,65 @@ function index(props) {
           </Text>
           <FlatList
             data={PaymentTestData}
-            style={{ height: metrics.screenHeight - vs(220) }}
-            renderItem={({ item }) => {
+            style={{ height: metrics.screenHeight - vs(300) }}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item, index }) => {
               return (
-                <View style={styles1.item}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Image
-                      style={styles1.paytypeIcon}
-                      source={images.userPayTypeImage}
-                    ></Image>
-                    <Text style={styles1.itemTitle}>{item.title}</Text>
-                    {item.isDefault && (
-                      <Image style={styles1.icon} source={images.check}></Image>
-                    )}
-                  </View>
-                  <View>
-                    <Text style={styles1.itemSubTitle}>{item.subTitle}</Text>
-                  </View>
-                  <View style={styles1.itemBottom}>
-                    {item.isDefault ? (
-                      <View style={styles1.itemTipsContainer}>
-                        <Text style={styles1.itemTips}>
-                          Default payment method
-                        </Text>
-                      </View>
-                    ) : (
-                      <TouchableOpacity style={styles1.itemSetDefault}>
-                        <Text style={styles1.setDefaultText}>
-                          SET AS DEFAULT
-                        </Text>
-                      </TouchableOpacity>
-                    )}
-
-                    <View style={{ flexDirection: 'row' }}>
-                      <TouchableOpacity
-                        onPress={(item) => {
-                          showSheet();
-                        }}
-                      >
+                <TouchableOpacity onPress={() => setSelectIndex(index)}>
+                  <View
+                    style={[
+                      styles1.item,
+                      { borderWidth: index == selectIndex ? 2 : 0 },
+                    ]}
+                  >
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
+                      <Image
+                        style={styles1.paytypeIcon}
+                        source={images.userPayTypeImage}
+                      ></Image>
+                      <Text style={styles1.itemTitle}>{item.title}</Text>
+                      {item.isDefault && (
                         <Image
-                          style={styles1.editImage}
-                          source={images.userAddressTrashImage}
-                        />
-                      </TouchableOpacity>
+                          style={styles1.icon}
+                          source={images.check}
+                        ></Image>
+                      )}
+                    </View>
+                    <View>
+                      <Text style={styles1.itemSubTitle}>{item.subTitle}</Text>
+                    </View>
+                    <View style={styles1.itemBottom}>
+                      {item.isDefault ? (
+                        <View style={styles1.itemTipsContainer}>
+                          <Text style={styles1.itemTips}>
+                            Default payment method
+                          </Text>
+                        </View>
+                      ) : (
+                        <TouchableOpacity style={styles1.itemSetDefault}>
+                          <Text style={styles1.setDefaultText}>
+                            SET AS DEFAULT
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+
+                      <View style={{ flexDirection: 'row' }}>
+                        <TouchableOpacity
+                          onPress={(item) => {
+                            showSheet();
+                          }}
+                        >
+                          <Image
+                            style={styles1.editImage}
+                            source={images.userAddressTrashImage}
+                          />
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               );
             }}
             keyExtractor={(item, index) => `listItem${index}`}
@@ -234,5 +250,6 @@ const styles1 = ScaledSheet.create({
     height: '122@vs',
     paddingHorizontal: AppConfig.paddingHorizontal,
     justifyContent: 'center',
+    borderColor: '#409AEF',
   },
 });

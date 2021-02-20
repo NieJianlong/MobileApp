@@ -86,7 +86,9 @@ const items = [
     lefticon: images.orderCancelImage,
     text: 'Cancel order',
     righticon: images.userRightBtnImage,
-    onPress: () => {},
+    onPress: () => {
+      NavigationService.navigate('CancelOrderScreen');
+    },
     hasline: false,
   },
 ];

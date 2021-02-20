@@ -54,6 +54,7 @@ import CheckoutPaymentCompletedGuestScreen from '../Containers/CheckoutPaymentCo
 import ChatScreen from '../Containers/Chat';
 import OrderGroupInfoScreen from '../Containers/OrderGroupInfo';
 import TrackOrderScreen from '../Containers/TrackOrder';
+import CancelOrderScreen from '../Containers/CancelOrder';
 import TabBar from './TabBar';
 
 const TabNav = createBottomTabNavigator(
@@ -123,11 +124,12 @@ const PrimaryNav = createStackNavigator(
     ChatScreen: { screen: ChatScreen },
     OrderGroupInfoScreen: { screen: OrderGroupInfoScreen },
     TrackOrderScreen: { screen: TrackOrderScreen },
+    CancelOrderScreen: { screen: CancelOrderScreen },
   },
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'TrackOrderScreen',
+    initialRouteName: 'OrderGroupInfoScreen',
     navigationOptions: {},
   }
 );

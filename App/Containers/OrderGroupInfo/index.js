@@ -70,7 +70,9 @@ const items = [
     lefticon: images.orderTrackImage,
     text: 'Track order',
     righticon: images.userRightBtnImage,
-    onPress: () => {},
+    onPress: () => {
+      NavigationService.navigate('TrackOrderScreen');
+    },
     hasline: true,
   },
   {
@@ -184,9 +186,12 @@ function index(props) {
               }}
               style={{ paddingRight: AppConfig.paddingHorizontal }}
             >
-              {medias.map((item) => {
+              {medias.map((item, index) => {
                 return (
-                  <View style={{ marginLeft: AppConfig.paddingHorizontal }}>
+                  <View
+                    key={`media${index}`}
+                    style={{ marginLeft: AppConfig.paddingHorizontal }}
+                  >
                     <Image
                       style={{
                         width: s(90),

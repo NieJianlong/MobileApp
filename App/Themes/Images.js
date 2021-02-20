@@ -110,6 +110,11 @@ const images = {
   orderVideoImage: require('../Images/myorders/Video.png'),
   orderDocImage: require('../Images/myorders/Doc.png'),
   orderLinkImage: require('../Images/myorders/Link.png'),
+  orderClockImage: require('../Images/myorders/Clock.png'),
+  orderLineImage: require('../Images/myorders/line.png'),
+  orderCheckImage: require('../Images/myorders/checked.png'),
+  orderUnCheckImage: require('../Images/myorders/unchecked.png'),
+  orderUnLineImage: require('../Images/myorders/unline.png'),
 };
 
 export default images;

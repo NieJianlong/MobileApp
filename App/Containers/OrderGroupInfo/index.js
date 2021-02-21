@@ -79,7 +79,9 @@ const items = [
     lefticon: images.orderReturnImage,
     text: 'Return product',
     righticon: images.userRightBtnImage,
-    onPress: () => {},
+    onPress: () => {
+      NavigationService.navigate('ReturnProductStep1Screen');
+    },
     hasline: true,
   },
   {

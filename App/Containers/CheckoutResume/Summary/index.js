@@ -148,6 +148,7 @@ function index(props) {
                 styles.title,
                 {
                   color: item.type == 'normal' ? colors.grey80 : colors.black,
+                  fontWeight: item.type == 'normal' ? 'normal' : '600',
                 },
               ]}
             >
@@ -158,6 +159,7 @@ function index(props) {
                 styles.title,
                 {
                   color: item.type == 'normal' ? colors.grey80 : colors.black,
+                  fontWeight: item.type == 'normal' ? 'normal' : '600',
                 },
               ]}
             >
@@ -166,64 +168,63 @@ function index(props) {
           </View>
         );
       })}
-      {
-        orderStatus!=1&& <View>
-        <View
-          style={{
-            marginTop: 30,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-          <Image
+      {orderStatus != 1 && (
+        <View>
+          <View
             style={{
-              width: s(28),
-              height: s(28),
-              resizeMode: 'contain',
-              marginRight: s(10),
+              marginTop: 30,
+              flexDirection: 'row',
+              alignItems: 'center',
             }}
-            source={images.shopcartInfoImage}
-          />
-          <View>
-            <Text
-              style={[
-                ApplicationStyles.screen.txtRegular,
-                { color: colors.grey80 },
-              ]}
-            >
-              Remember that you will get your product once the
-            </Text>
-            <View style={{ flexDirection: 'row' }}>
+          >
+            <Image
+              style={{
+                width: s(28),
+                height: s(28),
+                resizeMode: 'contain',
+                marginRight: s(10),
+              }}
+              source={images.shopcartInfoImage}
+            />
+            <View>
               <Text
                 style={[
                   ApplicationStyles.screen.txtRegular,
                   { color: colors.grey80 },
                 ]}
               >
-                number of slices has been reached
+                Remember that you will get your product once the
               </Text>
-              <TouchableOpacity>
+              <View style={{ flexDirection: 'row' }}>
                 <Text
                   style={[
                     ApplicationStyles.screen.txtRegular,
-                    { color: colors.secondary00, paddingLeft: 6 },
+                    { color: colors.grey80 },
                   ]}
                 >
-                  Learn more
+                  number of slices has been reached
                 </Text>
-              </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text
+                    style={[
+                      ApplicationStyles.screen.txtRegular,
+                      { color: colors.secondary00, paddingLeft: 6 },
+                    ]}
+                  >
+                    Learn more
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
+          <View style={{ marginTop: 20 }}>
+            <Switch
+              onSwitch={() => {}}
+              label="Use the same info as my personal details"
+            ></Switch>
+          </View>
         </View>
-        <View style={{ marginTop: 20 }}>
-          <Switch
-            onSwitch={() => {}}
-            label="Use the same info as my personal details"
-          ></Switch>
-        </View>
-        </View>
-      }
-     
+      )}
     </View>
   );
 }

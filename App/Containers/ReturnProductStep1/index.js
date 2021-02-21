@@ -45,7 +45,9 @@ function index(props) {
               <TouchableOpacity
                 onPress={() => {
                   if (prefer == 'Return the product and get a refund') {
-                    NavigationService.navigate('RefundScreen');
+                    NavigationService.navigate('RefundScreen', {
+                      cancel: false,
+                    });
                   } else {
                     NavigationService.navigate('AskForReplacementScreen');
                   }

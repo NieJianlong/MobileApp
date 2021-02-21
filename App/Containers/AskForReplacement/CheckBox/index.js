@@ -47,14 +47,16 @@ function index(props) {
           )}
           <View>
             <Text style={ApplicationStyles.screen.heading5Bold}>{label}</Text>
-            <Text
-              style={[
-                ApplicationStyles.screen.heading5Bold,
-                { color: colors.grey60 },
-              ]}
-            >
-              {sublabel}
-            </Text>
+            {sublabel ? (
+              <Text
+                style={[
+                  ApplicationStyles.screen.heading5Bold,
+                  { color: colors.grey60 },
+                ]}
+              >
+                {sublabel}
+              </Text>
+            ) : null}
           </View>
         </View>
 

@@ -115,6 +115,7 @@ const images = {
   orderCheckImage: require('../Images/myorders/checked.png'),
   orderUnCheckImage: require('../Images/myorders/unchecked.png'),
   orderUnLineImage: require('../Images/myorders/unline.png'),
+  orderCanceledImage: require('../Images/myorders/canceled.png'),
 };
 
 export default images;

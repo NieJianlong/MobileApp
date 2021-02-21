@@ -34,7 +34,9 @@ function index(props) {
   const [selectValue, setSelectValue] = useState(countries[0]);
   const {
     navigation: {
-      state: { params:{cancel} },
+      state: {
+        params: { cancel },
+      },
     },
   } = props;
   debugger;
@@ -101,10 +103,12 @@ function index(props) {
         <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <Button
             onPress={() => {
-              NavigationService.navigate('ReturnProductStep2Screen');
+              cancel
+                ? NavigationService.navigate('CancelOrderCompletedScreen')
+                : NavigationService.navigate('ReturnProductStep2Screen');
             }}
             color={colors.primary}
-            text={cancel?"CANCEL ORDER":"CONTINUE"}
+            text={cancel ? 'CANCEL ORDER' : 'CONTINUE'}
           />
         </View>
       </SafeAreaView>

@@ -60,6 +60,8 @@ import ReturnProductStep3Screen from '../Containers/ReturnProductStep3';
 import ReturnProductStep1Screen from '../Containers/ReturnProductStep1';
 import ReturnProductStep2Screen from '../Containers/ReturnProductStep2';
 import RefundScreen from '../Containers/Refund';
+import CancelOrderCompletedScreen from '../Containers/CancelOrderCompleted';
+import ReportGroupScreen from '../Containers/ReportGroup';
 import TabBar from './TabBar';
 
 const TabNav = createBottomTabNavigator(
@@ -135,11 +137,13 @@ const PrimaryNav = createStackNavigator(
     ReturnProductStep2Screen: { screen: ReturnProductStep2Screen },
     ReturnProductStep1Screen: { screen: ReturnProductStep1Screen },
     RefundScreen: { screen: RefundScreen },
+    CancelOrderCompletedScreen: { screen: CancelOrderCompletedScreen },
+    ReportGroupScreen: { screen: ReportGroupScreen },
   },
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'OrderGroupInfoScreen',
+    initialRouteName: 'ReportGroupScreen',
     navigationOptions: {},
   }
 );

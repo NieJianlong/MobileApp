@@ -32,6 +32,12 @@ const countries = [
 
 function index(props) {
   const [selectValue, setSelectValue] = useState(countries[0]);
+  const {
+    navigation: {
+      state: { params:{cancel} },
+    },
+  } = props;
+  debugger;
   return (
     <View
       style={{
@@ -98,7 +104,7 @@ function index(props) {
               NavigationService.navigate('ReturnProductStep2Screen');
             }}
             color={colors.primary}
-            text="CONTINUE"
+            text={cancel?"CANCEL ORDER":"CONTINUE"}
           />
         </View>
       </SafeAreaView>

@@ -55,6 +55,8 @@ import ChatScreen from '../Containers/Chat';
 import OrderGroupInfoScreen from '../Containers/OrderGroupInfo';
 import TrackOrderScreen from '../Containers/TrackOrder';
 import CancelOrderScreen from '../Containers/CancelOrder';
+import AskForReplacementScreen from '../Containers/AskForReplacement';
+import ReturnProductStep3Screen from '../Containers/ReturnProductStep3';
 import TabBar from './TabBar';
 
 const TabNav = createBottomTabNavigator(
@@ -125,11 +127,13 @@ const PrimaryNav = createStackNavigator(
     OrderGroupInfoScreen: { screen: OrderGroupInfoScreen },
     TrackOrderScreen: { screen: TrackOrderScreen },
     CancelOrderScreen: { screen: CancelOrderScreen },
+    AskForReplacementScreen: { screen: AskForReplacementScreen },
+    ReturnProductStep3Screen: { screen: ReturnProductStep3Screen },
   },
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'OrderGroupInfoScreen',
+    initialRouteName: 'ReturnProductStep3Screen',
     navigationOptions: {},
   }
 );

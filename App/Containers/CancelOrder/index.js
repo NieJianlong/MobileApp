@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   View,
   ScrollView,
@@ -13,12 +13,15 @@ import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { AppBar, TextInput } from '../../Components';
+import { AppBar, Selector, TextInput } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import { AlertContext } from '../Root/index';
+import SelectPrefer from './SelectPrefer';
 
 function index(props) {
   const { dispatch } = useContext(AlertContext);
+  const [showPrefer, setShowPrefer] = useState(false);
+  const [prefer, setPrefer] = useState('');
   return (
     <View
       style={{
@@ -39,21 +42,9 @@ function index(props) {
         <AppBar
           rightButton={() => {
             return (
-              <TouchableOpacity
-                onPress={() => {
-                  NavigationService.goBack();
-                  dispatch({
-                    type: 'changAlertState',
-                    payload: {
-                      visible: true,
-                      message:
-                        "We'll study this and get back to you as soon as possible.",
-                      color: colors.success,
-                      title: 'Message sent!',
-                    },
-                  });
-                }}
-              >
+              <TouchableOpacity onPress={() => {
+                NavigationService.navigate('AskForReplacementScreen');
+              }}>
                 <Text
                   style={{
                     color: colors.primary,
@@ -61,7 +52,7 @@ function index(props) {
                     fontFamily: fonts.primary,
                   }}
                 >
-                  SUBMIT
+                  NEXT
                 </Text>
               </TouchableOpacity>
             );
@@ -90,10 +81,18 @@ function index(props) {
             Select one of the options for which you want to cancel the product
           </Text>
         </View>
-        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-          <TextInput
-            placeholder="Problem reason goes here"
-            style={{ marginTop: vs(12) }}
+        <ScrollView style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+          <Selector
+            style={{ marginTop: vs(15), marginBottom: vs(10) }}
+            placeholder={'Problem reason goes here'}
+            data={[
+              'The product is damaged',
+              'The product is damaged',
+              'The product is damaged',
+            ]}
+            onValueChange={(item) => {
+              setShowPrefer(true);
+            }}
           />
           <RNTextInput
             multiline={true}
@@ -112,7 +111,14 @@ function index(props) {
               paddingVertical: s(20),
             }}
           />
-        </View>
+          {showPrefer && (
+            <SelectPrefer
+              onChangeValue={(item) => {
+                setPrefer(item);
+              }}
+            />
+          )}
+        </ScrollView>
       </SafeAreaView>
     </View>
   );

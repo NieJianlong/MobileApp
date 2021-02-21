@@ -16,6 +16,7 @@ import colors from '../../Themes/Colors';
 import { AppBar, Button, SearchBox } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import CheckBox from '../AskForReplacement/CheckBox';
+import Summary from './Summary';
 import metrics from '../../Themes/Metrics';
 const countries = [
   {
@@ -92,6 +93,7 @@ function index(props) {
           right: 0,
         }}
       >
+        <Summary />
         <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <Button
             onPress={() => {

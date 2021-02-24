@@ -88,6 +88,6 @@ const styles = ScaledSheet.create({
     fontFamily: fonts.primary,
     fontSize: '16@s',
     color: colors.black,
-    fontWeight: '600',
+    fontWeight: '400',
   },
 });

@@ -147,7 +147,14 @@ function index(props) {
           }}
         >
           <Button
-            onPress={() => params.removeCallback()}
+            onPress={() => {
+              if (params) {
+                if(typeof params.removeCallback=='function'){
+                  params.removeCallback()
+                }
+              }
+             
+            }}
             textColor="white"
             text="ADD NEW ADDRESS"
             backgroundColor={colors.grey80}

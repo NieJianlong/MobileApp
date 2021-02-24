@@ -149,7 +149,13 @@ function index(props) {
           }}
         >
           <Button
-            onPress={() => params.removeCallback()}
+             onPress={() => {
+              if (params) {
+                if(typeof params.removeCallback=='function'){
+                  params.removeCallback()
+                }
+              }
+            }}
             textColor="white"
             text="ADD  NEW PAYMENT METHOD"
             backgroundColor={colors.grey80}

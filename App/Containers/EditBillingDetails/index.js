@@ -237,7 +237,7 @@ function index(props) {
         >
           <View style={styles.bodyContainer}>
             <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
-            1 Click Purchasing preference
+              1 Click Purchasing preference
             </Text>
             <View style={{ marginTop: 20 }}>
               <Switch label="Use the same info as my personal details"></Switch>
@@ -272,7 +272,13 @@ function index(props) {
           }}
         >
           <Button
-            onPress={() => params.removeCallback()}
+            onPress={() => {
+              if (params) {
+                if(typeof params.removeCallback=='function'){
+                  params.removeCallback()
+                }
+              }
+            }}
             textColor={colors.grey80}
             text="REMOVE BILLING DETAILS"
             backgroundColor="transparent"

@@ -15,7 +15,6 @@ import ImagePicker from 'react-native-image-crop-picker'
 import styles from './styles'
 
 import {
-    ProductSearchBox,
     AppBar,
     StarRating,
     TextInput,

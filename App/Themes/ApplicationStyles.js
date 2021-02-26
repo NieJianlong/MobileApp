@@ -75,6 +75,13 @@ const ApplicationStyles = {
       color: Colors.black,
       fontWeight: '600'
     },
+    heading1Bold: {
+      fontSize: s(30),
+      fontFamily: Fonts.primary,
+      color: Colors.black,
+      fontWeight: '600',
+      lineHeight: s(38)
+    },
     heading2Bold: {
       fontSize: s(24),
       fontFamily: Fonts.primary,

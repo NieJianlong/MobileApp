@@ -75,11 +75,19 @@ const ApplicationStyles = {
       color: Colors.black,
       fontWeight: '600'
     },
+    heading1Bold: {
+      fontSize: s(30),
+      fontFamily: Fonts.primary,
+      color: Colors.black,
+      fontWeight: '600',
+      lineHeight: s(38)
+    },
     heading2Bold: {
       fontSize: s(24),
       fontFamily: Fonts.primary,
       color: Colors.black,
-      fontWeight: '600'
+      fontWeight: '600',
+      lineHeight: s(32)
     },
     heading3Bold: {
       fontSize: s(17),
@@ -88,7 +96,7 @@ const ApplicationStyles = {
       fontWeight: '600'
     },
     heading4Bold: {
-      fontSize: s(14),
+      fontSize: s(15),
       fontFamily: Fonts.primary,
       color: Colors.black,
       fontWeight: '600'

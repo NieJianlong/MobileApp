@@ -5,6 +5,7 @@ import { vs, s, ScaledSheet } from 'react-native-size-matters';
 
 import images from '../../../Themes/Images';
 import colors from '../../../Themes/Colors';
+import fonts from '../../../Themes/Fonts';
 
 function index(props) {
   const { orderStatus } = props;

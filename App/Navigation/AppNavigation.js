@@ -18,6 +18,8 @@ import ReportScreen from '../Containers/Explore/Report';
 import OrderPlacedScreen from '../Containers/Explore/OrderPlaced';
 import OrderScreen from '../Containers/Orders/MainScreen'
 import GroupInfoScreen from '../Containers/Orders/GroupInfo'
+import OrderDetailScreen from '../Containers/Orders/OrderDetail'
+import InvoiceScreen from '../Containers/Orders/Invoice'
 import LoginScreen from '../Containers/Login';
 import RegisterScreen from '../Containers/Register';
 import LegalScreen from '../Containers/Legal';
@@ -83,6 +85,8 @@ const PrimaryNav = createStackNavigator(
     RateOrderScreen: { screen: RateOrderScreen },
     ReportScreen: { screen: ReportScreen },
     OrderPlacedScreen: { screen: OrderPlacedScreen },
+    OrderDetailScreen: { screen: OrderDetailScreen },
+    InvoiceScreen: { screen: InvoiceScreen },
     GroupInfoScreen: { screen: GroupInfoScreen },
     LoginScreen: { screen: LoginScreen },
     RegisterScreen: { screen: RegisterScreen },

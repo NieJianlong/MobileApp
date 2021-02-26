@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import colors from '../../../Themes/Colors';
+import fonts from '../../../Themes/Fonts';
 import { AppBar, Button, Switch } from '../../../Components';
 
 import images from '../../../Themes/Images';

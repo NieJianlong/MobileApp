@@ -96,7 +96,7 @@ const ApplicationStyles = {
       fontWeight: '600'
     },
     heading4Bold: {
-      fontSize: s(14),
+      fontSize: s(15),
       fontFamily: Fonts.primary,
       color: Colors.black,
       fontWeight: '600'

@@ -46,9 +46,9 @@ class GroupInfoScreen extends Component {
         )
     }
 
-    renderAction = (icon, text) => {
+    renderAction = (icon, text, action) => {
         return (
-            <TouchableOpacity style={styles.actionContainer}>
+            <TouchableOpacity onPress={action} style={styles.actionContainer}>
                 <View style={styles.row}>
                     <Image resizeMode={'contain'} source={icon} style={styles.actionIcon} />
 
@@ -63,8 +63,8 @@ class GroupInfoScreen extends Component {
     renderActions() {
         return (
             <View>
-                {this.renderAction(Images.packageMed, 'Order details')}
-                {this.renderAction(Images.invoice, 'Invoice')}
+                {this.renderAction(Images.packageMed, 'Order details', () => NavigationService.navigate('OrderDetailScreen'))}
+                {this.renderAction(Images.invoice, 'Invoice', () => NavigationService.navigate('InvoiceScreen'))}
                 {this.renderAction(Images.star, 'Write a review about the product')}
                 {this.renderAction(Images.user, 'Evaluate the seller')}
             </View>

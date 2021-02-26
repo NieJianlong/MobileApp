@@ -66,7 +66,7 @@ class GroupInfoScreen extends Component {
                 {this.renderAction(Images.packageMed, 'Order details', () => NavigationService.navigate('OrderDetailScreen'))}
                 {this.renderAction(Images.invoice, 'Invoice', () => NavigationService.navigate('InvoiceScreen'))}
                 {this.renderAction(Images.star, 'Write a review about the product')}
-                {this.renderAction(Images.user, 'Evaluate the seller')}
+                {this.renderAction(Images.user, 'Evaluate the seller', () => NavigationService.navigate('RateSellerScreen'))}
             </View>
         )
     }

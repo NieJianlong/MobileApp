@@ -18,6 +18,7 @@ import {
     BottomSheetBackground
 } from '../../../Components'
 import CheckBox from '../Components/CheckBox'
+import SearchBox from '../Components/SearchBox'
 import NavigationService from '../../../Navigation/NavigationService'
 import { Colors, Images } from '../../../Themes'
 
@@ -34,6 +35,7 @@ class OrderScreen extends Component {
             sortOption: 0,
 
             showFilterSheet: false,
+            isSearching: false,
         }
     }
 
@@ -82,28 +84,36 @@ class OrderScreen extends Component {
     }
 
     renderHeader() {
-        return (
-            <View style={styles.header}>
-                <View style={styles.icSearch} />
+        if (this.state.isSearching) {
+            return (
+                <View style={styles.header}>
+                    <SearchBox
+                        onPressBack={() => this.setState({ isSearching: false })}
+                    />
+                </View>
+            )
+        } else {
+            return (
+                <View style={styles.header}>
+                    <View style={styles.icSearch} />
 
-                <Image source={Images.logo3} style={styles.logo} resizeMode={'contain'} />
+                    <Image source={Images.logo3} style={styles.logo} resizeMode={'contain'} />
 
-                {
-                    this.state.hasOrders ?
-                        <TouchableOpacity
-                            onPress={() => {
-                                // NavigationService.navigate('ProductSearchScreen', {
-                                //     onSearch: this.onSearch
-                                // })
-                            }}
-                        >
-                            <Image source={Images.search} style={styles.icSearch} />
-                        </TouchableOpacity> :
-                        <View style={styles.icSearch} />
-                }
+                    {
+                        this.state.hasOrders ?
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.setState({ isSearching: true })
+                                }}
+                            >
+                                <Image source={Images.search} style={styles.icSearch} />
+                            </TouchableOpacity> :
+                            <View style={styles.icSearch} />
+                    }
 
-            </View>
-        )
+                </View>
+            )
+        }
     }
 
     renderNoOrder() {
@@ -182,26 +192,30 @@ class OrderScreen extends Component {
     }
 
     renderBody() {
-        return (
-            <View style={styles.bodyContainer}>
-                {
-                    this.state.hasOrders ?
-                        <ScrollView showsVerticalScrollIndicator={false}>
-                            <View style={styles.v1}>
-                                <Text style={styles.heading1Bold}>Chats</Text>
+        if (this.state.isSearching) {
 
-                                {this.renderFilter()}
-                            </View>
-                            <View style={{ height: vs(15) }} />
-                            {
-                                orders.map((item, index) => this.renderOrderItem(item, index))
-                            }
-                        </ScrollView> :
+        } else {
+            return (
+                <View style={styles.bodyContainer}>
+                    {
+                        this.state.hasOrders ?
+                            <ScrollView showsVerticalScrollIndicator={false}>
+                                <View style={styles.v1}>
+                                    <Text style={styles.heading1Bold}>Chats</Text>
 
-                        this.renderNoOrder()
-                }
-            </View>
-        )
+                                    {this.renderFilter()}
+                                </View>
+                                <View style={{ height: vs(15) }} />
+                                {
+                                    orders.map((item, index) => this.renderOrderItem(item, index))
+                                }
+                            </ScrollView> :
+
+                            this.renderNoOrder()
+                    }
+                </View>
+            )
+        }
     }
 
     render() {

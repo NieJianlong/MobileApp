@@ -84,7 +84,7 @@ const buttons = [
 function index(props) {
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <UserHeader needSafeArea></UserHeader>
 
       {/* All the items usercenter */}
@@ -133,7 +133,7 @@ const styles = ScaledSheet.create({
   },
   container: {
     height: '100%',
-    backgroundColor: Colors.background,
+    backgroundColor: 'red',
     marginTop: '10@vs',
   },
 });

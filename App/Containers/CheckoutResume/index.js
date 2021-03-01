@@ -49,7 +49,7 @@ function index(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView edges={['top', 'right', 'left', 'bottom']}>
         <AppBar
           title={orderStatus == 1 ? 'Order 782788' : 'Review your details'}

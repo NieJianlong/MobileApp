@@ -3,6 +3,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { View, StatusBar, SafeAreaView } from 'react-native';
 import { AppBar } from '../../Components';
 import ChatHeader from './ChatHeader';
+import colors from '../../Themes/Colors';
 
 function index() {
   const [messages, setMessages] = useState([]);
@@ -30,7 +31,7 @@ function index() {
 
   return (
     <View style={{ flex: 1 }}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView style={{ backgroundColor: 'white' }}>
         <ChatHeader />
       </SafeAreaView>

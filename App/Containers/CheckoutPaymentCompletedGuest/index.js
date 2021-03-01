@@ -39,7 +39,7 @@ function index(props) {
         backgroundColor: 'white',
       }}
     >
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <KeyboardAwareScrollView>
         <SafeAreaView>
           <View style={{ height: 25 }} />

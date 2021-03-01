@@ -82,7 +82,7 @@ function index(props) {
   return (
     <CartContext.Provider value={{ dispatch }}>
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
         <SafeAreaView
           style={styles.mainContainer}
           edges={['top', 'left', 'right']}

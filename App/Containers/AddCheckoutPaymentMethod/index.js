@@ -22,6 +22,7 @@ import styles from './styles';
 import images from '../../Themes/Images';
 import { ScrollView } from 'react-native-gesture-handler';
 import Nav from '../../Navigation/NavigationService';
+import colors from '../../Themes/Colors';
 
 function index(props) {
   const payments = [
@@ -69,7 +70,7 @@ function index(props) {
   } = props;
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}

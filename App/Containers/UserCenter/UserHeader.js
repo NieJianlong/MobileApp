@@ -54,6 +54,7 @@ function UserHeader(props) {
 function userInfo(needEdit) {
   return (
     <TouchableOpacity
+      style={{backgroundColor:'black'}}
       onPress={() => {
         NavigationService.navigate('UserInfoScreen', {});
       }}
@@ -137,7 +138,7 @@ const styles = ScaledSheet.create({
     marginTop: '15@s',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'blue',
   },
   avatar: {
     width: '56@s',
@@ -153,7 +154,7 @@ const styles = ScaledSheet.create({
   },
   signbtn: { marginTop: '20@vs' },
   headerContainer: {
-    backgroundColor: colors.background,
+    backgroundColor: 'yellow',
     justifyContent: 'space-around',
     paddingHorizontal: AppConfig.paddingHorizontal,
     paddingBottom: '15@vs',

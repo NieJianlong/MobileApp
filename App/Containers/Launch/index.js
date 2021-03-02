@@ -11,18 +11,22 @@ import styles from './styles'
 class LaunchScreen extends Component {
 
     componentDidMount() {
-        setTimeout(() => {
-            this.props.navigation.navigate('OnboardingScreen')
-        }, 2000)
+        // setTimeout(() => {
+        //     this.props.navigation.navigate('OnboardingScreen')
+        // }, 2000)
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <StatusBar barStyle='light-content' />
-                <Image 
-                    source={Images.logo2} 
-                    style={styles.logo} 
+                <StatusBar
+                    barStyle='light-content'
+                    translucent
+                    backgroundColor={'rgba(0,0,0,0.0)'}
+                />
+                <Image
+                    source={Images.logo2}
+                    style={styles.logo}
                     resizeMode={'contain'}
                 />
             </View>

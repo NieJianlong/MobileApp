@@ -6,6 +6,8 @@ import {
     Image
 } from 'react-native'
 import { s, ScaledSheet, vs } from 'react-native-size-matters'
+import NumberFormat from 'react-number-format'
+
 import { Fonts, Colors, ApplicationStyles, Images } from '../../../Themes'
 import AppConfig from '../../../Config/AppConfig'
 import NavigationService from '../../../Navigation/NavigationService'
@@ -45,12 +47,24 @@ function ProductItem(props) {
                                 <View style={styles.row}>
                                     <View style={styles.v3}>
                                         <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
-                                        <Text style={styles.txtRetailPrice}>${product.retailPrice}</Text>
+                                        <NumberFormat
+                                            thousandSeparator={true}
+                                            prefix={'$'}
+                                            value={product.retailPrice}
+                                            displayType={'text'}
+                                            renderText={text => <Text style={styles.txtRetailPrice}>{text}</Text>}
+                                        />
                                     </View>
 
                                     <View style={styles.v3}>
                                         <Text style={[styles.txtNoteBold, { color: Colors.black }]}>WHOLE SALE PRICE</Text>
-                                        <Text style={styles.txtWholesalePrice}>${product.wholesalePrice}</Text>
+                                        <NumberFormat
+                                            thousandSeparator={true}
+                                            prefix={'$'}
+                                            value={product.wholesalePrice}
+                                            displayType={'text'}
+                                            renderText={text => <Text style={styles.txtWholesalePrice}>{text}</Text>}
+                                        />
                                     </View>
 
                                     <View style={styles.percentOffContainer}>
@@ -70,12 +84,24 @@ function ProductItem(props) {
                                 <View style={styles.row}>
                                     <View style={styles.v3}>
                                         <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
-                                        <Text style={styles.txtRetailPrice}>${product.retailPrice}</Text>
+                                        <NumberFormat
+                                            thousandSeparator={true}
+                                            prefix={'$'}
+                                            value={product.retailPrice}
+                                            displayType={'text'}
+                                            renderText={text => <Text style={styles.txtRetailPrice}>{text}</Text>}
+                                        />
                                     </View>
 
                                     <View style={styles.v3}>
                                         <Text style={[styles.txtNoteBold, { color: Colors.black }]}>WHOLE SALE PRICE</Text>
-                                        <Text style={styles.txtWholesalePrice}>${product.wholesalePrice}</Text>
+                                        <NumberFormat
+                                            thousandSeparator={true}
+                                            prefix={'$'}
+                                            value={product.wholesalePrice}
+                                            displayType={'text'}
+                                            renderText={text => <Text style={styles.txtWholesalePrice}>{text}</Text>}
+                                        />
                                     </View>
 
                                     <View style={styles.percentOffContainer}>

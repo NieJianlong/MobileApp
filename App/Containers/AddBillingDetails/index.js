@@ -19,7 +19,7 @@ import {
   PasswordInput,
   Switch,
 } from '../../Components';
-import { Colors, Metrics } from '../../Themes';
+import { ApplicationStyles, Colors, Metrics } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
@@ -200,7 +200,6 @@ function index(props) {
               <TouchableOpacity
                 disabled={disable}
                 onPress={() => {
-                  debugger;
                   if (typeof params.callback == 'function') {
                     params.callback({});
                   }
@@ -208,7 +207,12 @@ function index(props) {
                   NavigationService.goBack();
                 }}
               >
-                <Text style={disable ? styles.disupdate : styles.update}>
+                <Text
+                  style={[
+                    ApplicationStyles.screen.heading5Bold,
+                    { opacity: disable ? 0.5 : 1 },
+                  ]}
+                >
                   SAVE
                 </Text>
               </TouchableOpacity>

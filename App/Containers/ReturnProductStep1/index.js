@@ -17,6 +17,7 @@ import { AppBar, Selector, TextInput } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import { AlertContext } from '../Root/index';
 import SelectPrefer from './SelectPrefer';
+import { ApplicationStyles } from '../../Themes';
 
 function index(props) {
   const { dispatch } = useContext(AlertContext);
@@ -53,13 +54,7 @@ function index(props) {
                   }
                 }}
               >
-                <Text
-                  style={{
-                    color: colors.primary,
-                    fontSize: vs(12),
-                    fontFamily: fonts.primary,
-                  }}
-                >
+                <Text style={[ApplicationStyles.screen.heading5Bold]}>
                   NEXT
                 </Text>
               </TouchableOpacity>

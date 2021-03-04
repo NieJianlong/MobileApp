@@ -1,34 +1,23 @@
 import React, { useState } from 'react';
 import {
   View,
-  ScrollView,
   TouchableOpacity,
   Text,
-  Image,
   SafeAreaView,
   StatusBar,
-  FlatList,
   SectionList,
 } from 'react-native';
 import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { AppBar, SearchBox } from '../../Components';
+import { AppBar } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import CheckBox from '../Explore/Components/CheckBox';
 import metrics from '../../Themes/Metrics';
-import { ApplicationStyles, Colors, Fonts } from '../../Themes';
-
-const countries = () =>
-  [0, 1, 2, 3, 4, 5, 6, 7, 8].map((item) => `Country ${item}`);
-
-const languages = () =>
-  [0, 1, 2, 3, 4, 5, 6, 7, 8].map((item) => `Language ${item}`);
+import { ApplicationStyles } from '../../Themes';
 
 function index(props) {
-  const [selectValue, setSelectValue] = useState('');
-
   const [state, setState] = useState({
     selected: {
       Size: '256GB',
@@ -86,13 +75,7 @@ function index(props) {
                   NavigationService.goBack();
                 }}
               >
-                <Text
-                  style={{
-                    color: colors.primary,
-                    fontSize: vs(12),
-                    fontFamily: fonts.primary,
-                  }}
-                >
+                <Text style={[ApplicationStyles.screen.heading5Bold]}>
                   SAVE
                 </Text>
               </TouchableOpacity>

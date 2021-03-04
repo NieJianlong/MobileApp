@@ -1,12 +1,4 @@
 /*
- * @Author: JianLong Nie
- * @Date: 2021-01-09 16:30:32
- * @LastEditTime: 2021-01-24 14:11:56
- * @LastEditors: Please set LastEditors
- * @Description: Text tips
- * @FilePath: /MobileApp/App/Containers/UserInfo/TextTip.js
- */
-/*
  * @Author: Jianlong Nie
  * @Date: 2021-01-09 13:03:18
  * @LastEditTime: 2021-01-09 14:34:12
@@ -23,12 +15,13 @@ import { Button } from '.';
 import colors from '../Themes/Colors';
 import metrics from '../Themes/Metrics';
 import { ApplicationStyles } from '../Themes';
+import PropTypes from 'prop-types';
 /**
  * @description:Prompt component, user user does not add address information, do not add payment information when the display
  * @param {*} props
  * @return {*}
  */
-function TextTip(props) {
+function EmptyReminder(props) {
   const { textTip, subTextTip, needButton, btnMsg, onPress, callback } = props;
   return (
     <View style={{ flex: 1, width: metrics.screenWidth }}>
@@ -47,7 +40,15 @@ function TextTip(props) {
   );
 }
 
-export default TextTip;
+EmptyReminder.propTypes = {
+  textTip: PropTypes.string,
+  onPress: PropTypes.any,
+  needButton: PropTypes.bool,
+  callback: PropTypes.func,
+  subTextTip: PropTypes.string,
+  btnMsg: PropTypes.string,
+};
+export default EmptyReminder;
 const styles = ScaledSheet.create({
   nosign: {
     fontSize: '22@s',

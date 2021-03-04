@@ -25,6 +25,7 @@ import images from '../../Themes/Images';
 import TextTip from '../../Components/EmptyReminder';
 import fonts from '../../Themes/Fonts';
 import NavigationService from '../../Navigation/NavigationService';
+import { ApplicationStyles } from '../../Themes';
 
 //Alert Context, which controls the display and hiding of an alert, for example, Add Address Success
 export const AlertContext = React.createContext({});
@@ -100,7 +101,9 @@ function index(props) {
                     });
                   }}
                 >
-                  <Text style={styles.update}>EDIT</Text>
+                  <Text style={[ApplicationStyles.screen.heading5Bold]}>
+                    EDIT
+                  </Text>
                 </TouchableOpacity>
               ) : null;
             }}

@@ -19,6 +19,7 @@ import metrics from '../../Themes/Metrics';
 import fonts from '../../Themes/Fonts';
 import { AddressTestData } from '../UserInfo/Config';
 import { AlertContext } from '../Root/index';
+import { ApplicationStyles } from '../../Themes';
 /**
  * @description: The user selects the shipping address page
  * @param {*} props
@@ -58,7 +59,9 @@ function index(props) {
                   });
                 }}
               >
-                <Text style={styles.update}>SAVE</Text>
+                <Text style={[ApplicationStyles.screen.heading5Bold]}>
+                  SAVE
+                </Text>
               </TouchableOpacity>
             );
           }}
@@ -149,11 +152,10 @@ function index(props) {
           <Button
             onPress={() => {
               if (params) {
-                if(typeof params.removeCallback=='function'){
-                  params.removeCallback()
+                if (typeof params.removeCallback == 'function') {
+                  params.removeCallback();
                 }
               }
-             
             }}
             textColor="white"
             text="ADD NEW ADDRESS"

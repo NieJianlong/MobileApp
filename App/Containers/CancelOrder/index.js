@@ -16,6 +16,7 @@ import colors from '../../Themes/Colors';
 import { AppBar, Selector, TextInput } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import { AlertContext } from '../Root/index';
+import { ApplicationStyles } from '../../Themes';
 
 function index(props) {
   const { dispatch } = useContext(AlertContext);
@@ -43,16 +44,10 @@ function index(props) {
             return (
               <TouchableOpacity
                 onPress={() => {
-                  NavigationService.navigate('RefundScreen',{cancel:true});
+                  NavigationService.navigate('RefundScreen', { cancel: true });
                 }}
               >
-                <Text
-                  style={{
-                    color: colors.primary,
-                    fontSize: vs(12),
-                    fontFamily: fonts.primary,
-                  }}
-                >
+                <Text style={[ApplicationStyles.screen.heading5Bold]}>
                   NEXT
                 </Text>
               </TouchableOpacity>

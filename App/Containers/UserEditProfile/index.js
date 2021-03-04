@@ -42,11 +42,11 @@ function index(props) {
     const keyboardHide = (e) => {
       setShowBottom(true);
     };
-    Keyboard.addListener('keyboardWillShow', keyboardShow);
-    Keyboard.addListener('keyboardWillHide', keyboardHide);
+    Keyboard.addListener('keyboardDidShow', keyboardShow);
+    Keyboard.addListener('keyboardDidHide', keyboardHide);
     return () => {
-      Keyboard.removeListener('keyboardWillShow', keyboardShow);
-      Keyboard.removeListener('keyboardWillHide', keyboardHide);
+      Keyboard.removeListener('keyboardDisShow', keyboardShow);
+      Keyboard.removeListener('keyboardDidHide', keyboardHide);
     };
   }, []);
   return (

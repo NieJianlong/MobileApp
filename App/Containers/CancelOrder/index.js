@@ -4,7 +4,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Text,
-  Image,
   SafeAreaView,
   StatusBar,
   TextInput as RNTextInput,
@@ -13,13 +12,12 @@ import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { AppBar, Selector, TextInput } from '../../Components';
+import { AppBar, Selector } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import { AlertContext } from '../Root/GlobalContext';
 import { ApplicationStyles } from '../../Themes';
 
-function index(props) {
-  const { dispatch } = useContext(AlertContext);
+function CancelOrder(props) {
   const [showPrefer, setShowPrefer] = useState(false);
   const [prefer, setPrefer] = useState('');
   return (
@@ -113,7 +111,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default CancelOrder;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

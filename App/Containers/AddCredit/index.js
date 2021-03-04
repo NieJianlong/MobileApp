@@ -1,40 +1,24 @@
-import React, { Component, useState, useEffect } from 'react';
-import {
-  View,
-  StatusBar,
-  Text,
-  Keyboard,
-  TouchableOpacity,
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StatusBar, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 import { vs } from 'react-native-size-matters';
-import {
-  AppBar,
-  Button,
-  TextInput,
-  PasswordInput,
-  Switch,
-} from '../../Components';
-import { ApplicationStyles, Colors, Metrics } from '../../Themes';
+import { AppBar, TextInput, Switch, RightButton } from '../../Components';
+import { ApplicationStyles } from '../../Themes';
 import styles from './styles';
-import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
-import images from '../../Themes/Images';
 
-function index(props) {
+function AddCredit(props) {
   const [name, setName] = useState('');
   const [cardNum, setCardNum] = useState('');
   const [date, setDate] = useState('');
   const [cvv, setCvv] = useState('');
   const [disable, setDisable] = useState(true);
-  const [hastitle, setHasTitle] = useState(false);
   useEffect(() => {
     if (
-      name.length == 0 ||
-      cardNum.length == 0 ||
-      date.length == 0 ||
-      cvv.length == 0
+      name.length === 0 ||
+      cardNum.length === 0 ||
+      date.length === 0 ||
+      cvv.length === 0
     ) {
       setDisable(true);
     } else {
@@ -91,7 +75,8 @@ function index(props) {
       >
         <AppBar
           rightButton={() => (
-            <TouchableOpacity
+            <RightButton
+              title="SAVE"
               disabled={disable}
               onPress={() => {
                 params.callback({
@@ -102,16 +87,7 @@ function index(props) {
                 });
                 // NavigationService.goBack();
               }}
-            >
-              <Text
-                style={[
-                  ApplicationStyles.screen.heading5Bold,
-                  disable ? styles.disupdate : styles.update,
-                ]}
-              >
-                SAVE
-              </Text>
-            </TouchableOpacity>
+            />
           )}
         />
         <View style={styles.bodyContainer}>
@@ -143,4 +119,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default AddCredit;

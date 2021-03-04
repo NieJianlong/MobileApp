@@ -22,7 +22,7 @@ import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
 import images from '../../Themes/Images';
 
-function index(props) {
+function AddNewAddress(props) {
   const [name, setName] = useState('');
   const [streetName, setStreetName] = useState('');
   const [streetNum, setStreetNum] = useState('');
@@ -32,28 +32,22 @@ function index(props) {
   const [pincode, setPincode] = useState('');
   const [country, setCountry] = useState('');
   const [disable, setDisable] = useState(true);
-  const [hastitle, setHasTitle] = useState(false);
   useEffect(() => {
     if (
-      name.length == 0 ||
-      streetName.length == 0 ||
-      door.length == 0 ||
-      city.length == 0 ||
-      mstate.length == 0 ||
-      pincode.length == 0 ||
-      country.length == 0
+      name.length === 0 ||
+      streetName.length === 0 ||
+      door.length === 0 ||
+      city.length === 0 ||
+      mstate.length === 0 ||
+      pincode.length === 0 ||
+      country.length === 0
     ) {
       setDisable(true);
     } else {
       setDisable(false);
     }
   }, [name, streetName, streetNum, door, city, mstate, pincode, country]);
-  const radioProps = {
-    text: 'Set as default address',
-    prefixIcon: images.userToggleOff,
-    backgroundColor: 'transparent',
-    textColor: colors.black,
-  };
+ 
   const inputs = [
     {
       placeholder: 'Address Name (ex. home)*',
@@ -191,4 +185,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default AddNewAddress;

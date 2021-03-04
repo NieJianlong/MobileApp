@@ -133,7 +133,7 @@ const styles = ScaledSheet.create({
   },
   container: {
     height: '100%',
-    backgroundColor: 'red',
+    backgroundColor: Colors.background,
     marginTop: '10@vs',
   },
 });

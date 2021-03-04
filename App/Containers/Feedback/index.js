@@ -18,7 +18,7 @@ import { AppBar, TextInput, Button } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import { AlertContext } from '../Root/index';
 import { Images } from '../../Themes';
-import TextTip from '../UserInfo/TextTip';
+import TextTip from '../../Components/EmptyReminder';
 
 const images = [Images.userLoveImage, Images.userMedImage, Images.userSadImage];
 

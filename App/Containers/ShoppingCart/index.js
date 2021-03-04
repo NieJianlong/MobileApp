@@ -22,7 +22,7 @@ import colors from '../../Themes/Colors';
 import images from '../../Themes/Images';
 import NavigationService from '../../Navigation/NavigationService';
 import { AlertContext } from '../Root/index';
-import TextTip from '../UserInfo/TextTip';
+import TextTip from '../../Components/EmptyReminder';
 
 //Alert Context, which controls the display and hiding of an alert, for example, Add Address Success
 export const CartContext = React.createContext({});

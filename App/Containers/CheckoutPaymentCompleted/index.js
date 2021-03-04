@@ -5,7 +5,7 @@ import { s } from 'react-native-size-matters';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
 import images from '../../Themes/Images';
-import TextTip from '../UserInfo/TextTip';
+import TextTip from '../../Components/EmptyReminder';
 import Inform from './Inform';
 
 function index(props) {

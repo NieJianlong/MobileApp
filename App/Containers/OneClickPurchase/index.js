@@ -63,7 +63,7 @@ function index(props) {
                 fontSize: s(14),
                 fontFamily: fonts.primary,
               }}
-            >{`This is an explanatory text on how this \n functionality works`}</Text>
+            >{`This is an explanatory text on how this functionality works`}</Text>
           </View>
           <Text
             style={[

@@ -14,13 +14,13 @@ import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
 import { AppBar } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
-import TextTip from '../UserInfo/TextTip';
+import TextTip from '../../Components/EmptyReminder';
 import images from '../../Themes/Images';
 
 function index(props) {
   const data = {
     textTip: 'Your order has been canceled',
-    subTextTip: 'You will receive the refund money in \n 3-5 business days',
+    subTextTip: 'You will receive the refund money in 3-5 business days',
     needButton: true,
     btnMsg: 'CONTINUE EXPLORING',
     onPress: '',

@@ -14,19 +14,15 @@
  * @Description: User haven't added a default purchase preference yet
  * @FilePath: /MobileApp/App/Containers/UserInfo/NoPurchase.js
  */
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScaledSheet, s, vs } from 'react-native-size-matters';
-import Fonts from '../../Themes/Fonts';
-import AppConfig from '../../Config/AppConfig';
-import { Button } from '../../Components';
-import fonts from '../../Themes/Fonts';
-import colors from '../../Themes/Colors';
-import NavigationService from '../../Navigation/NavigationService';
-import images from '../../Themes/Images';
-import ListItem from './ListItem';
-import metrics from '../../Themes/Metrics';
+import React from 'react';
+import { View, Text } from 'react-native';
+import { ScaledSheet } from 'react-native-size-matters';
+import Fonts from '../Themes/Fonts';
+import AppConfig from '../Config/AppConfig';
+import { Button } from '.';
+import colors from '../Themes/Colors';
+import metrics from '../Themes/Metrics';
+import { ApplicationStyles } from '../Themes';
 /**
  * @description:Prompt component, user user does not add address information, do not add payment information when the display
  * @param {*} props
@@ -37,7 +33,9 @@ function TextTip(props) {
   return (
     <View style={{ flex: 1, width: metrics.screenWidth }}>
       <View style={styles.headerContainer}>
-        <Text style={styles.nosign}>{textTip}</Text>
+        <Text style={[ApplicationStyles.screen.heading4Bold, styles.nosign]}>
+          {textTip}
+        </Text>
         <Text style={[styles.subTextTip]}>{subTextTip}</Text>
         <View style={styles.signbtn}>
           {needButton && (
@@ -54,8 +52,6 @@ const styles = ScaledSheet.create({
   nosign: {
     fontSize: '22@s',
     textAlign: 'center',
-    fontFamily: Fonts.primary,
-    fontWeight: 'bold',
     marginTop: '25@vs',
   },
   subTextTip: {

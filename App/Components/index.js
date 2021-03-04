@@ -19,6 +19,7 @@ import SegmentedControl from './SegmentedControl';
 import ProductSearchBox from './ProductSearchBox';
 import Selector from './Selector';
 import SearchBox from './SearchBox';
+import EmptyReminder from './EmptyReminder';
 
 export {
   BottomSheet,
@@ -42,4 +43,5 @@ export {
   ProductSearchBox,
   Selector,
   SearchBox,
+  EmptyReminder,
 };

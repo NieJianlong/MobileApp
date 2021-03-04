@@ -85,7 +85,9 @@ function index(props) {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <UserHeader needSafeArea></UserHeader>
+      <View style={{ marginTop: vs(10) }}>
+        <UserHeader needSafeArea></UserHeader>
+      </View>
 
       {/* All the items usercenter */}
       <View style={styles.itemContainer}>
@@ -134,7 +136,6 @@ const styles = ScaledSheet.create({
   container: {
     height: '100%',
     backgroundColor: Colors.background,
-    marginTop: '10@vs',
   },
 });
 export default index;

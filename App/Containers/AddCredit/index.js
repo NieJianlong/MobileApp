@@ -77,7 +77,7 @@ function AddCredit(props) {
           rightButton={() => (
             <RightButton
               title="SAVE"
-              disabled={disable}
+              disable={disable}
               onPress={() => {
                 params.callback({
                   name,

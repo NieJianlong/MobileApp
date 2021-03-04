@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, Keyboard, TouchableOpacity } from 'react-native';
 import { ScaledSheet, s } from 'react-native-size-matters';
 import { SafeAreaView } from 'react-navigation';
-import { AppBar, MaterialTextInput } from '../../Components';
+import { AppBar, MaterialTextInput, RightButton } from '../../Components';
 import AppConfig from '../../Config/AppConfig';
 import Colors from '../../Themes/Colors';
 import colors from '../../Themes/Colors';
@@ -32,11 +32,10 @@ const inputs = [
  * @param {*} props
  * @return {*}
  */
-function index(props) {
+function UserEditProfile(props) {
   const [showBottom, setShowBottom] = useState(true);
   useEffect(() => {
     const keyboardShow = (e) => {
-      debugger;
       setShowBottom(false);
     };
     const keyboardHide = (e) => {
@@ -53,16 +52,8 @@ function index(props) {
     <View style={styles.container}>
       <SafeAreaView>
         <AppBar
-          rightButton={() => {
-            return (
-              <TouchableOpacity onPress={() => {}}>
-                <Text style={[ApplicationStyles.screen.heading4Bold]}>
-                  SAVE
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
-        ></AppBar>
+          rightButton={() => <RightButton title="SAVE" onPress={() => {}} />}
+        />
       </SafeAreaView>
       <KeyboardAwareScrollView>
         <View style={styles.contentContainer}>
@@ -112,7 +103,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default UserEditProfile;
 
 const styles = ScaledSheet.create({
   save: {

@@ -7,11 +7,10 @@
  * @FilePath: /MobileApp/App/Containers/UserCenter/index.js
  */
 import React from 'react';
-import { View, Text, StatusBar } from 'react-native';
-import { ScaledSheet, s, vs } from 'react-native-size-matters';
+import { View, StatusBar } from 'react-native';
+import { ScaledSheet, vs } from 'react-native-size-matters';
 import Colors from '../../Themes/Colors';
 import { Button } from '../../Components';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Fonts from '../../Themes/Fonts';
 import AppConfig from '../../Config/AppConfig';
 import ItemBox from './ItemBox';
@@ -81,7 +80,7 @@ const buttons = [
  * @param {*} props
  * @return {*}
  */
-function index(props) {
+function UserCenter(props) {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
@@ -140,4 +139,4 @@ const styles = ScaledSheet.create({
     backgroundColor: Colors.background,
   },
 });
-export default index;
+export default UserCenter;

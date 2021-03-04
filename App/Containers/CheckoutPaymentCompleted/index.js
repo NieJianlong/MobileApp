@@ -8,7 +8,7 @@ import images from '../../Themes/Images';
 import TextTip from '../../Components/EmptyReminder';
 import Inform from './Inform';
 
-function index(props) {
+function CheckoutPaymentCompleted(props) {
   const data = {
     textTip: 'Your order has been \n processed sucessfully',
     subTextTip:
@@ -58,4 +58,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default CheckoutPaymentCompleted;

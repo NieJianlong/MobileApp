@@ -7,22 +7,21 @@
  * @FilePath: /MobileApp/App/Containers/DeleteAccountMessage/index.js
  */
 import React from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { ScaledSheet, s, vs } from 'react-native-size-matters';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { ScaledSheet } from 'react-native-size-matters';
 import { SafeAreaView } from 'react-navigation';
-import { AppBar, Button, TextInput } from '../../Components';
+import { AppBar, Button } from '../../Components';
 import AppConfig from '../../Config/AppConfig';
 import Colors from '../../Themes/Colors';
 import colors from '../../Themes/Colors';
 import fonts from '../../Themes/Fonts';
-import UserAvatar from '../UserCenter/UserAvatar';
+
 import NavigationService from '../../Navigation/NavigationService';
 import TextTip from '../../Components/EmptyReminder';
 import images from '../../Themes/Images';
 import metrics from '../../Themes/Metrics';
 
-function index(props) {
-  const { title, icon } = props;
+function DeleteAccountMessage(props) {
   const textTip = 'Are you sure you want to remove  your account?';
   const subTextTip =
     'This action cannot be undone, if you delete the  account all the data and information will be  deleted.';
@@ -35,7 +34,7 @@ function index(props) {
   return (
     <View style={styles.container}>
       <SafeAreaView>
-        <AppBar></AppBar>
+        <AppBar />
       </SafeAreaView>
       <Image style={styles.trash} source={images.userTrashImage}></Image>
       <TextTip {...param}></TextTip>
@@ -54,7 +53,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default DeleteAccountMessage;
 
 const styles = ScaledSheet.create({
   trash: {

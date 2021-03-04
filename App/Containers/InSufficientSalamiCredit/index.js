@@ -19,14 +19,16 @@ import images from '../../Themes/Images';
 import { ApplicationStyles } from '../../Themes';
 import metrics from '../../Themes/Metrics';
 
-function index(props) {
+function InSufficientSalamiCredit(props) {
   const payments = [
     {
       image: images.userPayMethod2Image,
       onPress: () => {
         NavigationService.navigate('AddCreditScreen', {
           callback: () => {
-            NavigationService.navigate('CheckoutResumeScreen',{orderStatus:0});
+            NavigationService.navigate('CheckoutResumeScreen', {
+              orderStatus: 0,
+            });
             // Nav.goBack();
           },
         });
@@ -173,7 +175,9 @@ function index(props) {
                       } else {
                         NavigationService.navigate('AddCreditScreen', {
                           callback: () => {
-                            NavigationService.navigate('CheckoutResumeScreen',{orderStatus:0});
+                            NavigationService.navigate('CheckoutResumeScreen', {
+                              orderStatus: 0,
+                            });
                             // Nav.goBack();
                           },
                         });
@@ -199,7 +203,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default InSufficientSalamiCredit;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

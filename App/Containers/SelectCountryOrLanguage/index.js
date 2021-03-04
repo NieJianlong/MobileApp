@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import {
   View,
-  ScrollView,
   TouchableOpacity,
   Text,
-  Image,
   SafeAreaView,
   StatusBar,
   FlatList,
@@ -24,7 +22,7 @@ const countries = () =>
 const languages = () =>
   [0, 1, 2, 3, 4, 5, 6, 7, 8].map((item) => `Language ${item}`);
 
-function index(props) {
+function SelectCountryOrLanguage(props) {
   const {
     navigation: {
       state: {
@@ -77,7 +75,6 @@ function index(props) {
             contentContainerStyle={{ paddingBottom: vs(44) }}
             data={key == 'country' ? countries() : languages()}
             renderItem={({ item }, index) => {
-              debugger;
               return (
                 <View
                   style={{ paddingHorizontal: AppConfig.paddingHorizontal }}
@@ -99,7 +96,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default SelectCountryOrLanguage;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

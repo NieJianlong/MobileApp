@@ -1,23 +1,14 @@
 import React, { useState } from 'react';
-import {
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Text,
-  Image,
-  SafeAreaView,
-  StatusBar,
-  FlatList,
-} from 'react-native';
+import { View, Text, SafeAreaView, StatusBar, FlatList } from 'react-native';
 import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { AppBar, Button, SearchBox } from '../../Components';
+import { AppBar, Button } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import CheckBox from '../AskForReplacement/CheckBox';
 import Summary from './Summary';
-import metrics from '../../Themes/Metrics';
+
 const countries = [
   {
     label: 'Shipping method',
@@ -31,7 +22,7 @@ const countries = [
   },
 ];
 
-function index(props) {
+function ReturnProductStep2(props) {
   const [selectValue, setSelectValue] = useState(countries[0]);
   return (
     <View
@@ -70,7 +61,6 @@ function index(props) {
             </View>
           }
           renderItem={({ item }, index) => {
-            debugger;
             return (
               <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
                 <View style={{ height: vs(12) }} />
@@ -108,7 +98,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default ReturnProductStep2;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

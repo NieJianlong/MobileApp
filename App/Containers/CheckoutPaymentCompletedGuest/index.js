@@ -1,15 +1,7 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StatusBar,
-  SafeAreaView,
-  ScrollView,
-  KeyboardAvoidingView,
-} from 'react-native';
+import { View, Text, Image, StatusBar, SafeAreaView } from 'react-native';
 import { s, vs } from 'react-native-size-matters';
-import { Button, PasswordInput, TextInput } from '../../Components';
+import { Button, PasswordInput } from '../../Components';
 import AppConfig from '../../Config/AppConfig';
 import { ApplicationStyles } from '../../Themes';
 import colors from '../../Themes/Colors';
@@ -19,7 +11,7 @@ import TextTip from '../../Components/EmptyReminder';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import NavigationService from '../../Navigation/NavigationService';
 
-function index(props) {
+function CheckoutPaymentCompletedGuest(props) {
   const data = {
     textTip: 'Your order has been processed sucessfully',
     subTextTip:
@@ -107,4 +99,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default CheckoutPaymentCompletedGuest;

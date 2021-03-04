@@ -1,10 +1,7 @@
 import React, { useContext } from 'react';
 import {
   View,
-  ScrollView,
-  TouchableOpacity,
   Text,
-  Image,
   SafeAreaView,
   StatusBar,
   TextInput as RNTextInput,
@@ -13,12 +10,11 @@ import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { AppBar, TextInput } from '../../Components';
+import { AppBar, RightButton, TextInput } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import { AlertContext } from '../Root/GlobalContext';
-import { ApplicationStyles } from '../../Themes';
 
-function index(props) {
+function CustomerSupport(props) {
   const { dispatch } = useContext(AlertContext);
   return (
     <View
@@ -38,30 +34,26 @@ function index(props) {
         edges={['top', 'right', 'left', 'bottom']}
       >
         <AppBar
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  NavigationService.goBack();
-                  dispatch({
-                    type: 'changAlertState',
-                    payload: {
-                      visible: true,
-                      message:
-                        "We'll study this and get back to you as soon as possible.",
-                      color: colors.success,
-                      title: 'Message sent!',
-                    },
-                  });
-                }}
-              >
-                <Text style={[ApplicationStyles.screen.heading5Bold]}>
-                  SUBMIT
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
+          rightButton={() => (
+            <RightButton
+              title="SUBMIT"
+              onPress={() => {
+                NavigationService.goBack();
+                dispatch({
+                  type: 'changAlertState',
+                  payload: {
+                    visible: true,
+                    message:
+                      "We'll study this and get back to you as soon as possible.",
+                    color: colors.success,
+                    title: 'Message sent!',
+                  },
+                });
+              }}
+            />
+          )}
         />
+
         <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <Text
             style={{
@@ -102,7 +94,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default CustomerSupport;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

@@ -213,11 +213,7 @@ const styles1 = ScaledSheet.create({
     backgroundColor: colors.background,
     flex: 1,
   },
-  update: {
-    color: colors.primary,
-    fontSize: '12@vs',
-    fontFamily: fonts.primary,
-  },
+
   itemTitle: {
     fontSize: '14@s',
     fontFamily: fonts.primary,

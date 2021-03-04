@@ -58,9 +58,4 @@ export default ScaledSheet.create({
     borderRadius: '4@s',
     backgroundColor: colors.primary,
   },
-  update: {
-    color: Colors.primary,
-    fontSize: '12@vs',
-    fontFamily: Fonts.primary,
-  },
 });

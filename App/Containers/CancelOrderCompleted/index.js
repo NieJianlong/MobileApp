@@ -1,15 +1,12 @@
 import React from 'react';
 import {
   View,
-  ScrollView,
   TouchableOpacity,
-  Text,
   Image,
   SafeAreaView,
   StatusBar,
 } from 'react-native';
-import AppConfig from '../../Config/AppConfig';
-import { vs, s, ScaledSheet } from 'react-native-size-matters';
+import { s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
 import { AppBar } from '../../Components';
@@ -17,7 +14,7 @@ import NavigationService from '../../Navigation/NavigationService';
 import TextTip from '../../Components/EmptyReminder';
 import images from '../../Themes/Images';
 
-function index(props) {
+function CancelOrderCompleted(props) {
   const data = {
     textTip: 'Your order has been canceled',
     subTextTip: 'You will receive the refund money in 3-5 business days',
@@ -82,7 +79,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default CancelOrderCompleted;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

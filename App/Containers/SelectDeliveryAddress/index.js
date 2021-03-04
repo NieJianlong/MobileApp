@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   StatusBar,
@@ -25,7 +25,7 @@ import { ApplicationStyles } from '../../Themes';
  * @param {*} props
  * @return {*}
  */
-function index(props) {
+function SelectDeliveryAddress(props) {
   const {
     navigation: {
       state: { params },
@@ -123,7 +123,7 @@ function index(props) {
                         </TouchableOpacity>
                         <TouchableOpacity
                           onPress={(item) => {
-                            showSheet();
+                            //();
                           }}
                         >
                           <Image
@@ -167,7 +167,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default SelectDeliveryAddress;
 const styles1 = ScaledSheet.create({
   itemBottom: {
     flexDirection: 'row',

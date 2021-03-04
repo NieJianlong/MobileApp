@@ -1,29 +1,19 @@
-import React, { Component, useState, useEffect } from 'react';
-import {
-  View,
-  StatusBar,
-  Text,
-  Keyboard,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  ScrollView,
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StatusBar, Text, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 import { vs, s } from 'react-native-size-matters';
 import {
   AppBar,
   Button,
   TextInput,
-  PasswordInput,
   Switch,
+  RightButton,
 } from '../../Components';
-import { ApplicationStyles, Colors, Metrics } from '../../Themes';
+import { ApplicationStyles, Metrics } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
-import images from '../../Themes/Images';
 import AppConfig from '../../Config/AppConfig';
 import metrics from '../../Themes/Metrics';
 
@@ -32,7 +22,7 @@ import metrics from '../../Themes/Metrics';
  * @param {*} props
  * @return {*}
  */
-function index(props) {
+function EditBillingDetails(props) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneOrEmailNum, setPhoneOrEmailNum] = useState('');
@@ -47,41 +37,21 @@ function index(props) {
   const [taxid, setTaxid] = useState('');
   // const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [disable, setDisable] = useState(true);
-  const [hastitle, setHasTitle] = useState(false);
-  // useEffect(() => {
-  //   const keyboardShow = (e) => {
-  //     console.log('====================================');
-  //     console.log('输出键盘高度：' + e.endCoordinates.height);
-  //     console.log('====================================');
-  //     setKeyboardHeight(e.endCoordinates.height);
-  //   };
-  //   const keyboardHide = (e) => {
-  //     setKeyboardHeight(0);
-  //   };
-  //   Keyboard.addListener('keyboardWillShow', keyboardShow);
-  //   Keyboard.addListener('keyboardWillHide', keyboardHide);
-  //   return () => {
-  //     Keyboard.removeListener('keyboardWillShow', keyboardShow);
-  //     Keyboard.removeListener('keyboardWillHide', keyboardHide);
-  //   };
-  // }, []);
+
   useEffect(() => {
-    console.log('====================================');
-    console.log('屏幕高度' + Metrics.screenHeight);
-    console.log('====================================');
     if (
-      firstName.length == 0 ||
-      lastName.length == 0 ||
-      phoneOrEmailNum.length == 0 ||
-      streetName.length == 0 ||
-      streetNum.length == 0 ||
-      door.length == 0 ||
-      city.length == 0 ||
-      mstate.length == 0 ||
-      postcode.length == 0 ||
-      country.length == 0 ||
-      company.length == 0 ||
-      taxid.length == 0
+      firstName.length === 0 ||
+      lastName.length === 0 ||
+      phoneOrEmailNum.length === 0 ||
+      streetName.length === 0 ||
+      streetNum.length === 0 ||
+      door.length === 0 ||
+      city.length === 0 ||
+      mstate.length === 0 ||
+      postcode.length === 0 ||
+      country.length === 0 ||
+      company.length === 0 ||
+      taxid.length === 0
     ) {
       setDisable(true);
     } else {
@@ -210,30 +180,19 @@ function index(props) {
         edges={['top', 'right', 'left', 'bottom']}
       >
         <AppBar
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                disabled={disable}
-                onPress={() => {
-                  debugger;
-                  if (typeof params.saveCallback == 'function') {
-                    params.saveCallback({});
-                  }
+          rightButton={() => (
+            <RightButton
+              title="SAVE"
+              disable={disable}
+              onPress={() => {
+                if (typeof params.saveCallback === 'function') {
+                  params.saveCallback({});
+                }
 
-                  NavigationService.goBack();
-                }}
-              >
-                <Text
-                  style={[
-                    ApplicationStyles.screen.heading5Bold,
-                    { opacity: disable ? 0.5 : 1 },
-                  ]}
-                >
-                  SAVE
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
+                NavigationService.goBack();
+              }}
+            />
+          )}
         />
         <KeyboardAwareScrollView
           keyboardVerticalOffset={50}
@@ -294,4 +253,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default EditBillingDetails;

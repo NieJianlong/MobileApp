@@ -1,26 +1,11 @@
-import React, { Component, useState, useEffect } from 'react';
-import {
-  View,
-  StatusBar,
-  Text,
-  Keyboard,
-  TouchableOpacity,
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StatusBar, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 import { vs } from 'react-native-size-matters';
-import {
-  AppBar,
-  Button,
-  TextInput,
-  PasswordInput,
-  Switch,
-} from '../../Components';
-import { ApplicationStyles, Colors, Metrics } from '../../Themes';
+import { AppBar, TextInput, Switch, RightButton } from '../../Components';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
-import images from '../../Themes/Images';
 
 function AddNewAddress(props) {
   const [name, setName] = useState('');
@@ -47,7 +32,7 @@ function AddNewAddress(props) {
       setDisable(false);
     }
   }, [name, streetName, streetNum, door, city, mstate, pincode, country]);
- 
+
   const inputs = [
     {
       placeholder: 'Address Name (ex. home)*',
@@ -122,39 +107,27 @@ function AddNewAddress(props) {
         edges={['top', 'right', 'left', 'bottom']}
       >
         <AppBar
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                disabled={disable}
-                onPress={() => {
-                  debugger;
-                  if (typeof params.callback == 'function') {
-                    params.callback({
-                      name,
-                      streetName,
-                      streetNum,
-                      door,
-                      city,
-                      mstate,
-                      pincode,
-                      country,
-                    });
-                  }
-
-                  NavigationService.goBack();
-                }}
-              >
-                <Text
-                  style={[
-                    ApplicationStyles.screen.heading5Bold,
-                    { opacity: disable ? 0.5 : 1 },
-                  ]}
-                >
-                  SAVE
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
+          rightButton={() => (
+            <RightButton
+              title="SAVE"
+              disable={disable}
+              onPress={() => {
+                if (typeof params.callback === 'function') {
+                  params.callback({
+                    name,
+                    streetName,
+                    streetNum,
+                    door,
+                    city,
+                    mstate,
+                    pincode,
+                    country,
+                  });
+                }
+                NavigationService.goBack();
+              }}
+            />
+          )}
         />
         <View style={styles.bodyContainer}>
           <Text style={styles.heading2Bold}>{params.title}</Text>

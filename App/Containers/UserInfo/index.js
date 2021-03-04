@@ -40,9 +40,6 @@ const initialState = {
   rightButtonShow: false,
 };
 function reducer(state, action) {
-  console.log('====================================');
-  console.log({ ...state, ...action.payload });
-  console.log('====================================');
   switch (action.type) {
     case 'changAlertState':
       return { ...state, ...action.payload };
@@ -59,7 +56,7 @@ function reducer(state, action) {
  * @param {*} props
  * @return {*}
  */
-function index(props) {
+function UserInfo(props) {
   const [
     { visible, message, color, onDismiss, title, showSheet, rightButtonShow },
     dispatch,
@@ -204,7 +201,7 @@ function renderSheet(sheetEl, dispatch) {
     </BottomSheet>
   );
 }
-export default index;
+export default UserInfo;
 
 const styles = ScaledSheet.create({
   credit: {

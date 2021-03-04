@@ -3,12 +3,10 @@ import {
   StatusBar,
   View,
   SafeAreaView,
-  FlatList,
   SectionList,
   TouchableOpacity,
   Text,
   Image,
-  Touchable,
 } from 'react-native';
 import Empty from './Empty';
 import AddressBar from './AddressBar';
@@ -75,7 +73,7 @@ function reducer(state, action) {
       throw new Error();
   }
 }
-function index(props) {
+function ShoppingCart(props) {
   const [paidDuringDelivery, setPaidDuringDeliver] = useState(false);
   const [{ datas }, dispatch] = useReducer(reducer, initialState);
   const sheetContext = useContext(AlertContext);
@@ -279,4 +277,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default ShoppingCart;

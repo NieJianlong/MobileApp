@@ -3,7 +3,6 @@ import {
   View,
   StatusBar,
   Text,
-  Keyboard,
   TouchableOpacity,
   Image,
   FlatList,
@@ -12,10 +11,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { vs, s } from 'react-native-size-matters';
-import { AppBar, Button, BottomSheet } from '../../Components';
+import { AppBar, BottomSheet } from '../../Components';
 import { Colors } from '../../Themes';
 import styles from './styles';
-import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
 import images from '../../Themes/Images';
 import AppConfig from '../../Config/AppConfig';
@@ -43,7 +41,7 @@ const invitedUsers = [
   },
 ];
 
-function index(props) {
+function SalamiCredit(props) {
   fall = new Animated.Value(0);
   const [showSheet, setShowSheet] = useState(false);
   const sheetEl = useRef(null);
@@ -94,7 +92,6 @@ function index(props) {
           keyExtractor={(item, index) => `list${index}`}
         ></FlatList>
         {showSheet && (
-          
           <TouchableWithoutFeedback onPress={() => {}}>
             <Animated.View
               style={{
@@ -253,4 +250,4 @@ function renderSheet(sheetEl, setShowSheet) {
     </View>
   );
 }
-export default index;
+export default SalamiCredit;

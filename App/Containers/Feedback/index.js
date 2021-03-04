@@ -1,20 +1,18 @@
 import React, { useContext } from 'react';
 import {
   View,
-  ScrollView,
   TouchableOpacity,
   Text,
   Image,
   SafeAreaView,
   StatusBar,
   TextInput as RNTextInput,
-  Touchable,
 } from 'react-native';
 import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { AppBar, TextInput, Button } from '../../Components';
+import { AppBar, TextInput, Button, RightButton } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import { AlertContext } from '../Root/GlobalContext';
 import { ApplicationStyles, Images } from '../../Themes';
@@ -22,7 +20,7 @@ import TextTip from '../../Components/EmptyReminder';
 
 const images = [Images.userLoveImage, Images.userMedImage, Images.userSadImage];
 
-function index(props) {
+function Feedback(props) {
   const { dispatch } = useContext(AlertContext);
   return (
     <View
@@ -42,86 +40,81 @@ function index(props) {
         edges={['top', 'right', 'left', 'bottom']}
       >
         <AppBar
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  // NavigationService.goBack();
-                  // dispatch({
-                  //   type: 'changAlertState',
-                  //   payload: {
-                  //     visible: true,
-                  //     message:
-                  //       "We'll study this and get back to you as soon as possible.",
-                  //     color: colors.success,
-                  //     title: 'Message sent!',
-                  //   },
-                  // });
+          rightButton={() => (
+            <RightButton
+              title="SUBMIT"
+              onPress={() => {
+                // NavigationService.goBack();
+                // dispatch({
+                //   type: 'changAlertState',
+                //   payload: {
+                //     visible: true,
+                //     message:
+                //       "We'll study this and get back to you as soon as possible.",
+                //     color: colors.success,
+                //     title: 'Message sent!',
+                //   },
+                // });
 
-                  dispatch({
-                    type: 'changSheetState',
-                    payload: {
-                      showSheet: true,
-                      height: 380,
-                      children: () => {
-                        return (
+                dispatch({
+                  type: 'changSheetState',
+                  payload: {
+                    showSheet: true,
+                    height: 380,
+                    children: () => {
+                      return (
+                        <View
+                          style={{
+                            flex: 1,
+                            alignItems: 'center',
+                          }}
+                        >
+                          <Image
+                            style={{
+                              marginTop: 20,
+                              height: s(113),
+                              width: s(113),
+                              resizeMode: 'contain',
+                            }}
+                            source={Images.userFacebookImage}
+                          />
                           <View
                             style={{
+                              // marginLeft: -AppConfig.paddingHorizontal,
                               flex: 1,
-                              alignItems: 'center',
                             }}
                           >
-                            <Image
-                              style={{
-                                marginTop: 20,
-                                height: s(113),
-                                width: s(113),
-                                resizeMode: 'contain',
+                            <TextTip
+                              textTip="Thanks for sharing!"
+                              subTextTip="Would you mind rating us in the App Store / Google Play?"
+                              needButton
+                              btnMsg="SURE!"
+                              onPress={() => {
+                                dispatch({
+                                  type: 'changSheetState',
+                                  payload: {
+                                    showSheet: false,
+                                  },
+                                });
                               }}
-                              source={Images.userFacebookImage}
+                            ></TextTip>
+                            <Button
+                              backgroundColor="transparent"
+                              textColor={colors.grey80}
+                              onPress={() => {
+                                NavigationService.navigate('');
+                              }}
+                              text={'NOT NOW'}
                             />
-                            <View
-                              style={{
-                                // marginLeft: -AppConfig.paddingHorizontal,
-                                flex: 1,
-                              }}
-                            >
-                              <TextTip
-                                textTip="Thanks for sharing!"
-                                subTextTip="Would you mind rating us in the App Store / Google Play?"
-                                needButton
-                                btnMsg="SURE!"
-                                onPress={() => {
-                                  dispatch({
-                                    type: 'changSheetState',
-                                    payload: {
-                                      showSheet: false,
-                                    },
-                                  });
-                                }}
-                              ></TextTip>
-                              <Button
-                                backgroundColor="transparent"
-                                textColor={colors.grey80}
-                                onPress={() => {
-                                  NavigationService.navigate('');
-                                }}
-                                text={'NOT NOW'}
-                              />
-                            </View>
                           </View>
-                        );
-                      },
+                        </View>
+                      );
                     },
-                  });
-                }}
-              >
-                <Text style={[ApplicationStyles.screen.heading5Bold]}>
-                  SUBMIT
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
+                  },
+                });
+              }}
+            />
+          )}
         />
         <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <Text
@@ -195,7 +188,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default Feedback;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

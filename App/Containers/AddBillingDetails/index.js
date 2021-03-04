@@ -182,7 +182,7 @@ function AddBillingDetails(props) {
             return (
               <RightButton
                 title="SAVE"
-                disabled={disable}
+                disable={disable}
                 onPress={() => {
                   if (typeof params.callback === 'function') {
                     params.callback({});

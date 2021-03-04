@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StatusBar,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
-import { AppBar, Button, Switch } from '../../Components';
+import { AppBar, Button } from '../../Components';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
@@ -18,14 +18,13 @@ import AppConfig from '../../Config/AppConfig';
 import metrics from '../../Themes/Metrics';
 import fonts from '../../Themes/Fonts';
 import { PaymentTestData } from '../UserInfo/Config';
-import { set } from 'react-native-reanimated';
 import { ApplicationStyles } from '../../Themes';
 /**
  * @description: 1 Click purchase Screen
  * @param {*} props
  * @return {*}
  */
-function index(props) {
+function OneClickPurchase(props) {
   const {
     navigation: {
       state: { params },
@@ -169,7 +168,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default OneClickPurchase;
 const styles1 = ScaledSheet.create({
   itemBottom: {
     flexDirection: 'row',

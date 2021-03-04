@@ -1,11 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { View, StatusBar, SafeAreaView } from 'react-native';
-import { AppBar } from '../../Components';
 import ChatHeader from './ChatHeader';
 import colors from '../../Themes/Colors';
 
-function index() {
+function Chat() {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
@@ -45,4 +44,4 @@ function index() {
     </View>
   );
 }
-export default index;
+export default Chat;

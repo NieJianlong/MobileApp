@@ -1,25 +1,12 @@
 import React, { useRef, useState } from 'react';
-import {
-  View,
-  StatusBar,
-  Text,
-  Keyboard,
-  TouchableOpacity,
-  Image,
-  FlatList,
-  Animated,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { View, StatusBar, Text, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { vs, s } from 'react-native-size-matters';
-import { AppBar, Button, BottomSheet } from '../../Components';
-import { Colors } from '../../Themes';
+import { s } from 'react-native-size-matters';
+import { AppBar } from '../../Components';
 import styles from './styles';
-import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
 import images from '../../Themes/Images';
 import AppConfig from '../../Config/AppConfig';
-import metrics from '../../Themes/Metrics';
 import DynamicTabView from '../UserInfo/DynamicTabView';
 import CountryLanguage from './CountryLanguage';
 import Notifications from './Notifications';
@@ -47,7 +34,7 @@ export const MenuConfig = [
   },
 ];
 
-function index(props) {
+function Setting(props) {
   fall = new Animated.Value(0);
   const [defaultIndex, setDefaultIndex] = useState(0);
   const sheetEl = useRef(null);
@@ -109,4 +96,4 @@ function listHeader(setShowSheet) {
   );
 }
 
-export default index;
+export default Setting;

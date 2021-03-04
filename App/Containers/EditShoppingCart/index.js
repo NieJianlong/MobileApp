@@ -17,7 +17,7 @@ import CheckBox from '../Explore/Components/CheckBox';
 import metrics from '../../Themes/Metrics';
 import { ApplicationStyles } from '../../Themes';
 
-function index(props) {
+function EditShoppingCart(props) {
   const [state, setState] = useState({
     selected: {
       Size: '256GB',
@@ -154,7 +154,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default EditShoppingCart;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

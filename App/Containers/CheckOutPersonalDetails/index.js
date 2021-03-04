@@ -1,31 +1,20 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StatusBar,
   Text,
   Keyboard,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  ScrollView,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { isIphoneX } from 'react-native-iphone-x-helper';
-import { vs, s } from 'react-native-size-matters';
-import {
-  AppBar,
-  Button,
-  TextInput,
-  PasswordInput,
-  Switch,
-} from '../../Components';
+import { vs } from 'react-native-size-matters';
+import { AppBar, TextInput, Switch, RightButton } from '../../Components';
 import { ApplicationStyles, Colors, Metrics } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
-import colors from '../../Themes/Colors';
-import images from '../../Themes/Images';
 
-function index(props) {
+function CheckOutPersonalDetails(props) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneOrEmailNum, setPhoneOrEmailNum] = useState('');
@@ -40,12 +29,9 @@ function index(props) {
   const [taxid, setTaxid] = useState('');
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [disable, setDisable] = useState(true);
-  const [hastitle, setHasTitle] = useState(false);
+
   useEffect(() => {
     const keyboardShow = (e) => {
-      console.log('====================================');
-      console.log('输出键盘高度：' + e.endCoordinates.height);
-      console.log('====================================');
       setKeyboardHeight(e.endCoordinates.height);
     };
     const keyboardHide = (e) => {
@@ -59,20 +45,17 @@ function index(props) {
     };
   }, []);
   useEffect(() => {
-    console.log('====================================');
-    console.log('屏幕高度' + Metrics.screenHeight);
-    console.log('====================================');
     if (
-      firstName.length == 0 ||
-      lastName.length == 0 ||
-      phoneOrEmailNum.length == 0 ||
-      streetName.length == 0 ||
-      streetNum.length == 0 ||
-      door.length == 0 ||
-      city.length == 0 ||
-      mstate.length == 0 ||
-      postcode.length == 0 ||
-      country.length == 0
+      firstName.length === 0 ||
+      lastName.length === 0 ||
+      phoneOrEmailNum.length === 0 ||
+      streetName.length === 0 ||
+      streetNum.length === 0 ||
+      door.length === 0 ||
+      city.length === 0 ||
+      mstate.length === 0 ||
+      postcode.length === 0 ||
+      country.length === 0
     ) {
       setDisable(true);
     } else {
@@ -180,28 +163,20 @@ function index(props) {
         edges={['top', 'right', 'left', 'bottom']}
       >
         <AppBar
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                disabled={disable}
-                onPress={() => {
-                  NavigationService.navigate('CheckoutBillingDetailsScreen', {
-                    title: 'Please enter your billing details',
-                  });
-                }}
-              >
-                <Text
-                  style={[
-                    ApplicationStyles.screen.heading5Bold,
-                    { opacity: disable ? 0.5 : 1 },
-                  ]}
-                >
-                  NEXT
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
+          rightButton={() => (
+            <RightButton
+              title="NEXT"
+              disable={disable}
+              onPress={() => {
+                NavigationService.navigate('CheckoutBillingDetailsScreen', {
+                  title: 'Please enter your billing details',
+                });
+                // NavigationService.goBack();
+              }}
+            />
+          )}
         />
+
         <KeyboardAwareScrollView
           keyboardVerticalOffset={50}
           behavior="position"
@@ -242,4 +217,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default CheckOutPersonalDetails;

@@ -68,7 +68,6 @@ import RefundScreen from '../Containers/Refund';
 import CancelOrderCompletedScreen from '../Containers/CancelOrderCompleted';
 import ReportGroupScreen from '../Containers/ReportGroup';
 import TabBar from './TabBar';
-import { CardStyleInterpolators } from 'react-navigation-stack';
 
 const TabNav = createBottomTabNavigator(
   {

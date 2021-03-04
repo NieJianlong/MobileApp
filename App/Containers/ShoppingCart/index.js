@@ -21,7 +21,7 @@ import AppConfig from '../../Config/AppConfig';
 import colors from '../../Themes/Colors';
 import images from '../../Themes/Images';
 import NavigationService from '../../Navigation/NavigationService';
-import { AlertContext } from '../Root/index';
+import { AlertContext } from '../Root/GlobalContext';
 import TextTip from '../../Components/EmptyReminder';
 
 //Alert Context, which controls the display and hiding of an alert, for example, Add Address Success
@@ -82,7 +82,10 @@ function index(props) {
   return (
     <CartContext.Provider value={{ dispatch }}>
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor={colors.background}
+        />
         <SafeAreaView
           style={styles.mainContainer}
           edges={['top', 'left', 'right']}
@@ -266,7 +269,7 @@ function index(props) {
               ) : null;
             }}
             renderItem={({ item }) => {
-              return <CartItem product={item} />;
+              return <CartItem dispatch={dispatch} product={item} />;
             }}
             keyExtractor={(item, index) => `lll${index}`}
           />

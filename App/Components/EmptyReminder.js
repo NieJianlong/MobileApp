@@ -11,11 +11,12 @@ import { View, Text } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import Fonts from '../Themes/Fonts';
 import AppConfig from '../Config/AppConfig';
-import { Button } from '.';
+
 import colors from '../Themes/Colors';
 import metrics from '../Themes/Metrics';
 import { ApplicationStyles } from '../Themes';
 import PropTypes from 'prop-types';
+import Button from './Button';
 /**
  * @description:Prompt component, user user does not add address information, do not add payment information when the display
  * @param {*} props

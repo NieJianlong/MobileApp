@@ -91,14 +91,16 @@ function index(props) {
 
       {/* All the items usercenter */}
       <View style={styles.itemContainer}>
-        {items.map((item, index) => (
-          <ItemBox key={index} {...item}></ItemBox>
+        {items.map((item, i) => (
+          <View key={i}>
+            <ItemBox {...item}></ItemBox>
+          </View>
         ))}
       </View>
       <View style={styles.buttonContainer}>
-        {buttons.map((item, index) => (
-          <View style={{ marginTop: 15 }}>
-            <Button key={`button` + index} {...item}></Button>
+        {buttons.map((item, i) => (
+          <View key={`button` + i} style={{ marginTop: 15 }}>
+            <Button {...item}></Button>
           </View>
         ))}
       </View>

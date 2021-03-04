@@ -1,10 +1,4 @@
-import React, {
-  Component,
-  useContext,
-  useEffect,
-  useReducer,
-  useRef,
-} from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 import {
   View,
   StatusBar,
@@ -14,9 +8,9 @@ import {
 import { Alert, BottomSheet } from '../../Components';
 import AppNavigation from '../../Navigation/AppNavigation';
 import colors from '../../Themes/Colors';
-import { ScaledSheet, s, vs } from 'react-native-size-matters';
+import { vs } from 'react-native-size-matters';
+import { AlertContext } from './GlobalContext';
 
-export const AlertContext = React.createContext({});
 const initialState = {
   alert: {
     visible: false,

@@ -22,7 +22,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import colors from '../../Themes/Colors';
 import HorizontalMenu from './HorizontalMenu';
 import images from '../../Themes/Images';
-import TextTip from './TextTip';
+import TextTip from '../../Components/EmptyReminder';
 import fonts from '../../Themes/Fonts';
 import NavigationService from '../../Navigation/NavigationService';
 
@@ -106,7 +106,7 @@ function index(props) {
             }}
           />
         </SafeAreaView>
-        <View>
+        <View style={{ marginBottom: vs(15) }}>
           <UserHeader needEdit></UserHeader>
         </View>
         <HorizontalMenu></HorizontalMenu>

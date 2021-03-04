@@ -19,7 +19,7 @@ import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
 import ListItem from './ListItem';
 import metrics from '../../Themes/Metrics';
-import TextTip from './TextTip';
+import TextTip from '../../Components/EmptyReminder';
 /**
  * @description:This component is displayed when the user does not purchase it
  * @param {*} props

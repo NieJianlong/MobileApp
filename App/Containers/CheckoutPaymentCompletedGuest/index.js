@@ -15,13 +15,13 @@ import { ApplicationStyles } from '../../Themes';
 import colors from '../../Themes/Colors';
 import images from '../../Themes/Images';
 import metrics from '../../Themes/Metrics';
-import TextTip from '../UserInfo/TextTip';
+import TextTip from '../../Components/EmptyReminder';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import NavigationService from '../../Navigation/NavigationService';
 
 function index(props) {
   const data = {
-    textTip: 'Your order has been \n processed sucessfully',
+    textTip: 'Your order has been processed sucessfully',
     subTextTip:
       'Remember that you will receive your order once the required number of orders is reached',
     needButton: false,

@@ -3,7 +3,7 @@ import { s, vs } from 'react-native-size-matters';
 import Fonts from './Fonts';
 import Metrics from './Metrics';
 import Colors from './Colors';
-
+import { Platform } from 'react-native';
 // This file is for a reusable grouping of Theme items.
 // Similar to an XML fragment layout in Android
 
@@ -65,45 +65,53 @@ const ApplicationStyles = {
     },
     txtBold: {
       fontSize: s(12.5),
-      fontFamily: Fonts.semibold,
-      color: Colors.grey80,
+      fontFamily: Fonts.primary,
+      color: Colors.black,
+      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
     },
     txtHeroBold: {
       fontSize: s(44),
-      fontFamily: Fonts.semibold,
+      fontFamily: Fonts.primary,
       color: Colors.black,
+      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
     },
     heading1Bold: {
       fontSize: s(30),
+      fontFamily: Fonts.primary,
       color: Colors.black,
-      fontFamily: Fonts.semibold,
+      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
       lineHeight: s(38),
     },
     heading2Bold: {
       fontSize: s(24),
-      fontFamily: Fonts.semibold,
+      fontFamily: Fonts.primary,
       color: Colors.black,
+      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
       lineHeight: s(32),
     },
     heading3Bold: {
       fontSize: s(17),
-      fontFamily: Fonts.semibold,
+      fontFamily: Fonts.primary,
       color: Colors.black,
+      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
     },
     heading4Bold: {
       fontSize: s(15),
-      fontFamily: Fonts.semibold,
+      fontFamily: Fonts.primary,
       color: Colors.black,
+      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
     },
     heading5Bold: {
       fontSize: s(13),
+      fontFamily: Fonts.primary,
       color: Colors.black,
-      fontFamily: Fonts.semibold,
+      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
     },
     heading6Bold: {
       fontSize: s(11),
+      fontFamily: Fonts.primary,
       color: Colors.black,
-      fontFamily: Fonts.semibold,
+      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
     },
     heading4Regular: {
       fontSize: s(15),

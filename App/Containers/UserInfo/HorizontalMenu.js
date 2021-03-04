@@ -13,7 +13,7 @@ import colors from '../../Themes/Colors';
 import DynamicTabView from './DynamicTabView';
 import images from '../../Themes/Images';
 import NoPurchase from './NoPurchase';
-import TextTip from './TextTip';
+import TextTip from '../../Components/EmptyReminder';
 import NavigationService from '../../Navigation/NavigationService';
 import AppConfig from '../../Config/AppConfig';
 import { Fonts } from '../../Themes';
@@ -142,7 +142,7 @@ function HorizontalMenu(props) {
       }}
       defaultIndex={defaultIndex}
       containerStyle={styles.container}
-      headerBackgroundColor={'white'}
+      headerBackgroundColor={'transparent'}
       highlightStyle={{ color: 'white' }}
       noHighlightStyle={{ color: 'gray' }}
       headerTextStyle={styles.headerText}
@@ -178,7 +178,6 @@ function flatListView(item, data, isPayment = false, showSheet = () => {}) {
     itemActions: { setDefault, doEdit, doDelete },
     key,
   } = item;
-
 
   return (
     <View style={{ flex: 1 }}>

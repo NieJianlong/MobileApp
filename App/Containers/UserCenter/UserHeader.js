@@ -160,6 +160,5 @@ const styles = ScaledSheet.create({
     backgroundColor: colors.background,
     justifyContent: 'space-around',
     paddingHorizontal: AppConfig.paddingHorizontal,
-    paddingBottom: '15@vs',
   },
 });

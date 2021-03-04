@@ -19,7 +19,7 @@ import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
 import images from '../../Themes/Images';
 import AppConfig from '../../Config/AppConfig';
-import TextTip from '../UserInfo/TextTip';
+import TextTip from '../../Components/EmptyReminder';
 import metrics from '../../Themes/Metrics';
 
 const invitedUsers = [

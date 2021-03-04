@@ -7,25 +7,25 @@
  * @FilePath: /MobileApp/App/Containers/DeleteAccountMessage/index.js
  */
 import React from 'react';
-import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
-import {ScaledSheet, s, vs} from 'react-native-size-matters';
-import {SafeAreaView} from 'react-navigation';
-import {AppBar, Button, TextInput} from '../../Components';
+import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { ScaledSheet, s, vs } from 'react-native-size-matters';
+import { SafeAreaView } from 'react-navigation';
+import { AppBar, Button, TextInput } from '../../Components';
 import AppConfig from '../../Config/AppConfig';
 import Colors from '../../Themes/Colors';
 import colors from '../../Themes/Colors';
 import fonts from '../../Themes/Fonts';
 import UserAvatar from '../UserCenter/UserAvatar';
 import NavigationService from '../../Navigation/NavigationService';
-import TextTip from '../UserInfo/TextTip';
+import TextTip from '../../Components/EmptyReminder';
 import images from '../../Themes/Images';
 import metrics from '../../Themes/Metrics';
 
 function index(props) {
-  const {title, icon} = props;
-  const textTip = 'Are you sure you want to remove \n your account?';
+  const { title, icon } = props;
+  const textTip = 'Are you sure you want to remove  your account?';
   const subTextTip =
-    'This action cannot be undone, if you delete the \n account all the data and information will be  \n deleted.';
+    'This action cannot be undone, if you delete the  account all the data and information will be  deleted.';
   const param = {
     textTip,
     subTextTip,
@@ -42,10 +42,11 @@ function index(props) {
       <SafeAreaView style={styles.bottom}>
         <Button onPress={() => {}} text="CONFIRM"></Button>
         <TouchableOpacity
-         style={{margin:20}}
+          style={{ margin: 20 }}
           onPress={() => {
             NavigationService.navigate('');
-          }}>
+          }}
+        >
           <Text style={styles.removeText}>CANCEL</Text>
         </TouchableOpacity>
       </SafeAreaView>
@@ -78,7 +79,7 @@ const styles = ScaledSheet.create({
     color: colors.grey80,
     marginBottom: '10@vs',
   },
-  signbtn: {marginTop: '20@vs'},
+  signbtn: { marginTop: '20@vs' },
   headerContainer: {
     backgroundColor: colors.background,
     justifyContent: 'space-around',
@@ -93,7 +94,7 @@ const styles = ScaledSheet.create({
   },
   removeText: {
     fontFamily: fonts.primary,
-    fontSize:  AppConfig.fontSize,
+    fontSize: AppConfig.fontSize,
     textAlign: 'center',
     color: colors.grey80,
   },
@@ -102,7 +103,7 @@ const styles = ScaledSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    paddingHorizontal: AppConfig.paddingHorizontal
+    paddingHorizontal: AppConfig.paddingHorizontal,
   },
   contentContainer: {
     paddingHorizontal: AppConfig.paddingHorizontal,

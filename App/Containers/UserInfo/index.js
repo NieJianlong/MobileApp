@@ -218,9 +218,4 @@ const styles = ScaledSheet.create({
     backgroundColor: colors.background,
     flex: 1,
   },
-  update: {
-    color: colors.primary,
-    fontSize: '12@vs',
-    fontFamily: fonts.primary,
-  },
 });

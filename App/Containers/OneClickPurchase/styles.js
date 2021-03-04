@@ -11,17 +11,8 @@ export default ScaledSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  disupdate: {
-    color: Colors.primary,
-    fontSize: '12@vs',
-    fontFamily: Fonts.primary,
-    opacity: 0.5,
-  },
-  update: {
-    color: Colors.primary,
-    fontSize: '12@vs',
-    fontFamily: Fonts.primary,
-  },
+  
+
   safeArea: {
     flex: 1,
     width: '100%',

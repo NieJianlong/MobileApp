@@ -15,7 +15,7 @@ import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
 import { AppBar, Selector, TextInput } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
-import { AlertContext } from '../Root/index';
+import { AlertContext } from '../Root/GlobalContext';
 import SelectPrefer from './SelectPrefer';
 import { ApplicationStyles } from '../../Themes';
 

@@ -18,7 +18,7 @@ import AppConfig from '../../Config/AppConfig';
 import metrics from '../../Themes/Metrics';
 import fonts from '../../Themes/Fonts';
 import { AddressTestData } from '../UserInfo/Config';
-import { AlertContext } from '../Root/index';
+import { AlertContext } from '../Root/GlobalContext';
 import { ApplicationStyles } from '../../Themes';
 /**
  * @description: The user selects the shipping address page

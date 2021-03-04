@@ -16,7 +16,7 @@ import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
 import { AppBar, TextInput, Button } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
-import { AlertContext } from '../Root/index';
+import { AlertContext } from '../Root/GlobalContext';
 import { ApplicationStyles, Images } from '../../Themes';
 import TextTip from '../../Components/EmptyReminder';
 

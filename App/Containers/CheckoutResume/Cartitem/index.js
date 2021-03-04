@@ -9,7 +9,7 @@ import images from '../../../Themes/Images';
 import colors from '../../../Themes/Colors';
 import fonts from '../../../Themes/Fonts';
 // import { CartContext } from '../index';
-// import { AlertContext } from '../../Root/index';
+// import { AlertContext } from '../../Root/GlobalContext';
 
 function index(props) {
   // const { dispatch } = useContext(CartContext);

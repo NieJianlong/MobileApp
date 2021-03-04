@@ -23,7 +23,6 @@ import colors from '../../Themes/Colors';
 import HorizontalMenu from './HorizontalMenu';
 import images from '../../Themes/Images';
 import TextTip from '../../Components/EmptyReminder';
-import fonts from '../../Themes/Fonts';
 import NavigationService from '../../Navigation/NavigationService';
 import { ApplicationStyles } from '../../Themes';
 
@@ -112,7 +111,7 @@ function index(props) {
         <View style={{ marginBottom: vs(15) }}>
           <UserHeader needEdit></UserHeader>
         </View>
-        <HorizontalMenu></HorizontalMenu>
+        <HorizontalMenu dispatch={dispatch}></HorizontalMenu>
       </View>
       {showSheet && (
         <TouchableWithoutFeedback onPress={() => {}}>

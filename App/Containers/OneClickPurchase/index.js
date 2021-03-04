@@ -19,6 +19,7 @@ import metrics from '../../Themes/Metrics';
 import fonts from '../../Themes/Fonts';
 import { PaymentTestData } from '../UserInfo/Config';
 import { set } from 'react-native-reanimated';
+import { ApplicationStyles } from '../../Themes';
 /**
  * @description: 1 Click purchase Screen
  * @param {*} props
@@ -46,7 +47,9 @@ function index(props) {
                   NavigationService.navigate('SelectDeliveryAddressScreen');
                 }}
               >
-                <Text style={styles.update}>NEXT</Text>
+                <Text style={[ApplicationStyles.screen.heading5Bold]}>
+                  SAVE
+                </Text>
               </TouchableOpacity>
             );
           }}
@@ -149,10 +152,10 @@ function index(props) {
           }}
         >
           <Button
-             onPress={() => {
+            onPress={() => {
               if (params) {
-                if(typeof params.removeCallback=='function'){
-                  params.removeCallback()
+                if (typeof params.removeCallback == 'function') {
+                  params.removeCallback();
                 }
               }
             }}

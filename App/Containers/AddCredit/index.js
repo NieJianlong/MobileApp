@@ -16,7 +16,7 @@ import {
   PasswordInput,
   Switch,
 } from '../../Components';
-import { Colors, Metrics } from '../../Themes';
+import { ApplicationStyles, Colors, Metrics } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
@@ -84,7 +84,7 @@ function index(props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background}/>
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
@@ -103,7 +103,12 @@ function index(props) {
                 // NavigationService.goBack();
               }}
             >
-              <Text style={disable ? styles.disupdate : styles.update}>
+              <Text
+                style={[
+                  ApplicationStyles.screen.heading5Bold,
+                  disable ? styles.disupdate : styles.update,
+                ]}
+              >
                 SAVE
               </Text>
             </TouchableOpacity>

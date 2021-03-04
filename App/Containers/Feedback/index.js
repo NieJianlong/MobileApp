@@ -17,7 +17,7 @@ import colors from '../../Themes/Colors';
 import { AppBar, TextInput, Button } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import { AlertContext } from '../Root/index';
-import { Images } from '../../Themes';
+import { ApplicationStyles, Images } from '../../Themes';
 import TextTip from '../../Components/EmptyReminder';
 
 const images = [Images.userLoveImage, Images.userMedImage, Images.userSadImage];
@@ -116,13 +116,7 @@ function index(props) {
                   });
                 }}
               >
-                <Text
-                  style={{
-                    color: colors.primary,
-                    fontSize: vs(12),
-                    fontFamily: fonts.primary,
-                  }}
-                >
+                <Text style={[ApplicationStyles.screen.heading5Bold]}>
                   SUBMIT
                 </Text>
               </TouchableOpacity>

@@ -9,7 +9,13 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { vs, s } from 'react-native-size-matters';
-import { AppBar, TextInput, Switch, RightButton } from '../../Components';
+import {
+  AppBar,
+  Switch,
+  RightButton,
+  MaterialTextInput,
+  Selector,
+} from '../../Components';
 import { ApplicationStyles } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
@@ -83,12 +89,14 @@ function AddBillingDetails(props) {
       onChangeText: (text) => setFirstName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
       placeholder: 'Last Name*',
       onChangeText: (text) => setLastName(text),
       showError: false,
+      keyboardType: 'default',
       errorMessage: null,
       type: 'short',
     },
@@ -97,6 +105,7 @@ function AddBillingDetails(props) {
       onChangeText: (text) => setPhoneOrEmailNum(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
     {
@@ -104,6 +113,7 @@ function AddBillingDetails(props) {
       onChangeText: (text) => setStreetName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
     {
@@ -111,6 +121,7 @@ function AddBillingDetails(props) {
       onChangeText: (text) => setStreetNum(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -118,6 +129,7 @@ function AddBillingDetails(props) {
       onChangeText: (text) => setDoor(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -125,6 +137,7 @@ function AddBillingDetails(props) {
       onChangeText: (text) => setCity(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -132,6 +145,7 @@ function AddBillingDetails(props) {
       onChangeText: (text) => setMstate(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'selector',
       type: 'short',
     },
     {
@@ -139,6 +153,7 @@ function AddBillingDetails(props) {
       onChangeText: (text) => setPostCode(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'decimal-pad',
       type: 'short',
     },
     {
@@ -146,6 +161,7 @@ function AddBillingDetails(props) {
       onChangeText: (text) => setCountry(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -153,6 +169,7 @@ function AddBillingDetails(props) {
       onChangeText: (text) => setCompany(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -160,6 +177,7 @@ function AddBillingDetails(props) {
       onChangeText: (text) => setTaxid(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
   ];
@@ -194,19 +212,16 @@ function AddBillingDetails(props) {
             );
           }}
         />
-        <KeyboardAwareScrollView
-          keyboardVerticalOffset={50}
-          behavior="position"
-          style={{ flex: 1 }}
-          enabled
-          contentContainerStyle={{ flex: 1 }}
-        >
+        <KeyboardAwareScrollView>
           <View style={styles.bodyContainer}>
             <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
               {params.title}
             </Text>
             <View style={{ marginTop: 20 }}>
-              <Switch label="Use the same info as my personal details"></Switch>
+              <Switch
+                onSwitch={() => {}}
+                label="Use the same info as my personal details"
+              ></Switch>
             </View>
             <View
               style={{
@@ -219,9 +234,19 @@ function AddBillingDetails(props) {
                 return (
                   <View
                     key={index}
-                    style={{ width: item.type == 'short' ? '48%' : '100%' }}
+                    style={{
+                      width: item.type == 'short' ? '48%' : '100%',
+                      marginTop: vs(18),
+                    }}
                   >
-                    <TextInput style={{ marginTop: vs(18) }} {...item} />
+                    {item.keyboardType === 'selector' ? (
+                      <Selector
+                        placeholder={'Sate'}
+                        data={['AAA', 'BBB', 'CCC']}
+                      />
+                    ) : (
+                      <MaterialTextInput {...item} />
+                    )}
                   </View>
                 );
               })}

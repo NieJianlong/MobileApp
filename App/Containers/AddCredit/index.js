@@ -32,6 +32,7 @@ function AddCredit(props) {
       onChangeText: (text) => setName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       weight: '12',
     },
     {
@@ -39,20 +40,38 @@ function AddCredit(props) {
       onChangeText: (text) => setCardNum(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'decimal-pad',
       weight: '12',
     },
     {
       placeholder: 'MM/YY',
-      onChangeText: (text) => setDate(text),
+      onChangeText: (text) => {
+        if (text.length <= 5) {
+          if (text.length === 2) {
+            text = text + '/';
+            setDate(text);
+          } else {
+            setDate(text);
+          }
+        }
+      },
       showError: false,
       errorMessage: null,
+      value: date,
+      keyboardType: 'decimal-pad',
       weight: '7',
     },
     {
       placeholder: 'CVV',
-      onChangeText: (text) => setCvv(text),
+      onChangeText: (text) => {
+        if (text.length <= 3) {
+          setCvv(text);
+        }
+      },
       showError: false,
       errorMessage: null,
+      value: cvv,
+      keyboardType: 'decimal-pad',
       weight: '4.5',
     },
   ];
@@ -103,7 +122,9 @@ function AddCredit(props) {
               return (
                 <View
                   key={index}
-                  style={{ width: `${(item.weight / 12) * 100}%` }}
+                  style={{
+                    width: `${(item.weight / 12) * 100}%`,
+                  }}
                 >
                   <TextInput style={{ marginTop: vs(18) }} {...item} />
                 </View>

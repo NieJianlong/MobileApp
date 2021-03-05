@@ -5,7 +5,7 @@ import { Fonts, Colors, ApplicationStyles, Images } from '../../../Themes';
 import AppConfig from '../../../Config/AppConfig';
 import colors from '../../../Themes/Colors';
 
-function index(props) {
+function AskForReplacement(props) {
   const [active, setActive] = useState(props.defaultValue ?? false);
 
   useEffect(() => {
@@ -98,4 +98,4 @@ const styles = ScaledSheet.create({
   },
 });
 
-export default index;
+export default AskForReplacement;

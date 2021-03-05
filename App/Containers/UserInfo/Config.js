@@ -115,7 +115,7 @@ export const MenuConfig = [
     onPress: (callback) => {
       NavigationService.navigate('AddNewAddressScreen', {
         callback,
-        title: 'ADD NEW ADDRESS',
+        title: 'Add new address',
       });
     },
     extra: 'ADD NEW ADDRESS',

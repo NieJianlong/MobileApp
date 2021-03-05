@@ -2,7 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { View, StatusBar, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { vs } from 'react-native-size-matters';
-import { AppBar, TextInput, Switch, RightButton } from '../../Components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {
+  AppBar,
+  TextInput,
+  Switch,
+  RightButton,
+  MaterialTextInput,
+  Selector,
+} from '../../Components';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
@@ -22,7 +30,6 @@ function AddNewAddress(props) {
       name.length === 0 ||
       streetName.length === 0 ||
       door.length === 0 ||
-      city.length === 0 ||
       mstate.length === 0 ||
       pincode.length === 0 ||
       country.length === 0
@@ -36,10 +43,10 @@ function AddNewAddress(props) {
   const inputs = [
     {
       placeholder: 'Address Name (ex. home)*',
-
       onChangeText: (text) => setName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
     {
@@ -47,6 +54,7 @@ function AddNewAddress(props) {
       onChangeText: (text) => setStreetName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
     {
@@ -54,6 +62,7 @@ function AddNewAddress(props) {
       onChangeText: (text) => setStreetNum(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -61,6 +70,7 @@ function AddNewAddress(props) {
       onChangeText: (text) => setDoor(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -68,6 +78,7 @@ function AddNewAddress(props) {
       onChangeText: (text) => setCity(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -75,6 +86,7 @@ function AddNewAddress(props) {
       onChangeText: (text) => setMstate(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'selector',
       type: 'short',
     },
     {
@@ -82,6 +94,7 @@ function AddNewAddress(props) {
       onChangeText: (text) => setPincode(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'decimal-pad',
       type: 'short',
     },
     {
@@ -89,6 +102,7 @@ function AddNewAddress(props) {
       onChangeText: (text) => setCountry(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
   ];
@@ -131,24 +145,41 @@ function AddNewAddress(props) {
         />
         <View style={styles.bodyContainer}>
           <Text style={styles.heading2Bold}>{params.title}</Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              justifyContent: 'space-between',
-            }}
-          >
-            {inputs.map((item, index) => {
-              return (
-                <View
-                  key={index}
-                  style={{ width: item.type == 'short' ? '48%' : '100%' }}
-                >
-                  <TextInput style={{ marginTop: vs(18) }} {...item} />
-                </View>
-              );
-            })}
-          </View>
+          <KeyboardAwareScrollView>
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                justifyContent: 'space-between',
+              }}
+            >
+              {inputs.map((item, index) => {
+                return (
+                  <View
+                    key={index}
+                    style={{
+                      width: item.type == 'short' ? '48%' : '100%',
+                      marginTop: vs(18),
+                    }}
+                  >
+                    {item.keyboardType === 'selector' ? (
+                      <Selector
+                        style={{ marginBottom: vs(10) }}
+                        placeholder={'Sate'}
+                        data={['AAA', 'BBB', 'CCC']}
+                      />
+                    ) : (
+                      <MaterialTextInput
+                        style={{ marginTop: vs(18) }}
+                        {...item}
+                      />
+                    )}
+                  </View>
+                );
+              })}
+            </View>
+          </KeyboardAwareScrollView>
+
           <View style={{ marginTop: 20 }}>
             <Switch label="Set as default address"></Switch>
           </View>

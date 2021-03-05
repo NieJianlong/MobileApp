@@ -9,6 +9,8 @@ import {
   TextInput,
   Switch,
   RightButton,
+  Selector,
+  MaterialTextInput,
 } from '../../Components';
 import { ApplicationStyles, Metrics } from '../../Themes';
 import styles from './styles';
@@ -74,59 +76,75 @@ function EditBillingDetails(props) {
   const inputs = [
     {
       placeholder: 'First Name*',
+      value: 'John',
       onChangeText: (text) => setFirstName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
     {
       placeholder: 'Last Name*',
+      value: 'Roots',
       onChangeText: (text) => setLastName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
     {
       placeholder: 'Email *',
+      value: 'niejianlong11@126.com',
       onChangeText: (text) => setPhoneOrEmailNum(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
     {
       placeholder: 'Phone number *',
+      value: '6666666',
       onChangeText: (text) => setPhoneOrEmailNum(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'numeric',
       type: 'normal',
     },
 
     {
       placeholder: 'Street Name*',
+      value: 'Tami Nadu Street',
       onChangeText: (text) => setStreetName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
     {
       placeholder: 'Street Number*',
+      value: '12345',
       onChangeText: (text) => setStreetNum(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
       placeholder: 'Flat, Floor, Door',
+      value: '5L',
       onChangeText: (text) => setDoor(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
       placeholder: 'City*',
+      value: 'City',
       onChangeText: (text) => setCity(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -134,13 +152,16 @@ function EditBillingDetails(props) {
       onChangeText: (text) => setMstate(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'selector',
       type: 'short',
     },
     {
       placeholder: 'Postcode*',
+      value: '232',
       onChangeText: (text) => setPostCode(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'numeric',
       type: 'short',
     },
     {
@@ -148,6 +169,7 @@ function EditBillingDetails(props) {
       onChangeText: (text) => setCountry(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -155,6 +177,7 @@ function EditBillingDetails(props) {
       onChangeText: (text) => setCompany(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -162,6 +185,7 @@ function EditBillingDetails(props) {
       onChangeText: (text) => setTaxid(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
   ];
@@ -201,10 +225,13 @@ function EditBillingDetails(props) {
         >
           <View style={styles.bodyContainer}>
             <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
-              1 Click Purchasing preference
+              Edit billing details
             </Text>
             <View style={{ marginTop: 20 }}>
-              <Switch label="Use the same info as my personal details"></Switch>
+              <Switch
+                onSwitch={() => {}}
+                label="Use the same info as my personal details"
+              ></Switch>
             </View>
             <View
               style={{
@@ -217,9 +244,19 @@ function EditBillingDetails(props) {
                 return (
                   <View
                     key={index}
-                    style={{ width: item.type == 'short' ? '48%' : '100%' }}
+                    style={{
+                      width: item.type == 'short' ? '48%' : '100%',
+                      marginTop: vs(18),
+                    }}
                   >
-                    <TextInput style={{ marginTop: vs(18) }} {...item} />
+                    {item.keyboardType === 'selector' ? (
+                      <Selector
+                        placeholder={'Sate'}
+                        data={['AAA', 'BBB', 'CCC']}
+                      />
+                    ) : (
+                      <MaterialTextInput {...item} />
+                    )}
                   </View>
                 );
               })}

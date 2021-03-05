@@ -4,7 +4,14 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { vs, s } from 'react-native-size-matters';
-import { AppBar, TextInput, Switch, RightButton } from '../../Components';
+import {
+  AppBar,
+  TextInput,
+  Switch,
+  RightButton,
+  MaterialTextInput,
+  Selector,
+} from '../../Components';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
@@ -77,6 +84,7 @@ function CheckoutBillingDetails(props) {
       onChangeText: (text) => setFirstName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -84,6 +92,7 @@ function CheckoutBillingDetails(props) {
       onChangeText: (text) => setLastName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -91,6 +100,7 @@ function CheckoutBillingDetails(props) {
       onChangeText: (text) => setPhoneOrEmailNum(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
     {
@@ -98,6 +108,7 @@ function CheckoutBillingDetails(props) {
       onChangeText: (text) => setStreetName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
     {
@@ -105,6 +116,7 @@ function CheckoutBillingDetails(props) {
       onChangeText: (text) => setStreetNum(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -112,6 +124,7 @@ function CheckoutBillingDetails(props) {
       onChangeText: (text) => setDoor(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -119,6 +132,7 @@ function CheckoutBillingDetails(props) {
       onChangeText: (text) => setCity(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -126,6 +140,7 @@ function CheckoutBillingDetails(props) {
       onChangeText: (text) => setMstate(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'selector',
       type: 'short',
     },
     {
@@ -133,6 +148,7 @@ function CheckoutBillingDetails(props) {
       onChangeText: (text) => setPostCode(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'decimal-pad',
       type: 'short',
     },
     {
@@ -140,6 +156,7 @@ function CheckoutBillingDetails(props) {
       onChangeText: (text) => setCountry(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -147,6 +164,7 @@ function CheckoutBillingDetails(props) {
       onChangeText: (text) => setCompany(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -154,6 +172,7 @@ function CheckoutBillingDetails(props) {
       onChangeText: (text) => setTaxid(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
   ];
@@ -208,9 +227,23 @@ function CheckoutBillingDetails(props) {
                 return (
                   <View
                     key={index}
-                    style={{ width: item.type == 'short' ? '48%' : '100%' }}
+                    style={{
+                      width: item.type == 'short' ? '48%' : '100%',
+                      marginTop: vs(18),
+                    }}
                   >
-                    <TextInput style={{ marginTop: vs(18) }} {...item} />
+                    {item.keyboardType === 'selector' ? (
+                      <Selector
+                        style={{ marginBottom: vs(10) }}
+                        placeholder={'Sate'}
+                        data={['AAA', 'BBB', 'CCC']}
+                      />
+                    ) : (
+                      <MaterialTextInput
+                        style={{ marginTop: vs(18) }}
+                        {...item}
+                      />
+                    )}
                   </View>
                 );
               })}

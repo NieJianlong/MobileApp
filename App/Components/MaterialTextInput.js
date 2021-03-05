@@ -1,33 +1,49 @@
-import React, { Component } from 'react';
-import { Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
+import React, { useEffect, useState, useRef } from 'react';
+import { ScaledSheet, vs } from 'react-native-size-matters';
 import { TextField, OutlinedTextField } from 'react-native-material-textfield';
 import PropTypes from 'prop-types';
 
 import { Fonts, Colors, Images } from '../Themes';
 import colors from '../Themes/Colors';
 
-class MaterialTextInput extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
+function MaterialTextInput(props) {
+  const inputRef = useRef();
+  const { placeholder, value = '', keyboardType, onChangeText } = props;
+  const [padding, setPadding] = useState(false);
+  if (value.length > 0) {
+    setPadding(true);
   }
-
-  render() {
-    const { placeholder, style, onFocus, onBlur, value } = this.props;
-
-    return (
-      <TextField
-        label={placeholder}
-        labelTextStyle={styles.labelTextStyle}
-        labelFontSize={12}
-        value={value}
-        lineType={'none'}
-        containerStyle={styles.container}
-        tintColor={colors.grey40}
-      />
-    );
-  }
+  return (
+    <TextField
+      ref={inputRef}
+      label={placeholder}
+      labelTextStyle={styles.labelTextStyle}
+      labelFontSize={12}
+      keyboardType={keyboardType}
+      value={value}
+      onFocus={() => {
+        setPadding(true);
+      }}
+      onBlur={() => {
+        if (!inputRef.current.state.text) {
+          debugger;
+          setPadding(false);
+        } else {
+          debugger;
+          setPadding(true);
+        }
+      }}
+      lineType={'none'}
+      onChangeText={(text) => {
+        onChangeText(text);
+      }}
+      containerStyle={[
+        styles.container,
+        { paddingBottom: padding ? 0 : vs(10) },
+      ]}
+      tintColor={colors.grey40}
+    />
+  );
 }
 
 MaterialTextInput.propTypes = {};
@@ -71,7 +87,7 @@ const styles = ScaledSheet.create({
   },
   labelTextStyle: {
     //fontSize: '15@s',
-    //fontFamily: Fonts.primary,
+    fontFamily: Fonts.primary,
     color: Colors.grey40,
   },
 });

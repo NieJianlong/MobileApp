@@ -53,10 +53,8 @@ function AddPaymentMethod(props) {
                 >
                   <TouchableOpacity
                     onPress={(item) => {
-                      debugger;
                       Nav.navigate('AddCreditScreen', {
                         callback: () => {
-                          debugger;
                           Nav.pop(2);
                           if (typeof params.callback == 'function') {
                             params.callback();

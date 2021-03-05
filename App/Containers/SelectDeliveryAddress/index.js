@@ -158,7 +158,7 @@ function SelectDeliveryAddress(props) {
               }
             }}
             textColor="white"
-            text="ADD NEW ADDRESS"
+            text="Add new address"
             backgroundColor={colors.grey80}
           ></Button>
         </SafeAreaView>

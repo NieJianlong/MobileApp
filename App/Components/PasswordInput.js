@@ -65,7 +65,7 @@ PasswordInput.defaultProps = {
 
 const styles = ScaledSheet.create({
     container: {
-        height: '40@vs',
+        height: '48@vs',
         backgroundColor: Colors.white,
         borderRadius: '20@s',
         borderWidth: 1,

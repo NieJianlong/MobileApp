@@ -62,7 +62,7 @@ function AddCheckoutPaymentMethod(props) {
         <AppBar />
         <View style={styles.bodyContainer}>
           <Text style={styles.heading2Bold}> Add a payment method </Text>
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
             {payments.map((item, index) => {
               return (
                 <View

@@ -31,7 +31,7 @@ function index(props) {
             <Text
               style={[
                 styles.heading4Bold,
-                { fontSize: s(12), color: colors.grey80 },
+                { fontSize: s(12), fontWeight: 'normal', color: colors.grey80 },
               ]}
             >
               Selected product options goes here
@@ -64,11 +64,11 @@ function index(props) {
       </View>
 
       <View style={styles.v4}>
-        {product.id != 1 ? (
+        {product.id !== 1 ? (
           <View style={styles.counter}>
             <TouchableOpacity
               onPress={() => {
-                if (product.count == 1) {
+                if (product.count === 1) {
                   dispatch({ type: 'revomeCartCount', payload: product.id });
                   Alert.dispatch({
                     type: 'changAlertState',
@@ -87,7 +87,7 @@ function index(props) {
               <Image
                 style={styles.cartadd}
                 source={
-                  product.count == 1
+                  product.count === 1
                     ? images.shopcartRemoveImage
                     : images.shopcartSubImage
                 }
@@ -110,13 +110,13 @@ function index(props) {
                 borderRadius: s(40),
                 backgroundColor: colors.grey60,
                 justifyContent: 'center',
-                paddingHorizontal: 13,
+                paddingHorizontal: 10,
               }}
             >
               <Text
                 style={[
                   ApplicationStyles.screen.heading6Regular,
-                  { color: 'white' },
+                  { color: 'white', fontSize: s(10) },
                 ]}
               >
                 This product is no longer available
@@ -141,16 +141,24 @@ function index(props) {
               });
             }}
           >
-            <Text style={styles.removetext}>REMOVE</Text>
+            <Text
+              style={[ApplicationStyles.screen.heading5Bold, styles.removetext]}
+            >
+              REMOVE
+            </Text>
           </TouchableOpacity>
-          <View style={{ width: s(15) }} />
+          <View style={{ width: s(10) }} />
           <TouchableOpacity
             onPress={() => {
               NavigationService.navigate('EditShoppingCartScreen');
             }}
             style={[styles.removebtn, { width: s(60) }]}
           >
-            <Text style={styles.removetext}>EDIT</Text>
+            <Text
+              style={[ApplicationStyles.screen.heading5Bold, styles.removetext]}
+            >
+              EDIT
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -178,7 +186,7 @@ const styles = ScaledSheet.create({
     resizeMode: 'contain',
   },
   removebtn: {
-    width: '86@s',
+    width: '80@s',
     height: '32@s',
     borderColor: '#DDDFE3',
     borderWidth: 1,
@@ -189,9 +197,6 @@ const styles = ScaledSheet.create({
     height: '30@s',
     lineHeight: '30@s',
     color: colors.grey80,
-    fontWeight: '600',
-    fontFamily: fonts.primary,
-    fontSize: '14@s',
   },
   cartinput: {
     width: '32@s',

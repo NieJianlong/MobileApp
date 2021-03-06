@@ -163,7 +163,6 @@ function InSufficientSalamiCredit(props) {
             renderItem={({ item }) => {
               return (
                 <View
-                  key={`paymengt${index}`}
                   style={{
                     maxHeight: 110,
                   }}

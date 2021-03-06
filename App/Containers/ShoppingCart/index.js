@@ -128,12 +128,12 @@ function ShoppingCart(props) {
                       height: s(32),
                       alignItems: 'center',
                       justifyContent: 'center',
-                      marginTop: -25,
+                      marginTop: -15,
                     }}
                   >
                     <Text
                       style={[
-                        styles.heading4Bold,
+                        styles.heading5Bold,
                         { color: 'white', textAlign: 'center' },
                       ]}
                     >
@@ -257,6 +257,7 @@ function ShoppingCart(props) {
                 </View>
               </View>
             )}
+            stickySectionHeadersEnabled={true}
             stickyHeaderIndices={0}
             ListHeaderComponent={() => {
               return datas.length > 0 ? (

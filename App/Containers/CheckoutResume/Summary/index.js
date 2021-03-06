@@ -13,7 +13,7 @@ import { AppBar, Button, Switch } from '../../../Components';
 
 import fonts from '../../../Themes/Fonts';
 import images from '../../../Themes/Images';
-import { ApplicationStyles } from '../../../Themes'; 
+import { ApplicationStyles } from '../../../Themes';
 
 function index(props) {
   const { orderStatus } = props;
@@ -58,7 +58,7 @@ function index(props) {
         paddingTop: 25,
       }}
     >
-      <Text style={styles.title}>Order Summary</Text>
+      <Text style={ApplicationStyles.screen.heading4Bold}>Order Summary</Text>
       {orderStatus != 1 && (
         <View
           style={
@@ -120,7 +120,7 @@ function index(props) {
         </View>
       )}
 
-      {promoStatus == 'failure' && (
+      {promoStatus === 'failure' && (
         <Text
           style={
             (ApplicationStyles.screen.heading6Bold,
@@ -149,7 +149,7 @@ function index(props) {
                 styles.title,
                 {
                   color: item.type == 'normal' ? colors.grey80 : colors.black,
-                  fontWeight: item.type == 'normal' ? 'normal' : '600',
+                  fontWeight: item.type == 'normal' ? 'normal' : 'bold',
                 },
               ]}
             >
@@ -160,7 +160,7 @@ function index(props) {
                 styles.title,
                 {
                   color: item.type == 'normal' ? colors.grey80 : colors.black,
-                  fontWeight: item.type == 'normal' ? 'normal' : '600',
+                  fontWeight: item.type == 'normal' ? 'normal' : 'bold',
                 },
               ]}
             >
@@ -221,7 +221,7 @@ function index(props) {
           <View style={{ marginTop: 20 }}>
             <Switch
               onSwitch={() => {}}
-              label="Use the same info as my personal details"
+              label="I accept Privacy Policy and Terms of use"
             ></Switch>
           </View>
         </View>

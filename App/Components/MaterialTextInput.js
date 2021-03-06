@@ -8,17 +8,20 @@ import colors from '../Themes/Colors';
 
 function MaterialTextInput(props) {
   const inputRef = useRef();
-  const { placeholder, value = '', keyboardType, onChangeText } = props;
+  const {
+    placeholder,
+    value = '',
+    keyboardType,
+    onChangeText = () => {},
+  } = props;
   const [padding, setPadding] = useState(false);
-  if (value.length > 0) {
-    setPadding(true);
-  }
+
   return (
     <TextField
       ref={inputRef}
       label={placeholder}
-      labelTextStyle={styles.labelTextStyle}
-      labelFontSize={12}
+      // labelTextStyle={styles.labelTextStyle}
+      // labelFontSize={12}
       keyboardType={keyboardType}
       value={value}
       onFocus={() => {
@@ -26,10 +29,8 @@ function MaterialTextInput(props) {
       }}
       onBlur={() => {
         if (!inputRef.current.state.text) {
-          debugger;
           setPadding(false);
         } else {
-          debugger;
           setPadding(true);
         }
       }}
@@ -39,7 +40,7 @@ function MaterialTextInput(props) {
       }}
       containerStyle={[
         styles.container,
-        { paddingBottom: padding ? 0 : vs(10) },
+        { paddingBottom: padding || value ? 0 : vs(10) },
       ]}
       tintColor={colors.grey40}
     />

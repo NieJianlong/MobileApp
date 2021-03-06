@@ -6,11 +6,11 @@
  * @Description: edit user profile
  * @FilePath: /MobileApp/App/Containers/UserEditProfile/index.js
  */
-import React from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { ScaledSheet, s, vs } from 'react-native-size-matters';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, Keyboard, TouchableOpacity } from 'react-native';
+import { ScaledSheet, s } from 'react-native-size-matters';
 import { SafeAreaView } from 'react-navigation';
-import { AppBar, TextInput } from '../../Components';
+import { AppBar, MaterialTextInput, RightButton } from '../../Components';
 import AppConfig from '../../Config/AppConfig';
 import Colors from '../../Themes/Colors';
 import colors from '../../Themes/Colors';
@@ -18,34 +18,44 @@ import fonts from '../../Themes/Fonts';
 import UserAvatar from '../UserCenter/UserAvatar';
 import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
+import { ApplicationStyles } from '../../Themes';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const inputs = [
-  { title: 'First Name' },
-  { title: 'Last Name' },
-  { title: 'Email' },
-  { title: 'Phone Number' },
+  { placeholder: 'First Name', value: 'John' },
+  { placeholder: 'Last Name', value: 'John' },
+  { placeholder: 'Email', value: '1317272927@qq.com' },
+  { placeholder: 'Phone Number', value: '56565' },
 ];
 /**
  * @description:User edit page
  * @param {*} props
  * @return {*}
  */
-function index(props) {
-  const { title, icon } = props;
+function UserEditProfile(props) {
+  const [showBottom, setShowBottom] = useState(true);
+  useEffect(() => {
+    const keyboardShow = (e) => {
+      setShowBottom(false);
+    };
+    const keyboardHide = (e) => {
+      setShowBottom(true);
+    };
+    Keyboard.addListener('keyboardDidShow', keyboardShow);
+    Keyboard.addListener('keyboardDidHide', keyboardHide);
+    return () => {
+      Keyboard.removeListener('keyboardDisShow', keyboardShow);
+      Keyboard.removeListener('keyboardDidHide', keyboardHide);
+    };
+  }, []);
   return (
     <View style={styles.container}>
       <SafeAreaView>
         <AppBar
-          rightButton={() => {
-            return (
-              <TouchableOpacity onPress={() => alert('success')}>
-                <Text style={styles.save}>SAVE</Text>
-              </TouchableOpacity>
-            );
-          }}
-        ></AppBar>
+          rightButton={() => <RightButton title="SAVE" onPress={() => {}} />}
+        />
       </SafeAreaView>
-      <ScrollView>
+      <KeyboardAwareScrollView>
         <View style={styles.contentContainer}>
           <UserAvatar uri="http://measure.3vyd.com//uPic/JRD5RT.png"></UserAvatar>
           <Image
@@ -65,26 +75,35 @@ function index(props) {
                 key={index}
                 style={{ height: 80, justifyContent: 'center' }}
               >
-                <TextInput hasTitle {...item}></TextInput>
+                <MaterialTextInput {...item}></MaterialTextInput>
               </View>
             );
           })}
         </View>
-      </ScrollView>
-      <SafeAreaView style={styles.bottom}>
-        <TouchableOpacity
-          onPress={() => {
-            NavigationService.navigate('DeleteAccountMessageScreen');
-          }}
-        >
-          <Text style={styles.removeText}>REMOVE ACCOUNT</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
+      </KeyboardAwareScrollView>
+      {showBottom && (
+        <SafeAreaView style={styles.bottom}>
+          <TouchableOpacity
+            onPress={() => {
+              NavigationService.navigate('DeleteAccountMessageScreen');
+            }}
+          >
+            <Text
+              style={[
+                ApplicationStyles.screen.heading5Bold,
+                { color: colors.grey80, textAlign: 'center' },
+              ]}
+            >
+              REMOVE ACCOUNT
+            </Text>
+          </TouchableOpacity>
+        </SafeAreaView>
+      )}
     </View>
   );
 }
 
-export default index;
+export default UserEditProfile;
 
 const styles = ScaledSheet.create({
   save: {
@@ -92,17 +111,12 @@ const styles = ScaledSheet.create({
     fontSize: '12@vs',
     fontFamily: fonts.primary,
   },
-  removeText: {
-    fontFamily: fonts.primary,
-    fontSize: '14@s',
-    textAlign: 'center',
-    color: colors.grey80,
-  },
   bottom: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
+    paddingBottom: '15@vs',
   },
   contentContainer: {
     paddingHorizontal: AppConfig.paddingHorizontal,

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { View, ScrollView, SafeAreaView, StatusBar } from 'react-native';
 import AppConfig from '../../Config/AppConfig';
-import { vs, s, ScaledSheet } from 'react-native-size-matters';
-import fonts from '../../Themes/Fonts';
+import { vs } from 'react-native-size-matters';
 import colors from '../../Themes/Colors';
-import { AppBar, Button, Switch } from '../../Components';
+import { AppBar, Button } from '../../Components';
 import CartItem from './Cartitem';
 import metrics from '../../Themes/Metrics';
 import BottomSummary from './Summary';
@@ -12,7 +11,7 @@ import DeliverInfo from './DeliverInfo';
 import NavigationService from '../../Navigation/NavigationService';
 
 //orderStatus：1,completed
-function index(props) {
+function CheckoutResume(props) {
   const {
     navigation: {
       state: {
@@ -49,30 +48,31 @@ function index(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView edges={['top', 'right', 'left', 'bottom']}>
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+      <SafeAreaView
+        style={{ flex: 1 }}
+        edges={['top', 'right', 'left', 'bottom']}
+      >
         <AppBar
-          title={orderStatus == 1 ? 'Order 782788' : 'Review your details'}
+          title={orderStatus === 1 ? 'Order 782788' : 'Review your details'}
         />
-        <ScrollView
-          style={{
-            paddingHorizontal: AppConfig.paddingHorizontal,
-            height:
-              orderStatus == 1
-                ? metrics.screenHeight - 60
-                : metrics.screenHeight - 220,
-          }}
-          contentContainerStyle={{ paddingBottom: 60 }}
-        >
-          <DeliverInfo orderStatus={orderStatus}/>
-          <View>
-            {orders.map((item, index) => (
-              <CartItem key={index.toString()} product={item} />
-            ))}
-          </View>
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            style={{
+              paddingHorizontal: AppConfig.paddingHorizontal,
+            }}
+            contentContainerStyle={{ paddingBottom: 60 }}
+          >
+            <DeliverInfo orderStatus={orderStatus} />
+            <View>
+              {orders.map((item, index) => (
+                <CartItem key={index.toString()} product={item} />
+              ))}
+            </View>
 
-          <BottomSummary orderStatus={orderStatus} />
-        </ScrollView>
+            <BottomSummary orderStatus={orderStatus} />
+          </ScrollView>
+        </View>
       </SafeAreaView>
       {orderStatus != 1 && (
         <SafeAreaView
@@ -105,4 +105,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default CheckoutResume;

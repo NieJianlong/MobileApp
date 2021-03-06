@@ -3,11 +3,12 @@ import { View, ScrollView, StatusBar, Image, SafeAreaView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { s } from 'react-native-size-matters';
 import NavigationService from '../../Navigation/NavigationService';
+import colors from '../../Themes/Colors';
 import images from '../../Themes/Images';
-import TextTip from '../UserInfo/TextTip';
+import TextTip from '../../Components/EmptyReminder';
 import Inform from './Inform';
 
-function index(props) {
+function CheckoutPaymentCompleted(props) {
   const data = {
     textTip: 'Your order has been \n processed sucessfully',
     subTextTip:
@@ -27,7 +28,7 @@ function index(props) {
         backgroundColor: 'white',
       }}
     >
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView>
         <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
           <View style={{ width: 30, height: 30 }} />
@@ -57,4 +58,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default CheckoutPaymentCompleted;

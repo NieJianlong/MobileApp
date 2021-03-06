@@ -45,7 +45,6 @@ function index(props) {
       }}
       data={countries}
       renderItem={({ item }, index) => {
-        debugger;
         return (
           <View>
             <View style={{ height: vs(12) }} />

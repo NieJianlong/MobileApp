@@ -1,27 +1,19 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StatusBar,
-  SafeAreaView,
-  ScrollView,
-  KeyboardAvoidingView,
-} from 'react-native';
+import { View, Text, Image, StatusBar, SafeAreaView } from 'react-native';
 import { s, vs } from 'react-native-size-matters';
-import { Button, PasswordInput, TextInput } from '../../Components';
+import { Button, PasswordInput } from '../../Components';
 import AppConfig from '../../Config/AppConfig';
 import { ApplicationStyles } from '../../Themes';
 import colors from '../../Themes/Colors';
 import images from '../../Themes/Images';
 import metrics from '../../Themes/Metrics';
-import TextTip from '../UserInfo/TextTip';
+import TextTip from '../../Components/EmptyReminder';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import NavigationService from '../../Navigation/NavigationService';
 
-function index(props) {
+function CheckoutPaymentCompletedGuest(props) {
   const data = {
-    textTip: 'Your order has been \n processed sucessfully',
+    textTip: 'Your order has been processed sucessfully',
     subTextTip:
       'Remember that you will receive your order once the required number of orders is reached',
     needButton: false,
@@ -39,7 +31,7 @@ function index(props) {
         backgroundColor: 'white',
       }}
     >
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <KeyboardAwareScrollView>
         <SafeAreaView>
           <View style={{ height: 25 }} />
@@ -107,4 +99,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default CheckoutPaymentCompletedGuest;

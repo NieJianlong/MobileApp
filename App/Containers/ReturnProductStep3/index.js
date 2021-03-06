@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   View,
-  ScrollView,
   TouchableOpacity,
   Text,
   Image,
@@ -18,7 +17,7 @@ import images from '../../Themes/Images';
 import Content from './Content';
 import { ApplicationStyles } from '../../Themes';
 
-function index(props) {
+function ReturnProductStep3(props) {
   return (
     <View
       style={{
@@ -31,7 +30,7 @@ function index(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
@@ -109,7 +108,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default ReturnProductStep3;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

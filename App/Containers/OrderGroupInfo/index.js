@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   View,
   ScrollView,
-  TouchableOpacity,
   Text,
   Image,
   SafeAreaView,
@@ -21,7 +20,7 @@ import { ApplicationStyles } from '../../Themes';
 import ProductItem from '../CheckoutPaymentCompleted/ProductItem';
 
 const productInfo = {
-  id: index,
+  id: '123',
   name: 'The product name can be longer and occupy two lines',
   picture:
     'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
@@ -114,7 +113,7 @@ const medias = [
   },
 ];
 
-function index(props) {
+function OrderGroupInfo(props) {
   const [orders, setOrders] = useState(
     [0, 1].map((item, index) => ({
       id: index,
@@ -143,7 +142,7 @@ function index(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
@@ -232,7 +231,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default OrderGroupInfo;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

@@ -7,11 +7,10 @@
  * @FilePath: /MobileApp/App/Containers/UserCenter/index.js
  */
 import React from 'react';
-import { View, Text, StatusBar } from 'react-native';
-import { ScaledSheet, s, vs } from 'react-native-size-matters';
+import { View, StatusBar } from 'react-native';
+import { ScaledSheet, vs } from 'react-native-size-matters';
 import Colors from '../../Themes/Colors';
 import { Button } from '../../Components';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Fonts from '../../Themes/Fonts';
 import AppConfig from '../../Config/AppConfig';
 import ItemBox from './ItemBox';
@@ -81,22 +80,26 @@ const buttons = [
  * @param {*} props
  * @return {*}
  */
-function index(props) {
+function UserCenter(props) {
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <UserHeader needSafeArea></UserHeader>
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+      <View style={{ marginTop: vs(10) }}>
+        <UserHeader needSafeArea></UserHeader>
+      </View>
 
       {/* All the items usercenter */}
       <View style={styles.itemContainer}>
-        {items.map((item, index) => (
-          <ItemBox key={index} {...item}></ItemBox>
+        {items.map((item, i) => (
+          <View key={i}>
+            <ItemBox {...item}></ItemBox>
+          </View>
         ))}
       </View>
       <View style={styles.buttonContainer}>
-        {buttons.map((item, index) => (
-          <View style={{ marginTop: 15 }}>
-            <Button key={`button` + index} {...item}></Button>
+        {buttons.map((item, i) => (
+          <View key={`button` + i} style={{ marginTop: 15 }}>
+            <Button {...item}></Button>
           </View>
         ))}
       </View>
@@ -134,7 +137,6 @@ const styles = ScaledSheet.create({
   container: {
     height: '100%',
     backgroundColor: Colors.background,
-    marginTop: '10@vs',
   },
 });
-export default index;
+export default UserCenter;

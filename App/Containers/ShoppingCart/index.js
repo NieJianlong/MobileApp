@@ -3,12 +3,10 @@ import {
   StatusBar,
   View,
   SafeAreaView,
-  FlatList,
   SectionList,
   TouchableOpacity,
   Text,
   Image,
-  Touchable,
 } from 'react-native';
 import Empty from './Empty';
 import AddressBar from './AddressBar';
@@ -21,8 +19,8 @@ import AppConfig from '../../Config/AppConfig';
 import colors from '../../Themes/Colors';
 import images from '../../Themes/Images';
 import NavigationService from '../../Navigation/NavigationService';
-import { AlertContext } from '../Root/index';
-import TextTip from '../UserInfo/TextTip';
+import { AlertContext } from '../Root/GlobalContext';
+import TextTip from '../../Components/EmptyReminder';
 
 //Alert Context, which controls the display and hiding of an alert, for example, Add Address Success
 export const CartContext = React.createContext({});
@@ -75,14 +73,17 @@ function reducer(state, action) {
       throw new Error();
   }
 }
-function index(props) {
+function ShoppingCart(props) {
   const [paidDuringDelivery, setPaidDuringDeliver] = useState(false);
   const [{ datas }, dispatch] = useReducer(reducer, initialState);
   const sheetContext = useContext(AlertContext);
   return (
     <CartContext.Provider value={{ dispatch }}>
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor={colors.background}
+        />
         <SafeAreaView
           style={styles.mainContainer}
           edges={['top', 'left', 'right']}
@@ -127,12 +128,12 @@ function index(props) {
                       height: s(32),
                       alignItems: 'center',
                       justifyContent: 'center',
-                      marginTop: -25,
+                      marginTop: -15,
                     }}
                   >
                     <Text
                       style={[
-                        styles.heading4Bold,
+                        styles.heading5Bold,
                         { color: 'white', textAlign: 'center' },
                       ]}
                     >
@@ -256,6 +257,7 @@ function index(props) {
                 </View>
               </View>
             )}
+            stickySectionHeadersEnabled={true}
             stickyHeaderIndices={0}
             ListHeaderComponent={() => {
               return datas.length > 0 ? (
@@ -266,7 +268,7 @@ function index(props) {
               ) : null;
             }}
             renderItem={({ item }) => {
-              return <CartItem product={item} />;
+              return <CartItem dispatch={dispatch} product={item} />;
             }}
             keyExtractor={(item, index) => `lll${index}`}
           />
@@ -276,4 +278,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default ShoppingCart;

@@ -8,18 +8,17 @@
  */
 import React, { useState, useContext } from 'react';
 import { View, FlatList, Text, Image } from 'react-native';
-import { ScaledSheet, s, vs } from 'react-native-size-matters';
+import { ScaledSheet, vs } from 'react-native-size-matters';
 import colors from '../../Themes/Colors';
 import DynamicTabView from './DynamicTabView';
 import images from '../../Themes/Images';
 import NoPurchase from './NoPurchase';
-import TextTip from './TextTip';
-import NavigationService from '../../Navigation/NavigationService';
+import TextTip from '../../Components/EmptyReminder';
 import AppConfig from '../../Config/AppConfig';
 import { Fonts } from '../../Themes';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import fonts from '../../Themes/Fonts';
-import { Button, BottomSheet, Switch } from '../../Components';
+import { Button, Switch } from '../../Components';
 import { SafeAreaView } from 'react-navigation';
 import {
   AddressTestData,
@@ -27,7 +26,6 @@ import {
   PaymentTestData,
   BillDetail,
 } from './Config';
-import { AlertContext } from './index';
 
 /**
  * @description: Tab menu, with animation effect
@@ -43,7 +41,8 @@ function HorizontalMenu(props) {
   const [payments, setPayments] = useState([]);
   // my bill details
   const [billDetails, setBillDetails] = useState(null);
-  const { dispatch } = useContext(AlertContext);
+  
+  const { dispatch } = props;
   const showSheet = () => {
     dispatch({
       type: 'showPaymentRemoveSheet',
@@ -142,7 +141,7 @@ function HorizontalMenu(props) {
       }}
       defaultIndex={defaultIndex}
       containerStyle={styles.container}
-      headerBackgroundColor={'white'}
+      headerBackgroundColor={'transparent'}
       highlightStyle={{ color: 'white' }}
       noHighlightStyle={{ color: 'gray' }}
       headerTextStyle={styles.headerText}
@@ -178,7 +177,6 @@ function flatListView(item, data, isPayment = false, showSheet = () => {}) {
     itemActions: { setDefault, doEdit, doDelete },
     key,
   } = item;
-
 
   return (
     <View style={{ flex: 1 }}>

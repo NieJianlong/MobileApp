@@ -1,10 +1,7 @@
 import React, { useContext } from 'react';
 import {
   View,
-  ScrollView,
-  TouchableOpacity,
   Text,
-  Image,
   SafeAreaView,
   StatusBar,
   TextInput as RNTextInput,
@@ -13,11 +10,11 @@ import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { AppBar, TextInput } from '../../Components';
+import { AppBar, RightButton, Selector, TextInput } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
-import { AlertContext } from '../Root/index';
+import { AlertContext } from '../Root/GlobalContext';
 
-function index(props) {
+function CustomerSupport(props) {
   const { dispatch } = useContext(AlertContext);
   return (
     <View
@@ -31,42 +28,32 @@ function index(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
       >
         <AppBar
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  NavigationService.goBack();
-                  dispatch({
-                    type: 'changAlertState',
-                    payload: {
-                      visible: true,
-                      message:
-                        "We'll study this and get back to you as soon as possible.",
-                      color: colors.success,
-                      title: 'Message sent!',
-                    },
-                  });
-                }}
-              >
-                <Text
-                  style={{
-                    color: colors.primary,
-                    fontSize: vs(12),
-                    fontFamily: fonts.primary,
-                  }}
-                >
-                  SUBMIT
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
+          rightButton={() => (
+            <RightButton
+              title="SUBMIT"
+              onPress={() => {
+                NavigationService.goBack();
+                dispatch({
+                  type: 'changAlertState',
+                  payload: {
+                    visible: true,
+                    message:
+                      "We'll study this and get back to you as soon as possible.",
+                    color: colors.success,
+                    title: 'Message sent!',
+                  },
+                });
+              }}
+            />
+          )}
         />
+
         <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <Text
             style={{
@@ -80,15 +67,18 @@ function index(props) {
           </Text>
         </View>
         <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-          <TextInput
-            placeholder="Problem reason goes here"
-            style={{ marginTop: vs(12) }}
+          <Selector
+            style={{ marginVertical: vs(10) }}
+            placeholder={'Problem reason goes here'}
+            data={['AAA', 'BBB', 'CCC']}
           />
+
           <RNTextInput
             multiline={true}
             placeholder="Message"
             style={{
               marginTop: vs(16),
+              textAlignVertical: 'top',
               height: vs(160),
               backgroundColor: colors.white,
               borderRadius: s(20),
@@ -97,6 +87,7 @@ function index(props) {
               justifyContent: 'space-between',
               alignItems: 'center',
               flexDirection: 'row',
+              justifyContent: 'flex-start',
               padding: s(14),
               paddingVertical: s(20),
             }}
@@ -107,7 +98,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default CustomerSupport;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

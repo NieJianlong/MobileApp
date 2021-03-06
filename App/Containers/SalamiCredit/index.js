@@ -1,9 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import {
   View,
   StatusBar,
   Text,
-  Keyboard,
   TouchableOpacity,
   Image,
   FlatList,
@@ -12,15 +11,15 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { vs, s } from 'react-native-size-matters';
-import { AppBar, Button, BottomSheet } from '../../Components';
+import { AppBar, BottomSheet } from '../../Components';
 import { Colors } from '../../Themes';
 import styles from './styles';
-import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
 import images from '../../Themes/Images';
 import AppConfig from '../../Config/AppConfig';
-import TextTip from '../UserInfo/TextTip';
+import TextTip from '../../Components/EmptyReminder';
 import metrics from '../../Themes/Metrics';
+import { AlertContext } from '../Root/GlobalContext';
 
 const shareIcons = [
   { src: images.userShareIcon1Image, onPress: () => {} },
@@ -43,13 +42,12 @@ const invitedUsers = [
   },
 ];
 
-function index(props) {
-  fall = new Animated.Value(0);
-  const [showSheet, setShowSheet] = useState(false);
-  const sheetEl = useRef(null);
+function SalamiCredit(props) {
+  const { dispatch } = useContext(AlertContext);
+
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
@@ -57,7 +55,7 @@ function index(props) {
         <AppBar />
         <FlatList
           data={invitedUsers}
-          ListHeaderComponent={() => listHeader(setShowSheet)}
+          ListHeaderComponent={() => listHeader(dispatch)}
           renderItem={({ item }) => {
             return (
               <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
@@ -93,31 +91,28 @@ function index(props) {
           }}
           keyExtractor={(item, index) => `list${index}`}
         ></FlatList>
-        {showSheet && (
-          
-          <TouchableWithoutFeedback onPress={() => {}}>
-            <Animated.View
-              style={{
-                width: metrics.screenWidth,
-                height: metrics.screenHeight,
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                alignItems: 'center',
-                backgroundColor: 'rgb(29,29,29)',
-                opacity: Animated.add(0.85, Animated.multiply(-1.0, fall)),
-              }}
-            />
-          </TouchableWithoutFeedback>
-        )}
-        {showSheet && renderSheet(sheetEl, setShowSheet)}
       </SafeAreaView>
     </View>
   );
 }
-function listHeader(setShowSheet) {
+function listHeader(dispatch) {
+  const tips = {
+    textTip: 'About Salami Credit',
+    subTextTip:
+      'When a new user applies your unique code, they get a promotion for their first order. After they apply you code and place their first order, you will earn a promotion for future use.',
+    needButton: true,
+    btnMsg: 'OK',
+    onPress: () => {
+      dispatch({
+        type: 'changSheetState',
+        payload: {
+          showSheet: false,
+        },
+      });
+    },
+    callback: () => {},
+  };
+
   return (
     <View style={styles.bodyContainer}>
       <Text style={styles.heading2Bold}>Salami Credit</Text>
@@ -144,7 +139,7 @@ function listHeader(setShowSheet) {
             style={[
               styles.balanceTipTxt,
               {
-                fontSize: s(15),
+                fontSize: s(14),
                 color: colors.grey60,
                 textAlign: 'center',
               },
@@ -177,7 +172,46 @@ function listHeader(setShowSheet) {
             >
               order.
             </Text>
-            <TouchableOpacity onPress={() => setShowSheet(true)}>
+            <TouchableOpacity
+              onPress={() => {
+                dispatch({
+                  type: 'changSheetState',
+                  payload: {
+                    showSheet: true,
+                    height: 300,
+                    children: () => {
+                      const data = {
+                        textTip: 'Paying during delivery',
+                        subTextTip:
+                          'This is an explanatory text about this feature, lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professo.',
+                        needButton: true,
+                        btnMsg: 'OK',
+                        onPress: () => {
+                          dispatch({
+                            type: 'changSheetState',
+                            payload: {
+                              showSheet: false,
+                            },
+                          });
+                        },
+                      };
+                      return (
+                        <View
+                          style={{
+                            flex: 2,
+                            justifyContent: 'flex-end',
+                          }}
+                        >
+                          <View style={{ flex: 1, marginLeft: s(-15) }}>
+                            <TextTip {...tips}></TextTip>
+                          </View>
+                        </View>
+                      );
+                    },
+                  },
+                });
+              }}
+            >
               <Text
                 style={[
                   styles.balanceTipTxt,
@@ -211,46 +245,4 @@ function listHeader(setShowSheet) {
     </View>
   );
 }
-/**
- * @description: action sheet,like remove payment method
- * @param {*} sheetEl
- * @param {*} dispatch
- * @return {*}
- */
-function renderSheet(sheetEl, setShowSheet) {
-  const tips = {
-    textTip: 'About Salami Credit',
-    subTextTip:
-      'When a new user applies your unique code, they get a promotion for their first order. After they apply you code and place their first order, you will earn a promotion for future use.',
-    needButton: true,
-    btnMsg: 'OK',
-    onPress: () => {
-      setShowSheet(false);
-    },
-    callback: () => {},
-  };
-  return (
-    <View style={{ flex: 1 }}>
-      <BottomSheet
-        customRef={sheetEl}
-        onCloseEnd={() => {}}
-        // callbackNode={new Animated.Value(0)}
-        snapPoints={[vs(260), 0]}
-        initialSnap={0}
-        // title={'Add your delivery address'}
-      >
-        <View
-          style={{
-            flex: 2,
-            justifyContent: 'flex-end',
-          }}
-        >
-          <View style={{ flex: 1, marginLeft: s(-15) }}>
-            <TextTip {...tips}></TextTip>
-          </View>
-        </View>
-      </BottomSheet>
-    </View>
-  );
-}
-export default index;
+export default SalamiCredit;

@@ -1,6 +1,6 @@
-import {ScaledSheet} from 'react-native-size-matters';
-import {ApplicationStyles, Colors, Fonts} from '../../Themes';
-import {isIphoneX} from 'react-native-iphone-x-helper';
+import { ScaledSheet } from 'react-native-size-matters';
+import { ApplicationStyles, Colors, Fonts } from '../../Themes';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 import AppConfig from '../../Config/AppConfig';
 
 export default ScaledSheet.create({
@@ -11,11 +11,7 @@ export default ScaledSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  update: {
-    color: Colors.primary,
-    fontSize: '12@vs',
-    fontFamily: Fonts.primary,
-  },
+
   safeArea: {
     flex: 1,
     width: '100%',

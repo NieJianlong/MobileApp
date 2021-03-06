@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import RootContainer from './Root'
-import UserInfo from './UserInfo';
 
 class App extends Component {
     

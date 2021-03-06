@@ -18,6 +18,7 @@ import colors from '../../Themes/Colors';
 import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
 import UserAvatar from './UserAvatar';
+import { ApplicationStyles } from '../../Themes';
 /**
  * @description:The user header component, which contains basic user information
  * @param {*} props
@@ -64,7 +65,9 @@ function userInfo(needEdit) {
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
           >
-            <Text style={styles.myaccount}>My Account</Text>
+            <Text style={ApplicationStyles.screen.heading3Bold}>
+              My Account
+            </Text>
             {needEdit && (
               <TouchableOpacity
                 onPress={() => {
@@ -120,6 +123,7 @@ const styles = ScaledSheet.create({
   myaccount: {
     fontSize: '16@s',
     fontFamily: fonts.primary,
+    fontWeight: '600',
   },
   email: {
     width: '20@s',
@@ -156,6 +160,5 @@ const styles = ScaledSheet.create({
     backgroundColor: colors.background,
     justifyContent: 'space-around',
     paddingHorizontal: AppConfig.paddingHorizontal,
-    paddingBottom: '15@vs',
   },
 });

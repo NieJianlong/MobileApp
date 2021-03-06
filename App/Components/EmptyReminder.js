@@ -1,12 +1,4 @@
 /*
- * @Author: JianLong Nie
- * @Date: 2021-01-09 16:30:32
- * @LastEditTime: 2021-01-24 14:11:56
- * @LastEditors: Please set LastEditors
- * @Description: Text tips
- * @FilePath: /MobileApp/App/Containers/UserInfo/TextTip.js
- */
-/*
  * @Author: Jianlong Nie
  * @Date: 2021-01-09 13:03:18
  * @LastEditTime: 2021-01-09 14:34:12
@@ -14,30 +6,30 @@
  * @Description: User haven't added a default purchase preference yet
  * @FilePath: /MobileApp/App/Containers/UserInfo/NoPurchase.js
  */
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScaledSheet, s, vs } from 'react-native-size-matters';
-import Fonts from '../../Themes/Fonts';
-import AppConfig from '../../Config/AppConfig';
-import { Button } from '../../Components';
-import fonts from '../../Themes/Fonts';
-import colors from '../../Themes/Colors';
-import NavigationService from '../../Navigation/NavigationService';
-import images from '../../Themes/Images';
-import ListItem from './ListItem';
-import metrics from '../../Themes/Metrics';
+import React from 'react';
+import { View, Text } from 'react-native';
+import { ScaledSheet } from 'react-native-size-matters';
+import Fonts from '../Themes/Fonts';
+import AppConfig from '../Config/AppConfig';
+
+import colors from '../Themes/Colors';
+import metrics from '../Themes/Metrics';
+import { ApplicationStyles } from '../Themes';
+import PropTypes from 'prop-types';
+import Button from './Button';
 /**
  * @description:Prompt component, user user does not add address information, do not add payment information when the display
  * @param {*} props
  * @return {*}
  */
-function TextTip(props) {
+function EmptyReminder(props) {
   const { textTip, subTextTip, needButton, btnMsg, onPress, callback } = props;
   return (
     <View style={{ flex: 1, width: metrics.screenWidth }}>
       <View style={styles.headerContainer}>
-        <Text style={styles.nosign}>{textTip}</Text>
+        <Text style={[ApplicationStyles.screen.heading4Bold, styles.nosign]}>
+          {textTip}
+        </Text>
         <Text style={[styles.subTextTip]}>{subTextTip}</Text>
         <View style={styles.signbtn}>
           {needButton && (
@@ -49,13 +41,19 @@ function TextTip(props) {
   );
 }
 
-export default TextTip;
+EmptyReminder.propTypes = {
+  textTip: PropTypes.string,
+  onPress: PropTypes.any,
+  needButton: PropTypes.bool,
+  callback: PropTypes.func,
+  subTextTip: PropTypes.string,
+  btnMsg: PropTypes.string,
+};
+export default EmptyReminder;
 const styles = ScaledSheet.create({
   nosign: {
     fontSize: '22@s',
     textAlign: 'center',
-    fontFamily: Fonts.primary,
-    fontWeight: 'bold',
     marginTop: '25@vs',
   },
   subTextTip: {

@@ -1,28 +1,21 @@
-import React, { Component, useState, useEffect } from 'react';
-import {
-  View,
-  StatusBar,
-  Text,
-  Keyboard,
-  TouchableOpacity,
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StatusBar, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 import { vs } from 'react-native-size-matters';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   AppBar,
-  Button,
   TextInput,
-  PasswordInput,
   Switch,
+  RightButton,
+  MaterialTextInput,
+  Selector,
 } from '../../Components';
-import { Colors, Metrics } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
-import images from '../../Themes/Images';
 
-function index(props) {
+function AddNewAddress(props) {
   const [name, setName] = useState('');
   const [streetName, setStreetName] = useState('');
   const [streetNum, setStreetNum] = useState('');
@@ -32,35 +25,28 @@ function index(props) {
   const [pincode, setPincode] = useState('');
   const [country, setCountry] = useState('');
   const [disable, setDisable] = useState(true);
-  const [hastitle, setHasTitle] = useState(false);
   useEffect(() => {
     if (
-      name.length == 0 ||
-      streetName.length == 0 ||
-      door.length == 0 ||
-      city.length == 0 ||
-      mstate.length == 0 ||
-      pincode.length == 0 ||
-      country.length == 0
+      name.length === 0 ||
+      streetName.length === 0 ||
+      door.length === 0 ||
+      mstate.length === 0 ||
+      pincode.length === 0 ||
+      country.length === 0
     ) {
       setDisable(true);
     } else {
       setDisable(false);
     }
   }, [name, streetName, streetNum, door, city, mstate, pincode, country]);
-  const radioProps = {
-    text: 'Set as default address',
-    prefixIcon: images.userToggleOff,
-    backgroundColor: 'transparent',
-    textColor: colors.black,
-  };
+
   const inputs = [
     {
       placeholder: 'Address Name (ex. home)*',
-
       onChangeText: (text) => setName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
     {
@@ -68,6 +54,7 @@ function index(props) {
       onChangeText: (text) => setStreetName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
     {
@@ -75,6 +62,7 @@ function index(props) {
       onChangeText: (text) => setStreetNum(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -82,6 +70,7 @@ function index(props) {
       onChangeText: (text) => setDoor(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -89,6 +78,7 @@ function index(props) {
       onChangeText: (text) => setCity(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -96,6 +86,7 @@ function index(props) {
       onChangeText: (text) => setMstate(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'selector',
       type: 'short',
     },
     {
@@ -103,6 +94,7 @@ function index(props) {
       onChangeText: (text) => setPincode(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'decimal-pad',
       type: 'short',
     },
     {
@@ -110,6 +102,7 @@ function index(props) {
       onChangeText: (text) => setCountry(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
   ];
@@ -122,63 +115,73 @@ function index(props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
       >
         <AppBar
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                disabled={disable}
-                onPress={() => {
-                  debugger;
-                  if (typeof params.callback == 'function') {
-                    params.callback({
-                      name,
-                      streetName,
-                      streetNum,
-                      door,
-                      city,
-                      mstate,
-                      pincode,
-                      country,
-                    });
-                  }
-
-                  NavigationService.goBack();
-                }}
-              >
-                <Text style={disable ? styles.disupdate : styles.update}>
-                  SAVE
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
+          rightButton={() => (
+            <RightButton
+              title="SAVE"
+              disable={disable}
+              onPress={() => {
+                if (typeof params.callback === 'function') {
+                  params.callback({
+                    name,
+                    streetName,
+                    streetNum,
+                    door,
+                    city,
+                    mstate,
+                    pincode,
+                    country,
+                  });
+                }
+                NavigationService.goBack();
+              }}
+            />
+          )}
         />
         <View style={styles.bodyContainer}>
           <Text style={styles.heading2Bold}>{params.title}</Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              justifyContent: 'space-between',
-            }}
-          >
-            {inputs.map((item, index) => {
-              return (
-                <View
-                  key={index}
-                  style={{ width: item.type == 'short' ? '48%' : '100%' }}
-                >
-                  <TextInput style={{ marginTop: vs(18) }} {...item} />
-                </View>
-              );
-            })}
-          </View>
+          <KeyboardAwareScrollView>
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                justifyContent: 'space-between',
+              }}
+            >
+              {inputs.map((item, index) => {
+                return (
+                  <View
+                    key={index}
+                    style={{
+                      width: item.type == 'short' ? '48%' : '100%',
+                      marginTop: vs(18),
+                    }}
+                  >
+                    {item.keyboardType === 'selector' ? (
+                      <Selector
+                        style={{ marginBottom: vs(10) }}
+                        placeholder={'Sate'}
+                        data={['AAA', 'BBB', 'CCC']}
+                      />
+                    ) : (
+                      <MaterialTextInput
+                        style={{ marginTop: vs(18) }}
+                        {...item}
+                      />
+                    )}
+                  </View>
+                );
+              })}
+            </View>
+          </KeyboardAwareScrollView>
+
           <View style={{ marginTop: 20 }}>
-            <Switch label="Set as default address"></Switch>
+            <Switch onSwitch={() => {}} label="Set as default address"></Switch>
           </View>
         </View>
       </SafeAreaView>
@@ -186,4 +189,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default AddNewAddress;

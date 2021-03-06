@@ -17,10 +17,10 @@ import RateOrderScreen from '../Containers/Explore/RateOrder';
 import ReportScreen from '../Containers/Explore/Report';
 import RateSellerScreen from '../Containers/Orders/RateSeller';
 import OrderPlacedScreen from '../Containers/Explore/OrderPlaced';
-import OrderScreen from '../Containers/Orders/MainScreen'
-import GroupInfoScreen from '../Containers/Orders/GroupInfo'
-import OrderDetailScreen from '../Containers/Orders/OrderDetail'
-import InvoiceScreen from '../Containers/Orders/Invoice'
+import OrderScreen from '../Containers/Orders/MainScreen';
+import GroupInfoScreen from '../Containers/Orders/GroupInfo';
+import OrderDetailScreen from '../Containers/Orders/OrderDetail';
+import InvoiceScreen from '../Containers/Orders/Invoice';
 import LoginScreen from '../Containers/Login';
 import RegisterScreen from '../Containers/Register';
 import LegalScreen from '../Containers/Legal';

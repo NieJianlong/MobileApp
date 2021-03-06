@@ -1,4 +1,4 @@
-import { ScaledSheet } from 'react-native-size-matters';
+import { ScaledSheet, vs } from 'react-native-size-matters';
 import { ApplicationStyles, Colors, Fonts } from '../../Themes';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import AppConfig from '../../Config/AppConfig';
@@ -14,7 +14,6 @@ export default ScaledSheet.create({
     alignItems: 'center',
   },
   tipContainer: {
-    height: '150@vs',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -34,6 +33,7 @@ export default ScaledSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginTop: vs(15),
     paddingVertical: AppConfig.paddingHorizontal,
   },
   content: {
@@ -41,15 +41,15 @@ export default ScaledSheet.create({
     justifyContent: 'space-between',
     paddingVertical: AppConfig.paddingHorizontal,
   },
-  iconsContainer:{
-    flexDirection:'row',
-    justifyContent:'space-between'
+  iconsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  shareIcon:{
-    width:'45@s',
-    height:'45@s',
-    resizeMode:'contain',
-    margin:5
+  shareIcon: {
+    width: '45@s',
+    height: '45@s',
+    resizeMode: 'contain',
+    margin: 5,
   },
   balanceTipTxt: {
     color: colors.grey80,

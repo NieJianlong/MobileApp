@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 import {
   ScrollView,
   View,
   Dimensions,
   FlatList,
   TouchableHighlight,
-  Text
-} from "react-native";
-import DynamicTabViewScrollHeader from "./DynamicTabViewScrollHeader";
-import PropTypes from "prop-types";
+  Text,
+} from 'react-native';
+import DynamicTabViewScrollHeader from './DynamicTabViewScrollHeader';
+import PropTypes from 'prop-types';
 /**
  * @description: Custom Tab Menu component
  * @param {*}
@@ -19,16 +19,16 @@ class DynamicTabView extends React.Component {
     super(props);
     this.state = {
       index: this.props.defaultIndex,
-      containerWidth: Dimensions.get("window").width,
+      containerWidth: Dimensions.get('window').width,
       begin_offset: null,
-      end_offset: null
+      end_offset: null,
     };
     this.defaultStyle = defaultStyle;
   }
 
   componentDidMount() {
     //HACK
-    let wait = new Promise(resolve => setTimeout(resolve, 100));
+    let wait = new Promise((resolve) => setTimeout(resolve, 100));
     wait.then(() => {
       this.flatView.scrollToIndex({ index: this.state.index, animated: false });
       this.headerRef.scrollHeader(this.state.index);
@@ -38,10 +38,10 @@ class DynamicTabView extends React.Component {
   getItemLayout = (data, index) => ({
     length: this.state.containerWidth,
     offset: this.state.containerWidth * index,
-    index
+    index,
   });
 
-  goToPage = index => {
+  goToPage = (index) => {
     this.setState({ index });
     this.flatView.scrollToIndex({ index });
     if (this.props.onChangeTab) {
@@ -51,13 +51,13 @@ class DynamicTabView extends React.Component {
     this.headerRef.scrollHeader(index);
   };
 
-  onScrollBeginDrag = e => {
+  onScrollBeginDrag = (e) => {
     var begin_offset = e.nativeEvent.contentOffset.x; //since horizontal scroll view begin
     // console.log(begin_offset);
     this.setState({ begin_offset });
   };
 
-  onScrollEndDrag = e => {
+  onScrollEndDrag = (e) => {
     var end_offset = e.nativeEvent.contentOffset.x; // since horizontal scroll view end
     // console.log(end_offset)
     this.setState({ end_offset });
@@ -84,7 +84,7 @@ class DynamicTabView extends React.Component {
     }
   };
 
-  _onLayout = e => {
+  _onLayout = (e) => {
     const { width } = e.nativeEvent.layout;
     this.setState({ containerWidth: width });
   };
@@ -95,7 +95,7 @@ class DynamicTabView extends React.Component {
         style={[
           { width: this.state.containerWidth },
           this.defaultStyle.tabContainer,
-          this.props.tabContainerStyle
+          this.props.tabContainerStyle,
         ]}
       >
         {this.props.renderTab(item, index)}
@@ -108,11 +108,11 @@ class DynamicTabView extends React.Component {
       <View
         style={[
           this.defaultStyle.headerContainer,
-          this.props.headerContainerStyle
+          this.props.headerContainerStyle,
         ]}
       >
         <DynamicTabViewScrollHeader
-          ref={headerRef => {
+          ref={(headerRef) => {
             this.headerRef = headerRef;
           }}
           data={this.props.data}
@@ -138,13 +138,13 @@ class DynamicTabView extends React.Component {
           {...this.props}
           horizontal
           scrollEnabled={true}
-          ref={flatView => {
+          ref={(flatView) => {
             this.flatView = flatView;
           }}
           styleCustomization={this.props.styleCustomization}
           renderItem={this._renderTab}
           scrollEventThrottle={10}
-          keyboardDismissMode={"on-drag"}
+          keyboardDismissMode={'on-drag'}
           getItemLayout={this.getItemLayout}
           pagingEnabled={true}
           onMomentumScrollBegin={this._onCalculateIndex}
@@ -158,23 +158,23 @@ class DynamicTabView extends React.Component {
 
 const defaultStyle = {
   container: {
-    flex: 1
+    flex: 1,
   },
   headerContainer: {
-    backgroundColor: "white"
+    backgroundColor: 'transparent',
   },
   tabContainer: {
-    flex: 1
+    flex: 1,
   },
   labelStyle: {
-    color: "white"
+    color: 'white',
   },
   indicatorStyle: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     marginVertical: 1,
     bottom: 4, //indicatorStyle is implemented in absolute in the library
-    height: 4
-  }
+    height: 4,
+  },
 };
 
 DynamicTabView.defaultProps = {
@@ -186,7 +186,7 @@ DynamicTabView.defaultProps = {
   //styles for header
   headerTextStyle: {},
   highlightStyle: {},
-  noHighlightStyle: {}
+  noHighlightStyle: {},
 };
 
 DynamicTabView.propTypes = {

@@ -1,22 +1,13 @@
 import React, { useState } from 'react';
-import {
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Text,
-  Image,
-  SafeAreaView,
-  StatusBar,
-  FlatList,
-} from 'react-native';
+import { View, Text, SafeAreaView, StatusBar, FlatList } from 'react-native';
 import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { AppBar, Button, SearchBox } from '../../Components';
+import { AppBar, Button } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import CheckBox from './CheckBox';
-import metrics from '../../Themes/Metrics';
+
 const countries = [
   {
     label: 'Shipping method',
@@ -30,7 +21,7 @@ const countries = [
   },
 ];
 
-function index(props) {
+function AskForReplacement(props) {
   const [selectValue, setSelectValue] = useState(countries[0]);
   return (
     <View
@@ -44,7 +35,7 @@ function index(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
@@ -69,7 +60,6 @@ function index(props) {
             </View>
           }
           renderItem={({ item }, index) => {
-            debugger;
             return (
               <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
                 <View style={{ height: vs(12) }} />
@@ -93,16 +83,20 @@ function index(props) {
         }}
       >
         <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-          <Button onPress={()=>{
+          <Button
+            onPress={() => {
               NavigationService.navigate('ReturnProductStep3Screen');
-          }} color={colors.primary} text="CONFIRM THE RETURN" />
+            }}
+            color={colors.primary}
+            text="CONFIRM THE RETURN"
+          />
         </View>
       </SafeAreaView>
     </View>
   );
 }
 
-export default index;
+export default AskForReplacement;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import NavigationService from '../../../Navigation/NavigationService';
-import TextTip from '../../UserInfo/TextTip';
+import TextTip from '../../../Components/EmptyReminder';
 
 function index(props) {
 const subTip='Check if there are any products on your wish list and snatch them up before they’re gone!\n \n You can also explore new products \n';

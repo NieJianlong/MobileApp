@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   View,
-  ScrollView,
   TouchableOpacity,
   Text,
   Image,
@@ -9,7 +8,7 @@ import {
   StatusBar,
 } from 'react-native';
 import AppConfig from '../../Config/AppConfig';
-import { vs, s, ScaledSheet } from 'react-native-size-matters';
+import { s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
 import { AppBar } from '../../Components';
@@ -17,20 +16,10 @@ import NavigationService from '../../Navigation/NavigationService';
 import { ApplicationStyles } from '../../Themes';
 import images from '../../Themes/Images';
 
-function index(props) {
+function CheckoutNoAuth(props) {
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.background,
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-      }}
-    >
-      <StatusBar barStyle="dark-content" />
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
@@ -56,7 +45,7 @@ function index(props) {
                 justifyContent: 'center',
               }}
             >
-              <Text style={ApplicationStyles.screen.heading2Bold}>Sing In</Text>
+              <Text style={ApplicationStyles.screen.heading2Bold}>Sign In</Text>
             </View>
           </TouchableOpacity>
           <Image
@@ -68,22 +57,14 @@ function index(props) {
               NavigationService.navigate('CheckOutPersonalDetailsScreen');
             }}
           >
-            <View
-              style={{
-                backgroundColor: 'white',
-                paddingHorizontal: AppConfig.paddingHorizontal,
-                borderRadius: s(16),
-                height: 160,
-                justifyContent: 'center',
-              }}
-            >
+            <View style={styles.item_container}>
               <Text style={ApplicationStyles.screen.heading2Bold}>
                 Continue as guest
               </Text>
               <Text
                 style={[
                   ApplicationStyles.screen.heading4Bold,
-                  { color: colors.grey60 },
+                  { color: colors.grey60, fontWeight: 'normal' },
                 ]}
               >
                 You can continue as guest and only fill the mandatory details.
@@ -98,12 +79,28 @@ function index(props) {
   );
 }
 
-export default index;
+export default CheckoutNoAuth;
 const styles = ScaledSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
   title: {
     fontFamily: fonts.primary,
     fontSize: '16@s',
     color: colors.black,
     fontWeight: '600',
+  },
+  item_container: {
+    backgroundColor: 'white',
+    paddingHorizontal: AppConfig.paddingHorizontal,
+    borderRadius: s(16),
+    height: 160,
+    justifyContent: 'center',
   },
 });

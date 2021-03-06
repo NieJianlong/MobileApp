@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   StatusBar,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
-import { AppBar, Button, Switch } from '../../Components';
+import { AppBar, Button, RightButton, Switch } from '../../Components';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
@@ -18,13 +18,14 @@ import AppConfig from '../../Config/AppConfig';
 import metrics from '../../Themes/Metrics';
 import fonts from '../../Themes/Fonts';
 import { AddressTestData } from '../UserInfo/Config';
-import { AlertContext } from '../Root/index';
+import { AlertContext } from '../Root/GlobalContext';
+import { ApplicationStyles } from '../../Themes';
 /**
  * @description: The user selects the shipping address page
  * @param {*} props
  * @return {*}
  */
-function index(props) {
+function SelectDeliveryAddress(props) {
   const {
     navigation: {
       state: { params },
@@ -35,33 +36,30 @@ function index(props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
       >
         <AppBar
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  NavigationService.pop(2);
-                  context.dispatch({
-                    type: 'changAlertState',
-                    payload: {
-                      visible: true,
-                      message:
-                        'You have successfully activated 1 click purchasing method.',
-                      color: colors.success,
-                      title: '1 Click Purchasing Activated!',
-                    },
-                  });
-                }}
-              >
-                <Text style={styles.update}>SAVE</Text>
-              </TouchableOpacity>
-            );
-          }}
+          rightButton={() => (
+            <RightButton
+              title="SAVE"
+              onPress={() => {
+                NavigationService.pop(2);
+                context.dispatch({
+                  type: 'changAlertState',
+                  payload: {
+                    visible: true,
+                    message:
+                      'You have successfully activated 1 click purchasing method.',
+                    color: colors.success,
+                    title: '1 Click Purchasing Activated!',
+                  },
+                });
+              }}
+            />
+          )}
         />
 
         <View style={styles.bodyContainer}>
@@ -120,7 +118,7 @@ function index(props) {
                         </TouchableOpacity>
                         <TouchableOpacity
                           onPress={(item) => {
-                            showSheet();
+                            //();
                           }}
                         >
                           <Image
@@ -149,14 +147,13 @@ function index(props) {
           <Button
             onPress={() => {
               if (params) {
-                if(typeof params.removeCallback=='function'){
-                  params.removeCallback()
+                if (typeof params.removeCallback == 'function') {
+                  params.removeCallback();
                 }
               }
-             
             }}
             textColor="white"
-            text="ADD NEW ADDRESS"
+            text="Add new address"
             backgroundColor={colors.grey80}
           ></Button>
         </SafeAreaView>
@@ -165,7 +162,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default SelectDeliveryAddress;
 const styles1 = ScaledSheet.create({
   itemBottom: {
     flexDirection: 'row',
@@ -209,11 +206,7 @@ const styles1 = ScaledSheet.create({
     backgroundColor: colors.background,
     flex: 1,
   },
-  update: {
-    color: colors.primary,
-    fontSize: '12@vs',
-    fontFamily: fonts.primary,
-  },
+
   itemTitle: {
     fontSize: '14@s',
     fontFamily: fonts.primary,

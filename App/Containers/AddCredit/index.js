@@ -1,40 +1,24 @@
-import React, { Component, useState, useEffect } from 'react';
-import {
-  View,
-  StatusBar,
-  Text,
-  Keyboard,
-  TouchableOpacity,
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StatusBar, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 import { vs } from 'react-native-size-matters';
-import {
-  AppBar,
-  Button,
-  TextInput,
-  PasswordInput,
-  Switch,
-} from '../../Components';
-import { Colors, Metrics } from '../../Themes';
+import { AppBar, TextInput, Switch, RightButton } from '../../Components';
+import { ApplicationStyles } from '../../Themes';
 import styles from './styles';
-import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
-import images from '../../Themes/Images';
 
-function index(props) {
+function AddCredit(props) {
   const [name, setName] = useState('');
   const [cardNum, setCardNum] = useState('');
   const [date, setDate] = useState('');
   const [cvv, setCvv] = useState('');
   const [disable, setDisable] = useState(true);
-  const [hastitle, setHasTitle] = useState(false);
   useEffect(() => {
     if (
-      name.length == 0 ||
-      cardNum.length == 0 ||
-      date.length == 0 ||
-      cvv.length == 0
+      name.length === 0 ||
+      cardNum.length === 0 ||
+      date.length === 0 ||
+      cvv.length === 0
     ) {
       setDisable(true);
     } else {
@@ -48,6 +32,7 @@ function index(props) {
       onChangeText: (text) => setName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       weight: '12',
     },
     {
@@ -55,20 +40,38 @@ function index(props) {
       onChangeText: (text) => setCardNum(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'decimal-pad',
       weight: '12',
     },
     {
       placeholder: 'MM/YY',
-      onChangeText: (text) => setDate(text),
+      onChangeText: (text) => {
+        if (text.length <= 5) {
+          if (text.length === 2) {
+            text = text + '/';
+            setDate(text);
+          } else {
+            setDate(text);
+          }
+        }
+      },
       showError: false,
       errorMessage: null,
+      value: date,
+      keyboardType: 'decimal-pad',
       weight: '7',
     },
     {
       placeholder: 'CVV',
-      onChangeText: (text) => setCvv(text),
+      onChangeText: (text) => {
+        if (text.length <= 3) {
+          setCvv(text);
+        }
+      },
       showError: false,
       errorMessage: null,
+      value: cvv,
+      keyboardType: 'decimal-pad',
       weight: '4.5',
     },
   ];
@@ -84,15 +87,16 @@ function index(props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
       >
         <AppBar
           rightButton={() => (
-            <TouchableOpacity
-              disabled={disable}
+            <RightButton
+              title="SAVE"
+              disable={disable}
               onPress={() => {
                 params.callback({
                   name,
@@ -102,11 +106,7 @@ function index(props) {
                 });
                 // NavigationService.goBack();
               }}
-            >
-              <Text style={disable ? styles.disupdate : styles.update}>
-                SAVE
-              </Text>
-            </TouchableOpacity>
+            />
           )}
         />
         <View style={styles.bodyContainer}>
@@ -122,7 +122,9 @@ function index(props) {
               return (
                 <View
                   key={index}
-                  style={{ width: `${(item.weight / 12) * 100}%` }}
+                  style={{
+                    width: `${(item.weight / 12) * 100}%`,
+                  }}
                 >
                   <TextInput style={{ marginTop: vs(18) }} {...item} />
                 </View>
@@ -130,7 +132,10 @@ function index(props) {
             })}
           </View>
           <View style={{ marginTop: 20 }}>
-            <Switch label="Set as default payment method"></Switch>
+            <Switch
+              onSwitch={() => {}}
+              label="Set as default payment method"
+            ></Switch>
           </View>
         </View>
       </SafeAreaView>
@@ -138,4 +143,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default AddCredit;

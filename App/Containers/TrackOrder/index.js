@@ -1,24 +1,15 @@
 import React from 'react';
-import {
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Text,
-  Image,
-  SafeAreaView,
-  StatusBar,
-} from 'react-native';
+import { View, ScrollView, Text, SafeAreaView, StatusBar } from 'react-native';
 import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
 import { AppBar } from '../../Components';
-import NavigationService from '../../Navigation/NavigationService';
 import { ApplicationStyles } from '../../Themes';
 import Header from './header';
 import Trackers from './trackers';
 
-function index(props) {
+function TrackOrder(props) {
   return (
     <View
       style={{
@@ -31,7 +22,7 @@ function index(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
@@ -77,7 +68,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default TrackOrder;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

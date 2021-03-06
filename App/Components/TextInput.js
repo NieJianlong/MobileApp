@@ -26,6 +26,7 @@ class CustomTextInput extends Component {
       title,
       multiline,
       value,
+      keyboardType = 'default',
     } = this.props;
 
     return (
@@ -47,6 +48,7 @@ class CustomTextInput extends Component {
               onBlur={onBlur}
               onChangeText={onChangeText}
               multiline={multiline}
+              keyboardType={keyboardType}
               numberOfLines={multiline ? 5 : 1}
               value={value}
             />

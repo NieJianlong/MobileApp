@@ -1,10 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   ScrollView,
   TouchableOpacity,
   Text,
-  Image,
   SafeAreaView,
   StatusBar,
   TextInput as RNTextInput,
@@ -13,13 +12,13 @@ import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { AppBar, Selector, TextInput } from '../../Components';
+import { AppBar, Selector } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
-import { AlertContext } from '../Root/index';
-import SelectPrefer from './SelectPrefer';
 
-function index(props) {
-  const { dispatch } = useContext(AlertContext);
+import SelectPrefer from './SelectPrefer';
+import { ApplicationStyles } from '../../Themes';
+
+function ReturnProductStep1(props) {
   const [showPrefer, setShowPrefer] = useState(false);
   const [prefer, setPrefer] = useState('Return the product and get a refund');
   return (
@@ -34,7 +33,7 @@ function index(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
@@ -53,13 +52,7 @@ function index(props) {
                   }
                 }}
               >
-                <Text
-                  style={{
-                    color: colors.primary,
-                    fontSize: vs(12),
-                    fontFamily: fonts.primary,
-                  }}
-                >
+                <Text style={[ApplicationStyles.screen.heading5Bold]}>
                   NEXT
                 </Text>
               </TouchableOpacity>
@@ -121,7 +114,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default ReturnProductStep1;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

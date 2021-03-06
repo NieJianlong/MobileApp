@@ -1,29 +1,14 @@
-import React, { Component, useState, useEffect } from 'react';
-import {
-  View,
-  StatusBar,
-  Text,
-  Image,
-  Keyboard,
-  TouchableOpacity,
-} from 'react-native';
+import React from 'react';
+import { View, StatusBar, Text, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { isIphoneX } from 'react-native-iphone-x-helper';
-import { vs } from 'react-native-size-matters';
-import {
-  AppBar,
-  Button,
-  TextInput,
-  PasswordInput,
-  Switch,
-} from '../../Components';
-import { Colors, Metrics } from '../../Themes';
+import { AppBar } from '../../Components';
 import styles from './styles';
 import images from '../../Themes/Images';
 import { ScrollView } from 'react-native-gesture-handler';
 import Nav from '../../Navigation/NavigationService';
+import colors from '../../Themes/Colors';
 
-function index(props) {
+function AddPaymentMethod(props) {
   const payments = [
     {
       image: images.userPayMethod2Image,
@@ -49,7 +34,7 @@ function index(props) {
   } = props;
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
@@ -68,10 +53,8 @@ function index(props) {
                 >
                   <TouchableOpacity
                     onPress={(item) => {
-                      debugger;
                       Nav.navigate('AddCreditScreen', {
                         callback: () => {
-                          debugger;
                           Nav.pop(2);
                           if (typeof params.callback == 'function') {
                             params.callback();
@@ -92,4 +75,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default AddPaymentMethod;

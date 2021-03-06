@@ -17,14 +17,20 @@ import {
 } from 'react-native';
 import UserHeader from '../UserCenter/UserHeader';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
-import { AppBar, Alert, BottomSheet, Button } from '../../Components';
+import {
+  AppBar,
+  Alert,
+  BottomSheet,
+  Button,
+  RightButton,
+} from '../../Components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import colors from '../../Themes/Colors';
 import HorizontalMenu from './HorizontalMenu';
 import images from '../../Themes/Images';
-import TextTip from './TextTip';
-import fonts from '../../Themes/Fonts';
+import TextTip from '../../Components/EmptyReminder';
 import NavigationService from '../../Navigation/NavigationService';
+import { ApplicationStyles } from '../../Themes';
 
 //Alert Context, which controls the display and hiding of an alert, for example, Add Address Success
 export const AlertContext = React.createContext({});
@@ -40,9 +46,6 @@ const initialState = {
   rightButtonShow: false,
 };
 function reducer(state, action) {
-  console.log('====================================');
-  console.log({ ...state, ...action.payload });
-  console.log('====================================');
   switch (action.type) {
     case 'changAlertState':
       return { ...state, ...action.payload };
@@ -59,7 +62,7 @@ function reducer(state, action) {
  * @param {*} props
  * @return {*}
  */
-function index(props) {
+function UserInfo(props) {
   const [
     { visible, message, color, onDismiss, title, showSheet, rightButtonShow },
     dispatch,
@@ -79,9 +82,10 @@ function index(props) {
       <View style={styles.container}>
         <SafeAreaView style={{ maxHeight: 64 }}>
           <AppBar
-            rightButton={() => {
-              return rightButtonShow ? (
-                <TouchableOpacity
+            rightButton={() =>
+              rightButtonShow ? (
+                <RightButton
+                  title="EDIT"
                   onPress={() => {
                     NavigationService.navigate('EditBillingDetailsScreen', {
                       saveCallback: () => {},
@@ -99,17 +103,15 @@ function index(props) {
                       },
                     });
                   }}
-                >
-                  <Text style={styles.update}>EDIT</Text>
-                </TouchableOpacity>
-              ) : null;
-            }}
+                />
+              ) : null
+            }
           />
         </SafeAreaView>
-        <View>
+        <View style={{ marginBottom: vs(15) }}>
           <UserHeader needEdit></UserHeader>
         </View>
-        <HorizontalMenu></HorizontalMenu>
+        <HorizontalMenu dispatch={dispatch}></HorizontalMenu>
       </View>
       {showSheet && (
         <TouchableWithoutFeedback onPress={() => {}}>
@@ -202,7 +204,7 @@ function renderSheet(sheetEl, dispatch) {
     </BottomSheet>
   );
 }
-export default index;
+export default UserInfo;
 
 const styles = ScaledSheet.create({
   credit: {
@@ -214,10 +216,5 @@ const styles = ScaledSheet.create({
   container: {
     backgroundColor: colors.background,
     flex: 1,
-  },
-  update: {
-    color: colors.primary,
-    fontSize: '12@vs',
-    fontFamily: fonts.primary,
   },
 });

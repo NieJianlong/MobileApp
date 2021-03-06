@@ -3,24 +3,18 @@ import {
   View,
   StatusBar,
   Text,
-  Keyboard,
   TouchableOpacity,
   Image,
   FlatList,
   Animated,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { vs, s } from 'react-native-size-matters';
-import { AppBar, Button, BottomSheet } from '../../Components';
+import { s } from 'react-native-size-matters';
+import { AppBar, RightButton } from '../../Components';
 import { Colors } from '../../Themes';
 import styles from './styles';
-import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
-import images from '../../Themes/Images';
 import AppConfig from '../../Config/AppConfig';
-import TextTip from '../UserInfo/TextTip';
-import metrics from '../../Themes/Metrics';
 
 const invitedUsers = [
   {
@@ -61,24 +55,28 @@ const invitedUsers = [
   },
 ];
 
-function index(props) {
+function Notifications(props) {
   fall = new Animated.Value(0);
   const [showSheet, setShowSheet] = useState(false);
   const sheetEl = useRef(null);
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
       >
         <AppBar
           rightButton={() => (
-            <TouchableOpacity onPress={() => {}}>
-              <Text style={styles.update}>CLEAR ALL</Text>
-            </TouchableOpacity>
+            <RightButton
+              title="CLEAR ALL"
+              onPress={() => {
+                // NavigationService.goBack();
+              }}
+            />
           )}
         />
+
         <FlatList
           data={invitedUsers}
           ListHeaderComponent={() => listHeader(setShowSheet)}
@@ -167,4 +165,4 @@ function listHeader(setShowSheet) {
   );
 }
 
-export default index;
+export default Notifications;

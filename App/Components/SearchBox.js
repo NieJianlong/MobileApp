@@ -13,6 +13,7 @@ function index({ placeholder }) {
         <TextInput
           placeholder={placeholder}
           value={keyword}
+          paddingVertical={0}
           style={styles.textInput}
           onChangeText={(text) => {
             setKeyword(text);
@@ -68,6 +69,7 @@ const styles = ScaledSheet.create({
     fontSize: '14@s',
     fontFamily: Fonts.primary,
     color: Colors.black,
+    paddingVertical: 0,
   },
   textResult: {
     fontSize: '14@s',

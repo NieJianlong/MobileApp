@@ -1,10 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   ScrollView,
   TouchableOpacity,
   Text,
-  Image,
   SafeAreaView,
   StatusBar,
   TextInput as RNTextInput,
@@ -13,14 +12,12 @@ import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { AppBar, Selector, TextInput } from '../../Components';
+import { AppBar, Selector } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
-import { AlertContext } from '../Root/index';
+import { ApplicationStyles } from '../../Themes';
 
-function index(props) {
-  const { dispatch } = useContext(AlertContext);
+function CancelOrder(props) {
   const [showPrefer, setShowPrefer] = useState(false);
-  const [prefer, setPrefer] = useState('');
   return (
     <View
       style={{
@@ -33,7 +30,7 @@ function index(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
@@ -43,16 +40,10 @@ function index(props) {
             return (
               <TouchableOpacity
                 onPress={() => {
-                  NavigationService.navigate('RefundScreen',{cancel:true});
+                  NavigationService.navigate('RefundScreen', { cancel: true });
                 }}
               >
-                <Text
-                  style={{
-                    color: colors.primary,
-                    fontSize: vs(12),
-                    fontFamily: fonts.primary,
-                  }}
-                >
+                <Text style={[ApplicationStyles.screen.heading5Bold]}>
                   NEXT
                 </Text>
               </TouchableOpacity>
@@ -98,19 +89,7 @@ function index(props) {
           <RNTextInput
             multiline={true}
             placeholder="Message"
-            style={{
-              marginTop: vs(16),
-              height: vs(160),
-              backgroundColor: colors.white,
-              borderRadius: s(20),
-              borderWidth: 1,
-              borderColor: colors.grey20,
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              flexDirection: 'row',
-              padding: s(14),
-              paddingVertical: s(20),
-            }}
+            style={styles.input}
           />
         </ScrollView>
       </SafeAreaView>
@@ -118,12 +97,25 @@ function index(props) {
   );
 }
 
-export default index;
+export default CancelOrder;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,
     fontSize: '16@s',
     color: colors.black,
     fontWeight: '600',
+  },
+  input: {
+    marginTop: vs(16),
+    height: vs(160),
+    backgroundColor: colors.white,
+    borderRadius: s(20),
+    borderWidth: 1,
+    borderColor: colors.grey20,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: s(14),
+    paddingVertical: s(20),
   },
 });

@@ -1,31 +1,22 @@
-import React, { Component, useState, useEffect } from 'react';
-import {
-  View,
-  StatusBar,
-  Text,
-  Keyboard,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  ScrollView,
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StatusBar, Text, Keyboard } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { isIphoneX } from 'react-native-iphone-x-helper';
+
 import { vs, s } from 'react-native-size-matters';
 import {
   AppBar,
-  Button,
   TextInput,
-  PasswordInput,
   Switch,
+  RightButton,
+  MaterialTextInput,
+  Selector,
 } from '../../Components';
-import { Colors, Metrics } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
-import images from '../../Themes/Images';
 
-function index(props) {
+function CheckoutBillingDetails(props) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneOrEmailNum, setPhoneOrEmailNum] = useState('');
@@ -40,12 +31,8 @@ function index(props) {
   const [taxid, setTaxid] = useState('');
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [disable, setDisable] = useState(true);
-  const [hastitle, setHasTitle] = useState(false);
   useEffect(() => {
     const keyboardShow = (e) => {
-      console.log('====================================');
-      console.log('输出键盘高度：' + e.endCoordinates.height);
-      console.log('====================================');
       setKeyboardHeight(e.endCoordinates.height);
     };
     const keyboardHide = (e) => {
@@ -59,22 +46,19 @@ function index(props) {
     };
   }, []);
   useEffect(() => {
-    console.log('====================================');
-    console.log('屏幕高度' + Metrics.screenHeight);
-    console.log('====================================');
     if (
-      firstName.length == 0 ||
-      lastName.length == 0 ||
-      phoneOrEmailNum.length == 0 ||
-      streetName.length == 0 ||
-      streetNum.length == 0 ||
-      door.length == 0 ||
-      city.length == 0 ||
-      mstate.length == 0 ||
-      postcode.length == 0 ||
-      country.length == 0 ||
-      company.length == 0 ||
-      taxid.length == 0
+      firstName.length === 0 ||
+      lastName.length === 0 ||
+      phoneOrEmailNum.length === 0 ||
+      streetName.length === 0 ||
+      streetNum.length === 0 ||
+      door.length === 0 ||
+      city.length === 0 ||
+      mstate.length === 0 ||
+      postcode.length === 0 ||
+      country.length === 0 ||
+      company.length === 0 ||
+      taxid.length === 0
     ) {
       setDisable(true);
     } else {
@@ -100,6 +84,7 @@ function index(props) {
       onChangeText: (text) => setFirstName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -107,6 +92,7 @@ function index(props) {
       onChangeText: (text) => setLastName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -114,6 +100,7 @@ function index(props) {
       onChangeText: (text) => setPhoneOrEmailNum(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
     {
@@ -121,6 +108,7 @@ function index(props) {
       onChangeText: (text) => setStreetName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
     {
@@ -128,6 +116,7 @@ function index(props) {
       onChangeText: (text) => setStreetNum(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -135,6 +124,7 @@ function index(props) {
       onChangeText: (text) => setDoor(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -142,6 +132,7 @@ function index(props) {
       onChangeText: (text) => setCity(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -149,6 +140,7 @@ function index(props) {
       onChangeText: (text) => setMstate(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'selector',
       type: 'short',
     },
     {
@@ -156,6 +148,7 @@ function index(props) {
       onChangeText: (text) => setPostCode(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'decimal-pad',
       type: 'short',
     },
     {
@@ -163,6 +156,7 @@ function index(props) {
       onChangeText: (text) => setCountry(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -170,6 +164,7 @@ function index(props) {
       onChangeText: (text) => setCompany(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -177,6 +172,7 @@ function index(props) {
       onChangeText: (text) => setTaxid(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
   ];
@@ -189,27 +185,23 @@ function index(props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
       >
         <AppBar
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                disabled={disable}
-                onPress={() => {
-                  NavigationService.navigate('AddCheckoutPaymentMethodScreen');
-                }}
-              >
-                <Text style={disable ? styles.disupdate : styles.update}>
-                  NEXT
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
+          rightButton={() => (
+            <RightButton
+              title="NEXT"
+              disable={disable}
+              onPress={() => {
+                NavigationService.navigate('AddCheckoutPaymentMethodScreen');
+              }}
+            />
+          )}
         />
+
         <KeyboardAwareScrollView
           keyboardVerticalOffset={50}
           behavior="position"
@@ -222,7 +214,7 @@ function index(props) {
               {params.title}
             </Text>
             <View style={{ marginTop: 20 }}>
-              <Switch label="Use the same info as my personal details"></Switch>
+              <Switch onSwitch={() => {}} label="Use the same info as my personal details"></Switch>
             </View>
             <View
               style={{
@@ -235,9 +227,22 @@ function index(props) {
                 return (
                   <View
                     key={index}
-                    style={{ width: item.type == 'short' ? '48%' : '100%' }}
+                    style={{
+                      width: item.type == 'short' ? '48%' : '100%',
+                      marginTop: vs(18),
+                    }}
                   >
-                    <TextInput style={{ marginTop: vs(18) }} {...item} />
+                    {item.keyboardType === 'selector' ? (
+                      <Selector
+                        placeholder={'Sate'}
+                        data={['AAA', 'BBB', 'CCC']}
+                      />
+                    ) : (
+                      <MaterialTextInput
+                        style={{ marginTop: vs(18) }}
+                        {...item}
+                      />
+                    )}
                   </View>
                 );
               })}
@@ -249,4 +254,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default CheckoutBillingDetails;

@@ -1,34 +1,23 @@
 import React, { useState } from 'react';
 import {
   View,
-  ScrollView,
   TouchableOpacity,
   Text,
-  Image,
   SafeAreaView,
   StatusBar,
-  FlatList,
   SectionList,
 } from 'react-native';
 import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { AppBar, SearchBox } from '../../Components';
+import { AppBar, RightButton } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import CheckBox from '../Explore/Components/CheckBox';
 import metrics from '../../Themes/Metrics';
-import { ApplicationStyles, Colors, Fonts } from '../../Themes';
+import { ApplicationStyles } from '../../Themes';
 
-const countries = () =>
-  [0, 1, 2, 3, 4, 5, 6, 7, 8].map((item) => `Country ${item}`);
-
-const languages = () =>
-  [0, 1, 2, 3, 4, 5, 6, 7, 8].map((item) => `Language ${item}`);
-
-function index(props) {
-  const [selectValue, setSelectValue] = useState('');
-
+function EditShoppingCart(props) {
   const [state, setState] = useState({
     selected: {
       Size: '256GB',
@@ -72,7 +61,7 @@ function index(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
@@ -81,21 +70,12 @@ function index(props) {
           title={`Edit details`}
           rightButton={() => {
             return (
-              <TouchableOpacity
+              <RightButton
+                title="SAVE"
                 onPress={() => {
                   NavigationService.goBack();
                 }}
-              >
-                <Text
-                  style={{
-                    color: colors.primary,
-                    fontSize: vs(12),
-                    fontFamily: fonts.primary,
-                  }}
-                >
-                  SAVE
-                </Text>
-              </TouchableOpacity>
+              />
             );
           }}
         />
@@ -135,18 +115,18 @@ function index(props) {
                 >
                   <View style={{ height: vs(12) }} />
                   <CheckBox
-                    defaultValue={selectedValue == item.title}
+                    defaultValue={selectedValue === item.title}
                     onSwitch={(t) => {
                       const selectedDic = state.selected;
                       selectedDic[sectionTitle] = item.title;
                       console.log({ ...state, selected: { ...selectedDic } });
                       setState({ ...state, selected: { ...selectedDic } });
                     }}
-                    hasIcon={section.title == 'Color'}
+                    hasIcon={section.title === 'Color'}
                     iconColor={item.color}
                     label={item.title}
                   />
-                  {selectedValue != item.title && (
+                  {selectedValue !== item.title && (
                     <Text
                       style={[
                         { position: 'absolute', top: vs(25), right: 40 },
@@ -171,7 +151,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default EditShoppingCart;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

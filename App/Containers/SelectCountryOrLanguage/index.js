@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import {
   View,
-  ScrollView,
   TouchableOpacity,
   Text,
-  Image,
   SafeAreaView,
   StatusBar,
   FlatList,
@@ -13,17 +11,18 @@ import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { AppBar, SearchBox } from '../../Components';
+import { AppBar, RightButton, SearchBox } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import CheckBox from '../Explore/Components/CheckBox';
 import metrics from '../../Themes/Metrics';
+import { ApplicationStyles } from '../../Themes';
 const countries = () =>
   [0, 1, 2, 3, 4, 5, 6, 7, 8].map((item) => `Country ${item}`);
 
 const languages = () =>
   [0, 1, 2, 3, 4, 5, 6, 7, 8].map((item) => `Language ${item}`);
 
-function index(props) {
+function SelectCountryOrLanguage(props) {
   const {
     navigation: {
       state: {
@@ -46,33 +45,23 @@ function index(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
       >
         <AppBar
           title={`Select a ${key}`}
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  NavigationService.goBack();
-                }}
-              >
-                <Text
-                  style={{
-                    color: colors.primary,
-                    fontSize: vs(12),
-                    fontFamily: fonts.primary,
-                  }}
-                >
-                  SAVE
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
+          rightButton={() => (
+            <RightButton
+              title="SAVE"
+              onPress={() => {
+                NavigationService.goBack();
+              }}
+            />
+          )}
         />
+
         <View style={{ height: metrics.screenHeight - vs(64) }}>
           <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
             <SearchBox placeholder={`Search for a ${key}`}></SearchBox>
@@ -82,7 +71,6 @@ function index(props) {
             contentContainerStyle={{ paddingBottom: vs(44) }}
             data={key == 'country' ? countries() : languages()}
             renderItem={({ item }, index) => {
-              debugger;
               return (
                 <View
                   style={{ paddingHorizontal: AppConfig.paddingHorizontal }}
@@ -104,7 +92,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default SelectCountryOrLanguage;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

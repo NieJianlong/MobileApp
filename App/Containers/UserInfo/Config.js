@@ -115,7 +115,7 @@ export const MenuConfig = [
     onPress: (callback) => {
       NavigationService.navigate('AddNewAddressScreen', {
         callback,
-        title: 'ADD NEW ADDRESS',
+        title: 'Add new address',
       });
     },
     extra: 'ADD NEW ADDRESS',
@@ -140,7 +140,7 @@ export const MenuConfig = [
     icon: images.userUPayImage,
     selectedIcon: images.userPayImage,
     key: 'Payment',
-    textTip: "You haven't added any payment \n method yet",
+    textTip: "You haven't added any payment  method yet",
     subTextTip:
       'Add a payment method to be able to use it in your next  purchases',
     needButton: true,

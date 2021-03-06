@@ -6,6 +6,7 @@ import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import images from '../../../Themes/Images';
 import colors from '../../../Themes/Colors';
 import fonts from '../../../Themes/Fonts';
+import { ApplicationStyles } from '../../../Themes';
 
 function index(props) {
   const { orderStatus } = props;
@@ -48,7 +49,9 @@ function index(props) {
                 }}
               >
                 <Image style={styles.paytypeIcon} source={item.icon}></Image>
-                <Text style={styles.itemTitle}>{item.title}</Text>
+                <Text style={ApplicationStyles.screen.heading5Bold}>
+                  {item.title}
+                </Text>
               </View>
               <View>
                 <View
@@ -89,8 +92,8 @@ function index(props) {
           marginTop: 20,
         }}
       >
-        <Text style={styles.title}>
-          {orderStatus == 1 ? 'Order placed on Oct 24, 2020' : 'Your order'}
+        <Text style={ApplicationStyles.screen.heading4Bold}>
+          {orderStatus === 1 ? 'Order placed on Oct 24, 2020' : 'Your order'}
         </Text>
         <TouchableOpacity>
           <Image
@@ -121,12 +124,7 @@ const styles = ScaledSheet.create({
     color: colors.black,
     fontWeight: '600',
   },
-  itemTitle: {
-    fontSize: '14@s',
-    fontFamily: fonts.primary,
-    color: colors.black,
-    fontWeight: '600',
-  },
+
   itemSubTitle: {
     fontSize: '14@s',
     fontFamily: fonts.primary,

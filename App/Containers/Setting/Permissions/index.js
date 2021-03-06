@@ -13,7 +13,7 @@ import fonts from '../../../Themes/Fonts';
 import colors from '../../../Themes/Colors';
 import images from '../../../Themes/Images';
 import NavigationService from '../../../Navigation/NavigationService';
-import { Switch, TextInput } from '../../../Components';
+import { MaterialTextInput, Switch, TextInput } from '../../../Components';
 
 const datas = [
   {
@@ -67,15 +67,12 @@ function index(props) {
         </TouchableOpacity>
       ))}
       <View style={{ padding: AppConfig.paddingHorizontal }}>
-        <TextInput
-          style={{ marginTop: vs(12) }}
-          hasTitle
-          title={'Name displayed on chat '}
-          value={value}
-          placeholder={'Name displayed on chat '}
+        <MaterialTextInput
           onChangeText={(text) => {
             setValue(text);
           }}
+          value={value}
+          placeholder="Name displayed on chat"
         />
       </View>
     </ScrollView>

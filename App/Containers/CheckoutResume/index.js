@@ -49,29 +49,30 @@ function CheckoutResume(props) {
       }}
     >
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView edges={['top', 'right', 'left', 'bottom']}>
+      <SafeAreaView
+        style={{ flex: 1 }}
+        edges={['top', 'right', 'left', 'bottom']}
+      >
         <AppBar
           title={orderStatus === 1 ? 'Order 782788' : 'Review your details'}
         />
-        <ScrollView
-          style={{
-            paddingHorizontal: AppConfig.paddingHorizontal,
-            height:
-              orderStatus === 1
-                ? metrics.screenHeight - 60
-                : metrics.screenHeight - 220,
-          }}
-          contentContainerStyle={{ paddingBottom: 60 }}
-        >
-          <DeliverInfo orderStatus={orderStatus} />
-          <View>
-            {orders.map((item, index) => (
-              <CartItem key={index.toString()} product={item} />
-            ))}
-          </View>
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            style={{
+              paddingHorizontal: AppConfig.paddingHorizontal,
+            }}
+            contentContainerStyle={{ paddingBottom: 60 }}
+          >
+            <DeliverInfo orderStatus={orderStatus} />
+            <View>
+              {orders.map((item, index) => (
+                <CartItem key={index.toString()} product={item} />
+              ))}
+            </View>
 
-          <BottomSummary orderStatus={orderStatus} />
-        </ScrollView>
+            <BottomSummary orderStatus={orderStatus} />
+          </ScrollView>
+        </View>
       </SafeAreaView>
       {orderStatus != 1 && (
         <SafeAreaView

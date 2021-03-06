@@ -152,7 +152,7 @@ const PrimaryNav = createStackNavigator(
   {
     // Default config for all screens
     headerMode: 'none',
-    initialRouteName: 'UserCenter',
+    initialRouteName: 'LaunchScreen',
     navigationOptions: {},
   }
 );

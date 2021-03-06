@@ -71,23 +71,6 @@ function RootContainer() {
         />
       </View>
       {showSheet && (
-        <BottomSheet
-          customRef={sheetEl}
-          onCloseEnd={() => {
-            dispatch({
-              type: 'changSheetState',
-              payload: { showSheet: false },
-            });
-          }}
-          // callbackNode={new Animated.Value(0)}
-          snapPoints={[vs(height), 0]}
-          initialSnap={0}
-          // title={'Add your delivery address'}
-        >
-          {children()}
-        </BottomSheet>
-      )}
-      {showSheet && (
         <TouchableWithoutFeedback onPress={() => {}}>
           <Animated.View
             style={{
@@ -104,6 +87,23 @@ function RootContainer() {
             }}
           />
         </TouchableWithoutFeedback>
+      )}
+      {showSheet && (
+        <BottomSheet
+          customRef={sheetEl}
+          onCloseEnd={() => {
+            dispatch({
+              type: 'changSheetState',
+              payload: { showSheet: false },
+            });
+          }}
+          // callbackNode={new Animated.Value(0)}
+          snapPoints={[vs(height), 0]}
+          initialSnap={0}
+          // title={'Add your delivery address'}
+        >
+          {children()}
+        </BottomSheet>
       )}
     </AlertContext.Provider>
   );

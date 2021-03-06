@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { s } from 'react-native-size-matters';
-import { AppBar } from '../../Components';
+import { AppBar, RightButton } from '../../Components';
 import { Colors } from '../../Themes';
 import styles from './styles';
 import colors from '../../Themes/Colors';
@@ -68,11 +68,15 @@ function Notifications(props) {
       >
         <AppBar
           rightButton={() => (
-            <TouchableOpacity onPress={() => {}}>
-              <Text style={styles.update}>CLEAR ALL</Text>
-            </TouchableOpacity>
+            <RightButton
+              title="CLEAR ALL"
+              onPress={() => {
+                // NavigationService.goBack();
+              }}
+            />
           )}
         />
+
         <FlatList
           data={invitedUsers}
           ListHeaderComponent={() => listHeader(setShowSheet)}

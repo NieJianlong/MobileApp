@@ -11,7 +11,7 @@ import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { AppBar, SearchBox } from '../../Components';
+import { AppBar, RightButton, SearchBox } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import CheckBox from '../Explore/Components/CheckBox';
 import metrics from '../../Themes/Metrics';
@@ -52,20 +52,16 @@ function SelectCountryOrLanguage(props) {
       >
         <AppBar
           title={`Select a ${key}`}
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  NavigationService.goBack();
-                }}
-              >
-                <Text style={[ApplicationStyles.screen.heading5Bold]}>
-                  SAVE
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
+          rightButton={() => (
+            <RightButton
+              title="SAVE"
+              onPress={() => {
+                NavigationService.goBack();
+              }}
+            />
+          )}
         />
+
         <View style={{ height: metrics.screenHeight - vs(64) }}>
           <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
             <SearchBox placeholder={`Search for a ${key}`}></SearchBox>

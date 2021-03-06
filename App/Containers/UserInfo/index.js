@@ -17,7 +17,13 @@ import {
 } from 'react-native';
 import UserHeader from '../UserCenter/UserHeader';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
-import { AppBar, Alert, BottomSheet, Button } from '../../Components';
+import {
+  AppBar,
+  Alert,
+  BottomSheet,
+  Button,
+  RightButton,
+} from '../../Components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import colors from '../../Themes/Colors';
 import HorizontalMenu from './HorizontalMenu';
@@ -76,9 +82,10 @@ function UserInfo(props) {
       <View style={styles.container}>
         <SafeAreaView style={{ maxHeight: 64 }}>
           <AppBar
-            rightButton={() => {
-              return rightButtonShow ? (
-                <TouchableOpacity
+            rightButton={() =>
+              rightButtonShow ? (
+                <RightButton
+                  title="EDIT"
                   onPress={() => {
                     NavigationService.navigate('EditBillingDetailsScreen', {
                       saveCallback: () => {},
@@ -96,13 +103,9 @@ function UserInfo(props) {
                       },
                     });
                   }}
-                >
-                  <Text style={[ApplicationStyles.screen.heading5Bold]}>
-                    EDIT
-                  </Text>
-                </TouchableOpacity>
-              ) : null;
-            }}
+                />
+              ) : null
+            }
           />
         </SafeAreaView>
         <View style={{ marginBottom: vs(15) }}>

@@ -32,11 +32,11 @@ function index(props) {
           style={[styles.v2, { maxWidth: '90%', justifyContent: 'center' }]}
         >
           <View>
-            <Text style={[styles.heading4Bold]}>{product.name}</Text>
+            <Text style={[styles.heading5Bold]}>{product.name}</Text>
             <Text
               style={[
                 styles.heading4Bold,
-                { fontSize: s(12), color: colors.grey80 },
+                { fontSize: s(12), fontWeight: 'normal', color: colors.grey80 },
               ]}
             >
               Selected product options goes here

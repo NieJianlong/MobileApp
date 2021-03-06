@@ -132,7 +132,10 @@ function AddCredit(props) {
             })}
           </View>
           <View style={{ marginTop: 20 }}>
-            <Switch label="Set as default payment method"></Switch>
+            <Switch
+              onSwitch={() => {}}
+              label="Set as default payment method"
+            ></Switch>
           </View>
         </View>
       </SafeAreaView>

@@ -10,7 +10,7 @@ import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { AppBar, RightButton, TextInput } from '../../Components';
+import { AppBar, RightButton, Selector, TextInput } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import { AlertContext } from '../Root/GlobalContext';
 
@@ -67,15 +67,18 @@ function CustomerSupport(props) {
           </Text>
         </View>
         <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-          <TextInput
-            placeholder="Problem reason goes here"
-            style={{ marginTop: vs(12) }}
+          <Selector
+            style={{ marginVertical: vs(10) }}
+            placeholder={'Problem reason goes here'}
+            data={['AAA', 'BBB', 'CCC']}
           />
+
           <RNTextInput
             multiline={true}
             placeholder="Message"
             style={{
               marginTop: vs(16),
+              textAlignVertical: 'top',
               height: vs(160),
               backgroundColor: colors.white,
               borderRadius: s(20),
@@ -84,6 +87,7 @@ function CustomerSupport(props) {
               justifyContent: 'space-between',
               alignItems: 'center',
               flexDirection: 'row',
+              justifyContent: 'flex-start',
               padding: s(14),
               paddingVertical: s(20),
             }}

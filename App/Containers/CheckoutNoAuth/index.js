@@ -45,7 +45,7 @@ function CheckoutNoAuth(props) {
                 justifyContent: 'center',
               }}
             >
-              <Text style={ApplicationStyles.screen.heading2Bold}>Sing In</Text>
+              <Text style={ApplicationStyles.screen.heading2Bold}>Sign In</Text>
             </View>
           </TouchableOpacity>
           <Image
@@ -64,7 +64,7 @@ function CheckoutNoAuth(props) {
               <Text
                 style={[
                   ApplicationStyles.screen.heading4Bold,
-                  { color: colors.grey60 },
+                  { color: colors.grey60, fontWeight: 'normal' },
                 ]}
               >
                 You can continue as guest and only fill the mandatory details.

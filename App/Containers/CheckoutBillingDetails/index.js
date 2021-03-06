@@ -214,7 +214,7 @@ function CheckoutBillingDetails(props) {
               {params.title}
             </Text>
             <View style={{ marginTop: 20 }}>
-              <Switch label="Use the same info as my personal details"></Switch>
+              <Switch onSwitch={() => {}} label="Use the same info as my personal details"></Switch>
             </View>
             <View
               style={{
@@ -234,7 +234,6 @@ function CheckoutBillingDetails(props) {
                   >
                     {item.keyboardType === 'selector' ? (
                       <Selector
-                        style={{ marginBottom: vs(10) }}
                         placeholder={'Sate'}
                         data={['AAA', 'BBB', 'CCC']}
                       />

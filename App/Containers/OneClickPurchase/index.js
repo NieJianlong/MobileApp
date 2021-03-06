@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
-import { AppBar, Button } from '../../Components';
+import { AppBar, Button, RightButton } from '../../Components';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
@@ -39,21 +39,15 @@ function OneClickPurchase(props) {
         edges={['top', 'right', 'left', 'bottom']}
       >
         <AppBar
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  NavigationService.navigate('SelectDeliveryAddressScreen');
-                }}
-              >
-                <Text style={[ApplicationStyles.screen.heading5Bold]}>
-                  SAVE
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
+          rightButton={() => (
+            <RightButton
+              title="SAVE"
+              onPress={() => {
+                NavigationService.navigate('SelectDeliveryAddressScreen');
+              }}
+            />
+          )}
         />
-
         <View style={styles.bodyContainer}>
           <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
             1 Click Purchasing preference

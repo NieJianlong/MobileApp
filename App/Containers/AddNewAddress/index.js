@@ -181,7 +181,7 @@ function AddNewAddress(props) {
           </KeyboardAwareScrollView>
 
           <View style={{ marginTop: 20 }}>
-            <Switch label="Set as default address"></Switch>
+            <Switch onSwitch={() => {}} label="Set as default address"></Switch>
           </View>
         </View>
       </SafeAreaView>

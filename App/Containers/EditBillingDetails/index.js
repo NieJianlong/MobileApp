@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, StatusBar, Text, TouchableOpacity } from 'react-native';
+import {
+  View,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  Keyboard,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { vs, s } from 'react-native-size-matters';
@@ -73,6 +79,21 @@ function EditBillingDetails(props) {
     company,
     taxid,
   ]);
+  const [showBottom, setShowBottom] = useState(true);
+  useEffect(() => {
+    const keyboardShow = (e) => {
+      setShowBottom(false);
+    };
+    const keyboardHide = (e) => {
+      setShowBottom(true);
+    };
+    Keyboard.addListener('keyboardDidShow', keyboardShow);
+    Keyboard.addListener('keyboardDidHide', keyboardHide);
+    return () => {
+      Keyboard.removeListener('keyboardDisShow', keyboardShow);
+      Keyboard.removeListener('keyboardDidHide', keyboardHide);
+    };
+  }, []);
   const inputs = [
     {
       placeholder: 'First Name*',
@@ -172,22 +193,6 @@ function EditBillingDetails(props) {
       keyboardType: 'default',
       type: 'short',
     },
-    {
-      placeholder: 'Company name',
-      onChangeText: (text) => setCompany(text),
-      showError: false,
-      errorMessage: null,
-      keyboardType: 'default',
-      type: 'short',
-    },
-    {
-      placeholder: 'TAX ID',
-      onChangeText: (text) => setTaxid(text),
-      showError: false,
-      errorMessage: null,
-      keyboardType: 'default',
-      type: 'short',
-    },
   ];
 
   const {
@@ -263,28 +268,31 @@ function EditBillingDetails(props) {
             </View>
           </View>
         </KeyboardAwareScrollView>
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 10,
-            right: 0,
-            left: 0,
-            paddingHorizontal: AppConfig.paddingHorizontal,
-          }}
-        >
-          <Button
-            onPress={() => {
-              if (params) {
-                if (typeof params.removeCallback == 'function') {
-                  params.removeCallback();
-                }
-              }
+        {showBottom && (
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 10,
+              right: 0,
+              backgroundColor: colors.background,
+              left: 0,
+              paddingHorizontal: AppConfig.paddingHorizontal,
             }}
-            textColor={colors.grey80}
-            text="REMOVE BILLING DETAILS"
-            backgroundColor="transparent"
-          ></Button>
-        </View>
+          >
+            <Button
+              onPress={() => {
+                if (params) {
+                  if (typeof params.removeCallback == 'function') {
+                    params.removeCallback();
+                  }
+                }
+              }}
+              textColor={colors.grey80}
+              text="REMOVE BILLING DETAILS"
+              backgroundColor="transparent"
+            ></Button>
+          </View>
+        )}
       </SafeAreaView>
     </View>
   );

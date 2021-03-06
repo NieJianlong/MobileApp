@@ -35,9 +35,8 @@ export const MenuConfig = [
 ];
 
 function Setting(props) {
-  fall = new Animated.Value(0);
   const [defaultIndex, setDefaultIndex] = useState(0);
-  const sheetEl = useRef(null);
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
@@ -52,16 +51,16 @@ function Setting(props) {
         <DynamicTabView
           data={MenuConfig}
           renderTab={(item, index) => {
-            let cmp = <View></View>;
+            let cmp = <View />;
             switch (item.key) {
               case 'Country':
-                cmp = <CountryLanguage></CountryLanguage>;
+                cmp = <CountryLanguage />;
                 break;
               case 'Notifications':
-                cmp = <Notifications></Notifications>;
+                cmp = <Notifications />;
                 break;
               case 'Permissions':
-                cmp = <Permissions></Permissions>;
+                cmp = <Permissions />;
                 break;
 
               default:
@@ -74,7 +73,7 @@ function Setting(props) {
             height: s(100),
             backgroundColor: colors.background,
           }}
-          headerBackgroundColor={'white'}
+          headerBackgroundColor={'transparent'}
           highlightStyle={{ color: 'white' }}
           noHighlightStyle={{ color: 'gray' }}
           headerTextStyle={{ color: 'white' }}

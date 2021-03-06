@@ -17,6 +17,7 @@ import NavigationService from '../../Navigation/NavigationService';
 import { AlertContext } from '../Root/GlobalContext';
 import { ApplicationStyles, Images } from '../../Themes';
 import TextTip from '../../Components/EmptyReminder';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const images = [Images.userLoveImage, Images.userMedImage, Images.userSadImage];
 
@@ -116,73 +117,78 @@ function Feedback(props) {
             />
           )}
         />
-        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-          <Text
-            style={{
-              fontSize: s(24),
-              fontFamily: fonts.primary,
-              color: colors.black,
-              fontWeight: '600',
-            }}
-          >
-            Help us to improve
-          </Text>
-          <Text
-            style={{
-              fontSize: s(16),
-              fontFamily: fonts.primary,
-              color: colors.grey80,
-              fontWeight: 'normal',
-              marginVertical: vs(12),
-            }}
-          >
-            How is your experience so far? What do you love or don't like that
-            much? What would you like us to improve or to include in future
-            releases?
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              marginVertical: vs(12),
-            }}
-          >
-            {images.map((item, index) => {
-              return (
-                <TouchableOpacity key={`dsdssd${index}`}>
-                  <Image
-                    style={{
-                      width: s(80),
-                      height: s(80),
-                      resizeMode: 'contain',
-                    }}
-                    source={item}
-                  ></Image>
-                </TouchableOpacity>
-              );
-            })}
+        <KeyboardAwareScrollView>
+          <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+            <Text
+              style={{
+                fontSize: s(24),
+                fontFamily: fonts.primary,
+                color: colors.black,
+                fontWeight: '600',
+              }}
+            >
+              Help us to improve
+            </Text>
+            <Text
+              style={{
+                fontSize: s(16),
+                fontFamily: fonts.primary,
+                color: colors.grey80,
+                fontWeight: 'normal',
+                marginVertical: vs(12),
+              }}
+            >
+              How is your experience so far? What do you love or don't like that
+              much? What would you like us to improve or to include in future
+              releases?
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                marginVertical: vs(12),
+              }}
+            >
+              {images.map((item, index) => {
+                return (
+                  <TouchableOpacity key={`dsdssd${index}`}>
+                    <Image
+                      style={{
+                        width: s(80),
+                        height: s(80),
+                        resizeMode: 'contain',
+                      }}
+                      source={item}
+                    ></Image>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
           </View>
-        </View>
-        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-          <TextInput placeholder="Title" style={{ marginTop: vs(12) }} />
-          <RNTextInput
-            multiline={true}
-            placeholder="Message"
-            style={{
-              marginTop: vs(16),
-              height: vs(160),
-              backgroundColor: colors.white,
-              borderRadius: s(20),
-              borderWidth: 1,
-              borderColor: colors.grey20,
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              flexDirection: 'row',
-              padding: s(14),
-              paddingVertical: s(20),
-            }}
-          />
-        </View>
+
+          <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+            <TextInput placeholder="Title" style={{ marginTop: vs(12) }} />
+
+            <RNTextInput
+              multiline={true}
+              placeholder="Message"
+              style={{
+                marginTop: vs(16),
+                height: vs(160),
+                backgroundColor: colors.white,
+                borderRadius: s(20),
+                borderWidth: 1,
+                borderColor: colors.grey20,
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexDirection: 'row',
+                padding: s(14),
+                paddingVertical: s(20),
+                textAlignVertical: 'top',
+              }}
+            />
+          </View>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </View>
   );

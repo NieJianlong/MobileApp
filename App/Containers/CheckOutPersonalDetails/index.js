@@ -9,7 +9,7 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { vs } from 'react-native-size-matters';
-import { AppBar, TextInput, Switch, RightButton } from '../../Components';
+import { AppBar, TextInput, Switch, RightButton, Selector, MaterialTextInput } from '../../Components';
 import { ApplicationStyles, Colors, Metrics } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
@@ -81,6 +81,7 @@ function CheckOutPersonalDetails(props) {
       onChangeText: (text) => setFirstName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -88,6 +89,7 @@ function CheckOutPersonalDetails(props) {
       onChangeText: (text) => setLastName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
 
@@ -96,6 +98,7 @@ function CheckOutPersonalDetails(props) {
       onChangeText: (text) => setStreetName(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
     {
@@ -103,6 +106,7 @@ function CheckOutPersonalDetails(props) {
       onChangeText: (text) => setStreetNum(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -110,6 +114,7 @@ function CheckOutPersonalDetails(props) {
       onChangeText: (text) => setDoor(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -117,6 +122,7 @@ function CheckOutPersonalDetails(props) {
       onChangeText: (text) => setCity(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -124,6 +130,7 @@ function CheckOutPersonalDetails(props) {
       onChangeText: (text) => setMstate(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'selector',
       type: 'short',
     },
     {
@@ -131,6 +138,7 @@ function CheckOutPersonalDetails(props) {
       onChangeText: (text) => setPostCode(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'numeric',
       type: 'short',
     },
     {
@@ -138,6 +146,7 @@ function CheckOutPersonalDetails(props) {
       onChangeText: (text) => setCountry(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'short',
     },
     {
@@ -145,6 +154,7 @@ function CheckOutPersonalDetails(props) {
       onChangeText: (text) => setPhoneOrEmailNum(text),
       showError: false,
       errorMessage: null,
+      keyboardType: 'default',
       type: 'normal',
     },
   ];
@@ -200,15 +210,25 @@ function CheckOutPersonalDetails(props) {
                 return (
                   <View
                     key={index}
-                    style={{ width: item.type == 'short' ? '48%' : '100%' }}
+                    style={{
+                      width: item.type == 'short' ? '48%' : '100%',
+                      marginTop: vs(18),
+                    }}
                   >
-                    <TextInput style={{ marginTop: vs(18) }} {...item} />
+                    {item.keyboardType === 'selector' ? (
+                      <Selector
+                        placeholder={'Sate'}
+                        data={['AAA', 'BBB', 'CCC']}
+                      />
+                    ) : (
+                      <MaterialTextInput {...item} />
+                    )}
                   </View>
                 );
               })}
             </View>
             <View style={{ marginTop: 20 }}>
-              <Switch label="Use as default address"></Switch>
+              <Switch onSwitch={() => {}} label="Use as default address"></Switch>
             </View>
           </View>
         </KeyboardAwareScrollView>

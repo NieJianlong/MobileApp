@@ -3,7 +3,8 @@ import {
     View,
     StatusBar,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    Platform
 } from 'react-native'
 import Video from 'react-native-video'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -13,6 +14,8 @@ import Button from '../../Components/Button'
 import { Colors, Images } from '../../Themes'
 import styles from './styles'
 import { vs } from 'react-native-size-matters'
+
+const iOS = Platform.OS === 'ios'
 
 class OnboardingScreen extends Component {
 
@@ -36,7 +39,11 @@ class OnboardingScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <StatusBar barStyle='light-content' />
+                <StatusBar 
+                    barStyle='light-content' 
+                    translucent 
+                    backgroundColor={'rgba(0,0,0,0.0)'}
+                />
                 <Video
                     ref={(ref) => {
                         this.player = ref

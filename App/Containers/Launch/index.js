@@ -19,10 +19,14 @@ class LaunchScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <StatusBar barStyle='light-content' />
-                <Image 
-                    source={Images.logo2} 
-                    style={styles.logo} 
+                <StatusBar
+                    barStyle='light-content'
+                    translucent
+                    backgroundColor={'rgba(0,0,0,0.0)'}
+                />
+                <Image
+                    source={Images.logo2}
+                    style={styles.logo}
                     resizeMode={'contain'}
                 />
             </View>

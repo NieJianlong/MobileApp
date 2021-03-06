@@ -7,7 +7,7 @@ import {
     TouchableWithoutFeedback,
     TouchableOpacity,
     ScrollView,
-    FlatList
+    FlatList,
 } from 'react-native'
 import { vs, s } from 'react-native-size-matters'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -462,7 +462,11 @@ class ExploreScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <StatusBar barStyle='dark-content' />
+                <StatusBar
+                    barStyle='dark-content'
+                    translucent
+                    backgroundColor={'rgba(0,0,0,0.0)'}
+                />
 
                 <SafeAreaView
                     style={styles.mainContainer}

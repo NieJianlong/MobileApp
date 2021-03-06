@@ -17,6 +17,7 @@ import Collapsible from 'react-native-collapsible'
 import Carousel from 'react-native-snap-carousel'
 import InView from 'react-native-component-inview'
 import { ScrollIntoView, wrapScrollView } from 'react-native-scroll-into-view'
+import NumberFormat from 'react-number-format'
 import moment from 'moment'
 import { range } from 'lodash'
 
@@ -234,7 +235,13 @@ class ProductDetailScreen extends Component {
                         <Text style={[styles.txtBold, { color: Colors.white }]}>BUY NOW</Text>
 
                         <View style={styles.priceContainer}>
-                            <Text style={[styles.txtRegular, { color: Colors.white }]}>{this.state.quantity * product.wholesalePrice}</Text>
+                            <NumberFormat
+                                thousandSeparator={true}
+                                prefix={'$'}
+                                value={this.state.quantity * product.wholesalePrice}
+                                displayType={'text'}
+                                renderText={text => <Text style={[styles.txtRegular, { color: Colors.white }]}>{text}</Text>}
+                            />
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -317,12 +324,26 @@ class ProductDetailScreen extends Component {
                         <View style={[styles.row, { marginTop: vs(8) }]}>
                             <View style={styles.v3}>
                                 <Text style={[styles.heading6Bold, { color: Colors.grey60 }]}>RETAIL PRICE</Text>
-                                <Text style={styles.txtRetailPrice}>${product.retailPrice}</Text>
+                                {/* <Text style={styles.txtRetailPrice}>${product.retailPrice}</Text> */}
+                                <NumberFormat
+                                    thousandSeparator={true}
+                                    prefix={'$'}
+                                    value={product.retailPrice}
+                                    displayType={'text'}
+                                    renderText={text => <Text style={styles.txtRetailPrice}>{text}</Text>}
+                                />
                             </View>
 
                             <View style={styles.v3}>
                                 <Text style={[styles.heading6Bold, { color: Colors.black }]}>WHOLE SALE PRICE</Text>
-                                <Text style={styles.txtWholesalePrice}>${product.wholesalePrice}</Text>
+                                {/* <Text style={styles.txtWholesalePrice}>${product.wholesalePrice}</Text> */}
+                                <NumberFormat
+                                    thousandSeparator={true}
+                                    prefix={'$'}
+                                    value={product.wholesalePrice}
+                                    displayType={'text'}
+                                    renderText={text => <Text style={styles.txtWholesalePrice}>{text}</Text>}
+                                />
                             </View>
 
                             <View style={styles.percentOffContainer}>

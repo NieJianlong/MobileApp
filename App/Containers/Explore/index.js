@@ -462,7 +462,11 @@ class ExploreScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <StatusBar barStyle='dark-content' backgroundColor={Colors.background} />
+                <StatusBar
+                    barStyle='dark-content'
+                    translucent
+                    backgroundColor={'rgba(0,0,0,0.0)'}
+                />
 
                 <SafeAreaView
                     style={styles.mainContainer}

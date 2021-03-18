@@ -13,6 +13,8 @@ class CustomTextInput extends Component {
     this.state = {};
   }
 
+  getInnerRef = () => this.ref
+
   render() {
     const {
       placeholder,
@@ -27,6 +29,8 @@ class CustomTextInput extends Component {
       multiline,
       value,
       keyboardType = 'default',
+      onSubmitEditing,
+      returnKeyType,
     } = this.props;
 
     return (
@@ -42,6 +46,7 @@ class CustomTextInput extends Component {
           <View style={{ flex: 1 }}>
             {hasTitle && <Text style={styles.title}>{title}</Text>}
             <TextInput
+              ref={(r) => this.ref = r}
               placeholder={placeholder}
               style={styles.textInput}
               onFocus={onFocus}
@@ -51,6 +56,8 @@ class CustomTextInput extends Component {
               keyboardType={keyboardType}
               numberOfLines={multiline ? 5 : 1}
               value={value}
+              onSubmitEditing={onSubmitEditing}
+              returnKeyType={returnKeyType}
             />
           </View>
 

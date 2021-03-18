@@ -42,6 +42,10 @@ class LoginScreen extends Component {
         Keyboard.removeListener('keyboardWillHide', this._keyboardWillHide)
     }
 
+    onSignIn = () => {
+        this.props.navigation.navigate('MainScreen')
+    }
+
     toggleResetPasswordAlert = () => {
         this.setState({ showResetPasswordAlert: !this.state.showResetPasswordAlert })
     }
@@ -89,19 +93,21 @@ class LoginScreen extends Component {
                         <TextInput
                             style={styles.emailInput}
                             placeholder={'Email or phone number'}
+                            onSubmitEditing={() => this.passwordInput.getInnerRef().focus()}
                         />
 
                         <PasswordInput
                             style={styles.passwordInput}
                             placeholder={'Enter your password'}
+                            ref={(r) => this.passwordInput = r}
+                            onSubmitEditing={this.onSignIn}
+                            returnKeyType={'done'}
                         />
 
                         <View style={{ height: this.state.keyboardHeight - vs(100) }} />
 
                         <Button
-                            onPress={() => {
-                                this.props.navigation.navigate('MainScreen')
-                            }}
+                            onPress={this.onSignIn}
                             text={'SIGN IN'}
                         />
 

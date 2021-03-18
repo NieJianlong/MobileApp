@@ -19,7 +19,6 @@ import {
 import { Colors, Images } from '../../Themes'
 import styles from './styles'
 
-
 class RegisterScreen extends Component {
 
     constructor(props) {
@@ -31,6 +30,10 @@ class RegisterScreen extends Component {
 
     componentDidMount() {
 
+    }
+
+    onRegister = () => {
+        this.props.navigation.navigate('OTPScreen', { fromScreen: 'RegisterScreen' })
     }
 
     render() {
@@ -57,21 +60,32 @@ class RegisterScreen extends Component {
                         <TextInput
                             style={styles.textInput}
                             placeholder={'Type your name'}
+                            onSubmitEditing={() => this.lastNameInput.getInnerRef().focus()}
+                            returnKeyType={'next'}
                         />
 
                         <TextInput
                             style={styles.textInput}
                             placeholder={'Type your last name'}
+                            ref={(r) => this.lastNameInput = r}
+                            onSubmitEditing={() => this.emailInput.getInnerRef().focus()}
+                            returnKeyType={'next'}
                         />
 
                         <TextInput
                             style={styles.textInput}
                             placeholder={'Type your email or phone number'}
+                            ref={(r) => this.emailInput = r}
+                            onSubmitEditing={() => this.passwordInput.getInnerRef().focus()}
+                            returnKeyType={'next'}
                         />
 
                         <PasswordInput
                             style={styles.textInput}
                             placeholder={'Enter your password'}
+                            ref={(r) => this.passwordInput = r}
+                            onSubmitEditing={this.onRegister}
+                            returnKeyType={'done'}
                         />
 
                         <View style={styles.switch}>
@@ -88,7 +102,7 @@ class RegisterScreen extends Component {
                         <View style={{ flex: 1 }} />
 
                         <Button
-                            onPress={() => this.props.navigation.navigate('OTPScreen', { fromScreen: 'RegisterScreen' })}
+                            onPress={this.onRegister}
                             text={'REGISTER'} />
 
                         <TouchableOpacity

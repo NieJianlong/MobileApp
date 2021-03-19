@@ -563,7 +563,7 @@ class ProductDetailScreen extends Component {
                             <Text style={styles.heading5Bold}>{product.seller.name}</Text>
                         </View>
 
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => NavigationService.navigate('SellerStoreScreen')}>
                             <Text style={[styles.heading5Bold, { color: Colors.secondary00 }]}>VISIT STORE</Text>
                         </TouchableOpacity>
                     </View>

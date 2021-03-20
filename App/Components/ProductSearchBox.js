@@ -92,7 +92,7 @@ class ProductSearchBox extends Component {
                 }
 
                 {
-                    (this.state.results.length === 0 && !disabled) &&
+                    (this.state.results.length === 0 && !disabled && this.state.keyword !== '') &&
                     <View style={styles.noResultContainer}>
                         <View>
                             <Text style={styles.txt1}>

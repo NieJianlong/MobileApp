@@ -22,7 +22,6 @@ import {
     TextInput,
     Alert,
     RadiusButton,
-    StarRating,
     ProductSearchBox
 } from '../../Components'
 import CheckBox from './Components/CheckBox'
@@ -40,7 +39,7 @@ class ExploreScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            showLocationSheet: false,
+            showLocationSheet: true,
             showAddLocationSheet: false,
             showAddAddressSheet: false,
             showAccountActivatedSuccessfullyAlert: false,
@@ -202,34 +201,53 @@ class ExploreScreen extends Component {
                         </TouchableOpacity>
                     </View>
 
-                    <KeyboardAwareScrollView>
+                    <KeyboardAwareScrollView enableOnAndroid>
                         <TextInput
                             placeholder={'Pin Code'}
                             style={styles.textInput}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.stateInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'State (Province)'}
                             style={styles.textInput}
+                            ref={(r) => this.stateInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.cityInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'Town or city'}
                             style={styles.textInput}
+                            ref={(r) => this.cityInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.villageInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'Village or area'}
                             style={styles.textInput}
+                            ref={(r) => this.villageInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.houseNumberInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'House number'}
                             style={styles.textInput}
+                            ref={(r) => this.houseNumberInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.flatNumberInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'Flat number'}
                             style={styles.textInput}
+                            ref={(r) => this.flatNumberInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.landmarkInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'Landmark'}
                             style={styles.textInput}
+                            ref={(r) => this.landmarkInput = r}
+                            returnKeyType={'done'}
                         />
                     </KeyboardAwareScrollView>
 
@@ -351,42 +369,44 @@ class ExploreScreen extends Component {
     }
 
     renderCategories() {
-        return (
-            <View style={styles.categryContainer}>
-                <FlatList
-                    contentContainerStyle={styles.categoryListContainer}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    data={categories}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item, index }) => {
-                        const isFocused = this.state.selectedCategory === index
-                        return (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    this.setState({ selectedCategory: index })
-                                }}
-                                style={[styles.categoryItemContainer, !isFocused && { borderBottomColor: 'transparent' }]}>
-                                <Text style={[styles.heading5Bold, { color: isFocused ? Colors.primary : Colors.grey60 }]}>
-                                    {item}
-                                </Text>
-                            </TouchableOpacity>
-                        )
-                    }}
-                />
-                <LinearGradient
-                    colors={['#ffffff00', Colors.white]}
-                    start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 0.0 }}
-                    style={styles.v1}
-                >
-                    <TouchableOpacity
-                        onPress={() => NavigationService.navigate('EditCategoriesScreen')}
-                        style={styles.btnAddContainer}>
-                        <Image source={Images.add1} style={styles.icAdd} />
-                    </TouchableOpacity>
-                </LinearGradient>
-            </View>
-        )
+        if (this.state.keyword === '') {
+            return (
+                <View style={styles.categryContainer}>
+                    <FlatList
+                        contentContainerStyle={styles.categoryListContainer}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        data={categories}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item, index }) => {
+                            const isFocused = this.state.selectedCategory === index
+                            return (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        this.setState({ selectedCategory: index })
+                                    }}
+                                    style={[styles.categoryItemContainer, !isFocused && { borderBottomColor: 'transparent' }]}>
+                                    <Text style={[styles.heading5Bold, { color: isFocused ? Colors.primary : Colors.grey60 }]}>
+                                        {item}
+                                    </Text>
+                                </TouchableOpacity>
+                            )
+                        }}
+                    />
+                    <LinearGradient
+                        colors={['#ffffff00', Colors.white]}
+                        start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 0.0 }}
+                        style={styles.v1}
+                    >
+                        <TouchableOpacity
+                            onPress={() => NavigationService.navigate('EditCategoriesScreen')}
+                            style={styles.btnAddContainer}>
+                            <Image source={Images.add1} style={styles.icAdd} />
+                        </TouchableOpacity>
+                    </LinearGradient>
+                </View>
+            )
+        }
     }
 
     renderAddressBar() {

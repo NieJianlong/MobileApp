@@ -94,6 +94,7 @@ class LoginScreen extends Component {
                             style={styles.emailInput}
                             placeholder={'Email or phone number'}
                             onSubmitEditing={() => this.passwordInput.getInnerRef().focus()}
+                            returnKeyType={'next'}
                         />
 
                         <PasswordInput

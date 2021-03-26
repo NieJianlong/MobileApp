@@ -299,6 +299,10 @@ export default ScaledSheet.create({
         height: '28@s',
         tintColor: Colors.grey40,
     },
+    mastercardIcon: {
+        width: '28@s',
+        height: '28@s',
+    },
     chatContainer: {
         borderTopWidth: 1,
         borderBottomWidth: 1,

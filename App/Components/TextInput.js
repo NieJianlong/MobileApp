@@ -31,6 +31,7 @@ class CustomTextInput extends Component {
       keyboardType = 'default',
       onSubmitEditing,
       returnKeyType,
+      textAlignVertical,
     } = this.props;
 
     return (
@@ -58,6 +59,7 @@ class CustomTextInput extends Component {
               value={value}
               onSubmitEditing={onSubmitEditing}
               returnKeyType={returnKeyType}
+              textAlignVertical={textAlignVertical ?? 'center'}
             />
           </View>
 

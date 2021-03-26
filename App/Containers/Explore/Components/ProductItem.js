@@ -147,7 +147,9 @@ function ProductItem(props) {
         )
     } else if (size === 'S') {
         return (
-            <TouchableOpacity style={styles.productContainerSmall}>
+            <TouchableOpacity 
+                onPress={() => NavigationService.navigate('ProductDetailScreen')} 
+                style={styles.productContainerSmall}>
                 <View style={styles.productInfoSmall}>
                     <View>
                         <Image

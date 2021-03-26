@@ -48,6 +48,8 @@ const images = {
   star: require('../Images/star.png'),
   invoice: require('../Images/invoice.png'),
   download: require('../Images/download.png'),
+  mastercard: require('../Images/mastercard.png'),
+
   userDocImage: require('../Images/usercenter/Document.png'),
   userIconImage: require('../Images/usercenter/Icon.png'),
   userLogoImage: require('../Images/usercenter/Logo.png'),

@@ -5,6 +5,7 @@ import {
     Image,
     TouchableOpacity,
     TextInput,
+    Platform
 } from 'react-native'
 import { ScaledSheet } from 'react-native-size-matters'
 import PropTypes from 'prop-types'
@@ -12,6 +13,8 @@ import PropTypes from 'prop-types'
 import Highlighter from './Highlighter'
 
 import { Fonts, Colors, Images } from '../Themes'
+
+const isIOS = Platform.OS === 'ios'
 
 const results = ['street Jump', 'street Boro', 'street Bleard', 'street Laurence']
 
@@ -65,13 +68,12 @@ class LocationSearchBox extends Component {
                                 </TouchableOpacity>
                             )
                         }
-
-                        <TouchableOpacity onPress={onPressAddAddressManually} style={styles.addAddressContainer}>
-                            <Image style={styles.icAdd} source={Images.add1} />
-                            <Text style={styles.txtAddAdress}>ADD ADDRESS MANUALLY</Text>
-                        </TouchableOpacity>
                     </View>
                 }
+                <TouchableOpacity onPress={onPressAddAddressManually} style={styles.addAddressContainer}>
+                    <Image style={styles.icAdd} source={Images.add1} />
+                    <Text style={styles.txtAddAdress}>ADD ADDRESS MANUALLY</Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -87,7 +89,7 @@ LocationSearchBox.defaultProps = {
 
 const styles = ScaledSheet.create({
     container: {
-        height: '36@vs',
+        height: isIOS ? '36@s' : '42@vs',
         backgroundColor: Colors.white,
         borderRadius: '18@s',
         borderWidth: 1,

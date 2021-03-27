@@ -26,7 +26,9 @@ function ProductItem(props) {
         size,
         product,
         onPress,
-        onPressShare
+        onPressShare,
+        isAnnouncement,
+        navigation,
     } = props
 
     if (size === 'M' || size == 'L') {
@@ -111,44 +113,82 @@ function ProductItem(props) {
                             </View>
                         </View>
                 }
+                {
+                    isAnnouncement ?
+                        <View style={styles.v4}>
+                            {
+                                product.deliveryDate ?
+                                    <View style={styles.row}>
+                                        <View style={{ marginRight: s(15) }}>
+                                            <Text style={styles.txtOrderClose}>Delivery Date: </Text>
+                                            <Text style={styles.heading6Regular}>{product.deliveryDate}</Text>
+                                        </View>
 
-                <View style={styles.v4}>
-                    <View>
-                        <Text style={styles.txtOrderClose}>Order closes on:</Text>
-                        <Text style={styles.heading6Regular}>{product.orderClose}</Text>
-                    </View>
+                                        <View style={styles.row}>
+                                            <Image source={Images.stock} style={styles.icStock} />
+                                            <Text style={styles.txtOrderNumber}>min {product.minOrder}</Text>
+                                            <View style={styles.v5}>
+                                                <Text style={styles.txtOrderNumber}>{product.inStock} units left</Text>
+                                            </View>
+                                            <TouchableOpacity>
+                                                <Image source={Images.info2} style={styles.icInfo} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View> :
+                                    <TouchableOpacity onPress={() => navigation.navigate('ProductInfoScreen')}>
+                                        <Text style={styles.txtAction}>REQUEST TO MY ONLINE STORE</Text>
+                                    </TouchableOpacity>
+                            }
 
-                    <Progress
-                        maximumValue={product.inStock}
-                        currentValue={product.orderCount}
-                        barWidth={s(60)}
-                        barHeight={vs(6)}
-                    />
+                            <View style={styles.row}>
+                                <TouchableOpacity>
+                                    <Image source={Images.likeMed} style={styles.icShare} />
+                                </TouchableOpacity>
 
-                    <View style={styles.row}>
-                        <Image source={Images.stock} style={styles.icStock} />
-                        <Text style={styles.txtOrderNumber}>{product.orderCount}/{product.inStock}</Text>
-                        <TouchableOpacity>
-                            <Image source={Images.info2} style={styles.icInfo} />
-                        </TouchableOpacity>
-                    </View>
+                                <TouchableOpacity onPress={onPressShare}>
+                                    <Image source={Images.share} style={styles.icShare} />
+                                </TouchableOpacity>
+                            </View>
+                        </View> :
+                        <View style={styles.v4}>
+                            <View>
+                                <Text style={styles.txtOrderClose}>Order closes on:</Text>
+                                <Text style={styles.heading6Regular}>{product.orderClose}</Text>
+                            </View>
 
-                    <View style={styles.row}>
-                        <TouchableOpacity>
-                            <Image source={Images.likeMed} style={styles.icShare} />
-                        </TouchableOpacity>
+                            <Progress
+                                maximumValue={product.inStock}
+                                currentValue={product.orderCount}
+                                barWidth={s(60)}
+                                barHeight={vs(6)}
+                            />
 
-                        <TouchableOpacity onPress={onPressShare}>
-                            <Image source={Images.share} style={styles.icShare} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                            <View style={styles.row}>
+                                <Image source={Images.stock} style={styles.icStock} />
+                                <Text style={styles.txtOrderNumber}>{product.orderCount}/{product.inStock}</Text>
+                                <TouchableOpacity>
+                                    <Image source={Images.info2} style={styles.icInfo} />
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={styles.row}>
+                                <TouchableOpacity>
+                                    <Image source={Images.likeMed} style={styles.icShare} />
+                                </TouchableOpacity>
+
+                                <TouchableOpacity onPress={onPressShare}>
+                                    <Image source={Images.share} style={styles.icShare} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                }
+
             </TouchableOpacity>
         )
     } else if (size === 'S') {
         return (
-            <TouchableOpacity 
-                onPress={() => NavigationService.navigate('ProductDetailScreen')} 
+            <TouchableOpacity
+                onPress={() => NavigationService.navigate('ProductDetailScreen')}
                 style={styles.productContainerSmall}>
                 <View style={styles.productInfoSmall}>
                     <View>
@@ -286,6 +326,13 @@ const styles = ScaledSheet.create({
         marginTop: '5@vs',
         paddingTop: '10@vs'
     },
+    v5: {
+        backgroundColor: Colors.grey10,
+        paddingHorizontal: '7@s',
+        paddingVertical: '3@s',
+        borderRadius: '30@s',
+        marginLeft: '5@s'
+    },
     icStock: {
         width: '22@s',
         height: '22@s',
@@ -294,7 +341,7 @@ const styles = ScaledSheet.create({
     },
     txtOrderNumber: {
         ...ApplicationStyles.screen.heading6Regular,
-        fontSize: '13@s'
+        fontSize: '12@s'
     },
     icInfo: {
         width: '22@s',
@@ -358,7 +405,12 @@ const styles = ScaledSheet.create({
         height: '15@s',
         tintColor: Colors.grey60,
         marginLeft: '10@s'
-    }
+    },
+    txtAction: {
+        fontFamily: Fonts.semibold,
+        color: Colors.primary,
+        fontSize: AppConfig.fontSize
+    },
 })
 
 export default ProductItem

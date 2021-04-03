@@ -79,7 +79,7 @@ class OnboardingScreen extends Component {
                             text={'CONTINUE'}
                             backgroundColor={Colors.white}
                             textColor={Colors.black}
-                            onPress={() => this.props.navigation.navigate('ExploreScreen')}
+                            onPress={() => this.props.navigation.navigate('MainScreen')}
                         />
                     </View>
                 </SafeAreaView>

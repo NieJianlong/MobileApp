@@ -16,6 +16,7 @@ import ChooseCategoriesScreen from '../Containers/Explore/Categories/Choose';
 import RateOrderScreen from '../Containers/Explore/RateOrder';
 import ReportScreen from '../Containers/Explore/Report';
 import RateSellerScreen from '../Containers/Orders/RateSeller';
+import SellerStoreScreen from '../Containers/Explore/SellerStore';
 import OrderPlacedScreen from '../Containers/Explore/OrderPlaced';
 import OrderScreen from '../Containers/Orders/MainScreen';
 import GroupInfoScreen from '../Containers/Orders/GroupInfo';
@@ -99,6 +100,7 @@ const PrimaryNav = createStackNavigator(
     OrderPlacedScreen: { screen: OrderPlacedScreen },
     OrderDetailScreen: { screen: OrderDetailScreen },
     RateSellerScreen: { screen: RateSellerScreen },
+    SellerStoreScreen: { screen: SellerStoreScreen },
     InvoiceScreen: { screen: InvoiceScreen },
     GroupInfoScreen: { screen: GroupInfoScreen },
     LoginScreen: { screen: LoginScreen },

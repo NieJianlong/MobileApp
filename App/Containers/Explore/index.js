@@ -8,12 +8,14 @@ import {
     TouchableOpacity,
     ScrollView,
     FlatList,
+    Dimensions,
 } from 'react-native'
 import { vs, s } from 'react-native-size-matters'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Animated from 'react-native-reanimated'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import LinearGradient from 'react-native-linear-gradient'
+import Carousel from 'react-native-snap-carousel'
 
 import {
     Button,
@@ -22,7 +24,6 @@ import {
     TextInput,
     Alert,
     RadiusButton,
-    StarRating,
     ProductSearchBox
 } from '../../Components'
 import CheckBox from './Components/CheckBox'
@@ -32,6 +33,9 @@ import ShareOptionList from './Components/ShareOptionList'
 import { Colors, Images } from '../../Themes'
 import styles from './styles'
 import NavigationService from '../../Navigation/NavigationService'
+
+const sliderWidth = Dimensions.get('window').width
+const carouselItemWidth = Dimensions.get('window').width
 
 class ExploreScreen extends Component {
 
@@ -202,34 +206,53 @@ class ExploreScreen extends Component {
                         </TouchableOpacity>
                     </View>
 
-                    <KeyboardAwareScrollView>
+                    <KeyboardAwareScrollView enableOnAndroid>
                         <TextInput
                             placeholder={'Pin Code'}
                             style={styles.textInput}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.stateInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'State (Province)'}
                             style={styles.textInput}
+                            ref={(r) => this.stateInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.cityInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'Town or city'}
                             style={styles.textInput}
+                            ref={(r) => this.cityInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.villageInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'Village or area'}
                             style={styles.textInput}
+                            ref={(r) => this.villageInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.houseNumberInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'House number'}
                             style={styles.textInput}
+                            ref={(r) => this.houseNumberInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.flatNumberInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'Flat number'}
                             style={styles.textInput}
+                            ref={(r) => this.flatNumberInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.landmarkInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'Landmark'}
                             style={styles.textInput}
+                            ref={(r) => this.landmarkInput = r}
+                            returnKeyType={'done'}
                         />
                     </KeyboardAwareScrollView>
 
@@ -351,42 +374,45 @@ class ExploreScreen extends Component {
     }
 
     renderCategories() {
-        return (
-            <View style={styles.categryContainer}>
-                <FlatList
-                    contentContainerStyle={styles.categoryListContainer}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    data={categories}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item, index }) => {
-                        const isFocused = this.state.selectedCategory === index
-                        return (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    this.setState({ selectedCategory: index })
-                                }}
-                                style={[styles.categoryItemContainer, !isFocused && { borderBottomColor: 'transparent' }]}>
-                                <Text style={[styles.heading5Bold, { color: isFocused ? Colors.primary : Colors.grey60 }]}>
-                                    {item}
-                                </Text>
-                            </TouchableOpacity>
-                        )
-                    }}
-                />
-                <LinearGradient
-                    colors={['#ffffff00', Colors.white]}
-                    start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 0.0 }}
-                    style={styles.v1}
-                >
-                    <TouchableOpacity
-                        onPress={() => NavigationService.navigate('EditCategoriesScreen')}
-                        style={styles.btnAddContainer}>
-                        <Image source={Images.add1} style={styles.icAdd} />
-                    </TouchableOpacity>
-                </LinearGradient>
-            </View>
-        )
+        if (this.state.keyword === '') {
+            return (
+                <View style={styles.categryContainer}>
+                    <FlatList
+                        contentContainerStyle={styles.categoryListContainer}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        data={categories}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item, index }) => {
+                            const isFocused = this.state.selectedCategory === index
+                            return (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        this.setState({ selectedCategory: index })
+                                        this._carousel.snapToItem(index)
+                                    }}
+                                    style={[styles.categoryItemContainer, !isFocused && { borderBottomColor: 'transparent' }]}>
+                                    <Text style={[styles.heading5Bold, { color: isFocused ? Colors.primary : Colors.grey60 }]}>
+                                        {item}
+                                    </Text>
+                                </TouchableOpacity>
+                            )
+                        }}
+                    />
+                    <LinearGradient
+                        colors={['#ffffff00', Colors.white]}
+                        start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 0.0 }}
+                        style={styles.v1}
+                    >
+                        <TouchableOpacity
+                            onPress={() => NavigationService.navigate('EditCategoriesScreen')}
+                            style={styles.btnAddContainer}>
+                            <Image source={Images.add1} style={styles.icAdd} />
+                        </TouchableOpacity>
+                    </LinearGradient>
+                </View>
+            )
+        }
     }
 
     renderAddressBar() {
@@ -449,12 +475,51 @@ class ExploreScreen extends Component {
         )
     }
 
+    renderAnnoucementItem = (item, index) => {
+        return (
+            <ProductItem
+                navigation={this.props.navigation}
+                isAnnouncement
+                onPressShare={this.toggleShareSheet}
+                key={index.toString()}
+                product={item}
+                size={this.state.showProductAsRows ? 'M' : 'L'}
+            />
+        )
+    }
+
+    renderProductPage = ({ item, index }) => {
+        if (index !== 1) {
+            return (
+                <View style={{ width: sliderWidth, height: products.length * vs(180) }}>
+                    {products.map((itm, idx) => this.renderProduct(itm, idx))}
+                </View>
+            )
+        } else {
+            return (
+                <View style={{ width: sliderWidth, height: announcements.length * vs(180) }}>
+                    {announcements.map((itm, idx) => this.renderAnnoucementItem(itm, idx))}
+                </View>
+            )
+        }
+    }
+
+    onSnapToItem = (index) => {
+        this.setState({ selectedCategory: index })
+    }
+
     renderProducList() {
         return (
             <View style={styles.prodListContainer}>
-                {
-                    products.map((item, index) => this.renderProduct(item, index))
-                }
+                <Carousel
+                    style={{ flex: 1 }}
+                    ref={(c) => { this._carousel = c; }}
+                    data={categories}
+                    renderItem={this.renderProductPage}
+                    sliderWidth={sliderWidth}
+                    itemWidth={carouselItemWidth}
+                    onSnapToItem={this.onSnapToItem}
+                />
             </View>
         )
     }
@@ -608,4 +673,67 @@ const products = [
         inStock: 100,
         orderCount: 24
     }
+]
+
+const announcements = [
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        deliveryDate: '22/12/2020',
+        inStock: 100,
+        orderCount: 24,
+        minOrder: 10,
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        deliveryDate: null,
+        inStock: 100,
+        orderCount: 24,
+        minOrder: 10,
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        deliveryDate: '22/12/2020',
+        inStock: 100,
+        orderCount: 24,
+        minOrder: 10,
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        deliveryDate: null,
+        inStock: 100,
+        orderCount: 24,
+        minOrder: 10,
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        deliveryDate: null,
+        inStock: 100,
+        orderCount: 24,
+        minOrder: 10,
+    },
 ]

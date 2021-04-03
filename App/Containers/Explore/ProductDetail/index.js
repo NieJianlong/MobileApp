@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import {
     View,
     StatusBar,
@@ -42,6 +42,7 @@ import NavigationService from '../../../Navigation/NavigationService'
 import ProductItem from '../Components/ProductItem'
 import Review from '../Components/Review'
 import ColorOptionItem from '../Components/ColorOptionItem'
+import ShareOptionList from '../Components/ShareOptionList'
 
 const { height } = Dimensions.get('window')
 const Sections = range(0, 4)
@@ -67,10 +68,13 @@ class ProductDetailScreen extends Component {
             totalPrice: 0,
             colorIndex: 0,
             isPurchased: true,
+            isLiked: false,
 
             showPickupFromSellerSheet: false,
             showColorSheet: false,
             showAddToCartSheet: false,
+            showConfirmOrderSheet: false,
+            showShareSheet: false,
 
             showReviewSentAlert: false,
             showReportSentAlert: false,
@@ -131,6 +135,10 @@ class ProductDetailScreen extends Component {
         this.setState({ showFooter: true })
     }
 
+    onLikeProduct = () => {
+        this.setState({ isLiked: !this.state.isLiked })
+    }
+
     togglePickupFromSellerSheet = () => {
         this.setState({ showPickupFromSellerSheet: !this.state.showPickupFromSellerSheet }, () => {
             if (this.state.showPickupFromSellerSheet) {
@@ -147,6 +155,26 @@ class ProductDetailScreen extends Component {
                 this.colorSheet.snapTo(0)
             } else {
                 this.colorSheet.snapTo(1)
+            }
+        })
+    }
+
+    toggleShareSheet = () => {
+        this.setState({ showShareSheet: !this.state.showShareSheet }, () => {
+            if (this.state.showShareSheet) {
+                this.shareSheet.snapTo(0)
+            } else {
+                this.shareSheet.snapTo(1)
+            }
+        })
+    }
+
+    toggleConfirmOrderSheet = () => {
+        this.setState({ showConfirmOrderSheet: !this.state.showConfirmOrderSheet }, () => {
+            if (this.state.showConfirmOrderSheet) {
+                this.confirmOrderSheet.snapTo(0)
+            } else {
+                this.confirmOrderSheet.snapTo(1)
             }
         })
     }
@@ -230,7 +258,7 @@ class ProductDetailScreen extends Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={() => NavigationService.navigate('OrderPlacedScreen')}
+                        onPress={this.toggleConfirmOrderSheet}
                         style={styles.btnBuyNow}>
                         <Text style={[styles.txtBold, { color: Colors.white }]}>BUY NOW</Text>
 
@@ -288,11 +316,13 @@ class ProductDetailScreen extends Component {
 
                 <View style={styles.row2}>
                     <View style={{ flexDirection: 'row' }}>
-                        <TouchableOpacity style={styles.btnRoundContainer}>
-                            <Image style={styles.btnRoundIcon} source={Images.likeMed} />
+                        <TouchableOpacity onPress={this.onLikeProduct} style={styles.btnRoundContainer}>
+                            <Image
+                                style={[styles.btnRoundIcon, this.state.isLiked && { tintColor: Colors.primary }]}
+                                source={this.state.isLiked ? Images.likeFilled : Images.likeMed} />
                         </TouchableOpacity>
                         <View style={{ width: s(12) }} />
-                        <TouchableOpacity style={styles.btnRoundContainer}>
+                        <TouchableOpacity onPress={this.toggleShareSheet} style={styles.btnRoundContainer}>
                             <Image style={styles.btnRoundIcon} source={Images.share} />
                         </TouchableOpacity>
                     </View>
@@ -563,7 +593,7 @@ class ProductDetailScreen extends Component {
                             <Text style={styles.heading5Bold}>{product.seller.name}</Text>
                         </View>
 
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => NavigationService.navigate('SellerStoreScreen')}>
                             <Text style={[styles.heading5Bold, { color: Colors.secondary00 }]}>VISIT STORE</Text>
                         </TouchableOpacity>
                     </View>
@@ -836,6 +866,63 @@ class ProductDetailScreen extends Component {
         )
     }
 
+    renderShareSheet() {
+        return (
+            <BottomSheet
+                customRef={ref => {
+                    this.shareSheet = ref
+                }}
+                onCloseEnd={() => this.setState({ showShareSheet: false })}
+                callbackNode={this.fall}
+                snapPoints={[vs(580), 0]}
+                initialSnap={this.state.showShareSheet ? 0 : 1}
+                title={'Share to'}>
+                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    <ShareOptionList />
+                </View>
+            </BottomSheet>
+        )
+    }
+
+    renderConfirmOrderSheet() {
+        return (
+            <BottomSheet
+                customRef={ref => {
+                    this.confirmOrderSheet = ref
+                }}
+                onCloseEnd={() => this.setState({ showConfirmOrderSheet: false })}
+                callbackNode={this.fall}
+                snapPoints={[vs(310), 0]}
+                initialSnap={this.state.showConfirmOrderSheet ? 0 : 1}
+                title={'Confirm your Order'}>
+                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    <View style={[styles.pickupLocationContainer, { marginTop: 0, marginBottom: 10 }]}>
+                        <Image style={styles.pickupLocationIcon} source={Images.locationMed} />
+
+                        <View style={{ marginLeft: s(10) }}>
+                            <Text style={styles.heading5Bold}>Seller Address 00</Text>
+                            <Text style={styles.txtRegular}>Tamil Nadu 12345, Area 4</Text>
+                        </View>
+                    </View>
+
+                    <View style={[styles.pickupLocationContainer, { marginTop: 0, marginBottom: 20 }]}>
+                        <Image style={styles.mastercardIcon} source={Images.mastercard} />
+
+                        <View style={{ marginLeft: s(10) }}>
+                            <Text style={styles.heading5Bold}>***********6473</Text>
+                            <Text style={styles.txtRegular}>User name</Text>
+                        </View>
+                    </View>
+
+                    <Button
+                        onPress={() => NavigationService.navigate('OrderPlacedScreen')}
+                        text={'CONFIRM ORDER'}
+                    />
+                </View>
+            </BottomSheet>
+        )
+    }
+
     renderAddToCartSheet() {
         return (
             <BottomSheet
@@ -908,7 +995,9 @@ class ProductDetailScreen extends Component {
                 <BottomSheetBackground
                     visible={this.state.showPickupFromSellerSheet ||
                         this.state.showColorSheet ||
-                        this.state.showAddToCartSheet
+                        this.state.showAddToCartSheet ||
+                        this.state.showConfirmOrderSheet ||
+                        this.state.showShareSheet
                     }
                     controller={this.fall}
                 />
@@ -916,6 +1005,10 @@ class ProductDetailScreen extends Component {
                 {this.renderPickupFromSellerSheet()}
 
                 {this.renderColorSheet()}
+
+                {this.renderShareSheet()}
+
+                {this.renderConfirmOrderSheet()}
 
                 {this.renderAddToCartSheet()}
 

@@ -69,6 +69,7 @@ class ReportScreen extends Component {
                     style={styles.reviewInput}
                     multiline
                     placeholder={'Write here your review'}
+                    textAlignVertical={'top'}
                 />
             </View>
         )

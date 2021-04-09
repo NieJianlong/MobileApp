@@ -1,0 +1,15 @@
+
+really simple testing
+
+new to Jest start here https://jestjs.io/docs/getting-started
+
+must run from root dir
+
+node node_modules/jest/bin/jest.js -help
+
+node node_modules/jest/bin/jest.js -t '<test descriptor>'
+
+eg node_modules/jest/bin/jest.js -t 'test email valid'
+
+we can seperate concerns v_tests.js will be validation tests ect .....
+

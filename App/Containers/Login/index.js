@@ -55,7 +55,7 @@ function LoginScreen(props) {
 
     const onSignIn = async () => {
         // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
-        console.log('onSignIn' + `${loginInput}:::${psswd}`)
+        console.log('onSignIn' + `${loginInput}:::${psswd}`)// to-do remove
         let ret = validator.loginDifferentiator(loginInput)
         if (ret.isValid) {
             // we are good test for email or phone
@@ -64,13 +64,16 @@ function LoginScreen(props) {
                     email: loginInput,
                     isAuth: true
                 })
-                console.log(profile.data.userProfileVar.email)
+                console.log(profile.data.userProfileVar.email)// to-do remove
                 await jwt.runMockTokenFlow().then(function (res) {
                     // need check for status code = 200 
                     // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
                     storage.setLocalStorageValue(storage.LOCAL_STORAGE_TOKEN_KEY, 'somejwt')
                     if (psswd === 'admin') {
                         props.navigation.navigate('MainScreen')
+                    } else {
+                        console.log('psswd is not correct')
+                        toggleResetValidationAlert()
                     }
 
                 }).catch(function (err) {
@@ -90,7 +93,7 @@ function LoginScreen(props) {
             }
         } else {
             console.log('data not valid')
-            AlertHook()
+            toggleResetValidationAlert()
         }
     }
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import {
     View,
     StatusBar,
@@ -20,114 +20,181 @@ import {
 import { Colors, Images } from '../../Themes'
 import styles from './styles'
 
-class LoginScreen extends Component {
+/**
+ * validation and jwt modules
+ */
+import * as validator from '../../Validation'
+import * as jwt from '../../Apollo/jwt-request'
+import * as storage from '../../Apollo/local-storage'
+import { useQuery } from '@apollo/client';
+/** here GET_USER_PROFILE is the query for the cache to get userProfileVar */
+import { GET_USER_PROFILE, userProfileVar } from '../../Apollo/cache'
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            keyboardHeight: 0,
-            showResetPasswordAlert: false,
+
+
+function LoginScreen(props) {
+    let passwordInput = null
+    let [keyboardHeight, setKeyboardHeight] = useState(0)
+    let [showResetPasswordAlert, setShowResetPasswordAlert] = useState(false)
+    let [showValidationAlert, setShowValidationAlert] = useState(false)
+    let [loginInput, setLoginInput] = useState('')
+    let [psswd, setPsswd] = useState('')
+
+    const profile = useQuery(GET_USER_PROFILE);
+
+    useEffect(() => {
+        Keyboard.addListener('keyboardWillShow', _keyboardWillShow)
+        Keyboard.addListener('keyboardWillHide', _keyboardWillHide)
+        return () => {
+            // Anything in here is fired on component unmount.
+            Keyboard.removeListener('keyboardWillShow', _keyboardWillShow)
+            Keyboard.removeListener('keyboardWillHide', _keyboardWillHide)
         }
+    }, []);
 
-        Keyboard.addListener('keyboardWillShow', this._keyboardWillShow)
-        Keyboard.addListener('keyboardWillHide', this._keyboardWillHide)
+
+    const onSignIn = async () => {
+        // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
+        console.log('onSignIn' + `${loginInput}:::${psswd}`)
+        let ret = validator.loginDifferentiator(loginInput)
+        if (ret.isValid) {
+            // we are good test for email or phone
+            if (ret.isEmail) {
+                userProfileVar({
+                    email: loginInput,
+                    isAuth: true
+                })
+                console.log(profile.data.userProfileVar.email)
+                await jwt.runMockTokenFlow().then(function (res) {
+                    // need check for status code = 200 
+                    // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
+                    storage.setLocalStorageValue(storage.LOCAL_STORAGE_TOKEN_KEY, 'somejwt')
+                    if (psswd === 'admin') {
+                        props.navigation.navigate('MainScreen')
+                    }
+
+                }).catch(function (err) {
+                    // here we will need to deal with a  status code 401 and refresh jwt and try again
+
+                })
+
+
+            } else {
+                // must be phone   
+                console.log('phone is valid but not implemented')
+                userProfileVar({
+                    phone: loginInput,
+                    isAuth: true
+                })
+                toggleResetValidationAlert()
+            }
+        } else {
+            console.log('data not valid')
+            AlertHook()
+        }
     }
 
-    componentDidMount() {
-
+    const toggleResetPasswordAlert = () => {
+        setShowResetPasswordAlert(!showResetPasswordAlert)
     }
 
-    componentWillUnmount() {
-        Keyboard.removeListener('keyboardWillShow', this._keyboardWillShow)
-        Keyboard.removeListener('keyboardWillHide', this._keyboardWillHide)
+    const toggleResetValidationAlert = () => {
+        setShowValidationAlert(!showValidationAlert)
     }
 
-    onSignIn = () => {
-        this.props.navigation.navigate('MainScreen')
-    }
-
-    toggleResetPasswordAlert = () => {
-        this.setState({ showResetPasswordAlert: !this.state.showResetPasswordAlert })
-    }
-
-    _keyboardWillShow = (e) => {
+    const _keyboardWillShow = (e) => {
         this.setState({
             keyboardHeight: e.endCoordinates.height
         })
     }
 
-    _keyboardWillHide = () => {
+    const _keyboardWillHide = () => {
         this.setState({
             keyboardHeight: 0
         })
     }
 
-    renderResetPasswordAlert() {
+    const renderResetPasswordAlert = () => {
         return (
             <Alert
-                visible={this.state.showResetPasswordAlert}
+                visible={showResetPasswordAlert}
                 title={'Email/SMS Sent'}
                 message={'We have sent you an email, please use the link on it to proceed with your new password creation.'}
                 color={Colors.secondary00}
-                onDismiss={this.toggleResetPasswordAlert}
+                onDismiss={toggleResetPasswordAlert}
             />
         )
     }
 
-    render() {
+    const renderValidationAlert = () => {
         return (
-            <View style={styles.container}>
-                <StatusBar barStyle='dark-content' />
-                <SafeAreaView
-                    style={styles.safeArea}
-                    edges={['top', 'right', 'left', 'bottom']}
-                >
-                    <View style={styles.bodyContainer}>
-
-                        <Text style={styles.txt1}>Sign In</Text>
-
-                        <Text style={styles.txt2}>
-                            Join purchases to get what{'\n'}you want with great discounts
-                        </Text>
-
-                        <TextInput
-                            style={styles.emailInput}
-                            placeholder={'Email or phone number'}
-                            onSubmitEditing={() => this.passwordInput.getInnerRef().focus()}
-                            returnKeyType={'next'}
-                        />
-
-                        <PasswordInput
-                            style={styles.passwordInput}
-                            placeholder={'Enter your password'}
-                            ref={(r) => this.passwordInput = r}
-                            onSubmitEditing={this.onSignIn}
-                            returnKeyType={'done'}
-                        />
-
-                        <View style={{ height: this.state.keyboardHeight - vs(100) }} />
-
-                        <Button
-                            onPress={this.onSignIn}
-                            text={'SIGN IN'}
-                        />
-
-                        <View style={styles.row}>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('ForgotPasswordScreen')}>
-                                <Text style={styles.txtAction}>I FORGOT MY PASSWORD</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('RegisterScreen')}>
-                                <Text style={styles.txtAction}>REGISTER</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </SafeAreaView>
-
-                {this.renderResetPasswordAlert()}
-            </View>
+            <Alert
+                visible={showValidationAlert}
+                title={'Check Credentials'}
+                message={'message to do'}
+                color={Colors.warning}
+                onDismiss={toggleResetValidationAlert}
+            />
         )
     }
+
+    return (
+        <View style={styles.container}>
+            <StatusBar barStyle='dark-content' />
+            <SafeAreaView
+                style={styles.safeArea}
+                edges={['top', 'right', 'left', 'bottom']}
+            >
+                <View style={styles.bodyContainer}>
+
+                    <Text style={styles.txt1}>Sign In</Text>
+
+                    <Text style={styles.txt2}>
+                        Join purchases to get what{'\n'}you want with great discounts
+                        </Text>
+
+                    <TextInput
+                        style={styles.emailInput}
+                        placeholder={'Email or phone number'}
+                        onSubmitEditing={() => passwordInput.getInnerRef().focus()}
+                        returnKeyType={'next'}
+                        onChangeText={text => setLoginInput(text)}
+
+                    />
+
+                    <PasswordInput
+                        style={styles.passwordInput}
+                        placeholder={'Enter your password'}
+                        ref={(r) => passwordInput = r}
+                        onSubmitEditing={onSignIn}
+                        returnKeyType={'done'}
+                        onChangeText={text => setPsswd(text)}
+                    />
+
+                    <View style={{ height: keyboardHeight - vs(100) }} />
+
+                    <Button
+                        onPress={onSignIn}
+                        text={'SIGN IN'}
+                    />
+
+                    <View style={styles.row}>
+                        <TouchableOpacity onPress={() => props.navigation.navigate('ForgotPasswordScreen')}>
+                            <Text style={styles.txtAction}>I FORGOT MY PASSWORD</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress={() => props.navigation.navigate('RegisterScreen')}>
+                            <Text style={styles.txtAction}>REGISTER</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </SafeAreaView>
+
+            {renderResetPasswordAlert()}
+            {renderValidationAlert()}
+        </View>
+    )
 }
+
 
 export default LoginScreen

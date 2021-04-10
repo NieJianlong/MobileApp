@@ -60,7 +60,7 @@ export default ScaledSheet.create({
     },
     categoryItemContainer: {
         paddingHorizontal: '12@s',
-        paddingBottom: '5@vs',
+        paddingBottom: '7@vs',
 
         borderBottomColor: Colors.primary,
         borderBottomWidth: 2
@@ -75,7 +75,7 @@ export default ScaledSheet.create({
         paddingTop: '5@vs',
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: Colors.white
+        backgroundColor: Colors.white,
     },
     icAdd: {
         width: '25@s',
@@ -230,4 +230,28 @@ export default ScaledSheet.create({
         tintColor: Colors.black,
         marginLeft: '5@s'
     },
+    pickupLocationContainer: {
+        backgroundColor: Colors.white,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: '15@s',
+        paddingVertical: '10@vs',
+        borderRadius: '15@s',
+        borderWidth: 1,
+        borderColor: Colors.grey10,
+        marginBottom: '10@vs',
+    },
+    pickupLocationIcon: {
+        width: '28@s',
+        height: '28@s',
+        tintColor: Colors.grey40,
+    },
+    editAddressIcon: {
+        width: '24@s',
+        height: '24@s',
+        tintColor: Colors.grey40,
+    },
+    btnEditAddress: {
+        
+    }
 })

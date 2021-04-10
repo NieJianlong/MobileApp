@@ -44,7 +44,7 @@ class ExploreScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            showLocationSheet: false,
+            showLocationSheet: true,
             showAddLocationSheet: false,
             showAddAddressSheet: false,
             showAccountActivatedSuccessfullyAlert: false,
@@ -127,6 +127,25 @@ class ExploreScreen extends Component {
 
     }
 
+    renderAddressItem = () => {
+        return (
+            <View style={styles.pickupLocationContainer}>
+                <Image style={styles.pickupLocationIcon} source={Images.locationMed} />
+
+                <View style={{ marginLeft: s(10) }}>
+                    <Text style={styles.heading5Bold}>Seller Address 00</Text>
+                    <Text style={styles.txtRegular}>Tamil Nadu 12345, Area 4</Text>
+                </View>
+
+                <View style={{flex: 1}} />
+
+                <TouchableOpacity style={styles.btnEditAddress}>
+                    <Image style={styles.editAddressIcon} source={Images.userAddressEditImage} />
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
     renderAddressSheet() {
         return (
             <BottomSheet
@@ -135,7 +154,7 @@ class ExploreScreen extends Component {
                 }}
                 onCloseEnd={() => this.setState({ showLocationSheet: false })}
                 callbackNode={this.fall}
-                snapPoints={[vs(210), 0]}
+                snapPoints={[vs(380), 0]}
                 initialSnap={this.state.showLocationSheet ? 0 : 1}
                 title={'Add your delivery address'}>
                 <View style={{ flex: 1, justifyContent: 'flex-end' }}>
@@ -158,6 +177,11 @@ class ExploreScreen extends Component {
                             this.toggleAddLocationSheet()
                         }}
                         text={'ADD ADDRESS'} />
+
+                    <View style={{ height: vs(20) }} />
+
+                    {this.renderAddressItem({ name: 'Address Name 00', address: 'Tamil Nadu 33243' })}
+                    {this.renderAddressItem({ name: 'Address Name 01', address: 'Sala Nadu 33243' })}
                 </View>
             </BottomSheet>
         )

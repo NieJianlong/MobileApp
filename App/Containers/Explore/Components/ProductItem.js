@@ -125,14 +125,29 @@ function ProductItem(props) {
                                         </View>
 
                                         <View style={styles.row}>
-                                            <Image source={Images.stock} style={styles.icStock} />
+                                            {/* <Image source={Images.stock} style={styles.icStock} />
                                             <Text style={styles.txtOrderNumber}>min {product.minOrder}</Text>
                                             <View style={styles.v5}>
                                                 <Text style={styles.txtOrderNumber}>{product.inStock} units left</Text>
                                             </View>
                                             <TouchableOpacity>
                                                 <Image source={Images.info2} style={styles.icInfo} />
-                                            </TouchableOpacity>
+                                            </TouchableOpacity> */}
+
+                                            <Progress
+                                                maximumValue={product.inStock}
+                                                currentValue={product.orderCount}
+                                                barWidth={s(60)}
+                                                barHeight={vs(6)}
+                                            />
+                                            <View style={{width: s(20)}} />
+                                            <View style={styles.row}>
+                                                <Image source={Images.stock} style={styles.icStock} />
+                                                <Text style={styles.txtOrderNumber}>{product.orderCount}/{product.inStock}</Text>
+                                                <TouchableOpacity>
+                                                    <Image source={Images.info2} style={styles.icInfo} />
+                                                </TouchableOpacity>
+                                            </View>
                                         </View>
                                     </View> :
                                     <TouchableOpacity onPress={() => navigation.navigate('ProductInfoScreen')}>

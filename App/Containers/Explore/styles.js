@@ -95,7 +95,7 @@ export default ScaledSheet.create({
         right: 0,
     },
     categoryListContainer: {
-        paddingRight: '50@s',
+        paddingRight: '15@s',
         paddingLeft: '15@s',
     },
     addressBarContainer: {

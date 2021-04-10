@@ -518,13 +518,14 @@ class ExploreScreen extends Component {
         return (
             <View style={styles.prodListContainer}>
                 <Carousel
+                    //loop
                     style={{ flex: 1 }}
                     ref={(c) => { this._carousel = c; }}
                     data={categories}
                     renderItem={this.renderProductPage}
                     sliderWidth={sliderWidth}
                     itemWidth={carouselItemWidth}
-                    onSnapToItem={this.onSnapToItem}
+                    onBeforeSnapToItem={this.onSnapToItem}
                 />
             </View>
         )

@@ -83,7 +83,9 @@ export default ScaledSheet.create({
         marginBottom: '5@vs'
     },
     btnAddContainer: {
-        width: '100@s',
+        //width: '100@s',
+        backgroundColor: 'white',
+        width: '50@s',
         alignItems: 'flex-end',
         paddingRight: AppConfig.paddingHorizontal
 
@@ -94,7 +96,7 @@ export default ScaledSheet.create({
     },
     categoryListContainer: {
         paddingRight: '50@s',
-        paddingLeft: '15@s'
+        paddingLeft: '15@s',
     },
     addressBarContainer: {
         flexDirection: 'row',

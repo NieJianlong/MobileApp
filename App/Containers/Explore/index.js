@@ -399,7 +399,7 @@ class ExploreScreen extends Component {
                             )
                         }}
                     />
-                    <LinearGradient
+                    {/* <LinearGradient
                         colors={['#ffffff00', Colors.white]}
                         start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 0.0 }}
                         style={styles.v1}
@@ -409,7 +409,13 @@ class ExploreScreen extends Component {
                             style={styles.btnAddContainer}>
                             <Image source={Images.add1} style={styles.icAdd} />
                         </TouchableOpacity>
-                    </LinearGradient>
+                    </LinearGradient> */}
+
+                    <TouchableOpacity
+                        onPress={() => NavigationService.navigate('EditCategoriesScreen')}
+                        style={styles.btnAddContainer}>
+                        <Image source={Images.add1} style={styles.icAdd} />
+                    </TouchableOpacity>
                 </View>
             )
         }

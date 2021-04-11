@@ -9,6 +9,7 @@ import {
     ScrollView,
     FlatList,
     Dimensions,
+    Alert as RNAlert,
 } from 'react-native'
 import { vs, s } from 'react-native-size-matters'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -44,7 +45,7 @@ class ExploreScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            showLocationSheet: true,
+            showLocationSheet: false,
             showAddLocationSheet: false,
             showAddAddressSheet: false,
             showAccountActivatedSuccessfullyAlert: false,
@@ -137,7 +138,7 @@ class ExploreScreen extends Component {
                     <Text style={styles.txtRegular}>Tamil Nadu 12345, Area 4</Text>
                 </View>
 
-                <View style={{flex: 1}} />
+                <View style={{ flex: 1 }} />
 
                 <TouchableOpacity style={styles.btnEditAddress}>
                     <Image style={styles.editAddressIcon} source={Images.userAddressEditImage} />
@@ -152,7 +153,9 @@ class ExploreScreen extends Component {
                 customRef={ref => {
                     this.addressSheet = ref
                 }}
-                onCloseEnd={() => this.setState({ showLocationSheet: false })}
+                onCloseEnd={() => {
+                    this.setState({ showLocationSheet: false })
+                }}
                 callbackNode={this.fall}
                 snapPoints={[vs(380), 0]}
                 initialSnap={this.state.showLocationSheet ? 0 : 1}
@@ -197,14 +200,74 @@ class ExploreScreen extends Component {
                 callbackNode={this.fall}
                 snapPoints={[vs(600), 0]}
                 initialSnap={this.state.showAddLocationSheet ? 0 : 1}
-                title={'Add your location'}>
-                <View style={{ flex: 1 }}>
+                //title={'Add your location'}
+                >
+                {/* <View style={{ flex: 1 }}>
                     <LocationSearchBox
                         onPressAddAddressManually={() => {
                             this.toggleAddLocationSheet()
                             this.toggleAddAddressSheet()
                         }}
                     />
+                </View> */}
+                <View style={{ flex: 1 }}>
+                    <View style={styles.popupHeader}>
+                        <Text style={[styles.txtSave, { color: 'transparent' }]}>SAVE</Text>
+                        <Text style={styles.popupTitle}>Add your delivery address</Text>
+                        <TouchableOpacity onPress={this.toggleAddLocationSheet}>
+                            <Text style={styles.txtSave}>SAVE</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <KeyboardAwareScrollView enableOnAndroid>
+                        <TextInput
+                            placeholder={'Pin Code'}
+                            style={styles.textInput}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.stateInput.getInnerRef().focus()}
+                        />
+                        <TextInput
+                            placeholder={'State (Province)'}
+                            style={styles.textInput}
+                            ref={(r) => this.stateInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.cityInput.getInnerRef().focus()}
+                        />
+                        <TextInput
+                            placeholder={'Town or city'}
+                            style={styles.textInput}
+                            ref={(r) => this.cityInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.villageInput.getInnerRef().focus()}
+                        />
+                        <TextInput
+                            placeholder={'Village or area'}
+                            style={styles.textInput}
+                            ref={(r) => this.villageInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.houseNumberInput.getInnerRef().focus()}
+                        />
+                        <TextInput
+                            placeholder={'House number'}
+                            style={styles.textInput}
+                            ref={(r) => this.houseNumberInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.flatNumberInput.getInnerRef().focus()}
+                        />
+                        <TextInput
+                            placeholder={'Flat number'}
+                            style={styles.textInput}
+                            ref={(r) => this.flatNumberInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.landmarkInput.getInnerRef().focus()}
+                        />
+                        <TextInput
+                            placeholder={'Landmark'}
+                            style={styles.textInput}
+                            ref={(r) => this.landmarkInput = r}
+                            returnKeyType={'done'}
+                        />
+                    </KeyboardAwareScrollView>
                 </View>
             </BottomSheet>
         )
@@ -225,7 +288,7 @@ class ExploreScreen extends Component {
                     <View style={styles.popupHeader}>
                         <Text style={[styles.txtSave, { color: 'transparent' }]}>SAVE</Text>
                         <Text style={styles.popupTitle}>Add your delivery address</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={this.toggleAddAddressSheet}>
                             <Text style={styles.txtSave}>SAVE</Text>
                         </TouchableOpacity>
                     </View>
@@ -390,7 +453,13 @@ class ExploreScreen extends Component {
                     <ProductSearchBox
                         disabled={true}
                         keyword={this.state.keyword}
-                        onPressDelete={() => this.setState({ keyword: '' })}
+                        onPressDelete={() => {
+                            this.setState({ keyword: '' })
+                            NavigationService.navigate('ProductSearchScreen', {
+                                onSearch: this.onSearch
+                            })
+                        }}
+                        onPressBack={() => this.setState({ keyword: '' })}
                     />
                 </View>
             )

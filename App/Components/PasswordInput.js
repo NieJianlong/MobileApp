@@ -20,6 +20,8 @@ class PasswordInput extends Component {
         }
     }
 
+    getInnerRef = () => this.ref
+
     render() {
 
         const {
@@ -28,16 +30,21 @@ class PasswordInput extends Component {
             showError,
             errorMessage,
             onChangeText,
+            onSubmitEditing,
+            returnKeyType,
         } = this.props
 
         return (
             <View>
                 <View style={[styles.container, style, showError && styles.errorContainer]}>
                     <TextInput
+                        ref={(r) => this.ref = r}
                         placeholder={placeholder}
                         style={styles.textInput}
                         secureTextEntry={!this.state.showPassword}
                         onChangeText={onChangeText}
+                        onSubmitEditing={onSubmitEditing}
+                        returnKeyType={returnKeyType}
                     />
                     <TouchableOpacity
                         style={styles.btnView}
@@ -65,7 +72,7 @@ PasswordInput.defaultProps = {
 
 const styles = ScaledSheet.create({
     container: {
-        height: '40@vs',
+        height: '48@vs',
         backgroundColor: Colors.white,
         borderRadius: '20@s',
         borderWidth: 1,

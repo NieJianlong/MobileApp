@@ -1,6 +1,9 @@
+import { Dimensions } from 'react-native'
 import { ScaledSheet } from 'react-native-size-matters'
 import AppConfig from '../../Config/AppConfig'
 import { ApplicationStyles, Colors, Fonts } from '../../Themes'
+
+const { width, height } = Dimensions.get('window')
 
 export default ScaledSheet.create({
     ...ApplicationStyles.screen,
@@ -23,7 +26,8 @@ export default ScaledSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: Colors.white,
-        paddingHorizontal: AppConfig.paddingHorizontal
+        paddingHorizontal: AppConfig.paddingHorizontal,
+        height: '50@vs'
     },
     icSearch: {
         width: '30@s',
@@ -56,7 +60,7 @@ export default ScaledSheet.create({
     },
     categoryItemContainer: {
         paddingHorizontal: '12@s',
-        paddingBottom: '5@vs',
+        paddingBottom: '7@vs',
 
         borderBottomColor: Colors.primary,
         borderBottomWidth: 2
@@ -71,7 +75,7 @@ export default ScaledSheet.create({
         paddingTop: '5@vs',
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: Colors.white
+        backgroundColor: Colors.white,
     },
     icAdd: {
         width: '25@s',
@@ -79,7 +83,9 @@ export default ScaledSheet.create({
         marginBottom: '5@vs'
     },
     btnAddContainer: {
-        width: '100@s',
+        //width: '100@s',
+        backgroundColor: 'white',
+        width: '50@s',
         alignItems: 'flex-end',
         paddingRight: AppConfig.paddingHorizontal
 
@@ -89,8 +95,8 @@ export default ScaledSheet.create({
         right: 0,
     },
     categoryListContainer: {
-        paddingRight: '50@s',
-        paddingLeft: '15@s'
+        paddingRight: '15@s',
+        paddingLeft: '15@s',
     },
     addressBarContainer: {
         flexDirection: 'row',
@@ -224,4 +230,28 @@ export default ScaledSheet.create({
         tintColor: Colors.black,
         marginLeft: '5@s'
     },
+    pickupLocationContainer: {
+        backgroundColor: Colors.white,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: '15@s',
+        paddingVertical: '10@vs',
+        borderRadius: '15@s',
+        borderWidth: 1,
+        borderColor: Colors.grey10,
+        marginBottom: '10@vs',
+    },
+    pickupLocationIcon: {
+        width: '28@s',
+        height: '28@s',
+        tintColor: Colors.grey40,
+    },
+    editAddressIcon: {
+        width: '24@s',
+        height: '24@s',
+        tintColor: Colors.grey40,
+    },
+    btnEditAddress: {
+        
+    }
 })

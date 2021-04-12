@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { isIphoneX } from 'react-native-iphone-x-helper'
 import { vs } from 'react-native-size-matters'
-
+import NavigationService from '../../Navigation/NavigationService';
 import {
     AppBar,
     Button,
@@ -72,8 +72,17 @@ class ForgotPasswordScreen extends Component {
                     disabled={!this.validateEmail(this.state.email) && !this.validatePhone(this.state.email)}
                     onPress={() => {
                         if (this.validateEmail(this.state.email)) {
-                            this.props.navigation.navigate('LoginScreen')
+                            /**
+                             * add router parameter here for Login screen to show EMS alert
+                             */
+                           // this.props.navigation.navigate('LoginScreen')
+                           NavigationService.navigate('LoginScreen', { showEms: true });
+                      
                         } else if (this.validatePhone(this.state.email)) {
+                            /**
+                             * To-Do need clarity for OTP flow
+                             */
+
                             this.props.navigation.navigate('OTPScreen', { fromScreen: 'ForgotPasswordScreen' })
                         }
                     }}

@@ -1,48 +1,66 @@
 /*
  * @Author: Jianlong Nie
  * @Date: 2021-01-07 16:12:07
- * @LastEditTime: 2021-01-09 09:28:05
+ * @LastEditTime: 2021-01-24 21:00:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /MobileApp/App/Containers/UserCenter/index.js
  */
 import React from 'react';
-import {View, Text} from 'react-native';
-import {ScaledSheet, s, vs} from 'react-native-size-matters';
+import { View, StatusBar } from 'react-native';
+import { ScaledSheet, vs } from 'react-native-size-matters';
 import Colors from '../../Themes/Colors';
-import {Button} from '../../Components';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { Button } from '../../Components';
 import Fonts from '../../Themes/Fonts';
 import AppConfig from '../../Config/AppConfig';
 import ItemBox from './ItemBox';
 import colors from '../../Themes/Colors';
 import UserHeader from './UserHeader';
 import images from '../../Themes/Images';
+import NavigationService from '../../Navigation/NavigationService';
 
 const items = [
   {
     title: 'Salami Credit',
     icon: images.userLogoImage,
+    onPress: () => {
+      NavigationService.navigate('SalamiCreditScreen');
+    },
   },
   {
     title: 'Notifications',
     icon: images.userIconImage,
+    onPress: () => {
+      NavigationService.navigate('NotificationsScreen');
+    },
   },
   {
     title: 'Settings',
     icon: images.userSettingImage,
+    onPress: () => {
+      NavigationService.navigate('SettingScreen');
+    },
   },
   {
     title: 'Support',
     icon: images.userMediumImage,
+    onPress: () => {
+      NavigationService.navigate('CustomerSupportScreen');
+    },
   },
   {
     title: 'Feedback',
     icon: images.userStarImage,
+    onPress: () => {
+      NavigationService.navigate('FeedbackScreen');
+    },
   },
   {
     title: 'Legal',
     icon: images.userDocImage,
+    onPress: () => {
+      NavigationService.navigate('CustomerSupportScreen');
+    },
   },
 ];
 const buttons = [
@@ -57,21 +75,32 @@ const buttons = [
     onPress: () => {},
   },
 ];
-
-function index(props) {
+/**
+ * @description: User Center Screen
+ * @param {*} props
+ * @return {*}
+ */
+function UserCenter(props) {
   return (
     <View style={styles.container}>
-      <UserHeader needSafeArea></UserHeader>
-     
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+      <View style={{ marginTop: vs(10) }}>
+        <UserHeader needSafeArea></UserHeader>
+      </View>
+
       {/* All the items usercenter */}
       <View style={styles.itemContainer}>
-        {items.map((item, index) => (
-          <ItemBox key={index} {...item}></ItemBox>
+        {items.map((item, i) => (
+          <View key={i}>
+            <ItemBox {...item}></ItemBox>
+          </View>
         ))}
       </View>
       <View style={styles.buttonContainer}>
-        {buttons.map((item, index) => (
-          <Button key={`button` + index} {...item}></Button>
+        {buttons.map((item, i) => (
+          <View key={`button` + i} style={{ marginTop: 15 }}>
+            <Button {...item}></Button>
+          </View>
         ))}
       </View>
     </View>
@@ -86,11 +115,11 @@ const styles = ScaledSheet.create({
     fontWeight: 'bold',
     marginTop: '20@vs',
   },
-  buttonContainer:{
+  buttonContainer: {
     paddingHorizontal: AppConfig.paddingHorizontal,
-    height:'100@vs',
-    justifyContent:'space-around',
-    marginTop:'30@vs'
+    height: '130@vs',
+    justifyContent: 'space-around',
+    marginTop: '30@vs',
   },
   itemContainer: {
     flexDirection: 'row',
@@ -98,7 +127,7 @@ const styles = ScaledSheet.create({
     paddingHorizontal: AppConfig.paddingHorizontal,
     justifyContent: 'space-around',
   },
-  signbtn: {marginTop: '20@vs'},
+  signbtn: { marginTop: '20@vs' },
   header: {
     backgroundColor: 'white',
     justifyContent: 'space-around',
@@ -108,7 +137,6 @@ const styles = ScaledSheet.create({
   container: {
     height: '100%',
     backgroundColor: Colors.background,
-    marginTop: '10@vs',
   },
 });
-export default index;
+export default UserCenter;

@@ -71,11 +71,6 @@ class ProductDetailScreen extends Component {
             isPurchased: true,
             isLiked: false,
 
-            isTab0Visible: true,
-            isTab1Visible: false,
-            isTab2Visible: false,
-            isTab3Visible: false,
-
             showPickupFromSellerSheet: false,
             showColorSheet: false,
             showAddToCartSheet: false,
@@ -230,10 +225,6 @@ class ProductDetailScreen extends Component {
                                 onPress={() => {
                                     this.setState({
                                         tabIndex: index,
-                                        isTab0Visible: index === 0,
-                                        isTab1Visible: index === 1,
-                                        isTab2Visible: index === 2,
-                                        isTab3Visible: index === 3,
                                     })
                                     this.scrollSectionIntoView(index)
                                 }}
@@ -317,11 +308,15 @@ class ProductDetailScreen extends Component {
                     onSnapToItem={this.onSnapToItem}
                 />
                 <View style={styles.row1}>
-                    <TouchableOpacity onPress={NavigationService.goBack} style={styles.btnRoundContainer}>
+                    <TouchableOpacity
+                        onPress={() => NavigationService.goBack()}
+                        style={styles.btnRoundContainer}>
                         <Image style={styles.btnRoundIcon} source={Images.arrow_left} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.btnRoundContainer}>
+                    <TouchableOpacity
+                        onPress={() => NavigationService.navigate('CartScreen')}
+                        style={styles.btnRoundContainer}>
                         <Image style={styles.btnRoundIcon} source={Images.cartMed} />
                     </TouchableOpacity>
                 </View>
@@ -354,9 +349,7 @@ class ProductDetailScreen extends Component {
             <InView
                 onChange={(isVisible) => {
                     if (isVisible) {
-                        this.setState({ tabIndex: 0, isTab0Visible: true })
-                    } else {
-                        this.setState({ isTab0Visible: false })
+                        this.setState({ tabIndex: 0 })
                     }
                 }}>
                 <View style={styles.infoContainer}>
@@ -396,9 +389,9 @@ class ProductDetailScreen extends Component {
                                 <Text style={[styles.heading6Bold, { color: Colors.secondary00 }]}>30% OFF</Text>
                             </View>
 
-                            <Text style={[styles.heading5Regular, { marginLeft: s(8) }]}>
+                            {/* <Text style={[styles.heading5Regular, { marginLeft: s(8) }]}>
                                 Save ${product.retailPrice - product.wholesalePrice}
-                            </Text>
+                            </Text> */}
                         </View>
 
                         <View style={[styles.row, { marginVertical: vs(10) }]}>
@@ -566,9 +559,7 @@ class ProductDetailScreen extends Component {
             <InView
                 onChange={(isVisible) => {
                     if (isVisible) {
-                        this.setState({ isTab1Visible: true, tabIndex: 1 })
-                    } else {
-                        this.setState({ isTab1Visible: false })
+                        this.setState({ tabIndex: 1 })
                     }
                 }}>
                 <View style={styles.relatedProductsContainer}>
@@ -601,12 +592,9 @@ class ProductDetailScreen extends Component {
             <InView
                 onChange={(isVisible) => {
                     if (isVisible) {
-                        this.setState({
-                            isTab2Visible: true,
-                            tabIndex: !this.state.isTab1Visible ? 2 : this.state.tabIndex
-                        })
-                    } else {
-                        this.setState({ isTab2Visible: false })
+                        // this.setState({
+                        //     tabIndex: 2
+                        // })
                     }
                 }}>
                 <View style={styles.storeInfoContainer}>
@@ -659,12 +647,9 @@ class ProductDetailScreen extends Component {
 
                 <InView onChange={(isVisible) => {
                     if (isVisible) {
-                        this.setState({
-                            isTab3Visible: true,
-                            tabIndex: !this.state.isTab2Visible ? 3 : this.state.tabIndex
-                        })
-                    } else {
-                        this.setState({ isTab3Visible: false })
+                        // this.setState({
+                        //     tabIndex: 3,
+                        // })
                     }
                 }}>
                     <Text style={styles.heading3Bold}>Product Reviews</Text>
@@ -1025,7 +1010,7 @@ class ProductDetailScreen extends Component {
                 </SafeAreaView>
 
                 {/* background for bottom sheet */}
-                {/* <BottomSheetBackground
+                <BottomSheetBackground
                     visible={this.state.showPickupFromSellerSheet ||
                         this.state.showColorSheet ||
                         this.state.showAddToCartSheet ||
@@ -1033,7 +1018,7 @@ class ProductDetailScreen extends Component {
                         this.state.showShareSheet
                     }
                     controller={this.fall}
-                /> */}
+                />
 
                 {this.renderPickupFromSellerSheet()}
 

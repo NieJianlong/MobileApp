@@ -31,7 +31,6 @@ import { useQuery } from '@apollo/client';
 import { GET_USER_PROFILE, userProfileVar } from '../../Apollo/cache'
 
 
-
 function LoginScreen(props) {
     let passwordInput = null
     let [keyboardHeight, setKeyboardHeight] = useState(0)
@@ -77,7 +76,7 @@ function LoginScreen(props) {
                     }
 
                 }).catch(function (err) {
-                    // here we will need to deal with a  status code 401 and refresh jwt and try again
+                    // here we will need to deal with a  status` code 401 and refresh jwt and try again
 
                 })
 
@@ -106,15 +105,11 @@ function LoginScreen(props) {
     }
 
     const _keyboardWillShow = (e) => {
-        this.setState({
-            keyboardHeight: e.endCoordinates.height
-        })
+        setKeyboardHeight(e.endCoordinates.height)
     }
 
     const _keyboardWillHide = () => {
-        this.setState({
-            keyboardHeight: 0
-        })
+        setKeyboardHeight(0)
     }
 
     const renderResetPasswordAlert = () => {

@@ -39,13 +39,20 @@ class ProductSearchBox extends Component {
         const {
             disabled,
             onPressDelete,
+            onPressBack,
             onSelect,
         } = this.props
 
         return (
             <View>
                 <View style={styles.container}>
-                    <TouchableOpacity onPress={() => NavigationService.goBack()}>
+                    <TouchableOpacity onPress={() => {
+                        if (onPressBack) {
+                            onPressBack()
+                        } else {
+                            NavigationService.goBack()
+                        }
+                    }}>
                         <Image source={Images.arrow_left} style={styles.icSearch} />
                     </TouchableOpacity>
 

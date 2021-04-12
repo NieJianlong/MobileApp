@@ -9,6 +9,7 @@ import {
     Dimensions,
     FlatList,
     ImageBackground,
+    Alert as RNAlert
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { s, vs } from 'react-native-size-matters'
@@ -69,11 +70,6 @@ class ProductDetailScreen extends Component {
             colorIndex: 0,
             isPurchased: true,
             isLiked: false,
-
-            isTab0Visible: true,
-            isTab1Visible: false,
-            isTab2Visible: false,
-            isTab3Visible: false,
 
             showPickupFromSellerSheet: false,
             showColorSheet: false,
@@ -227,12 +223,8 @@ class ProductDetailScreen extends Component {
                             <TouchableOpacity
                                 key={index.toString()}
                                 onPress={() => {
-                                    this.setState({ 
+                                    this.setState({
                                         tabIndex: index,
-                                        isTab0Visible: index === 0,
-                                        isTab1Visible: index === 1,
-                                        isTab2Visible: index === 2,
-                                        isTab3Visible: index === 3,
                                     })
                                     this.scrollSectionIntoView(index)
                                 }}
@@ -316,11 +308,15 @@ class ProductDetailScreen extends Component {
                     onSnapToItem={this.onSnapToItem}
                 />
                 <View style={styles.row1}>
-                    <TouchableOpacity onPress={NavigationService.goBack} style={styles.btnRoundContainer}>
+                    <TouchableOpacity
+                        onPress={() => NavigationService.goBack()}
+                        style={styles.btnRoundContainer}>
                         <Image style={styles.btnRoundIcon} source={Images.arrow_left} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.btnRoundContainer}>
+                    <TouchableOpacity
+                        onPress={() => NavigationService.navigate('CartScreen')}
+                        style={styles.btnRoundContainer}>
                         <Image style={styles.btnRoundIcon} source={Images.cartMed} />
                     </TouchableOpacity>
                 </View>
@@ -353,16 +349,16 @@ class ProductDetailScreen extends Component {
             <InView
                 onChange={(isVisible) => {
                     if (isVisible) {
-                        this.setState({ tabIndex: 0, isTab0Visible: true })
-                    } else {
-                        this.setState({ isTab0Visible: false })
+                        this.setState({ tabIndex: 0 })
                     }
                 }}>
                 <View style={styles.infoContainer}>
                     <View style={styles.v2}>
                         <View>
                             <Text style={styles.heading2Bold}>{product.name}</Text>
-                            <StarRating rating={product.rating} ratingCount={product.ratingCount} />
+                            <TouchableOpacity onPress={() => this.scrollSectionIntoView(3)}>
+                                <StarRating fullMode rating={product.rating} ratingCount={product.ratingCount} />
+                            </TouchableOpacity>
                         </View>
                         <View style={[styles.row, { marginTop: vs(8) }]}>
                             <View style={styles.v3}>
@@ -393,9 +389,9 @@ class ProductDetailScreen extends Component {
                                 <Text style={[styles.heading6Bold, { color: Colors.secondary00 }]}>30% OFF</Text>
                             </View>
 
-                            <Text style={[styles.heading5Regular, { marginLeft: s(8) }]}>
+                            {/* <Text style={[styles.heading5Regular, { marginLeft: s(8) }]}>
                                 Save ${product.retailPrice - product.wholesalePrice}
-                            </Text>
+                            </Text> */}
                         </View>
 
                         <View style={[styles.row, { marginVertical: vs(10) }]}>
@@ -534,12 +530,14 @@ class ProductDetailScreen extends Component {
                 {this.state.isPurchased && this.renderChatOptions()}
 
                 <Picker
+                    onPress={this.toggleColorSheet}
                     style={styles.picker}
                     title={'Size'}
                     value={'256GB'}
                 />
 
                 <Picker
+                    onPress={this.toggleColorSheet}
                     style={styles.picker}
                     title={'Style'}
                     value={'OnePlus 8 Pro'}
@@ -561,9 +559,7 @@ class ProductDetailScreen extends Component {
             <InView
                 onChange={(isVisible) => {
                     if (isVisible) {
-                        this.setState({ isTab1Visible: true, tabIndex: 1 })
-                    } else {
-                        this.setState({ isTab1Visible: false })
+                        this.setState({ tabIndex: 1 })
                     }
                 }}>
                 <View style={styles.relatedProductsContainer}>
@@ -596,12 +592,9 @@ class ProductDetailScreen extends Component {
             <InView
                 onChange={(isVisible) => {
                     if (isVisible) {
-                        this.setState({
-                            isTab2Visible: true,
-                            tabIndex: !this.state.isTab1Visible ? 2 : this.state.tabIndex
-                        })
-                    } else {
-                        this.setState({ isTab2Visible: false })
+                        // this.setState({
+                        //     tabIndex: 2
+                        // })
                     }
                 }}>
                 <View style={styles.storeInfoContainer}>
@@ -654,12 +647,9 @@ class ProductDetailScreen extends Component {
 
                 <InView onChange={(isVisible) => {
                     if (isVisible) {
-                        this.setState({ 
-                            isTab3Visible: true,
-                            tabIndex: !this.state.isTab2Visible ? 3 : this.state.tabIndex
-                        })
-                    } else {
-                        this.setState({ isTab3Visible: false })
+                        // this.setState({
+                        //     tabIndex: 3,
+                        // })
                     }
                 }}>
                     <Text style={styles.heading3Bold}>Product Reviews</Text>
@@ -869,7 +859,10 @@ class ProductDetailScreen extends Component {
                 customRef={ref => {
                     this.colorSheet = ref
                 }}
-                onCloseEnd={() => this.setState({ showColorSheet: false })}
+                onCloseEnd={() => {
+                    this.setState({ showColorSheet: false })
+                    RNAlert.prompt('Hello')
+                }}
                 callbackNode={this.fall}
                 snapPoints={[vs(390), 0]}
                 initialSnap={this.state.showColorSheet ? 0 : 1}

@@ -6,9 +6,8 @@ import {
     Image
 } from 'react-native'
 import { ScaledSheet } from 'react-native-size-matters'
-import { Fonts, Colors, ApplicationStyles, Images } from '../../Themes'
-import AppConfig from '../../Config/AppConfig'
-import { set } from 'lodash'
+import { Fonts, Colors, ApplicationStyles, Images } from '../../../Themes'
+import AppConfig from '../../../Config/AppConfig'
 
 function CheckBox(props) {
 
@@ -63,7 +62,7 @@ CheckBox.defaultProps = {
 
 const styles = ScaledSheet.create({
     container: {
-        height: '46@vs',
+        height: '60@vs',
         backgroundColor: Colors.white,
         borderRadius: '20@s',
         paddingHorizontal: '20@vs',

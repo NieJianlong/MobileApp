@@ -7,13 +7,16 @@ import {
     TouchableWithoutFeedback,
     TouchableOpacity,
     ScrollView,
-    FlatList
+    FlatList,
+    Dimensions,
+    Alert as RNAlert,
 } from 'react-native'
 import { vs, s } from 'react-native-size-matters'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Animated from 'react-native-reanimated'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import LinearGradient from 'react-native-linear-gradient'
+import Carousel from 'react-native-snap-carousel'
 
 import {
     Button,
@@ -22,13 +25,18 @@ import {
     TextInput,
     Alert,
     RadiusButton,
-    StarRating
+    ProductSearchBox
 } from '../../Components'
-import CheckBox from './CheckBox'
+import CheckBox from './Components/CheckBox'
+import ProductItem from './Components/ProductItem'
+import ShareOptionList from './Components/ShareOptionList'
 
 import { Colors, Images } from '../../Themes'
 import styles from './styles'
-import AppConfig from '../../Config/AppConfig'
+import NavigationService from '../../Navigation/NavigationService'
+
+const sliderWidth = Dimensions.get('window').width
+const carouselItemWidth = Dimensions.get('window').width
 
 class ExploreScreen extends Component {
 
@@ -43,10 +51,12 @@ class ExploreScreen extends Component {
             showAccountActivatedSuccessfullyAlert: false,
             showAccountActivateAlert: false,
             showSortBySheet: false,
+            showShareSheet: false,
 
             selectedCategory: 0,
             showProductAsRows: true,
             sortOption: 1,
+            keyword: ''
         }
     }
 
@@ -94,6 +104,16 @@ class ExploreScreen extends Component {
         })
     }
 
+    toggleShareSheet = () => {
+        this.setState({ showShareSheet: !this.state.showShareSheet }, () => {
+            if (this.state.showShareSheet) {
+                this.shareSheet.snapTo(0)
+            } else {
+                this.shareSheet.snapTo(1)
+            }
+        })
+    }
+
     toggleAccountActivatedSuccessfullyAlert = () => {
         if (this.state.showAccountActivatedSuccessfullyAlert) {
             setTimeout(() => {
@@ -108,15 +128,36 @@ class ExploreScreen extends Component {
 
     }
 
+    renderAddressItem = () => {
+        return (
+            <View style={styles.pickupLocationContainer}>
+                <Image style={styles.pickupLocationIcon} source={Images.locationMed} />
+
+                <View style={{ marginLeft: s(10) }}>
+                    <Text style={styles.heading5Bold}>Seller Address 00</Text>
+                    <Text style={styles.txtRegular}>Tamil Nadu 12345, Area 4</Text>
+                </View>
+
+                <View style={{ flex: 1 }} />
+
+                <TouchableOpacity style={styles.btnEditAddress}>
+                    <Image style={styles.editAddressIcon} source={Images.userAddressEditImage} />
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
     renderAddressSheet() {
         return (
             <BottomSheet
                 customRef={ref => {
                     this.addressSheet = ref
                 }}
-                onCloseEnd={() => this.setState({ showLocationSheet: false })}
+                onCloseEnd={() => {
+                    this.setState({ showLocationSheet: false })
+                }}
                 callbackNode={this.fall}
-                snapPoints={[vs(190), 0]}
+                snapPoints={[vs(380), 0]}
                 initialSnap={this.state.showLocationSheet ? 0 : 1}
                 title={'Add your delivery address'}>
                 <View style={{ flex: 1, justifyContent: 'flex-end' }}>
@@ -139,6 +180,11 @@ class ExploreScreen extends Component {
                             this.toggleAddLocationSheet()
                         }}
                         text={'ADD ADDRESS'} />
+
+                    <View style={{ height: vs(20) }} />
+
+                    {this.renderAddressItem({ name: 'Address Name 00', address: 'Tamil Nadu 33243' })}
+                    {this.renderAddressItem({ name: 'Address Name 01', address: 'Sala Nadu 33243' })}
                 </View>
             </BottomSheet>
         )
@@ -154,14 +200,74 @@ class ExploreScreen extends Component {
                 callbackNode={this.fall}
                 snapPoints={[vs(600), 0]}
                 initialSnap={this.state.showAddLocationSheet ? 0 : 1}
-                title={'Add your location'}>
-                <View style={{ flex: 1 }}>
+                //title={'Add your location'}
+                >
+                {/* <View style={{ flex: 1 }}>
                     <LocationSearchBox
                         onPressAddAddressManually={() => {
                             this.toggleAddLocationSheet()
                             this.toggleAddAddressSheet()
                         }}
                     />
+                </View> */}
+                <View style={{ flex: 1 }}>
+                    <View style={styles.popupHeader}>
+                        <Text style={[styles.txtSave, { color: 'transparent' }]}>SAVE</Text>
+                        <Text style={styles.popupTitle}>Add your delivery address</Text>
+                        <TouchableOpacity onPress={this.toggleAddLocationSheet}>
+                            <Text style={styles.txtSave}>SAVE</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <KeyboardAwareScrollView enableOnAndroid>
+                        <TextInput
+                            placeholder={'Pin Code'}
+                            style={styles.textInput}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.stateInput.getInnerRef().focus()}
+                        />
+                        <TextInput
+                            placeholder={'State (Province)'}
+                            style={styles.textInput}
+                            ref={(r) => this.stateInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.cityInput.getInnerRef().focus()}
+                        />
+                        <TextInput
+                            placeholder={'Town or city'}
+                            style={styles.textInput}
+                            ref={(r) => this.cityInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.villageInput.getInnerRef().focus()}
+                        />
+                        <TextInput
+                            placeholder={'Village or area'}
+                            style={styles.textInput}
+                            ref={(r) => this.villageInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.houseNumberInput.getInnerRef().focus()}
+                        />
+                        <TextInput
+                            placeholder={'House number'}
+                            style={styles.textInput}
+                            ref={(r) => this.houseNumberInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.flatNumberInput.getInnerRef().focus()}
+                        />
+                        <TextInput
+                            placeholder={'Flat number'}
+                            style={styles.textInput}
+                            ref={(r) => this.flatNumberInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.landmarkInput.getInnerRef().focus()}
+                        />
+                        <TextInput
+                            placeholder={'Landmark'}
+                            style={styles.textInput}
+                            ref={(r) => this.landmarkInput = r}
+                            returnKeyType={'done'}
+                        />
+                    </KeyboardAwareScrollView>
                 </View>
             </BottomSheet>
         )
@@ -182,39 +288,58 @@ class ExploreScreen extends Component {
                     <View style={styles.popupHeader}>
                         <Text style={[styles.txtSave, { color: 'transparent' }]}>SAVE</Text>
                         <Text style={styles.popupTitle}>Add your delivery address</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={this.toggleAddAddressSheet}>
                             <Text style={styles.txtSave}>SAVE</Text>
                         </TouchableOpacity>
                     </View>
 
-                    <KeyboardAwareScrollView>
+                    <KeyboardAwareScrollView enableOnAndroid>
                         <TextInput
                             placeholder={'Pin Code'}
                             style={styles.textInput}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.stateInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'State (Province)'}
                             style={styles.textInput}
+                            ref={(r) => this.stateInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.cityInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'Town or city'}
                             style={styles.textInput}
+                            ref={(r) => this.cityInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.villageInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'Village or area'}
                             style={styles.textInput}
+                            ref={(r) => this.villageInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.houseNumberInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'House number'}
                             style={styles.textInput}
+                            ref={(r) => this.houseNumberInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.flatNumberInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'Flat number'}
                             style={styles.textInput}
+                            ref={(r) => this.flatNumberInput = r}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => this.landmarkInput.getInnerRef().focus()}
                         />
                         <TextInput
                             placeholder={'Landmark'}
                             style={styles.textInput}
+                            ref={(r) => this.landmarkInput = r}
+                            returnKeyType={'done'}
                         />
                     </KeyboardAwareScrollView>
 
@@ -253,6 +378,24 @@ class ExploreScreen extends Component {
         )
     }
 
+    renderShareSheet() {
+        return (
+            <BottomSheet
+                customRef={ref => {
+                    this.shareSheet = ref
+                }}
+                onCloseEnd={() => this.setState({ showShareSheet: false })}
+                callbackNode={this.fall}
+                snapPoints={[vs(580), 0]}
+                initialSnap={this.state.showShareSheet ? 0 : 1}
+                title={'Share to'}>
+                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    <ShareOptionList />
+                </View>
+            </BottomSheet>
+        )
+    }
+
     renderAccountActivatedSuccessfullyAlert() {
         return (
             <Alert
@@ -281,55 +424,94 @@ class ExploreScreen extends Component {
         )
     }
 
+    onSearch = (keyword) => {
+        this.setState({ keyword })
+    }
+
     renderHeader() {
-        return (
-            <View style={styles.header}>
-                <View style={styles.icSearch} />
+        if (this.state.keyword === '') {
+            return (
+                <View style={styles.header}>
+                    <View style={styles.icSearch} />
 
-                <Image source={Images.logo3} style={styles.logo} resizeMode={'contain'} />
+                    <Image source={Images.logo3} style={styles.logo} resizeMode={'contain'} />
 
-                <TouchableOpacity onPress={this.toggleAddressSheet}>
-                    <Image source={Images.search} style={styles.icSearch} />
-                </TouchableOpacity>
-            </View>
-        )
+                    <TouchableOpacity
+                        onPress={() => {
+                            NavigationService.navigate('ProductSearchScreen', {
+                                onSearch: this.onSearch
+                            })
+                        }}
+                    >
+                        <Image source={Images.search} style={styles.icSearch} />
+                    </TouchableOpacity>
+                </View>
+            )
+        } else {
+            return (
+                <View style={[styles.header, { paddingVertical: vs(10) }]}>
+                    <ProductSearchBox
+                        disabled={true}
+                        keyword={this.state.keyword}
+                        onPressDelete={() => {
+                            this.setState({ keyword: '' })
+                            NavigationService.navigate('ProductSearchScreen', {
+                                onSearch: this.onSearch
+                            })
+                        }}
+                        onPressBack={() => this.setState({ keyword: '' })}
+                    />
+                </View>
+            )
+        }
     }
 
     renderCategories() {
-        return (
-            <View style={styles.categryContainer}>
-                <FlatList
-                    contentContainerStyle={styles.categoryListContainer}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    data={categories}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item, index }) => {
-                        const isFocused = this.state.selectedCategory === index
-                        return (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    this.setState({ selectedCategory: index })
-                                }}
-                                style={[styles.categoryItemContainer, !isFocused && { borderBottomColor: 'transparent' }]}>
-                                <Text style={[styles.heading5Bold, { color: isFocused ? Colors.primary : Colors.grey60 }]}>
-                                    {item}
-                                </Text>
-                            </TouchableOpacity>
-                        )
-                    }}
-                />
-                <LinearGradient
-                    colors={['#ffffff00', Colors.white]}
-                    start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 0.0 }}
-                    style={styles.v1}
-                >
-                    <TouchableOpacity style={styles.btnAddContainer}>
+        if (this.state.keyword === '') {
+            return (
+                <View style={styles.categryContainer}>
+                    <FlatList
+                        contentContainerStyle={styles.categoryListContainer}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        data={categories}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item, index }) => {
+                            const isFocused = this.state.selectedCategory === index
+                            return (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        this.setState({ selectedCategory: index })
+                                        this._carousel.snapToItem(index)
+                                    }}
+                                    style={[styles.categoryItemContainer, !isFocused && { borderBottomColor: 'transparent' }]}>
+                                    <Text style={[styles.heading5Bold, { color: isFocused ? Colors.primary : Colors.grey60 }]}>
+                                        {item}
+                                    </Text>
+                                </TouchableOpacity>
+                            )
+                        }}
+                    />
+                    {/* <LinearGradient
+                        colors={['#ffffff00', Colors.white]}
+                        start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 0.0 }}
+                        style={styles.v1}
+                    >
+                        <TouchableOpacity
+                            onPress={() => NavigationService.navigate('EditCategoriesScreen')}
+                            style={styles.btnAddContainer}>
+                            <Image source={Images.add1} style={styles.icAdd} />
+                        </TouchableOpacity>
+                    </LinearGradient> */}
+
+                    <TouchableOpacity
+                        onPress={() => NavigationService.navigate('EditCategoriesScreen')}
+                        style={styles.btnAddContainer}>
                         <Image source={Images.add1} style={styles.icAdd} />
                     </TouchableOpacity>
-                </LinearGradient>
-            </View>
-        )
+                </View>
+            )
+        }
     }
 
     renderAddressBar() {
@@ -343,7 +525,7 @@ class ExploreScreen extends Component {
                     </View>
                 </View>
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={this.toggleAddressSheet}>
                     <Image source={Images.arrow_left} style={styles.icArrowDown} />
                 </TouchableOpacity>
             </View>
@@ -383,95 +565,61 @@ class ExploreScreen extends Component {
 
     renderProduct = (item, index) => {
         return (
-            <View style={styles.productContainer} key={index.toString()}>
-                {
-                    this.state.showProductAsRows ?
-                        <View style={[styles.row, { paddingHorizontal: AppConfig.paddingHorizontal }]}>
-                            <Image source={{ uri: item.picture }} style={styles.productImage} />
-
-                            <View style={styles.v2}>
-                                <View>
-                                    <Text style={styles.heading4Bold}>{item.name}</Text>
-                                    <StarRating rating={item.rating} ratingCount={item.ratingCount} />
-                                </View>
-                                <View style={styles.row}>
-                                    <View style={styles.v3}>
-                                        <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
-                                        <Text style={styles.txtRetailPrice}>${item.retailPrice}</Text>
-                                    </View>
-
-                                    <View style={styles.v3}>
-                                        <Text style={[styles.txtNoteBold, { color: Colors.black }]}>WHOLE SALE PRICE</Text>
-                                        <Text style={styles.txtWholesalePrice}>${item.wholesalePrice}</Text>
-                                    </View>
-
-                                    <View style={styles.percentOffContainer}>
-                                        <Text style={[styles.heading6Bold, { color: Colors.secondary00 }]}>30% OFF</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </View> :
-                        <View style={[{ paddingHorizontal: AppConfig.paddingHorizontal }]}>
-                            <Image source={{ uri: item.picture }} style={styles.productImageBig} />
-
-                            <View style={styles.v2}>
-                                <View>
-                                    <Text style={styles.heading4Bold}>{item.name}</Text>
-                                    <StarRating rating={item.rating} ratingCount={item.ratingCount} />
-                                </View>
-                                <View style={styles.row}>
-                                    <View style={styles.v3}>
-                                        <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
-                                        <Text style={styles.txtRetailPrice}>${item.retailPrice}</Text>
-                                    </View>
-
-                                    <View style={styles.v3}>
-                                        <Text style={[styles.txtNoteBold, { color: Colors.black }]}>WHOLE SALE PRICE</Text>
-                                        <Text style={styles.txtWholesalePrice}>${item.wholesalePrice}</Text>
-                                    </View>
-
-                                    <View style={styles.percentOffContainer}>
-                                        <Text style={[styles.heading6Bold, { color: Colors.secondary00 }]}>30% OFF</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-                }
-
-                <View style={styles.v4}>
-                    <View>
-                        <Text style={styles.txtOrderClose}>Order closes on:</Text>
-                        <Text style={styles.heading6Regular}>{item.orderClose}</Text>
-                    </View>
-
-                    <View style={styles.row}>
-                        <Image source={Images.stock} style={styles.icStock} />
-                        <Text style={styles.txtOrderNumber}>{item.orderCount}/{item.inStock}</Text>
-                        <TouchableOpacity>
-                            <Image source={Images.info2} style={styles.icInfo} />
-                        </TouchableOpacity>
-                    </View>
-
-                    <View style={styles.row}>
-                        <TouchableOpacity>
-                            <Image source={Images.likeMed} style={styles.icShare} />
-                        </TouchableOpacity>
-
-                        <TouchableOpacity>
-                            <Image source={Images.share} style={styles.icShare} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
+            <ProductItem
+                onPressShare={this.toggleShareSheet}
+                key={index.toString()}
+                product={item}
+                size={this.state.showProductAsRows ? 'M' : 'L'}
+            />
         )
+    }
+
+    renderAnnoucementItem = (item, index) => {
+        return (
+            <ProductItem
+                navigation={this.props.navigation}
+                isAnnouncement
+                onPressShare={this.toggleShareSheet}
+                key={index.toString()}
+                product={item}
+                size={this.state.showProductAsRows ? 'M' : 'L'}
+            />
+        )
+    }
+
+    renderProductPage = ({ item, index }) => {
+        if (index !== 1) {
+            return (
+                <View style={{ width: sliderWidth, height: products.length * vs(180) }}>
+                    {products.map((itm, idx) => this.renderProduct(itm, idx))}
+                </View>
+            )
+        } else {
+            return (
+                <View style={{ width: sliderWidth, height: announcements.length * vs(180) }}>
+                    {announcements.map((itm, idx) => this.renderAnnoucementItem(itm, idx))}
+                </View>
+            )
+        }
+    }
+
+    onSnapToItem = (index) => {
+        this.setState({ selectedCategory: index })
     }
 
     renderProducList() {
         return (
             <View style={styles.prodListContainer}>
-                {
-                    products.map((item, index) => this.renderProduct(item, index))
-                }
+                <Carousel
+                    //loop
+                    style={{ flex: 1 }}
+                    ref={(c) => { this._carousel = c; }}
+                    data={categories}
+                    renderItem={this.renderProductPage}
+                    sliderWidth={sliderWidth}
+                    itemWidth={carouselItemWidth}
+                    onBeforeSnapToItem={this.onSnapToItem}
+                />
             </View>
         )
     }
@@ -479,7 +627,11 @@ class ExploreScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <StatusBar barStyle='dark-content' />
+                <StatusBar
+                    barStyle='dark-content'
+                    translucent
+                    backgroundColor={'rgba(0,0,0,0.0)'}
+                />
 
                 <SafeAreaView
                     style={styles.mainContainer}
@@ -507,12 +659,15 @@ class ExploreScreen extends Component {
 
                 {this.renderSortBySheet()}
 
+                {this.renderShareSheet()}
+
                 {/* background for bottom sheet */}
                 {
                     (this.state.showLocationSheet ||
                         this.state.showAddLocationSheet ||
                         this.state.showAddAddressSheet ||
-                        this.state.showSortBySheet
+                        this.state.showSortBySheet ||
+                        this.state.showShareSheet
                     ) &&
                     <TouchableWithoutFeedback
                         onPress={() => {
@@ -618,4 +773,67 @@ const products = [
         inStock: 100,
         orderCount: 24
     }
+]
+
+const announcements = [
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        deliveryDate: '22/12/2020',
+        inStock: 100,
+        orderCount: 24,
+        minOrder: 10,
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        deliveryDate: null,
+        inStock: 100,
+        orderCount: 24,
+        minOrder: 10,
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        deliveryDate: '22/12/2020',
+        inStock: 100,
+        orderCount: 24,
+        minOrder: 10,
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        deliveryDate: null,
+        inStock: 100,
+        orderCount: 24,
+        minOrder: 10,
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        deliveryDate: null,
+        inStock: 100,
+        orderCount: 24,
+        minOrder: 10,
+    },
 ]

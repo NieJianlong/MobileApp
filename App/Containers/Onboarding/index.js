@@ -3,7 +3,8 @@ import {
     View,
     StatusBar,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    Platform
 } from 'react-native'
 import Video from 'react-native-video'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -13,6 +14,8 @@ import Button from '../../Components/Button'
 import { Colors, Images } from '../../Themes'
 import styles from './styles'
 import { vs } from 'react-native-size-matters'
+
+const iOS = Platform.OS === 'ios'
 
 class OnboardingScreen extends Component {
 
@@ -36,16 +39,21 @@ class OnboardingScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <StatusBar barStyle='light-content' />
+                <StatusBar 
+                    barStyle='light-content' 
+                    translucent 
+                    backgroundColor={'rgba(0,0,0,0.0)'}
+                />
                 <Video
                     ref={(ref) => {
                         this.player = ref
                     }}
-                    source={Images.videoOnboarding}
+                    source={{ uri: 'http://www.exit109.com/~dnn/clips/RW20seconds_1.mp4' }}
                     style={styles.backgroundVideo}
                     resizeMode={'cover'}
                     repeat
                     paused={!this.state.isPlaying}
+                    muted
                 />
                 <SafeAreaView
                     style={styles.safeArea}
@@ -71,7 +79,7 @@ class OnboardingScreen extends Component {
                             text={'CONTINUE'}
                             backgroundColor={Colors.white}
                             textColor={Colors.black}
-                            onPress={() => this.props.navigation.navigate('ExploreScreen')}
+                            onPress={() => this.props.navigation.navigate('MainScreen')}
                         />
                     </View>
                 </SafeAreaView>

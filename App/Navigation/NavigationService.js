@@ -6,7 +6,7 @@
  * @Description: In User Settings Edit
  * @FilePath: /MobileApp/App/Navigation/NavigationService.js
  */
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions, StackActions } from 'react-navigation';
 
 let _navigator;
 
@@ -23,13 +23,15 @@ function navigate(routeName, params) {
   );
 }
 function goBack(routeName, params) {
-  _navigator.dispatch(
-    NavigationActions.back()
-  );
+  _navigator.dispatch(NavigationActions.back());
+}
+function pop(n) {
+  _navigator.dispatch(StackActions.pop({ n }));
 }
 // add other navigation functions that you need and export them
 export default {
   navigate,
   goBack,
   setTopLevelNavigator,
+  pop,
 };

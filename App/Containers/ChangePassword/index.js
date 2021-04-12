@@ -1,15 +1,14 @@
-import React, {Component, useState, useEffect} from 'react';
-import {View, StatusBar, Text, Keyboard} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {isIphoneX} from 'react-native-iphone-x-helper';
-import {vs} from 'react-native-size-matters';
-import {AppBar, Button, TextInput, PasswordInput} from '../../Components';
-import {Colors} from '../../Themes';
+import React, { useState, useEffect } from 'react';
+import { View, StatusBar, Text, Keyboard } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { vs } from 'react-native-size-matters';
+import { AppBar, Button, PasswordInput, RightButton } from '../../Components';
+import { Colors } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
 
-function index(props) {
+function ChangePassword(props) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -51,28 +50,49 @@ function index(props) {
   }, []);
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}>
-        <AppBar />
+        edges={['top', 'right', 'left', 'bottom']}
+      >
+        <AppBar
+          rightButton={() => {
+            return (
+              <AppBar
+                rightButton={() => (
+                  <RightButton
+                    title="UPDATE"
+                    disable={false}
+                    onPress={() => {
+                      // NavigationService.goBack();
+                    }}
+                  />
+                )}
+              />
+            );
+          }}
+        />
         <View style={styles.bodyContainer}>
           <Text style={styles.heading2Bold}>Change my password</Text>
-          <Text style={[styles.heading4Regular, {color: Colors.grey80}]}>
+          <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
             For security reasons please first enter your current password.
           </Text>
 
-        <View>
-        {inputs.map((item) => {
-            return <PasswordInput style={{ marginTop: vs(18) }} {...item} />
-        }
-            
-          )}
-        </View>
+          <View>
+            {inputs.map((item, index) => {
+              return (
+                <PasswordInput
+                  key={index}
+                  style={{ marginTop: vs(18) }}
+                  {...item}
+                />
+              );
+            })}
+          </View>
 
-        <View style={{position:'absolute',bottom:0,left:0,right:0}}>
+          <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
             <Button
-              backgroundColor='transparent'
+              backgroundColor="transparent"
               textColor={colors.grey80}
               onPress={() => {
                 NavigationService.navigate('');
@@ -86,4 +106,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default ChangePassword;

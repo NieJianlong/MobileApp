@@ -68,7 +68,7 @@ class ProductDetailScreen extends Component {
             quantity: 1,
             totalPrice: 0,
             colorIndex: 0,
-            isPurchased: true,
+            isPurchased: false,
             isLiked: false,
 
             showPickupFromSellerSheet: false,
@@ -861,7 +861,6 @@ class ProductDetailScreen extends Component {
                 }}
                 onCloseEnd={() => {
                     this.setState({ showColorSheet: false })
-                    RNAlert.prompt('Hello')
                 }}
                 callbackNode={this.fall}
                 snapPoints={[vs(390), 0]}

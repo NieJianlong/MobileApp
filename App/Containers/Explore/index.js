@@ -466,11 +466,20 @@ class ExploreScreen extends Component {
         }
     }
 
+    scrollToIndex = (index) => {
+        this.refs.categoriesFlatlist.scrollToIndex({
+            animated: true,
+            index,
+            viewOffset: Dimensions.get('window').width / 7 * 3,
+        })
+    }
+
     renderCategories() {
         if (this.state.keyword === '') {
             return (
                 <View style={styles.categryContainer}>
                     <FlatList
+                        ref='categoriesFlatlist'
                         contentContainerStyle={styles.categoryListContainer}
                         horizontal
                         showsHorizontalScrollIndicator={false}
@@ -483,6 +492,7 @@ class ExploreScreen extends Component {
                                     onPress={() => {
                                         this.setState({ selectedCategory: index })
                                         this._carousel.snapToItem(index)
+                                        this.scrollToIndex(index)
                                     }}
                                     style={[styles.categoryItemContainer, !isFocused && { borderBottomColor: 'transparent' }]}>
                                     <Text style={[styles.heading5Bold, { color: isFocused ? Colors.primary : Colors.grey60 }]}>
@@ -605,6 +615,7 @@ class ExploreScreen extends Component {
 
     onSnapToItem = (index) => {
         this.setState({ selectedCategory: index })
+        this.scrollToIndex(index)
     }
 
     renderProducList() {

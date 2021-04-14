@@ -31,6 +31,7 @@ import { GET_USER_PROFILE, userProfileVar } from '../../Apollo/cache'
 
 
 function LoginScreen(props ) {
+    // refs
     let passwordInput = null
  
     let [keyboardHeight, setKeyboardHeight] = useState(0)
@@ -70,13 +71,13 @@ function LoginScreen(props ) {
         console.log('onSignIn' + `${loginInput}:::${psswd}`)// to-do remove
         let ret = validator.loginDifferentiator(loginInput)
         if (ret.isValid) {
-            // we are good test for email or phone
+            // we are good so we can test for email or phone
             if (ret.isEmail) {
                 userProfileVar({
                     email: loginInput,
                     isAuth: true
                 })
-                console.log(profile.data.userProfileVar.email)// to-do remove
+               // console.log(profile.data.userProfileVar.email)// to-do remove
                 await jwt.runMockTokenFlow().then(function (res) {
                     // need check for status code = 200 
                     // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
@@ -101,7 +102,6 @@ function LoginScreen(props ) {
                     phone: loginInput,
                     isAuth: true
                 })
-                toggleResetValidationAlert()
             }
         } else {
             console.log('data not valid')

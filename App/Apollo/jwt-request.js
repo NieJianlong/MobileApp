@@ -46,3 +46,22 @@ export const runMockTokenFlow = async (userId, password) => {
     return ret
 
 }
+
+
+
+export const runMockRegisterFlow = async (regUser) => {
+    let headers = { 'Content-Type': 'application/json' }
+
+    let MockRegisterJsonReponse = '{"registerOk":"OK"}'
+
+    let ret = new Promise((resolve, reject) => {
+        console.log(JSON.stringify(regUser))
+        setTimeout(() => {
+            resolve(MockRegisterJsonReponse);
+        }, 300);
+    })
+
+    return ret
+
+
+}

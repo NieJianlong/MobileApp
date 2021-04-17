@@ -63,5 +63,12 @@ export default ScaledSheet.create({
         color: Colors.black,
         fontSize: '14@s',
         fontWeight: '600'
+    },
+    txtValidate: {
+        fontFamily: Fonts.primary,
+        color: Colors.error,
+        fontSize: '14@s',
+        fontWeight: '700',
+        margin: '12@vs',
     }
 })

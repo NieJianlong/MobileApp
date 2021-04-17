@@ -3,7 +3,11 @@ const EMAIL_REG = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
 const PHONE_REG = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
 
-const INTNTL_PHONE_REG =/^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/
+const INTNTL_PHONE_REG = /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/
+
+const PASSWORD_VALIDATION = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])$/
+
+
 
 /**
  * there will be a bunch of validation functions
@@ -33,4 +37,63 @@ export const loginDifferentiator = (loginInput) => {
         diff.isValid = false
     }
     return diff
+}
+
+/** a function to decide if a register user request is a valid with correct error flags */
+export const registerValidator = (registerValues) => {
+    console.log(`debug registerValidator ${JSON.stringify(registerValues)}`)
+    let reporter = {validPhoneOrEmail:true}
+    let { registerInput } = registerValues
+    let missing = checkMissingRegisterValues(registerValues)
+    if(missing.hasMissing) {
+       // we are missing something
+       reporter.hasMissing = true
+       reporter.missingVal = missing.missingVal
+       return reporter
+    }
+
+    let ret = loginDifferentiator(registerInput)
+    if (ret.isValid) {
+        // we have decided lets check email or phone
+        if (ret.isEmail) {
+            reporter.isEmail = true
+        } else {
+            reporter.isPhone= true
+        }
+
+    } else {
+        reporter.validPhoneOrEmail = false
+        return reporter
+    }
+    return reporter
+}
+
+function checkMissingRegisterValues(registerValues) {
+    let {name, lastName, registerInput, psswd } = registerValues     
+    let missingVals = {hasMissing:false}
+        // lets check name and last name exist
+        if(typeof name === 'undefined' || name === "") {
+            missingVals.hasMissing=true
+            missingVals.missingVal='Name'
+            return missingVals
+
+        }
+        if(typeof lastName === 'undefined' || lastName === "") {
+            missingVals.hasMissing=true
+            missingVals.missingVal='Last Name'
+            return missingVals
+        }
+        if(typeof registerInput === 'undefined' || registerInput === "") {
+            missingVals.hasMissing=true
+            missingVals.missingVal='Email or Phone'
+            return missingVals
+        }
+
+        if(typeof psswd === 'undefined' || psswd === "") {
+            missingVals.hasMissing=true
+            missingVals.missingVal='Password'
+            return missingVals
+        }
+
+        return missingVals
 }

@@ -145,12 +145,11 @@ function SelectDeliveryAddress(props) {
           }}
         >
           <Button
-            onPress={() => {
-              if (params) {
-                if (typeof params.removeCallback == 'function') {
-                  params.removeCallback();
-                }
-              }
+            onPress={(callback) => {
+              NavigationService.navigate('AddNewAddressScreen', {
+                callback,
+                title: 'Add new address',
+              });
             }}
             textColor="white"
             text="Add new address"

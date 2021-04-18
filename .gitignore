@@ -59,3 +59,13 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 onboarding.mp4
+
+android/app/src/main/res/raw
+android/app/src/main/res/drawable-mdpi
+android/app/src/main/res/drawable-hdpi
+android/app/src/main/res/drawable-xhdpi
+android/app/src/main/res/drawable-xxhdpi
+android/app/src/main/res/drawable-xxxhdpi
+
+
+

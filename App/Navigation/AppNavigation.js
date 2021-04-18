@@ -28,6 +28,7 @@ import LegalScreen from '../Containers/Legal';
 import OTPScreen from '../Containers/OTP';
 import ForgotPasswordScreen from '../Containers/ForgotPassword';
 import CreateNewPasswordScreen from '../Containers/CreateNewPassword';
+import WishlistScreen from '../Containers/Wishlist';
 import UserCenter from '../Containers/UserCenter';
 import UserInfoScreen from '../Containers/UserInfo';
 import UserEditProfileScreen from '../Containers/UserEditProfile';
@@ -75,7 +76,7 @@ const TabNav = createBottomTabNavigator(
     ExploreScreen: { screen: ExploreScreen },
     PackageScreen: { screen: OrderScreen },
     CartScreen: { screen: ShoppingCartScreen },
-    FollowScreen: { screen: ExploreScreen },
+    FollowScreen: { screen: WishlistScreen },
     MenuScreen: { screen: UserCenter },
   },
   {

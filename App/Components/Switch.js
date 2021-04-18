@@ -10,12 +10,16 @@ import { Fonts, Colors } from '../Themes'
 function Switch(props) {
 
     const [active, setActive] = useState(false)
+ 
 
     const {
         disabled,
         label,
         onSwitch,
+ 
     } = props
+
+ 
 
     if (!disabled) {
         return (
@@ -25,6 +29,8 @@ function Switch(props) {
                     onPress={() => {
                         setActive(!active)
                         onSwitch(!active)
+                       
+
                     }}>
                     {
                         active ?

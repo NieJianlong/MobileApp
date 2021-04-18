@@ -151,10 +151,10 @@ android {
             keyPassword 'android'
         }
         release {
-            keyAlias 'my-key-alias'
-            keyPassword 'android'
-            storeFile file("keystores/my-upload-key.keystore")
-            storePassword 'android'
+            keyAlias 'salami'
+            keyPassword 'salami'
+            storeFile file("salami.keystore")
+            storePassword 'salami'
         }
     }
     buildTypes {

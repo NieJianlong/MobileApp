@@ -17,7 +17,7 @@ import { ScaledSheet, s, vs } from 'react-native-size-matters';
  */
 function UserAvatar(props) {
   const { uri } = props;
-  return <Image style={styles.avatar} source={{ uri }} />;
+  return <Image style={styles.avatar} source={uri} />;
 }
 
 export default UserAvatar;

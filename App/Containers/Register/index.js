@@ -52,7 +52,7 @@ function RegisterScreen(props) {
         }
     }, [])
 
->>>>>>> origin/develop
+ 
 
     const onRegister = async () => {
         // first decide are we an email or a phone
@@ -232,11 +232,6 @@ function RegisterScreen(props) {
                     <View style={{ flex: 1 }} />
                     <Text style={styles.txtValidate}>{validationDisplay}  </Text>
 
-<<<<<<< Updated upstream
-                        <Button
-                            onPress={this.onRegister}
-                            text={'REGISTER'} />
-=======
                     <Button
                         // onPress={onRegister}
                         onPress={onDebug}
@@ -255,10 +250,7 @@ function RegisterScreen(props) {
             {renderValidationAlert()}
         </View>
     )
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> origin/develop
+ 
 
 }
 

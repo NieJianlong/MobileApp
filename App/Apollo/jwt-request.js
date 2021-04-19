@@ -80,6 +80,5 @@ export const runMockOTPFlow = async (otpCode) => {
 
     return ret
 
-
->>>>>>> Stashed changes
+ 
 }

@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useState, useRef, useEffect } from 'react'
 import {
     View,
     StatusBar,
@@ -52,64 +52,41 @@ const carouselItemWidth = Dimensions.get('window').width
 // Wrap the original ScrollView
 const CustomScrollView = wrapScrollView(ScrollView)
 
-class ProductDetailScreen extends Component {
+function ProductDetail(props) {
 
-    fall = new Animated.Value(0)
+    const fall = useRef(new Animated.Value(0)).current
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            showHeaderTabs: false,
-            showFooter: false,
-            showDescription: false,
+    const [showHeaderTabs, setShowHeaderTabs] = useState(false)
+    const [showFooter, setShowFooter] = useState(false)
+    const [showDescription, setShowDescription] = useState(false)
 
-            tabIndex: 0,
-            photoIndex: 0,
-            quantity: 1,
-            totalPrice: 0,
-            colorIndex: 0,
-            isPurchased: false,
-            isLiked: false,
+    const [tabIndex, setTabIndex] = useState(0)
+    const [photoIndex, setPhotoIndex] = useState(0)
+    const [quantity, setQuantity] = useState(1)
+    const [totalPrice, setTotalPrice] = useState(0)
+    const [colorIndex, setColorIndex] = useState(0)
+    const [isPurchased, setIsPurchased] = useState(false)
+    const [isLiked, setIsLiked] = useState(false)
 
-            showPickupFromSellerSheet: false,
-            showColorSheet: false,
-            showAddToCartSheet: false,
-            showConfirmOrderSheet: false,
-            showShareSheet: false,
+    const [showPickupFromSellerSheet, setShowPickupFromSellerSheet] = useState(false)
+    const [showColorSheet, setShowColorSheet] = useState(false)
+    const [showAddToCartSheet, setShowAddToCartSheet] = useState(false)
+    const [showConfirmOrderSheet, setShowConfirmOrderSheet] = useState(false)
+    const [showShareSheet, setShowShareSheet] = useState(false)
 
-            showReviewSentAlert: false,
-            showReportSentAlert: false,
-        }
-    }
+    const [showReviewSentAlert, setShowReviewSentAlert] = useState(false)
+    const [showReportSentAlert, setShowReportSentAlert] = useState(false)
 
-    componentDidMount() {
+    const sectionsRefs = Sections.map(_section => React.createRef())
+    const pickupFromSellerSheet = useRef()
+    const colorSheet = useRef()
+    const shareSheet = useRef()
+    const confirmOrderSheet = useRef()
+    const addToCartSheet = useRef()
+    const _carousel = useRef()
 
-    }
-
-    toggleReviewSentAlert = () => {
-        if (this.state.showReviewSentAlert) {
-            setTimeout(() => {
-                this.setState({ showReviewSentAlert: false })
-            }, 2100)
-        } else {
-            this.setState({ showReviewSentAlert: true })
-        }
-    }
-
-    toggleReportSentAlert = () => {
-        if (this.state.showReportSentAlert) {
-            setTimeout(() => {
-                this.setState({ showReportSentAlert: false })
-            }, 2100)
-        } else {
-            this.setState({ showReportSentAlert: true })
-        }
-    }
-
-    sectionsRefs = Sections.map(_section => React.createRef())
-
-    scrollSectionIntoView = (section) => {
-        this.sectionsRefs[section].current.scrollIntoView(
+    const scrollSectionIntoView = (section) => {
+        sectionsRefs[section].current.scrollIntoView(
             {
                 align: 'top',
                 insets: {
@@ -120,101 +97,105 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    setTabIndex = (index) => this.setState({ tabIndex: index })
-
-    handleScroll = (event) => {
+    const handleScroll = (event) => {
         let threshold = height / 4
         let y = event.nativeEvent.contentOffset.y
-        if (y > threshold && !this.state.showHeaderTabs) {
-            this.setState({ showHeaderTabs: true, showFooter: false })
-        } else if (y <= threshold && this.state.showHeaderTabs) {
-            this.setState({ showHeaderTabs: false, showFooter: false })
+        if (y > threshold && !showHeaderTabs) {
+            setShowHeaderTabs(true)
+            setShowFooter(false)
+        } else if (y <= threshold && showHeaderTabs) {
+            setShowHeaderTabs(false)
+            setShowFooter(false)
         }
     }
 
-    handleScrollEnd = (event) => {
-        this.setState({ showFooter: true })
+    const handleScrollEnd = (event) => {
+        setShowFooter(true)
     }
 
-    onLikeProduct = () => {
-        this.setState({ isLiked: !this.state.isLiked })
+    const onLikeProduct = () => {
+        setIsLiked(!isLiked)
     }
 
-    togglePickupFromSellerSheet = () => {
-        this.setState({ showPickupFromSellerSheet: !this.state.showPickupFromSellerSheet }, () => {
-            if (this.state.showPickupFromSellerSheet) {
-                this.pickupFromSellerSheet.snapTo(0)
-            } else {
-                this.pickupFromSellerSheet.snapTo(1)
-            }
-        })
-    }
+    useEffect(() => {
+        if (showPickupFromSellerSheet) {
+            pickupFromSellerSheet.current.snapTo(0)
+        } else {
+            pickupFromSellerSheet.current.snapTo(1)
+        }
+    }, [showPickupFromSellerSheet])
 
-    toggleColorSheet = () => {
-        this.setState({ showColorSheet: !this.state.showColorSheet }, () => {
-            if (this.state.showColorSheet) {
-                this.colorSheet.snapTo(0)
-            } else {
-                this.colorSheet.snapTo(1)
-            }
-        })
-    }
+    useEffect(() => {
+        if (showColorSheet) {
+            colorSheet.current.snapTo(0)
+        } else {
+            colorSheet.current.snapTo(1)
+        }
+    }, [showColorSheet])
 
-    toggleShareSheet = () => {
-        this.setState({ showShareSheet: !this.state.showShareSheet }, () => {
-            if (this.state.showShareSheet) {
-                this.shareSheet.snapTo(0)
-            } else {
-                this.shareSheet.snapTo(1)
-            }
-        })
-    }
+    useEffect(() => {
+        if (showShareSheet) {
+            shareSheet.current.snapTo(0)
+        } else {
+            shareSheet.current.snapTo(1)
+        }
+    }, [showShareSheet])
 
-    toggleConfirmOrderSheet = () => {
-        this.setState({ showConfirmOrderSheet: !this.state.showConfirmOrderSheet }, () => {
-            if (this.state.showConfirmOrderSheet) {
-                this.confirmOrderSheet.snapTo(0)
-            } else {
-                this.confirmOrderSheet.snapTo(1)
-            }
-        })
-    }
+    useEffect(() => {
+        if (showConfirmOrderSheet) {
+            confirmOrderSheet.current.snapTo(0)
+        } else {
+            confirmOrderSheet.current.snapTo(1)
+        }
+    }, [showConfirmOrderSheet])
 
-    toggleAddToCartSheet = () => {
-        this.setState({ showAddToCartSheet: !this.state.showAddToCartSheet }, () => {
-            if (this.state.showAddToCartSheet) {
-                this.addToCartSheet.snapTo(0)
-            } else {
-                this.addToCartSheet.snapTo(1)
-            }
-        })
-    }
+    useEffect(() => {
+        if (showAddToCartSheet) {
+            addToCartSheet.current.snapTo(0)
+        } else {
+            addToCartSheet.current.snapTo(1)
+        }
+    }, [showAddToCartSheet])
 
-    renderReviewSentAlert() {
+    useEffect(() => {
+        if (showReportSentAlert) {
+            setTimeout(() => setShowReportSentAlert(false), 2000)
+        }
+    }, [showReportSentAlert])
+
+    const togglePickupFromSellerSheet = () => setShowPickupFromSellerSheet(!showPickupFromSellerSheet)
+    const toggleColorSheet = () => setShowColorSheet(!showColorSheet)
+    const toggleShareSheet = () => setShowShareSheet(!showShareSheet)
+    const toggleConfirmOrderSheet = () => setShowConfirmOrderSheet(!showConfirmOrderSheet)
+    const toggleAddToCartSheet = () => setShowAddToCartSheet(!showAddToCartSheet)
+    const toggleReviewSentAlert = () => setShowReviewSentAlert(!showReviewSentAlert)
+    const toggleReportSentAlert = () => setShowReportSentAlert(!showReportSentAlert)
+
+    const renderReviewSentAlert = () => {
         return (
             <Alert
-                visible={this.state.showReviewSentAlert}
+                visible={showReviewSentAlert}
                 title={'Thanks for your review!'}
                 message={'Your review has been added successfully'}
                 color={Colors.success}
-                onDismiss={this.toggleReviewSentAlert}
+                onDismiss={() => setShowReviewSentAlert(false)}
             />
         )
     }
 
-    renderReportSentAlert() {
+    const renderReportSentAlert = () => {
         return (
             <Alert
-                visible={this.state.showReportSentAlert}
+                visible={showReportSentAlert}
                 title={'Thanks for your report!'}
                 message={'Your report has been sent successfully'}
                 color={Colors.success}
-                onDismiss={this.toggleReviewSentAlert}
+                onDismiss={() => setShowReportSentAlert(false)}
             />
         )
     }
 
-    renderHeaderTabs() {
+    const renderHeaderTabs = () => {
         return (
             <SafeAreaView style={styles.headerTabsSafeArea} edges={['top']}>
                 <View style={styles.headerTabsContainer}>
@@ -223,16 +204,14 @@ class ProductDetailScreen extends Component {
                             <TouchableOpacity
                                 key={index.toString()}
                                 onPress={() => {
-                                    this.setState({
-                                        tabIndex: index,
-                                    })
-                                    this.scrollSectionIntoView(index)
+                                    setTabIndex(index)
+                                    scrollSectionIntoView(index)
                                 }}
                                 style={[styles.headerTabItem,
-                                this.state.tabIndex === index && { borderBottomColor: Colors.primary }]}>
+                                tabIndex === index && { borderBottomColor: Colors.primary }]}>
                                 <Text
                                     style={[styles.heading5Bold,
-                                    { color: this.state.tabIndex === index ? Colors.primary : Colors.grey60 }]}>
+                                    { color: tabIndex === index ? Colors.primary : Colors.grey60 }]}>
                                     {i}
                                 </Text>
                             </TouchableOpacity>)
@@ -242,26 +221,26 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    renderFooter() {
+    const renderFooter = () => {
         return (
             <SafeAreaView style={styles.footerSafeArea} edges={['bottom']}>
                 <QuantitySelector
                     minimumValue={1}
                     maximumValue={100}
-                    value={this.state.quantity}
-                    onChange={(value) => this.setState({ quantity: value })}
+                    value={quantity}
+                    onChange={(value) => setQuantity(value)}
                 />
 
                 <View style={{ height: vs(15) }} />
 
                 <View style={styles.rowSpaceBetween}>
-                    <TouchableOpacity style={styles.row} onPress={this.toggleAddToCartSheet}>
+                    <TouchableOpacity style={styles.row} onPress={toggleAddToCartSheet}>
                         <Image source={Images.cartMed} style={styles.icCart} />
                         <Text style={[styles.txtBold, { color: Colors.primary }]}>ADD TO CART</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={this.toggleConfirmOrderSheet}
+                        onPress={toggleConfirmOrderSheet}
                         style={styles.btnBuyNow}>
                         <Text style={[styles.txtBold, { color: Colors.white }]}>BUY NOW</Text>
 
@@ -269,7 +248,7 @@ class ProductDetailScreen extends Component {
                             <NumberFormat
                                 thousandSeparator={true}
                                 prefix={'$'}
-                                value={this.state.quantity * product.wholesalePrice}
+                                value={quantity * product.wholesalePrice}
                                 displayType={'text'}
                                 renderText={text => <Text style={[styles.txtRegular, { color: Colors.white }]}>{text}</Text>}
                             />
@@ -280,9 +259,9 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    _renderImageItem = ({ item, index }) => {
+    const _renderImageItem = ({ item, index }) => {
         return (
-            <TouchableOpacity onPress={() => NavigationService.navigate('ProductGalleryScreen', { fullscreenMode: true })}>
+            <TouchableOpacity key={index.toString()} onPress={() => NavigationService.navigate('ProductGalleryScreen', { fullscreenMode: true })}>
                 <Image
                     resizeMode={'contain'}
                     source={{ uri: product.picture }}
@@ -292,20 +271,20 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    onSnapToItem = (index) => {
-        this.setState({ photoIndex: index })
+    const onSnapToItem = (index) => {
+        setPhotoIndex(index)
     }
 
-    renderProductImages() {
+    const renderProductImages = () => {
         return (
             <View style={styles.imagesContainer}>
                 <Carousel
-                    ref={(c) => { this._carousel = c; }}
+                    ref={_carousel}
                     data={product.photoUrls}
-                    renderItem={this._renderImageItem}
+                    renderItem={_renderImageItem}
                     sliderWidth={sliderWidth}
                     itemWidth={carouselItemWidth}
-                    onSnapToItem={this.onSnapToItem}
+                    onSnapToItem={onSnapToItem}
                 />
                 <View style={styles.row1}>
                     <TouchableOpacity
@@ -323,13 +302,13 @@ class ProductDetailScreen extends Component {
 
                 <View style={styles.row2}>
                     <View style={{ flexDirection: 'row' }}>
-                        <TouchableOpacity onPress={this.onLikeProduct} style={styles.btnRoundContainer}>
+                        <TouchableOpacity onPress={onLikeProduct} style={styles.btnRoundContainer}>
                             <Image
-                                style={[styles.btnRoundIcon, this.state.isLiked && { tintColor: Colors.primary }]}
-                                source={this.state.isLiked ? Images.likeFilled : Images.likeMed} />
+                                style={[styles.btnRoundIcon, isLiked && { tintColor: Colors.primary }]}
+                                source={isLiked ? Images.likeFilled : Images.likeMed} />
                         </TouchableOpacity>
                         <View style={{ width: s(12) }} />
-                        <TouchableOpacity onPress={this.toggleShareSheet} style={styles.btnRoundContainer}>
+                        <TouchableOpacity onPress={toggleShareSheet} style={styles.btnRoundContainer}>
                             <Image style={styles.btnRoundIcon} source={Images.share} />
                         </TouchableOpacity>
                     </View>
@@ -337,26 +316,26 @@ class ProductDetailScreen extends Component {
                     <TouchableOpacity
                         onPress={() => NavigationService.navigate('ProductGalleryScreen', { fullscreenMode: false })}
                         style={styles.photoNumberContainer}>
-                        <Text style={styles.photoNumberTxt}>{this.state.photoIndex + 1}/{product.photoUrls.length}</Text>
+                        <Text style={styles.photoNumberTxt}>{photoIndex + 1}/{product.photoUrls.length}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
         )
     }
 
-    renderProductInfo() {
+    const renderProductInfo = () => {
         return (
             <InView
                 onChange={(isVisible) => {
                     if (isVisible) {
-                        this.setState({ tabIndex: 0 })
+                        setTabIndex(0)
                     }
                 }}>
                 <View style={styles.infoContainer}>
                     <View style={styles.v2}>
                         <View>
                             <Text style={styles.heading2Bold}>{product.name}</Text>
-                            <TouchableOpacity onPress={() => this.scrollSectionIntoView(3)}>
+                            <TouchableOpacity onPress={() => scrollSectionIntoView(3)}>
                                 <StarRating fullMode rating={product.rating} ratingCount={product.ratingCount} />
                             </TouchableOpacity>
                         </View>
@@ -406,7 +385,7 @@ class ProductDetailScreen extends Component {
                                 <Switch
                                     onSwitch={(t) => {
                                         if (t) {
-                                            this.togglePickupFromSellerSheet()
+                                            togglePickupFromSellerSheet()
                                         }
                                     }}
                                 />
@@ -473,7 +452,7 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    renderChatOptions() {
+    const renderChatOptions = () => {
         return (
             <View style={styles.chatContainer}>
                 <View style={styles.chatIconsContainer}>
@@ -511,7 +490,7 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    renderOptions() {
+    const renderOptions = () => {
         return (
             <View style={styles.optionContainer}>
 
@@ -527,24 +506,24 @@ class ProductDetailScreen extends Component {
                     </View>
                 </View>
 
-                {this.state.isPurchased && this.renderChatOptions()}
+                {isPurchased && this.renderChatOptions()}
 
                 <Picker
-                    onPress={this.toggleColorSheet}
+                    onPress={toggleColorSheet}
                     style={styles.picker}
                     title={'Size'}
                     value={'256GB'}
                 />
 
                 <Picker
-                    onPress={this.toggleColorSheet}
+                    onPress={toggleColorSheet}
                     style={styles.picker}
                     title={'Style'}
                     value={'OnePlus 8 Pro'}
                 />
 
                 <Picker
-                    onPress={this.toggleColorSheet}
+                    onPress={toggleColorSheet}
                     style={styles.picker}
                     title={'Color'}
                     value={'Black'}
@@ -554,12 +533,12 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    renderRelatedProducts() {
+    const renderRelatedProducts = () => {
         return (
             <InView
                 onChange={(isVisible) => {
                     if (isVisible) {
-                        this.setState({ tabIndex: 1 })
+                        setTabIndex(1)
                     }
                 }}>
                 <View style={styles.relatedProductsContainer}>
@@ -587,7 +566,7 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    renderStoreInfo() {
+    const renderStoreInfo = () => {
         return (
             <InView
                 onChange={(isVisible) => {
@@ -626,10 +605,10 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    renderUserReview() {
+    const renderUserReview = () => {
         return (
             <TouchableOpacity
-                onPress={() => NavigationService.navigate('RateOrderScreen', { onPost: this.toggleReviewSentAlert })}
+                onPress={() => NavigationService.navigate('RateOrderScreen', { onPost: toggleReviewSentAlert })}
                 style={styles.userReviewContainer}>
                 <Text style={styles.heading4Bold}>Rate and review this product</Text>
                 <Text style={styles.txtRegular}>Share your experience</Text>
@@ -641,7 +620,7 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    renderProductReview() {
+    const renderProductReview = () => {
         return (
             <View style={styles.productReviewContainer}>
 
@@ -662,7 +641,7 @@ class ProductDetailScreen extends Component {
 
                 <View style={{ height: vs(15) }} />
 
-                {this.state.isPurchased && this.renderUserReview()}
+                {isPurchased && renderUserReview()}
 
                 <View style={{ height: vs(15) }} />
 
@@ -697,6 +676,7 @@ class ProductDetailScreen extends Component {
                                         horizontal
                                         showsHorizontalScrollIndicator={false}
                                         data={comment.comment.photos}
+                                        keyExtractor={(item, index) => index.toString()}
                                         renderItem={({ item, index }) =>
                                             <ImageBackground
                                                 key={index.toString()}
@@ -718,7 +698,7 @@ class ProductDetailScreen extends Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
-                                    onPress={() => NavigationService.navigate('ReportScreen', { onSubmit: this.toggleReportSentAlert })}
+                                    onPress={() => NavigationService.navigate('ReportScreen', { onSubmit: toggleReportSentAlert })}
                                     style={{ marginLeft: s(20) }}>
                                     <Text style={[styles.heading5Bold, { color: Colors.grey60 }]}>
                                         REPORT
@@ -773,65 +753,63 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    renderSectionDetails() {
+    const renderSectionDetails = () => {
         return (
             <ScrollIntoView
                 align={'top'}
                 key={'section0'}
-                ref={this.sectionsRefs[0]}
+                ref={sectionsRefs[0]}
             >
-                {this.renderProductImages()}
+                {renderProductImages()}
 
-                {this.renderProductInfo()}
+                {renderProductInfo()}
 
-                {this.renderOptions()}
+                {renderOptions()}
             </ScrollIntoView>
         )
     }
 
-    renderSectionRelated() {
+    const renderSectionRelated = () => {
         return (
             <ScrollIntoView
                 key={'section1'}
-                ref={this.sectionsRefs[1]}
+                ref={sectionsRefs[1]}
             >
-                {this.renderRelatedProducts()}
+                {renderRelatedProducts()}
             </ScrollIntoView>
         )
     }
 
-    renderSectionSeller() {
+    const renderSectionSeller = () => {
         return (
             <ScrollIntoView
                 key={'section2'}
-                ref={this.sectionsRefs[2]}
+                ref={sectionsRefs[2]}
             >
-                {this.renderStoreInfo()}
+                {renderStoreInfo()}
             </ScrollIntoView>
         )
     }
 
-    renderSectionReview() {
+    const renderSectionReview = () => {
         return (
             <ScrollIntoView
                 key={'section3'}
-                ref={this.sectionsRefs[3]}
+                ref={sectionsRefs[3]}
             >
-                {this.renderProductReview()}
+                {renderProductReview()}
             </ScrollIntoView>
         )
     }
 
-    renderPickupFromSellerSheet() {
+    const renderPickupFromSellerSheet = () => {
         return (
             <BottomSheet
-                customRef={ref => {
-                    this.pickupFromSellerSheet = ref
-                }}
-                onCloseEnd={() => this.setState({ showPickupFromSellerSheet: false })}
-                callbackNode={this.fall}
+                customRef={pickupFromSellerSheet}
+                onCloseEnd={() => setShowPickupFromSellerSheet(false)}
+                callbackNode={fall}
                 snapPoints={[vs(290), 0]}
-                initialSnap={this.state.showPickupFromSellerSheet ? 0 : 1}
+                initialSnap={showPickupFromSellerSheet ? 0 : 1}
                 title={'Pick up from seller'}>
                 <View style={{ flex: 1, justifyContent: 'flex-end' }}>
                     <Text style={[styles.txtRegular, { textAlign: 'center' }]}>
@@ -847,31 +825,30 @@ class ProductDetailScreen extends Component {
                         </View>
                     </View>
 
-                    <Button onPress={this.togglePickupFromSellerSheet} text={'OK'} />
+                    <Button onPress={togglePickupFromSellerSheet} text={'OK'} />
                 </View>
             </BottomSheet>
         )
     }
 
-    renderColorSheet() {
+    const renderColorSheet = () => {
         return (
             <BottomSheet
-                customRef={ref => {
-                    this.colorSheet = ref
-                }}
+                customRef={colorSheet}
                 onCloseEnd={() => {
-                    this.setState({ showColorSheet: false })
+                    setShowColorSheet(false)
                 }}
                 callbackNode={this.fall}
                 snapPoints={[vs(390), 0]}
-                initialSnap={this.state.showColorSheet ? 0 : 1}
+                initialSnap={showColorSheet ? 0 : 1}
                 title={'Color'}>
                 <View style={{ flex: 1, justifyContent: 'flex-end' }}>
                     {
                         product.colors.map((item, index) =>
                             <ColorOptionItem
-                                defaultValue={this.state.colorIndex === index}
-                                onSwitch={() => { this.setState({ colorIndex: index }) }}
+                                key={index.toString()}
+                                defaultValue={colorIndex === index}
+                                onSwitch={() => setColorIndex(index)}
                                 label={item.name}
                                 style={{ marginBottom: vs(16) }}
                                 available={item.available}
@@ -883,16 +860,14 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    renderShareSheet() {
+    const renderShareSheet = () => {
         return (
             <BottomSheet
-                customRef={ref => {
-                    this.shareSheet = ref
-                }}
-                onCloseEnd={() => this.setState({ showShareSheet: false })}
-                callbackNode={this.fall}
+                customRef={shareSheet}
+                onCloseEnd={() => setShowShareSheet(false)}
+                callbackNode={fall}
                 snapPoints={[vs(580), 0]}
-                initialSnap={this.state.showShareSheet ? 0 : 1}
+                initialSnap={showShareSheet ? 0 : 1}
                 title={'Share to'}>
                 <View style={{ flex: 1, justifyContent: 'flex-end' }}>
                     <ShareOptionList />
@@ -901,16 +876,14 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    renderConfirmOrderSheet() {
+    const renderConfirmOrderSheet = () => {
         return (
             <BottomSheet
-                customRef={ref => {
-                    this.confirmOrderSheet = ref
-                }}
-                onCloseEnd={() => this.setState({ showConfirmOrderSheet: false })}
-                callbackNode={this.fall}
+                customRef={confirmOrderSheet}
+                onCloseEnd={() => setShowConfirmOrderSheet(false)}
+                callbackNode={fall}
                 snapPoints={[vs(310), 0]}
-                initialSnap={this.state.showConfirmOrderSheet ? 0 : 1}
+                initialSnap={showConfirmOrderSheet ? 0 : 1}
                 title={'Confirm your Order'}>
                 <View style={{ flex: 1, justifyContent: 'flex-end' }}>
                     <View style={[styles.pickupLocationContainer, { marginTop: 0, marginBottom: 10 }]}>
@@ -940,28 +913,26 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    renderAddToCartSheet() {
+    const renderAddToCartSheet = () => {
         return (
             <BottomSheet
-                customRef={ref => {
-                    this.addToCartSheet = ref
-                }}
-                onCloseEnd={() => this.setState({ showAddToCartSheet: false })}
-                callbackNode={this.fall}
+                customRef={addToCartSheet}
+                onCloseEnd={() => setShowAddToCartSheet(false)}
+                callbackNode={fall}
                 snapPoints={[vs(290), 0]}
-                initialSnap={this.state.showAddToCartSheet ? 0 : 1}
+                initialSnap={showAddToCartSheet ? 0 : 1}
                 title={'An item has been added to your cart'}>
                 <View style={{ flex: 1, justifyContent: 'flex-end' }}>
                     <Text style={[styles.txtRegular, { textAlign: 'center', marginBottom: vs(25) }]}>
                         There are now 2 items in your cart
                     </Text>
 
-                    <Button onPress={this.toggleAddToCartSheet} text={'GO TO CHECKOUT'} />
+                    <Button onPress={toggleAddToCartSheet} text={'GO TO CHECKOUT'} />
 
                     <View style={styles.btnRow}>
                         <View style={styles.v5}>
                             <Button
-                                onPress={this.toggleAddToCartSheet}
+                                onPress={toggleAddToCartSheet}
                                 text={'CONTINUE'}
                                 backgroundColor={Colors.grey80}
                             />
@@ -980,64 +951,62 @@ class ProductDetailScreen extends Component {
         )
     }
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <StatusBar barStyle='dark-content' />
-                <SafeAreaView
-                    style={styles.mainContainer}
-                    edges={['top', 'left', 'right']}>
-                    <CustomScrollView
-                        contentContainerStyle={{ paddingBottom: vs(150) }}
-                        onScroll={this.handleScroll}
-                        onMomentumScrollEnd={this.handleScrollEnd}
-                        scrollEventThrottle={60}
-                        showsVerticalScrollIndicator={false}>
+    return (
+        <View style={styles.container}>
+            <StatusBar barStyle='dark-content' />
+            <SafeAreaView
+                style={styles.mainContainer}
+                edges={['top', 'left', 'right']}>
+                <CustomScrollView
+                    contentContainerStyle={{ paddingBottom: vs(150) }}
+                    onScroll={handleScroll}
+                    onMomentumScrollEnd={handleScrollEnd}
+                    scrollEventThrottle={60}
+                    showsVerticalScrollIndicator={false}>
 
-                        {this.renderSectionDetails()}
+                    {renderSectionDetails()}
 
-                        {this.renderSectionRelated()}
+                    {renderSectionRelated()}
 
-                        {this.renderSectionSeller()}
+                    {renderSectionSeller()}
 
-                        {this.renderSectionReview()}
-                    </CustomScrollView>
+                    {renderSectionReview()}
+                </CustomScrollView>
 
-                    {this.state.showHeaderTabs && this.renderHeaderTabs()}
+                {showHeaderTabs && renderHeaderTabs()}
 
-                    {this.state.showFooter && this.renderFooter()}
-                </SafeAreaView>
+                {showFooter && renderFooter()}
+            </SafeAreaView>
 
-                {/* background for bottom sheet */}
-                <BottomSheetBackground
-                    visible={this.state.showPickupFromSellerSheet ||
-                        this.state.showColorSheet ||
-                        this.state.showAddToCartSheet ||
-                        this.state.showConfirmOrderSheet ||
-                        this.state.showShareSheet
-                    }
-                    controller={this.fall}
-                />
+            {/* background for bottom sheet */}
+            <BottomSheetBackground
+                visible={showPickupFromSellerSheet ||
+                    showColorSheet ||
+                    showAddToCartSheet ||
+                    showConfirmOrderSheet ||
+                    showShareSheet
+                }
+                controller={fall}
+            />
 
-                {this.renderPickupFromSellerSheet()}
+            {renderPickupFromSellerSheet()}
 
-                {this.renderColorSheet()}
+            {renderColorSheet()}
 
-                {this.renderShareSheet()}
+            {renderShareSheet()}
 
-                {this.renderConfirmOrderSheet()}
+            {renderConfirmOrderSheet()}
 
-                {this.renderAddToCartSheet()}
+            {renderAddToCartSheet()}
 
-                {this.renderReviewSentAlert()}
+            {renderReviewSentAlert()}
 
-                {this.renderReportSentAlert()}
-            </View>
-        )
-    }
+            {renderReportSentAlert()}
+        </View>
+    )
 }
 
-export default ProductDetailScreen
+export default ProductDetail
 
 const product = {
     name: 'iPhone 11',

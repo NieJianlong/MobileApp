@@ -2,10 +2,9 @@
 const EMAIL_REG = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
 const PHONE_REG = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
-
-<<<<<<< Updated upstream
+ 
 const INTNTL_PHONE_REG =/^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/
-=======
+ 
 const INTNTL_PHONE_REG = /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/
 
 
@@ -25,9 +24,7 @@ const STRONG_PASSWORD_VALIDATION = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\
  *  eight characters or longer
  */
 const WEAK_PASSWORD_VALIDATION = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/
-
-
->>>>>>> Stashed changes
+ 
 
 /**
  * there will be a bunch of validation functions
@@ -60,9 +57,7 @@ export const loginDifferentiator = (loginInput) => {
     } else {
         diff.isValid = false
     }
-    return diff
-<<<<<<< Updated upstream
-=======
+ 
 }
 
 /** a function to decide if a register user request is a valid with correct error flags */
@@ -135,5 +130,5 @@ function checkMissingRegisterValues(registerValues) {
     }
 
     return missingVals
->>>>>>> Stashed changes
+ 
 }

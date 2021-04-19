@@ -235,9 +235,6 @@ function RegisterScreen(props) {
                     <Button
                         // onPress={onRegister}
                         onPress={onDebug}
-                        
-                    <Button
-                        onPress={onRegister}
                         text={'REGISTER'} />
 
                     <TouchableOpacity

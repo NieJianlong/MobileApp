@@ -20,4 +20,49 @@ project(':@react-native-community_async-storage').projectDir = new File(rootProj
 - see  __tests__/testInfo.txt for simple jest testing instructins
 - see  /__tests__/api_tests.js for configuring Local Storage mocks
 
+## Production Build Android
+### development only
+### we will have 2 keystores dev and production, so we set them up secure somewhere and exclude from git
+### then we copy them into the android/app for a dev or deploy to production build
+Step 1
+keytool -genkey -v -keystore salami.keystore -alias salami -keyalg RSA -keysize 2048 -validity 10000
+// password must be 6 chars
+salami6
+// whatever you want for remaining keytool options
+
+Step 2
+copy dev keystore to android/app
+
+Step 3
+app\build.gradle config
+signingConfigs ....
+        release {
+            keyAlias 'salami'
+            keyPassword 'salami'
+            storeFile file("salami.keystore")
+            storePassword 'salami'
+        }
+
+ buildTypes ...
+   release {
+       ...
+       signingConfig signingConfigs.release
+       ...
+
+Step 4 
+if your mergeReleaseResources task is failing then you need to delete all the  drawable-xxx and res from  
+MobileApp/android/app/src/main/res  
+seems crazy I know
+then ./gradlew clean
+
+Step 5
+cd android
+./gradlew assembleRelease
+
+APK at android/app/build/outputs/apk/app-release.apk.
+
+## Production Build IOS (xcode)
+
+
+
  

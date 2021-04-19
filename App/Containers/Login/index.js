@@ -1,11 +1,10 @@
-import React, { Component, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     View,
     StatusBar,
     Text,
     TouchableOpacity,
-    Keyboard,
-    KeyboardAvoidingView
+    Keyboard
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { vs } from 'react-native-size-matters'
@@ -17,7 +16,7 @@ import {
     Alert,
 } from '../../Components'
 
-import { Colors, Images } from '../../Themes'
+import { Colors  } from '../../Themes'
 import styles from './styles'
 
 /**
@@ -31,8 +30,10 @@ import { useQuery } from '@apollo/client';
 import { GET_USER_PROFILE, userProfileVar } from '../../Apollo/cache'
 
 
-function LoginScreen(props) {
+function LoginScreen(props ) {
+    // refs
     let passwordInput = null
+ 
     let [keyboardHeight, setKeyboardHeight] = useState(0)
     let [showResetPasswordAlert, setShowResetPasswordAlert] = useState(false)
     let [showValidationAlert, setShowValidationAlert] = useState(false)
@@ -40,16 +41,29 @@ function LoginScreen(props) {
     let [psswd, setPsswd] = useState('')
 
     const profile = useQuery(GET_USER_PROFILE);
-
+ 
     useEffect(() => {
         Keyboard.addListener('keyboardWillShow', _keyboardWillShow)
         Keyboard.addListener('keyboardWillHide', _keyboardWillHide)
+        //console.log ('debug loginScreen useEffect'+JSON.stringify(props.navigation.state))
+        /**
+         * this page is a bit diferent as the navigation params will aways be
+         * undefined unless in the single case where we are coming from
+         * ForgotPassword
+         */
+        if(props.navigation.state.params=== undefined) {
+            //console.log ('debug message caught expected undefined parameter')  
+        } else {
+            //  console.log (`'debug message ${props.navigation.state.params.showEms}`)
+             toggleResetPasswordAlert()
+        }
+ 
         return () => {
             // Anything in here is fired on component unmount.
             Keyboard.removeListener('keyboardWillShow', _keyboardWillShow)
             Keyboard.removeListener('keyboardWillHide', _keyboardWillHide)
         }
-    }, []);
+    }, [props]);
 
     const onDebugSignIn = async () => {
         userProfileVar({
@@ -64,13 +78,13 @@ function LoginScreen(props) {
         console.log('onSignIn' + `${loginInput}:::${psswd}`)// to-do remove
         let ret = validator.loginDifferentiator(loginInput)
         if (ret.isValid) {
-            // we are good test for email or phone
+            // we are good so we can test for email or phone
             if (ret.isEmail) {
                 userProfileVar({
                     email: loginInput,
                     isAuth: true
                 })
-                console.log(profile.data.userProfileVar.email)// to-do remove
+               // console.log(profile.data.userProfileVar.email)// to-do remove
                 await jwt.runMockTokenFlow().then(function (res) {
                     // need check for status code = 200 
                     // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
@@ -95,7 +109,6 @@ function LoginScreen(props) {
                     phone: loginInput,
                     isAuth: true
                 })
-                toggleResetValidationAlert()
             }
         } else {
             console.log('data not valid')

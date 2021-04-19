@@ -45,8 +45,6 @@ export const runMockTokenFlow = async (userId, password) => {
 
     return ret
 
-<<<<<<< Updated upstream
-=======
 }
 
 

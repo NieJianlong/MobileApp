@@ -51,7 +51,14 @@ function LoginScreen(props) {
         }
     }, []);
 
-
+    const onDebugSignIn = async () => {
+        userProfileVar({
+            email: loginInput,
+            isAuth: true
+        })
+        storage.setLocalStorageValue(storage.LOCAL_STORAGE_TOKEN_KEY, 'somejwt')
+        props.navigation.navigate('MainScreen')
+    }
     const onSignIn = async () => {
         // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
         console.log('onSignIn' + `${loginInput}:::${psswd}`)// to-do remove
@@ -68,7 +75,7 @@ function LoginScreen(props) {
                     // need check for status code = 200 
                     // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
                     storage.setLocalStorageValue(storage.LOCAL_STORAGE_TOKEN_KEY, 'somejwt')
-                    if (psswd === 'admin') {
+                    if (psswd === 'longerWww2') {
                         props.navigation.navigate('MainScreen')
                     } else {
                         console.log('psswd is not correct')
@@ -172,7 +179,9 @@ function LoginScreen(props) {
                     <View style={{ height: keyboardHeight - vs(100) }} />
 
                     <Button
-                        onPress={onSignIn}
+                    
+                        onPress={onDebugSignIn}
+                       // onPress={onSignIn}
                         text={'SIGN IN'}
                     />
 

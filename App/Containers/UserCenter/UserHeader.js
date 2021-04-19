@@ -6,7 +6,7 @@
  * @Description: User center header layout
  * @FilePath: /MobileApp/App/Containers/UserCenter/UserHeader.js
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
@@ -19,6 +19,10 @@ import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
 import UserAvatar from './UserAvatar';
 import { ApplicationStyles } from '../../Themes';
+import {  userProfileVar } from '../../Apollo/cache'
+
+
+
 /**
  * @description:The user header component, which contains basic user information
  * @param {*} props
@@ -27,7 +31,18 @@ import { ApplicationStyles } from '../../Themes';
 function UserHeader(props) {
   const { needSafeArea, needEdit } = props;
   const textTip = "You haven't add any personal \n details yet";
-  const [islogin, setIslogin] = useState(true);
+  const [islogin, setIslogin] = useState(false);
+  /**    
+   * state management code for users account display
+   * islogin status
+   */
+   useEffect(() => {
+    if(userProfileVar().isAuth) {
+      setIslogin(true)
+    }
+
+  }, [props]);
+
   return (
     <View style={styles.headerContainer}>
       {islogin ? (

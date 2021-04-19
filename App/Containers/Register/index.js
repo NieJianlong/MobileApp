@@ -26,6 +26,81 @@ class RegisterScreen extends Component {
         this.state = {
 
         }
+<<<<<<< Updated upstream
+=======
+    }, [])
+
+    /** use to work on otp to remove*/
+    const onDebug = () => {
+        props.navigation.navigate('OTPScreen', { fromScreen: 'RegisterScreen', phone:registerInput })
+    }
+
+    const onRegister = async () => {
+        // first decide are we an email or a phone
+        let registerUserBody = {}
+        let registerUserValidation = { name, lastName, registerInput, psswd }
+        setValidationDisplay(``)
+        console.log(`${name}::${lastName}::${registerInput}::${psswd}:: `)
+
+        // here registerInput can be email or phone
+        let reporter = validator.registerValidator(registerUserValidation)
+        console.log(`validation state ${JSON.stringify(reporter)}`)
+        // first validate for missing values 
+        if (reporter.hasMissing) {
+            setValidationDisplay(`${reporter.missingVal} is required`) 
+
+        } else {
+            // now check is valid password
+            if (!reporter.validPassword) {
+                setValidationDisplay(`Password requires 1 uppercase, 1 number and min 8 characters`) 
+                return
+            }
+            // now check is valid email or phone
+            if (reporter.validPhoneOrEmail) {
+                console.log(`setTermsAccepted=${termsAccepted}`)
+                if(termsAccepted) {
+                    setValidationDisplay(`Please accept terms and privacy policy`) 
+                    return
+                }
+                // we are good so we can  test for email or phone
+                if (reporter.isEmail) {
+                    // mock api call for register user
+                    registerUserBody = {
+                        "name": name,
+                        "lastName": lastName,
+                        "email": registerInput,
+                        "password": psswd
+                    }
+
+                } else {
+                    // must be phone
+                    registerUserBody = {
+                        "name": name,
+                        "lastName": lastName,
+                        "phone": registerInput,
+                        "password": psswd
+                    }
+                }
+
+                await jwt.runMockRegisterFlow(registerUserBody).then(function (res) {
+                    // below is a mock for the expected api response shpould be something like res.data.<some api response>
+                    console.log(res)
+                    resetValidation()
+                    props.navigation.navigate('OTPScreen', { fromScreen: 'RegisterScreen', phone:'+44781334567' })
+                    
+                }).catch(function (err) {
+                    // here we will need to check status code and gracefully deal with error
+
+                })
+
+            } else {
+                setValidationDisplay(` phone or email is invalid`)
+            }
+      
+
+        }// end else => no missing fields block
+    
+>>>>>>> Stashed changes
     }
 
     componentDidMount() {
@@ -101,9 +176,28 @@ class RegisterScreen extends Component {
 
                         <View style={{ flex: 1 }} />
 
+<<<<<<< Updated upstream
                         <Button
                             onPress={this.onRegister}
                             text={'REGISTER'} />
+=======
+                    <Button
+                        // onPress={onRegister}
+                        onPress={onDebug}
+                        
+                        text={'REGISTER'} />
+
+                    <TouchableOpacity
+                        onPress={() => props.navigation.goBack()}
+                        style={styles.btnSignin}>
+                        <Text style={styles.txtAction}>SIGN IN</Text>
+                    </TouchableOpacity>
+                </View>
+            </SafeAreaView>
+            {renderValidationAlert()}
+        </View>
+    )
+>>>>>>> Stashed changes
 
                         <TouchableOpacity
                             onPress={() => this.props.navigation.goBack()}

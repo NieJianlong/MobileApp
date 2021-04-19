@@ -45,4 +45,43 @@ export const runMockTokenFlow = async (userId, password) => {
 
     return ret
 
+<<<<<<< Updated upstream
+=======
+}
+
+
+
+export const runMockRegisterFlow = async (regUser) => {
+    let headers = { 'Content-Type': 'application/json' }
+
+    let MockRegisterJsonReponse = '{"registerOk":"OK"}'
+
+    let ret = new Promise((resolve, reject) => {
+        console.log(JSON.stringify(regUser))
+        setTimeout(() => {
+            resolve(MockRegisterJsonReponse);
+        }, 300);
+    })
+
+    return ret
+
+
+}
+
+export const runMockOTPFlow = async (otpCode) => {
+    let headers = { 'Content-Type': 'application/json' }
+
+    let MockOTPJsonReponse = {"validateOK":"OK"}
+
+    let ret = new Promise((resolve, reject) => {
+        console.log(JSON.stringify(otpCode))
+        setTimeout(() => {
+            resolve(MockOTPJsonReponse);
+        }, 300);
+    })
+
+    return ret
+
+
+>>>>>>> Stashed changes
 }

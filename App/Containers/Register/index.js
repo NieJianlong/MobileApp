@@ -51,7 +51,11 @@ function RegisterScreen(props) {
           
         }
     }, [])
-
+ 
+    /** use to work on otp to remove*/
+    const onDebug = () => {
+        props.navigation.navigate('OTPScreen', { fromScreen: 'RegisterScreen', phone:registerInput })
+    }
  
 
     const onRegister = async () => {
@@ -105,7 +109,7 @@ function RegisterScreen(props) {
                     // below is a mock for the expected api response shpould be something like res.data.<some api response>
                     console.log(res)
                     resetValidation()
-                    props.navigation.navigate('OTPScreen', { fromScreen: 'RegisterScreen' })
+                    props.navigation.navigate('OTPScreen', { fromScreen: 'RegisterScreen', phone:'+44781334567' })
                     
                 }).catch(function (err) {
                     // here we will need to check status code and gracefully deal with error

@@ -1,48 +1,7 @@
 import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
-import NoPurchase from './NoPurchase';
+import NoPurchase from './OnePurchase';
 
-/**
- * @description: address test data
- * @param {*}
- * @return {*}
- */
-export const AddressTestData = [
-  {
-    title: 'Home',
-    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
-    isDefault: true,
-  },
-  {
-    title: 'Work',
-    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
-    isDefault: false,
-  },
-  {
-    title: 'Home',
-    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
-    isDefault: false,
-  },
-  {
-    title: 'Work',
-    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
-    isDefault: false,
-  },
-];
-export const BillDetail = {
-  firstName: 'John',
-  lastName: 'Roots',
-  phoneOrEmailNum: '1317272927@qq.com',
-  streetName: 'Tamil Nadu Street, 12345',
-  streetNum: '666',
-  door: '7-703',
-  city: 'QingDao',
-  mstate: 'ShanDong',
-  postcode: '27009',
-  country: 'China',
-  company: 'MaShangBan',
-  taxid: 'dsds',
-};
 let replaceChars = function (str, length, fromBegin, mask) {
   mask = mask ? mask : '*';
   let replacement = '';
@@ -61,6 +20,70 @@ let replaceChars = function (str, length, fromBegin, mask) {
     );
   }
 };
+
+export const OneClickPurchaseData = [
+  {
+    title: 'Home',
+    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
+    isDefault: true,
+    itemType: 'address',
+  },
+  {
+    title: replaceChars('s887765453433887', 10, true, '*'),
+    subTitle: 'John Smith \nExpires 09/2022',
+    type: 'credit',
+    expires: 'Expires 09/2022',
+    isDefault: true,
+    itemType: 'payment',
+  },
+];
+
+/**
+ * @description: address test data
+ * @param {*}
+ * @return {*}
+ */
+export const AddressTestData = [
+  {
+    title: 'Home',
+    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
+    isDefault: true,
+    itemType: 'address',
+  },
+  {
+    title: 'Work',
+    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
+    isDefault: false,
+    itemType: 'address',
+  },
+  {
+    title: 'Home',
+    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
+    isDefault: false,
+    itemType: 'address',
+  },
+  {
+    title: 'Work',
+    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
+    isDefault: false,
+    itemType: 'address',
+  },
+];
+export const BillDetail = {
+  firstName: 'John',
+  lastName: 'Roots',
+  phoneOrEmailNum: '1317272927@qq.com',
+  streetName: 'Tamil Nadu Street, 12345',
+  streetNum: '666',
+  door: '7-703',
+  city: 'QingDao',
+  mstate: 'ShanDong',
+  postcode: '27009',
+  country: 'China',
+  company: 'MaShangBan',
+  taxid: 'dsds',
+};
+
 export const PaymentTestData = [
   {
     title: replaceChars('s887765453433887', 10, true, '*'),
@@ -68,6 +91,7 @@ export const PaymentTestData = [
     type: 'credit',
     expires: 'Expires 09/2022',
     isDefault: true,
+    itemType: 'payment',
   },
   {
     title: replaceChars('s887765453433887', 10, true, '*'),
@@ -75,6 +99,7 @@ export const PaymentTestData = [
     type: 'credit',
     expires: 'Expires 09/2022',
     isDefault: false,
+    itemType: 'payment',
   },
   {
     title: replaceChars('s887765453433887', 10, true, '*'),
@@ -82,6 +107,7 @@ export const PaymentTestData = [
     type: 'credit',
     expires: 'Expires 09/2022',
     isDefault: false,
+    itemType: 'payment',
   },
 ];
 
@@ -97,10 +123,16 @@ export const MenuConfig = [
     selectedIcon: images.userPurchaseImage,
     screen: NoPurchase,
     key: 'Purchasing',
+    extra: 'EDIT 1 CLICK PURCHASING PREFERENCES',
     onPress: (callback) => {
       NavigationService.navigate('OneClickPurchaseScreen', {
         callback,
       });
+    },
+    itemActions: {
+      setDefault: (item) => {},
+      doEdit: (item) => {},
+      doDelete: (showRemoveSheet) => {},
     },
   },
   {

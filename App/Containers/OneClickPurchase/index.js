@@ -43,7 +43,10 @@ function OneClickPurchase(props) {
             <RightButton
               title="SAVE"
               onPress={() => {
-                NavigationService.navigate('SelectDeliveryAddressScreen');
+                NavigationService.navigate(
+                  'SelectDeliveryAddressScreen',
+                  params
+                );
               }}
             />
           )}

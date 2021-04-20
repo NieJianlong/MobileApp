@@ -57,6 +57,9 @@ function SelectDeliveryAddress(props) {
                     title: '1 Click Purchasing Activated!',
                   },
                 });
+                if (typeof params.callback === 'function') {
+                  params.callback({});
+                }
               }}
             />
           )}

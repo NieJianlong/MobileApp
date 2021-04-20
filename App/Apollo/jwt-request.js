@@ -65,3 +65,21 @@ export const runMockRegisterFlow = async (regUser) => {
 
 
 }
+
+export const runMockOTPFlow = async (otpCode) => {
+    let headers = { 'Content-Type': 'application/json' }
+
+    let MockOTPJsonReponse = {"validateOK":"OK"}
+
+    let ret = new Promise((resolve, reject) => {
+        console.log(JSON.stringify(otpCode))
+        setTimeout(() => {
+            resolve(MockOTPJsonReponse);
+        }, 300);
+    })
+
+    return ret
+ 
+
+}
+ 

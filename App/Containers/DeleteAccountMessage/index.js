@@ -39,11 +39,16 @@ function DeleteAccountMessage(props) {
       <Image style={styles.trash} source={images.userTrashImage}></Image>
       <TextTip {...param}></TextTip>
       <SafeAreaView style={styles.bottom}>
-        <Button onPress={() => {}} text="CONFIRM"></Button>
+        <Button
+          onPress={() => {
+            NavigationService.navigate('OnboardingScreen');
+          }}
+          text="CONFIRM"
+        ></Button>
         <TouchableOpacity
           style={{ margin: 20 }}
           onPress={() => {
-            NavigationService.navigate('');
+            NavigationService.goBack();
           }}
         >
           <Text style={styles.removeText}>CANCEL</Text>

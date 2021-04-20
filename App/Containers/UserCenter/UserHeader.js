@@ -6,7 +6,7 @@
  * @Description: User center header layout
  * @FilePath: /MobileApp/App/Containers/UserCenter/UserHeader.js
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScaledSheet, s, vs } from 'react-native-size-matters';
@@ -19,9 +19,6 @@ import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
 import UserAvatar from './UserAvatar';
 import { ApplicationStyles } from '../../Themes';
-import {  userProfileVar } from '../../Apollo/cache'
-
-
 
 /**
  * @description:The user header component, which contains basic user information
@@ -31,18 +28,7 @@ import {  userProfileVar } from '../../Apollo/cache'
 function UserHeader(props) {
   const { needSafeArea, needEdit } = props;
   const textTip = "You haven't add any personal \n details yet";
-  const [islogin, setIslogin] = useState(false);
-  /**    
-   * state management code for users account display
-   * islogin status
-   */
-   useEffect(() => {
-    if(userProfileVar().isAuth) {
-      setIslogin(true)
-    }
-
-  }, [props]);
-
+  const [islogin, setIslogin] = useState(true);
   return (
     <View style={styles.headerContainer}>
       {islogin ? (
@@ -75,7 +61,7 @@ function userInfo(needEdit) {
       }}
     >
       <View style={styles.userinfo}>
-        <UserAvatar uri="http://measure.3vyd.com//uPic/oplutv.png"></UserAvatar>
+        <UserAvatar uri={images.userDefaultAvatar}></UserAvatar>
         <View style={styles.textinfo}>
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}

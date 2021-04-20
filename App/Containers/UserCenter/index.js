@@ -83,7 +83,7 @@ const buttons = [
 function UserCenter(props) {
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+      <StatusBar barStyle="dark-content" translucent={false} backgroundColor={colors.background} />
       <View style={{ marginTop: vs(10) }}>
         <UserHeader needSafeArea></UserHeader>
       </View>

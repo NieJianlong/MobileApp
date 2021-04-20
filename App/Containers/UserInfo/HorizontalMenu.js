@@ -12,7 +12,7 @@ import { ScaledSheet, vs } from 'react-native-size-matters';
 import colors from '../../Themes/Colors';
 import DynamicTabView from './DynamicTabView';
 import images from '../../Themes/Images';
-import NoPurchase from './NoPurchase';
+import OnePurchase from './OnePurchase';
 import TextTip from '../../Components/EmptyReminder';
 import AppConfig from '../../Config/AppConfig';
 import { Fonts } from '../../Themes';
@@ -25,8 +25,134 @@ import {
   MenuConfig,
   PaymentTestData,
   BillDetail,
+  OneClickPurchaseData,
 } from './Config';
+import metrics from '../../Themes/Metrics';
 
+function renderAddressItem(
+  item,
+  showSheet = () => {},
+  setDefault,
+  doEdit,
+  doDelete
+) {
+  return (
+    <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+      <View style={[styles.item, { height: vs(122) }]}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={styles.itemTitle}>{item.title}</Text>
+          {item.isDefault && (
+            <Image style={styles.icon} source={images.check}></Image>
+          )}
+        </View>
+        <View>
+          <Text style={styles.itemSubTitle}>{item.subTitle}</Text>
+        </View>
+
+        <View style={styles.itemBottom}>
+          {item.isDefault ? (
+            <View style={styles.itemTipsContainer}>
+              <Text style={styles.itemTips}>Default address</Text>
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={styles.itemSetDefault}
+              onPress={setDefault}
+            >
+              <Text style={styles.setDefaultText}>SET AS DEFAULT</Text>
+            </TouchableOpacity>
+          )}
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity onPress={(item) => doEdit(item)}>
+              <Image
+                style={styles.editImage}
+                source={images.userAddressEditImage}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={(item) => {
+                showSheet();
+              }}
+            >
+              <Image
+                style={styles.editImage}
+                source={images.userAddressTrashImage}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+function renderPayMentItem(
+  item,
+  showSheet = () => {},
+  setDefault,
+  doEdit,
+  doDelete
+) {
+  return (
+    <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+      <View style={[styles.item, { height: vs(122) }]}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Image
+            style={styles.paytypeIcon}
+            source={images.userPayTypeImage}
+          ></Image>
+          <Text style={styles.itemTitle}>{item.title}</Text>
+          {item.isDefault && (
+            <Image style={styles.icon} source={images.check}></Image>
+          )}
+        </View>
+        <View>
+          <Text style={styles.itemSubTitle}>{item.subTitle}</Text>
+        </View>
+        <View style={styles.itemBottom}>
+          {item.isDefault ? (
+            <View style={styles.itemTipsContainer}>
+              <Text style={styles.itemTips}>Default payment method</Text>
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={styles.itemSetDefault}
+              onPress={setDefault}
+            >
+              <Text style={styles.setDefaultText}>SET AS DEFAULT</Text>
+            </TouchableOpacity>
+          )}
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity
+              onPress={(item) => {
+                showSheet();
+              }}
+            >
+              <Image
+                style={styles.editImage}
+                source={images.userAddressTrashImage}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+}
+function renderBillingItem(item) {
+  return (
+    <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+      <View style={[styles.item, { height: vs(65) }]}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={styles.itemTitle}>{item[0]}</Text>
+        </View>
+        <View>
+          <Text style={styles.itemSubTitle}>{item[1]}</Text>
+        </View>
+      </View>
+    </View>
+  );
+}
 /**
  * @description: Tab menu, with animation effect
  * @param {*} props
@@ -41,7 +167,9 @@ function HorizontalMenu(props) {
   const [payments, setPayments] = useState([]);
   // my bill details
   const [billDetails, setBillDetails] = useState(null);
-  
+
+  const [active, setActive] = useState(false);
+
   const { dispatch } = props;
   const showSheet = () => {
     dispatch({
@@ -55,10 +183,27 @@ function HorizontalMenu(props) {
       data={MenuConfig}
       renderTab={(item, index) => {
         console.log('renderItem', index);
-        let component = <NoPurchase />;
+        let component = <OnePurchase />;
         switch (item.key) {
           case 'Purchasing':
-            component = <NoPurchase {...item} />;
+            component = active ? (
+              <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, flexGrow: 1 }}>
+                  {flatListView(item, OneClickPurchaseData)}
+                </View>
+                <OnePurchase />
+              </View>
+            ) : (
+              <View style={{ flex: 1, width: metrics.screenWidth }}>
+                <TextTip
+                  {...item}
+                  callback={() => {
+                    setActive(true);
+                  }}
+                />
+                <OnePurchase />
+              </View>
+            );
             break;
           case 'Addresses':
             if (addresses.length > 0) {
@@ -182,6 +327,23 @@ function flatListView(item, data, isPayment = false, showSheet = () => {}) {
     <View style={{ flex: 1 }}>
       <FlatList
         data={data}
+        ListFooterComponent={() => {
+          if (key == 'Purchasing') {
+            return (
+              <View
+                style={{
+                  paddingHorizontal: AppConfig.paddingHorizontal,
+                  marginBottom: vs(20),
+                  marginTop: vs(20),
+                }}
+              >
+                <Button text={item.extra} onPress={item.onPress}></Button>
+              </View>
+            );
+          } else {
+            return null;
+          }
+        }}
         ListHeaderComponent={() => {
           if (key != 'Billing') {
             return null;
@@ -199,87 +361,25 @@ function flatListView(item, data, isPayment = false, showSheet = () => {}) {
           }
         }}
         renderItem={({ item }) => {
-          return (
-            <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-              <View
-                style={[
-                  styles.item,
-                  { height: vs(key == 'Billing' ? 65 : 122) },
-                ]}
-              >
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  {isPayment && (
-                    <Image
-                      style={styles.paytypeIcon}
-                      source={images.userPayTypeImage}
-                    ></Image>
-                  )}
-                  <Text style={styles.itemTitle}>
-                    {key == 'Billing' ? item[0] : item.title}
-                  </Text>
-                  {item.isDefault && (
-                    <Image style={styles.icon} source={images.check}></Image>
-                  )}
-                </View>
-                <View>
-                  <Text style={styles.itemSubTitle}>
-                    {key == 'Billing' ? item[1] : item.subTitle}
-                  </Text>
-                  {/* {
-                    isPayment&& <Text style={styles.itemSubTitle}>{item.expires}</Text>
-                  } */}
-                </View>
-                {key != 'Billing' && (
-                  <View style={styles.itemBottom}>
-                    {item.isDefault ? (
-                      <View style={styles.itemTipsContainer}>
-                        <Text style={styles.itemTips}>
-                          {isPayment
-                            ? 'Default payment method'
-                            : 'Default address'}
-                        </Text>
-                      </View>
-                    ) : (
-                      <TouchableOpacity
-                        style={styles.itemSetDefault}
-                        onPress={setDefault}
-                      >
-                        <Text style={styles.setDefaultText}>
-                          SET AS DEFAULT
-                        </Text>
-                      </TouchableOpacity>
-                    )}
-
-                    <View style={{ flexDirection: 'row' }}>
-                      {!isPayment && (
-                        <TouchableOpacity onPress={(item) => doEdit(item)}>
-                          <Image
-                            style={styles.editImage}
-                            source={images.userAddressEditImage}
-                          />
-                        </TouchableOpacity>
-                      )}
-
-                      <TouchableOpacity
-                        onPress={(item) => {
-                          showSheet();
-                        }}
-                      >
-                        <Image
-                          style={styles.editImage}
-                          source={images.userAddressTrashImage}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                )}
-              </View>
-            </View>
-          );
+          if (key === 'Billing') {
+            return renderBillingItem(item);
+          } else {
+            if (item.itemType === 'payment') {
+              return renderPayMentItem(
+                item,
+                showSheet,
+                setDefault,
+                doEdit,
+                doDelete
+              );
+            } else {
+              return renderAddressItem(item, showSheet);
+            }
+          }
         }}
         keyExtractor={(item, index) => `listItem${index}`}
       />
-      {key != 'Billing' && (
+      {key != 'Billing' && key != 'Purchasing' && (
         <SafeAreaView
           style={{
             paddingHorizontal: AppConfig.paddingHorizontal,

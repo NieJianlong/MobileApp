@@ -60,7 +60,7 @@ function CustomerSupport(props) {
               fontSize: s(24),
               fontFamily: fonts.primary,
               color: colors.black,
-              fontWeight: '600',
+              fontWeight: 'bold',
             }}
           >
             How may we help you?

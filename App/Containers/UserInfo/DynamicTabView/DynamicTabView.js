@@ -52,12 +52,14 @@ class DynamicTabView extends React.Component {
   };
 
   onScrollBeginDrag = (e) => {
+    alert('开始');
     var begin_offset = e.nativeEvent.contentOffset.x; //since horizontal scroll view begin
     // console.log(begin_offset);
     this.setState({ begin_offset });
   };
 
   onScrollEndDrag = (e) => {
+    alert('结束');
     var end_offset = e.nativeEvent.contentOffset.x; // since horizontal scroll view end
     // console.log(end_offset)
     this.setState({ end_offset });
@@ -70,12 +72,16 @@ class DynamicTabView extends React.Component {
     var width = this.state.containerWidth;
 
     if (begin_offset < end_offset) {
+      debugger;
       let index = Math.floor(begin_offset / width) + 1; // if Page scroll from left->right, index is increase by 1
 
       if (index < this.props.data.length) {
         this.goToPage(index);
+      } else {
+        this.goToPage(0);
       }
     } else if (begin_offset > end_offset) {
+      debugger;
       let index = Math.ceil(begin_offset / width) - 1; // if Page scroll from right->left, index is decrease by 1
 
       if (index < this.props.data.length && index >= 0) {

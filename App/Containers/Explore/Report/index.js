@@ -3,50 +3,33 @@ import {
     View,
     StatusBar,
     Text,
-    Image,
     TouchableOpacity,
-    FlatList,
-    ImageBackground,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { s, vs } from 'react-native-size-matters'
+import { vs } from 'react-native-size-matters'
 
 import styles from './styles'
 
 import {
     AppBar,
-    StarRating,
     TextInput,
-    Picker,
     Selector
 } from '../../../Components'
-import { Colors, Images } from '../../../Themes'
 import NavigationService from '../../../Navigation/NavigationService'
 
-class ReportScreen extends Component {
+function Report(props) {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            images: []
-        }
-    }
-
-    componentDidMount() {
-
-    }
-
-    onSubmit = () => {
-        this.props.navigation.state.params.onSubmit()
+    const onSubmit = () => {
+        props.navigation.state.params.onSubmit()
         NavigationService.goBack()
     }
 
-    renderHeader() {
+    const renderHeader = () => {
         return (
             <View style={styles.header}>
                 <AppBar
                     rightButton={() =>
-                        <TouchableOpacity onPress={this.onSubmit}>
+                        <TouchableOpacity onPress={onSubmit}>
                             <Text style={styles.txtSave}>SUBMIT</Text>
                         </TouchableOpacity>
                     }
@@ -55,7 +38,7 @@ class ReportScreen extends Component {
         )
     }
 
-    renderBody() {
+    const renderBody = () => {
         return (
             <View style={styles.body}>
 
@@ -75,22 +58,20 @@ class ReportScreen extends Component {
         )
     }
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <StatusBar barStyle='dark-content' />
-                <SafeAreaView
-                    style={styles.container}
-                    edges={['top', 'left', 'right']}>
+    return (
+        <View style={styles.container}>
+            <StatusBar barStyle='dark-content' />
+            <SafeAreaView
+                style={styles.container}
+                edges={['top', 'left', 'right']}>
 
-                    {this.renderHeader()}
+                {renderHeader()}
 
-                    {this.renderBody()}
+                {renderBody()}
 
-                </SafeAreaView>
-            </View>
-        )
-    }
+            </SafeAreaView>
+        </View>
+    )
 }
 
-export default ReportScreen
+export default Report

@@ -51,7 +51,12 @@ function RegisterScreen(props) {
           
         }
     }, [])
-
+ 
+    /** use to work on otp to remove*/
+    const onDebug = () => {
+        props.navigation.navigate('OTPScreen', { fromScreen: 'RegisterScreen', phone:registerInput })
+    }
+ 
 
     const onRegister = async () => {
         // first decide are we an email or a phone
@@ -68,6 +73,11 @@ function RegisterScreen(props) {
             setValidationDisplay(`${reporter.missingVal} is required`) 
 
         } else {
+            // now check is valid password
+            if (!reporter.validPassword) {
+                setValidationDisplay(`Password requires 1 uppercase, 1 number and min 8 characters`) 
+                return
+            }
             // now check is valid email or phone
             if (reporter.validPhoneOrEmail) {
                 console.log(`setTermsAccepted=${termsAccepted}`)
@@ -99,7 +109,7 @@ function RegisterScreen(props) {
                     // below is a mock for the expected api response shpould be something like res.data.<some api response>
                     console.log(res)
                     resetValidation()
-                    props.navigation.navigate('OTPScreen', { fromScreen: 'RegisterScreen' })
+                    props.navigation.navigate('OTPScreen', { fromScreen: 'RegisterScreen', phone:'+44781334567' })
                     
                 }).catch(function (err) {
                     // here we will need to check status code and gracefully deal with error
@@ -227,7 +237,8 @@ function RegisterScreen(props) {
                     <Text style={styles.txtValidate}>{validationDisplay}  </Text>
 
                     <Button
-                        onPress={onRegister}
+                        // onPress={onRegister}
+                        onPress={onDebug}
                         text={'REGISTER'} />
 
                     <TouchableOpacity
@@ -240,6 +251,7 @@ function RegisterScreen(props) {
             {renderValidationAlert()}
         </View>
     )
+ 
 
 }
 

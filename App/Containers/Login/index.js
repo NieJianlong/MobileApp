@@ -41,7 +41,11 @@ function LoginScreen(props ) {
     let [psswd, setPsswd] = useState('')
 
     const profile = useQuery(GET_USER_PROFILE);
- 
+    const {
+        navigation: {
+          state: { params },
+        },
+      } = props;
     useEffect(() => {
         Keyboard.addListener('keyboardWillShow', _keyboardWillShow)
         Keyboard.addListener('keyboardWillHide', _keyboardWillHide)
@@ -89,8 +93,15 @@ function LoginScreen(props ) {
                     // need check for status code = 200 
                     // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
                     storage.setLocalStorageValue(storage.LOCAL_STORAGE_TOKEN_KEY, 'somejwt')
+                    
                     if (psswd === 'longerWww2') {
-                        props.navigation.navigate('MainScreen')
+                        // params.callback, and then continue with the previous business logic,like shopping cart,
+                        if (typeof params.callback === 'function') {
+                            params.callback({});
+                        }else{
+                            props.navigation.navigate('MainScreen');
+                        }
+                        
                     } else {
                         console.log('psswd is not correct')
                         toggleResetValidationAlert()

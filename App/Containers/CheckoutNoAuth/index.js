@@ -33,7 +33,11 @@ function CheckoutNoAuth(props) {
         >
           <TouchableOpacity
             onPress={() => {
-              NavigationService.navigate('LoginScreen');
+              NavigationService.navigate('LoginScreen', {
+                callback: () => {
+                  NavigationService.navigate('CheckOutPersonalDetailsScreen');
+                },
+              });
             }}
           >
             <View

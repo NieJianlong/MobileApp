@@ -83,7 +83,7 @@ class ForgotPasswordScreen extends Component {
                              * To-Do need clarity for OTP flow
                              */
 
-                            this.props.navigation.navigate('OTPScreen', { fromScreen: 'ForgotPasswordScreen' })
+                            NavigationService.navigate('OTPScreen', { fromScreen: 'ForgotPasswordScreen' })
                         }
                     }}
                     text={'RESET PASSWORD'} />
@@ -103,7 +103,7 @@ class ForgotPasswordScreen extends Component {
                 >
                     <AppBar
                         showLogo={false}
-                        onPressBack={() => this.props.navigation.goBack()}
+                        onPressBack={() => NavigationService.goBack()}
                     />
 
                     <View style={styles.bodyContainer}>

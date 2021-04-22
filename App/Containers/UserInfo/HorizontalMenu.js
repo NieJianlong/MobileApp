@@ -7,7 +7,7 @@
  * @FilePath: /MobileApp/App/Containers/UserInfo/HorizontalMenu.js
  */
 import React, { useState, useContext } from 'react';
-import { View, FlatList, Text, Image } from 'react-native';
+import { View, FlatList, Text, Image, SafeAreaView } from 'react-native';
 import { ScaledSheet, vs } from 'react-native-size-matters';
 import colors from '../../Themes/Colors';
 import DynamicTabView from './DynamicTabView';
@@ -19,7 +19,6 @@ import { Fonts } from '../../Themes';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import fonts from '../../Themes/Fonts';
 import { Button, Switch } from '../../Components';
-import { SafeAreaView } from 'react-navigation';
 import {
   AddressTestData,
   MenuConfig,

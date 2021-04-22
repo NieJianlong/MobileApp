@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
     View,
     StatusBar,
@@ -16,18 +16,14 @@ import {
 import { Colors, Images } from '../../../Themes'
 import NavigationService from '../../../Navigation/NavigationService'
 
-class ProductSearchScreen extends Component {
+function ProductSearch(props) {
 
-    componentDidMount() {
-        console.log(this.props.navigation)
-    }
-
-    renderHeader() {
+    const renderHeader = () => {
         return (
             <View style={styles.header}>
                 <ProductSearchBox
                     onSelect={(item) => {
-                        this.props.navigation.state.params.onSearch(item)
+                        props.route.params.onSearch(i)
                         NavigationService.goBack()
                     }}
                 />
@@ -35,7 +31,7 @@ class ProductSearchScreen extends Component {
         )
     }
 
-    renderBody() {
+    const renderBody = () => {
         return (
             <View style={styles.body}>
                 <Text style={styles.heading5Bold}>Recent searches</Text>
@@ -47,7 +43,7 @@ class ProductSearchScreen extends Component {
                                 <Image style={styles.icClock} source={Images.clock} />
                                 <TouchableOpacity
                                     onPress={() => {
-                                        this.props.navigation.state.params.onSearch(i)
+                                        props.route.params.onSearch(i)
                                         NavigationService.goBack()
                                     }}
                                 >
@@ -67,24 +63,22 @@ class ProductSearchScreen extends Component {
         )
     }
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <StatusBar barStyle='dark-content' />
-                <SafeAreaView
-                    style={styles.container}
-                    edges={['top', 'left', 'right']}>
+    return (
+        <View style={styles.container}>
+            <StatusBar barStyle='dark-content' />
+            <SafeAreaView
+                style={styles.container}
+                edges={['top', 'left', 'right']}>
 
-                    {this.renderHeader()}
+                {renderHeader()}
 
-                    {this.renderBody()}
+                {renderBody()}
 
-                </SafeAreaView>
-            </View>
-        )
-    }
+            </SafeAreaView>
+        </View>
+    )
 }
 
-export default ProductSearchScreen
+export default ProductSearch
 
 const recentSearches = ['Apple', 'Cherry', 'Washing machine with the ability to wash 100kg of clothes in just 1 minute', 'Bucket and mop']

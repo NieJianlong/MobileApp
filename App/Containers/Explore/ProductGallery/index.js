@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import {
     View,
     StatusBar,
@@ -23,7 +23,7 @@ class ProductGalleryScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            fullscreenMode: this.props.navigation.state.params.fullscreenMode ?? false,
+            fullscreenMode: this.props.route.params.fullscreenMode ?? false,
             currentImageIndex: 0
         }
     }
@@ -83,7 +83,62 @@ class ProductGalleryScreen extends Component {
     }
 }
 
-export default ProductGalleryScreen
+function ProductGallery(props) {
+    
+    const [fullscreenMode, setFullscreenMode] = useState(props.navigation.state.params.fullscreenMode ?? false)
+    const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+    const toggleFullscreenMode = (index) => {
+        setFullscreenMode(!fullscreenMode)
+        setCurrentImageIndex(index)
+    }
+
+    const renderIndicator = (currentIndex, numberOfPhotos) => {
+        return (
+            <View style={styles.indicatorContainer}>
+                <Text style={styles.indicator}>{currentIndex}/{numberOfPhotos}</Text>
+            </View>
+        )
+    }
+
+    return (
+        <View style={styles.container}>
+            <StatusBar barStyle='dark-content' />
+            <SafeAreaView
+                style={styles.container}
+                edges={['top', 'left', 'right']}>
+                <AppBar title={'Gallery (4)'} />
+
+                {
+                    fullscreenMode ?
+                        <ImageViewer
+                            index={currentImageIndex}
+                            imageUrls={imageUrls}
+                            backgroundColor={Colors.background}
+                            onClick={() => toggleFullscreenMode(0)}
+                            renderIndicator={(currentIndex, allSize) => renderIndicator(currentIndex, imageUrls.length)}
+                        /> :
+                        <ScrollView contentContainerStyle={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+
+                            {
+                                imageUrls.map((image, index) =>
+                                    <TouchableOpacity key={index.toString()} onPress={() => toggleFullscreenMode(index)} >
+                                        <Image
+                                            resizeMode={'contain'}
+                                            source={{ uri: image.url }}
+                                            style={styles.image}
+                                        />
+                                    </TouchableOpacity>
+                                )
+                            }
+                        </ScrollView>
+                }
+            </SafeAreaView>
+        </View>
+    )
+}
+
+export default ProductGallery
 
 const imageUrls = [
     {

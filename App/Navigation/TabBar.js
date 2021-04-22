@@ -28,16 +28,20 @@ class TabBar extends Component {
         }
     }
 
+    componentDidMount() {
+        
+    }
+
     render() {
-        const { routes, index } = this.props.navigation.state
+        const { routes, index } = this.props.state
 
         return (
             <SafeAreaView edges={['bottom']} style={styles.safeAreaView}>
                 <View style={styles.container}>
                     {routes.map((route, idx) => {
-                        const isFocused = idx === this.props.navigation.state.index
+                        const isFocused = idx === index
                         const onPress = () => {
-                            this.props.navigation.navigate(route.routeName)
+                            this.props.navigation.navigate(route.name)
                         }
 
                         return (
@@ -47,7 +51,7 @@ class TabBar extends Component {
                                 onPress={onPress}>
                                 <Image
                                     resizeMode={'contain'}
-                                    source={this.getIconSource(route.routeName, isFocused)}
+                                    source={this.getIconSource(route.name, isFocused)}
                                     style={[styles.icon, isFocused && { tintColor: Colors.primary }]}
                                 />
                             </TouchableOpacity>

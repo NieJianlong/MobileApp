@@ -23,7 +23,7 @@ class ProductGalleryScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            fullscreenMode: this.props.navigation.state.params.fullscreenMode ?? false,
+            fullscreenMode: this.props.route.params.fullscreenMode ?? false,
             currentImageIndex: 0
         }
     }

@@ -23,7 +23,7 @@ function ProductSearch(props) {
             <View style={styles.header}>
                 <ProductSearchBox
                     onSelect={(item) => {
-                        props.navigation.state.params.onSearch(item)
+                        props.route.params.onSearch(i)
                         NavigationService.goBack()
                     }}
                 />
@@ -43,7 +43,7 @@ function ProductSearch(props) {
                                 <Image style={styles.icClock} source={Images.clock} />
                                 <TouchableOpacity
                                     onPress={() => {
-                                        props.navigation.state.params.onSearch(i)
+                                        props.route.params.onSearch(i)
                                         NavigationService.goBack()
                                     }}
                                 >

@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { vs } from 'react-native-size-matters'
+import { useRoute } from '@react-navigation/native'
 
 import {
     TextInput,
@@ -16,7 +17,7 @@ import {
     Alert,
 } from '../../Components'
 
-import { Colors  } from '../../Themes'
+import { Colors } from '../../Themes'
 import styles from './styles'
 
 /**
@@ -28,12 +29,12 @@ import * as storage from '../../Apollo/local-storage'
 import { useQuery } from '@apollo/client';
 /** here GET_USER_PROFILE is the query for the cache to get userProfileVar */
 import { GET_USER_PROFILE, userProfileVar } from '../../Apollo/cache'
+import NavigationService from '../../Navigation/NavigationService'
 
-
-function LoginScreen(props ) {
+function LoginScreen(props) {
     // refs
     let passwordInput = null
- 
+
     let [keyboardHeight, setKeyboardHeight] = useState(0)
     let [showResetPasswordAlert, setShowResetPasswordAlert] = useState(false)
     let [showValidationAlert, setShowValidationAlert] = useState(false)
@@ -41,7 +42,9 @@ function LoginScreen(props ) {
     let [psswd, setPsswd] = useState('')
 
     const profile = useQuery(GET_USER_PROFILE);
- 
+
+    const { params } = useRoute();
+
     useEffect(() => {
         Keyboard.addListener('keyboardWillShow', _keyboardWillShow)
         Keyboard.addListener('keyboardWillHide', _keyboardWillHide)
@@ -51,13 +54,13 @@ function LoginScreen(props ) {
          * undefined unless in the single case where we are coming from
          * ForgotPassword
          */
-        if(props.navigation.state.params=== undefined) {
+        if (params === undefined) {
             //console.log ('debug message caught expected undefined parameter')  
         } else {
             //  console.log (`'debug message ${props.navigation.state.params.showEms}`)
-             toggleResetPasswordAlert()
+            toggleResetPasswordAlert()
         }
- 
+
         return () => {
             // Anything in here is fired on component unmount.
             Keyboard.removeListener('keyboardWillShow', _keyboardWillShow)
@@ -71,7 +74,7 @@ function LoginScreen(props ) {
             isAuth: true
         })
         storage.setLocalStorageValue(storage.LOCAL_STORAGE_TOKEN_KEY, 'somejwt')
-        props.navigation.navigate('MainScreen')
+        NavigationService.navigate('MainScreen')
     }
     const onSignIn = async () => {
         // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
@@ -84,13 +87,13 @@ function LoginScreen(props ) {
                     email: loginInput,
                     isAuth: true
                 })
-               // console.log(profile.data.userProfileVar.email)// to-do remove
+                // console.log(profile.data.userProfileVar.email)// to-do remove
                 await jwt.runMockTokenFlow().then(function (res) {
                     // need check for status code = 200 
                     // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
                     storage.setLocalStorageValue(storage.LOCAL_STORAGE_TOKEN_KEY, 'somejwt')
                     if (psswd === 'longerWww2') {
-                        props.navigation.navigate('MainScreen')
+                        NavigationService.navigate('MainScreen')
                     } else {
                         console.log('psswd is not correct')
                         toggleResetValidationAlert()
@@ -192,18 +195,18 @@ function LoginScreen(props ) {
                     <View style={{ height: keyboardHeight - vs(100) }} />
 
                     <Button
-                    
+
                         onPress={onDebugSignIn}
-                       // onPress={onSignIn}
+                        // onPress={onSignIn}
                         text={'SIGN IN'}
                     />
 
                     <View style={styles.row}>
-                        <TouchableOpacity onPress={() => props.navigation.navigate('ForgotPasswordScreen')}>
+                        <TouchableOpacity onPress={() => NavigationService.navigate('ForgotPasswordScreen')}>
                             <Text style={styles.txtAction}>I FORGOT MY PASSWORD</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => props.navigation.navigate('RegisterScreen')}>
+                        <TouchableOpacity onPress={() => NavigationService.navigate('RegisterScreen')}>
                             <Text style={styles.txtAction}>REGISTER</Text>
                         </TouchableOpacity>
                     </View>

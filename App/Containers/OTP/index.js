@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { isIphoneX } from 'react-native-iphone-x-helper'
 import { vs } from 'react-native-size-matters'
+import { useRoute } from '@react-navigation/native'
 
 import {
     AppBar,
@@ -21,7 +22,7 @@ import { Colors } from '../../Themes'
 import styles from './styles'
 
 import * as jwt from '../../Apollo/jwt-request'
-
+import NavigationService from '../../Navigation/NavigationService'
 
 function OTPScreen(props) {
     // refs
@@ -35,6 +36,7 @@ function OTPScreen(props) {
     let [field3, setField3] = useState('')
     let [field4, setField4] = useState('')
 
+    const { params } = useRoute()
 
     useEffect(() => {
 
@@ -55,27 +57,27 @@ function OTPScreen(props) {
         }
     }, [props]);
 
-    const  _keyboardWillShow = (e) => {
+    const _keyboardWillShow = (e) => {
         setKeyboardHeight(e.endCoordinates.height)
-      }
+    }
 
     const _keyboardWillHide = () => {
         setKeyboardHeight(0)
     }
 
-    const onValidate = async() => {
+    const onValidate = async () => {
         var otpCode = field1.concat(field2).concat(field3).concat(field4)
         console.log(otpCode)
         await jwt.runMockOTPFlow(otpCode).then(function (res) {
             console.log(res.validateOK)
-            if(res.validateOK === 'OK') {
-             if (props.navigation.state.params.fromScreen === 'ForgotPasswordScreen') {
-                 props.navigation.navigate('CreateNewPasswordScreen')
-             } else {
-                 props.navigation.navigate('ExploreScreen')
-             }
+            if (res.validateOK === 'OK') {
+                if (params.fromScreen === 'ForgotPasswordScreen') {
+                    NavigationService.navigate('CreateNewPasswordScreen')
+                } else {
+                    NavigationService.navigate('ExploreScreen')
+                }
             }
-         }).catch(function (err) {
+        }).catch(function (err) {
             // here we will need to deal with a  status` code  and error and implement  logic
 
         })
@@ -171,7 +173,7 @@ function OTPScreen(props) {
                     }
                     onPress={() => {
                         onValidate()
-                        // if (props.navigation.state.params.fromScreen === 'ForgotPasswordScreen') {
+                        // if (params.fromScreen === 'ForgotPasswordScreen') {
                         //     props.navigation.navigate('CreateNewPasswordScreen')
                         // } else {
                         //     props.navigation.navigate('ExploreScreen')
@@ -199,7 +201,7 @@ function OTPScreen(props) {
                 <View style={styles.bodyContainer}>
                     <Text style={styles.heading2Bold}>{'Validate your phone number'}</Text>
                     <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
-                        Please enter the code number sent by sms to your phone [{props.navigation.state.params.phone}]
+                        Please enter the code number sent by sms to your phone [{params.phone}]
                         </Text>
 
                     {renderOTPInput()}

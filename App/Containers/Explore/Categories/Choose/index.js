@@ -26,7 +26,7 @@ class ChooseCategoriesScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            categories: this.props.navigation.state.params.categories
+            categories: this.props.route.params.categories
         }
     }
 
@@ -41,7 +41,7 @@ class ChooseCategoriesScreen extends Component {
                     rightButton={() =>
                         <TouchableOpacity
                             onPress={() => {
-                                this.props.navigation.state.params.returnCategories(this.state.categories)
+                                this.props.route.params.returnCategories(this.state.categories)
                                 NavigationService.goBack()
                             }}
                         >

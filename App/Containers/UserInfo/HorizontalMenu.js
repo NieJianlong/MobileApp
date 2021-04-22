@@ -65,7 +65,6 @@ function renderAddressItem(
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity
               onPress={(item) => {
-                debugger;
                 doEdit(item);
               }}
             >
@@ -223,12 +222,7 @@ function HorizontalMenu(props) {
             break;
           case 'Addresses':
             if (addresses.length > 0) {
-              component = flatListView(
-                item,
-                AddressTestData,
-                false,
-                deleteItem
-              );
+              component = flatListView(item, addresses, false, deleteItem);
             } else {
               //component = flatListView(addresses);
               component = (
@@ -252,7 +246,7 @@ function HorizontalMenu(props) {
             break;
           case 'Payment':
             if (payments.length > 0) {
-              component = flatListView(item, PaymentTestData, true, showSheet);
+              component = flatListView(item, payments, true, showSheet);
             } else {
               component = (
                 <TextTip

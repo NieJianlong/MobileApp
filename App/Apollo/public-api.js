@@ -5,7 +5,11 @@ import globalCache from './cache'
 /**
  * need fetch as we are not in a browser
  */
-import fetch from 'cross-fetch';
+ import fetch from 'cross-fetch';
+
+
+/** buyer id for public checkout */
+const BUYER_ID = "00000000-0000-0000-0000-000000000000"
 
 /**
  * base and url path can change for production and development

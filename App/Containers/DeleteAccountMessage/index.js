@@ -7,9 +7,8 @@
  * @FilePath: /MobileApp/App/Containers/DeleteAccountMessage/index.js
  */
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { SafeAreaView } from 'react-navigation';
 import { AppBar, Button } from '../../Components';
 import AppConfig from '../../Config/AppConfig';
 import Colors from '../../Themes/Colors';

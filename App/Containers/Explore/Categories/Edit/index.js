@@ -30,7 +30,7 @@ class EditCategoriesScreen extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.navigation)
+        
     }
 
     renderHeader() {

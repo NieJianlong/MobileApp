@@ -27,10 +27,11 @@ class RateSellerScreen extends Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    console.log(this.props)
+  }
 
   onPost = () => {
-    this.props.navigation.state.params.onPost();
     NavigationService.goBack();
   };
 

@@ -7,9 +7,8 @@
  * @FilePath: /MobileApp/App/Containers/UserEditProfile/index.js
  */
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { View, Text, Image, Keyboard, TouchableOpacity } from 'react-native';
+import { View, Text, Image, Keyboard, TouchableOpacity, SafeAreaView } from 'react-native';
 import { ScaledSheet, s } from 'react-native-size-matters';
-import { SafeAreaView } from 'react-navigation';
 import { AppBar, MaterialTextInput, RightButton } from '../../Components';
 import AppConfig from '../../Config/AppConfig';
 import Colors from '../../Themes/Colors';

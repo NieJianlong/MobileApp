@@ -75,12 +75,14 @@ function index(props) {
               </View>
             </View>
 
-            <TouchableOpacity>
-              <Image
-                style={styles.editImage}
-                source={images.userAddressEditImage}
-              />
-            </TouchableOpacity>
+            {item.type === 'Payment' && (
+              <TouchableOpacity>
+                <Image
+                  style={styles.editImage}
+                  source={images.userAddressEditImage}
+                />
+              </TouchableOpacity>
+            )}
           </View>
         );
       })}

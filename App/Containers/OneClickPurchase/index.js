@@ -43,7 +43,10 @@ function OneClickPurchase(props) {
             <RightButton
               title="SAVE"
               onPress={() => {
-                NavigationService.navigate('SelectDeliveryAddressScreen');
+                NavigationService.navigate(
+                  'SelectDeliveryAddressScreen',
+                  params
+                );
               }}
             />
           )}
@@ -145,15 +148,13 @@ function OneClickPurchase(props) {
           }}
         >
           <Button
-            onPress={() => {
-              if (params) {
-                if (typeof params.removeCallback == 'function') {
-                  params.removeCallback();
-                }
-              }
+            onPress={(callback) => {
+              NavigationService.navigate('AddPaymentMethodScreen', {
+                callback,
+              });
             }}
             textColor="white"
-            text="ADD  NEW PAYMENT METHOD"
+            text="ADD NEW PAYMENT METHOD"
             backgroundColor={colors.grey80}
           ></Button>
         </SafeAreaView>

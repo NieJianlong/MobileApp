@@ -19,25 +19,9 @@ import ProductItem from '../Components/ProductItem'
 import { Colors, Images } from '../../../Themes'
 import NavigationService from '../../../Navigation/NavigationService'
 
-class OrderPlacedScreen extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-
-        }
-    }
-
-    componentDidMount() {
-
-    }
-
-    onSubmit = () => {
-        this.props.navigation.state.params.onSubmit()
-        NavigationService.goBack()
-    }
-
-    renderHeader() {
+function OrderPlaced(props) {
+    
+    const renderHeader = () => {
         return (
             <View style={styles.header}>
                 <View style={styles.icSearch} />
@@ -55,7 +39,7 @@ class OrderPlacedScreen extends Component {
         )
     }
 
-    renderBody() {
+    const renderBody = () => {
         return (
             <ScrollView style={styles.body}>
                 <View style={styles.textArea}>
@@ -83,17 +67,17 @@ class OrderPlacedScreen extends Component {
                         </View>
                     </View>
 
-                    {this.renderChatOptions()}
+                    {renderChatOptions()}
                 </View>
 
                 <Text style={styles.txt3}>Who bought this item also bought...</Text>
 
-                {this.renderProducList()}
+                {renderProducList()}
             </ScrollView>
         )
     }
 
-    renderChatOptions() {
+    const renderChatOptions = () => {
         return (
             <View style={styles.chatContainer}>
                 <View style={styles.chatIconsContainer}>
@@ -131,7 +115,7 @@ class OrderPlacedScreen extends Component {
         )
     }
 
-    renderProduct = (item, index) => {
+    const renderProduct = (item, index) => {
         return (
             <ProductItem
                 key={index.toString()}
@@ -141,35 +125,33 @@ class OrderPlacedScreen extends Component {
         )
     }
 
-    renderProducList() {
+    const renderProducList = () => {
         return (
             <View style={styles.prodListContainer}>
                 {
-                    products.map((item, index) => this.renderProduct(item, index))
+                    products.map((item, index) => renderProduct(item, index))
                 }
             </View>
         )
     }
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <StatusBar barStyle='dark-content' />
-                <SafeAreaView
-                    style={styles.container}
-                    edges={['top', 'left', 'right']}>
+    return (
+        <View style={styles.container}>
+            <StatusBar barStyle='dark-content' />
+            <SafeAreaView
+                style={styles.container}
+                edges={['top', 'left', 'right']}>
 
-                    {this.renderHeader()}
+                {renderHeader()}
 
-                    {this.renderBody()}
+                {renderBody()}
 
-                </SafeAreaView>
-            </View>
-        )
-    }
+            </SafeAreaView>
+        </View>
+    )
 }
 
-export default OrderPlacedScreen
+export default OrderPlaced
 
 const products = [
     {

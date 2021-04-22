@@ -59,6 +59,7 @@ const images = {
   userPayImage: require('../Images/usercenter/pay.png'),
   userUPayImage: require('../Images/usercenter/upay.png'),
   userBillingImage: require('../Images/usercenter/billing.png'),
+  userDefaultAvatar: require('../Images/usercenter/avatar.png'),
 
   userUBillingImage: require('../Images/usercenter/ubiling.png'),
   userDeliverytoImage: require('../Images/usercenter/deliveryto.png'),

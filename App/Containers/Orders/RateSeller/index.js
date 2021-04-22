@@ -37,7 +37,7 @@ class RateSellerScreen extends Component {
     }
 
     onPost = () => {
-        this.props.navigation.state.params.onPost()
+        this.props.route.params.onPost()
         NavigationService.goBack()
     }
 

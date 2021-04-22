@@ -109,7 +109,7 @@ function UserInfo(props) {
           />
         </SafeAreaView>
         <View style={{ marginBottom: vs(15) }}>
-          <UserHeader needEdit></UserHeader>
+          <UserHeader needEdit islogin={true}></UserHeader>
         </View>
         <HorizontalMenu dispatch={dispatch}></HorizontalMenu>
       </View>

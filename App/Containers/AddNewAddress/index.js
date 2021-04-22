@@ -14,6 +14,7 @@ import {
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
+import { useRoute } from '@react-navigation/native';
 
 function AddNewAddress(props) {
   const [name, setName] = useState('');
@@ -25,6 +26,7 @@ function AddNewAddress(props) {
   const [pincode, setPincode] = useState('');
   const [country, setCountry] = useState('');
   const [disable, setDisable] = useState(true);
+  const [landMark, setLandMark] = useState('');
   useEffect(() => {
     if (
       name.length === 0 ||
@@ -105,13 +107,17 @@ function AddNewAddress(props) {
       keyboardType: 'default',
       type: 'short',
     },
+    {
+      placeholder: 'Land Mark',
+      onChangeText: (text) => setLandMark(text),
+      showError: false,
+      errorMessage: null,
+      keyboardType: 'default',
+      type: 'normal',
+    },
   ];
 
-  const {
-    navigation: {
-      state: { params },
-    },
-  } = props;
+  const { params } = useRoute();
 
   return (
     <View style={styles.container}>

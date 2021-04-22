@@ -19,18 +19,14 @@ import metrics from '../../Themes/Metrics';
 import fonts from '../../Themes/Fonts';
 import { AddressTestData } from '../UserInfo/Config';
 import { AlertContext } from '../Root/GlobalContext';
-import { ApplicationStyles } from '../../Themes';
+import { useRoute } from '@react-navigation/native';
 /**
  * @description: The user selects the shipping address page
  * @param {*} props
  * @return {*}
  */
 function SelectDeliveryAddress(props) {
-  const {
-    navigation: {
-      state: { params },
-    },
-  } = props;
+  const { params } = useRoute();
   const [selectIndex, setSelectIndex] = useState(999);
   const context = useContext(AlertContext);
 

@@ -6,6 +6,7 @@ import { AppBar, TextInput, Switch, RightButton } from '../../Components';
 import { ApplicationStyles } from '../../Themes';
 import styles from './styles';
 import colors from '../../Themes/Colors';
+import { useRoute } from '@react-navigation/native';
 
 function AddCredit(props) {
   const [name, setName] = useState('');
@@ -76,15 +77,7 @@ function AddCredit(props) {
     },
   ];
 
-  const {
-    navigation: {
-      state: { params },
-    },
-  } = props;
-  // if (params.title=="EDIT ADDRESS") {
-  //   setHasTitle(tru);
-  // }
-
+  const { params } = useRoute();
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />

@@ -26,9 +26,9 @@ import { ApplicationStyles } from '../../Themes';
  * @return {*}
  */
 function UserHeader(props) {
-  const { needSafeArea, needEdit } = props;
+  const { needSafeArea, needEdit, islogin, setLogin } = props;
   const textTip = "You haven't add any personal \n details yet";
-  const [islogin, setIslogin] = useState(true);
+
   return (
     <View style={styles.headerContainer}>
       {islogin ? (
@@ -45,7 +45,7 @@ function UserHeader(props) {
             <Text style={styles.nosign}>{textTip}</Text>
           </SafeAreaView>
           <View style={styles.signbtn}>
-            <Button onPress={() => setIslogin(true)} text="SIGN IN"></Button>
+            <Button onPress={setLogin} text="SIGN IN"></Button>
           </View>
         </View>
       )}

@@ -20,6 +20,7 @@ import { ApplicationStyles } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
+import { useRoute } from '@react-navigation/native';
 
 function AddBillingDetails(props) {
   const [firstName, setFirstName] = useState('');
@@ -181,13 +182,7 @@ function AddBillingDetails(props) {
       type: 'short',
     },
   ];
-
-  const {
-    navigation: {
-      state: { params },
-    },
-  } = props;
-
+  const { params } = useRoute();
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />

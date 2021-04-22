@@ -15,6 +15,7 @@ import {
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
+import { useRoute } from '@react-navigation/native';
 
 function CheckoutBillingDetails(props) {
   const [firstName, setFirstName] = useState('');
@@ -31,6 +32,7 @@ function CheckoutBillingDetails(props) {
   const [taxid, setTaxid] = useState('');
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [disable, setDisable] = useState(true);
+  const [useAsPersonalInfo, setUseAsPersonalInfo] = useState(false);
   useEffect(() => {
     const keyboardShow = (e) => {
       setKeyboardHeight(e.endCoordinates.height);
@@ -177,12 +179,7 @@ function CheckoutBillingDetails(props) {
     },
   ];
 
-  const {
-    navigation: {
-      state: { params },
-    },
-  } = props;
-
+  const { params } = useRoute();
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
@@ -214,39 +211,46 @@ function CheckoutBillingDetails(props) {
               {params.title}
             </Text>
             <View style={{ marginTop: 20 }}>
-              <Switch onSwitch={() => {}} label="Use the same info as my personal details"></Switch>
+              <Switch
+                onSwitch={(check) => {
+                  setUseAsPersonalInfo(check);
+                }}
+                label="Use the same info as my personal details"
+              ></Switch>
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                justifyContent: 'space-between',
-              }}
-            >
-              {inputs.map((item, index) => {
-                return (
-                  <View
-                    key={index}
-                    style={{
-                      width: item.type == 'short' ? '48%' : '100%',
-                      marginTop: vs(18),
-                    }}
-                  >
-                    {item.keyboardType === 'selector' ? (
-                      <Selector
-                        placeholder={'Sate'}
-                        data={['AAA', 'BBB', 'CCC']}
-                      />
-                    ) : (
-                      <MaterialTextInput
-                        style={{ marginTop: vs(18) }}
-                        {...item}
-                      />
-                    )}
-                  </View>
-                );
-              })}
-            </View>
+            {!useAsPersonalInfo && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  justifyContent: 'space-between',
+                }}
+              >
+                {inputs.map((item, index) => {
+                  return (
+                    <View
+                      key={index}
+                      style={{
+                        width: item.type == 'short' ? '48%' : '100%',
+                        marginTop: vs(18),
+                      }}
+                    >
+                      {item.keyboardType === 'selector' ? (
+                        <Selector
+                          placeholder={'Sate'}
+                          data={['AAA', 'BBB', 'CCC']}
+                        />
+                      ) : (
+                        <MaterialTextInput
+                          style={{ marginTop: vs(18) }}
+                          {...item}
+                        />
+                      )}
+                    </View>
+                  );
+                })}
+              </View>
+            )}
           </View>
         </KeyboardAwareScrollView>
       </SafeAreaView>

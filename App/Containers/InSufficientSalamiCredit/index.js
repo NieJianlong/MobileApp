@@ -88,10 +88,7 @@ function InSufficientSalamiCredit(props) {
             ListHeaderComponent={() => {
               return (
                 <View>
-                  <View
-                    key={`header${index}`}
-                    style={[styles.item, { height: vs(64) }]}
-                  >
+                  <View style={[styles.item, { height: vs(64) }]}>
                     <View>
                       <View
                         style={{ flexDirection: 'row', alignItems: 'center' }}

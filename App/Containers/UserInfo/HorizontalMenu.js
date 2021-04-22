@@ -63,7 +63,11 @@ function renderAddressItem(
             </TouchableOpacity>
           )}
           <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity onPress={(item) => doEdit(item)}>
+            <TouchableOpacity
+              onPress={(item) => {
+                doEdit(item);
+              }}
+            >
               <Image
                 style={styles.editImage}
                 source={images.userAddressEditImage}
@@ -177,7 +181,18 @@ function HorizontalMenu(props) {
       payload: { showSheet: true },
     });
   };
-
+  const deleteItem = () => {
+    dispatch({
+      type: 'changAlertState',
+      payload: {
+        visible: true,
+        message: 'You have successfully removed your address.',
+        color: colors.secondary00,
+        title: 'Address method removed',
+        showSheet: false,
+      },
+    });
+  };
   return (
     <DynamicTabView
       data={MenuConfig}
@@ -207,7 +222,7 @@ function HorizontalMenu(props) {
             break;
           case 'Addresses':
             if (addresses.length > 0) {
-              component = flatListView(item, AddressTestData);
+              component = flatListView(item, addresses, false, deleteItem);
             } else {
               //component = flatListView(addresses);
               component = (
@@ -231,7 +246,7 @@ function HorizontalMenu(props) {
             break;
           case 'Payment':
             if (payments.length > 0) {
-              component = flatListView(item, PaymentTestData, true, showSheet);
+              component = flatListView(item, payments, true, showSheet);
             } else {
               component = (
                 <TextTip
@@ -373,7 +388,13 @@ function flatListView(item, data, isPayment = false, showSheet = () => {}) {
                 doDelete
               );
             } else {
-              return renderAddressItem(item, showSheet);
+              return renderAddressItem(
+                item,
+                showSheet,
+                setDefault,
+                doEdit,
+                doDelete
+              );
             }
           }
         }}

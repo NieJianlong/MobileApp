@@ -14,6 +14,7 @@ import Button from '../../Components/Button'
 import { Colors, Images } from '../../Themes'
 import styles from './styles'
 import { vs } from 'react-native-size-matters'
+import NavigationService from '../../Navigation/NavigationService'
 
 const iOS = Platform.OS === 'ios'
 
@@ -70,7 +71,7 @@ class OnboardingScreen extends Component {
 
                         <Button
                             text={'SIGN IN'}
-                            onPress={() => this.props.navigation.navigate('LoginScreen')}
+                            onPress={() => NavigationService.navigate('LoginScreen')}
                         />
 
                         <View style={{ height: vs(12) }} />
@@ -79,7 +80,7 @@ class OnboardingScreen extends Component {
                             text={'CONTINUE'}
                             backgroundColor={Colors.white}
                             textColor={Colors.black}
-                            onPress={() => this.props.navigation.navigate('MainScreen')}
+                            onPress={() => NavigationService.navigate('MainScreen')}
                         />
                     </View>
                 </SafeAreaView>

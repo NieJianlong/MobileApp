@@ -19,6 +19,7 @@ import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
 import UserAvatar from './UserAvatar';
 import { ApplicationStyles } from '../../Themes';
+
 /**
  * @description:The user header component, which contains basic user information
  * @param {*} props
@@ -60,7 +61,7 @@ function userInfo(needEdit) {
       }}
     >
       <View style={styles.userinfo}>
-        <UserAvatar uri="http://measure.3vyd.com//uPic/oplutv.png"></UserAvatar>
+        <UserAvatar uri={images.userDefaultAvatar}></UserAvatar>
         <View style={styles.textinfo}>
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}

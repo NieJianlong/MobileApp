@@ -25,7 +25,7 @@ import TextTip from '../../Components/EmptyReminder';
  * @param {*} props
  * @return {*}
  */
-function NoPurchase(props) {
+function OnePurchase(props) {
   const items = [
     {
       lefticon: images.userChangePwdImage,
@@ -45,8 +45,7 @@ function NoPurchase(props) {
     },
   ];
   return (
-    <View style={{ flex: 1, width: metrics.screenWidth }}>
-      <TextTip {...props}></TextTip>
+    <View style={{ width: metrics.screenWidth }}>
       <SafeAreaView style={styles.bottomlist}>
         {items.map((item, index) => {
           return <ListItem key={`listitem` + index} {...item}></ListItem>;
@@ -56,7 +55,7 @@ function NoPurchase(props) {
   );
 }
 
-export default NoPurchase;
+export default OnePurchase;
 const styles = ScaledSheet.create({
   bottomlist: {
     position: 'absolute',

@@ -62,15 +62,6 @@ class CustomTextInput extends Component {
               textAlignVertical={textAlignVertical ?? 'center'}
             />
           </View>
-
-          {/* {
-                        this.state.keyword !== '' &&
-                        <TouchableOpacity
-                            onPress={() => this.setState({ keyword: '' })}
-                            style={styles.btnDelete}>
-                            <Image source={Images.crossMedium} style={styles.icDelete} />
-                        </TouchableOpacity>
-                    } */}
         </View>
         {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
       </View>

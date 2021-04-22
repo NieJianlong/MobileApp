@@ -82,6 +82,7 @@ function ShoppingCart(props) {
       <View style={styles.container}>
         <StatusBar
           barStyle="dark-content"
+          translucent={false}
           backgroundColor={colors.background}
         />
         <SafeAreaView

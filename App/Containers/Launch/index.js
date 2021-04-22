@@ -4,6 +4,7 @@ import {
     StatusBar,
     Image
 } from 'react-native'
+import NavigationService from '../../Navigation/NavigationService'
 
 import { Images } from '../../Themes'
 import styles from './styles'
@@ -12,7 +13,8 @@ class LaunchScreen extends Component {
 
     componentDidMount() {
         setTimeout(() => {
-            this.props.navigation.navigate('OnboardingScreen')
+            //this.props.navigation.navigate('OnboardingScreen')
+            NavigationService.navigate('OnboardingScreen')
         }, 2000)
     }
 

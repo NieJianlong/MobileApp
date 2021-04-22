@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     View,
     StatusBar,
@@ -20,182 +20,199 @@ import { Colors } from '../../Themes'
 
 import styles from './styles'
 
+import * as jwt from '../../Apollo/jwt-request'
 
-class OTPScreen extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            field1: '',
-            field2: '',
-            field3: '',
-            field4: '',
-            onFocus: 1,
-            keyboardHeight: 0,
-            allowToResendCode: false,
-        }
+function OTPScreen(props) {
+    // refs
+    let field1Input, field2Input, field3Input, field4Input = null
 
-        Keyboard.addListener('keyboardWillShow', this._keyboardWillShow)
-        Keyboard.addListener('keyboardWillHide', this._keyboardWillHide)
-    }
+    let [keyboardHeight, setKeyboardHeight] = useState(0)
+    let [allowToResendCode, setAllowToResendCode] = useState(false)
+    let [onFocus, setOnFocus] = useState(1)
+    let [field1, setField1] = useState('')
+    let [field2, setField2] = useState('')
+    let [field3, setField3] = useState('')
+    let [field4, setField4] = useState('')
 
-    componentDidMount() {
+
+    useEffect(() => {
+
+        Keyboard.addListener('keyboardWillShow', _keyboardWillShow)
+        Keyboard.addListener('keyboardWillHide', _keyboardWillHide)
+
+        console.log(JSON.stringify(props))
+
         setTimeout(() => {
-            this.setState({ allowToResendCode: true })
+            setAllowToResendCode(true)
         }, 10000)
+
+
+        return () => {
+            // Anything in here is fired on component unmount.
+            Keyboard.removeListener('keyboardWillShow', _keyboardWillShow)
+            Keyboard.removeListener('keyboardWillHide', _keyboardWillHide)
+        }
+    }, [props]);
+
+    const  _keyboardWillShow = (e) => {
+        setKeyboardHeight(e.endCoordinates.height)
+      }
+
+    const _keyboardWillHide = () => {
+        setKeyboardHeight(0)
     }
 
-    componentWillUnmount() {
-        Keyboard.removeListener('keyboardWillShow', this._keyboardWillShow)
-        Keyboard.removeListener('keyboardWillHide', this._keyboardWillHide)
-    }
+    const onValidate = async() => {
+        var otpCode = field1.concat(field2).concat(field3).concat(field4)
+        console.log(otpCode)
+        await jwt.runMockOTPFlow(otpCode).then(function (res) {
+            console.log(res.validateOK)
+            if(res.validateOK === 'OK') {
+             if (props.navigation.state.params.fromScreen === 'ForgotPasswordScreen') {
+                 props.navigation.navigate('CreateNewPasswordScreen')
+             } else {
+                 props.navigation.navigate('ExploreScreen')
+             }
+            }
+         }).catch(function (err) {
+            // here we will need to deal with a  status` code  and error and implement  logic
 
-    _keyboardWillShow = (e) => {
-        this.setState({
-            keyboardHeight: e.endCoordinates.height
         })
+
+
     }
 
-    _keyboardWillHide = () => {
-        this.setState({
-            keyboardHeight: 0
-        })
-    }
-
-    renderOTPInput() {
+    const renderOTPInput = () => {
         return (
             <View style={styles.otpContainer}>
                 <TextInput
                     autoFocus
-                    style={this.state.onFocus === 1 ? styles.txtInputFocused : styles.txtInput}
+                    style={onFocus === 1 ? styles.txtInputFocused : styles.txtInput}
                     maxLength={1}
                     keyboardType={'number-pad'}
-                    value={this.state.field1}
-                    ref={r => this.field1 = r}
-                    onFocus={() => this.setState({ onFocus: 1 })}
+                    value={field1}
+                    ref={r => field1Input = r}
+                    onFocus={() => setOnFocus(1)}
                     onChangeText={(text) => {
-                        this.setState({ field1: text }, () => {
-                            if (text.length > 0) {
-                                this.field2.focus()
-                            }
-                        })
+                        setField1(text)
+                        if (text.length > 0) {
+                            field2Input.focus()
+                        }
                     }}
                 />
 
                 <TextInput
-                    style={this.state.onFocus === 2 ? styles.txtInputFocused : styles.txtInput}
+                    style={onFocus === 2 ? styles.txtInputFocused : styles.txtInput}
                     maxLength={1}
                     keyboardType={'number-pad'}
-                    value={this.state.field2}
-                    ref={r => this.field2 = r}
-                    onFocus={() => this.setState({ onFocus: 2 })}
+                    value={field2}
+                    ref={r => field2Input = r}
+                    onFocus={() => setOnFocus(2)}
                     onChangeText={(text) => {
-                        this.setState({ field2: text }, () => {
-                            if (text.length > 0) {
-                                this.field3.focus()
-                            }
-                        })
+                        setField2(text)
+                        if (text.length > 0) {
+                            field3Input.focus()
+                        }
                     }}
                 />
 
                 <TextInput
-                    style={this.state.onFocus === 3 ? styles.txtInputFocused : styles.txtInput}
+                    style={onFocus === 3 ? styles.txtInputFocused : styles.txtInput}
                     maxLength={1}
                     keyboardType={'number-pad'}
-                    value={this.state.field3}
-                    ref={r => this.field3 = r}
-                    onFocus={() => this.setState({ onFocus: 3 })}
+                    value={field3}
+                    ref={r => field3Input = r}
+                    onFocus={() => setOnFocus(3)}
                     onChangeText={(text) => {
-                        this.setState({ field3: text }, () => {
-                            if (text.length > 0) {
-                                this.field4.focus()
-                            }
-                        })
+                        setField3(text)
+                        if (text.length > 0) {
+                            field4Input.focus()
+                        }
                     }}
                 />
 
                 <TextInput
-                    style={this.state.onFocus === 4 ? styles.txtInputFocused : styles.txtInput}
+                    style={onFocus === 4 ? styles.txtInputFocused : styles.txtInput}
                     maxLength={1}
                     keyboardType={'number-pad'}
-                    value={this.state.field4}
-                    ref={r => this.field4 = r}
-                    onFocus={() => this.setState({ onFocus: 4 })}
+                    value={field4}
+                    ref={r => field4Input = r}
+                    onFocus={() => setOnFocus(4)}
                     onChangeText={(text) => {
-                        this.setState({ field4: text }, () => {
-                            if (text.length > 0) {
-                                Keyboard.dismiss()
-                                this.setState({ onFocus: 0 })
-                            }
-                        })
+                        setField4(text)
+                        if (text.length > 0) {
+                            Keyboard.dismiss()
+                            setOnFocus(4)
+                        }
                     }}
                 />
             </View>
         )
     }
 
-    renderAction() {
+    const renderAction = () => {
         return (
             <View>
                 <TouchableOpacity
-                    onPress={() => this.props.navigation.goBack()}
+                    onPress={() => props.navigation.goBack()}
                     style={styles.btnResendCode}>
-                    <Text style={[styles.txtAction, !this.state.allowToResendCode && { color: Colors.grey80 }]}>
+                    <Text style={[styles.txtAction, !allowToResendCode && { color: Colors.grey80 }]}>
                         I DIDN{'\''}T RECEIVE A CODE
                     </Text>
                 </TouchableOpacity>
 
                 <Button
                     disabled={
-                        this.state.field1 === '' ||
-                        this.state.field2 === '' ||
-                        this.state.field3 === '' ||
-                        this.state.field4 === ''
+                        field1 === '' ||
+                        field2 === '' ||
+                        field3 === '' ||
+                        field4 === ''
                     }
                     onPress={() => {
-                        if (this.props.navigation.state.params.fromScreen === 'ForgotPasswordScreen') {
-                            this.props.navigation.navigate('CreateNewPasswordScreen')
-                        } else {
-                            this.props.navigation.navigate('ExploreScreen')
-                        }
+                        onValidate()
+                        // if (props.navigation.state.params.fromScreen === 'ForgotPasswordScreen') {
+                        //     props.navigation.navigate('CreateNewPasswordScreen')
+                        // } else {
+                        //     props.navigation.navigate('ExploreScreen')
+                        // }
                     }}
                     text={'VALIDATE'} />
 
-                <View style={{ height: this.state.keyboardHeight > 0 ? this.state.keyboardHeight : isIphoneX() ? 0 : vs(15) }} />
+                <View style={{ height: keyboardHeight > 0 ? keyboardHeight : isIphoneX() ? 0 : vs(15) }} />
             </View>
         )
     }
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <StatusBar barStyle='dark-content' />
-                <SafeAreaView
-                    style={styles.safeArea}
-                    edges={['top', 'right', 'left', 'bottom']}
-                >
-                    <AppBar
-                        showLogo={false}
-                        onPressBack={() => this.props.navigation.goBack()}
-                    />
+    return (
+        <View style={styles.container}>
+            <StatusBar barStyle='dark-content' />
+            <SafeAreaView
+                style={styles.safeArea}
+                edges={['top', 'right', 'left', 'bottom']}
+            >
+                <AppBar
+                    showLogo={false}
+                    onPressBack={() => props.navigation.goBack()}
+                />
 
-                    <View style={styles.bodyContainer}>
-                        <Text style={styles.heading2Bold}>{'Validate your phone number'}</Text>
-                        <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
-                            Please enter the code number sent by sms to your phone [XXX XXX XXX]
+                <View style={styles.bodyContainer}>
+                    <Text style={styles.heading2Bold}>{'Validate your phone number'}</Text>
+                    <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
+                        Please enter the code number sent by sms to your phone [{props.navigation.state.params.phone}]
                         </Text>
 
-                        {this.renderOTPInput()}
+                    {renderOTPInput()}
 
-                        <View style={{ flex: 1 }} />
+                    <View style={{ flex: 1 }} />
 
-                        {this.renderAction()}
+                    {renderAction()}
 
-                    </View>
-                </SafeAreaView>
-            </View>
-        )
-    }
+                </View>
+            </SafeAreaView>
+        </View>
+    )
+
 }
 
 export default OTPScreen

@@ -57,7 +57,7 @@ function UserEditProfile(props) {
       </SafeAreaView>
       <KeyboardAwareScrollView>
         <View style={styles.contentContainer}>
-          <UserAvatar uri="http://measure.3vyd.com//uPic/JRD5RT.png"></UserAvatar>
+          <UserAvatar uri={images.userDefaultAvatar}></UserAvatar>
           <Image
             style={{
               width: s(30),

@@ -6,7 +6,7 @@
  * @Description: In User Settings Edit
  * @FilePath: /MobileApp/App/Navigation/NavigationService.js
  */
-import { NavigationActions, StackActions } from 'react-navigation';
+import { NavigationActions, StackActions } from '@react-navigation/native';
 
 let _navigator;
 
@@ -15,15 +15,11 @@ function setTopLevelNavigator(navigatorRef) {
 }
 
 function navigate(routeName, params) {
-  _navigator.dispatch(
-    NavigationActions.navigate({
-      routeName,
-      params,
-    })
-  );
+  _navigator.navigate(routeName, params)
 }
+
 function goBack(routeName, params) {
-  _navigator.dispatch(NavigationActions.back());
+  _navigator.goBack();
 }
 function pop(n) {
   _navigator.dispatch(StackActions.pop({ n }));

@@ -57,6 +57,9 @@ function SelectDeliveryAddress(props) {
                     title: '1 Click Purchasing Activated!',
                   },
                 });
+                if (typeof params.callback === 'function') {
+                  params.callback({});
+                }
               }}
             />
           )}
@@ -145,12 +148,11 @@ function SelectDeliveryAddress(props) {
           }}
         >
           <Button
-            onPress={() => {
-              if (params) {
-                if (typeof params.removeCallback == 'function') {
-                  params.removeCallback();
-                }
-              }
+            onPress={(callback) => {
+              NavigationService.navigate('AddNewAddressScreen', {
+                callback,
+                title: 'Add new address',
+              });
             }}
             textColor="white"
             text="Add new address"

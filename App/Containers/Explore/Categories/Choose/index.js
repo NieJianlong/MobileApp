@@ -31,7 +31,7 @@ class ChooseCategoriesScreen extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.navigation)
+        
     }
 
     renderHeader() {

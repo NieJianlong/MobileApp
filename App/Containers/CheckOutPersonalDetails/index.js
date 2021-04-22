@@ -9,10 +9,18 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { vs } from 'react-native-size-matters';
-import { AppBar, TextInput, Switch, RightButton, Selector, MaterialTextInput } from '../../Components';
+import {
+  AppBar,
+  TextInput,
+  Switch,
+  RightButton,
+  Selector,
+  MaterialTextInput,
+} from '../../Components';
 import { ApplicationStyles, Colors, Metrics } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
+import { useRoute } from '@react-navigation/native';
 
 function CheckOutPersonalDetails(props) {
   const [firstName, setFirstName] = useState('');
@@ -159,11 +167,7 @@ function CheckOutPersonalDetails(props) {
     },
   ];
 
-  const {
-    navigation: {
-      state: { params },
-    },
-  } = props;
+  const { params } = useRoute();
 
   return (
     <View style={styles.container}>
@@ -228,7 +232,10 @@ function CheckOutPersonalDetails(props) {
               })}
             </View>
             <View style={{ marginTop: 20 }}>
-              <Switch onSwitch={() => {}} label="Use as default address"></Switch>
+              <Switch
+                onSwitch={() => {}}
+                label="Use as default address"
+              ></Switch>
             </View>
           </View>
         </KeyboardAwareScrollView>

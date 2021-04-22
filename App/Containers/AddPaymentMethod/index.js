@@ -7,6 +7,7 @@ import images from '../../Themes/Images';
 import { ScrollView } from 'react-native-gesture-handler';
 import Nav from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
+import { useRoute } from '@react-navigation/native';
 
 function AddPaymentMethod(props) {
   const payments = [
@@ -27,11 +28,7 @@ function AddPaymentMethod(props) {
     },
   ];
 
-  const {
-    navigation: {
-      state: { params },
-    },
-  } = props;
+  const { params } = useRoute();
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />

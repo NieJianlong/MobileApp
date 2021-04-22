@@ -24,7 +24,7 @@ import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
 import AppConfig from '../../Config/AppConfig';
 import metrics from '../../Themes/Metrics';
-
+import { useRoute } from '@react-navigation/native';
 /**
  * @description: Edit Billing detail Screen
  * @param {*} props
@@ -195,11 +195,7 @@ function EditBillingDetails(props) {
     },
   ];
 
-  const {
-    navigation: {
-      state: { params },
-    },
-  } = props;
+  const { params } = useRoute();
 
   return (
     <View style={styles.container}>

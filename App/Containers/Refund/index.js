@@ -7,6 +7,7 @@ import colors from '../../Themes/Colors';
 import { AppBar, Button } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import CheckBox from '../AskForReplacement/CheckBox';
+import { useRoute } from '@react-navigation/native';
 
 const countries = [
   {
@@ -23,13 +24,9 @@ const countries = [
 
 function Refund(props) {
   const [selectValue, setSelectValue] = useState(countries[0]);
-  const {
-    navigation: {
-      state: {
-        params: { cancel },
-      },
-    },
-  } = props;
+  const { params } = useRoute();
+  const { cancel } = params;
+
   return (
     <View
       style={{

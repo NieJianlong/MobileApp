@@ -15,6 +15,7 @@ import {
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
+import { useRoute } from '@react-navigation/native';
 
 function CheckoutBillingDetails(props) {
   const [firstName, setFirstName] = useState('');
@@ -177,12 +178,7 @@ function CheckoutBillingDetails(props) {
     },
   ];
 
-  const {
-    navigation: {
-      state: { params },
-    },
-  } = props;
-
+  const { params } = useRoute();
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
@@ -214,7 +210,10 @@ function CheckoutBillingDetails(props) {
               {params.title}
             </Text>
             <View style={{ marginTop: 20 }}>
-              <Switch onSwitch={() => {}} label="Use the same info as my personal details"></Switch>
+              <Switch
+                onSwitch={() => {}}
+                label="Use the same info as my personal details"
+              ></Switch>
             </View>
             <View
               style={{

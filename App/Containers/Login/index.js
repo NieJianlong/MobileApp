@@ -13,6 +13,7 @@ import { TextInput, Button, PasswordInput, Alert } from '../../Components';
 
 import { Colors } from '../../Themes';
 import styles from './styles';
+import { useRoute } from '@react-navigation/native';
 
 /**
  * validation and jwt modules
@@ -35,11 +36,7 @@ function LoginScreen(props) {
   let [psswd, setPsswd] = useState('');
 
   const profile = useQuery(GET_USER_PROFILE);
-  const {
-    navigation: {
-      state: { params },
-    },
-  } = props;
+  const { params } = useRoute();
   useEffect(() => {
     Keyboard.addListener('keyboardWillShow', _keyboardWillShow);
     Keyboard.addListener('keyboardWillHide', _keyboardWillHide);
@@ -49,7 +46,7 @@ function LoginScreen(props) {
      * undefined unless in the single case where we are coming from
      * ForgotPassword
      */
-    if (props.navigation.state.params === undefined) {
+    if (params === undefined) {
       //console.log ('debug message caught expected undefined parameter')
     } else {
       //  console.log (`'debug message ${props.navigation.state.params.showEms}`)

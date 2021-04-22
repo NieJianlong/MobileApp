@@ -14,6 +14,7 @@ import {
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
+import { useRoute } from '@react-navigation/native';
 
 function AddNewAddress(props) {
   const [name, setName] = useState('');
@@ -33,24 +34,13 @@ function AddNewAddress(props) {
       door.length === 0 ||
       mstate.length === 0 ||
       pincode.length === 0 ||
-      country.length === 0 
-     
+      country.length === 0
     ) {
       setDisable(true);
     } else {
       setDisable(false);
     }
-  }, [
-    name,
-    streetName,
-    streetNum,
-    door,
-    city,
-    mstate,
-    pincode,
-    country,
-   
-  ]);
+  }, [name, streetName, streetNum, door, city, mstate, pincode, country]);
 
   const inputs = [
     {
@@ -127,11 +117,7 @@ function AddNewAddress(props) {
     },
   ];
 
-  const {
-    navigation: {
-      state: { params },
-    },
-  } = props;
+  const { params } = useRoute();
 
   return (
     <View style={styles.container}>

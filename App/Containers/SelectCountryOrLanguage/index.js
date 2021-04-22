@@ -15,7 +15,8 @@ import { AppBar, RightButton, SearchBox } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import CheckBox from '../Explore/Components/CheckBox';
 import metrics from '../../Themes/Metrics';
-import { ApplicationStyles } from '../../Themes';
+import { useRoute } from '@react-navigation/native';
+
 const countries = () =>
   [0, 1, 2, 3, 4, 5, 6, 7, 8].map((item) => `Country ${item}`);
 
@@ -23,13 +24,8 @@ const languages = () =>
   [0, 1, 2, 3, 4, 5, 6, 7, 8].map((item) => `Language ${item}`);
 
 function SelectCountryOrLanguage(props) {
-  const {
-    navigation: {
-      state: {
-        params: { key },
-      },
-    },
-  } = props;
+  const { params } = useRoute();
+  const { key } = params;
   const [selectValue, setSelectValue] = useState(
     key == 'country' ? countries()[0] : languages()[0]
   );

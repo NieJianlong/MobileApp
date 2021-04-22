@@ -6,7 +6,7 @@
  * @Description: edit user profile
  * @FilePath: /MobileApp/App/Containers/UserEditProfile/index.js
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { View, Text, Image, Keyboard, TouchableOpacity } from 'react-native';
 import { ScaledSheet, s } from 'react-native-size-matters';
 import { SafeAreaView } from 'react-navigation';
@@ -20,6 +20,8 @@ import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
 import { ApplicationStyles } from '../../Themes';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import ImagePicker from 'react-native-image-crop-picker';
+import ActionSheet from 'react-native-actionsheet';
 
 const inputs = [
   { placeholder: 'First Name', value: 'John' },
@@ -34,6 +36,8 @@ const inputs = [
  */
 function UserEditProfile(props) {
   const [showBottom, setShowBottom] = useState(true);
+  const [newAvatar, setNewAvatar] = useState(null);
+  const sheetRef = useRef();
   useEffect(() => {
     const keyboardShow = (e) => {
       setShowBottom(false);
@@ -48,25 +52,56 @@ function UserEditProfile(props) {
       Keyboard.removeListener('keyboardDidHide', keyboardHide);
     };
   }, []);
+  const showSheet = useCallback(() => {
+    sheetRef.current.show();
+  }, []);
+  const onPressGallery = useCallback(() => {
+    ImagePicker.openPicker({
+      //cropping: true,
+      includeBase64: true,
+      multiple: true,
+    }).then((image) => {
+      setNewAvatar(image[0]);
+    });
+  }, []);
+  const onPressCamera = useCallback(() => {
+    ImagePicker.openCamera({
+      cropping: true,
+      includeBase64: true,
+    }).then((image) => {
+      setNewAvatar(image[0]);
+    });
+  }, []);
   return (
     <View style={styles.container}>
       <SafeAreaView>
         <AppBar
-          rightButton={() => <RightButton title="SAVE" onPress={() => {}} />}
+          rightButton={() => (
+            <RightButton
+              title="SAVE"
+              onPress={() => {
+                NavigationService.goBack();
+              }}
+            />
+          )}
         />
       </SafeAreaView>
       <KeyboardAwareScrollView>
         <View style={styles.contentContainer}>
-          <UserAvatar uri={images.userDefaultAvatar}></UserAvatar>
-          <Image
-            style={{
-              width: s(30),
-              height: s(30),
-              marginTop: s(-20),
-              marginLeft: s(30),
-            }}
-            source={images.userUploadImage}
+          <UserAvatar
+            uri={newAvatar ? { uri: newAvatar.path } : images.userDefaultAvatar}
           />
+          <TouchableOpacity onPress={showSheet}>
+            <Image
+              style={{
+                width: s(30),
+                height: s(30),
+                marginTop: s(-20),
+                marginLeft: s(30),
+              }}
+              source={images.userUploadImage}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.contentContainer}>
           {inputs.map((item, index) => {
@@ -99,6 +134,20 @@ function UserEditProfile(props) {
           </TouchableOpacity>
         </SafeAreaView>
       )}
+      <ActionSheet
+        ref={sheetRef}
+        title={'Select a new picture'}
+        options={['Camera', 'Photo Gallery', 'Cancel']}
+        cancelButtonIndex={2}
+        //destructiveButtonIndex={1}
+        onPress={(index) => {
+          if (index === 0) {
+            onPressCamera();
+          } else if (index === 1) {
+            onPressGallery();
+          }
+        }}
+      />
     </View>
   );
 }

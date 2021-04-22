@@ -9,17 +9,12 @@ import metrics from '../../Themes/Metrics';
 import BottomSummary from './Summary';
 import DeliverInfo from './DeliverInfo';
 import NavigationService from '../../Navigation/NavigationService';
+import { useRoute } from '@react-navigation/native';
 
 //orderStatus：1,completed
 function CheckoutResume(props) {
-  const {
-    navigation: {
-      state: {
-        params: { orderStatus },
-      },
-    },
-  } = props;
-
+  const { params } = useRoute();
+  const { orderStatus } = params;
   const [orders, setOrders] = useState(
     [0, 1, 2, 3, 4].map((item, index) => ({
       id: index,

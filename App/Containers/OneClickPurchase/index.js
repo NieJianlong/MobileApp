@@ -19,17 +19,14 @@ import metrics from '../../Themes/Metrics';
 import fonts from '../../Themes/Fonts';
 import { PaymentTestData } from '../UserInfo/Config';
 import { ApplicationStyles } from '../../Themes';
+import { useRoute } from '@react-navigation/native';
 /**
  * @description: 1 Click purchase Screen
  * @param {*} props
  * @return {*}
  */
 function OneClickPurchase(props) {
-  const {
-    navigation: {
-      state: { params },
-    },
-  } = props;
+  const { params } = useRoute();
   const [selectIndex, setSelectIndex] = useState(999);
   return (
     <View style={styles.container}>

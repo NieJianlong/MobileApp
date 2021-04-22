@@ -6,9 +6,9 @@
  * @Description: In User Settings Edit
  * @FilePath: /MobileApp/App/Containers/UserCenter/index.js
  */
-import React from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { View, StatusBar } from 'react-native';
-import { ScaledSheet, vs } from 'react-native-size-matters';
+import { s, ScaledSheet, vs } from 'react-native-size-matters';
 import Colors from '../../Themes/Colors';
 import { Button } from '../../Components';
 import Fonts from '../../Themes/Fonts';
@@ -19,7 +19,7 @@ import UserHeader from './UserHeader';
 import images from '../../Themes/Images';
 import NavigationService from '../../Navigation/NavigationService';
 
-const items = [
+const salamiItem = [
   {
     title: 'Salami Credit',
     icon: images.userLogoImage,
@@ -27,6 +27,8 @@ const items = [
       NavigationService.navigate('SalamiCreditScreen');
     },
   },
+];
+const items = [
   {
     title: 'Notifications',
     icon: images.userIconImage,
@@ -81,20 +83,42 @@ const buttons = [
  * @return {*}
  */
 function UserCenter(props) {
+  const [islogin, setIslogin] = useState(false);
+  const setLogin = useCallback(() => {
+    setIslogin(true);
+  }, []);
+  const [serviceItems, setServiceItems] = useState([]);
+  useEffect(() => {
+    if (islogin) {
+      setServiceItems([...salamiItem, ...items]);
+    } else {
+      setServiceItems(items);
+    }
+  }, [islogin]);
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" translucent={false} backgroundColor={colors.background} />
+      <StatusBar
+        barStyle="dark-content"
+        translucent={false}
+        backgroundColor={colors.background}
+      />
       <View style={{ marginTop: vs(10) }}>
-        <UserHeader needSafeArea></UserHeader>
+        <UserHeader
+          needSafeArea
+          islogin={islogin}
+          setLogin={setLogin}
+        ></UserHeader>
       </View>
 
       {/* All the items usercenter */}
       <View style={styles.itemContainer}>
-        {items.map((item, i) => (
+        {/*hide salami credit when user not sign in*/}
+        {serviceItems.map((item, i) => (
           <View key={i}>
             <ItemBox {...item}></ItemBox>
           </View>
         ))}
+        {!islogin && <View style={{ height: s(94), width: s(94) }} />}
       </View>
       <View style={styles.buttonContainer}>
         {buttons.map((item, i) => (

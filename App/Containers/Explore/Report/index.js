@@ -7,6 +7,7 @@ import {
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { vs } from 'react-native-size-matters'
+import { useRoute } from '@react-navigation/native'
 
 import styles from './styles'
 
@@ -19,8 +20,10 @@ import NavigationService from '../../../Navigation/NavigationService'
 
 function Report(props) {
 
+    const { params } = useRoute()
+
     const onSubmit = () => {
-        props.navigation.state.params.onSubmit()
+        params.onSubmit()
         NavigationService.goBack()
     }
 

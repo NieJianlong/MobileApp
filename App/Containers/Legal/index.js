@@ -12,6 +12,7 @@ import {
     AppBar,
     SegmentedControl
 } from '../../Components'
+import NavigationService from '../../Navigation/NavigationService'
 
 import styles from './styles'
 
@@ -48,7 +49,7 @@ class LegalScreen extends Component {
                 >
                     <AppBar
                         showLogo={false}
-                        onPressBack={() => this.props.navigation.goBack()}
+                        onPressBack={() => NavigationService.goBack()}
                     />
 
                     <View style={styles.bodyContainer}>

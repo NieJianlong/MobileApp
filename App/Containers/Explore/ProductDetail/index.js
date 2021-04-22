@@ -950,6 +950,7 @@ function ProductDetail(props) {
                             <Button
                                 text={'VIEW CART'}
                                 backgroundColor={Colors.grey80}
+                                onPress={() => props.navigation.navigate('ShoppingCartScreen')}
                             />
                         </View>
 

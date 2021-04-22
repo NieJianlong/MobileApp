@@ -506,7 +506,7 @@ function ProductDetail(props) {
                     </View>
                 </View>
 
-                {isPurchased && this.renderChatOptions()}
+                {isPurchased && renderChatOptions()}
 
                 <Picker
                     onPress={toggleColorSheet}
@@ -571,9 +571,7 @@ function ProductDetail(props) {
             <InView
                 onChange={(isVisible) => {
                     if (isVisible) {
-                        // this.setState({
-                        //     tabIndex: 2
-                        // })
+                        
                     }
                 }}>
                 <View style={styles.storeInfoContainer}>
@@ -626,9 +624,7 @@ function ProductDetail(props) {
 
                 <InView onChange={(isVisible) => {
                     if (isVisible) {
-                        // this.setState({
-                        //     tabIndex: 3,
-                        // })
+                        
                     }
                 }}>
                     <Text style={styles.heading3Bold}>Product Reviews</Text>
@@ -838,7 +834,7 @@ function ProductDetail(props) {
                 onCloseEnd={() => {
                     setShowColorSheet(false)
                 }}
-                callbackNode={this.fall}
+                callbackNode={fall}
                 snapPoints={[vs(390), 0]}
                 initialSnap={showColorSheet ? 0 : 1}
                 title={'Color'}>

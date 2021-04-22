@@ -25,6 +25,7 @@ function AddNewAddress(props) {
   const [pincode, setPincode] = useState('');
   const [country, setCountry] = useState('');
   const [disable, setDisable] = useState(true);
+  const [landMark, setLandMark] = useState('');
   useEffect(() => {
     if (
       name.length === 0 ||
@@ -32,13 +33,24 @@ function AddNewAddress(props) {
       door.length === 0 ||
       mstate.length === 0 ||
       pincode.length === 0 ||
-      country.length === 0
+      country.length === 0 
+     
     ) {
       setDisable(true);
     } else {
       setDisable(false);
     }
-  }, [name, streetName, streetNum, door, city, mstate, pincode, country]);
+  }, [
+    name,
+    streetName,
+    streetNum,
+    door,
+    city,
+    mstate,
+    pincode,
+    country,
+   
+  ]);
 
   const inputs = [
     {
@@ -104,6 +116,14 @@ function AddNewAddress(props) {
       errorMessage: null,
       keyboardType: 'default',
       type: 'short',
+    },
+    {
+      placeholder: 'Land Mark',
+      onChangeText: (text) => setLandMark(text),
+      showError: false,
+      errorMessage: null,
+      keyboardType: 'default',
+      type: 'normal',
     },
   ];
 

@@ -112,6 +112,7 @@ function UserCenter(props) {
 
       {/* All the items usercenter */}
       <View style={styles.itemContainer}>
+        {/*hide salami credit when user not sign in*/}
         {serviceItems.map((item, i) => (
           <View key={i}>
             <ItemBox {...item}></ItemBox>

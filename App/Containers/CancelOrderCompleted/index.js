@@ -20,7 +20,9 @@ function CancelOrderCompleted(props) {
     subTextTip: 'You will receive the refund money in 3-5 business days',
     needButton: true,
     btnMsg: 'CONTINUE EXPLORING',
-    onPress: '',
+    onPress: () => {
+      NavigationService.navigate('ExploreScreen');
+    },
   };
   return (
     <View

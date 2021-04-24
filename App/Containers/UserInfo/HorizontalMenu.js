@@ -196,7 +196,6 @@ function HorizontalMenu(props) {
     <DynamicTabView
       data={MenuConfig}
       renderTab={(item, index) => {
-        console.log('renderItem', index);
         let component = <OnePurchase />;
         switch (item.key) {
           case 'Purchasing':

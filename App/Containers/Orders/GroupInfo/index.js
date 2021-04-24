@@ -48,7 +48,11 @@ function GroupInfoScreen(props) {
           NavigationService.navigate('InvoiceScreen')
         )}
         {renderAction(Images.star, 'Write a review about the product', () =>
-          NavigationService.navigate('RateOrderScreen')
+          NavigationService.navigate('RateOrderScreen', {
+            onPost: () => {
+              NavigationService.goBack();
+            },
+          })
         )}
         {renderAction(Images.user, 'Evaluate the seller', () =>
           NavigationService.navigate('RateSellerScreen')

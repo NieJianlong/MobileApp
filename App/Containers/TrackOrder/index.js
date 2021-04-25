@@ -8,8 +8,12 @@ import { AppBar } from '../../Components';
 import { ApplicationStyles } from '../../Themes';
 import Header from './header';
 import Trackers from './trackers';
+import { useRoute } from '@react-navigation/core';
 
 function TrackOrder(props) {
+  const {
+    params: { type },
+  } = useRoute();
   return (
     <View
       style={{
@@ -27,7 +31,9 @@ function TrackOrder(props) {
         style={styles.safeArea}
         edges={['top', 'right', 'left', 'bottom']}
       >
-        <AppBar title="Track Order" />
+        <AppBar
+          title={type === 'track' ? 'Track Order' : 'Order return status'}
+        />
         <ScrollView contentContainerStyle={{ paddingBottom: vs(64) }}>
           <View
             style={{
@@ -39,12 +45,13 @@ function TrackOrder(props) {
             <Text
               style={[ApplicationStyles.screen.txtRegular, { fontSize: s(14) }]}
             >
-              Estimated delivery date
+              {`Estimated ${type === 'track' ? 'delivery' : 'return'} date`}
             </Text>
+            <View style={{ height: 10, width: '100%' }} />
             <Text
               style={[
                 ApplicationStyles.screen.heading2Bold,
-                { fontSize: s(32) },
+                { fontSize: s(32), paddingTop: 10 },
               ]}
             >
               22 Oct 2020
@@ -59,7 +66,7 @@ function TrackOrder(props) {
               }}
             >
               <Header />
-              <Trackers />
+              <Trackers type={type} />
             </View>
           </View>
         </ScrollView>

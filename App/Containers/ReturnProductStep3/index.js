@@ -11,7 +11,7 @@ import AppConfig from '../../Config/AppConfig';
 import { vs, s, ScaledSheet } from 'react-native-size-matters';
 import fonts from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { AppBar } from '../../Components';
+import { AppBar, Button } from '../../Components';
 import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
 import Content from './Content';
@@ -41,7 +41,10 @@ function ReturnProductStep3(props) {
             return (
               <TouchableOpacity
                 onPress={() => {
-                  NavigationService.goBack();
+                  NavigationService.navigate('GroupInfoScreen', {
+                    type: 'returnstatus',
+                  });
+                  // NavigationService.goBack();
                 }}
               >
                 <Image
@@ -95,13 +98,25 @@ function ReturnProductStep3(props) {
               <Text
                 style={[
                   ApplicationStyles.screen.heading4Regular,
-                  { color: colors.black, marginLeft: s(5) },
+                  { color: colors.black, marginLeft: s(5), fontWeight: 'bold' },
                 ]}
               >
                 Dec 2, 2020
               </Text>
             </View>
           </View>
+        </View>
+      </SafeAreaView>
+      <SafeAreaView
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}
+      >
+        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+          <Button color={colors.primary} text="PRINT RETURN LABEL" />
         </View>
       </SafeAreaView>
     </View>

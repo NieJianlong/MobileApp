@@ -13,13 +13,9 @@ import {
     SegmentedControl
 } from '../../../Components'
 
-class ProductInfoScreen extends Component {
+function ProductInfoScreen(props) {
 
-    componentDidMount() {
-
-    }
-
-    renderBody() {
+    const renderBody = () => {
         return (
             <View style={styles.body}>
                 <SegmentedControl
@@ -42,21 +38,19 @@ class ProductInfoScreen extends Component {
         )
     }
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <StatusBar barStyle='dark-content' />
-                <SafeAreaView
-                    style={styles.container}
-                    edges={['top', 'left', 'right']}>
-                    <AppBar />
+    return (
+        <View style={styles.container}>
+            <StatusBar barStyle='dark-content' />
+            <SafeAreaView
+                style={styles.container}
+                edges={['top', 'left', 'right']}>
+                <AppBar />
 
-                    {this.renderBody()}
+                {renderBody()}
 
-                </SafeAreaView>
-            </View>
-        )
-    }
+            </SafeAreaView>
+        </View>
+    )
 }
 
 export default ProductInfoScreen

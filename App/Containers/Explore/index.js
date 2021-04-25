@@ -35,6 +35,8 @@ import { Colors, Images } from '../../Themes'
 import styles from './styles'
 import NavigationService from '../../Navigation/NavigationService'
 
+import * as jwt from '../../Apollo/jwt-request'
+
 const sliderWidth = Dimensions.get('window').width
 const carouselItemWidth = Dimensions.get('window').width
 
@@ -50,6 +52,8 @@ function Explore(props) {
     const categoriesFlatlist = useRef()
     const _carousel = useRef()
 
+    let [products, setProducts] = useState([])
+
     const [showLocationSheet, setShowLocationSheet] = useState(false)
     const [showAddLocationSheet, setShowAddLocationSheet] = useState(false)
     const [showAddAddressSheet, setShowAddAddressSheet] = useState(false)
@@ -61,6 +65,14 @@ function Explore(props) {
     const [showProductAsRows, setShowProductAsRows] = useState(true)
     const [sortOption, setSortOption] = useState(1)
     const [keyword, setKeyword] = useState('')
+
+    useEffect(() => {
+        getProductList()
+
+        return () => {
+           
+        }
+    }, [props]);
 
     useEffect(() => {
         if (showLocationSheet) {
@@ -109,6 +121,17 @@ function Explore(props) {
             }, 5000)
         }
     }, [showAccountActivatedSuccessfullyAlert])
+
+    const getProductList = async () => {
+        await jwt.runMockGetProductList()
+            .then(function (res) {
+                //setProducts(res.productList)
+                setProducts(JSON.parse(res.productList))
+            })
+            .catch(function (error) {
+
+            })
+    }
 
     const toggleAddressSheet = () => {
         setShowLocationSheet(!showLocationSheet)
@@ -722,75 +745,6 @@ const sortOptions = [
     'Last added',
     'Price: low to high',
     'Price: high to low',
-]
-
-const products = [
-    {
-        name: 'iPhone 11',
-        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
-        rating: 3.0,
-        ratingCount: 124,
-        retailPrice: 2345,
-        wholesalePrice: 1542,
-        orderClose: '22/12/2020',
-        inStock: 100,
-        orderCount: 24
-    },
-    {
-        name: 'iPhone 11',
-        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
-        rating: 4.0,
-        ratingCount: 124,
-        retailPrice: 2345,
-        wholesalePrice: 1542,
-        orderClose: '22/12/2020',
-        inStock: 100,
-        orderCount: 24
-    },
-    {
-        name: 'iPhone 11',
-        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
-        rating: 3.0,
-        ratingCount: 124,
-        retailPrice: 2345,
-        wholesalePrice: 1542,
-        orderClose: '22/12/2020',
-        inStock: 100,
-        orderCount: 24
-    },
-    {
-        name: 'iPhone 11',
-        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
-        rating: 3.0,
-        ratingCount: 124,
-        retailPrice: 2345,
-        wholesalePrice: 1542,
-        orderClose: '22/12/2020',
-        inStock: 100,
-        orderCount: 24
-    },
-    {
-        name: 'iPhone 11',
-        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
-        rating: 3.0,
-        ratingCount: 124,
-        retailPrice: 2345,
-        wholesalePrice: 1542,
-        orderClose: '22/12/2020',
-        inStock: 100,
-        orderCount: 24
-    },
-    {
-        name: 'iPhone 11',
-        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
-        rating: 3.0,
-        ratingCount: 124,
-        retailPrice: 2345,
-        wholesalePrice: 1542,
-        orderClose: '22/12/2020',
-        inStock: 100,
-        orderCount: 24
-    }
 ]
 
 const announcements = [

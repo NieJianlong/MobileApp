@@ -82,4 +82,87 @@ export const runMockOTPFlow = async (otpCode) => {
  
 
 }
+
+export const runMockGetProductList = async () => {
+    let headers = { 'Content-Type': 'application/json' }
+
+    let MockProductListJsonReponse = {"productList": JSON.stringify(products)}
+
+    let ret = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(MockProductListJsonReponse);
+        }, 300);
+    })
+
+    return ret
+}
+
+const products = [
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 4.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    },
+    {
+        name: 'iPhone 11',
+        picture: 'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+        rating: 3.0,
+        ratingCount: 124,
+        retailPrice: 2345,
+        wholesalePrice: 1542,
+        orderClose: '22/12/2020',
+        inStock: 100,
+        orderCount: 24
+    }
+]
  

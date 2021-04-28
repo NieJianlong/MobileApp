@@ -11,9 +11,9 @@ import { isIphoneX } from 'react-native-iphone-x-helper'
 
 import { Colors, Images } from '../Themes'
 
-class TabBar extends Component {
+function TabBar(props) {
 
-    getIconSource = (routeName, isFocused) => {
+    const getIconSource = (routeName, isFocused) => {
         switch (routeName) {
             case 'ExploreScreen':
                 return Images.logo1
@@ -28,39 +28,33 @@ class TabBar extends Component {
         }
     }
 
-    componentDidMount() {
-        
-    }
+    const { routes, index } = props.state
 
-    render() {
-        const { routes, index } = this.props.state
+    return (
+        <SafeAreaView edges={['bottom']} style={styles.safeAreaView}>
+            <View style={styles.container}>
+                {routes.map((route, idx) => {
+                    const isFocused = idx === index
+                    const onPress = () => {
+                        props.navigation.navigate(route.name)
+                    }
 
-        return (
-            <SafeAreaView edges={['bottom']} style={styles.safeAreaView}>
-                <View style={styles.container}>
-                    {routes.map((route, idx) => {
-                        const isFocused = idx === index
-                        const onPress = () => {
-                            this.props.navigation.navigate(route.name)
-                        }
-
-                        return (
-                            <TouchableOpacity
-                                style={styles.iconContainer}
-                                key={idx.toString()}
-                                onPress={onPress}>
-                                <Image
-                                    resizeMode={'contain'}
-                                    source={this.getIconSource(route.name, isFocused)}
-                                    style={[styles.icon, isFocused && { tintColor: Colors.primary }]}
-                                />
-                            </TouchableOpacity>
-                        )
-                    })}
-                </View>
-            </SafeAreaView>
-        )
-    }
+                    return (
+                        <TouchableOpacity
+                            style={styles.iconContainer}
+                            key={idx.toString()}
+                            onPress={onPress}>
+                            <Image
+                                resizeMode={'contain'}
+                                source={getIconSource(route.name, isFocused)}
+                                style={[styles.icon, isFocused && { tintColor: Colors.primary }]}
+                            />
+                        </TouchableOpacity>
+                    )
+                })}
+            </View>
+        </SafeAreaView>
+    )
 }
 
 export default TabBar

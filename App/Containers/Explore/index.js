@@ -54,7 +54,7 @@ function Explore(props) {
 
     let [products, setProducts] = useState([])
 
-    const [showLocationSheet, setShowLocationSheet] = useState(false)
+    const [showLocationSheet, setShowLocationSheet] = useState(true)
     const [showAddLocationSheet, setShowAddLocationSheet] = useState(false)
     const [showAddAddressSheet, setShowAddAddressSheet] = useState(false)
     const [showAccountActivatedSuccessfullyAlert, setShowAccountActivatedSuccessfullyAlert] = useState(false)

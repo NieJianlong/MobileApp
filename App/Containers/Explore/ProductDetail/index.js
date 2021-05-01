@@ -107,6 +107,18 @@ function ProductDetail(props) {
             setShowHeaderTabs(false)
             setShowFooter(false)
         }
+
+        if (y > 1430 && tabIndex === 0) {
+            setTabIndex(1)
+        } else if (y > 1840 && tabIndex === 1) {
+            setTabIndex(2)
+        } else if (y > 2020 && tabIndex === 2) {
+            setTabIndex(3)
+        } else if (y < 2020 && tabIndex === 3) {
+            setTabIndex(2)
+        } else if (y < 1840 && tabIndex === 2) {
+            setTabIndex(1)
+        }
     }
 
     const handleScrollEnd = (event) => {
@@ -538,7 +550,7 @@ function ProductDetail(props) {
             <InView
                 onChange={(isVisible) => {
                     if (isVisible) {
-                        setTabIndex(1)
+                        //setTabIndex(1)
                     }
                 }}>
                 <View style={styles.relatedProductsContainer}>
@@ -570,8 +582,8 @@ function ProductDetail(props) {
         return (
             <InView
                 onChange={(isVisible) => {
-                    if (isVisible) {
-                        
+                    if (isVisible && tabIndex === 1) {
+                        //setTabIndex(2)
                     }
                 }}>
                 <View style={styles.storeInfoContainer}>
@@ -623,8 +635,8 @@ function ProductDetail(props) {
             <View style={styles.productReviewContainer}>
 
                 <InView onChange={(isVisible) => {
-                    if (isVisible) {
-                        
+                    if (isVisible && tabIndex === 2) {
+                        //setTabIndex(3)
                     }
                 }}>
                     <Text style={styles.heading3Bold}>Product Reviews</Text>

@@ -7,7 +7,7 @@ import * as localStorage from './local-storage'
  * private appoloo client will read from local strogae for auth requests
  * 
  */
-const LOGIN_ENDPOINT = 'to do'
+const LOGIN_ENDPOINT = 'http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8081/api/sso/authentication/login'
 
 // Axios automatically serialize object to JSON
 export const runTokenFlow = async (userId, password) => {

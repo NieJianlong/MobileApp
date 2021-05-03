@@ -45,6 +45,16 @@ it('test determine user input', async () => {
 
 });
 
+it('test login screen', async () => {
+
+  let ret = validator.loginDifferentiator(VALID_EMAIL)
+  expect(ret.isValid).toBe(true)
+  expect(ret.isEmail).toBe(true)
+  ret = validator.loginDifferentiator(INVALID_EMAIL)
+  expect(ret.isValid).toBe(false)
+ 
+})
+
 //=============== Register validation
 
 it('test register screen', async () => {
@@ -79,6 +89,27 @@ it('test password rules', async () => {
   /** for now single rule is 8 chars min */
   expect( validator.isValidPassword(WEAK_VALID_PASSWORD)).toBe(true)
   expect( validator.isValidPassword(INVALID_PASSWORD)).toBe(false)
- 
+
+});
+
+//=================Check personal details
+
+let PERSONAL_DETAILS_CACHE_FIELDS = {
+  firstName: 'john',
+  lastName: 'doe',
+  phoneOrEmailNum: 'silly@billy.com',
+  streetName: 'buggy',
+  streetNum: '140',
+  door: '20',
+  city: 'London',
+  mstate: 'London',
+  postcode: 'HP630G',
+  country: 'UK'
+}
+
+it('check personal details', async () => {
+  let validatorResponse = validator.personalDetailsValidator(PERSONAL_DETAILS_CACHE_FIELDS)
+
+  console.log(JSON.stringify(validatorResponse))
 
 });

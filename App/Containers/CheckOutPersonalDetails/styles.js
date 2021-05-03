@@ -58,4 +58,11 @@ export default ScaledSheet.create({
     alignSelf: 'center',
     marginBottom: '10@vs',
   },
+  txtValidate: {
+    fontFamily: Fonts.primary,
+    color: Colors.error,
+    fontSize: '14@s',
+    fontWeight: '700',
+    margin: '12@vs',
+}
 });

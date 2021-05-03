@@ -22,7 +22,30 @@ import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import { useRoute } from '@react-navigation/native';
 
+// validation 
+import * as validator from '../../Validation'
+
 function CheckOutPersonalDetails(props) {
+
+  /**
+   * Valdiation and cache data, this will change as we evolve the apollo client
+   * we will need an object to post for the mutation
+   * we can validate non required fields
+   * we can validate fro XSS on everything
+   */
+  let PERSONAL_DETAILS_CACHE_FIELDS = {
+    firstName: '',
+    lastName: '',
+    phoneOrEmailNum: '',
+    streetName: '',
+    streetNum: '',
+    door: '',
+    city: '',
+    mstate: '',
+    postcode: '',
+    country: ''
+  }
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneOrEmailNum, setPhoneOrEmailNum] = useState('');
@@ -36,7 +59,10 @@ function CheckOutPersonalDetails(props) {
   const [company, setCompany] = useState('');
   const [taxid, setTaxid] = useState('');
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const [disable, setDisable] = useState(true);
+  const [disable, setDisable] = useState(false);
+
+  /** Validation, will be updated when style guidelines are provided */
+  let [validationDisplay, setValidationDisplay] = useState('')
 
   useEffect(() => {
     const keyboardShow = (e) => {
@@ -59,9 +85,9 @@ function CheckOutPersonalDetails(props) {
       phoneOrEmailNum.length === 0 ||
       streetName.length === 0 ||
       streetNum.length === 0 ||
-      door.length === 0 ||
+      // door.length === 0 ||  this is not a required field
       city.length === 0 ||
-      mstate.length === 0 ||
+      // state is not a required field mstate.length === 0 ||
       postcode.length === 0 ||
       country.length === 0
     ) {
@@ -81,7 +107,7 @@ function CheckOutPersonalDetails(props) {
     postcode,
     country,
     company,
-    taxid,
+    // taxid,
   ]);
   const inputs = [
     {
@@ -169,6 +195,34 @@ function CheckOutPersonalDetails(props) {
 
   const { params } = useRoute();
 
+  /**
+   * we will need values to create a grapphql mutation(update database)
+   * we will probably need a mix of fields for the database update from this screen and others
+   * so we will temporarly cache them until update is complete
+   * also we will need to do some validation as well
+   */
+  const updateForCacheAndValidation = () => {
+    PERSONAL_DETAILS_CACHE_FIELDS.firstName = firstName
+    PERSONAL_DETAILS_CACHE_FIELDS.lastName = lastName
+    PERSONAL_DETAILS_CACHE_FIELDS.streetName = streetName
+    PERSONAL_DETAILS_CACHE_FIELDS.streetNum = streetNum
+    PERSONAL_DETAILS_CACHE_FIELDS.door = door
+    PERSONAL_DETAILS_CACHE_FIELDS.city = city
+    PERSONAL_DETAILS_CACHE_FIELDS.mstate = mstate
+    PERSONAL_DETAILS_CACHE_FIELDS.postcode = postcode
+    PERSONAL_DETAILS_CACHE_FIELDS.country = country
+    // PERSONAL_DETAILS_CACHE_FIELDS.company = company
+    PERSONAL_DETAILS_CACHE_FIELDS.phoneOrEmailNum = phoneOrEmailNum
+    let validatorResponse = validator.personalDetailsValidator(PERSONAL_DETAILS_CACHE_FIELDS)
+
+    // do something with cache
+
+    return validatorResponse
+
+  }
+
+
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
@@ -182,9 +236,20 @@ function CheckOutPersonalDetails(props) {
               title="NEXT"
               disable={disable}
               onPress={() => {
-                NavigationService.navigate('CheckoutBillingDetailsScreen', {
-                  title: 'Please enter your billing details',
-                });
+                // Validation here, simply check in state and set validation message if requried
+                // make an object so code is more concise in validate function
+                let reporter = updateForCacheAndValidation()
+                console.log(JSON.stringify(reporter))
+                if (reporter.hasMissing) {
+                  setValidationDisplay(`${reporter.missingVal}`)
+                } else if(!reporter.validPhoneOrEmail) {
+                  setValidationDisplay('Valid Phone or Email Required')
+
+                } else {
+                  NavigationService.navigate('CheckoutBillingDetailsScreen', {
+                    title: 'Please enter your billing details',
+                  });
+                }
                 // NavigationService.goBack();
               }}
             />
@@ -233,10 +298,11 @@ function CheckOutPersonalDetails(props) {
             </View>
             <View style={{ marginTop: 20 }}>
               <Switch
-                onSwitch={() => {}}
+                onSwitch={() => { }}
                 label="Use as default address"
               ></Switch>
             </View>
+            <Text style={styles.txtValidate}>{validationDisplay}  </Text>
           </View>
         </KeyboardAwareScrollView>
       </SafeAreaView>

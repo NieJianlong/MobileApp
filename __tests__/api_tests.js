@@ -22,3 +22,18 @@ it('test login', async () => {
 
 });
 
+
+let PERSONAL_DETAILS_CACHE_FIELDS = {
+firstName:'', 
+lastName:'', 
+phoneOrEmailNum:'', 
+streetName:'', 
+streetNum:'', 
+door:'', 
+city:'', 
+mstate:'', 
+postcode:'', 
+country:''
+}
+
+

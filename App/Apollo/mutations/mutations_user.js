@@ -23,7 +23,7 @@ import { gql } from '@apollo/client';
  *  see @NEW_ENTITY_ID for possible default ID values
  */
 export const REGISTER_USER = gql`
- mutation RegisterUser($request: UserProfileRequestInput!) {
+ mutation RegisterUser($request: UserProfileRequest!) {
    registerUser(request: $request) {
     userId
    }
@@ -47,7 +47,7 @@ export const DELETE_USER_PROFILE = gql`
  * 
  */
 export const UPDATE_USER_PROFILE = gql`
- mutation UpdateUserProfile($request: UserProfileRequestInput!) {
+ mutation UpdateUserProfile($request: UserProfileRequest!) {
   updateUserProfile(request: $request) {
     userId
    }
@@ -80,7 +80,7 @@ export const UPDATE_USER_PROFILE = gql`
  *  see @NEW_ENTITY_ID for possible default ID values
  */
 export const REGISTER_BUYER = gql`
- mutation RegisterBuyer($request: BuyerProfileRequestInput!) {
+ mutation RegisterBuyer($request: BuyerProfileRequest!) {
   registerBuyer(request: $request) {
     userId
     buyerId
@@ -105,7 +105,7 @@ export const DELETE_BUYER_PROFILE = gql`
  * 
  */
 export const UPDATE_BUYER_PROFILE = gql`
- mutation UpdateBuyerProfile($request: BuyerProfileRequestInput!) {
+ mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
   updateBuyerProfile(request: $request) {
     userId
     buyerId
@@ -119,7 +119,7 @@ export const UPDATE_BUYER_PROFILE = gql`
  * 
  */
 export const CREATE_GUEST_BUYER = gql`
- mutation CreateGuestBuyer($request: BuyerProfileRequestInput!) {
+ mutation CreateGuestBuyer($request: BuyerProfileRequest!) {
   createGuestBuyer(request: $request) {
     userId
     buyerId
@@ -147,7 +147,7 @@ export const CREATE_GUEST_BUYER = gql`
  *  see @NEW_ENTITY_ID for possible default ID values
  */
 export const REGISTER_SELLER = gql`
- mutation RegisterSeller($request:SellerProfileRequestInput!) {
+ mutation RegisterSeller($request:SellerProfileRequest!) {
   registerSeller(request: $request) {
     userId
     sellerId
@@ -172,7 +172,7 @@ export const DELETE_SELLER_PROFILE = gql`
  * 
  */
 export const UPDATE_SELLER_PROFILE = gql`
- mutation UpdateSellerProfile($request: SellerProfileRequestInput!) {
+ mutation UpdateSellerProfile($request: SellerProfileRequest!) {
   updateSellerProfile(request: $request) {
     userId
     buyerId
@@ -197,9 +197,11 @@ export const UPDATE_SELLER_PROFILE = gql`
  * townCity:String villageArea:String district:String provinceState:String country:String areaCode:String
  * landMark:String pinCode:String addressType:AddressType referenceId:ID billingDetails:BillingDetailsResponse
  * createdAt:OffsetDateTime updatedAt:OffsetDateTime }
+ * 
+ * enum AddressType {SHIPPING, BILLING, BUSINESS, RETURN, COLLECTION_POINT,UNDEFINED}
  */
 export const CREATE_ADDRESS = gql`
-    mutation CreateAddress($request: AddressRequestInput!) {
+    mutation CreateAddress($request: AddressRequest!) {
      createAddress(request: $request) {
        addressId
       }
@@ -212,7 +214,7 @@ export const CREATE_ADDRESS = gql`
  * 
  */
 export const UPDATE_ADDRESS = gql`
-    mutation UpdateAddress($request: AddressRequestInput!) {
+    mutation UpdateAddress($request: AddressRequest!) {
       updateAddress(request: $request) {
        addressId
       }
@@ -237,7 +239,7 @@ export const DELETE_ADDRESS = gql`
  *  isDefaultPaymentType:Boolean paymentTypeDetails:String}
  */
 export const CREATE_PAYMENT_DETAIL = gql`
- mutation CreatePaymentDetail($request:PaymentDetailRequestInput!) {
+ mutation CreatePaymentDetail($request:PaymentDetailRequest!) {
   createPaymentDetail(request: $request) {
     paymentDetailId
     buyerId
@@ -262,7 +264,7 @@ export const DELETE_PAYMENT_DETAIL = gql`
  * 
  */
 export const UPDATE_PAYMENT_DETAIL = gql`
- mutation UpdatePaymentDetail($request: PaymentDetailRequestInput!) {
+ mutation UpdatePaymentDetail($request: PaymentDetailRequest!) {
   updatePaymentDetail(request: $request) {
     userId
     buyerId
@@ -278,7 +280,7 @@ export const UPDATE_PAYMENT_DETAIL = gql`
     buyerId:ID dateTime:OffsetDateTime }
  */
 export const CREATE_NOTIFICATION = gql`
- mutation CreateNotification($request:NotificationRequestInput!) {
+ mutation CreateNotification($request:NotificationRequest!) {
   createNotification(request: $request) {
     notificationId
     buyerId
@@ -303,7 +305,7 @@ export const DELETE_NOTIFICATION = gql`
  * 
  */
 export const UPDATE_NOTIFICATION = gql`
- mutation UpdateNotification($request: NotificationRequestInput!) {
+ mutation UpdateNotification($request: NotificationRequest!) {
   updateNotification(request: $request) {
     notificationId
     buyerId
@@ -320,7 +322,7 @@ export const UPDATE_NOTIFICATION = gql`
  * profileId:ID referenceId:ID }
  */
 export const CREATE_PREFERENCE = gql`
-    mutation CreatePreference($request:PreferenceRequestInput!) {
+    mutation CreatePreference($request:PreferenceRequest!) {
       createPreference(request: $request) {
         preferenceId
         profileId
@@ -345,7 +347,7 @@ export const DELETE_PREFERENCE = gql`
  * 
  */
 export const UPDATE_PREFERENCE = gql`
-    mutation UpdatePreference($request: PreferenceRequestInput!) {
+    mutation UpdatePreference($request: PreferenceRequest!) {
       updatePreference(request: $request) {
         preferenceId
         profileId
@@ -366,7 +368,7 @@ export const UPDATE_PREFERENCE = gql`
  * shareChannel:ShareChannel }
  */
 export const CREATE_SHARE_INFORMATION = gql`
-    mutation CreateShareInformation($request:ShareInformationRequestInput!) {
+    mutation CreateShareInformation($request:ShareInformationRequest!) {
       createShareInformation(request: $request) {
         shareInformationId
         buyerId
@@ -391,7 +393,7 @@ export const DELETE_SHARE_INFORMATION = gql`
  * 
  */
 export const UPDATE_SHARE_INFORMATION = gql`
-    mutation UpdateShareInformation($request: ShareInformationRequestInput!) {
+    mutation UpdateShareInformation($request: ShareInformationRequest!) {
       updateShareInformation(request: $request) {
         shareInformationId
         buyerId
@@ -406,7 +408,7 @@ export const UPDATE_SHARE_INFORMATION = gql`
  *  WishListRequest{ wishListId:ID profileId:ID productId:ID addedDateTime:OffsetDateTime }
  */
 export const CREATE_WISHLIST = gql`
- mutation CreateWishList($request:WishListRequestInput!) {
+ mutation CreateWishList($request:WishListRequest!) {
    createWishList(request: $request) {
     wishListId
     profileId
@@ -431,7 +433,7 @@ export const DELETE_WISHLIST = gql`
  * 
  */
 export const UPDATE_WISHLIST = gql`
- mutation UpdateWishList($request: WishListRequestInput!) {
+ mutation UpdateWishList($request: WishListRequest!) {
   updateWishList(request: $request) {
     wishListId
     profileId
@@ -450,7 +452,7 @@ export const UPDATE_WISHLIST = gql`
  *  createdAt:OffsetDateTime updatedAt:OffsetDateTime}
  */
 export const CREATE_BILLING_DETAILS = gql`
-  mutation CreateBillingDetails($request:BillingDetailsRequestInput!) {
+  mutation CreateBillingDetails($request:BillingDetailsRequest!) {
     createBillingDetails(request: $request) {
       billingDetailsId
       buyerId
@@ -475,7 +477,7 @@ export const DELETE_BILLING_DETAILS = gql`
  * 
  */
 export const UPDATE_BILLING_DETAILS = gql`
-  mutation UpdateBillingDetails($request: BillingDetailsRequestInput!) {
+  mutation UpdateBillingDetails($request: BillingDetailsRequest!) {
     updateBillingDetails(request: $request) {
       billingDetailsId
       buyerId
@@ -492,7 +494,7 @@ export const UPDATE_BILLING_DETAILS = gql`
  * chatStatus:ChatStatus chatOpenPeriodStartDate:OffsetDateTime chatOpenPeriodEndDate:OffsetDateTime}
  */
 export const CREATE_CHAT = gql`
- mutation CreateChat($request:ChatRequestInput!) {
+ mutation CreateChat($request:ChatRequest!) {
   createChat(request: $request) {
     chatId
     productListingId
@@ -517,7 +519,7 @@ export const DELETE_CHAT = gql`
  * 
  */
 export const UPDATE_CHAT = gql`
- mutation UpdateChat($request: ChatRequestInput!) {
+ mutation UpdateChat($request: ChatRequest!) {
   updateChat(request: $request) {
     chatId
     productListingId
@@ -534,7 +536,7 @@ export const UPDATE_CHAT = gql`
  * chatStatus:ChatStatus chatOpenPeriodStartDate:OffsetDateTime chatOpenPeriodEndDate:OffsetDateTime}
  */
 export const CREATE_CHAT_MESSAGE = gql`
- mutation CreateChatMessage($request:ChatRequestInput!) {
+ mutation CreateChatMessage($request:ChatRequest!) {
   createChatMessage(request: $request) {
     chatId
     productListingId
@@ -559,7 +561,7 @@ export const DELETE_CHAT_MESSAGE = gql`
  * 
  */
 export const UPDATE_CHAT_MESSAGE = gql`
- mutation UpdateChatMessage($request: ChatRequestInput!) {
+ mutation UpdateChatMessage($request: ChatRequest!) {
   updateChatMessage(request: $request) {
     chatMessageId
     chatId
@@ -575,7 +577,7 @@ export const UPDATE_CHAT_MESSAGE = gql`
  * ChatSubscriberRequest{ buyerId:ID!  chatId:ID!}
  */
 export const CREATE_CHAT_SUBSCRIBER = gql`
- mutation CreateChatSubscriber($request:ChatSubscriberRequestInput!) {
+ mutation CreateChatSubscriber($request:ChatSubscriberRequest!) {
   createChatSubscriber(request: $request) {
     buyerId
     chatId
@@ -600,7 +602,7 @@ export const DELETE_CHAT_SUBSCRIBER = gql`
  * 
  */
 export const UPDATE_CHAT_SUBSCRIBER = gql`
- mutation UpdateChatSubscriber($request: ChatSubscriberRequestInput!) {
+ mutation UpdateChatSubscriber($request: ChatSubscriberRequest!) {
   updateChatSubscriber(request: $request) {
     buyerId
     chatId
@@ -615,10 +617,11 @@ export const UPDATE_CHAT_SUBSCRIBER = gql`
 * DeliveryAddressGeoCoordinateRequest{ addressId:ID! coordinates:PointRequest }
 * 
 * DeliveryAddressGeoCoordinateResponse{addressId:ID! coordinates:PointResponse }
+* input PointRequest{ x:Float  y:Float }
 */
 export const CREATE_DELIVERY_ADDRESS_GEOCOORDINATE = gql`
-  mutation CreateDeliveryAddressGeoCoordinate($addressId: String!) {
-   createDeliveryAddressGeoCoordinate(request: DeliveryAddressGeoCoordinateRequest!) :DeliveryAddressGeoCoordinateResponse {
+  mutation CreateDeliveryAddressGeoCoordinate($request: DeliveryAddressGeoCoordinateRequest!) {
+   createDeliveryAddressGeoCoordinate(request: $request) {
      addressId
      coordinates
   }
@@ -634,7 +637,7 @@ export const CREATE_DELIVERY_ADDRESS_GEOCOORDINATE = gql`
  */
 export const DELETE_DELIVERY_ADDRESS_GEOCOORDINATE = gql`
   mutation DeleteDeliveryAddressGeoCoordinate($addressId: String!) {
-   deleteDeliveryAddressGeoCoordinate(addressId: String!)   
+   deleteDeliveryAddressGeoCoordinate(addressId:$addressId:)   
  }
  `;
 
@@ -646,8 +649,8 @@ export const DELETE_DELIVERY_ADDRESS_GEOCOORDINATE = gql`
  * 
  */
 export const UPDATE_DELIVERY_ADDRESS_GEOCOORDINATE = gql`
-  mutation UpdateDeliveryAddressGeoCoordinate($addressId: String!) {
-   updateDeliveryAddressGeoCoordinate(request: DeliveryAddressToOnlineStoreRequest!) :DeliveryAddressGeoCoordinateResponse {
+  mutation UpdateDeliveryAddressGeoCoordinate($request: DeliveryAddressToOnlineStoreRequest!) {
+   updateDeliveryAddressGeoCoordinate(request:$request)  {
      addressId
      coordinates
   }
@@ -664,8 +667,8 @@ export const UPDATE_DELIVERY_ADDRESS_GEOCOORDINATE = gql`
  * DeliveryAddressToOnlineStoreResponse {addressId:ID! storeId:ID!}
  */
 export const CREATE_DELIVERY_ADDRESS_TO_ONLINE_STORE = gql`
- mutation CreateDeliveryAddressToOnlineStore($addressId: String!) {
-   createDeliveryAddressToOnlineStore(request: DeliveryAddressToOnlineStoreRequest!) :DeliveryAddressToOnlineStoreResponse {
+ mutation CreateDeliveryAddressToOnlineStore($request: DeliveryAddressToOnlineStoreRequest!) {
+   createDeliveryAddressToOnlineStore(request: $request)  {
     addressId
     storeId
  }
@@ -684,7 +687,7 @@ export const CREATE_DELIVERY_ADDRESS_TO_ONLINE_STORE = gql`
  */
 export const DELETE_DELIVERY_ADDRESS_TO_ONLINE_STORE = gql`
  mutation DeleteDeliveryAddressToOnlineStore($addressId: String!) {
-  deleteDeliveryAddressToOnlineStore(addressId: String!)   
+  deleteDeliveryAddressToOnlineStore(addressId:$addressId)   
 }
 `;
 
@@ -696,8 +699,8 @@ export const DELETE_DELIVERY_ADDRESS_TO_ONLINE_STORE = gql`
  * 
  */
 export const UPDATE_DELIVERY_ADDRESS_TO_ONLINE_STORE = gql`
- mutation UpdateDeliveryAddressToOnlineStore($addressId: String!) {
-  updateDeliveryAddressToOnlineStore(request: DeliveryAddressToOnlineStoreRequest!) :DeliveryAddressToOnlineStoreResponse {
+ mutation UpdateDeliveryAddressToOnlineStore($request: DeliveryAddressGeoCoordinateRequest!) {
+  updateDeliveryAddressToOnlineStore(request:$request) {
     addressId
     storeId
  }
@@ -715,7 +718,7 @@ export const UPDATE_DELIVERY_ADDRESS_TO_ONLINE_STORE = gql`
  * shippingDate:OffsetDateTime expectedDeliveryDate:OffsetDateTime }
  */
 export const CREATE_SHIPPING_DETAIL = gql`
- mutation CreateShippingDetail($request:ShippingDetailRequestInput!) {
+ mutation CreateShippingDetail($request:ShippingDetailRequest!) {
   createShippingDetail(request: $request) {
     shippingId
     orderId
@@ -740,7 +743,7 @@ export const DELETE_SHIPPING_DETAIL = gql`
  * 
  */
 export const UPDATE_SHIPPING_DETAIL = gql`
- mutation UpdateShippingDetail($request: ShippingDetailRequestInput!) {
+ mutation UpdateShippingDetail($request: ShippingDetailRequest!) {
   updateShippingDetail(request: $request) {
     shippingId
     orderId
@@ -760,7 +763,7 @@ export const UPDATE_SHIPPING_DETAIL = gql`
  * shippingDate:OffsetDateTime expectedDeliveryDate:OffsetDateTime }
  */
 export const CREATE_SELLER_TO_ONLINE_STORE = gql`
- mutation CreateSellerToOnlineStore($request:SellerToOnlineStoreRequestInput!) {
+ mutation CreateSellerToOnlineStore($request:SellerToOnlineStoreRequest!) {
   createSellerToOnlineStore(request: $request) {
     sellerId
     storeId
@@ -785,7 +788,7 @@ export const DELETE_SELLER_TO_ONLINE_STORE = gql`
  * 
  */
 export const UPDATE_SELLER_TO_ONLINE_STORE = gql`
- mutation UpdateSellerToOnlineStore($request: SellerToOnlineStoreRequestInput!) {
+ mutation UpdateSellerToOnlineStore($request: SellerToOnlineStoreRequest!) {
   updateSellerToOnlineStore(request: $request) {
     sellerId
     storeId

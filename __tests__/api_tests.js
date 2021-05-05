@@ -47,6 +47,66 @@ it('test register user', async () => {
 });
 
 
+// node_modules/jest/bin/jest.js -t 'test create storeaddress'
+it('test create address', async () => {
+let AddressRequestInput = { addressId:NEW_ID, defaultAddress:true, addressType:'SHIPPING', 
+  streetAddress1:'Earth 3rd planet from sun', referenceId:NEW_ID }
+let client = await endPointClient(url)
+let ret = await client.mutate({
+mutation: CREATE_ADDRESS, 
+variables: {request: AddressRequestInput}
+})
+.then(result => result)
+.catch(err => { 
+  console.log("mutation error " + err)
+  return  });
+
+if (typeof ret !== 'undefined') {
+  console.log(ret.data.registerUser.userId)
+}
+
+});
+
+it('test create geoaddress', async () => {
+  let PointRequest = { x:1.2, y:1.3 }
+  let DeliveryAddressGeoCoordinateRequest = { addressId:NEW_ID, coordinates:PointRequest }
+  let client = await endPointClient(url)
+  let ret = await client.mutate({
+  mutation: CREATE_DELIVERY_ADDRESS_GEOCOORDINATE, 
+  variables: {request: DeliveryAddressGeoCoordinateRequest}
+  })
+  .then(result => result)
+  .catch(err => { 
+    console.log("mutation error " + err)
+    return  });
+  
+  if (typeof ret !== 'undefined') {
+    console.log(ret.data.registerUser.userId)
+  }
+  
+  });
+
+
+it('test create storeaddress', async () => {
+  let DeliveryAddressToOnlineStoreRequest = { addressId:NEW_ID, storeId:NEW_ID  }
+  let client = await endPointClient(url)
+  let ret = await client.mutate({
+  mutation: CREATE_DELIVERY_ADDRESS_TO_ONLINE_STORE, 
+  variables: {request: DeliveryAddressToOnlineStoreRequest}
+  })
+  .then(result => result)
+  .catch(err => { 
+    console.log("mutation error " + err)
+    return  });
+  
+  if (typeof ret !== 'undefined') {
+    console.log(ret.data.registerUser.userId)
+  }
+  
+  });
+  
+
+
 
 
 

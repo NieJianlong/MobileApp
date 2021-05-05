@@ -151,38 +151,7 @@ import { gql } from '@apollo/client';
     }
     `;
 
-
-/**
- *  @query  paymentDetails 
- * 
- * schema 
- * paymentDetails : [PaymentDetailResponse]
- * PaymentDetailResponse{paymentDetailId:ID buyerId:ID paymentType:String isDefaultPaymentType:Boolean 
- * paymentTypeDetails:String createdAt:OffsetDateTime updatedAt:OffsetDateTime}
- * 
- */
- export const PAYMENT_DETAILS = gql`
- query Addresses {
-    paymentDetails  {
-        paymentDetailId
-   }
- }
- `;
-
- /**
- * @query  paymentDetailById 
- * 
- * schema 
- * paymentDetailById(paymentDetailId : ID!) : PaymentDetailResponse
- * see @query addresses
- */
-  export const FIND_PAYMENT_DETAIL_BY_ID = gql`
-  query PaymentDetailById($paymentDetailId: ID!)  {
-    paymentDetailById(paymentDetailId: $paymentDetailId)  {
-        paymentDetailId
-    }
-  }
-  `;
+ 
 
   /**
  *  @query  paymentDetails 
@@ -417,38 +386,7 @@ import { gql } from '@apollo/client';
   }
   `;
 
-
-/**
- *  @query  chatMessages 
- * 
- * schema 
- * chatMessages : [ChatMessageResponse]
- * NotificationResponse{chatMessageId:ID chatId:ID postedBy:String msgText:String 
- * createdAt:OffsetDateTime updatedAt:OffsetDateTime}
- * 
- */
- export const CHAT_MESSAGES = gql`
- query ChatMessages {
-    chatMessages  {
-        chatMessageId
-   }
- }
- `;
-
- /**
- * @query  chatMessageById 
- * 
- * schema 
- * chatMessageById(chatMessageId : ID!) : ChatMessageResponse
- * see @query chatMessages
- */
-  export const FIND_CHAT_MESSAGE_BY_ID = gql`
-  query ChatMessageById($chatMessageId: ID!)  {
-    chatMessageById(chatMessageId: $chatMessageId)  {
-        chatMessageId
-    }
-  }
-  `;
+ 
 
 
 /**
@@ -583,42 +521,7 @@ import { gql } from '@apollo/client';
     }
   }
   `;
-
-
-/**
- *  @query  sellerToOnlineStores 
- * 
- * schema 
- * sellerToOnlineStores : [SellerToOnlineStoreResponse]
- * SellerToOnlineStoreResponse{sellerId:ID storeId:ID}
- * 
- */
- export const SELLER_TO_ONLINE_STORES  = gql`
- query SellerToOnlineStores {
-    sellerToOnlineStores  {
-        sellerId
-        storeId
-   
-   }
- }
- `;
-
- /**
- * @query  sellerToOnlineStoreById 
- * 
- * schema 
- * sellerToOnlineStoreById(sellerId : ID!, storeId : ID!) : SellerToOnlineStoreResponse
- * see @query sellerToOnlineStores
- */
-  export const FIND_SELLER_TO_ONLINE_STORE_BY_ID = gql`
-  query SellerToOnlineStoreById($sellerId: ID!, $storeId: ID)  {
-    sellerToOnlineStoreById(sellerId: $sellerId , storeId: $storeId)  {
-        sellerId
-        storeId
-    }
-  }
-  `;
-     
+ 
 
  /**
  *  @query  sellerToOnlineStores 

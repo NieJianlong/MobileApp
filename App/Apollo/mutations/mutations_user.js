@@ -616,7 +616,10 @@ export const CREATE_DELIVERY_ADDRESS_GEOCOORDINATE = gql`
   mutation CreateDeliveryAddressGeoCoordinate($request: DeliveryAddressGeoCoordinateRequest!) {
    createDeliveryAddressGeoCoordinate(request: $request) {
      addressId
-     coordinates
+     coordinates {
+       x
+       y
+     }
   }
   
  }

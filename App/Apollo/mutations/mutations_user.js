@@ -2,6 +2,9 @@ import { gql } from '@apollo/client';
 
 /** ================== User Management ================ */
 
+/** buyer id for public checkout */
+export const NEW_ID = "00000000-0000-0000-0000-000000000000"
+
 /**
  *  @mutation registerUser
  *  schema
@@ -35,7 +38,7 @@ export const REGISTER_USER = gql`
  * schema  see @mutation registerUser
  * 
  */
-export const DELETE_USER_PROFILE = gql`
+ export const DELETE_USER_PROFILE = gql`
  mutation DeleteUserProfile($userProfileId: ID!) {
   deleteUserProfile(userProfileId: $userProfileId)  
   }
@@ -53,8 +56,6 @@ export const UPDATE_USER_PROFILE = gql`
    }
   }
 `;
-
-
 
 /**
  *  @mutation registerBuyer
@@ -79,7 +80,7 @@ export const UPDATE_USER_PROFILE = gql`
  *  note javascript implements gql AST ID type as type String
  *  see @NEW_ENTITY_ID for possible default ID values
  */
-export const REGISTER_BUYER = gql`
+ export const REGISTER_BUYER = gql`
  mutation RegisterBuyer($request: BuyerProfileRequest!) {
   registerBuyer(request: $request) {
     userId
@@ -127,7 +128,6 @@ export const CREATE_GUEST_BUYER = gql`
   }
 `;
 
-
 /**
  *  @mutation registerSeller
  *  schema
@@ -146,7 +146,7 @@ export const CREATE_GUEST_BUYER = gql`
  *  note javascript implements gql AST ID type as type String
  *  see @NEW_ENTITY_ID for possible default ID values
  */
-export const REGISTER_SELLER = gql`
+ export const REGISTER_SELLER = gql`
  mutation RegisterSeller($request:SellerProfileRequest!) {
   registerSeller(request: $request) {
     userId
@@ -200,7 +200,7 @@ export const UPDATE_SELLER_PROFILE = gql`
  * 
  * enum AddressType {SHIPPING, BILLING, BUSINESS, RETURN, COLLECTION_POINT,UNDEFINED}
  */
-export const CREATE_ADDRESS = gql`
+    export const CREATE_ADDRESS = gql`
     mutation CreateAddress($request: AddressRequest!) {
      createAddress(request: $request) {
        addressId
@@ -231,6 +231,7 @@ export const DELETE_ADDRESS = gql`
       deleteAddress(addressId: $addressId)  
      }
    `;
+
 
 /**
  * @mutation createPaymentDetail
@@ -272,48 +273,46 @@ export const UPDATE_PAYMENT_DETAIL = gql`
   }
 `;
 
-
 /**
  * @mutation createNotification
  *  schema
  * NotificationRequest{ notificationId:ID text:String notificationStatus:NotificationStatus
     buyerId:ID dateTime:OffsetDateTime }
  */
-export const CREATE_NOTIFICATION = gql`
- mutation CreateNotification($request:NotificationRequest!) {
-  createNotification(request: $request) {
-    notificationId
-    buyerId
-   }
-  }
-`;
-
-/**
- * @mutation deleteNotification
- * schema  see @mutation createNotification
- * 
- */
-export const DELETE_NOTIFICATION = gql`
- mutation DeleteNotification($notificationId: ID!) {
-  deleteNotification(notificationId: $notificationId)  
-  }
-`;
-
-/**
- * @mutation updateNotification
- * schema  see @mutation createNotification
- * 
- */
-export const UPDATE_NOTIFICATION = gql`
- mutation UpdateNotification($request: NotificationRequest!) {
-  updateNotification(request: $request) {
-    notificationId
-    buyerId
-   }
-  }
-`;
-
-
+    export const CREATE_NOTIFICATION = gql`
+    mutation CreateNotification($request:NotificationRequest!) {
+     createNotification(request: $request) {
+       notificationId
+       buyerId
+      }
+     }
+   `;
+   
+   /**
+    * @mutation deleteNotification
+    * schema  see @mutation createNotification
+    * 
+    */
+   export const DELETE_NOTIFICATION = gql`
+    mutation DeleteNotification($notificationId: ID!) {
+     deleteNotification(notificationId: $notificationId)  
+     }
+   `;
+   
+   /**
+    * @mutation updateNotification
+    * schema  see @mutation createNotification
+    * 
+    */
+   export const UPDATE_NOTIFICATION = gql`
+    mutation UpdateNotification($request: NotificationRequest!) {
+     updateNotification(request: $request) {
+       notificationId
+       buyerId
+      }
+     }
+   `;
+   
 /**
  * @mutation createPreference
  *  schema
@@ -321,43 +320,39 @@ export const UPDATE_NOTIFICATION = gql`
  * PreferenceRequest{ preferenceId:ID  preferenceType:PreferenceType
  * profileId:ID referenceId:ID }
  */
-export const CREATE_PREFERENCE = gql`
-    mutation CreatePreference($request:PreferenceRequest!) {
-      createPreference(request: $request) {
-        preferenceId
-        profileId
-      }
-     }
-   `;
+ export const CREATE_PREFERENCE = gql`
+ mutation CreatePreference($request:PreferenceRequest!) {
+   createPreference(request: $request) {
+     preferenceId
+     profileId
+   }
+  }
+`;
 
 /**
- * @mutation deletePreference
- * schema  see @mutation createPreference
- * 
- */
+* @mutation deletePreference
+* schema  see @mutation createPreference
+* 
+*/
 export const DELETE_PREFERENCE = gql`
-    mutation DeletePreference($notificationId: ID!) {
-      deletePreference(notificationId: $notificationId)  
-     }
-   `;
+ mutation DeletePreference($notificationId: ID!) {
+   deletePreference(notificationId: $notificationId)  
+  }
+`;
 
 /**
- * @mutation updatePreference
- * schema  see @mutation createPreference
- * 
- */
+* @mutation updatePreference
+* schema  see @mutation createPreference
+* 
+*/
 export const UPDATE_PREFERENCE = gql`
-    mutation UpdatePreference($request: PreferenceRequest!) {
-      updatePreference(request: $request) {
-        preferenceId
-        profileId
-      }
-     }
-   `;
-
-
-
-
+ mutation UpdatePreference($request: PreferenceRequest!) {
+   updatePreference(request: $request) {
+     preferenceId
+     profileId
+   }
+  }
+`;
 
 /**
  * @mutation createShareInformation
@@ -367,39 +362,39 @@ export const UPDATE_PREFERENCE = gql`
  * buyerId:ID productId:ID hashtags:[String] shareTitle:String productPageUrl:String 
  * shareChannel:ShareChannel }
  */
-export const CREATE_SHARE_INFORMATION = gql`
-    mutation CreateShareInformation($request:ShareInformationRequest!) {
-      createShareInformation(request: $request) {
-        shareInformationId
-        buyerId
-      }
-     }
-   `;
+ export const CREATE_SHARE_INFORMATION = gql`
+ mutation CreateShareInformation($request:ShareInformationRequest!) {
+   createShareInformation(request: $request) {
+     shareInformationId
+     buyerId
+   }
+  }
+`;
 
 /**
- * @mutation deleteShareInformation
- * schema  see @mutation createShareInformation
- * 
- */
+* @mutation deleteShareInformation
+* schema  see @mutation createShareInformation
+* 
+*/
 export const DELETE_SHARE_INFORMATION = gql`
-    mutation DeleteShareInformation($shareInformationId: ID!) {
-      deleteShareInformation(shareInformationId: $shareInformationId)  
-     }
-   `;
+ mutation DeleteShareInformation($shareInformationId: ID!) {
+   deleteShareInformation(shareInformationId: $shareInformationId)  
+  }
+`;
 
 /**
- * @mutation updateShareInformation
- * schema  see @mutation createShareInformation
- * 
- */
+* @mutation updateShareInformation
+* schema  see @mutation createShareInformation
+* 
+*/
 export const UPDATE_SHARE_INFORMATION = gql`
-    mutation UpdateShareInformation($request: ShareInformationRequest!) {
-      updateShareInformation(request: $request) {
-        shareInformationId
-        buyerId
-      }
-     }
-   `;
+ mutation UpdateShareInformation($request: ShareInformationRequest!) {
+   updateShareInformation(request: $request) {
+     shareInformationId
+     buyerId
+   }
+  }
+`;
 
 /**
  * @mutation createWishList
@@ -407,7 +402,7 @@ export const UPDATE_SHARE_INFORMATION = gql`
  *  createWishList(request: WishListRequest!) : WishListResponse
  *  WishListRequest{ wishListId:ID profileId:ID productId:ID addedDateTime:OffsetDateTime }
  */
-export const CREATE_WISHLIST = gql`
+ export const CREATE_WISHLIST = gql`
  mutation CreateWishList($request:WishListRequest!) {
    createWishList(request: $request) {
     wishListId
@@ -485,7 +480,6 @@ export const UPDATE_BILLING_DETAILS = gql`
    }
  `;
 
-
 /**
  * @mutation createChat
  * schema  
@@ -493,7 +487,7 @@ export const UPDATE_BILLING_DETAILS = gql`
  * ChatRequest{ chatId:ID productListingId:ID  productName:String  muteFlagForCustomer:Boolean
  * chatStatus:ChatStatus chatOpenPeriodStartDate:OffsetDateTime chatOpenPeriodEndDate:OffsetDateTime}
  */
-export const CREATE_CHAT = gql`
+ export const CREATE_CHAT = gql`
  mutation CreateChat($request:ChatRequest!) {
   createChat(request: $request) {
     chatId
@@ -569,14 +563,13 @@ export const UPDATE_CHAT_MESSAGE = gql`
   }
 `;
 
-
 /**
  * @mutation createChatSubscriber
  * schema  
  * createChatSubscriber(request: ChatSubscriberRequest!) : ChatSubscriberResponse
  * ChatSubscriberRequest{ buyerId:ID!  chatId:ID!}
  */
-export const CREATE_CHAT_SUBSCRIBER = gql`
+ export const CREATE_CHAT_SUBSCRIBER = gql`
  mutation CreateChatSubscriber($request:ChatSubscriberRequest!) {
   createChatSubscriber(request: $request) {
     buyerId
@@ -629,17 +622,17 @@ export const CREATE_DELIVERY_ADDRESS_GEOCOORDINATE = gql`
  }
  `;
 
-/**
+ /**
  * @mutation deleteDeliveryAddressGeoCoordinate
  * 
  * schema   see @mutation createDeliveryAddressGeoCoordinate
  * 
  */
 export const DELETE_DELIVERY_ADDRESS_GEOCOORDINATE = gql`
-  mutation DeleteDeliveryAddressGeoCoordinate($addressId: String!) {
-   deleteDeliveryAddressGeoCoordinate(addressId:$addressId:)   
- }
- `;
+mutation DeleteDeliveryAddressGeoCoordinate($addressId: String!) {
+ deleteDeliveryAddressGeoCoordinate(addressId: $addressId)   
+}
+`;
 
 /**
  * @mutation updateDeliveryAddressGeoCoordinate
@@ -648,156 +641,152 @@ export const DELETE_DELIVERY_ADDRESS_GEOCOORDINATE = gql`
  * 
  * 
  */
-export const UPDATE_DELIVERY_ADDRESS_GEOCOORDINATE = gql`
-  mutation UpdateDeliveryAddressGeoCoordinate($request: DeliveryAddressToOnlineStoreRequest!) {
-   updateDeliveryAddressGeoCoordinate(request:$request)  {
-     addressId
-     coordinates
-  }
+ export const UPDATE_DELIVERY_ADDRESS_GEOCOORDINATE = gql`
+ mutation UpdateDeliveryAddressGeoCoordinate($request: DeliveryAddressToOnlineStoreRequest!) {
+  updateDeliveryAddressGeoCoordinate(request:$request)  {
+    addressId
+    coordinates
  }
- `;
+}
+`;
 
 
 /**
- * @mutation createDeliveryAddressToOnlineStore
- * 
- * schema
- * DeliveryAddressToOnlineStoreRequest{ addressId:ID! storeId:ID!}
- * 
- * DeliveryAddressToOnlineStoreResponse {addressId:ID! storeId:ID!}
- */
+* @mutation createDeliveryAddressToOnlineStore
+* 
+* schema
+* DeliveryAddressToOnlineStoreRequest{ addressId:ID! storeId:ID!}
+* 
+* DeliveryAddressToOnlineStoreResponse {addressId:ID! storeId:ID!}
+*/
 export const CREATE_DELIVERY_ADDRESS_TO_ONLINE_STORE = gql`
- mutation CreateDeliveryAddressToOnlineStore($request: DeliveryAddressToOnlineStoreRequest!) {
-   createDeliveryAddressToOnlineStore(request: $request)  {
-    addressId
-    storeId
- }
- 
+mutation CreateDeliveryAddressToOnlineStore($request: DeliveryAddressToOnlineStoreRequest!) {
+  createDeliveryAddressToOnlineStore(request: $request)  {
+   addressId
+   storeId
+}
+
 }
 `;
 
 /**
- * @mutation deleteDeliveryAddressToOnlineStore
- * 
- * schema   see @mutation createDeliveryAddressToOnlineStore
- * 
- * note confusing scalar response in mutation, fpr red hat looks like
- * {"data":{"deleteAddress":true}}
- * 
- */
+* @mutation deleteDeliveryAddressToOnlineStore
+* 
+* schema   see @mutation createDeliveryAddressToOnlineStore
+* 
+* note confusing scalar response in mutation, fpr red hat looks like
+* {"data":{"deleteAddress":true}}
+* 
+*/
 export const DELETE_DELIVERY_ADDRESS_TO_ONLINE_STORE = gql`
- mutation DeleteDeliveryAddressToOnlineStore($addressId: String!) {
-  deleteDeliveryAddressToOnlineStore(addressId:$addressId)   
+mutation DeleteDeliveryAddressToOnlineStore($addressId: String!) {
+ deleteDeliveryAddressToOnlineStore(addressId:$addressId)   
 }
 `;
 
 /**
- * @mutation updateDeliveryAddressToOnlineStore
- * 
- * schema see @mutation createDeliveryAddressToOnlineStore
- * 
- * 
- */
+* @mutation updateDeliveryAddressToOnlineStore
+* 
+* schema see @mutation createDeliveryAddressToOnlineStore
+* 
+* 
+*/
 export const UPDATE_DELIVERY_ADDRESS_TO_ONLINE_STORE = gql`
- mutation UpdateDeliveryAddressToOnlineStore($request: DeliveryAddressGeoCoordinateRequest!) {
-  updateDeliveryAddressToOnlineStore(request:$request) {
-    addressId
-    storeId
- }
- 
+mutation UpdateDeliveryAddressToOnlineStore($request: DeliveryAddressGeoCoordinateRequest!) {
+ updateDeliveryAddressToOnlineStore(request:$request) {
+   addressId
+   storeId
+}
+
 }
 `;
 
 /**
- * @mutation createShippingDetail
- * schema  
- * 
- * ShippingDetailRequest{ shippingId:ID orderId:ID shippingAddressId:ID carrier:String
- * carrierUrl:String trackingNum:String deliveryDate:OffsetDateTime shippingInstructions:String
- * shippingStatus:ShippingStatus shippingMethod:ShippingMethod failedDeliveryReason:String
- * shippingDate:OffsetDateTime expectedDeliveryDate:OffsetDateTime }
- */
+* @mutation createShippingDetail
+* schema  
+* 
+* ShippingDetailRequest{ shippingId:ID orderId:ID shippingAddressId:ID carrier:String
+* carrierUrl:String trackingNum:String deliveryDate:OffsetDateTime shippingInstructions:String
+* shippingStatus:ShippingStatus shippingMethod:ShippingMethod failedDeliveryReason:String
+* shippingDate:OffsetDateTime expectedDeliveryDate:OffsetDateTime }
+*/
 export const CREATE_SHIPPING_DETAIL = gql`
- mutation CreateShippingDetail($request:ShippingDetailRequest!) {
-  createShippingDetail(request: $request) {
-    shippingId
-    orderId
-   }
+mutation CreateShippingDetail($request:ShippingDetailRequest!) {
+ createShippingDetail(request: $request) {
+   shippingId
+   orderId
   }
+ }
 `;
 
 /**
- * @mutation deleteShippingDetail
- * schema  see @mutation createShippingDetail
- * 
- */
+* @mutation deleteShippingDetail
+* schema  see @mutation createShippingDetail
+* 
+*/
 export const DELETE_SHIPPING_DETAIL = gql`
- mutation DeleteShippingDetail($shippingId: ID!  {
-  deleteShippingDetail(shippingId: $shippingId )  
-  }
+mutation DeleteShippingDetail($shippingId: ID!)  {
+ deleteShippingDetail(shippingId: $shippingId )  
+ }
 `;
 
 /**
- * @mutation updateShippingDetail
- * schema  see @mutation createShippingDetail
- * 
- */
+* @mutation updateShippingDetail
+* schema  see @mutation createShippingDetail
+* 
+*/
 export const UPDATE_SHIPPING_DETAIL = gql`
- mutation UpdateShippingDetail($request: ShippingDetailRequest!) {
-  updateShippingDetail(request: $request) {
-    shippingId
-    orderId
-   }
+mutation UpdateShippingDetail($request: ShippingDetailRequest!) {
+ updateShippingDetail(request: $request) {
+   shippingId
+   orderId
   }
+ }
 `;
 
 
 /**
- * @mutation createSellerToOnlineStore
- * schema  
- * createSellerToOnlineStore(request: SellerToOnlineStoreRequest!) :SellerToOnlineStoreResponse
- * 
- * SellerToOnlineStoreRequest{ shippingId:ID orderId:ID shippingAddressId:ID carrier:String
- * carrierUrl:String trackingNum:String deliveryDate:OffsetDateTime shippingInstructions:String
- * shippingStatus:ShippingStatus shippingMethod:ShippingMethod failedDeliveryReason:String
- * shippingDate:OffsetDateTime expectedDeliveryDate:OffsetDateTime }
- */
+* @mutation createSellerToOnlineStore
+* schema  
+* createSellerToOnlineStore(request: SellerToOnlineStoreRequest!) :SellerToOnlineStoreResponse
+* 
+* SellerToOnlineStoreRequest{ shippingId:ID orderId:ID shippingAddressId:ID carrier:String
+* carrierUrl:String trackingNum:String deliveryDate:OffsetDateTime shippingInstructions:String
+* shippingStatus:ShippingStatus shippingMethod:ShippingMethod failedDeliveryReason:String
+* shippingDate:OffsetDateTime expectedDeliveryDate:OffsetDateTime }
+*/
 export const CREATE_SELLER_TO_ONLINE_STORE = gql`
- mutation CreateSellerToOnlineStore($request:SellerToOnlineStoreRequest!) {
-  createSellerToOnlineStore(request: $request) {
-    sellerId
-    storeId
-   }
+mutation CreateSellerToOnlineStore($request:SellerToOnlineStoreRequest!) {
+ createSellerToOnlineStore(request: $request) {
+   sellerId
+   storeId
   }
+ }
 `;
 
 /**
- * @mutation deleteSellerToOnlineStore
- * schema  see @mutation createSellerToOnlineStore
- * 
- */
+* @mutation deleteSellerToOnlineStore
+* schema  see @mutation createSellerToOnlineStore
+* 
+*/
 export const DELETE_SELLER_TO_ONLINE_STORE = gql`
- mutation DeleteSellerToOnlineStore($sellerId: ID!, $storeId: ID!) {
-  deleteSellerToOnlineStore(sellerId: $sellerId, storeId: $storeId )  
-  }
+mutation DeleteSellerToOnlineStore($sellerId: ID!, $storeId: ID!) {
+ deleteSellerToOnlineStore(sellerId: $sellerId, storeId: $storeId )  
+ }
 `;
 
 /**
- * @mutation updateSellerToOnlineStore
- * schema  see @mutation createSellerToOnlineStore
- * 
- */
+* @mutation updateSellerToOnlineStore
+* schema  see @mutation createSellerToOnlineStore
+* 
+*/
 export const UPDATE_SELLER_TO_ONLINE_STORE = gql`
- mutation UpdateSellerToOnlineStore($request: SellerToOnlineStoreRequest!) {
-  updateSellerToOnlineStore(request: $request) {
-    sellerId
-    storeId
-   }
+mutation UpdateSellerToOnlineStore($request: SellerToOnlineStoreRequest!) {
+ updateSellerToOnlineStore(request: $request) {
+   sellerId
+   storeId
   }
+ }
 `;
-
-
-
-
 
 

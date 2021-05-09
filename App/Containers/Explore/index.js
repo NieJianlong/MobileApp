@@ -16,7 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated from 'react-native-reanimated';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 
 import {
   Button,
@@ -28,21 +28,19 @@ import {
   ProductSearchBox,
 } from '../../Components';
 import CheckBox from './Components/CheckBox';
-import ProductItem from './Components/ProductItem';
+import ProductItem from './Components/ProductList/ProductItem';
 import ShareOptionList from './Components/ShareOptionList';
 
 import { Colors, Images } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
-
-import * as jwt from '../../Apollo/jwt-request';
+import colors from '../../Themes/Colors';
 
 const sliderWidth = Dimensions.get('window').width;
-const carouselItemWidth = Dimensions.get('window').width;
 
 function Explore(props) {
-  const FirstRoute = () => (
-    <View style={{ flex: 1, backgroundColor: '#ff4081' }} />
+  const productPage = () => (
+    <View style={{ flex: 1, backgroundColor: 'red' }} />
   );
 
   const SecondRoute = () => (
@@ -50,13 +48,19 @@ function Explore(props) {
   );
 
   const renderScene = SceneMap({
-    first: FirstRoute,
-    second: SecondRoute,
+    All: productPage,
+    Announcements: productPage,
+    Electronics: productPage,
+    'Food & Beverage': productPage,
+    Fashion: productPage,
   });
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: 'first', title: 'First' },
-    { key: 'second', title: 'Second' },
+    { key: 'All', title: 'All' },
+    { key: 'Announcements', title: 'Announcements' },
+    { key: 'Electronics', title: 'Electronics' },
+    { key: 'Food & Beverage', title: 'Food & Beverage' },
+    { key: 'Fashion', title: 'Fashion' },
   ]);
   const fall = useRef(new Animated.Value(0)).current;
 
@@ -66,8 +70,7 @@ function Explore(props) {
   const sortBySheet = useRef();
   const shareSheet = useRef();
   const categoriesFlatlist = useRef();
-
-  let [products, setProducts] = useState([]);
+  const tabView = useRef();
 
   const [showLocationSheet, setShowLocationSheet] = useState(true);
   const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
@@ -87,10 +90,11 @@ function Explore(props) {
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
-    getProductList();
-
-    return () => {};
-  }, [props]);
+    if (tabView) {
+      debugger;
+      console.log(tabView.current);
+    }
+  }, [tabView]);
 
   useEffect(() => {
     if (showLocationSheet) {
@@ -139,16 +143,6 @@ function Explore(props) {
       }, 5000);
     }
   }, [showAccountActivatedSuccessfullyAlert]);
-
-  const getProductList = async () => {
-    await jwt
-      .runMockGetProductList()
-      .then(function (res) {
-        //setProducts(res.productList)
-        setProducts(JSON.parse(res.productList));
-      })
-      .catch(function (error) {});
-  };
 
   const toggleAddressSheet = () => {
     setShowLocationSheet(!showLocationSheet);
@@ -555,7 +549,7 @@ function Explore(props) {
                 <TouchableOpacity
                   onPress={() => {
                     setSelectedCategory(index);
-                    scrollToIndex(index);
+                    //scrollToIndex(index);
                   }}
                   style={[
                     styles.categoryItemContainer,
@@ -609,7 +603,7 @@ function Explore(props) {
   const renderStickyParts = () => {
     return (
       <View>
-        {renderCategories()}
+        {/* {renderCategories()} */}
         {renderAddressBar()}
       </View>
     );
@@ -638,6 +632,7 @@ function Explore(props) {
   };
 
   const renderProduct = (item, index) => {
+    debugger;
     return (
       <ProductItem
         onPressShare={toggleShareSheet}
@@ -661,7 +656,7 @@ function Explore(props) {
     );
   };
 
-  const renderProductPage = ({ item, index }) => {
+  const renderProductPage = (index) => {
     if (index !== 1) {
       return (
         <View style={{ width: sliderWidth, height: products.length * vs(180) }}>
@@ -683,7 +678,28 @@ function Explore(props) {
     setSelectedCategory(index);
     scrollToIndex(index);
   };
-
+  const renderTabBar = (props) => (
+    <TabBar
+      {...props}
+      tabStyle={{ width: 'auto' }}
+      indicatorStyle={{ backgroundColor: colors.primary, marginTop: -40 }}
+      indicatorContainerStyle={{ marginTop: -40 }}
+      renderLabel={({ route, focused, color }) => (
+        <Text
+          style={[
+            styles.heading5Bold,
+            styles.categoryItemContainer,
+            // !focused && { borderBottomColor: 'transparent' },
+            { color: focused ? Colors.primary : Colors.grey60 },
+          ]}
+        >
+          {route.title}
+        </Text>
+      )}
+      scrollEnabled
+      style={{ backgroundColor: 'transparent' }}
+    />
+  );
   return (
     <View style={styles.container}>
       <StatusBar
@@ -709,9 +725,16 @@ function Explore(props) {
 
           {/* {renderProducList()} */}
           <TabView
+            // lazy
+            // renderLazyPlaceholder={<Text>refreshing</Text>}
             navigationState={{ index, routes }}
             renderScene={renderScene}
-            onIndexChange={setIndex}
+            onIndexChange={(index) => {
+              debugger;
+              setSelectedCategory(index);
+              setIndex(index);
+            }}
+            renderTabBar={renderTabBar}
             initialLayout={{ width: sliderWidth }}
           />
         </ScrollView>

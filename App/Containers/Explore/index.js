@@ -16,7 +16,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated from 'react-native-reanimated';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
-import Carousel from 'react-native-snap-carousel';
 import { TabView, SceneMap } from 'react-native-tab-view';
 
 import {
@@ -67,7 +66,6 @@ function Explore(props) {
   const sortBySheet = useRef();
   const shareSheet = useRef();
   const categoriesFlatlist = useRef();
-  const _carousel = useRef();
 
   let [products, setProducts] = useState([]);
 
@@ -557,7 +555,6 @@ function Explore(props) {
                 <TouchableOpacity
                   onPress={() => {
                     setSelectedCategory(index);
-                    _carousel.current.snapToItem(index);
                     scrollToIndex(index);
                   }}
                   style={[
@@ -577,17 +574,6 @@ function Explore(props) {
               );
             }}
           />
-          {/* <LinearGradient
-                        colors={['#ffffff00', Colors.white]}
-                        start={{ x: 0.0, y: 0.0 }} end={{ x: 1.0, y: 0.0 }}
-                        style={styles.v1}
-                    >
-                        <TouchableOpacity
-                            onPress={() => NavigationService.navigate('EditCategoriesScreen')}
-                            style={styles.btnAddContainer}>
-                            <Image source={Images.add1} style={styles.icAdd} />
-                        </TouchableOpacity>
-                    </LinearGradient> */}
 
           <TouchableOpacity
             onPress={() => NavigationService.navigate('EditCategoriesScreen')}
@@ -698,23 +684,6 @@ function Explore(props) {
     scrollToIndex(index);
   };
 
-  const renderProducList = () => {
-    return (
-      <View style={styles.prodListContainer}>
-        <Carousel
-          //loop
-          style={{ flex: 1 }}
-          ref={_carousel}
-          data={categories}
-          renderItem={renderProductPage}
-          sliderWidth={sliderWidth}
-          itemWidth={carouselItemWidth}
-          onBeforeSnapToItem={onSnapToItem}
-        />
-      </View>
-    );
-  };
-
   return (
     <View style={styles.container}>
       <StatusBar
@@ -730,6 +699,7 @@ function Explore(props) {
         <ScrollView
           stickyHeaderIndices={[1]}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ flexGrow: 1 }}
         >
           {renderHeader()}
 
@@ -737,7 +707,13 @@ function Explore(props) {
 
           {renderSortBar()}
 
-          {renderProducList()}
+          {/* {renderProducList()} */}
+          <TabView
+            navigationState={{ index, routes }}
+            renderScene={renderScene}
+            onIndexChange={setIndex}
+            initialLayout={{ width: sliderWidth }}
+          />
         </ScrollView>
       </SafeAreaView>
 

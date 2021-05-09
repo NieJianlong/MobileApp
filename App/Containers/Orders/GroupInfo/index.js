@@ -13,7 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles';
 import { AppBar } from '../../../Components';
 import ProductInfo from '../Components/ProductInfo';
-import ProductItem from '../../Explore/Components/ProductItem';
+import ProductItem from '../../Explore/Components/ProductList/ProductItem';
 import { Images } from '../../../Themes';
 import NavigationService from '../../../Navigation/NavigationService';
 import { useRoute } from '@react-navigation/core';

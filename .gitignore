@@ -23,7 +23,6 @@ DerivedData
 
 # Android/IntelliJ
 #
-build/
 .idea
 .prettierrc.js
 .gradle
@@ -69,3 +68,4 @@ android/app/src/main/res/drawable-xxxhdpi
 
 
 
+/snips.js

@@ -14,7 +14,7 @@ export default function ExploreHeader() {
 
   if (keyword === '') {
     return (
-      <View style={styles.header}>
+      <View style={[styles.header]}>
         <View style={styles.icSearch} />
         <Image
           source={Images.logo3}

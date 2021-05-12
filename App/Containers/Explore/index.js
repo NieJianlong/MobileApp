@@ -35,6 +35,7 @@ import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
 import AddressSheetContent from './Components/AddressSheetContent';
+import AddressBar from './Components/AddressBar';
 
 const sliderWidth = Dimensions.get('window').width;
 
@@ -77,20 +78,6 @@ function Explore(props) {
   const [showProductAsRows, setShowProductAsRows] = useState(true);
   const [sortOption, setSortOption] = useState(1);
   const [keyword, setKeyword] = useState('');
-  const toggleAddressSheet = useCallback(() => {
-    dispatch({
-      type: 'changSheetState',
-      payload: {
-        showSheet: true,
-        height: 380,
-        children: () => <AddressSheetContent />,
-        sheetTitle: 'Add your delivery address',
-      },
-    });
-  }, [dispatch]);
-  useEffect(() => {
-    toggleAddressSheet();
-  }, [toggleAddressSheet]);
 
   useEffect(() => {
     if (showAccountActivatedSuccessfullyAlert) {
@@ -224,35 +211,6 @@ function Explore(props) {
     }
   };
 
-  const renderAddressBar = () => {
-    return (
-      <View style={styles.addressBarContainer}>
-        <View style={styles.row}>
-          <Image source={Images.locationMed} style={styles.icLocation} />
-          <Text style={styles.heading5Regular}>
-            Deliver to - Tanil Nadu 12345
-          </Text>
-          <View style={styles.areaContainer}>
-            <Text style={styles.heading6Bold}>Area 4</Text>
-          </View>
-        </View>
-
-        <TouchableOpacity onPress={toggleAddressSheet}>
-          <Image source={Images.arrow_left} style={styles.icArrowDown} />
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
-  const renderStickyParts = () => {
-    return (
-      <View>
-        {/* {renderCategories()} */}
-        {renderAddressBar()}
-      </View>
-    );
-  };
-
   const renderSortBar = () => {
     return (
       <View style={styles.sortBarContainer}>
@@ -274,7 +232,6 @@ function Explore(props) {
       </View>
     );
   };
-
 
   const renderAnnoucementItem = (item, index) => {
     return (
@@ -348,7 +305,7 @@ function Explore(props) {
         >
           {renderHeader()}
 
-          {renderStickyParts()}
+          <AddressBar />
 
           {renderSortBar()}
 

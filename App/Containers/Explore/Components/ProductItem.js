@@ -8,13 +8,13 @@ import {
 import { s, ScaledSheet, vs } from 'react-native-size-matters'
 import NumberFormat from 'react-number-format'
 
-import { Fonts, Colors, ApplicationStyles, Images } from '../../../../Themes'
-import AppConfig from '../../../../Config/AppConfig'
-import NavigationService from '../../../../Navigation/NavigationService'
+import { Fonts, Colors, ApplicationStyles, Images } from '../../../Themes'
+import AppConfig from '../../../Config/AppConfig'
+import NavigationService from '../../../Navigation/NavigationService'
 import {
     StarRating,
     Progress
-} from '../../../../Components'
+} from '../../../Components'
 
 function ProductItem(props) {
 

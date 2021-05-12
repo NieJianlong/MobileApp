@@ -28,7 +28,7 @@ import {
   ProductSearchBox,
 } from '../../Components';
 import CheckBox from './Components/CheckBox';
-import ProductItem from './Components/ProductList/ProductItem';
+import ProductItem from './Components/ProductItem';
 import ShareOptionList from './Components/ShareOptionList';
 
 import { Colors, Images } from '../../Themes';

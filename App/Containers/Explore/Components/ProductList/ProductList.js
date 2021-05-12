@@ -2,8 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { FlatList } from 'react-native';
 import * as jwt from '../../../../Apollo/jwt-request';
 import ProductItem from './ProductItem';
-
+/*explore productlist component */
 export default function ProductPage(props) {
+  // if show it as row
   const { showProductAsRows } = props;
   const [showShareSheet, setShowShareSheet] = useState(false);
   let [products, setProducts] = useState([]);

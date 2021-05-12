@@ -21,6 +21,7 @@ export default function AddressBar() {
   useEffect(() => {
     toggleAddressSheet();
   }, [toggleAddressSheet]);
+
   return (
     <View style={styles.addressBarContainer}>
       <View style={styles.row}>

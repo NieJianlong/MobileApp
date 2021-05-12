@@ -12,7 +12,6 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  FlatList,
   Dimensions,
 } from 'react-native';
 import { vs, s } from 'react-native-size-matters';
@@ -21,21 +20,15 @@ import Animated from 'react-native-reanimated';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { AlertContext } from '../Root/GlobalContext';
 
-import {
-  BottomSheet,
-  Alert,
-  RadiusButton,
-  ProductSearchBox,
-} from '../../Components';
+import { BottomSheet, Alert, RadiusButton } from '../../Components';
 import CheckBox from './Components/CheckBox';
 import ProductItem from './Components/ProductItem';
 import ShareOptionList from './Components/ShareOptionList';
 import { Colors, Images } from '../../Themes';
 import styles from './styles';
-import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
-import AddressSheetContent from './Components/AddressSheetContent';
 import AddressBar from './Components/AddressBar';
+import ExploreHeader from './Components/ExploreHeader';
 
 const sliderWidth = Dimensions.get('window').width;
 
@@ -43,10 +36,6 @@ function Explore(props) {
   const { dispatch } = useContext(AlertContext);
   const productPage = () => (
     <View style={{ flex: 1, backgroundColor: 'red' }} />
-  );
-
-  const SecondRoute = () => (
-    <View style={{ flex: 1, backgroundColor: '#673ab7' }} />
   );
 
   const renderScene = SceneMap({
@@ -77,7 +66,6 @@ function Explore(props) {
   const [showSortBySheet, setShowSortBySheet] = useState(false);
   const [showProductAsRows, setShowProductAsRows] = useState(true);
   const [sortOption, setSortOption] = useState(1);
-  const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
     if (showAccountActivatedSuccessfullyAlert) {
@@ -165,52 +153,6 @@ function Explore(props) {
     );
   };
 
-  const onSearch = (keyword) => {
-    setKeyword(keyword);
-  };
-
-  const renderHeader = () => {
-    if (keyword === '') {
-      return (
-        <View style={styles.header}>
-          <View style={styles.icSearch} />
-
-          <Image
-            source={Images.logo3}
-            style={styles.logo}
-            resizeMode={'contain'}
-          />
-
-          <TouchableOpacity
-            onPress={() => {
-              NavigationService.navigate('ProductSearchScreen', {
-                onSearch: onSearch,
-              });
-            }}
-          >
-            <Image source={Images.search} style={styles.icSearch} />
-          </TouchableOpacity>
-        </View>
-      );
-    } else {
-      return (
-        <View style={[styles.header, { paddingVertical: vs(10) }]}>
-          <ProductSearchBox
-            disabled={true}
-            keyword={keyword}
-            onPressDelete={() => {
-              setKeyword('');
-              NavigationService.navigate('ProductSearchScreen', {
-                onSearch: onSearch,
-              });
-            }}
-            onPressBack={() => setKeyword('')}
-          />
-        </View>
-      );
-    }
-  };
-
   const renderSortBar = () => {
     return (
       <View style={styles.sortBarContainer}>
@@ -218,7 +160,6 @@ function Explore(props) {
           <Image source={Images.arrow_left} style={styles.icArrowDown2} />
           <Text style={styles.txtBold}>{sortOptions[sortOption]}</Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           onPress={() => {
             setShowProductAsRows(!showProductAsRows);
@@ -293,7 +234,6 @@ function Explore(props) {
         translucent
         backgroundColor={'rgba(0,0,0,0.0)'}
       />
-
       <SafeAreaView
         style={styles.mainContainer}
         edges={['top', 'left', 'right']}
@@ -303,12 +243,9 @@ function Explore(props) {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ flexGrow: 1 }}
         >
-          {renderHeader()}
-
+          <ExploreHeader />
           <AddressBar />
-
           {renderSortBar()}
-
           {/* {renderProducList()} */}
           <TabView
             // lazy

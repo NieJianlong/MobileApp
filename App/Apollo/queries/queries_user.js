@@ -18,7 +18,7 @@ import { gql } from '@apollo/client';
  * chatMessages:[ChatMessageResponse] }
  * 
  */
- export const USER_PROFILES = gql`
+export const USER_PROFILES = gql`
  query UserProfiles  {
     userProfiles  {
         userId
@@ -26,14 +26,14 @@ import { gql } from '@apollo/client';
  }
  `;
 
- /**
- *  @query  userProfile 
- * 
- * schema 
- * userProfile(userProfileId : ID!) : UserProfileResponse
- * see @query userProfiles
- */
-  export const FIND_USER_PROFILE = gql`
+/**
+*  @query  userProfile 
+* 
+* schema 
+* userProfile(userProfileId : ID!) : UserProfileResponse
+* see @query userProfiles
+*/
+export const FIND_USER_PROFILE = gql`
   query UserProfile($userProfileId: ID!)  {
     userProfile(userProfileId: $userProfileId)  {
          userId
@@ -56,7 +56,7 @@ import { gql } from '@apollo/client';
  * billingDetails:BillingDetailsResponse}
  * 
  */
- export const BUYER_PROFILES = gql`
+export const BUYER_PROFILES = gql`
  query BuyerProfiles  {
     buyerProfiles  {
         userId
@@ -64,14 +64,14 @@ import { gql } from '@apollo/client';
  }
  `;
 
- /**
- *  @query  buyerProfile 
- * 
- * schema 
- * buyerProfile(buyerId : ID!) : BuyerProfileResponse
- * see @query buyerProfiles
- */
-  export const FIND_BUYER_PROFILE = gql`
+/**
+*  @query  buyerProfile 
+* 
+* schema 
+* buyerProfile(buyerId : ID!) : BuyerProfileResponse
+* see @query buyerProfiles
+*/
+export const FIND_BUYER_PROFILE = gql`
   query BuyerProfile($buyerId: ID!)  {
     buyerProfile(buyerId: $buyerId)  {
          userId
@@ -80,34 +80,51 @@ import { gql } from '@apollo/client';
   `;
 
 
-  /**
- *  @query  sellerProfiles 
+/**
+ * @query  oneClickBuy 
  * 
  * schema 
- * sellerProfiles : [SellerProfileResponse]
- * SellerProfileResponse{sellerId:ID userName:String firstName:String lastName:String 
- * email:String phoneNumber:String userType: UserType createdAt:OffsetDateTime 
- * updatedAt:OffsetDateTime businessName:String geoLocation: String avatarUrl:String 
- * brandName:String biography:String govCompanyId:String vstGstNumber:String usersRating:String 
- * addresses:[AddressResponse]}
+ * oneClickBuy(buyerId : ID!) : OneClickBuyResponse
  * 
+ *  OneClickBuyResponse{defaultAddress: AddressResponse defaultPaymentMethod: PaymentDetailResponse}
  */
-   export const SELLER_PROFILES = gql`
+export const FIND_ONE_CLICK_BUY = gql`
+ query OneClickBuy($buyerId: ID!)  {
+    oneClickBuy(buyerId: $buyerId)  {
+      defaultAddress
+   }
+ }
+ `;
+
+
+/**
+*  @query  sellerProfiles 
+* 
+* schema 
+* sellerProfiles : [SellerProfileResponse]
+* SellerProfileResponse{sellerId:ID userName:String firstName:String lastName:String 
+* email:String phoneNumber:String userType: UserType createdAt:OffsetDateTime 
+* updatedAt:OffsetDateTime businessName:String geoLocation: String avatarUrl:String 
+* brandName:String biography:String govCompanyId:String vstGstNumber:String usersRating:String 
+* addresses:[AddressResponse]}
+* 
+*/
+export const SELLER_PROFILES = gql`
    query sellerProfiles {
     sellerProfiles  {
         sellerId
      }
    }
    `;
-  
-   /**
-   *  @query  sellerProfile 
-   * 
-   * schema 
-   * sellerProfile(sellerId : ID!) : SellerProfileResponse
-   * see @query sellerProfiles
-   */
-    export const FIND_SELLER_PROFILE = gql`
+
+/**
+*  @query  sellerProfile 
+* 
+* schema 
+* sellerProfile(sellerId : ID!) : SellerProfileResponse
+* see @query sellerProfiles
+*/
+export const FIND_SELLER_PROFILE = gql`
     query SellerProfile($sellerId: ID!)  {
         sellerProfile(sellerId: $sellerId)  {
             sellerId
@@ -128,22 +145,22 @@ import { gql } from '@apollo/client';
  * updatedAt:OffsetDateTime}
  * 
  */
-   export const ADDRESSES = gql`
+export const ADDRESSES = gql`
    query Addresses {
     addresses  {
         addressId
      }
    }
    `;
-  
-   /**
-   * @query  addressById 
-   * 
-   * schema 
-   * addressById(addressId : ID!) : AddressResponse
-   * see @query addresses
-   */
-    export const FIND_ADDRESS_BY_ID = gql`
+
+/**
+* @query  addressById 
+* 
+* schema 
+* addressById(addressId : ID!) : AddressResponse
+* see @query addresses
+*/
+export const FIND_ADDRESS_BY_ID = gql`
     query AddressById($addressId: ID!)  {
         addressById(addressId: $addressId)  {
             addressId
@@ -151,18 +168,109 @@ import { gql } from '@apollo/client';
     }
     `;
 
- 
+/**
+* @query  getSellerAddressesById 
+* 
+* schema 
+*  getSellerAddressesById(sellerId : ID!) : [AddressResponse]
+* see @query addresses
+*/
+export const FIND_SELLER_ADDRESS_BY_ID = gql`
+    query GetSellerAddressesById($sellerId: ID!)  {
+      getSellerAddressesById(sellerId: $sellerId)  {
+            addressId
+      }
+    }
+    `;
+/**
+* @query  getSellerDefaultAddressBySellerId 
+* 
+* schema 
+*  getSellerDefaultAddressBySellerId(sellerId : ID!) : AddressResponse
+* see @query addresses
+*/
+export const FIND_SELLER_DEFAULT_ADDRESS_BY_ID = gql`
+    query GetSellerDefaultAddressBySellerId($sellerId: ID!)  {
+      getSellerDefaultAddressBySellerId(sellerId: $sellerId)  {
+            addressId
+      }
+    }
+    `;
 
-  /**
- *  @query  paymentDetails 
- * 
- * schema 
- * paymentDetails : [PaymentDetailResponse]
- * PaymentDetailResponse{paymentDetailId:ID buyerId:ID paymentType:String isDefaultPaymentType:Boolean 
- * paymentTypeDetails:String createdAt:OffsetDateTime updatedAt:OffsetDateTime}
- * 
- */
- export const PAYMENT_DETAILS = gql`
+
+
+/**
+* @query  getBuyerAddressesById 
+* 
+* schema 
+*  getBuyerAddressesById(buyerId : ID!) : [AddressResponse]
+* see @query addresses
+*/
+export const FIND_BUYER_ADDRESS_BY_ID = gql`
+    query GetBuyerAddressesById($buyerId: ID!)  {
+      getBuyerAddressesById(buyerId: $buyerId)  {
+            addressId
+      }
+    }
+    `;
+
+/**
+* @query  getBuyerDefaultAddressByBuyerId 
+* 
+* schema 
+* getBuyerDefaultAddressByBuyerId(buyerId : ID!) : AddressResponse
+* see @query addresses
+*/
+export const FIND_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
+    query GetBuyerDefaultAddressByBuyerId($buyerId: ID!)  {
+      getBuyerDefaultAddressByBuyerId(buyerId: $buyerId)  {
+            addressId
+      }
+    }
+    `;
+
+
+
+/**
+* @query  getGuestBuyerAddressesById 
+* 
+* schema 
+*  getGuestBuyerAddressesById(sellerId : ID!) : [AddressResponse]
+* see @query addresses
+*/
+export const FIND_GUEST_BUYER_ADDRESS_BY_ID = gql`
+     query GetGuestBuyerAddressesById($buyerId: ID!)  {
+      getGuestBuyerAddressesById(buyerId: $buyerId)  {
+             addressId
+       }
+     }
+     `;
+
+/**
+* @query  getGuestBuyerAddressesById 
+* 
+* schema 
+*  getGuestBuyerDefaultAddressByBuyerId(sellerId : ID!) : AddressResponse
+* see @query addresses
+*/
+export const FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
+     query GetGuestBuyerDefaultAddressByBuyerId($buyerId: ID!)  {
+      getGuestBuyerDefaultAddressByBuyerId(buyerId: $buyerId)  {
+             addressId
+       }
+     }
+     `;
+ 
+/**
+*  @query  paymentDetails 
+* 
+* schema 
+* paymentDetails : [PaymentDetailResponse]
+* PaymentDetailResponse{paymentDetailId:ID buyerId:ID paymentType:String isDefaultPaymentType:Boolean 
+* paymentTypeDetails:String createdAt:OffsetDateTime updatedAt:OffsetDateTime}
+* 
+*/
+export const PAYMENT_DETAILS = gql`
  query Addresses {
     paymentDetails  {
         paymentDetailId
@@ -170,14 +278,14 @@ import { gql } from '@apollo/client';
  }
  `;
 
- /**
- * @query  paymentDetailById 
- * 
- * schema 
- * paymentDetailById(paymentDetailId : ID!) : PaymentDetailResponse
- * see @query addresses
- */
-  export const FIND_PAYMENT_DETAIL_BY_ID = gql`
+/**
+* @query  paymentDetailById 
+* 
+* schema 
+* paymentDetailById(paymentDetailId : ID!) : PaymentDetailResponse
+* see @query addresses
+*/
+export const FIND_PAYMENT_DETAIL_BY_ID = gql`
   query PaymentDetailById($paymentDetailId: ID!)  {
     paymentDetailById(paymentDetailId: $paymentDetailId)  {
         paymentDetailId
@@ -185,16 +293,17 @@ import { gql } from '@apollo/client';
   }
   `;
 
-    /**
- *  @query  preferences 
- * 
- * schema 
- * preferences : [PreferenceResponse]
- * PreferenceResponse{preferenceId:ID preferenceType:PreferenceType profileId:ID referenceId:ID 
- * createdAt:OffsetDateTime updatedAt:OffsetDateTime}
- * 
- */
- export const PREFERENCES = gql`
+
+/**
+*  @query  preferences 
+* 
+* schema 
+* preferences : [PreferenceResponse]
+* PreferenceResponse{preferenceId:ID preferenceType:PreferenceType profileId:ID referenceId:ID 
+* createdAt:OffsetDateTime updatedAt:OffsetDateTime}
+* 
+*/
+export const PREFERENCES = gql`
  query Preferences {
     preferences  {
         preferenceId
@@ -202,14 +311,14 @@ import { gql } from '@apollo/client';
  }
  `;
 
- /**
- * @query  preferenceById 
- * 
- * schema 
- * preferenceById(preferenceId : ID!) : PreferenceResponse
- * see @query preferences
- */
-  export const FIND_PREFERENCE_BY_ID = gql`
+/**
+* @query  preferenceById 
+* 
+* schema 
+* preferenceById(preferenceId : ID!) : PreferenceResponse
+* see @query preferences
+*/
+export const FIND_PREFERENCE_BY_ID = gql`
   query PreferenceById($paymentDetailId: ID!)  {
     preferenceById(preferenceId: $preferenceId)  {
         preferenceId
@@ -228,22 +337,22 @@ import { gql } from '@apollo/client';
  * shareChannel:ShareChannel createdAt:OffsetDateTime updatedAt:OffsetDateTime}
  * 
  */
-     export const SHAREINFORMATIONS = gql`
+export const SHAREINFORMATIONS = gql`
      query ShareInformations {
         shareInformations  {
             shareInformationId
        }
      }
      `;
-    
-     /**
-     * @query  shareInformationById 
-     * 
-     * schema 
-     * shareInformationById(shareInformationId : ID!) : ShareInformationResponse
-     * see @query shareInformations
-     */
-      export const FIND_SHAREINFORMATION_BY_ID = gql`
+
+/**
+* @query  shareInformationById 
+* 
+* schema 
+* shareInformationById(shareInformationId : ID!) : ShareInformationResponse
+* see @query shareInformations
+*/
+export const FIND_SHAREINFORMATION_BY_ID = gql`
       query ShareInformationById($shareInformationId: ID!)  {
         shareInformationById(shareInformationId: $shareInformationId)  {
             shareInformationId
@@ -251,7 +360,7 @@ import { gql } from '@apollo/client';
       }
       `;
 
-    
+
 /**
  *  @query  wishLists 
  * 
@@ -261,7 +370,7 @@ import { gql } from '@apollo/client';
  * createdAt:OffsetDateTime updatedAt:OffsetDateTime}
  * 
  */
- export const WISHLISTS = gql`
+export const WISHLISTS = gql`
  query WishLists {
     wishLists  {
         wishListId
@@ -269,14 +378,14 @@ import { gql } from '@apollo/client';
  }
  `;
 
- /**
- * @query  wishListById 
- * 
- * schema 
- * wishListById(wishListId : ID!) : WishListResponse
- * see @query wishLists
- */
-  export const FIND_WISHLIST_BY_ID = gql`
+/**
+* @query  wishListById 
+* 
+* schema 
+* wishListById(wishListId : ID!) : WishListResponse
+* see @query wishLists
+*/
+export const FIND_WISHLIST_BY_ID = gql`
   query WishListById($wishListId: ID!)  {
     wishListById(wishListId: $wishListId)  {
         wishListId
@@ -285,7 +394,7 @@ import { gql } from '@apollo/client';
   `;
 
 
-       
+
 /**
  *  @query  notifications 
  * 
@@ -295,7 +404,7 @@ import { gql } from '@apollo/client';
  * dateTime:OffsetDateTime createdAt:OffsetDateTime updatedAt:OffsetDateTime}
  * 
  */
- export const NOTIFICATIONS = gql`
+export const NOTIFICATIONS = gql`
  query Notifications {
     notifications  {
         notificationId
@@ -303,14 +412,14 @@ import { gql } from '@apollo/client';
  }
  `;
 
- /**
- * @query  notificationById 
- * 
- * schema 
- * notificationById(notificationId : ID!) : NotificationResponse
- * see @query notifications
- */
-  export const FIND_NOTIFICATIONS_BY_ID = gql`
+/**
+* @query  notificationById 
+* 
+* schema 
+* notificationById(notificationId : ID!) : NotificationResponse
+* see @query notifications
+*/
+export const FIND_NOTIFICATIONS_BY_ID = gql`
   query NotificationById($notificationId: ID!)  {
     notificationById(notificationId: $notificationId)  {
         notificationId
@@ -328,7 +437,7 @@ import { gql } from '@apollo/client';
  * createdAt:OffsetDateTime updatedAt:OffsetDateTime}
  * 
  */
- export const BILLINGDETAILS = gql`
+export const BILLINGDETAILS = gql`
  query BillingDetails {
     billingDetails  {
         billingDetailsId
@@ -336,14 +445,14 @@ import { gql } from '@apollo/client';
  }
  `;
 
- /**
- * @query  billingDetails 
- * 
- * schema 
- * billingDetailsById(billingDetailsId : ID!) : BillingDetailsResponse
- * see @query notifications
- */
-  export const FIND_BILLINGDETAILS_BY_ID = gql`
+/**
+* @query  billingDetails 
+* 
+* schema 
+* billingDetailsById(billingDetailsId : ID!) : BillingDetailsResponse
+* see @query notifications
+*/
+export const FIND_BILLINGDETAILS_BY_ID = gql`
   query BillingDetailsById($billingDetailsId: ID!)  {
     billingDetailsById(billingDetailsId: $billingDetailsId)  {
         billingDetailsId
@@ -363,7 +472,7 @@ import { gql } from '@apollo/client';
  * updatedAt:OffsetDateTime}
  * 
  */
- export const CHATS = gql`
+export const CHATS = gql`
  query Chats {
     chats  {
         chatId
@@ -371,14 +480,14 @@ import { gql } from '@apollo/client';
  }
  `;
 
- /**
- * @query  chatById 
- * 
- * schema 
- * chatById(chatId : ID!) : ChatResponse
- * see @query chats
- */
-  export const FIND_CHAT_BY_ID = gql`
+/**
+* @query  chatById 
+* 
+* schema 
+* chatById(chatId : ID!) : ChatResponse
+* see @query chats
+*/
+export const FIND_CHAT_BY_ID = gql`
   query ChatById($chatId: ID!)  {
     chatById(chatId: $chatId)  {
         chatId
@@ -386,7 +495,7 @@ import { gql } from '@apollo/client';
   }
   `;
 
- 
+
 
 
 /**
@@ -398,7 +507,7 @@ import { gql } from '@apollo/client';
  * createdAt:OffsetDateTime updatedAt:OffsetDateTime}
  * 
  */
- export const CHAT_MESSAGES = gql`
+export const CHAT_MESSAGES = gql`
  query ChatMessages {
     chatMessages  {
         chatMessageId
@@ -406,14 +515,14 @@ import { gql } from '@apollo/client';
  }
  `;
 
- /**
- * @query  chatMessageById 
- * 
- * schema 
- * chatMessageById(chatMessageId : ID!) : ChatMessageResponse
- * see @query chatMessages
- */
-  export const FIND_CHAT_MESSAGE_BY_ID = gql`
+/**
+* @query  chatMessageById 
+* 
+* schema 
+* chatMessageById(chatMessageId : ID!) : ChatMessageResponse
+* see @query chatMessages
+*/
+export const FIND_CHAT_MESSAGE_BY_ID = gql`
   query ChatMessageById($chatMessageId: ID!)  {
     chatMessageById(chatMessageId: $chatMessageId)  {
         chatMessageId
@@ -430,7 +539,7 @@ import { gql } from '@apollo/client';
  * ChatSubscriberResponse{buyerId:ID chatId:ID createdAt:OffsetDateTime updatedAt:OffsetDateTime}
  * 
  */
- export const CHAT_SUBSCRIBERS = gql`
+export const CHAT_SUBSCRIBERS = gql`
  query ChatSubscribers {
     chatSubscribers  {
         buyerId
@@ -439,14 +548,14 @@ import { gql } from '@apollo/client';
  }
  `;
 
- /**
- * @query  chatSubscriberById 
- * 
- * schema 
- * chatSubscriberById(buyerId : ID!, chatId: ID!) : ChatSubscriberResponse
- * see @query chatSubscribers
- */
-  export const FIND_CHAT_SUBSCRIBER_BY_ID = gql`
+/**
+* @query  chatSubscriberById 
+* 
+* schema 
+* chatSubscriberById(buyerId : ID!, chatId: ID!) : ChatSubscriberResponse
+* see @query chatSubscribers
+*/
+export const FIND_CHAT_SUBSCRIBER_BY_ID = gql`
   query ChatSubscriberById($buyerId: ID!, $chatId: ID!)  {
     chatSubscriberById(buyerId: $buyerId, chatId: $chatId)  {
         buyerId
@@ -463,7 +572,7 @@ import { gql } from '@apollo/client';
  * DeliveryAddressGeoCoordinateResponse{addressId:ID coordinates:PointResponse}
  * 
  */
- export const DELIVERY_ADDRESS_GEOCOORDINATES = gql`
+export const DELIVERY_ADDRESS_GEOCOORDINATES = gql`
  query DeliveryAddressGeoCoordinates {
     deliveryAddressGeoCoordinates  {
         addressId
@@ -472,14 +581,14 @@ import { gql } from '@apollo/client';
  }
  `;
 
- /**
- * @query  deliveryAddressGeoCoordinateById 
- * 
- * schema 
- * deliveryAddressGeoCoordinateById(addressId : ID!) : DeliveryAddressGeoCoordinateResponse
- * see @query deliveryAddressGeoCoordinates
- */
-  export const FIND_DELIVERY_ADDRESS_GEOCOORDINATE_BY_ID = gql`
+/**
+* @query  deliveryAddressGeoCoordinateById 
+* 
+* schema 
+* deliveryAddressGeoCoordinateById(addressId : ID!) : DeliveryAddressGeoCoordinateResponse
+* see @query deliveryAddressGeoCoordinates
+*/
+export const FIND_DELIVERY_ADDRESS_GEOCOORDINATE_BY_ID = gql`
   query DeliveryAddressGeoCoordinateById($addressId: ID!)  {
     deliveryAddressGeoCoordinateById(addressId: $addressId )  {
         addressId
@@ -496,9 +605,9 @@ import { gql } from '@apollo/client';
  * DeliveryAddressToOnlineStoreResponse{addressId:ID storeId:ID}
  * 
  */
- export const DELIVERY_ADDRESS_TO_ONLINE_STORES  = gql`
+export const DELIVERY_ADDRESS_TO_ONLINE_STORES = gql`
  query DeliveryAddressToOnlineStores {
-    deliveryAddressToOnlineStores  {
+  deliveryAddressesByOnlineStores  {
         addressId
         storeId
    
@@ -506,14 +615,14 @@ import { gql } from '@apollo/client';
  }
  `;
 
- /**
- * @query  deliveryAddressToOnlineStoreById 
- * 
- * schema 
- * deliveryAddressToOnlineStoreById(addressId : ID!, storeId : ID!) : DeliveryAddressToOnlineStoreResponse
- * see @query deliveryAddressToOnlineStores
- */
-  export const FIND_DELIVERY_ADDRESS_TO_ONLINE_STORE_BY_ID = gql`
+/**
+* @query  deliveryAddressToOnlineStoreById 
+* 
+* schema 
+* deliveryAddressToOnlineStoreById(addressId : ID!, storeId : ID!) : DeliveryAddressToOnlineStoreResponse
+* see @query deliveryAddressToOnlineStores
+*/
+export const FIND_DELIVERY_ADDRESS_TO_ONLINE_STORE_BY_ID = gql`
   query DeliveryAddressToOnlineStoreById($addressId: ID!, $storeId: ID)  {
     deliveryAddressToOnlineStoreById(addressId: $addressId , storeId: $storeId)  {
         addressId
@@ -521,17 +630,17 @@ import { gql } from '@apollo/client';
     }
   }
   `;
- 
 
- /**
- *  @query  sellerToOnlineStores 
- * 
- * schema 
- * sellerToOnlineStores : [SellerToOnlineStoreResponse]
- * SellerToOnlineStoreResponse{sellerId:ID storeId:ID}
- * 
- */
- export const SELLER_TO_ONLINE_STORES  = gql`
+
+/**
+*  @query  sellerToOnlineStores 
+* 
+* schema 
+* sellerToOnlineStores : [SellerToOnlineStoreResponse]
+* SellerToOnlineStoreResponse{sellerId:ID storeId:ID}
+* 
+*/
+export const SELLER_TO_ONLINE_STORES = gql`
  query SellerToOnlineStores {
     sellerToOnlineStores  {
         sellerId
@@ -541,14 +650,14 @@ import { gql } from '@apollo/client';
  }
  `;
 
- /**
- * @query  sellerToOnlineStoreById 
- * 
- * schema 
- * sellerToOnlineStoreById(sellerId : ID!, storeId : ID!) : SellerToOnlineStoreResponse
- * see @query sellerToOnlineStores
- */
-  export const FIND_SELLER_TO_ONLINE_STORE_BY_ID = gql`
+/**
+* @query  sellerToOnlineStoreById 
+* 
+* schema 
+* sellerToOnlineStoreById(sellerId : ID!, storeId : ID!) : SellerToOnlineStoreResponse
+* see @query sellerToOnlineStores
+*/
+export const FIND_SELLER_TO_ONLINE_STORE_BY_ID = gql`
   query SellerToOnlineStoreById($sellerId: ID!, $storeId: ID)  {
     sellerToOnlineStoreById(sellerId: $sellerId , storeId: $storeId)  {
         sellerId
@@ -556,7 +665,7 @@ import { gql } from '@apollo/client';
     }
   }
   `;
-     
+
 
 
 /**
@@ -571,7 +680,7 @@ import { gql } from '@apollo/client';
  * updatedAt:OffsetDateTime}
  * 
  */
- export const SHIPPINGDETAILS  = gql`
+export const SHIPPINGDETAILS = gql`
  query ShippingDetails {
     shippingDetails  {
         shippingId
@@ -580,25 +689,20 @@ import { gql } from '@apollo/client';
  }
  `;
 
- /**
- * @query  shippingDetailById 
- * 
- * schema 
- * shippingDetailById(shippingId : ID!) : ShippingDetailResponse
- * see @query shippingDetails
- */
-  export const SHIPPING_DETAIL_BY_ID = gql`
+/**
+* @query  shippingDetailById 
+* 
+* schema 
+* shippingDetailById(shippingId : ID!) : ShippingDetailResponse
+* see @query shippingDetails
+*/
+export const SHIPPING_DETAIL_BY_ID = gql`
   query ShippingDetailById($shippingId: ID! )  {
     shippingDetailById(shippingId: $shippingId  )  {
         shippingId
     }
   }
-  `;  
-    
-     
-     
-    
-    
+  `;
 
 
 
@@ -609,6 +713,11 @@ import { gql } from '@apollo/client';
 
 
 
-    
-    
+
+
+
+
+
+
+
 

@@ -8,14 +8,13 @@ export const NEW_ID = "00000000-0000-0000-0000-000000000000"
 /**
  *  @mutation registerUser
  *  schema
- *  registerUser(request: UserProfileRequest!): UserProfileResponse
+ *  registerUser(request: UserProfileRequestForCreate!): UserProfileResponse
  * 
- *  UserProfileRequest{ userId:ID buyerId:ID userName:String! password:StringfirstName:String
-    lastName:String email:String! phoneNumber:String userType: UserType geoLocation: String 
-    vatarUrl: String }
+ *  UserProfileRequestForCreate{ userName:String password:String firstName:String lastName:String 
+ *  email:String phoneNumber:String userType: UserType geoLocation: String }
  *
  *  UserProfileResponse{userId:ID userName:String firstName:String lastName:String email:String
-    phoneNumber:String userType: UserType createdAt:OffsetDateTime updatedAt:OffsetDateTime
+    phoneNumber:String userType: UserType createdAt:DateTime updatedAt:DateTime
     geoLocation: String avatarUrl: String addresses:[AddressResponse] 
     chatMessages:[ChatMessageResponse] }
  * 
@@ -26,7 +25,7 @@ export const NEW_ID = "00000000-0000-0000-0000-000000000000"
  *  see @NEW_ENTITY_ID for possible default ID values
  */
 export const REGISTER_USER = gql`
- mutation RegisterUser($request: UserProfileRequest!) {
+ mutation RegisterUser($request: UserProfileRequestForCreate!) {
    registerUser(request: $request) {
     userId
    }
@@ -60,31 +59,29 @@ export const UPDATE_USER_PROFILE = gql`
 /**
  *  @mutation registerBuyer
  *  schema
- *  registerBuyer(request: BuyerProfileRequest!) : BuyerProfileResponse
+ *  registerBuyer(request: BuyerProfileRequestForCreate!) : BuyerProfileResponse
  * 
- *  BuyerProfileRequest{userId:ID buyerId:ID password:String userName:String firstName:String
- *  lastName:String email:String phoneNumber:String userType: UserType oneClickPurchaseOn:Boolean
- *  guestBuyer:Boolean geoLocation: String areaRegion:String languages:[String] currencies:[String]
- *  avatarUrl: String applicationSettings: String salamiCreditAvailable: Int categoryPreferences:[String]
- *  productPreferences:[String] sellerPreferences:[String]}
+ *  BuyerProfileRequestForCreate{ password:String userName:String firstName:String lastName:String 
+ *  email:String phoneNumber:String userType: UserType oneClickPurchaseOn:Boolean guestBuyer:Boolean! 
+ *  geoLocation: String areaRegion:String languages:[String] currencies:[String]}
  *
- *  BuyerProfileResponse{userId:ID buyerId:ID firstName:String lastName:String email:String
- *  phoneNumber:String userType: UserType createdAt:OffsetDateTime updatedAt:OffsetDateTime
- *  oneClickPurchaseOn:Boolean guestBuyer:Boolean geoLocation: areaRegion:String
- *  languages:[String] currencies:[String] avatarUrl: String applicationSettings: String
- *  salamiCreditAvailable: Int addresses:[AddressResponse] paymentOptions:[PaymentDetailResponse]
- *  notifications:[NotificationResponse] preferences:[PreferenceResponse] wishLists:[WishListResponse]
- *  shareInformations:[ShareInformationResponse] categoryPreferences:[String] productPreferences:[String]
- *  sellerPreferences:[String] billingDetails:BillingDetailsResponse }
+ *  BuyerProfileResponse{userId:ID buyerId:ID userName:String firstName:String lastName:String 
+ *  email:String phoneNumber:String userType: UserType createdAt:DateTime updatedAt:DateTime 
+ *  oneClickPurchaseOn:Boolean guestBuyer:Boolean geoLocation: String areaRegion:String 
+ *  languages:[String] currencies:[String] applicationSettings: String 
+ *  paymentOptions:[PaymentDetailResponse] notifications:[NotificationResponse] 
+ *  preferences:[PreferenceResponse] wishLists:[WishListResponse] 
+ *  shareInformations:[ShareInformationResponse] categoryPreferences:[String] 
+ *  productPreferences:[String] sellerPreferences:[String] billingDetails:BillingDetailsResponse 
+ *  refundSalamiCredit:Float bonusSalamiCredit:Float bonusSalamiCreditExpire:DateTime }
  * 
- *  note javascript implements gql AST ID type as type String
- *  see @NEW_ENTITY_ID for possible default ID values
+ *  enum AddressType { SHIPPING, BILLING, BUSINESS, RETURN, COLLECTION_POINT,UNDEFINED }
  */
  export const REGISTER_BUYER = gql`
- mutation RegisterBuyer($request: BuyerProfileRequest!) {
+ mutation RegisterBuyer($request: BuyerProfileRequestForCreate!) {
   registerBuyer(request: $request) {
-    userId
     buyerId
+ 
    }
   }
 `;
@@ -108,7 +105,6 @@ export const DELETE_BUYER_PROFILE = gql`
 export const UPDATE_BUYER_PROFILE = gql`
  mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
   updateBuyerProfile(request: $request) {
-    userId
     buyerId
    }
   }
@@ -120,9 +116,8 @@ export const UPDATE_BUYER_PROFILE = gql`
  * 
  */
 export const CREATE_GUEST_BUYER = gql`
- mutation CreateGuestBuyer($request: BuyerProfileRequest!) {
+ mutation CreateGuestBuyer($request: BuyerProfileRequestForCreate!) {
   createGuestBuyer(request: $request) {
-    userId
     buyerId
    }
   }
@@ -133,10 +128,10 @@ export const CREATE_GUEST_BUYER = gql`
  *  schema
  *  registerSeller(request: SellerProfileRequest!) : SellerProfileResponse
  * 
- *  SellerProfileRequest{userId:ID sellerId:ID userName:String password:String firstName:String
- *  lastName:String email:String phoneNumber:String userType: UserType businessName:String
- *  geoLocation: String avatarUrl: String brandName:String biography:String  govCompanyId:String
- *  vstGstNumber:String usersRating:Float }
+ *  SellerProfileRequest{userName:String password:String firstName:String lastName:String 
+ *  email:String phoneNumber:String userType: UserType businessName:String geoLocation: String 
+ *  brandName:String biography:String govCompanyId:String vstGstNumber:String usersRating:Float 
+ *  sellerType: SellerType }
  *
  *  SellerProfileResponse{userId:ID sellerId:ID userName:String firstName:String lastName:String
  *  email:String phoneNumber:String userType: UserType createdAt:OffsetDateTime updatedAt:OffsetDateTime
@@ -185,12 +180,12 @@ export const UPDATE_SELLER_PROFILE = gql`
  * @mutation createAddress
  * 
  * schema
- * AddressRequest
- *  AddressRequest{ addressId:ID, flat:String, floor:String, defaultAddress:Boolean
-    block:String, building:String, houseNumber:String, streetAddress1:String
-    streetAddress2:String, streetAddress3:String, townCity:String, villageArea:String
-    district:String, provinceState:String, country:String, areaCode:String, landMark:String
-    pinCode:String, addressType:AddressType, referenceId:String}
+ *  createAddress(request: AddressRequestForCreate!) : AddressResponse
+ * 
+ *  AddressRequestForCreate{ flat:String floor:String defaultAddress:Boolean block:String building:String 
+ *  houseNumber:String streetAddress1:String streetAddress2:String streetAddress3:String 
+ *  townCity:String villageArea:String district:String provinceState:String country:String 
+ *  areaCode:String landMark:String pinCode:String addressType:AddressType referenceId:String!}
  *
  * AddressResponse {addressId:ID flat:String floor:String defaultAddress:Boolean block:String 
  * building:String houseNumber:String streetAddress1:String streetAddress2:String streetAddress3:String
@@ -201,7 +196,7 @@ export const UPDATE_SELLER_PROFILE = gql`
  * enum AddressType {SHIPPING, BILLING, BUSINESS, RETURN, COLLECTION_POINT,UNDEFINED}
  */
     export const CREATE_ADDRESS = gql`
-    mutation CreateAddress($request: AddressRequest!) {
+    mutation CreateAddress($request: AddressRequestForCreate!) {
      createAddress(request: $request) {
        addressId
       }
@@ -236,11 +231,12 @@ export const DELETE_ADDRESS = gql`
 /**
  * @mutation createPaymentDetail
  *  schema
- * PaymentDetailRequest{paymentDetailId:ID buyerId:ID paymentType:PaymentType 
- *  isDefaultPaymentType:Boolean paymentTypeDetails:String}
+ * createPaymentDetail(request: PaymentDetailRequestForCreate!) : PaymentDetailResponse
+ * PaymentDetailRequestForCreate{buyerId:ID! paymentType:PaymentType isDefaultPaymentType:Boolean 
+ * paymentTypeDetails:String}
  */
 export const CREATE_PAYMENT_DETAIL = gql`
- mutation CreatePaymentDetail($request:PaymentDetailRequest!) {
+ mutation CreatePaymentDetail($request:PaymentDetailRequestForCreate!) {
   createPaymentDetail(request: $request) {
     paymentDetailId
     buyerId
@@ -275,12 +271,13 @@ export const UPDATE_PAYMENT_DETAIL = gql`
 
 /**
  * @mutation createNotification
- *  schema
- * NotificationRequest{ notificationId:ID text:String notificationStatus:NotificationStatus
-    buyerId:ID dateTime:OffsetDateTime }
+ *   schema
+ * createNotification(request: NotificationRequestForCreate!) : NotificationResponse
+ * NotificationRequestForCreate{ text:String notificationStatus:NotificationStatus buyerId:ID! 
+ * dateTime:DateTime }
  */
     export const CREATE_NOTIFICATION = gql`
-    mutation CreateNotification($request:NotificationRequest!) {
+    mutation CreateNotification($request:NotificationRequestForCreate!) {
      createNotification(request: $request) {
        notificationId
        buyerId
@@ -316,12 +313,11 @@ export const UPDATE_PAYMENT_DETAIL = gql`
 /**
  * @mutation createPreference
  *  schema
- * createPreference(request: PreferenceRequest!) : PreferenceResponse
- * PreferenceRequest{ preferenceId:ID  preferenceType:PreferenceType
- * profileId:ID referenceId:ID }
+ * createPreference(request: PreferenceRequestForCreate!) : PreferenceResponse
+ * PreferenceRequestForCreate{ preferenceType:PreferenceType profileId:ID! referenceId:ID! }
  */
  export const CREATE_PREFERENCE = gql`
- mutation CreatePreference($request:PreferenceRequest!) {
+ mutation CreatePreference($request:PreferenceRequestForCreate!) {
    createPreference(request: $request) {
      preferenceId
      profileId
@@ -357,13 +353,12 @@ export const UPDATE_PREFERENCE = gql`
 /**
  * @mutation createShareInformation
  *  schema
- * createShareInformation(request: ShareInformationRequest!) : ShareInformationResponse
- * ShareInformationRequest{ shareInformationId:ID  targetEmailAddress:String shareMessage:String
- * buyerId:ID productId:ID hashtags:[String] shareTitle:String productPageUrl:String 
- * shareChannel:ShareChannel }
+ * createShareInformation(request: ShareInformationRequestForCreate!) : ShareInformationResponse
+ * ShareInformationRequestForCreate{targetEmailAddress:String shareMessage:String buyerId:ID! productId:ID! 
+ * hashtags:[String] shareTitle:String productPageUrl:String shareChannel:ShareChannel }
  */
  export const CREATE_SHARE_INFORMATION = gql`
- mutation CreateShareInformation($request:ShareInformationRequest!) {
+ mutation CreateShareInformation($request:ShareInformationRequestForCreate!) {
    createShareInformation(request: $request) {
      shareInformationId
      buyerId
@@ -399,11 +394,11 @@ export const UPDATE_SHARE_INFORMATION = gql`
 /**
  * @mutation createWishList
  *  schema
- *  createWishList(request: WishListRequest!) : WishListResponse
- *  WishListRequest{ wishListId:ID profileId:ID productId:ID addedDateTime:OffsetDateTime }
+ *  createWishList(request: WishListRequestForCreate!) : WishListResponse
+ *  WishListRequestForCreate{profileId:ID! productId:ID! addedDateTime:DateTime }
  */
  export const CREATE_WISHLIST = gql`
- mutation CreateWishList($request:WishListRequest!) {
+ mutation CreateWishList($request:WishListRequestForCreate!) {
    createWishList(request: $request) {
     wishListId
     profileId
@@ -439,15 +434,16 @@ export const UPDATE_WISHLIST = gql`
 /**
  * @mutation createBillingDetails
  * schema  
- * BillingDetailsRequest{ billingDetailsId:ID buyerId:ID firstName:String lastName:String
- *  companyName:String email:String phoneNumber:String billingAddressId:ID taxCode:String }
+ * createBillingDetails(request: BillingDetailsRequestForCreate!) : BillingDetailsResponse
+ * BillingDetailsRequestForCreate{ buyerId:ID! firstName:String lastName:String companyName:String 
+ * email:String phoneNumber:String billingAddressId:ID! taxCode:String }
  * 
  * BillingDetailsResponse { billingDetailsId:ID buyerId:ID firstName:String lastName:String
  *  companyName:String email:String phoneNumber:String billingAddressId:ID taxCode:String
  *  createdAt:OffsetDateTime updatedAt:OffsetDateTime}
  */
 export const CREATE_BILLING_DETAILS = gql`
-  mutation CreateBillingDetails($request:BillingDetailsRequest!) {
+  mutation CreateBillingDetails($request:BillingDetailsRequestForCreate!) {
     createBillingDetails(request: $request) {
       billingDetailsId
       buyerId
@@ -483,12 +479,12 @@ export const UPDATE_BILLING_DETAILS = gql`
 /**
  * @mutation createChat
  * schema  
- * eateChat(request: ChatRequest!) : ChatResponse
- * ChatRequest{ chatId:ID productListingId:ID  productName:String  muteFlagForCustomer:Boolean
- * chatStatus:ChatStatus chatOpenPeriodStartDate:OffsetDateTime chatOpenPeriodEndDate:OffsetDateTime}
+ * ceateChat(request: ChatRequestForCreate!) : ChatResponse
+ * ChatRequestForCreate{ productListingId:ID  productName:String  muteFlagForCustomer:Boolean
+ * chatStatus:ChatStatus chatOpenPeriodStartDate:DateTime chatOpenPeriodEndDate:DateTime}
  */
  export const CREATE_CHAT = gql`
- mutation CreateChat($request:ChatRequest!) {
+ mutation CreateChat($request:ChatRequestForCreate!) {
   createChat(request: $request) {
     chatId
     productListingId
@@ -525,9 +521,8 @@ export const UPDATE_CHAT = gql`
 /**
  * @mutation createChatMessage
  * schema  
- * createChatMessage(request: ChatMessageRequest!) : ChatMessageResponse
- * ChatMessageRequest{ chatId:ID productListingId:ID  productName:String  muteFlagForCustomer:Boolean
- * chatStatus:ChatStatus chatOpenPeriodStartDate:OffsetDateTime chatOpenPeriodEndDate:OffsetDateTime}
+ * createChatMessage(request: ChatMessageRequestForCreate!) : ChatMessageResponse
+ * ChatMessageRequestForCreate{chatId:ID! postedBy:String msgText:String }
  */
 export const CREATE_CHAT_MESSAGE = gql`
  mutation CreateChatMessage($request:ChatRequest!) {
@@ -566,11 +561,11 @@ export const UPDATE_CHAT_MESSAGE = gql`
 /**
  * @mutation createChatSubscriber
  * schema  
- * createChatSubscriber(request: ChatSubscriberRequest!) : ChatSubscriberResponse
- * ChatSubscriberRequest{ buyerId:ID!  chatId:ID!}
+ * createChatSubscriber(request: ChatSubscriberRequestForCreate!) : ChatSubscriberResponse
+ * ChatSubscriberRequestForCreate{ buyerId:ID!  chatId:ID!}
  */
  export const CREATE_CHAT_SUBSCRIBER = gql`
- mutation CreateChatSubscriber($request:ChatSubscriberRequest!) {
+ mutation CreateChatSubscriber($request:ChatSubscriberRequestForCreate!) {
   createChatSubscriber(request: $request) {
     buyerId
     chatId
@@ -607,13 +602,14 @@ export const UPDATE_CHAT_SUBSCRIBER = gql`
 * @mutation createDeliveryAddressGeoCoordinate
 * 
 * schema
-* DeliveryAddressGeoCoordinateRequest{ addressId:ID! coordinates:PointRequest }
+* createDeliveryAddressGeoCoordinate(request: DeliveryAddressGeoCoordinateRequestForCreate!) :DeliveryAddressGeoCoordinateResponse
+* DeliveryAddressGeoCoordinateRequestForCreate{ addressId:ID! coordinates:PointRequestForCreate }
 * 
 * DeliveryAddressGeoCoordinateResponse{addressId:ID! coordinates:PointResponse }
 * input PointRequest{ x:Float  y:Float }
 */
 export const CREATE_DELIVERY_ADDRESS_GEOCOORDINATE = gql`
-  mutation CreateDeliveryAddressGeoCoordinate($request: DeliveryAddressGeoCoordinateRequest!) {
+  mutation CreateDeliveryAddressGeoCoordinate($request: DeliveryAddressGeoCoordinateRequestForCreate!) {
    createDeliveryAddressGeoCoordinate(request: $request) {
      addressId
      coordinates {
@@ -658,12 +654,13 @@ mutation DeleteDeliveryAddressGeoCoordinate($addressId: String!) {
 * @mutation createDeliveryAddressToOnlineStore
 * 
 * schema
-* DeliveryAddressToOnlineStoreRequest{ addressId:ID! storeId:ID!}
+* createDeliveryAddressToOnlineStore(request: DeliveryAddressToOnlineStoreRequestForCreate!) :DeliveryAddressToOnlineStoreResponse
+* DeliveryAddressToOnlineStoreRequestForCreate{ addressId:ID! storeId:ID!}
 * 
 * DeliveryAddressToOnlineStoreResponse {addressId:ID! storeId:ID!}
 */
 export const CREATE_DELIVERY_ADDRESS_TO_ONLINE_STORE = gql`
-mutation CreateDeliveryAddressToOnlineStore($request: DeliveryAddressToOnlineStoreRequest!) {
+mutation CreateDeliveryAddressToOnlineStore($request: DeliveryAddressToOnlineStoreRequestForCreate!) {
   createDeliveryAddressToOnlineStore(request: $request)  {
    addressId
    storeId
@@ -707,14 +704,15 @@ mutation UpdateDeliveryAddressToOnlineStore($request: DeliveryAddressGeoCoordina
 /**
 * @mutation createShippingDetail
 * schema  
-* 
-* ShippingDetailRequest{ shippingId:ID orderId:ID shippingAddressId:ID carrier:String
-* carrierUrl:String trackingNum:String deliveryDate:OffsetDateTime shippingInstructions:String
-* shippingStatus:ShippingStatus shippingMethod:ShippingMethod failedDeliveryReason:String
-* shippingDate:OffsetDateTime expectedDeliveryDate:OffsetDateTime }
+* createShippingDetail(request: ShippingDetailRequestForCreate!) :ShippingDetailResponse
+*
+* ShippingDetailRequestForCreate{ orderId:ID! shippingAddressId:ID! carrier:String carrierUrl:String 
+  trackingNum:String deliveryDate:DateTime shippingInstructions:String shippingStatus:ShippingStatus 
+  shippingMethod:ShippingMethod failedDeliveryReason:String shippingDate:DateTime 
+  expectedDeliveryDate:DateTime }
 */
 export const CREATE_SHIPPING_DETAIL = gql`
-mutation CreateShippingDetail($request:ShippingDetailRequest!) {
+mutation CreateShippingDetail($request:ShippingDetailRequestForCreate!) {
  createShippingDetail(request: $request) {
    shippingId
    orderId
@@ -751,15 +749,12 @@ mutation UpdateShippingDetail($request: ShippingDetailRequest!) {
 /**
 * @mutation createSellerToOnlineStore
 * schema  
-* createSellerToOnlineStore(request: SellerToOnlineStoreRequest!) :SellerToOnlineStoreResponse
+* createSellerToOnlineStore(request: SellerToOnlineStoreRequestForCreate!) :SellerToOnlineStoreResponse
 * 
-* SellerToOnlineStoreRequest{ shippingId:ID orderId:ID shippingAddressId:ID carrier:String
-* carrierUrl:String trackingNum:String deliveryDate:OffsetDateTime shippingInstructions:String
-* shippingStatus:ShippingStatus shippingMethod:ShippingMethod failedDeliveryReason:String
-* shippingDate:OffsetDateTime expectedDeliveryDate:OffsetDateTime }
+* SellerToOnlineStoreRequestForCreate{   sellerId:ID!  storeId:ID!}
 */
 export const CREATE_SELLER_TO_ONLINE_STORE = gql`
-mutation CreateSellerToOnlineStore($request:SellerToOnlineStoreRequest!) {
+mutation CreateSellerToOnlineStore($request:SellerToOnlineStoreRequestForCreate!) {
  createSellerToOnlineStore(request: $request) {
    sellerId
    storeId

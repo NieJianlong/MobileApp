@@ -27,8 +27,8 @@ import * as validator from '../../Validation'
 import * as jwt from '../../Apollo/jwt-request'
 import * as storage from '../../Apollo/local-storage'
 import { useQuery } from '@apollo/client';
-/** here GET_USER_PROFILE is the query for the cache to get userProfileVar */
-import { GET_USER_PROFILE, userProfileVar } from '../../Apollo/cache'
+/** userProfileVar is the variable for the cache to get set  userProfile attributes */
+import { userProfileVar } from '../../Apollo/cache'
 import NavigationService from '../../Navigation/NavigationService'
 
 function LoginScreen(props) {
@@ -40,9 +40,6 @@ function LoginScreen(props) {
     let [showValidationAlert, setShowValidationAlert] = useState(false)
     let [loginInput, setLoginInput] = useState('')
     let [psswd, setPsswd] = useState('')
-
-    const profile = useQuery(GET_USER_PROFILE);
-
     const { params } = useRoute();
 
     useEffect(() => {
@@ -67,6 +64,7 @@ function LoginScreen(props) {
         }
     }, [props]);
 
+    // u can use this to skip login for some development, need to paste an access token to replace somejwt
     const onDebugSignIn = async () => {
         userProfileVar({
             email: loginInput,
@@ -75,47 +73,54 @@ function LoginScreen(props) {
         storage.setLocalStorageValue(storage.LOCAL_STORAGE_TOKEN_KEY, 'somejwt')
         NavigationService.navigate('MainScreen')
     }
-    const onSignIn = async () => {
+
+    const onSignIn = async() => {
         // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
         console.log('onSignIn' + `${loginInput}:::${psswd}`)// to-do remove
         let ret = validator.loginDifferentiator(loginInput)
-        if (ret.isValid) {
+         if (ret.isValid) {
             // we are good so we can test for email or phone
-            if (ret.isEmail) {
-                userProfileVar({
-                    email: loginInput,
-                    isAuth: true
-                })
+             if (ret.isEmail) {
+                let loginRequest = { username: 'billy@silly.com', password: '123456789'}
                 // console.log(profile.data.userProfileVar.email)// to-do remove
-                await jwt.runMockTokenFlow().then(function (res) {
+                await jwt.runTokenFlow(loginRequest).then(function (res) {
+                    if (typeof res !== 'undefined') {
+                        console.log(`login ok set auth`)
+                        userProfileVar({
+                            email: loginRequest.username,
+                            isAuth: true
+                        })
+         
+                        let access_token =res.data.access_token
+                        if (access_token === 'undefined') {
+                          console.log('no access token')
+                        } 
+                        storage.setLocalStorageValue(storage.LOCAL_STORAGE_TOKEN_KEY, access_token)
+                        NavigationService.navigate('MainScreen')
+                       }
                     // need check for status code = 200 
                     // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
-                    storage.setLocalStorageValue(storage.LOCAL_STORAGE_TOKEN_KEY, 'somejwt')
-                    if (psswd === 'longerWww2') {
-                        NavigationService.navigate('MainScreen')
-                    } else {
+                     else {
                         console.log('psswd is not correct')
                         toggleResetValidationAlert()
                     }
 
                 }).catch(function (err) {
                     // here we will need to deal with a  status` code 401 and refresh jwt and try again
-
                 })
-
-
-            } else {
-                // must be phone   
+             } else {
+            //     // must be phone   
                 console.log('phone is valid but not implemented')
-                userProfileVar({
-                    phone: loginInput,
-                    isAuth: true
-                })
-            }
-        } else {
-            console.log('data not valid')
-            toggleResetValidationAlert()
-        }
+                toggleResetValidationAlert()
+            //     userProfileVar({
+            //         phone: loginInput,
+            //         isAuth: true
+            //     })
+             }
+         } else {
+             console.log('data not valid')
+             toggleResetValidationAlert()
+         }
     }
 
     const toggleResetPasswordAlert = () => {
@@ -179,6 +184,7 @@ function LoginScreen(props) {
                         onSubmitEditing={() => passwordInput.getInnerRef().focus()}
                         returnKeyType={'next'}
                         onChangeText={text => setLoginInput(text)}
+                       
 
                     />
 
@@ -189,14 +195,15 @@ function LoginScreen(props) {
                         onSubmitEditing={onSignIn}
                         returnKeyType={'done'}
                         onChangeText={text => setPsswd(text)}
+                   
                     />
 
                     <View style={{ height: keyboardHeight - vs(100) }} />
 
                     <Button
 
-                        onPress={onDebugSignIn}
-                        // onPress={onSignIn}
+                       // onPress={onDebugSignIn}
+                        onPress={onSignIn}
                         text={'SIGN IN'}
                     />
 

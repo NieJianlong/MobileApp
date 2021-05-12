@@ -41,7 +41,10 @@ export const isValidEmail = (loginInput) => { return EMAIL_REG.test(loginInput) 
 export const isValidPhone = (loginInput) => { return INTNTL_PHONE_REG.test(loginInput) }
 
 /** min 8 chars for now */
-export const isValidPassword = (loginInput) => { return WEAK_PASSWORD_VALIDATION.test(loginInput) }
+export const isValidPassword = (loginInput) => { 
+    return true // for dev only
+    //return WEAK_PASSWORD_VALIDATION.test(loginInput)
+     }
 
 
 /** a function to decide an input is a valid phone or an email */

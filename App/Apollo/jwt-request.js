@@ -10,13 +10,35 @@ import * as localStorage from './local-storage'
 const LOGIN_ENDPOINT = 'http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8081/api/sso/authentication/login'
 
 // Axios automatically serialize object to JSON
-export const runTokenFlow = async (userId, password) => {
-
-    let loginRequest = { name: userId, password: password }
-    let headers = { 'Content-Type': 'application/json' }
+export const runTokenFlow = async( loginRequest) => {
 
 
-    let ret = await axios.post(LOGIN_ENDPOINT, loginRequest, headers)
+    let ret = await axios.post(LOGIN_ENDPOINT, loginRequest, 
+        {  headers: { 'Content-Type': 'application/json', 'accept': '*/*'  } })
+        .then(ret => ret)
+        .catch(err => {
+            console.log(`${err}`)
+            // to do error conditions
+
+        })
+
+  //  await localStorage.setLocalStorageValue(ret)
+
+    return ret
+
+}
+
+
+// Axios automatically serialize object to JSON
+export const runRefreshTokenFlow = async (token ) => {
+
+    let loginRequest = { username: 'massimo.03', password: 'massimo.03'}
+
+    let ret = await axios.post(LOGIN_ENDPOINT, loginRequest, 
+        {  headers: { 'Content-Type': 'application/json', 
+        'Refresh-Token':token, 
+        accept: '*/*'  } }
+        )
         .then(ret => ret)
         .catch(err => {
             console.log(`${err}`)

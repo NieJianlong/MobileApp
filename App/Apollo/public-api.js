@@ -34,8 +34,9 @@ const pubLink = setContext((_, { headers }) => {
 /**
  * gql endpoint
  */
+ let endpoint = 'http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8082/graphql'
 const httpLink = createHttpLink({
-    uri: `${BASE_GQL_URL}${URL_PATH_PART}`, fetch: fetch,
+    uri: endpoint, fetch: fetch,
 });
 
 /**

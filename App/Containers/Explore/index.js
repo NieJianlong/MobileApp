@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import {
   View,
   StatusBar,
@@ -17,6 +17,7 @@ import Animated from 'react-native-reanimated';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { AlertContext } from '../Root/GlobalContext';
 
 import {
   Button,
@@ -35,10 +36,12 @@ import { Colors, Images } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
+import AddressSheetContent from './Components/AddressSheetContent';
 
 const sliderWidth = Dimensions.get('window').width;
 
 function Explore(props) {
+  const { dispatch } = useContext(AlertContext);
   const productPage = () => (
     <View style={{ flex: 1, backgroundColor: 'red' }} />
   );
@@ -63,14 +66,9 @@ function Explore(props) {
     { key: 'Fashion', title: 'Fashion' },
   ]);
   const fall = useRef(new Animated.Value(0)).current;
-
-  const addressSheet = useRef();
-  const addLocationSheet = useRef();
-  const addAddressSheet = useRef();
   const sortBySheet = useRef();
   const shareSheet = useRef();
   const categoriesFlatlist = useRef();
-  const tabView = useRef();
 
   const [showLocationSheet, setShowLocationSheet] = useState(true);
   const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
@@ -90,51 +88,40 @@ function Explore(props) {
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
-    if (tabView) {
-      debugger;
-      console.log(tabView.current);
-    }
-  }, [tabView]);
+    dispatch({
+      type: 'changSheetState',
+      payload: {
+        showSheet: true,
+        height: 380,
+        children: () => <AddressSheetContent />,
+        sheetTitle: 'Add your delivery address',
+      },
+    });
+  }, [dispatch]);
 
-  useEffect(() => {
-    if (showLocationSheet) {
-      addressSheet.current.snapTo(0);
-    } else {
-      addressSheet.current.snapTo(1);
-    }
-  }, [showLocationSheet]);
+  // useEffect(() => {
+  //   if (showLocationSheet) {
+  //     addressSheet.current.snapTo(0);
+  //   } else {
+  //     addressSheet.current.snapTo(1);
+  //   }
+  // }, [showLocationSheet]);
 
-  useEffect(() => {
-    if (showAddLocationSheet) {
-      addLocationSheet.current.snapTo(0);
-    } else {
-      addLocationSheet.current.snapTo(1);
-    }
-  }, [showAddLocationSheet]);
+  // useEffect(() => {
+  //   if (showSortBySheet) {
+  //     sortBySheet.current.snapTo(0);
+  //   } else {
+  //     sortBySheet.current.snapTo(1);
+  //   }
+  // }, [showSortBySheet]);
 
-  useEffect(() => {
-    if (showAddAddressSheet) {
-      addAddressSheet.current.snapTo(0);
-    } else {
-      addAddressSheet.current.snapTo(1);
-    }
-  }, [showAddAddressSheet]);
-
-  useEffect(() => {
-    if (showSortBySheet) {
-      sortBySheet.current.snapTo(0);
-    } else {
-      sortBySheet.current.snapTo(1);
-    }
-  }, [showSortBySheet]);
-
-  useEffect(() => {
-    if (showShareSheet) {
-      shareSheet.current.snapTo(0);
-    } else {
-      shareSheet.current.snapTo(1);
-    }
-  }, [showShareSheet]);
+  // useEffect(() => {
+  //   if (showShareSheet) {
+  //     shareSheet.current.snapTo(0);
+  //   } else {
+  //     shareSheet.current.snapTo(1);
+  //   }
+  // }, [showShareSheet]);
 
   useEffect(() => {
     if (showAccountActivatedSuccessfullyAlert) {
@@ -148,13 +135,6 @@ function Explore(props) {
     setShowLocationSheet(!showLocationSheet);
   };
 
-  const toggleAddLocationSheet = () => {
-    setShowAddLocationSheet(!showAddLocationSheet);
-  };
-
-  const toggleAddAddressSheet = () => {
-    setShowAddAddressSheet(!showAddAddressSheet);
-  };
 
   const toggleSortBySheet = () => {
     setShowSortBySheet(!showSortBySheet);
@@ -164,245 +144,7 @@ function Explore(props) {
     setShowShareSheet(!showShareSheet);
   };
 
-  const renderAddressItem = (address) => {
-    return (
-      <View style={styles.pickupLocationContainer}>
-        <Image style={styles.pickupLocationIcon} source={Images.locationMed} />
-
-        <View style={{ marginLeft: s(10) }}>
-          <Text style={styles.heading5Bold}>Seller Address 00</Text>
-          <Text style={styles.txtRegular}>Tamil Nadu 12345, Area 4</Text>
-        </View>
-
-        <View style={{ flex: 1 }} />
-
-        <TouchableOpacity style={styles.btnEditAddress}>
-          <Image
-            style={styles.editAddressIcon}
-            source={Images.userAddressEditImage}
-          />
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
-  const renderAddressSheet = () => {
-    return (
-      <BottomSheet
-        customRef={addressSheet}
-        onCloseEnd={() => {
-          setShowLocationSheet(false);
-        }}
-        callbackNode={fall}
-        snapPoints={[vs(380), 0]}
-        initialSnap={showLocationSheet ? 0 : 1}
-        title={'Add your delivery address'}
-      >
-        <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-          <Button
-            backgroundColor={Colors.grey80}
-            onPress={() => {
-              toggleAddressSheet();
-              toggleAddAddressSheet();
-            }}
-            prefixIcon={Images.location}
-            text={'CURRENT LOCATION'}
-          />
-
-          <View style={{ height: vs(12) }} />
-
-          <Button
-            backgroundColor={Colors.grey80}
-            prefixIcon={Images.add1}
-            onPress={() => {
-              toggleAddressSheet();
-              toggleAddLocationSheet();
-            }}
-            text={'ADD ADDRESS'}
-          />
-
-          <View style={{ height: vs(20) }} />
-
-          {renderAddressItem({
-            name: 'Address Name 00',
-            address: 'Tamil Nadu 33243',
-          })}
-          {renderAddressItem({
-            name: 'Address Name 01',
-            address: 'Sala Nadu 33243',
-          })}
-        </View>
-      </BottomSheet>
-    );
-  };
-
-  const renderAddLocationSheet = () => {
-    var stateInput = useRef();
-    var cityInput = useRef();
-    var villageInput = useRef();
-    var houseNumberInput = useRef();
-    var flatNumberInput = useRef();
-    var landmarkInput = useRef();
-
-    return (
-      <BottomSheet
-        customRef={addLocationSheet}
-        onCloseEnd={() => setShowAddLocationSheet(false)}
-        callbackNode={fall}
-        snapPoints={[vs(600), 0]}
-        initialSnap={showAddLocationSheet ? 0 : 1}
-        //title={'Add your location'}
-      >
-        {/* <View style={{ flex: 1 }}>
-                    <LocationSearchBox
-                        onPressAddAddressManually={() => {
-                            toggleAddLocationSheet()
-                            toggleAddAddressSheet()
-                        }}
-                    />
-                </View> */}
-        <View style={{ flex: 1 }}>
-          <View style={styles.popupHeader}>
-            <Text style={[styles.txtSave, { color: 'transparent' }]}>SAVE</Text>
-            <Text style={styles.popupTitle}>Add your delivery address</Text>
-            <TouchableOpacity onPress={toggleAddLocationSheet}>
-              <Text style={styles.txtSave}>SAVE</Text>
-            </TouchableOpacity>
-          </View>
-
-          <KeyboardAwareScrollView enableOnAndroid>
-            <TextInput
-              placeholder={'Pin Code'}
-              style={styles.textInput}
-              returnKeyType={'next'}
-              onSubmitEditing={() => stateInput.getInnerRef().focus()}
-            />
-            <TextInput
-              placeholder={'State (Province)'}
-              style={styles.textInput}
-              ref={(r) => (stateInput = r)}
-              returnKeyType={'next'}
-              onSubmitEditing={() => cityInput.getInnerRef().focus()}
-            />
-            <TextInput
-              placeholder={'Town or city'}
-              style={styles.textInput}
-              ref={(r) => (cityInput = r)}
-              returnKeyType={'next'}
-              onSubmitEditing={() => villageInput.getInnerRef().focus()}
-            />
-            <TextInput
-              placeholder={'Village or area'}
-              style={styles.textInput}
-              ref={(r) => (villageInput = r)}
-              returnKeyType={'next'}
-              onSubmitEditing={() => houseNumberInput.getInnerRef().focus()}
-            />
-            <TextInput
-              placeholder={'House number'}
-              style={styles.textInput}
-              ref={(r) => (houseNumberInput = r)}
-              returnKeyType={'next'}
-              onSubmitEditing={() => flatNumberInput.getInnerRef().focus()}
-            />
-            <TextInput
-              placeholder={'Flat number'}
-              style={styles.textInput}
-              ref={(r) => (flatNumberInput = r)}
-              returnKeyType={'next'}
-              onSubmitEditing={() => landmarkInput.getInnerRef().focus()}
-            />
-            <TextInput
-              placeholder={'Landmark'}
-              style={styles.textInput}
-              ref={(r) => (landmarkInput = r)}
-              returnKeyType={'done'}
-            />
-          </KeyboardAwareScrollView>
-        </View>
-      </BottomSheet>
-    );
-  };
-
-  const renderAddAddressSheet = () => {
-    var stateInput = useRef();
-    var cityInput = useRef();
-    var villageInput = useRef();
-    var houseNumberInput = useRef();
-    var flatNumberInput = useRef();
-    var landmarkInput = useRef();
-
-    return (
-      <BottomSheet
-        customRef={addAddressSheet}
-        onCloseEnd={() => setShowAddAddressSheet(false)}
-        callbackNode={fall}
-        snapPoints={[vs(600), 0]}
-        initialSnap={showAddAddressSheet ? 0 : 1}
-      >
-        <View style={{ flex: 1 }}>
-          <View style={styles.popupHeader}>
-            <Text style={[styles.txtSave, { color: 'transparent' }]}>SAVE</Text>
-            <Text style={styles.popupTitle}>Add your delivery address</Text>
-            <TouchableOpacity onPress={toggleAddAddressSheet}>
-              <Text style={styles.txtSave}>SAVE</Text>
-            </TouchableOpacity>
-          </View>
-
-          <KeyboardAwareScrollView enableOnAndroid>
-            <TextInput
-              placeholder={'Pin Code'}
-              style={styles.textInput}
-              returnKeyType={'next'}
-              onSubmitEditing={() => stateInput.getInnerRef().focus()}
-            />
-            <TextInput
-              placeholder={'State (Province)'}
-              style={styles.textInput}
-              ref={(r) => (stateInput = r)}
-              returnKeyType={'next'}
-              onSubmitEditing={() => cityInput.getInnerRef().focus()}
-            />
-            <TextInput
-              placeholder={'Town or city'}
-              style={styles.textInput}
-              ref={(r) => (cityInput = r)}
-              returnKeyType={'next'}
-              onSubmitEditing={() => villageInput.getInnerRef().focus()}
-            />
-            <TextInput
-              placeholder={'Village or area'}
-              style={styles.textInput}
-              ref={(r) => (villageInput = r)}
-              returnKeyType={'next'}
-              onSubmitEditing={() => houseNumberInput.getInnerRef().focus()}
-            />
-            <TextInput
-              placeholder={'House number'}
-              style={styles.textInput}
-              ref={(r) => (houseNumberInput = r)}
-              returnKeyType={'next'}
-              onSubmitEditing={() => flatNumberInput.getInnerRef().focus()}
-            />
-            <TextInput
-              placeholder={'Flat number'}
-              style={styles.textInput}
-              ref={(r) => (flatNumberInput = r)}
-              returnKeyType={'next'}
-              onSubmitEditing={() => landmarkInput.getInnerRef().focus()}
-            />
-            <TextInput
-              placeholder={'Landmark'}
-              style={styles.textInput}
-              ref={(r) => (landmarkInput = r)}
-              returnKeyType={'done'}
-            />
-          </KeyboardAwareScrollView>
-        </View>
-      </BottomSheet>
-    );
-  };
-
+ 
   const renderSortBySheet = () => {
     return (
       <BottomSheet
@@ -740,8 +482,6 @@ function Explore(props) {
         </ScrollView>
       </SafeAreaView>
 
-      {renderAddressSheet()}
-
       {renderAddLocationSheet()}
 
       {renderAddAddressSheet()}
@@ -749,30 +489,6 @@ function Explore(props) {
       {renderSortBySheet()}
 
       {renderShareSheet()}
-
-      {/* background for bottom sheet */}
-      {(showLocationSheet ||
-        showAddAddressSheet ||
-        showAddLocationSheet ||
-        showSortBySheet ||
-        showShareSheet) && (
-        <TouchableWithoutFeedback onPress={() => {}}>
-          <Animated.View
-            style={{
-              width: '100%',
-              height: '100%',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              alignItems: 'center',
-              backgroundColor: 'rgb(29,29,29)',
-              opacity: Animated.add(0.85, Animated.multiply(-1.0, fall)),
-            }}
-          />
-        </TouchableWithoutFeedback>
-      )}
 
       {renderAccountActivatedSuccessfullyAlert()}
 

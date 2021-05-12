@@ -1,29 +1,28 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+  useCallback,
+} from 'react';
 import {
   View,
   StatusBar,
   Image,
   Text,
-  TouchableWithoutFeedback,
   TouchableOpacity,
   ScrollView,
   FlatList,
   Dimensions,
-  Alert as RNAlert,
 } from 'react-native';
 import { vs, s } from 'react-native-size-matters';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated from 'react-native-reanimated';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import LinearGradient from 'react-native-linear-gradient';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { AlertContext } from '../Root/GlobalContext';
 
 import {
-  Button,
   BottomSheet,
-  LocationSearchBox,
-  TextInput,
   Alert,
   RadiusButton,
   ProductSearchBox,
@@ -31,7 +30,6 @@ import {
 import CheckBox from './Components/CheckBox';
 import ProductItem from './Components/ProductItem';
 import ShareOptionList from './Components/ShareOptionList';
-
 import { Colors, Images } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
@@ -67,12 +65,7 @@ function Explore(props) {
   ]);
   const fall = useRef(new Animated.Value(0)).current;
   const sortBySheet = useRef();
-  const shareSheet = useRef();
-  const categoriesFlatlist = useRef();
 
-  const [showLocationSheet, setShowLocationSheet] = useState(true);
-  const [showAddLocationSheet, setShowAddLocationSheet] = useState(false);
-  const [showAddAddressSheet, setShowAddAddressSheet] = useState(false);
   const [
     showAccountActivatedSuccessfullyAlert,
     setShowAccountActivatedSuccessfullyAlert,
@@ -81,13 +74,10 @@ function Explore(props) {
     false
   );
   const [showSortBySheet, setShowSortBySheet] = useState(false);
-  const [showShareSheet, setShowShareSheet] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(0);
   const [showProductAsRows, setShowProductAsRows] = useState(true);
   const [sortOption, setSortOption] = useState(1);
   const [keyword, setKeyword] = useState('');
-
-  useEffect(() => {
+  const toggleAddressSheet = useCallback(() => {
     dispatch({
       type: 'changSheetState',
       payload: {
@@ -98,30 +88,9 @@ function Explore(props) {
       },
     });
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (showLocationSheet) {
-  //     addressSheet.current.snapTo(0);
-  //   } else {
-  //     addressSheet.current.snapTo(1);
-  //   }
-  // }, [showLocationSheet]);
-
-  // useEffect(() => {
-  //   if (showSortBySheet) {
-  //     sortBySheet.current.snapTo(0);
-  //   } else {
-  //     sortBySheet.current.snapTo(1);
-  //   }
-  // }, [showSortBySheet]);
-
-  // useEffect(() => {
-  //   if (showShareSheet) {
-  //     shareSheet.current.snapTo(0);
-  //   } else {
-  //     shareSheet.current.snapTo(1);
-  //   }
-  // }, [showShareSheet]);
+  useEffect(() => {
+    toggleAddressSheet();
+  }, [toggleAddressSheet]);
 
   useEffect(() => {
     if (showAccountActivatedSuccessfullyAlert) {
@@ -131,20 +100,26 @@ function Explore(props) {
     }
   }, [showAccountActivatedSuccessfullyAlert]);
 
-  const toggleAddressSheet = () => {
-    setShowLocationSheet(!showLocationSheet);
-  };
-
-
   const toggleSortBySheet = () => {
     setShowSortBySheet(!showSortBySheet);
   };
 
-  const toggleShareSheet = () => {
-    setShowShareSheet(!showShareSheet);
-  };
+  const toggleShareSheet = useCallback(() => {
+    dispatch({
+      type: 'changSheetState',
+      payload: {
+        showSheet: true,
+        height: 580,
+        children: () => (
+          <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+            <ShareOptionList />
+          </View>
+        ),
+        sheetTitle: 'Share to',
+      },
+    });
+  }, [dispatch]);
 
- 
   const renderSortBySheet = () => {
     return (
       <BottomSheet
@@ -168,23 +143,6 @@ function Explore(props) {
               </View>
             );
           })}
-        </View>
-      </BottomSheet>
-    );
-  };
-
-  const renderShareSheet = () => {
-    return (
-      <BottomSheet
-        customRef={shareSheet}
-        onCloseEnd={() => setShowShareSheet(false)}
-        callbackNode={fall}
-        snapPoints={[vs(580), 0]}
-        initialSnap={showShareSheet ? 0 : 1}
-        title={'Share to'}
-      >
-        <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-          <ShareOptionList />
         </View>
       </BottomSheet>
     );
@@ -266,62 +224,6 @@ function Explore(props) {
     }
   };
 
-  const scrollToIndex = (index) => {
-    categoriesFlatlist.current.scrollToIndex({
-      animated: true,
-      index,
-      viewOffset: (Dimensions.get('window').width / 7) * 3,
-    });
-  };
-
-  const renderCategories = () => {
-    if (keyword === '') {
-      return (
-        <View style={styles.categryContainer}>
-          <FlatList
-            ref={categoriesFlatlist}
-            contentContainerStyle={styles.categoryListContainer}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={categories}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index }) => {
-              const isFocused = selectedCategory === index;
-              return (
-                <TouchableOpacity
-                  onPress={() => {
-                    setSelectedCategory(index);
-                    //scrollToIndex(index);
-                  }}
-                  style={[
-                    styles.categoryItemContainer,
-                    !isFocused && { borderBottomColor: 'transparent' },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.heading5Bold,
-                      { color: isFocused ? Colors.primary : Colors.grey60 },
-                    ]}
-                  >
-                    {item}
-                  </Text>
-                </TouchableOpacity>
-              );
-            }}
-          />
-
-          <TouchableOpacity
-            onPress={() => NavigationService.navigate('EditCategoriesScreen')}
-            style={styles.btnAddContainer}
-          >
-            <Image source={Images.add1} style={styles.icAdd} />
-          </TouchableOpacity>
-        </View>
-      );
-    }
-  };
-
   const renderAddressBar = () => {
     return (
       <View style={styles.addressBarContainer}>
@@ -373,17 +275,6 @@ function Explore(props) {
     );
   };
 
-  const renderProduct = (item, index) => {
-    debugger;
-    return (
-      <ProductItem
-        onPressShare={toggleShareSheet}
-        key={index.toString()}
-        product={item}
-        size={showProductAsRows ? 'M' : 'L'}
-      />
-    );
-  };
 
   const renderAnnoucementItem = (item, index) => {
     return (
@@ -416,10 +307,6 @@ function Explore(props) {
     }
   };
 
-  const onSnapToItem = (index) => {
-    setSelectedCategory(index);
-    scrollToIndex(index);
-  };
   const renderTabBar = (props) => (
     <TabBar
       {...props}
@@ -482,13 +369,7 @@ function Explore(props) {
         </ScrollView>
       </SafeAreaView>
 
-      {renderAddLocationSheet()}
-
-      {renderAddAddressSheet()}
-
       {renderSortBySheet()}
-
-      {renderShareSheet()}
 
       {renderAccountActivatedSuccessfullyAlert()}
 

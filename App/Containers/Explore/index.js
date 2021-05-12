@@ -5,23 +5,14 @@ import React, {
   useContext,
   useCallback,
 } from 'react';
-import {
-  View,
-  StatusBar,
-  Image,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  Dimensions,
-} from 'react-native';
+import { View, StatusBar, Text, ScrollView, Dimensions } from 'react-native';
 import { vs, s } from 'react-native-size-matters';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated from 'react-native-reanimated';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { AlertContext } from '../Root/GlobalContext';
 
-import { BottomSheet, Alert, RadiusButton } from '../../Components';
-import CheckBox from './Components/CheckBox';
+import { Alert, RadiusButton } from '../../Components';
 import ProductItem from './Components/ProductItem';
 import ShareOptionList from './Components/ShareOptionList';
 import { Colors, Images } from '../../Themes';
@@ -29,6 +20,7 @@ import styles from './styles';
 import colors from '../../Themes/Colors';
 import AddressBar from './Components/AddressBar';
 import ExploreHeader from './Components/ExploreHeader';
+import ExploreSortBar from './Components/ExploreSortBar';
 
 const sliderWidth = Dimensions.get('window').width;
 
@@ -63,9 +55,6 @@ function Explore(props) {
   const [showAccountActivateAlert, setShowAccountActivateAlert] = useState(
     false
   );
-  const [showSortBySheet, setShowSortBySheet] = useState(false);
-  const [showProductAsRows, setShowProductAsRows] = useState(true);
-  const [sortOption, setSortOption] = useState(1);
 
   useEffect(() => {
     if (showAccountActivatedSuccessfullyAlert) {
@@ -74,11 +63,6 @@ function Explore(props) {
       }, 5000);
     }
   }, [showAccountActivatedSuccessfullyAlert]);
-
-  const toggleSortBySheet = () => {
-    setShowSortBySheet(!showSortBySheet);
-  };
-
   const toggleShareSheet = useCallback(() => {
     dispatch({
       type: 'changSheetState',
@@ -94,34 +78,6 @@ function Explore(props) {
       },
     });
   }, [dispatch]);
-
-  const renderSortBySheet = () => {
-    return (
-      <BottomSheet
-        customRef={sortBySheet}
-        onCloseEnd={() => setShowSortBySheet(false)}
-        callbackNode={fall}
-        snapPoints={[vs(320), 0]}
-        initialSnap={showSortBySheet ? 0 : 1}
-        title={'Sort By'}
-      >
-        <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-          {sortOptions.map((i, index) => {
-            return (
-              <View key={index.toString()}>
-                <View style={{ height: vs(12) }} />
-                <CheckBox
-                  defaultValue={sortOption === index}
-                  onSwitch={(t) => setSortOption(index)}
-                  label={i}
-                />
-              </View>
-            );
-          })}
-        </View>
-      </BottomSheet>
-    );
-  };
 
   const renderAccountActivatedSuccessfullyAlert = () => {
     return (
@@ -150,27 +106,6 @@ function Explore(props) {
           </View>
         )}
       />
-    );
-  };
-
-  const renderSortBar = () => {
-    return (
-      <View style={styles.sortBarContainer}>
-        <TouchableOpacity onPress={toggleSortBySheet} style={styles.row}>
-          <Image source={Images.arrow_left} style={styles.icArrowDown2} />
-          <Text style={styles.txtBold}>{sortOptions[sortOption]}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            setShowProductAsRows(!showProductAsRows);
-          }}
-        >
-          <Image
-            source={showProductAsRows ? Images.sortRows : Images.sortSquares}
-            style={styles.icSort}
-          />
-        </TouchableOpacity>
-      </View>
     );
   };
 
@@ -245,7 +180,7 @@ function Explore(props) {
         >
           <ExploreHeader />
           <AddressBar />
-          {renderSortBar()}
+          <ExploreSortBar />
           {/* {renderProducList()} */}
           <TabView
             // lazy
@@ -262,9 +197,7 @@ function Explore(props) {
           />
         </ScrollView>
       </SafeAreaView>
-
-      {renderSortBySheet()}
-
+      <AddressBar />
       {renderAccountActivatedSuccessfullyAlert()}
 
       {renderActivateAccountAlert()}
@@ -280,13 +213,6 @@ const categories = [
   'Electronics',
   'Food & Beverage',
   'Fashion',
-];
-
-const sortOptions = [
-  'About to be completed',
-  'Last added',
-  'Price: low to high',
-  'Price: high to low',
 ];
 
 const announcements = [

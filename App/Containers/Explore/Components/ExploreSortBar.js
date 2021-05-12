@@ -41,7 +41,7 @@ function SortSheetContent({ callback }) {
     </SafeAreaView>
   );
 }
-export default function ExploreSortBar() {
+export default function ExploreSortBar({ onChange }) {
   const [showProductAsRows, setShowProductAsRows] = useState(true);
   const { dispatch } = useContext(AlertContext);
   const [currentOption, setCurrentOption] = useState(1);
@@ -67,6 +67,7 @@ export default function ExploreSortBar() {
       <TouchableOpacity
         onPress={() => {
           setShowProductAsRows(!showProductAsRows);
+          onChange(!showProductAsRows);
         }}
       >
         <Image

@@ -197,7 +197,7 @@ function Explore(props) {
           />
         </ScrollView>
       </SafeAreaView>
-      <AddressBar />
+
       {renderAccountActivatedSuccessfullyAlert()}
 
       {renderActivateAccountAlert()}

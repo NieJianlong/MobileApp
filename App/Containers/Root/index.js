@@ -23,6 +23,7 @@ const initialState = {
     showSheet: false,
     children: null,
     height: 200,
+    sheetTitle: '',
     onCloseEnd: () => {},
   },
 };
@@ -43,7 +44,7 @@ function RootContainer() {
   const [
     {
       alert: { visible, message, color, onDismiss, title },
-      actionSheet: { showSheet, children, height, onCloseEnd },
+      actionSheet: { showSheet, children, height, onCloseEnd, sheetTitle },
     },
     dispatch,
   ] = useReducer(reducer, initialState);
@@ -100,7 +101,7 @@ function RootContainer() {
           // callbackNode={new Animated.Value(0)}
           snapPoints={[vs(height), 0]}
           initialSnap={0}
-          // title={'Add your delivery address'}
+          title={sheetTitle || null}
         >
           {children()}
         </BottomSheet>

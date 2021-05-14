@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 import * as jwt from '../../../../Apollo/jwt-request';
 import ProductItem from '../ProductItem';
 import { HPageViewHoc } from 'react-native-head-tab-view';
 import { CollapsibleHeaderTabView } from 'react-native-scrollable-tab-view-collapsible-header';
 import ExploreSortBar from '../ExploreSortBar';
 import { AlertContext } from '../../../Root/GlobalContext';
+import ShareOptionList from '../ShareOptionList';
 const HFlatList = HPageViewHoc(FlatList);
 const announcements = [
   {
@@ -88,9 +89,13 @@ export default function ProductList(props) {
       type: 'changSheetState',
       payload: {
         showSheet: true,
-        height: 600,
-        children: () => null,
-        sheetTitle: '',
+        height: 580,
+        children: () => (
+          <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+            <ShareOptionList />
+          </View>
+        ),
+        sheetTitle: 'Share to',
       },
     });
   }, [dispatch]);

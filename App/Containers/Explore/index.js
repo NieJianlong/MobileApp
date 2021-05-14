@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StatusBar, Text, Image, TouchableOpacity } from 'react-native';
+import { View, StatusBar, Image, TouchableOpacity } from 'react-native';
 import { s } from 'react-native-size-matters';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert, RadiusButton } from '../../Components';
@@ -64,6 +64,7 @@ function Explore(props) {
                     width: 60,
                     height: 41,
                     marginTop: -100,
+                    marginBottom: 60,
                     zIndex: 1000,
                     marginLeft: screenWidth - 60,
                   }}

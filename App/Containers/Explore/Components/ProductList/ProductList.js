@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { FlatList } from 'react-native';
 import * as jwt from '../../../../Apollo/jwt-request';
 import ProductItem from '../ProductItem';
 import { HPageViewHoc } from 'react-native-head-tab-view';
 import { CollapsibleHeaderTabView } from 'react-native-scrollable-tab-view-collapsible-header';
 import ExploreSortBar from '../ExploreSortBar';
+import { AlertContext } from '../../../Root/GlobalContext';
 const HFlatList = HPageViewHoc(FlatList);
 const announcements = [
   {
@@ -77,13 +78,22 @@ const announcements = [
 /*explore productlist component */
 export default function ProductList(props) {
   // if show it as row
+  const { dispatch } = useContext(AlertContext);
   const { isAnnouncement, index } = props;
   const [showShareSheet, setShowShareSheet] = useState(false);
   const [showProductAsRows, setShowProductAsRows] = useState(true);
   let [products, setProducts] = useState([]);
   const toggleShareSheet = useCallback(() => {
-    setShowShareSheet(!showShareSheet);
-  }, [showShareSheet]);
+    dispatch({
+      type: 'changSheetState',
+      payload: {
+        showSheet: true,
+        height: 600,
+        children: () => null,
+        sheetTitle: '',
+      },
+    });
+  }, [dispatch]);
   const getProductList = async () => {
     await jwt
       .runMockGetProductList()

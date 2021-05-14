@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StatusBar, Dimensions } from 'react-native';
+import { View, StatusBar, Text } from 'react-native';
 import { s } from 'react-native-size-matters';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert, RadiusButton } from '../../Components';
@@ -10,6 +10,8 @@ import ExploreHeader from './Components/ExploreHeader';
 import ProductList from './Components/ProductList/ProductList';
 import { CollapsibleHeaderTabView } from 'react-native-scrollable-tab-view-collapsible-header';
 import { ScrollableTabBar } from 'react-native-scrollable-tab-view';
+import colors from '../../Themes/Colors';
+import fonts from '../../Themes/Fonts';
 
 function Explore(props) {
   const [
@@ -40,11 +42,18 @@ function Explore(props) {
       >
         <CollapsibleHeaderTabView
           makeHeaderHeight={() => 60}
-          initialPage={0}
+          tabBarActiveTextColor={colors.primary}
+          tabBarUnderlineStyle={{ color: colors.primary }}
           renderTabBar={(mprops) => {
             return (
-              <View>
-                <ScrollableTabBar {...mprops} />
+              <View style={{ flex: 1, backgroundColor: 'white' }}>
+                <ScrollableTabBar
+                  {...mprops}
+                  underlineStyle={{
+                    backgroundColor: colors.primary,
+                  }}
+                  textStyle={{ fontFamily: fonts.primary }}
+                />
                 <AddressBar />
               </View>
             );
@@ -52,10 +61,14 @@ function Explore(props) {
           renderScrollHeader={() => <ExploreHeader />}
         >
           <ProductList index={0} tabLabel="All" />
-          <ProductList index={1} tabLabel="Announcements" />
+          <ProductList
+            index={1}
+            tabLabel="Announcements"
+            isAnnouncement={true}
+          />
           <ProductList index={2} tabLabel="Electronics" />
           <ProductList index={3} tabLabel="Food & Beverage" />
-          <ProductList index={4} tabLabel="Fashion" />
+          <ProductList index={4} tabLabel="Fashion      kk" />
         </CollapsibleHeaderTabView>
         {/* </View> */}
       </SafeAreaView>

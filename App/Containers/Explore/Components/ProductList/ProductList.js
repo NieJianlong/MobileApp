@@ -115,6 +115,7 @@ export default function ProductList(props) {
           <ProductItem
             onPressShare={toggleShareSheet}
             key={index.toString()}
+            isAnnouncement={isAnnouncement}
             product={item}
             size={showProductAsRows ? 'M' : 'L'}
           />

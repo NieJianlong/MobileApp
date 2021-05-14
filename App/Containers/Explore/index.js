@@ -1,55 +1,23 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, StatusBar, ScrollView, Dimensions, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StatusBar, Image, TouchableOpacity } from 'react-native';
 import { s } from 'react-native-size-matters';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { TabView, SceneMap } from 'react-native-tab-view';
 import { Alert, RadiusButton } from '../../Components';
 import { Colors, Images } from '../../Themes';
 import styles from './styles';
 import AddressBar from './Components/AddressBar';
 import ExploreHeader from './Components/ExploreHeader';
-import ExploreSortBar from './Components/ExploreSortBar';
-import CustomTabbar from './Components/CustomTabbar';
 import ProductList from './Components/ProductList/ProductList';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import NavigationService from '../../Navigation/NavigationService';
+import { CollapsibleHeaderTabView } from 'react-native-scrollable-tab-view-collapsible-header';
+import { ScrollableTabBar } from 'react-native-scrollable-tab-view';
+import colors from '../../Themes/Colors';
+import fonts from '../../Themes/Fonts';
 
-const sliderWidth = Dimensions.get('window').width;
+import NavigationService from '../../Navigation/NavigationService';
+import useWindowDimensions from 'react-native/Libraries/Utilities/useWindowDimensions';
 
 function Explore(props) {
-  const [showProductAsRows, setShowProductAsRows] = useState(true);
-  const productPage = useCallback(
-    () => (
-      <View style={{ paddingTop: 110 }}>
-        <ProductList showProductAsRows={showProductAsRows} />
-      </View>
-    ),
-    [showProductAsRows]
-  );
-  const announcementPage = useCallback(
-    () => (
-      <View style={{ paddingTop: 110 }}>
-        <ProductList showProductAsRows={showProductAsRows} isAnnouncement />
-      </View>
-    ),
-    [showProductAsRows]
-  );
-  // const [selectedCategory, setSelectedCategory] = useState(0);
-  const renderScene = SceneMap({
-    All: productPage,
-    Announcements: announcementPage,
-    Electronics: productPage,
-    'Food & Beverage': productPage,
-    Fashion: productPage,
-  });
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'All', title: 'All' },
-    { key: 'Announcements', title: 'Announcements' },
-    { key: 'Electronics', title: 'Electronics' },
-    { key: 'Food & Beverage', title: 'Food & Beverage' },
-    { key: 'Fashion', title: 'Fashion' },
-  ]);
+  const screenWidth = useWindowDimensions().width;
   const [
     showAccountActivatedSuccessfullyAlert,
     setShowAccountActivatedSuccessfullyAlert,
@@ -76,59 +44,57 @@ function Explore(props) {
         style={styles.mainContainer}
         edges={['top', 'left', 'right']}
       >
-        <ScrollView
-          stickyHeaderIndices={[1]}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flexGrow: 1 }}
+        <CollapsibleHeaderTabView
+          makeHeaderHeight={() => 60}
+          tabBarActiveTextColor={colors.primary}
+          renderTabBar={(mprops) => {
+            return (
+              <View style={{ flex: 1, backgroundColor: 'white' }}>
+                <ScrollableTabBar
+                  {...mprops}
+                  underlineStyle={{
+                    backgroundColor: colors.primary,
+                  }}
+                  textStyle={{ fontFamily: fonts.primary }}
+                />
+                <AddressBar />
+                <View
+                  style={{
+                    backgroundColor: 'white',
+                    width: 60,
+                    height: 41,
+                    marginTop: -100,
+                    marginBottom: 60,
+                    zIndex: 1000,
+                    marginLeft: screenWidth - 60,
+                  }}
+                >
+                  <TouchableOpacity
+                    // activeOpacity={1}
+                    onPress={() => {
+                      NavigationService.navigate('EditCategoriesScreen');
+                    }}
+                    style={[styles.btnAddContainer]}
+                  >
+                    <Image source={Images.add1} style={styles.icAdd} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            );
+          }}
+          renderScrollHeader={() => <ExploreHeader />}
         >
-          <ExploreHeader />
-          <View
-            style={{ height: 120, backgroundColor: 'white', marginTop: 50 }}
-          >
-            <AddressBar />
-            <ExploreSortBar
-              onChange={(showAsRow) => {
-                setShowProductAsRows(showAsRow);
-              }}
-            />
-            <View
-              style={{
-                backgroundColor: 'white',
-                width: 60,
-                height: 54,
-                marginTop: -170,
-                marginLeft: sliderWidth - 60,
-              }}
-            >
-              <TouchableOpacity
-                activeOpacity={1}
-                onPress={() =>
-                  NavigationService.navigate('EditCategoriesScreen')
-                }
-                style={[styles.btnAddContainer]}
-              >
-                <Image source={Images.add1} style={styles.icAdd} />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={{ flexGrow: 1, marginTop: -180 }}>
-            <TabView
-              // lazy
-              // renderLazyPlaceholder={<Text>refreshing</Text>}
-              onSwipeStart={(event) => {
-                console.log(event);
-              }}
-              navigationState={{ index, routes }}
-              renderScene={renderScene}
-              onIndexChange={(index) => {
-                setIndex(index);
-              }}
-              renderTabBar={(nprops) => <CustomTabbar {...nprops} />}
-              initialLayout={{ width: sliderWidth }}
-            />
-          </View>
-        </ScrollView>
+          <ProductList index={0} tabLabel="All" />
+          <ProductList
+            index={1}
+            tabLabel="Announcements"
+            isAnnouncement={true}
+          />
+          <ProductList index={2} tabLabel="Electronics" />
+          <ProductList index={3} tabLabel="Food & Beverage" />
+          <ProductList index={4} tabLabel="Fashion            kk" />
+        </CollapsibleHeaderTabView>
+        {/* </View> */}
       </SafeAreaView>
       {showAccountActivatedSuccessfullyAlert && (
         <Alert

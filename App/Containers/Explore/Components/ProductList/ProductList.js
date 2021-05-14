@@ -2,7 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { FlatList } from 'react-native';
 import * as jwt from '../../../../Apollo/jwt-request';
 import ProductItem from '../ProductItem';
-
+import { HPageViewHoc } from 'react-native-head-tab-view';
+import { CollapsibleHeaderTabView } from 'react-native-scrollable-tab-view-collapsible-header';
+import ExploreSortBar from '../ExploreSortBar';
+const HFlatList = HPageViewHoc(FlatList);
 const announcements = [
   {
     name: 'iPhone 11',
@@ -74,8 +77,9 @@ const announcements = [
 /*explore productlist component */
 export default function ProductList(props) {
   // if show it as row
-  const { showProductAsRows, isAnnouncement } = props;
+  const { isAnnouncement, index } = props;
   const [showShareSheet, setShowShareSheet] = useState(false);
+  const [showProductAsRows, setShowProductAsRows] = useState(true);
   let [products, setProducts] = useState([]);
   const toggleShareSheet = useCallback(() => {
     setShowShareSheet(!showShareSheet);
@@ -94,7 +98,15 @@ export default function ProductList(props) {
     return () => {};
   }, [props]);
   return (
-    <FlatList
+    <HFlatList
+      index={index}
+      ListHeaderComponent={
+        <ExploreSortBar
+          onChange={(showAsRow) => {
+            setShowProductAsRows(!showProductAsRows);
+          }}
+        />
+      }
       showsHorizontalScrollIndicator={false}
       data={isAnnouncement ? announcements : products}
       keyExtractor={(item, index) => index.toString()}
@@ -108,6 +120,7 @@ export default function ProductList(props) {
           />
         );
       }}
+      {...props}
     />
   );
 }

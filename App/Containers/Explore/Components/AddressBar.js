@@ -8,15 +8,15 @@ import AddressSheetContent from './AddressSheetContent';
 export default function AddressBar() {
   const { dispatch } = useContext(AlertContext);
   const toggleAddressSheet = useCallback(() => {
-    dispatch({
-      type: 'changSheetState',
-      payload: {
-        showSheet: true,
-        height: 380,
-        children: () => <AddressSheetContent />,
-        sheetTitle: 'Add your delivery address',
-      },
-    });
+    // dispatch({
+    //   type: 'changSheetState',
+    //   payload: {
+    //     showSheet: true,
+    //     height: 380,
+    //     children: () => <AddressSheetContent />,
+    //     sheetTitle: 'Add your delivery address',
+    //   },
+    // });
   }, [dispatch]);
   useEffect(() => {
     toggleAddressSheet();

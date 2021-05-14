@@ -6304,6 +6304,11 @@ react-native-gifted-chat@^0.16.3:
     react-native-typing-animation "^0.1.7"
     uuid "3.4.0"
 
+react-native-head-tab-view@3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-head-tab-view/-/react-native-head-tab-view-3.0.4.tgz#9f0558d6abf6cc5aa6f83fb85efbe7603a14c7ff"
+  integrity sha512-FdXCaZHWjb0PBhu67mbZf3rvuQjudJ6PcbTanobxOnHZvCVi0Slg1kNLRyjgJP/mbl3OvUUja6ZzXxprRTrWhg==
+
 react-native-image-crop-picker@^0.35.3:
   version "0.35.3"
   resolved "https://registry.npmjs.org/react-native-image-crop-picker/-/react-native-image-crop-picker-0.35.3.tgz"
@@ -6398,6 +6403,11 @@ react-native-scroll-into-view@^1.0.3:
   dependencies:
     prop-types ">=15.6.1"
 
+react-native-scrollable-tab-view-collapsible-header@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-scrollable-tab-view-collapsible-header/-/react-native-scrollable-tab-view-collapsible-header-0.0.5.tgz#9ce06d735867f65a45ae35e679d7c259893f5e96"
+  integrity sha512-uicXZpJMaH3nHTGEt1UIoxH8qtxCT1YarE9XH8rwioI6Iq+3TF4sTLxfHAF01EAmQ1wBD/Yb0yanAITmcdEAlA==
+
 react-native-scrollable-tab-view@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-scrollable-tab-view/-/react-native-scrollable-tab-view-1.0.0.tgz#87319896067f7bb643ecd7fba2cba4d6d8f9e18b"
@@ -6430,11 +6440,6 @@ react-native-star-rating@^1.1.0:
     react-native-animatable "^1.2.4"
     react-native-button "^2.3.0"
     react-native-vector-icons "^4.5.0"
-
-react-native-tab-view@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.0.1.tgz#7ed8c5c4a0bb48fa8895e612d26e6d545ed03447"
-  integrity sha512-L7qXtYz5Z+NdWyu38zaJrlHA/8H6rNFRZXe3ydym12UEEPPoefbVZ71b9YK2O6QP0u4pUlzMpMVM/Lsz2DJ4jg==
 
 react-native-typing-animation@^0.1.7:
   version "0.1.7"

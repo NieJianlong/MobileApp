@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, StatusBar, Text } from 'react-native';
+import { View, StatusBar, Text, Image, TouchableOpacity } from 'react-native';
 import { s } from 'react-native-size-matters';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert, RadiusButton } from '../../Components';
-import { Colors } from '../../Themes';
+import { Colors, Images } from '../../Themes';
 import styles from './styles';
 import AddressBar from './Components/AddressBar';
 import ExploreHeader from './Components/ExploreHeader';
@@ -13,7 +13,11 @@ import { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import colors from '../../Themes/Colors';
 import fonts from '../../Themes/Fonts';
 
+import NavigationService from '../../Navigation/NavigationService';
+import useWindowDimensions from 'react-native/Libraries/Utilities/useWindowDimensions';
+
 function Explore(props) {
+  const screenWidth = useWindowDimensions().width;
   const [
     showAccountActivatedSuccessfullyAlert,
     setShowAccountActivatedSuccessfullyAlert,
@@ -43,7 +47,6 @@ function Explore(props) {
         <CollapsibleHeaderTabView
           makeHeaderHeight={() => 60}
           tabBarActiveTextColor={colors.primary}
-          tabBarUnderlineStyle={{ color: colors.primary }}
           renderTabBar={(mprops) => {
             return (
               <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -55,6 +58,26 @@ function Explore(props) {
                   textStyle={{ fontFamily: fonts.primary }}
                 />
                 <AddressBar />
+                <View
+                  style={{
+                    backgroundColor: 'white',
+                    width: 60,
+                    height: 41,
+                    marginTop: -100,
+                    zIndex: 1000,
+                    marginLeft: screenWidth - 60,
+                  }}
+                >
+                  <TouchableOpacity
+                    // activeOpacity={1}
+                    onPress={() => {
+                      NavigationService.navigate('EditCategoriesScreen');
+                    }}
+                    style={[styles.btnAddContainer]}
+                  >
+                    <Image source={Images.add1} style={styles.icAdd} />
+                  </TouchableOpacity>
+                </View>
               </View>
             );
           }}
@@ -68,7 +91,7 @@ function Explore(props) {
           />
           <ProductList index={2} tabLabel="Electronics" />
           <ProductList index={3} tabLabel="Food & Beverage" />
-          <ProductList index={4} tabLabel="Fashion      kk" />
+          <ProductList index={4} tabLabel="Fashion            kk" />
         </CollapsibleHeaderTabView>
         {/* </View> */}
       </SafeAreaView>

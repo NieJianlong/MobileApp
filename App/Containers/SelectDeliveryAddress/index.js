@@ -19,7 +19,8 @@ import metrics from '../../Themes/Metrics';
 import fonts from '../../Themes/Fonts';
 import { AddressTestData } from '../UserInfo/Config';
 import { AlertContext } from '../Root/GlobalContext';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native';
 /**
  * @description: The user selects the shipping address page
  * @param {*} props
@@ -29,7 +30,8 @@ function SelectDeliveryAddress(props) {
   const { params } = useRoute();
   const [selectIndex, setSelectIndex] = useState(999);
   const context = useContext(AlertContext);
-
+  const popAction = StackActions.pop(2);
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
@@ -42,7 +44,7 @@ function SelectDeliveryAddress(props) {
             <RightButton
               title="SAVE"
               onPress={() => {
-                NavigationService.pop(2);
+                navigation.dispatch(popAction);
                 context.dispatch({
                   type: 'changAlertState',
                   payload: {

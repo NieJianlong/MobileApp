@@ -7,7 +7,10 @@ import images from '../../Themes/Images';
 import { ScrollView } from 'react-native-gesture-handler';
 import Nav from '../../Navigation/NavigationService';
 import colors from '../../Themes/Colors';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native';
+
+const popAction = StackActions.pop(2);
 
 function AddPaymentMethod(props) {
   const payments = [
@@ -29,6 +32,7 @@ function AddPaymentMethod(props) {
   ];
 
   const { params } = useRoute();
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
@@ -52,7 +56,7 @@ function AddPaymentMethod(props) {
                     onPress={(item) => {
                       Nav.navigate('AddCreditScreen', {
                         callback: () => {
-                          Nav.pop(2);
+                          navigation.dispatch(popAction);
                           if (typeof params.callback == 'function') {
                             params.callback();
                           }

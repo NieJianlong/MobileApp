@@ -15,14 +15,14 @@ function setTopLevelNavigator(navigatorRef) {
 }
 
 function navigate(routeName, params) {
-  _navigator.navigate(routeName, params)
+  _navigator.navigate(routeName, params);
 }
 
 function goBack(routeName, params) {
   _navigator.goBack();
 }
 function pop(n) {
-  _navigator.dispatch(StackActions.pop({ n }));
+  _navigator.current?.dispatch(StackActions.pop({ n }));
 }
 // add other navigation functions that you need and export them
 export default {

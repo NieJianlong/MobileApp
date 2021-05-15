@@ -29,6 +29,9 @@ jest.mock("@react-native-community/async-storage", () =>
     require("@react-native-community/async-storage/jest/async-storage-mock"),
 );
 
+
+/** tests for the onboarding endpoints */
+
 /**
  * public endpoints
  * registerUser registerBuyer, createGuestBuyer registerSeller createAddress, updateAddress, deleteAddress
@@ -72,6 +75,7 @@ it('test guest buyer', async () => {
     }
 });
 
+/** test with minimal input */
 // node_modules/jest/bin/jest.js -t 'test guest buyer 2'
 it('test guest buyer 2', async () => {
     let BuyerProfileRequestForCreate = {
@@ -98,16 +102,16 @@ it('test guest buyer 2', async () => {
 //+++++++++++++++++ create a register buyer +++++++++++++++++++
 // update numbers so no xxx exists errors
 // node_modules/jest/bin/jest.js -t 'test register buyer'
-//       {"data":{"registerBuyer":{"buyerId":"36f9e312-a5c4-4228-a740-7ddbb2cbc88c","userId":"c8eb3595-503b-48bc-9430-50c86a633cd5","__typename":"BuyerProfileResponse"}}}
+//  {"data":{"registerBuyer":{"buyerId":"f3d26ef6-3666-407b-b6b5-389828487b39","__typename":"BuyerProfileResponse"}}}
 it('test register buyer', async () => {
     let BuyerProfileRequestForCreate = {
-        userName: 'buyer334',
-        firstName: 'buyer33Y4',
-        lastName: 'buyer33YR',
+        userName: 'bu3634',
+        firstName: 'bu363Y4',
+        lastName: 'bu336YR',
         geoLocation: '1.2.3.44',
-        phoneNumber: '+3321712300124',
+        phoneNumber: '+33266300124',
         guestBuyer: false,
-        email: 'g33Y4Rbuyer@email.com', userType: 'BUYER', password: '1R2T#$Tymkop224',
+        email: 'bu@email.com', userType: 'BUYER', password: '1R2T#$6Tkop224',
         oneClickPurchaseOn: true, areaRegion: '',
         languages: [
             "EN"
@@ -137,9 +141,12 @@ it('test register buyer', async () => {
 it('test create address', async () => {
 
     let AddressRequestForCreate = {
-        defaultAddress: true, addressType: 'SHIPPING',
+        defaultAddress: true, addressType: 'SHIPPING',flat:"flat", floor:"floor",   district:"13",
+        streetAddress1:"street_1", streetAddress2:"street_2",streetAddress3:"street_3",
+        block:"block",  building:"building", houseNumber:"11", villageArea:"village_area", 
+        provinceState:"state", landMark:"Statue of Big J", pinCode:"1138",
         streetAddress1: 'Earth 3rd planet from sun', country: 'UK', areaCode: 'XYZ123',
-        referenceId: '36f9e312-a5c4-4228-a740-7ddbb2cbc88c'
+        referenceId: '3c5c4bdf-82a6-4b93-9ff7-7e06c172ee02'
     }
     let client = await endPointClient(url)
     let ret = await client.mutate({
@@ -157,6 +164,25 @@ it('test create address', async () => {
     }
 
 });
+
+
+
+
+// node_modules/jest/bin/jest.js -t 'test get all addresses'
+it('test get all addresses', async () => {
+    let client = await endPointClient(url)
+
+    let ret = await client.query({
+        query: FIND_BUYER_ADDRESS_BY_ID,
+        variables: {buyerId: 'ad2e7afd-93fb-4b1a-84c0-6f7249437182'}
+    })
+        .then(result => result)
+        .catch(err => { console.log("Query error " + err) });
+
+    console.log(JSON.stringify(ret))
+
+});
+ 
 
 // node_modules/jest/bin/jest.js -t 'test getBuyerAddressesById'
 it('test getBuyerAddressesById', async () => {

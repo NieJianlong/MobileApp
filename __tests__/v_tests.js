@@ -16,6 +16,8 @@ const INVALID_PASSWORD = 'short'
 const STRONG_VALID_PASSWORD = 'longerWww2!'
 const WEAK_VALID_PASSWORD = 'longerWww2'
 
+/** validation tests */
+
 
 it('test email valid', async () => {
   expect(validator.isValidEmail(VALID_EMAIL)).toBe(true)

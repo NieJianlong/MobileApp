@@ -4,10 +4,14 @@ jest.mock("@react-native-community/async-storage", () =>
   require("@react-native-community/async-storage/jest/async-storage-mock"),
 );
 
+/**
+ * tests for developing the code associated with the JWT token attributes
+ */
+
 // node_modules/jest/bin/jest.js -t 'makes login request'
 it('makes login request', async () => {
    
-  let loginRequest = { username: 'massimo.03', password: 'massimo.03'}
+  let loginRequest = { username: 'bu@email.com', password: '1R2T#$6Tkop224'}
     let ret = await runTokenFlow(loginRequest)
     // for (const key in ret) {
     //     console.log(`${key}: ${ret[key]}`);
@@ -17,8 +21,6 @@ it('makes login request', async () => {
    // console.log(`id_token\n ${ ret.data.id_token}`)
       //   console.log(`refresh_token\n ${ ret.data.refresh_token}`)
    }
-
-    
 });
 
 // node_modules/jest/bin/jest.js -t 'makes refresh token request'

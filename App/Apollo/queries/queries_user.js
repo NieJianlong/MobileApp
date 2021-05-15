@@ -59,7 +59,8 @@ export const FIND_USER_PROFILE = gql`
 export const BUYER_PROFILES = gql`
  query BuyerProfiles  {
     buyerProfiles  {
-        userId
+      buyerId
+      userName
    }
  }
  `;
@@ -74,7 +75,10 @@ export const BUYER_PROFILES = gql`
 export const FIND_BUYER_PROFILE = gql`
   query BuyerProfile($buyerId: ID!)  {
     buyerProfile(buyerId: $buyerId)  {
-         userId
+      firstName
+    lastName
+    email
+    phoneNumber
     }
   }
   `;
@@ -260,7 +264,7 @@ export const FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
        }
      }
      `;
- 
+
 /**
 *  @query  paymentDetails 
 * 

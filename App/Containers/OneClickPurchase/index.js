@@ -118,7 +118,7 @@ function OneClickPurchase(props) {
                       <View style={{ flexDirection: 'row' }}>
                         <TouchableOpacity
                           onPress={(item) => {
-                            showSheet();
+                            // showSheet();
                           }}
                         >
                           <Image

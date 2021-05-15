@@ -72,11 +72,7 @@ function renderAddressItem(
                 source={images.userAddressEditImage}
               />
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={(item) => {
-                showSheet();
-              }}
-            >
+            <TouchableOpacity onPress={(item) => {}}>
               <Image
                 style={styles.editImage}
                 source={images.userAddressTrashImage}

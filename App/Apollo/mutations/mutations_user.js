@@ -98,14 +98,19 @@ export const DELETE_BUYER_PROFILE = gql`
 `;
 
 /**
- * @mutation updateUserProfile
+ * @mutation updateBuyerProfile
  * schema  see @mutation registerBuyer
+ * BuyerProfileRequest{userId:ID buyerId:ID! userName:String firstName:String lastName:String email:String 
+ * phoneNumber:String userType: UserType oneClickPurchaseOn:Boolean guestBuyer:Boolean! geoLocation: String 
+ * areaRegion:String languages:[String] currencies:[String] applicationSettings: String 
+ * categoryPreferences:[String] productPreferences:[String] sellerPreferences:[String] }
  * 
  */
 export const UPDATE_BUYER_PROFILE = gql`
  mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
   updateBuyerProfile(request: $request) {
     buyerId
+
    }
   }
 `;
@@ -234,6 +239,9 @@ export const DELETE_ADDRESS = gql`
  * createPaymentDetail(request: PaymentDetailRequestForCreate!) : PaymentDetailResponse
  * PaymentDetailRequestForCreate{buyerId:ID! paymentType:PaymentType isDefaultPaymentType:Boolean 
  * paymentTypeDetails:String}
+ * enum PaymentType {
+    CREDIT_CARD, DEBIT_CARD, CASH_AT_DELIVERY, WIRE_TRANSFER, SALAMI_CREDIT, ESCROW, PAYPAL,UNDEFINED
+}
  */
 export const CREATE_PAYMENT_DETAIL = gql`
  mutation CreatePaymentDetail($request:PaymentDetailRequestForCreate!) {

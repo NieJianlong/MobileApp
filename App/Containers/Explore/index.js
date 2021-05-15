@@ -35,11 +35,7 @@ function Explore(props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        barStyle="dark-content"
-        translucent
-        backgroundColor={'rgba(0,0,0,0.0)'}
-      />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.mainContainer}
         edges={['top', 'left', 'right']}
@@ -55,6 +51,7 @@ function Explore(props) {
                   underlineStyle={{
                     backgroundColor: colors.primary,
                   }}
+                  style={{ borderWidth: 0 }}
                   textStyle={{ fontFamily: fonts.primary }}
                 />
                 <AddressBar />
@@ -62,7 +59,7 @@ function Explore(props) {
                   style={{
                     backgroundColor: 'white',
                     width: 60,
-                    height: 41,
+                    height: 46,
                     marginTop: -100,
                     marginBottom: 60,
                     zIndex: 1000,

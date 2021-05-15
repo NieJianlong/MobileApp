@@ -174,7 +174,12 @@ function renderSheet(sheetEl, dispatch) {
   return (
     <BottomSheet
       customRef={sheetEl}
-      onCloseEnd={() => {}}
+      onCloseEnd={() => {
+        dispatch({
+          type: 'showPaymentRemoveSheet',
+          payload: { showSheet: false },
+        });
+      }}
       // callbackNode={new Animated.Value(0)}
       snapPoints={[vs(380), 0]}
       initialSnap={0}

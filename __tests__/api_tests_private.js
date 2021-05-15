@@ -28,26 +28,32 @@ jest.mock("@react-native-community/async-storage", () =>
 /**
  * Tests for private api development
  * 
- * Run the loging with a registered buyer to get a token with the correct permissions
+ * Run the login with a registered buyer to get a token with the correct permissions
  * then copy for JWT above to run the private client
  * 
  */
-//  node_modules/jest/bin/jest.js -t 'test login'
-it('test login', async () => {
-  //{"data":{"createGuestBuyer":{"buyerId":"acf755fe-20e4-4133-a595-8c01aab272df","__typename":"BuyerProfileResponse"}
-  //     userName:'buyer2', 
-  let loginRequest = { username: 'massimo.03', password: 'massimo.03'}
+
+/**
+ * first login as an existing buyer to get the correct JWT token for the
+ * buyers roles
+ * see test register buyer
+ * 
+ */
+// node_modules/jest/bin/jest.js -t 'makes login request'
+it('makes login request', async () => {
+   
+  let loginRequest = { username: 'bu@email.com', password: '1R2T#$6Tkop224'}
     let ret = await runTokenFlow(loginRequest)
     // for (const key in ret) {
     //     console.log(`${key}: ${ret[key]}`);
     // }
     if (typeof ret !== 'undefined') {
-    //  console.log(`${JSON.stringify(ret.data)}`)
-    console.log(`access_token\n ${ ret.data.access_token}`)
-      //   console.log(`refresh_token\n ${ ret.data.refresh_token}`)
+    console.log(`${ ret.data.access_token}`)
+   // console.log(`id_token\n ${ ret.data.id_token}`)
+   // console.log(`refresh_token\n ${ ret.data.refresh_token}`)
    }
-
 });
+
  
 
 /**

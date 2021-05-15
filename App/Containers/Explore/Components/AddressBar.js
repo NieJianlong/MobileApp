@@ -19,7 +19,7 @@ export default function AddressBar() {
     });
   }, [dispatch]);
   useEffect(() => {
-    // toggleAddressSheet();
+    toggleAddressSheet();
   }, [toggleAddressSheet]);
 
   return (

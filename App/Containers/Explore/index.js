@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StatusBar, Image, TouchableOpacity } from 'react-native';
-import { s } from 'react-native-size-matters';
+import { s, vs } from 'react-native-size-matters';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert, RadiusButton } from '../../Components';
 import { Colors, Images } from '../../Themes';
@@ -35,13 +35,13 @@ function Explore(props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
       <SafeAreaView
         style={styles.mainContainer}
         edges={['top', 'left', 'right']}
       >
         <CollapsibleHeaderTabView
-          makeHeaderHeight={() => 60}
+          makeHeaderHeight={() => vs(50)}
           tabBarActiveTextColor={colors.primary}
           renderTabBar={(mprops) => {
             return (

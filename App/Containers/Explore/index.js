@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { View, StatusBar, Image, TouchableOpacity } from 'react-native';
 import { s, vs } from 'react-native-size-matters';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,14 +17,24 @@ import NavigationService from '../../Navigation/NavigationService';
 import useWindowDimensions from 'react-native/Libraries/Utilities/useWindowDimensions';
 
 function Explore(props) {
+  const ref = useRef();
   const screenWidth = useWindowDimensions().width;
   const [
     showAccountActivatedSuccessfullyAlert,
     setShowAccountActivatedSuccessfullyAlert,
   ] = useState(false);
+  //Fixed a bug that accidentally triggered onclick when swiping
+  const [canGoNext, setCanGoNext] = useState(true);
+
   const [showAccountActivateAlert, setShowAccountActivateAlert] = useState(
     false
   );
+  const ableGoNext = useCallback(() => {
+    setCanGoNext(true);
+  }, []);
+  const goFirst = useCallback(() => {
+    ref.current.goToPage(0);
+  }, []);
   useEffect(() => {
     if (showAccountActivatedSuccessfullyAlert) {
       setTimeout(() => {
@@ -40,58 +50,96 @@ function Explore(props) {
         style={styles.mainContainer}
         edges={['top', 'left', 'right']}
       >
-        <CollapsibleHeaderTabView
-          makeHeaderHeight={() => vs(50)}
-          tabBarActiveTextColor={colors.primary}
-          renderTabBar={(mprops) => {
-            return (
-              <View style={{ flex: 1, backgroundColor: 'white' }}>
-                <ScrollableTabBar
-                  {...mprops}
-                  underlineStyle={{
-                    backgroundColor: colors.primary,
-                  }}
-                  style={{ borderWidth: 0 }}
-                  textStyle={{ fontFamily: fonts.primary }}
-                />
-                <AddressBar />
-                <View
-                  style={{
-                    backgroundColor: 'white',
-                    width: 60,
-                    height: 46,
-                    marginTop: -100,
-                    marginBottom: 60,
-                    zIndex: 1000,
-                    marginLeft: screenWidth - 60,
-                  }}
-                >
-                  <TouchableOpacity
-                    // activeOpacity={1}
-                    onPress={() => {
-                      NavigationService.navigate('EditCategoriesScreen');
-                    }}
-                    style={[styles.btnAddContainer]}
-                  >
-                    <Image source={Images.add1} style={styles.icAdd} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            );
+        <View
+          style={{ flex: 1 }}
+          onMoveShouldSetResponder={({ nativeEvent }) => {
+            console.log(nativeEvent);
+            if (canGoNext) {
+              setCanGoNext(false);
+            }
+            return false;
           }}
-          renderScrollHeader={() => <ExploreHeader />}
+          onResponderRelease={({ nativeEvent }) => {
+            console.warn(nativeEvent);
+          }}
         >
-          <ProductList index={0} tabLabel="All" />
-          <ProductList
-            index={1}
-            tabLabel="Announcements"
-            isAnnouncement={true}
-          />
-          <ProductList index={2} tabLabel="Electronics" />
-          <ProductList index={3} tabLabel="Food & Beverage" />
-          <ProductList index={4} tabLabel="Fashion            kk" />
-        </CollapsibleHeaderTabView>
-        {/* </View> */}
+          <CollapsibleHeaderTabView
+            prerenderingSiblingsNumber={1}
+            makeHeaderHeight={() => vs(50)}
+            tabBarActiveTextColor={colors.primary}
+            ref={ref}
+            renderTabBar={(mprops) => {
+              return (
+                <View style={{ flex: 1, backgroundColor: 'white' }}>
+                  <ScrollableTabBar
+                    {...mprops}
+                    underlineStyle={{
+                      backgroundColor: colors.primary,
+                    }}
+                    style={{ borderWidth: 0 }}
+                    textStyle={{ fontFamily: fonts.primary }}
+                  />
+                  <AddressBar />
+                  <View
+                    style={{
+                      backgroundColor: 'white',
+                      width: 60,
+                      height: 46,
+                      marginTop: -100,
+                      marginBottom: 60,
+                      zIndex: 1000,
+                      marginLeft: screenWidth - 60,
+                    }}
+                  >
+                    <TouchableOpacity
+                      // activeOpacity={1}
+                      onPress={() => {
+                        NavigationService.navigate('EditCategoriesScreen');
+                      }}
+                      style={[styles.btnAddContainer]}
+                    >
+                      <Image source={Images.add1} style={styles.icAdd} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              );
+            }}
+            renderScrollHeader={() => <ExploreHeader />}
+          >
+            <ProductList
+              index={0}
+              tabLabel="All"
+              canGoNext={canGoNext}
+              callBack={ableGoNext}
+            />
+            <ProductList
+              index={1}
+              tabLabel="Announcements"
+              isAnnouncement={true}
+              canGoNext={canGoNext}
+              callBack={ableGoNext}
+            />
+            <ProductList
+              index={2}
+              tabLabel="Electronics"
+              canGoNext={canGoNext}
+              callBack={ableGoNext}
+            />
+            <ProductList
+              index={3}
+              tabLabel="Food & Beverage"
+              canGoNext={canGoNext}
+              callBack={ableGoNext}
+            />
+            <ProductList
+              index={4}
+              goFirst={goFirst}
+              tabLabel="Fashion            kk"
+              canGoNext={canGoNext}
+              callBack={ableGoNext}
+            />
+          </CollapsibleHeaderTabView>
+        </View>
       </SafeAreaView>
       {showAccountActivatedSuccessfullyAlert && (
         <Alert

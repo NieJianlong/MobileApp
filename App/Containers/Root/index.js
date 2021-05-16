@@ -93,7 +93,6 @@ function RootContainer() {
         <BottomSheet
           customRef={sheetEl}
           onCloseEnd={() => {
-            debugger;
             dispatch({
               type: 'changSheetState',
               payload: { showSheet: false },

@@ -18,10 +18,11 @@ import styles from './styles';
 /**
  * validation and jwt modules
  */
-import * as validator from '../../Validation';
-import * as jwt from '../../Apollo/jwt-request';
-import * as storage from '../../Apollo/local-storage';
-import { useQuery } from '@apollo/client';
+
+import * as validator from '../../Validation'
+import * as jwt from '../../Apollo/jwt-request'
+import * as storage from '../../Apollo/local-storage'
+import { runRefreshCron } from '../../Apollo/cache';
 /** userProfileVar is the variable for the cache to get set  userProfile attributes */
 import { userProfileVar } from '../../Apollo/cache';
 import NavigationService from '../../Navigation/NavigationService';
@@ -123,6 +124,54 @@ function LoginScreen(props) {
     } else {
       console.log('data not valid');
       toggleResetValidationAlert();
+    const onSignIn = async() => {
+        // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
+        console.log('onSignIn' + `${loginInput}:::${psswd}`)// to-do remove
+        let ret = validator.loginDifferentiator(loginInput)
+         if (ret.isValid) {
+            // we are good so we can test for email or phone
+             if (ret.isEmail) {
+                let loginRequest = { username: 'billy@silly.com', password: '123456789'}
+                // console.log(profile.data.userProfileVar.email)// to-do remove
+                await jwt.runTokenFlow(loginRequest).then(function (res) {
+                    if (typeof res !== 'undefined') {
+                        console.log(`login ok set auth`)
+                        userProfileVar({
+                            email: loginRequest.username,
+                            isAuth: true
+                        })
+         
+                        let access_token =res.data.access_token
+                        if (access_token === 'undefined') {
+                          console.log('no access token')
+                        } 
+                        storage.setLocalStorageValue(storage.LOCAL_STORAGE_TOKEN_KEY, access_token)
+                        runRefreshCron()
+                        NavigationService.navigate('MainScreen')
+                       }
+                    // need check for status code = 200 
+                    // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
+                     else {
+                        console.log('psswd is not correct')
+                        toggleResetValidationAlert()
+                    }
+
+                }).catch(function (err) {
+                    // here we will need to deal with a  status` code 401 and refresh jwt and try again
+                })
+             } else {
+            //     // must be phone   
+                console.log('phone is valid but not implemented')
+                toggleResetValidationAlert()
+            //     userProfileVar({
+            //         phone: loginInput,
+            //         isAuth: true
+            //     })
+             }
+         } else {
+             console.log('data not valid')
+             toggleResetValidationAlert()
+         }
     }
   };
 

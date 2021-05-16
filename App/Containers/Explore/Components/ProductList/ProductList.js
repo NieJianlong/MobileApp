@@ -81,7 +81,7 @@ export default function ProductList(props) {
   // if show it as row
   const { dispatch } = useContext(AlertContext);
   const { isAnnouncement, index } = props;
-  const [showShareSheet, setShowShareSheet] = useState(false);
+
   const [showProductAsRows, setShowProductAsRows] = useState(true);
   let [products, setProducts] = useState([]);
   const toggleShareSheet = useCallback(() => {
@@ -115,6 +115,7 @@ export default function ProductList(props) {
   return (
     <HFlatList
       index={index}
+      keyboardShouldPersistTaps="always"
       ListHeaderComponent={
         <ExploreSortBar
           onChange={(showAsRow) => {
@@ -133,6 +134,7 @@ export default function ProductList(props) {
             isAnnouncement={isAnnouncement}
             product={item}
             size={showProductAsRows ? 'M' : 'L'}
+            {...props}
           />
         );
       }}

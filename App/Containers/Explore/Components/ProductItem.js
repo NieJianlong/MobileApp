@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, TouchableOpacity, Platform } from 'react-native';
 import { s, ScaledSheet, vs } from 'react-native-size-matters';
 import NumberFormat from 'react-number-format';
 
@@ -7,23 +7,48 @@ import { Fonts, Colors, ApplicationStyles, Images } from '../../../Themes';
 import AppConfig from '../../../Config/AppConfig';
 import NavigationService from '../../../Navigation/NavigationService';
 import { StarRating, Progress } from '../../../Components';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-function ProductItem(props) {
-  useEffect(() => {});
 
+function ProductItem(props) {
+  const [startX, setSartX] = useState(999);
+  const [endX, setEndX] = useState(999);
   const {
     size,
     product,
-    onPress,
     onPressShare,
     isAnnouncement,
     navigation,
+    canGoNext,
+    callBack,
+    goFirst,
   } = props;
 
   if (size === 'M' || size == 'L') {
     return (
       <TouchableOpacity
-        onPress={() => NavigationService.navigate('ProductDetailScreen')}
+        onPressIn={({ nativeEvent }) => {
+          console.warn('in');
+          console.warn(nativeEvent);
+          setSartX(nativeEvent.locationX);
+          if (callBack) {
+            callBack();
+          }
+        }}
+        onPressOut={({ nativeEvent }) => {
+          console.warn(nativeEvent);
+          setEndX(nativeEvent.locationX);
+          console.warn(endX - startX);
+          if (endX - startX < -50) {
+            goFirst && goFirst();
+          }
+        }}
+        onPress={() => {
+          //
+          if (Platform.OS === 'ios') {
+            NavigationService.navigate('ProductDetailScreen');
+          } else if (canGoNext) {
+            NavigationService.navigate('ProductDetailScreen');
+          }
+        }}
         style={styles.productContainer}
       >
         {size === 'M' ? (

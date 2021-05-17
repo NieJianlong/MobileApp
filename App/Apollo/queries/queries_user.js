@@ -246,12 +246,14 @@ export const FIND_GUEST_BUYER_ADDRESS_BY_ID = gql`
      query GetGuestBuyerAddressesById($buyerId: ID!)  {
       getGuestBuyerAddressesById(buyerId: $buyerId)  {
              addressId
+             villageArea
+             provinceState
        }
      }
      `;
 
 /**
-* @query  getGuestBuyerAddressesById 
+* @query  getGuestBuyerDefaultAddressByBuyerId 
 * 
 * schema 
 *  getGuestBuyerDefaultAddressByBuyerId(sellerId : ID!) : AddressResponse
@@ -261,6 +263,8 @@ export const FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
      query GetGuestBuyerDefaultAddressByBuyerId($buyerId: ID!)  {
       getGuestBuyerDefaultAddressByBuyerId(buyerId: $buyerId)  {
              addressId
+             villageArea
+             provinceState
        }
      }
      `;

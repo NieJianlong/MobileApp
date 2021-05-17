@@ -32,6 +32,13 @@ import { gql } from '@apollo/client';
  mutation CreateAddress($request: AddressRequestForCreate!) {
   createAddress(request: $request) {
     addressId
+    pinCode
+    provinceState
+    townCity
+    villageArea
+    houseNumber
+    flat
+    landMark
    }
   }
 `;
@@ -51,6 +58,12 @@ export const FIND_GUEST_BUYER_ADDRESS_BY_ID = gql`
      query GetGuestBuyerAddressesById($buyerId: ID!)  {
       getGuestBuyerAddressesById(buyerId: $buyerId)  {
              addressId
+             streetAddress1
+             villageArea
+             district
+             provinceState
+             country
+             pinCode
        }
      }
      `;
@@ -68,6 +81,50 @@ export const FIND_BUYER_ADDRESS_BY_ID = gql`
     query GetBuyerAddressesById($buyerId: ID!)  {
       getBuyerAddressesById(buyerId: $buyerId)  {
             addressId
+      }
+    }
+    `;
+
+    /**
+* @query  getGuestBuyerDefaultAddressByBuyerId 
+* 
+* schema 
+*  getGuestBuyerDefaultAddressByBuyerId(sellerId : ID!) : AddressResponse
+* see @query addresses
+*/
+export const FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
+query GetGuestBuyerDefaultAddressByBuyerId($buyerId: ID!)  {
+ getGuestBuyerDefaultAddressByBuyerId(buyerId: $buyerId)  {
+        addressId
+        pinCode
+        provinceState
+        townCity
+        villageArea
+        houseNumber
+        flat
+        landMark
+  }
+}
+`;
+
+/**
+* @query  getBuyerDefaultAddressByBuyerId 
+* 
+* schema 
+* getBuyerDefaultAddressByBuyerId(buyerId : ID!) : AddressResponse
+* see @query addresses
+*/
+export const FIND_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
+    query GetBuyerDefaultAddressByBuyerId($buyerId: ID!)  {
+      getBuyerDefaultAddressByBuyerId(buyerId: $buyerId)  {
+        addressId
+        pinCode
+        provinceState
+        townCity
+        villageArea
+        houseNumber
+        flat
+        landMark
       }
     }
     `;

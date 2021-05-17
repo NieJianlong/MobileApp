@@ -1,23 +1,20 @@
 import { gql } from '@apollo/client';
 
 /**
- * @query  productListingPagedAndSorted 
+ * @query  allProductListingsDTO 
  * 
- * productListingPagedAndSorted(sortfield: String!, sortDirection: String!, pageNo: Int, pageSize: Int):[ProductListing]
+ * allProductListingsDTO(sortfield: String!, sortDirection: String!, pageNo: Int, pageSize: Int):[ProductListingDTO]
  * 
- * ProductListing {id: ID! product: Product store: Store chat: Chat announcement: Announcement address: Address 
- * chatMuteFlag: Boolean wholeSalePrice: Float retailPrice: Float discount: Float numberOfItems: Int maxQuantityPerCart: Int 
- * closedDate: Date deliveryDate: Date createdAt: DateTime updatedAt: DateTime }
- * 
- * Product{id: ID! shortName: String longName: String description: String}
+ * ProductListingDTO { id: ID!  photo: String  productName: String  rating: Int numberOfReviews: Int  wholesalePrice: Float
+ *  retailPrice: Float  percentOff: Int closedDate: Date  progressBarValue: Float }
  * 
  */
 
- export const PRODUCT_LISTING_PAGED_AND_SORTED = gql`
- query ProductListingPagedAndSorted($sortfield: String!, $sortDirection: String!, $pageNo: Int!, $pageSize: Int!)  {
-    productListingPagedAndSorted(sortfield: $sortfield, sortDirection: $sortDirection, pageNo: $pageNo, pageSize: $pageSize)  {
+ export const ALL_PRODUCT_LISTINGS_DTO = gql`
+ query AllProductListingsDTO($sortfield: String!, $sortDirection: String!, $pageNo: Int!, $pageSize: Int!)  {
+  allProductListingsDTO(sortfield: $sortfield, sortDirection: $sortDirection, pageNo: $pageNo, pageSize: $pageSize)  {
         id
-        wholeSalePrice
+        wholesalePrice
    }
  }
  `;

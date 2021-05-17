@@ -69,6 +69,7 @@ function Explore(props) {
             tabBarActiveTextColor={colors.primary}
             ref={ref}
             renderTabBar={(mprops) => {
+              console.warn('screen' + screenWidth);
               return (
                 <View style={{ flex: 1, backgroundColor: 'white' }}>
                   <ScrollableTabBar
@@ -76,8 +77,15 @@ function Explore(props) {
                     underlineStyle={{
                       backgroundColor: colors.primary,
                     }}
+                    inactiveTextColor={colors.grey60}
+                    activeTextColor={colors.primary}
                     style={{ borderWidth: 0 }}
-                    textStyle={{ fontFamily: fonts.primary }}
+                    textStyle={{
+                      fontFamily: fonts.primary,
+                      width: '100%',
+                      fontWeight: 'bold',
+                      fontSize: 14,
+                    }}
                   />
                   <AddressBar />
                   <View

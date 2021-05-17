@@ -9,6 +9,7 @@ import {
     NEW_ID
 } from '../App/Apollo/mutations/mutations_user'
 import {
+    ADDRESSES,
     FIND_BUYER_ADDRESS_BY_ID,
     FIND_BUYER_DEFAULT_ADDRESS_BY_ID,
     FIND_GUEST_BUYER_ADDRESS_BY_ID,
@@ -167,70 +168,13 @@ it('test create address', async () => {
 
 
 
-
-// node_modules/jest/bin/jest.js -t 'test get all addresses'
-it('test get all addresses', async () => {
-    let client = await endPointClient(url)
-
-    let ret = await client.query({
-        query: FIND_BUYER_ADDRESS_BY_ID,
-        variables: {buyerId: 'ad2e7afd-93fb-4b1a-84c0-6f7249437182'}
-    })
-        .then(result => result)
-        .catch(err => { console.log("Query error " + err) });
-
-    console.log(JSON.stringify(ret))
-
-});
- 
-
-// node_modules/jest/bin/jest.js -t 'test getBuyerAddressesById'
-it('test getBuyerAddressesById', async () => {
-    // public api
-    let client = await endPointClient(url)
-    let ret = await client.query({
-        query: FIND_BUYER_ADDRESS_BY_ID,
-        variables: { buyerId: '36f9e312-a5c4-4228-a740-7ddbb2cbc88c' }
-    })
-        .then(result => result)
-        .catch(err => {
-            console.log("query error " + err)
-            return
-        });
-
-    if (typeof ret !== 'undefined') {
-        console.log(JSON.stringify(ret))
-    }
-
-});
-
-// node_modules/jest/bin/jest.js -t 'test getBuyerDefaultAddressByBuyerId'
-it('test getBuyerDefaultAddressByBuyerId', async () => {
-    // public api
-    let client = await endPointClient(url)
-    let ret = await client.query({
-        query: FIND_BUYER_DEFAULT_ADDRESS_BY_ID,
-        variables: { buyerId: '36f9e312-a5c4-4228-a740-7ddbb2cbc88c' }
-    })
-        .then(result => result)
-        .catch(err => {
-            console.log("query error " + err)
-            return
-        });
-
-    if (typeof ret !== 'undefined') {
-        console.log(JSON.stringify(ret))
-    }
-
-});
-
 // node_modules/jest/bin/jest.js -t 'test getGuestBuyerAddressesById'
 it('test getGuestBuyerAddressesById', async () => {
     // public api
     let client = await endPointClient(url)
     let ret = await client.query({
         query: FIND_GUEST_BUYER_ADDRESS_BY_ID,
-        variables: { buyerId: '204750d9-62cc-419d-b8e3-ac0b285c18dd' }
+        variables: { buyerId: '03fe91d1-7e9c-47b6-a006-fb4a150a88e6' }
     })
         .then(result => result)
         .catch(err => {

@@ -25,6 +25,8 @@ const iOS = Platform.OS === 'ios'
 
 function OnboardingScreen(props) {
 
+    const [bIdExists, setBIdExists] = useState(false)
+
     /** this is enough to create a guest buyer */
     let BuyerProfileRequestForCreate = {
         guestBuyer: true,
@@ -44,9 +46,20 @@ function OnboardingScreen(props) {
         onError: (error) => console.error("Error creating a guest Id", error),
     });
 
+    const checkBuyerIdExists = async() => {
+        // lets check if a buyer id exists
+        // first check for an existing buyer id
+        let bid = await storage.getLocalStorageValue(getUniqueId())
+        if (bid) {
+            console.log(`found a bid in local storage ${bid}`)
+            setBIdExists(true)
+        }  
+    }
+
 
     useEffect(() => {
 
+        checkBuyerIdExists()
 
         return () => {
             // unmount here
@@ -59,7 +72,7 @@ function OnboardingScreen(props) {
      */
     const onGetGuestBuyerId = async (data) => {
         let buyerId = data.createGuestBuyer.buyerId
-        console.log("OnboardingScreen mutation createGuestBuyer" + buyerId)
+        console.log("OnboardingScreen mutation createGuestBuyer=" + buyerId)
         await storage.setLocalStorageValue(getUniqueId(), buyerId)
         NavigationService.navigate('MainScreen')
     }
@@ -113,7 +126,13 @@ function OnboardingScreen(props) {
                         textColor={Colors.black}
                         onPress={() => {
                             // call the CREATE_GUEST_BUYER mutation see onGetGuestBuyerId callback
-                            guestBuyerId({ variables: { request: BuyerProfileRequestForCreate } })
+                            if (bIdExists) {
+                                console.log('found bid in local storage')
+                                NavigationService.navigate('MainScreen')
+                            } else {
+                                guestBuyerId({ variables: { request: BuyerProfileRequestForCreate } })
+                            }
+
                         }
                         }
                     />

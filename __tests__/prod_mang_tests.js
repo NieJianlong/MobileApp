@@ -1,22 +1,31 @@
 import { endPointClient } from '../App/Apollo/public-api-v3'
 import {
-    PRODUCT_LISTING_PAGED_AND_SORTED
+    ALL_PRODUCT_LISTINGS_DTO
 } from '../App/Apollo/queries/queries_prodmang'
 
 jest.mock("@react-native-community/async-storage", () =>
 require("@react-native-community/async-storage/jest/async-storage-mock"),
 );
 
-let url = 'http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8082/graphql'
+let url = 'http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8083/graphql'
 
-// node_modules/jest/bin/jest.js -t 'test productListingPagedAndSorted'
-it('test productListingPagedAndSorted', async () => {
+/**
+ * 
+8081 --> IAM
+8082 --> UserManagement
+8083 --> ProductManagement
+
+
+ */
+
+// node_modules/jest/bin/jest.js -t 'test allProductListingsDTO'
+it('test allProductListingsDTO', async () => {
 
     // public api
     let client = await endPointClient(url)
     let ret = await client.query({
-        query: PRODUCT_LISTING_PAGED_AND_SORTED,
-        variables: { sortfield: 'wholeSalePrice', sortDirection:'DESC', pageNo: 1, pageSize: 3  }
+        query: ALL_PRODUCT_LISTINGS_DTO,
+        variables: { sortfield: 'wholeSalePrice', sortDirection:'DESC', pageNo: 0, pageSize: 3  }
     })
         .then(result => result)
         .catch(err => {

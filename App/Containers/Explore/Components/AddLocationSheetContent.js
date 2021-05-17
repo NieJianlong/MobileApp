@@ -9,6 +9,7 @@ import { AlertContext } from '../../Root/GlobalContext';
  * queries for address
  */
 import * as aQM from '../gql/explore_queries'
+import * as gqlMappers from '../gql/gql_mappers'
 import { endPointClient, PUBLIC_CLIENT_ENDPOINT } from '../../../Apollo/public-api-v3'
 import * as storage from '../../../Apollo/local-storage'
 import { userProfileVar } from '../../../Apollo/cache'
@@ -22,13 +23,18 @@ export default function AddLocationSheet() {
   let flatNumberInput = useRef();
   let landmarkInput = useRef();
   const { dispatch } = useContext(AlertContext);
-
-  // temp soln for local state re address
-  const [address, setAddress] = useState({ pinCode: '', state: '', city: '', area: '', numH: '', numF: '', mark: '' });
+ 
+  // mayby we can simplity this
+  const [pinCodeV, setPinCode] = useState(0);
+  const [stateV, setStateV] = useState( '');
+  const [cityV, setCityV] = useState( '');
+  const [areaV, setAreaV] = useState( '');
+  const [numHV, setNumHV] = useState( '');
+  const [numFV, setNumFV] = useState( '');
+  const [markN, setMarkV] = useState( '');
 
   const toggleAddLocationSheet = useCallback(() => {
-    // state and backend update here?
-    runAddAddessMutation()
+    // found issues with updating state here
     dispatch({
       type: 'changSheetState',
       payload: {
@@ -49,22 +55,30 @@ export default function AddLocationSheet() {
       * guest flow use guest buyer id in local storage device id key
       */
   const runAddAddessMutation = async () => {
+
     // depending on the auth state we will opulate a buyerId from local storage
     let buyerId = ''
     if (userProfileVar().isAuth) {
       // local storage register buyer use email
       await storage.getLocalStorageValue(userProfileVar().email).then((res) => { buyerId = res })
+      console.log(`running create address with registered buyer id ${buyerId}`)
     } else {
       // local storage guest buyer   use deviceId
       await storage.getLocalStorageValue(getUniqueId()).then((res) => { buyerId = res })
+      console.log(`running create address with guest buyer id ${buyerId}`)
     }
+
     let AddressRequestForCreate = {
-      pinCode: address.pinCode,
+      pinCode: pinCodeV,
       defaultAddress: true, addressType: 'SHIPPING',
-      streetAddress1: address.area, townCity: address.city, flat: address.numF,
-      houseNumber: address.numH, provinceState: address.state, landMark: address.mark,
+      provinceState: stateV,
+      townCity:cityV,
+      flat:numFV,
+      villageArea:areaV,
+      houseNumber: numHV,  landMark:markN,
       referenceId: buyerId
     }
+
     // CREATE_ADDRESS is a public api
     let client = await endPointClient(PUBLIC_CLIENT_ENDPOINT)
     await client.mutate({
@@ -73,14 +87,19 @@ export default function AddLocationSheet() {
     })
       .then((result) => {
         if (typeof result.data !== 'undefined') {
-          console.log(JSON.stringify(result.data))
-          //result.data.createAddress.addressId
+          console.log(`runAddAddessMutation ${JSON.stringify(result.data)}`)
+          userProfileVar({
+          ...userProfileVar(), 
+          addressId:result.data.createAddress.addressId,
+          addressLine1:gqlMappers.mapGQLAddressToDelivery(result.data.createAddress),
+          addressLine2: gqlMappers.mapGQLAddressToLine2(result.data.createAddress)
+          });
         }
 
       })
       .catch(err => {
         console.log("explore address mutation error " + err)
-        { renderAddressItem({ name: 'error', address: err }) }
+      //  { renderAddressItem({ name: 'error', address: err }) }
 
         return
       });
@@ -91,8 +110,7 @@ export default function AddLocationSheet() {
 
   }
 
-
-
+  
 
 
   return (
@@ -100,27 +118,27 @@ export default function AddLocationSheet() {
       <View style={styles.popupHeader}>
         <Text style={[styles.txtSave, { color: 'transparent' }]}>SAVE</Text>
         <Text style={styles.popupTitle}>Add your delivery address</Text>
-        <TouchableOpacity onPress={toggleAddLocationSheet}>
+        <TouchableOpacity onPress={
+          () => {
+            // had to do this for issues getting local state for create address
+            runAddAddessMutation()
+            toggleAddLocationSheet()
+          }
+          }>
           <Text style={styles.txtSave}>SAVE</Text>
         </TouchableOpacity>
       </View>
 
       <KeyboardAwareScrollView enableOnAndroid>
         <TextInput
-          onChangeText={text => setAddress(prevState => ({
-            ...prevState,
-            ['pinCode']: text
-          }))}
+          onChangeText={text => setPinCode(text)}
           placeholder={'Pin Code'}
           style={styles.textInput}
           returnKeyType={'next'}
           onSubmitEditing={() => stateInput.getInnerRef().focus()}
         />
         <TextInput
-          onChangeText={text => setAddress(prevState => ({
-            ...prevState,
-            ['state']: text
-          }))}
+          onChangeText={text =>  setStateV(text)}
           placeholder={'State (Province)'}
           style={styles.textInput}
           ref={(r) => (stateInput = r)}
@@ -128,10 +146,7 @@ export default function AddLocationSheet() {
           onSubmitEditing={() => cityInput.getInnerRef().focus()}
         />
         <TextInput
-          onChangeText={text => setAddress(prevState => ({
-            ...prevState,
-            ['city']: text
-          }))}
+          onChangeText={text =>  setCityV(text)}
           placeholder={'Town or city'}
           style={styles.textInput}
           ref={(r) => (cityInput = r)}
@@ -139,10 +154,7 @@ export default function AddLocationSheet() {
           onSubmitEditing={() => villageInput.getInnerRef().focus()}
         />
         <TextInput
-          onChangeText={text => setAddress(prevState => ({
-            ...prevState,
-            ['area']: text
-          }))}
+          onChangeText={text =>   setAreaV(text)}
           placeholder={'Village or area'}
           style={styles.textInput}
           ref={(r) => (villageInput = r)}
@@ -150,10 +162,7 @@ export default function AddLocationSheet() {
           onSubmitEditing={() => houseNumberInput.getInnerRef().focus()}
         />
         <TextInput
-          onChangeText={text => setAddress(prevState => ({
-            ...prevState,
-            ['numH']: text
-          }))}
+          onChangeText={text =>         setNumHV(text)}
           placeholder={'House number'}
           style={styles.textInput}
           ref={(r) => (houseNumberInput = r)}
@@ -161,10 +170,7 @@ export default function AddLocationSheet() {
           onSubmitEditing={() => flatNumberInput.getInnerRef().focus()}
         />
         <TextInput
-          onChangeText={text => setAddress(prevState => ({
-            ...prevState,
-            ['numF']: text
-          }))}
+          onChangeText={text => setNumFV(text)}
           placeholder={'Flat number'}
           style={styles.textInput}
           ref={(r) => (flatNumberInput = r)}
@@ -172,10 +178,7 @@ export default function AddLocationSheet() {
           onSubmitEditing={() => landmarkInput.getInnerRef().focus()}
         />
         <TextInput
-          onChangeText={text => setAddress(prevState => ({
-            ...prevState,
-            ['mark']: text
-          }))}
+          onChangeText={text =>  setMarkV(data)}
           placeholder={'Landmark'}
           style={styles.textInput}
           ref={(r) => (landmarkInput = r)}

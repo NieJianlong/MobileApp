@@ -9,6 +9,7 @@ import AddressSheetContent from './AddressSheetContent';
  * queries for address
  */
 import * as aQM from '../gql/explore_queries'
+import * as gqlMappers from '../gql/gql_mappers'
 import { endPointClient, PUBLIC_CLIENT_ENDPOINT } from '../../../Apollo/public-api-v3'
 import { getPrivateClient } from '../../../Apollo/private-api-v3'
 import * as storage from '../../../Apollo/local-storage'
@@ -17,8 +18,7 @@ import { getUniqueId } from 'react-native-device-info';
 
 
 export default function AddressBar() {
-  let [deliveryAddress, setDeliveryAddress] = useState('Deliver to - Tanil Nadu 12345')
-
+  const [addressUpdate, setAdressUpdate] = useState(false)
 
   const { dispatch } = useContext(AlertContext);
   const toggleAddressSheet = useCallback(() => {
@@ -34,19 +34,25 @@ export default function AddressBar() {
   }, [dispatch]);
 
   /**
-   * we wil only toggle toggleAddressSheet if address not exist
+   * we wil only toggle toggleAddressSheet if the default address does not exist
    */
-  useEffect(() => {
-    toggleAddressSheet();
-  }, [toggleAddressSheet]);
+  // useEffect(() => {
+  //   toggleAddressSheet();
+  // }, [toggleAddressSheet]);
 
   useEffect(() => {
-    console.log(`useEffect=$`)
+    console.log('AddressBar useEffect')
+
     fetchAddessData()
-    // just a test for now
-    setDeliveryAddress('updated')
+    // toggleAddressSheet()
 
   }, []);
+
+  useEffect(() => {
+    console.log('AddressBar useEffect' + userProfileVar().addressId)
+
+
+  }, [addressUpdate]);
 
 
 
@@ -75,19 +81,28 @@ export default function AddressBar() {
 
       let client = await getPrivateClient()
       await client.query({
-        query: aQM.FIND_BUYER_ADDRESS_BY_ID,
+        query: aQM.FIND_BUYER_DEFAULT_ADDRESS_BY_ID,
         variables: { buyerId: buyerId }
       })
         .then((result) => {
           if (typeof result.data !== 'undefined') {
-            if (!Array.isArray(result.data.getBuyerAddressesById) || !result.data.getBuyerAddressesById.length) {
-              console.log("Query returns no data show add address ")
+            if (result.data.getBuyerDefaultAddressByBuyerId.addressId === 'null') {
+              console.log(`address is null`)
               toggleAddressSheet()
+              return
             }
+            console.log(`found registerBuyerAddress addressId ${JSON.stringify(result.data)}`)
 
+            userProfileVar({
+              ...userProfileVar(),
+              addressId: result.data.getBuyerDefaultAddressByBuyerId.addressId,
+              addressLine1: gqlMappers.mapGQLAddressToDelivery(result.data.getBuyerDefaultAddressByBuyerId),
+              addressLine2: gqlMappers.mapGQLAddressToLine2(result.data.getBuyerDefaultAddressByBuyerId)
+            });
+            setAdressUpdate(true)
 
           } else {
-            console.log('server error for query FIND_GUEST_BUYER_ADDRESS_BY_ID')
+            console.log('server error for query registerBuyerAddress')
           }
         })
         .catch(err => {
@@ -103,16 +118,27 @@ export default function AddressBar() {
       console.log(`showLocationSheet and guest buyerId=${buyerId}`)
       let client = await endPointClient(PUBLIC_CLIENT_ENDPOINT)
       await client.query({
-        query: aQM.FIND_GUEST_BUYER_ADDRESS_BY_ID,
+        query: aQM.FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID, // return is not a collection
         variables: { buyerId: buyerId }
       })
         .then((result) => {
           if (typeof result.data !== 'undefined') {
-            if (!Array.isArray(result.data.getGuestBuyerAddressesById) || !result.data.getGuestBuyerAddressesById.length) {
-              console.log("Query returns no data show add address  ")
+            console.log(`found GuestBuyer addressId ${JSON.stringify(result.data)}`)
+            if (result.data.getGuestBuyerDefaultAddressByBuyerId.addressId === null) {
+              console.log(`found null GuestBuyer addressId  creating`)
               toggleAddressSheet()
+              return
+            } else {
+              console.log(`found GuestBuyer address ${JSON.stringify(result.data.getGuestBuyerDefaultAddressByBuyerId)}`)
+              userProfileVar({
+                ...userProfileVar(),
+                addressId: result.data.getGuestBuyerDefaultAddressByBuyerId.addressId,
+                addressLine1: gqlMappers.mapGQLAddressToDelivery(result.data.getGuestBuyerDefaultAddressByBuyerId),
+                addressLine2: gqlMappers.mapGQLAddressToLine2(result.data.getGuestBuyerDefaultAddressByBuyerId)
+              });
+              setAdressUpdate(true)
+              //   console.log(userProfileVar().addressId)
             }
-
           } else {
             console.log('server error for query FIND_GUEST_BUYER_ADDRESS_BY_ID')
           }
@@ -131,10 +157,10 @@ export default function AddressBar() {
       <View style={styles.row}>
         <Image source={Images.locationMed} style={styles.icLocation} />
         <Text style={styles.heading5Regular}>
-          {deliveryAddress}
+          Deliver to -  {userProfileVar().addressId && userProfileVar().addressLine1}
         </Text>
         <View style={styles.areaContainer}>
-          <Text style={styles.heading6Bold}>Area 4</Text>
+          <Text style={styles.heading6Bold}>{userProfileVar().addressId && userProfileVar().addressLine2}</Text>
         </View>
       </View>
 

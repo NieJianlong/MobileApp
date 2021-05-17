@@ -26,17 +26,13 @@ function ProductItem(props) {
     return (
       <TouchableOpacity
         onPressIn={({ nativeEvent }) => {
-          console.warn('in');
-          console.warn(nativeEvent);
           setSartX(nativeEvent.locationX);
           if (callBack) {
             callBack();
           }
         }}
         onPressOut={({ nativeEvent }) => {
-          console.warn(nativeEvent);
           setEndX(nativeEvent.locationX);
-          console.warn(endX - startX);
           if (endX - startX < -50) {
             goFirst && goFirst();
           }

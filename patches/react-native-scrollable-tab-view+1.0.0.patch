@@ -1,0 +1,56 @@
+diff --git a/node_modules/react-native-scrollable-tab-view/Button.android.js b/node_modules/react-native-scrollable-tab-view/Button.android.js
+index e1e184e..303cd71 100644
+--- a/node_modules/react-native-scrollable-tab-view/Button.android.js
++++ b/node_modules/react-native-scrollable-tab-view/Button.android.js
+@@ -8,7 +8,7 @@ const {
+ const Button = (props) => {
+   return <TouchableNativeFeedback
+     delayPressIn={0}
+-    background={TouchableNativeFeedback.SelectableBackground()} // eslint-disable-line new-cap
++    background={TouchableNativeFeedback.Ripple('#ffffff')} // eslint-disable-line new-cap
+     {...props}
+   >
+     {props.children}
+diff --git a/node_modules/react-native-scrollable-tab-view/Button.ios.js b/node_modules/react-native-scrollable-tab-view/Button.ios.js
+index e04a881..3e59c89 100644
+--- a/node_modules/react-native-scrollable-tab-view/Button.ios.js
++++ b/node_modules/react-native-scrollable-tab-view/Button.ios.js
+@@ -6,7 +6,7 @@ const {
+ } = ReactNative;
+ 
+ const Button = (props) => {
+-  return <TouchableOpacity {...props}>
++  return <TouchableOpacity activeOpacity={1} {...props}>
+     {props.children}
+   </TouchableOpacity>;
+ };
+diff --git a/node_modules/react-native-scrollable-tab-view/ScrollableTabBar.js b/node_modules/react-native-scrollable-tab-view/ScrollableTabBar.js
+index 5db3793..f8f9c90 100644
+--- a/node_modules/react-native-scrollable-tab-view/ScrollableTabBar.js
++++ b/node_modules/react-native-scrollable-tab-view/ScrollableTabBar.js
+@@ -164,7 +164,7 @@ const ScrollableTabBar = createReactClass({
+       width: this.state._widthTabUnderline,
+     };
+ 
+-    return <View
++    return this.props.tabs.length > 0?<View
+       style={[styles.container, {backgroundColor: this.props.backgroundColor, }, this.props.style, ]}
+       onLayout={this.onContainerLayout}
+     >
+@@ -190,7 +190,7 @@ const ScrollableTabBar = createReactClass({
+           <Animated.View style={[tabUnderlineStyle, dynamicTabUnderline, this.props.underlineStyle, ]} />
+         </View>
+       </ScrollView>
+-    </View>;
++    </View>:<View/>;
+   },
+ 
+   componentDidUpdate(prevProps) {
+@@ -203,6 +203,7 @@ const ScrollableTabBar = createReactClass({
+   onTabContainerLayout(e) {
+     this._tabContainerMeasurements = e.nativeEvent.layout;
+     let width = this._tabContainerMeasurements.width;
++    console.warn('width:'+width);
+     if (width < WINDOW_WIDTH) {
+       width = WINDOW_WIDTH;
+     }

@@ -50,7 +50,6 @@ index 5db3793..f8f9c90 100644
    onTabContainerLayout(e) {
      this._tabContainerMeasurements = e.nativeEvent.layout;
      let width = this._tabContainerMeasurements.width;
-+    console.warn('width:'+width);
      if (width < WINDOW_WIDTH) {
        width = WINDOW_WIDTH;
      }

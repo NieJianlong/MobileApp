@@ -228,7 +228,14 @@ export const FIND_BUYER_ADDRESS_BY_ID = gql`
 export const FIND_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
     query GetBuyerDefaultAddressByBuyerId($buyerId: ID!)  {
       getBuyerDefaultAddressByBuyerId(buyerId: $buyerId)  {
-            addressId
+        addressId
+        pinCode
+        provinceState
+        townCity
+        villageArea
+        houseNumber
+        flat
+        landMark
       }
     }
     `;

@@ -25,7 +25,7 @@ it('test allProductListingsDTO', async () => {
     let client = await endPointClient(url)
     let ret = await client.query({
         query: ALL_PRODUCT_LISTINGS_DTO,
-        variables: { sortfield: 'wholeSalePrice', sortDirection:'DESC', pageNo: 0, pageSize: 3  }
+        variables: { sortfield: 'wholeSalePrice', sortDirection:'DESC', pageNo: 0, pageSize: 6  }
     })
         .then(result => result)
         .catch(err => {

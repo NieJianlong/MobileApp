@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 /** ================== User Management ================ */
 // scripts for processing schema data
-// tr --delete '\n'  < temp.txt >> temp2.txt
+// tr --delete '\n'  < temp.txt > temp2.txt
 // tr -s \  <  temp2.txt
 
 

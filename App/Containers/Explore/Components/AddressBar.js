@@ -18,11 +18,13 @@ import * as storage from '../../../Apollo/local-storage'
 import { userProfileVar } from '../../../Apollo/cache'
 import { getUniqueId } from 'react-native-device-info';
 
+import AsyncStorage from '@react-native-community/async-storage';
+import { useReactiveVar } from '@apollo/client';
+
 
 export default function AddressBar() {
-  const [addressUpdate, setAdressUpdate] = useState(false)
-  const [regBuyerId, setRegBuyerId] = useState('')
-  const [guestBuyerId, setGuestBuyerId] = useState('')
+  const userProfileVarReactive = useReactiveVar(userProfileVar);
+
 
   const { dispatch } = useContext(AlertContext);
   const toggleAddressSheet = useCallback(() => {
@@ -46,20 +48,42 @@ export default function AddressBar() {
   //   toggleAddressSheet();
   // }, [toggleAddressSheet]);
 
-  // get the buyer id from locasl storgae and tun the queries
+  // debug code
+  const fetchAllItems = async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys()
+      const items = await AsyncStorage.multiGet(keys)
+
+      return items
+    } catch (error) {
+      console.log(error, "fetchAllItems issues")
+    }
+  }
+
+  let buyId = ''
+
+  // get the buyer id from local storage and tun the queries
   const getBuyerId = async () => {
-    let isAuth = userProfileVar().isAuth
+    // this wakes up async storage
+    let data = await fetchAllItems()
+    console.log(data)
+
+
+    let isAuth = userProfileVarReactive.isAuth
     if (isAuth) {
       console.log('AddressBar getBuyerId isAuth true get buyerid from local storage in statewith email= ' + userProfileVar().email)
-      let bid = await storage.getLocalStorageValue(userProfileVar().email)
-      setRegBuyerId(bid)
-      console.log('AddressBar getBuyerId isAuth true get buyerid from local storage in state= ' + regBuyerId)
-      fetchAddessDataBuyer()
+      // let bid = await storage.getLocalStorageValue(userProfileVar().email)
+
+      buyId = await AsyncStorage.getItem(userProfileVar().email)
+
+      console.log('AddressBar getBuyerId isAuth true get buyerid from local storage in state= ' + buyId)
+      fetchAddressDataBuyer()
     } else {
-      let gbod = await storage.getLocalStorageValue(getUniqueId())
-      setGuestBuyerId(gbod)
-      console.log('AddressBar getBuyerId isAuth false get guestBuyerId from local storage in state= ' + guestBuyerId)
-      fetchAddessDataGuest()
+      // let gbod = await storage.getLocalStorageValue(getUniqueId())
+      buyId = await AsyncStorage.getItem(getUniqueId())
+
+      console.log('AddressBar getBuyerId isAuth false get guestBuyerId from local storage in state= ' + buyId)
+      fetchAddressDataGuest()
     }
   }
 
@@ -71,8 +95,8 @@ export default function AddressBar() {
 
   // need this to get the address to show in screen see App/Containers/Explore/Components/AddLocationSheetContent.js
   useEffect(() => {
-    console.log('AddressBar useEffect addressUpdate' + userProfileVar().addressId)
-  }, [userProfileVar().addressId]);
+    console.log('AddressBar useEffect addressUpdate' + userProfileVarReactive.addressId)
+  }, [userProfileVarReactive.addressId]);
 
 
   /**
@@ -88,84 +112,76 @@ export default function AddressBar() {
    * see './gql/explore_queries'
    */
 
-  const fetchAddessDataGuest = async () => {
-    console.log(`fetchAddessDataGuest and guest buyerId=${guestBuyerId}`)
+  const fetchAddressDataGuest = async () => {
+    console.log(`fetchAddessDataGuest and guest buyerId=${buyId}`)
     let client = await endPointClient(PUBLIC_CLIENT_ENDPOINT)
     await client.query({
       query: aQM.FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID, // return is not a collection
-      variables: { buyerId: guestBuyerId }
+      variables: { buyerId: buyId }
     })
       .then((result) => {
         if (typeof result.data !== 'undefined') {
-          console.log(`AddressBar found GuestBuyer addressId ${JSON.stringify(result.data)}`)
+          console.log(`AddressBar fetchAddressDataGuest look up GuestBuyer addressId ${JSON.stringify(result.data)}`)
           if (result.data.getGuestBuyerDefaultAddressByBuyerId.addressId === null) {
             console.log(`found null GuestBuyer addressId  creating`)
             toggleAddressSheet()
             return
           } else {
-            console.log(`AddressBar found GuestBuyer address ${JSON.stringify(result.data.getGuestBuyerDefaultAddressByBuyerId)}`)
+            console.log(`AddressBar fetchAddressDataGuest found GuestBuyer default address ${JSON.stringify(result.data.getGuestBuyerDefaultAddressByBuyerId)}`)
             userProfileVar({
               ...userProfileVar(),
               addressId: result.data.getGuestBuyerDefaultAddressByBuyerId.addressId,
               addressLine1: gqlMappers.mapGQLAddressToDelivery(result.data.getGuestBuyerDefaultAddressByBuyerId),
               addressLine2: gqlMappers.mapGQLAddressToLine2(result.data.getGuestBuyerDefaultAddressByBuyerId)
             });
-            setAdressUpdate(true)
-            //   console.log(userProfileVar().addressId)
           }
         } else {
-          console.log('AddressBar server error for query FIND_GUEST_BUYER_ADDRESS_BY_ID')
+          console.log('AddressBar fetchAddressDataGuest server error for query FIND_GUEST_BUYER_ADDRESS_BY_ID')
         }
       })
       .catch(err => {
         if (typeof err !== 'undefined') {
-          console.log("AddressBar Query error GetGuestBuyerDefaultAddressByBuyerId" + err)
+          console.log("AddressBar fetchAddressDataGuest Query error GetGuestBuyerDefaultAddressByBuyerId" + err)
         }
       });
 
   }
 
   /** FIND_BUYER_DEFAULT_ADDRESS_BY_ID is a private api */
-  const fetchAddessDataBuyer = async () => {
+  const fetchAddressDataBuyer = async () => {
 
     // call query for registerBuyerAddress by buyer id  
-    console.log(`AddressBar fetchAddessDataBuyer and  buyerId=${regBuyerId}`)
-    //console.log(`AddressBar fetchAddessDataBuyer and  buyerId=${JSON.stringify(aQM.FIND_BUYER_DEFAULT_ADDRESS_BY_ID)}`)
+    console.log(`AddressBar fetchAddressDataBuyer and  buyerId=${buyId}`)
     let client = await getPrivateClient()
     // const token = await getLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY)
     // console.log(token)
     // let client = await  getPrivateTestClient(token)
     await client.query({
       query: aQM.FIND_BUYER_DEFAULT_ADDRESS_BY_ID,
-      variables: { buyerId: regBuyerId }
+      variables: { buyerId: buyId }
     })
       .then((result) => {
-        console.log(`AddressBar result ${result}`)
         if (typeof result.data !== 'undefined') {
-          console.log(`AddressBar address id ${result.data.getBuyerDefaultAddressByBuyerId.addressId}`)
+          console.log(`AddressBar fetchAddressDataBuyer address id ${result.data.getBuyerDefaultAddressByBuyerId.addressId}`)
           if (result.data.getBuyerDefaultAddressByBuyerId.addressId === null) {
-            console.log(`AddressBar address is null`)
+            console.log(`AddressBar fetchAddressDataBuyer address is null so create`)
             toggleAddressSheet()
             return
           }
-          console.log(`AddressBar found getBuyerDefaultAddressByBuyerId addressId ${JSON.stringify(result.data)}`)
-
+          console.log(`AddressBar fetchAddressDataBuyer found getBuyerDefaultAddressByBuyerId addressId ${JSON.stringify(result.data)}`)
           userProfileVar({
             ...userProfileVar(),
             addressId: result.data.getBuyerDefaultAddressByBuyerId.addressId,
             addressLine1: gqlMappers.mapGQLAddressToDelivery(result.data.getBuyerDefaultAddressByBuyerId),
             addressLine2: gqlMappers.mapGQLAddressToLine2(result.data.getBuyerDefaultAddressByBuyerId)
           });
-          setAdressUpdate(true)
-
-
         } else {
-          console.log('AddressBar server error for query getBuyerDefaultAddressByBuyerId')
+          console.log('AddressBar fetchAddressDataBuyer server error for query getBuyerDefaultAddressByBuyerId')
         }
       })
       .catch(err => {
         if (typeof err !== 'undefined') {
-          console.log("AddressBar Query error getBuyerDefaultAddressByBuyerId" + err)
+          console.log("AddressBar fetchAddressDataBuyer Query error getBuyerDefaultAddressByBuyerId" + err)
         }
       });
 

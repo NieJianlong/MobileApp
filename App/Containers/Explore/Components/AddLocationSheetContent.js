@@ -86,33 +86,23 @@ export default function AddLocationSheet() {
       .then((result) => {
         console.log(`runAddAddessMutation ${JSON.stringify(result.data)}`)
         if (typeof result.data !== 'undefined') {
-
+          console.log(`runAddAddessMutation update userProfileVar with addressId ${JSON.stringify(result.data.createAddress.addressId)}`)
           userProfileVar({
             ...userProfileVar(),
             addressId: result.data.createAddress.addressId,
             addressLine1: gqlMappers.mapGQLAddressToDelivery(result.data.createAddress),
             addressLine2: gqlMappers.mapGQLAddressToLine2(result.data.createAddress)
           });
+          console.log(userProfileVar().addressId)
         }
-
-        console.log(`userProfileVar ${userProfileVar()}`)
-
       })
       .catch(err => {
-        console.log("explore address mutation error " + err)
+        console.log("explore add address mutation error " + err)
         //  { renderAddressItem({ name: 'error', address: err }) }
 
         return
       });
-
-    if (typeof ret !== 'undefined') {
-      console.log(JSON.stringify(ret))
-    }
-
   }
-
-
-
 
   return (
     <View style={{ flex: 1 }}>

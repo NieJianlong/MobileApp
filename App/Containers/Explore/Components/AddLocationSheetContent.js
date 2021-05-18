@@ -68,16 +68,8 @@ export default function AddLocationSheet() {
       console.log(`running create address with guest buyer id ${buyerId}`)
     }
 
-    let AddressRequestForCreate = {
-      pinCode: pinCodeV,
-      defaultAddress: true, addressType: 'SHIPPING',
-      provinceState: stateV,
-      townCity:cityV,
-      flat:numFV,
-      villageArea:areaV,
-      houseNumber: numHV,  landMark:markN,
-      referenceId: buyerId
-    }
+
+    
 
     // CREATE_ADDRESS is a public api
     let client = await endPointClient(PUBLIC_CLIENT_ENDPOINT)

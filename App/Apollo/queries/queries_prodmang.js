@@ -5,7 +5,7 @@ import { gql } from '@apollo/client';
  * 
  * allProductListingsDTO(sortfield: String!, sortDirection: String!, pageNo: Int, pageSize: Int):[ProductListingDTO]
  * 
- * ProductListingDTO { id: ID!  photo: String  productName: String  rating: Int numberOfReviews: Int  wholesalePrice: Float
+ * ProductListingDTO { id: ID!  photo: String  productName: String  rating: Int numberOfReviews: Int  wholeSalePrice: Float
  *  retailPrice: Float  percentOff: Int closedDate: Date  progressBarValue: Float }
  * 
  */
@@ -14,7 +14,15 @@ import { gql } from '@apollo/client';
  query AllProductListingsDTO($sortfield: String!, $sortDirection: String!, $pageNo: Int!, $pageSize: Int!)  {
   allProductListingsDTO(sortfield: $sortfield, sortDirection: $sortDirection, pageNo: $pageNo, pageSize: $pageSize)  {
         id
-        wholesalePrice
+        photo
+        productName
+        rating
+        numberOfReviews
+        wholeSalePrice
+        retailPrice
+        percentOff
+        closedDate
+        progressBarValue
    }
  }
  `;

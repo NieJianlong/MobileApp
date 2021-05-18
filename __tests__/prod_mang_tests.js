@@ -35,6 +35,7 @@ it('test allProductListingsDTO', async () => {
 
     if (typeof ret !== 'undefined') {
         console.log(JSON.stringify(ret))
+        console.log(ret.data.allProductListingsDTO.length)
     }
 
 });

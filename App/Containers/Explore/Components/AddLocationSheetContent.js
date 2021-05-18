@@ -1,9 +1,10 @@
 import React, { useRef, useContext, useCallback } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TextInput } from '../../../Components';
 import styles from '../styles';
 import { AlertContext } from '../../Root/GlobalContext';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function AddLocationSheet() {
   let stateInput = useRef();

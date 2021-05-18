@@ -103,16 +103,16 @@ it('test guest buyer 2', async () => {
 //+++++++++++++++++ create a register buyer +++++++++++++++++++
 // update numbers so no xxx exists errors
 // node_modules/jest/bin/jest.js -t 'test register buyer'
-//  {"data":{"registerBuyer":{"buyerId":"f3d26ef6-3666-407b-b6b5-389828487b39","__typename":"BuyerProfileResponse"}}}
+//  {"data":{"registerBuyer":{"buyerId":"c4f06cac-3661-408f-9d04-af3f7090c6db","__typename":"BuyerProfileResponse"}}}
 it('test register buyer', async () => {
     let BuyerProfileRequestForCreate = {
-        userName: 'bu3634',
-        firstName: 'bu363Y4',
-        lastName: 'bu336YR',
+        userName: 'cu3634',
+        firstName: 'cu363Y4',
+        lastName: 'cu336YR',
         geoLocation: '1.2.3.44',
-        phoneNumber: '+33266300124',
+        phoneNumber: '+33267700124',
         guestBuyer: false,
-        email: 'bu@email.com', userType: 'BUYER', password: '1R2T#$6Tkop224',
+        email: 'cu@email.com', userType: 'BUYER', password: 'Wwwwwww8',
         oneClickPurchaseOn: true, areaRegion: '',
         languages: [
             "EN"
@@ -174,16 +174,13 @@ it('test create address', async () => {
 
 
 
-
-
-
 // node_modules/jest/bin/jest.js -t 'test getGuestBuyerAddressesById'
 it('test getGuestBuyerAddressesById', async () => {
     // public api
     let client = await endPointClient(url)
     let ret = await client.query({
         query: FIND_GUEST_BUYER_ADDRESS_BY_ID,
-        variables: { buyerId: '3c48548f-9a81-4b83-8f6a-9bd6885df231' }
+        variables: { buyerId: '99264247-c58c-4a77-bb61-559b6226db2c' }
     })
         .then(result => result)
         .catch(err => {

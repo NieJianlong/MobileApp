@@ -23,15 +23,15 @@ export default function AddLocationSheet() {
   let flatNumberInput = useRef();
   let landmarkInput = useRef();
   const { dispatch } = useContext(AlertContext);
- 
+
   // mayby we can simplity this
   const [pinCodeV, setPinCode] = useState(0);
-  const [stateV, setStateV] = useState( '');
-  const [cityV, setCityV] = useState( '');
-  const [areaV, setAreaV] = useState( '');
-  const [numHV, setNumHV] = useState( '');
-  const [numFV, setNumFV] = useState( '');
-  const [markN, setMarkV] = useState( '');
+  const [stateV, setStateV] = useState('');
+  const [cityV, setCityV] = useState('');
+  const [areaV, setAreaV] = useState('');
+  const [numHV, setNumHV] = useState('');
+  const [numFV, setNumFV] = useState('');
+  const [markN, setMarkV] = useState('');
 
   const toggleAddLocationSheet = useCallback(() => {
     // found issues with updating state here
@@ -56,7 +56,7 @@ export default function AddLocationSheet() {
       */
   const runAddAddessMutation = async () => {
 
-    // depending on the auth state we will opulate a buyerId from local storage
+    // depending on the auth state we will populate a buyerId from local storage
     let buyerId = ''
     if (userProfileVar().isAuth) {
       // local storage register buyer use email
@@ -67,10 +67,16 @@ export default function AddLocationSheet() {
       await storage.getLocalStorageValue(getUniqueId()).then((res) => { buyerId = res })
       console.log(`running create address with guest buyer id ${buyerId}`)
     }
-
-
-    
-
+    let AddressRequestForCreate = {
+      pinCode: pinCodeV,
+      defaultAddress: true, addressType: 'SHIPPING',
+      provinceState: stateV,
+      townCity: cityV,
+      flat: numFV,
+      villageArea: areaV,
+      houseNumber: numHV, landMark: markN,
+      referenceId: buyerId
+    }
     // CREATE_ADDRESS is a public api
     let client = await endPointClient(PUBLIC_CLIENT_ENDPOINT)
     await client.mutate({
@@ -78,20 +84,23 @@ export default function AddLocationSheet() {
       variables: { request: AddressRequestForCreate }
     })
       .then((result) => {
+        console.log(`runAddAddessMutation ${JSON.stringify(result.data)}`)
         if (typeof result.data !== 'undefined') {
-          console.log(`runAddAddessMutation ${JSON.stringify(result.data)}`)
+
           userProfileVar({
-          ...userProfileVar(), 
-          addressId:result.data.createAddress.addressId,
-          addressLine1:gqlMappers.mapGQLAddressToDelivery(result.data.createAddress),
-          addressLine2: gqlMappers.mapGQLAddressToLine2(result.data.createAddress)
+            ...userProfileVar(),
+            addressId: result.data.createAddress.addressId,
+            addressLine1: gqlMappers.mapGQLAddressToDelivery(result.data.createAddress),
+            addressLine2: gqlMappers.mapGQLAddressToLine2(result.data.createAddress)
           });
         }
+
+        console.log(`userProfileVar ${userProfileVar()}`)
 
       })
       .catch(err => {
         console.log("explore address mutation error " + err)
-      //  { renderAddressItem({ name: 'error', address: err }) }
+        //  { renderAddressItem({ name: 'error', address: err }) }
 
         return
       });
@@ -102,7 +111,7 @@ export default function AddLocationSheet() {
 
   }
 
-  
+
 
 
   return (
@@ -116,7 +125,7 @@ export default function AddLocationSheet() {
             runAddAddessMutation()
             toggleAddLocationSheet()
           }
-          }>
+        }>
           <Text style={styles.txtSave}>SAVE</Text>
         </TouchableOpacity>
       </View>
@@ -130,7 +139,7 @@ export default function AddLocationSheet() {
           onSubmitEditing={() => stateInput.getInnerRef().focus()}
         />
         <TextInput
-          onChangeText={text =>  setStateV(text)}
+          onChangeText={text => setStateV(text)}
           placeholder={'State (Province)'}
           style={styles.textInput}
           ref={(r) => (stateInput = r)}
@@ -138,7 +147,7 @@ export default function AddLocationSheet() {
           onSubmitEditing={() => cityInput.getInnerRef().focus()}
         />
         <TextInput
-          onChangeText={text =>  setCityV(text)}
+          onChangeText={text => setCityV(text)}
           placeholder={'Town or city'}
           style={styles.textInput}
           ref={(r) => (cityInput = r)}
@@ -146,7 +155,7 @@ export default function AddLocationSheet() {
           onSubmitEditing={() => villageInput.getInnerRef().focus()}
         />
         <TextInput
-          onChangeText={text =>   setAreaV(text)}
+          onChangeText={text => setAreaV(text)}
           placeholder={'Village or area'}
           style={styles.textInput}
           ref={(r) => (villageInput = r)}
@@ -154,7 +163,7 @@ export default function AddLocationSheet() {
           onSubmitEditing={() => houseNumberInput.getInnerRef().focus()}
         />
         <TextInput
-          onChangeText={text =>         setNumHV(text)}
+          onChangeText={text => setNumHV(text)}
           placeholder={'House number'}
           style={styles.textInput}
           ref={(r) => (houseNumberInput = r)}
@@ -170,7 +179,7 @@ export default function AddLocationSheet() {
           onSubmitEditing={() => landmarkInput.getInnerRef().focus()}
         />
         <TextInput
-          onChangeText={text =>  setMarkV(data)}
+          onChangeText={text => setMarkV(data)}
           placeholder={'Landmark'}
           style={styles.textInput}
           ref={(r) => (landmarkInput = r)}

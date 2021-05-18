@@ -9,7 +9,10 @@ import { InMemoryCache } from '@apollo/client';
 const userProfile = {
   email: '',
   isAuth: false,
-  phone: 0
+  phone: 0,
+  addressId: '', 
+  addressLine1:'',
+  addressLine2:''
 }
 
 export const userProfileVar = makeVar(userProfile);

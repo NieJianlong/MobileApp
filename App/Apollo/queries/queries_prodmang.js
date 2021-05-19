@@ -75,22 +75,7 @@ export const PRODUCT_BY_ID = gql`
 
 
 
- /**
-  *  @query   productListingByReturnAddress(addressId: ID!): [ProductListing]
-  * 
- *  ProductListing{id: ID! product: Product store: Store chat: Chat announcement: Announcement address: Address 
- *  chatMuteFlag: Boolean wholeSalePrice: Float retailPrice: Float discount: Float numberOfItems: Int maxQuantityPerCart: Int 
- *  closedDate: Date deliveryDate: Date createdAt: DateTime updatedAt: DateTime}
-  * 
-  */
-export const PRODUCT_LISTING_DETAIL_RESPONSE = gql`
- query ProductListingDetailResponse($id: ID!)  {
-  productListingDetailResponse(id: $id)  {
-    id
-  }
- }
- `;
-
+ 
 
 
 

@@ -64,8 +64,8 @@ function RegisterScreen(props) {
     const runRegisterBuyer = async() => {
         console.log(`${name}::${lastName}::${registerInput}::${psswd}`)
         // userName ===  email  && phoneNumber is required if empty
-        // backend has not published list requried fields so languages, 
-        // currencies seem to be needed hence defaults here
+        // backend has not published list requried fields so languages and  
+        // currencies seem to be needed, hence defaults here
         let BuyerProfileRequestForCreate = {
             userName: registerInput,
             firstName: name,

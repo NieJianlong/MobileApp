@@ -114,6 +114,13 @@ query GetGuestBuyerDefaultAddressByBuyerId($buyerId: ID!)  {
 * getBuyerDefaultAddressByBuyerId(buyerId : ID!) : AddressResponse
 * see @query addresses
 */
+/**
+* @query  getBuyerDefaultAddressByBuyerId 
+* 
+* schema 
+* getBuyerDefaultAddressByBuyerId(buyerId : ID!) : AddressResponse
+* see @query addresses
+*/
 export const FIND_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
     query GetBuyerDefaultAddressByBuyerId($buyerId: ID!)  {
       getBuyerDefaultAddressByBuyerId(buyerId: $buyerId)  {

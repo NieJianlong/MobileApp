@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 /** ================== User Management ================ */
 // scripts for processing schema data
-// tr --delete '\n'  < temp.txt >> temp2.txt
+// tr --delete '\n'  < temp.txt > temp2.txt
 // tr -s \  <  temp2.txt
 
 
@@ -228,7 +228,14 @@ export const FIND_BUYER_ADDRESS_BY_ID = gql`
 export const FIND_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
     query GetBuyerDefaultAddressByBuyerId($buyerId: ID!)  {
       getBuyerDefaultAddressByBuyerId(buyerId: $buyerId)  {
-            addressId
+        addressId
+        pinCode
+        provinceState
+        townCity
+        villageArea
+        houseNumber
+        flat
+        landMark
       }
     }
     `;

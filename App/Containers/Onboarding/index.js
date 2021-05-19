@@ -46,21 +46,20 @@ function OnboardingScreen(props) {
         onError: (error) => console.error("Error creating a guest Id", error),
     });
 
-    const checkBuyerIdExists = async() => {
+    /** for now only guests end up here */
+    const checkBuyerIdExists = async () => {
+
         // lets check if a buyer id exists
         // first check for an existing buyer id
         let bid = await storage.getLocalStorageValue(getUniqueId())
         if (bid) {
             console.log(`found a bid in local storage ${bid}`)
             setBIdExists(true)
-        }  
+        }
     }
 
-
     useEffect(() => {
-
         checkBuyerIdExists()
-
         return () => {
             // unmount here
         }

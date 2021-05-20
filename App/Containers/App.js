@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import RootContainer from './Root';
 /**
  * we are using apollo for gql and state
@@ -6,16 +6,12 @@ import RootContainer from './Root';
  */
 import { ApolloProvider } from '@apollo/client';
 /** pubClient is gql client for public api and is also the global cache */
-import { getPrivateClient } from '../Apollo/private-api-v3';
+import { client } from '../Apollo/public-api-v3';
 
-class App extends Component {
-  render() {
-    return (
-      <ApolloProvider client={getPrivateClient}>
-        <RootContainer />
-      </ApolloProvider>
-    );
-  }
-}
+const App = () => (
+  <ApolloProvider client={client}>
+    <RootContainer />
+  </ApolloProvider>
+);
 
 export default App;

@@ -19,6 +19,8 @@ import UserHeader from './UserHeader';
 import images from '../../Themes/Images';
 import NavigationService from '../../Navigation/NavigationService';
 import { userProfileVar } from '../../Apollo/cache';
+import { useQuery } from '@apollo/client';
+import { USER_PROFILES } from '../../Apollo/queries/queries_user';
 
 const salamiItem = [
   {
@@ -85,8 +87,10 @@ const buttons = [
  */
 function UserCenter(props) {
   const [serviceItems, setServiceItems] = useState([]);
+  const { loading, error, data } = useQuery(USER_PROFILES);
+  const client = useApolloClient();
+  debugger;
   useEffect(() => {
-   
     if (userProfileVar().isAuth) {
       setServiceItems([...salamiItem, ...items]);
     } else {

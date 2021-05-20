@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
-import { Text, View, Image } from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  TouchableOpacity as RNTouchableOpacity,
+  Platform,
+} from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { Fonts, Colors } from '../Themes';
 import PropTypes from 'prop-types';
 import AppConfig from '../Config/AppConfig';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import { TouchableOpacity as GHTouchableOpacity } from 'react-native-gesture-handler';
+const TouchableOpacity =
+  Platform.OS === 'ios' ? RNTouchableOpacity : GHTouchableOpacity;
 class Button extends Component {
   render() {
     const {

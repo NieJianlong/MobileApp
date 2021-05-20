@@ -59,9 +59,6 @@ function Explore(props) {
             }
             return false;
           }}
-          onResponderRelease={({ nativeEvent }) => {
-            console.warn(nativeEvent);
-          }}
         >
           <CollapsibleHeaderTabView
             prerenderingSiblingsNumber={1}
@@ -69,7 +66,6 @@ function Explore(props) {
             tabBarActiveTextColor={colors.primary}
             ref={ref}
             renderTabBar={(mprops) => {
-              console.warn('screen' + screenWidth);
               return (
                 <View style={{ flex: 1, backgroundColor: 'white' }}>
                   <ScrollableTabBar

@@ -1,5 +1,5 @@
-import { makeVar, gql } from '@apollo/client';
-import { InMemoryCache } from '@apollo/client';
+import { makeVar, gql } from "@apollo/client";
+import { InMemoryCache } from "@apollo/client";
 
 
 /**
@@ -7,12 +7,12 @@ import { InMemoryCache } from '@apollo/client';
  * on user login
  */
 const userProfile = {
-  email: '',
+  email: "",
   isAuth: false,
   phone: 0,
-  addressId: '', 
-  addressLine1:'',
-  addressLine2:''
+  addressId: "", 
+  addressLine1:"",
+  addressLine2:""
 }
 
 export const userProfileVar = makeVar(userProfile);

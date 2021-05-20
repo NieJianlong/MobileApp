@@ -3,15 +3,15 @@ import * as validator from "../App/Validation";
 /**
  * validation hook tests
  */
-const INVALID_PHONE = "+4412@2345456";;
-const VALID_PHONE = "+441232345456";;
+const INVALID_PHONE = "+4412@2345456";
+const VALID_PHONE = "+441232345456";
 
-const INVALID_EMAIL = "drop database user;";;
-const VALID_EMAIL = "silly@billy.com";;
+const INVALID_EMAIL = "drop database user;";
+const VALID_EMAIL = "silly@billy.com";
 
-const INVALID_PASSWORD = "short";;
-const STRONG_VALID_PASSWORD = "longerWww2!";;
-const WEAK_VALID_PASSWORD = "longerWww2";;
+const INVALID_PASSWORD = "short";
+const STRONG_VALID_PASSWORD = "longerWww2!";
+const WEAK_VALID_PASSWORD = "longerWww2";
 
 /** validation tests */
 
@@ -38,15 +38,15 @@ it("test determine user input", async () => {
   expect(ret3.isValid).toBe(false);
 
   let ret4 = validator.loginDifferentiator(INVALID_PHONE);
-  expect(ret4.isValid).toBe(false);;
+  expect(ret4.isValid).toBe(false);
 });
 
 it("test login screen", async () => {
-  let ret = validator.loginDifferentiator(VALID_EMAIL);;
+  let ret = validator.loginDifferentiator(VALID_EMAIL);
   expect(ret.isValid).toBe(true);
   expect(ret.isEmail).toBe(true);
   ret = validator.loginDifferentiator(INVALID_EMAIL);
-  expect(ret.isValid).toBe(false);;
+  expect(ret.isValid).toBe(false);
 });
 
 //=============== Register validation
@@ -61,7 +61,7 @@ it("test register screen", async () => {
     lastName: "silly",
     registerInput: VALID_EMAIL,
     psswd: WEAK_VALID_PASSWORD,
-  };;
+  };
   let reporter = validator.registerValidator(registerValues);
   expect(reporter.hasMissing).toBe(undefined);
   expect(reporter.missingVal).toBe(undefined);
@@ -76,14 +76,14 @@ it("test register screen", async () => {
   reporter = validator.registerValidator(registerValues);
   expect(reporter.validPhoneOrEmail).toBe(false);
   registerValues.registerInput = INVALID_PHONE;
-  expect(reporter.validPhoneOrEmail).toBe(false);;
+  expect(reporter.validPhoneOrEmail).toBe(false);
 });
 
 //==================== Password rules
 
 it("test password rules", async () => {
   /** for now single rule is 8 chars min */
-  expect(validator.isValidPassword(WEAK_VALID_PASSWORD)).toBe(true);;
+  expect(validator.isValidPassword(WEAK_VALID_PASSWORD)).toBe(true);
   expect(validator.isValidPassword(INVALID_PASSWORD)).toBe(false);
 });
 
@@ -99,13 +99,13 @@ let PERSONAL_DETAILS_CACHE_FIELDS = {
   city: "London",
   mstate: "London",
   postcode: "HP630G",
-  country: "UK",,
+  country: "UK",
 };
 
 it("check personal details", async () => {
   let validatorResponse = validator.personalDetailsValidator(
     PERSONAL_DETAILS_CACHE_FIELDS
-  );;
+  );
 
-  console.log(JSON.stringify(validatorResponse));;
+  console.log(JSON.stringify(validatorResponse));
 });

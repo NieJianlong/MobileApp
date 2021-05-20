@@ -1,5 +1,6 @@
 import React, { Component, useCallback, useEffect } from 'react';
 import { View, StatusBar, Image } from 'react-native';
+import { userProfileVar } from '../../Apollo/cache';
 import { runTokenFlow } from '../../Apollo/jwt-request';
 import {
   getLocalStorageValue,
@@ -24,6 +25,10 @@ export default function LaunchScreen() {
       let access_token = data.access_token;
       if (access_token === 'undefined') {
         console.log('no access token');
+        userProfileVar({
+          email: username,
+          isAuth: true,
+        });
       }
       setLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY, access_token);
       NavigationService.navigate('MainScreen');

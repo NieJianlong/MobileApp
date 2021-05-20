@@ -20,6 +20,7 @@ import {
 // validation and auth api
 import * as validator from '../../Validation'
 import * as aQM from './gql/register_mutations'
+import * as jwt from '../../Apollo/jwt-request'
 import * as storage from '../../Apollo/local-storage'
 import { endPointClient, PUBLIC_CLIENT_ENDPOINT } from '../../Apollo/public-api-v3'
 /** userProfileVar is the variable for the cache to get set  userProfile attributes */
@@ -100,6 +101,43 @@ function RegisterScreen(props) {
                         email: registerInput,
                         isAuth: true
                     })
+                    let loginRequest = {
+                        username: registerInput,
+                        password: psswd,
+                      };
+
+                    // login here for private api jwt initial getDefaultBuyerAdress
+                      jwt
+                      .runTokenFlow(loginRequest)
+                      .then(function (res) {
+                        if (typeof res !== 'undefined') {
+                          console.log(`login ok set auth`);
+                          userProfileVar({
+                            email: loginRequest.username,
+                            isAuth: true,
+                          });
+            
+                          let access_token = res.data.access_token;
+                          if (access_token === 'undefined') {
+                            console.log('no access token');
+                          }
+                          storage.setLocalStorageValue(
+                            storage.LOCAL_STORAGE_TOKEN_KEY,
+                            access_token
+                          );
+                          NavigationService.navigate('MainScreen');
+                        }
+                        // need check for status code = 200
+                        // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
+                        else {
+                          console.log('psswd is not correct');
+                          toggleResetValidationAlert();
+                        }
+                      })
+                      .catch(function (err) {
+                        // here we will need to deal with a  status` code 401 and refresh jwt and try again
+                      });
+
                     NavigationService.navigate('MainScreen') 
                    // NavigationService.navigate('OTPScreen', { fromScreen: 'RegisterScreen', phone: registerInput })
                 }

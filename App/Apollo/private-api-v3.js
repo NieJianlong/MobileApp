@@ -4,21 +4,21 @@ import {
   ApolloLink,
   InMemoryCache,
   concat,
-} from '@apollo/client';
+} from "@apollo/client";
 import {
   LOCAL_STORAGE_TOKEN_KEY,
   getLocalStorageValue,
-} from '../Apollo/local-storage';
+} from "../Apollo/local-storage";
 
 /**
  * need fetch as we are not in a browser
  */
-import fetch from 'cross-fetch';
+import fetch from "cross-fetch";
 
-// const endpointDev = 'http://10.0.2.2:8080/graphql'
+// const endpointDev = "http://10.0.2.2:8080/graphql"
 
 const endpointDev =
-  'http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8082/graphql';
+  "http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8082/graphql";
 
 const httpLink = new HttpLink({ uri: endpointDev, fetch: fetch });
 
@@ -28,9 +28,9 @@ export const getPrivateClient = async () => {
     // add the authorization to the headers
     operation.setContext({
       headers: {
-        Authorization: token ? `Bearer ${token}` : '',
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
+        Authorization: token ? `Bearer ${token}` : "",
+        "Content-Type": "application/json",
+        Accept: "application/json",
       },
     });
 
@@ -51,9 +51,9 @@ export const getPrivateTestClient = async (token) => {
     // add the authorization to the headers
     operation.setContext({
       headers: {
-        Authorization: token ? `Bearer ${token}` : '',
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
+        Authorization: token ? `Bearer ${token}` : "",
+        "Content-Type": "application/json",
+        Accept: "application/json",
       },
     });
 

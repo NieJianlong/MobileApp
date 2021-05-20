@@ -19,6 +19,7 @@ import NavigationService from '../../Navigation/NavigationService';
 import images from '../../Themes/Images';
 import UserAvatar from './UserAvatar';
 import { ApplicationStyles } from '../../Themes';
+import { userProfileVar } from '../../Apollo/cache';
 
 /**
  * @description:The user header component, which contains basic user information
@@ -28,10 +29,9 @@ import { ApplicationStyles } from '../../Themes';
 function UserHeader(props) {
   const { needSafeArea, needEdit, islogin, setLogin } = props;
   const textTip = "You haven't add any personal \n details yet";
-
   return (
     <View style={styles.headerContainer}>
-      {islogin ? (
+      {userProfileVar().isAuth ? (
         needSafeArea ? (
           <SafeAreaView style={styles.toppart}>
             {userInfo(needEdit)}

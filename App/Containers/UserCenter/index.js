@@ -18,6 +18,7 @@ import colors from '../../Themes/Colors';
 import UserHeader from './UserHeader';
 import images from '../../Themes/Images';
 import NavigationService from '../../Navigation/NavigationService';
+import { userProfileVar } from '../../Apollo/cache';
 
 const salamiItem = [
   {
@@ -83,18 +84,15 @@ const buttons = [
  * @return {*}
  */
 function UserCenter(props) {
-  const [islogin, setIslogin] = useState(false);
-  const setLogin = useCallback(() => {
-    setIslogin(true);
-  }, []);
   const [serviceItems, setServiceItems] = useState([]);
   useEffect(() => {
-    if (islogin) {
+   
+    if (userProfileVar().isAuth) {
       setServiceItems([...salamiItem, ...items]);
     } else {
       setServiceItems(items);
     }
-  }, [islogin]);
+  }, []);
   return (
     <View style={styles.container}>
       <StatusBar
@@ -103,11 +101,7 @@ function UserCenter(props) {
         backgroundColor={colors.background}
       />
       <View style={{ marginTop: vs(10) }}>
-        <UserHeader
-          needSafeArea
-          islogin={islogin}
-          setLogin={setLogin}
-        ></UserHeader>
+        <UserHeader needSafeArea></UserHeader>
       </View>
 
       {/* All the items usercenter */}
@@ -118,7 +112,9 @@ function UserCenter(props) {
             <ItemBox {...item}></ItemBox>
           </View>
         ))}
-        {!islogin && <View style={{ height: s(94), width: s(94) }} />}
+        {!userProfileVar().isAuth && (
+          <View style={{ height: s(94), width: s(94) }} />
+        )}
       </View>
       <View style={styles.buttonContainer}>
         {buttons.map((item, i) => (

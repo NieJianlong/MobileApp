@@ -1,16 +1,16 @@
-import { endPointClient } from "../App/Apollo/public-api-v3";;
+import { endPointClient } from "../App/Apollo/public-api-v3";
 import {
   PRODUCT_LISTINGS_BY_STORE_ID,
   PRODUCT_BY_ID,
-  PRODUCT_LISTING_DETAIL_RESPONSE,,
-} from "../App/Apollo/queries/queries_prodmang";;
+  PRODUCT_LISTING_DETAIL_RESPONSE,
+} from "../App/Apollo/queries/queries_prodmang";
 
-jest.mock('@react-native-community/async-storage', () =>
+jest.mock("@react-native-community/async-storage", () =>
   require("@react-native-community/async-storage/jest/async-storage-mock")
 );
 
 let url =
-  "http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8083/graphql";;
+  "http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8083/graphql";
 /**
  *
 8081 --> IAM
@@ -19,10 +19,10 @@ let url =
 
  */
 
-// node_modules/jest/bin/jest.js -t 'test productListingsByStoreId'
+// node_modules/jest/bin/jest.js -t "test productListingsByStoreId"
 it("test productListingsByStoreId", async () => {
   // public api
-  let client = await endPointClient(url);;
+  let client = await endPointClient(url);
   let ret = await client
     .query({
       query: PRODUCT_LISTINGS_BY_STORE_ID,
@@ -31,22 +31,22 @@ it("test productListingsByStoreId", async () => {
         sortfield: "wholeSalePrice",
         sortDirection: "ASC",
         pageNo: 0,
-        pageSize: 3,,
-      },,
+        pageSize: 3,
+      },
     })
     .then((result) => result)
     .catch((err) => {
-      console.log("query error " + err);;
-      return;;
+      console.log("query error" + err);
+      return;
     });
 
   if (typeof ret !== "undefined") {
     console.log(
-      JSON.stringify(ret.data.productListingsByStoreId.productListingDTOList);
+      JSON.stringify(ret.data.productListingsByStoreId.productListingDTOList)
     );
-    console.log(ret.data.productListingsByStoreId.productListingDTOList.length);;
+    console.log(ret.data.productListingsByStoreId.productListingDTOList.length);
 
-    let pList = [];;
+    let pList = [];
     for (const element of ret.data.productListingsByStoreId
       .productListingDTOList) {
       let bag = {
@@ -60,27 +60,27 @@ it("test productListingsByStoreId", async () => {
         retailPrice: element.retailPrice,
         percentOff: element.percentOff,
         deliveryDate: element.closedDate,
-        progressBarValue: element.progressBarValue,,
-      };;
-      pList.push(bag);;
+        progressBarValue: element.progressBarValue,
+      };
+      pList.push(bag);
     }
-    console.log(JSON.stringify(pList[0]));;
+    console.log(JSON.stringify(pList[0]));
   }
 });
 
-// node_modules/jest/bin/jest.js -t 'test productById'
+// node_modules/jest/bin/jest.js -t "test productById"
 it("test productById", async () => {
   // public api
-  let client = await endPointClient(url);;
+  let client = await endPointClient(url);
   let ret = await client
     .query({
       query: PRODUCT_BY_ID,
-      variables: { id: "564efc1f-1bfc-4b24-97c5-f35f4fd071ad" },,
+      variables: { id: "564efc1f-1bfc-4b24-97c5-f35f4fd071ad" },
     })
     .then((result) => result)
     .catch((err) => {
-      console.log("query error " + err);;
-      return;;
+      console.log("query error " + err);
+      return;
     });
 
   if (typeof ret !== "undefined") {
@@ -88,19 +88,19 @@ it("test productById", async () => {
   }
 });
 
-// node_modules/jest/bin/jest.js -t 'test productListingDetailResponse'
+// node_modules/jest/bin/jest.js -t "test productListingDetailResponse"
 it("test productListingDetailResponse", async () => {
   // public api
-  let client = await endPointClient(url);;
+  let client = await endPointClient(url);
   let ret = await client
     .query({
       query: PRODUCT_LISTING_DETAIL_RESPONSE,
-      variables: { id: "564efc1f-1bfc-4b24-97c5-f35f4fd071ad" },,
+      variables: { id: "564efc1f-1bfc-4b24-97c5-f35f4fd071ad" },
     })
     .then((result) => result)
     .catch((err) => {
-      console.log("query error " + err);;
-      return;;
+      console.log("query error " + err);
+      return;
     });
 
   if (typeof ret !== "undefined") {

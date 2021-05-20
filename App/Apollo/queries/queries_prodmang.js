@@ -53,7 +53,7 @@ export const PRODUCT_BY_ID = gql`
  *  closedDate: Date deliveryDate: Date createdAt: DateTime updatedAt: DateTime}
  * 
  */
- export const PRODUCT_LISTING_DETAIL_RESPONSE = gql`
+export const PRODUCT_LISTING_DETAIL_RESPONSE = gql`
  query ProductListingDetailResponse($id: ID!)  {
   productListingDetailResponse(id: $id)  {
     id
@@ -64,22 +64,43 @@ export const PRODUCT_BY_ID = gql`
 
 
 /**
- *  @query   productListingWithFilter(filter: ProductListingFilter): [ProductListing]
- *  ProductListing{id: ID! product: Product store: Store chat: Chat announcement: Announcement address: Address 
- *  chatMuteFlag: Boolean wholeSalePrice: Float retailPrice: Float discount: Float numberOfItems: Int maxQuantityPerCart: Int 
- *  closedDate: Date deliveryDate: Date createdAt: DateTime updatedAt: DateTime} 
+ *  @query  productListingsByStoreId(storeId: String,sortfield: String!, sortDirection: String!, pageNo: Int, pageSize: Int) 
+ *        : StoreDTO
  * 
- * input ProductListingFilter { closedDate: FilterField } 
- * input FilterField { operator: String! value: String localDateValue: Date}
+ * StoreDTO{ id: ID! name: String productListingDTOList: [ProductListingDTO] } 
+ * 
+ * ProductListingDTO {id: ID! productId: ID! photo: String productName: String rating: Int numberOfReviews: Int 
+ * wholeSalePrice: Float retailPrice: Float percentOff: Int closedDate: Date progressBarValue: Float}
+ * 
  */
+export const PRODUCT_LISTINGS_BY_STORE_ID = gql`
+ query ProductListingsByStoreId($storeId: String, $sortfield: String!, $sortDirection: String!, $pageNo: Int, $pageSize: Int)  {
+  productListingsByStoreId(storeId: $storeId, sortfield: $sortfield, sortDirection: $sortDirection, pageNo: $pageNo, pageSize: $pageSize)  {
+    id
+        name
+        productListingDTOList {
+            id
+            productId
+            photo
+            productName
+            rating
+            numberOfReviews
+            wholeSalePrice
+            retailPrice
+            percentOff
+            closedDate
+            progressBarValue
+        }
+  }
+ }
+ `;
 
 
 
- 
 
 
 
 
- /**
-  * @query   chatById(id: String!): Chat
-  */
+/**
+ * @query   chatById(id: String!): Chat
+ */

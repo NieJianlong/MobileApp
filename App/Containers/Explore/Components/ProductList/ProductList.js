@@ -66,10 +66,10 @@ const announcements = [
     picture:
       'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
     rating: 3.0,
-    ratingCount: 124,
+    ratingCount: 124, // numberOfReviews
     retailPrice: 2345,
     wholesalePrice: 1542,
-    deliveryDate: null,
+    deliveryDate: null, // closeDate
     inStock: 100,
     orderCount: 24,
     minOrder: 10,

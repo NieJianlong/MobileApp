@@ -19,9 +19,9 @@ import styles from './styles';
  * validation and jwt modules
  */
 
-import * as validator from '../../Validation'
-import * as jwt from '../../Apollo/jwt-request'
-import * as storage from '../../Apollo/local-storage'
+import * as validator from '../../Validation';
+import * as jwt from '../../Apollo/jwt-request';
+import * as storage from '../../Apollo/local-storage';
 import { runRefreshCron } from '../../Apollo/cache';
 /** userProfileVar is the variable for the cache to get set  userProfile attributes */
 import { userProfileVar } from '../../Apollo/cache';
@@ -99,6 +99,14 @@ function LoginScreen(props) {
               storage.setLocalStorageValue(
                 storage.LOCAL_STORAGE_TOKEN_KEY,
                 access_token
+              );
+              storage.setLocalStorageValue(
+                storage.LOCAL_STORAGE_USER_NAME,
+                loginInput
+              );
+              storage.setLocalStorageValue(
+                storage.LOCAL_STORAGE_USER_PASSWORD,
+                psswd
               );
               NavigationService.navigate('MainScreen');
             }
@@ -203,8 +211,8 @@ function LoginScreen(props) {
           <View style={{ height: keyboardHeight - vs(100) }} />
 
           <Button
-            onPress={onDebugSignIn}
-            //onPress={onSignIn}
+            //onPress={onDebugSignIn}
+            onPress={onSignIn}
             text={'SIGN IN'}
           />
 

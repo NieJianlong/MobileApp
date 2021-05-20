@@ -1,3 +1,4 @@
+
 import React, { useRef, useContext, useCallback, useState } from 'react';
 import { View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -5,16 +6,16 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { TextInput } from '../../../Components';
 import styles from '../styles';
 import { AlertContext } from '../../Root/GlobalContext';
+import * as aQM from '../gql/explore_queries';
+import * as gqlMappers from '../gql/gql_mappers';
+import { endPointClient, PUBLIC_CLIENT_ENDPOINT } from '../../../Apollo/public-api-v3'
+import * as storage from '../../../Apollo/local-storage';
+import { userProfileVar } from '../../../Apollo/cache';
+import { getUniqueId } from 'react-native-device-info';
+
 /**
  * queries for address
  */
-import * as aQM from '../gql/explore_queries'
-import * as gqlMappers from '../gql/gql_mappers'
-import { endPointClient, PUBLIC_CLIENT_ENDPOINT } from '../../../Apollo/public-api-v3'
-import * as storage from '../../../Apollo/local-storage'
-import { userProfileVar } from '../../../Apollo/cache'
-import { getUniqueId } from 'react-native-device-info';
-
 export default function AddLocationSheet() {
   let stateInput = useRef();
   let cityInput = useRef();

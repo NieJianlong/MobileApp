@@ -25,11 +25,11 @@ export default function LaunchScreen() {
       let access_token = data.access_token;
       if (access_token === 'undefined') {
         console.log('no access token');
-        userProfileVar({
-          email: username,
-          isAuth: true,
-        });
       }
+      userProfileVar({
+        email: username,
+        isAuth: true,
+      });
       setLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY, access_token);
       NavigationService.navigate('MainScreen');
     } else {

@@ -4,21 +4,21 @@ import {
   ApolloLink,
   InMemoryCache,
   concat,
-} from '@apollo/client';
-import globalCache from './cache';
+} from "@apollo/client";
+import globalCache from "./cache";
 /**
  * need fetch as we are not in a browser
  */
-import fetch from 'cross-fetch';
-const baseUrl = 'http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com';
+import fetch from "cross-fetch";
+const baseUrl = "http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com";
 
 // const endpointDev = "http://10.0.2.2:8080/graphql"
 // 8081 --> IAM
 // 8082 --> UserManagement
 // 8083 --> ProductManagement
-const IAM_PORT = ':8081/graphql';
-const USER_PORT = ':8082/graphql';
-const PRODUCT_PORT = ':8083/graphql';
+const IAM_PORT = ":8081/graphql";
+const USER_PORT = ":8082/graphql";
+const PRODUCT_PORT = ":8083/graphql";
 
 //we should add all apis here,
 const allAPIS = {
@@ -54,11 +54,11 @@ const customFetch = (uri, options) => {
 
 const httpLink = new HttpLink({ uri: baseUrl, fetch: customFetch });
 const publicHeaders = {
-  'Content-Type': 'application/json',
-  Accept: 'application/json',
+  "Content-Type": "application/json",
+  Accept: "application/json",
 };
 const privateHeaders = {
-  Authorization: global.access_token ? `Bearer ${global.access_token}` : '',
+  Authorization: global.access_token ? `Bearer ${global.access_token}` : "",
 };
 const getClient = () => {
   // let httpLink = USER_MANAGEMENT_Link;

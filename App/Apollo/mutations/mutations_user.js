@@ -1,23 +1,23 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 /** ================== User Management ================ */
 
 /** buyer id for public checkout */
-export const NEW_ID = '00000000-0000-0000-0000-000000000000';
+export const NEW_ID = "00000000-0000-0000-0000-000000000000";
 
 /**
  *  @mutation registerUser
  *  schema
  *  registerUser(request: UserProfileRequestForCreate!): UserProfileResponse
- * 
- *  UserProfileRequestForCreate{ userName:String password:String firstName:String lastName:String 
+ *
+ *  UserProfileRequestForCreate{ userName:String password:String firstName:String lastName:String
  *  email:String phoneNumber:String userType: UserType geoLocation: String }
  *
  *  UserProfileResponse{userId:ID userName:String firstName:String lastName:String email:String
     phoneNumber:String userType: UserType createdAt:DateTime updatedAt:DateTime
-    geoLocation: String avatarUrl: String addresses:[AddressResponse] 
+    geoLocation: String avatarUrl: String addresses:[AddressResponse]
     chatMessages:[ChatMessageResponse] }
- * 
+ *
  *  enum UserType {
     ADMIN, BUYER, SELLER, BUYER_SELLER, UNDEFINED, GUEST_USER, RETAIL_BUYER, COMPANY_BUYER }
 
@@ -233,7 +233,7 @@ export const DELETE_ADDRESS = gql`
  * @mutation createPaymentDetail
  *  schema
  * createPaymentDetail(request: PaymentDetailRequestForCreate!) : PaymentDetailResponse
- * PaymentDetailRequestForCreate{buyerId:ID! paymentType:PaymentType isDefaultPaymentType:Boolean 
+ * PaymentDetailRequestForCreate{buyerId:ID! paymentType:PaymentType isDefaultPaymentType:Boolean
  * paymentTypeDetails:String}
  * enum PaymentType {
     CREDIT_CARD, DEBIT_CARD, CASH_AT_DELIVERY, WIRE_TRANSFER, SALAMI_CREDIT, ESCROW, PAYPAL,UNDEFINED
@@ -710,12 +710,12 @@ export const UPDATE_DELIVERY_ADDRESS_TO_ONLINE_STORE = gql`
 
 /**
 * @mutation createShippingDetail
-* schema  
+* schema
 * createShippingDetail(request: ShippingDetailRequestForCreate!) :ShippingDetailResponse
 *
-* ShippingDetailRequestForCreate{ orderId:ID! shippingAddressId:ID! carrier:String carrierUrl:String 
-  trackingNum:String deliveryDate:DateTime shippingInstructions:String shippingStatus:ShippingStatus 
-  shippingMethod:ShippingMethod failedDeliveryReason:String shippingDate:DateTime 
+* ShippingDetailRequestForCreate{ orderId:ID! shippingAddressId:ID! carrier:String carrierUrl:String
+  trackingNum:String deliveryDate:DateTime shippingInstructions:String shippingStatus:ShippingStatus
+  shippingMethod:ShippingMethod failedDeliveryReason:String shippingDate:DateTime
   expectedDeliveryDate:DateTime }
 */
 export const CREATE_SHIPPING_DETAIL = gql`

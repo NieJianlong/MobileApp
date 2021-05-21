@@ -1,20 +1,20 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { View, StatusBar, Image, TouchableOpacity } from 'react-native';
-import { s, vs } from 'react-native-size-matters';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Alert, RadiusButton } from '../../Components';
-import { Colors, Images } from '../../Themes';
-import styles from './styles';
-import AddressBar from './Components/AddressBar';
-import ExploreHeader from './Components/ExploreHeader';
-import ProductList from './Components/ProductList/ProductList';
-import { CollapsibleHeaderTabView } from 'react-native-scrollable-tab-view-collapsible-header';
-import { ScrollableTabBar } from 'react-native-scrollable-tab-view';
-import colors from '../../Themes/Colors';
-import fonts from '../../Themes/Fonts';
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { View, StatusBar, Image, TouchableOpacity } from "react-native";
+import { s, vs } from "react-native-size-matters";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Alert, RadiusButton } from "../../Components";
+import { Colors, Images } from "../../Themes";
+import styles from "./styles";
+import AddressBar from "./Components/AddressBar";
+import ExploreHeader from "./Components/ExploreHeader";
+import ProductList from "./Components/ProductList/ProductList";
+import { CollapsibleHeaderTabView } from "react-native-scrollable-tab-view-collapsible-header";
+import { ScrollableTabBar } from "react-native-scrollable-tab-view";
+import colors from "../../Themes/Colors";
+import fonts from "../../Themes/Fonts";
 
-import NavigationService from '../../Navigation/NavigationService';
-import useWindowDimensions from 'react-native/Libraries/Utilities/useWindowDimensions';
+import NavigationService from "../../Navigation/NavigationService";
+import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimensions";
 
 function Explore(props) {
   const ref = useRef();
@@ -48,7 +48,7 @@ function Explore(props) {
       <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
       <SafeAreaView
         style={styles.mainContainer}
-        edges={['top', 'left', 'right']}
+        edges={["top", "left", "right"]}
       >
         <View
           style={{ flex: 1 }}
@@ -67,7 +67,7 @@ function Explore(props) {
             ref={ref}
             renderTabBar={(mprops) => {
               return (
-                <View style={{ flex: 1, backgroundColor: 'white' }}>
+                <View style={{ flex: 1, backgroundColor: "white" }}>
                   <ScrollableTabBar
                     {...mprops}
                     underlineStyle={{
@@ -78,15 +78,15 @@ function Explore(props) {
                     style={{ borderWidth: 0 }}
                     textStyle={{
                       fontFamily: fonts.primary,
-                      width: '100%',
-                      fontWeight: 'bold',
+                      width: "100%",
+                      fontWeight: "bold",
                       fontSize: 14,
                     }}
                   />
                   <AddressBar />
                   <View
                     style={{
-                      backgroundColor: 'white',
+                      backgroundColor: "white",
                       width: 60,
                       height: 46,
                       marginTop: -100,
@@ -98,7 +98,7 @@ function Explore(props) {
                     <TouchableOpacity
                       // activeOpacity={1}
                       onPress={() => {
-                        NavigationService.navigate('EditCategoriesScreen');
+                        NavigationService.navigate("EditCategoriesScreen");
                       }}
                       style={[styles.btnAddContainer]}
                     >
@@ -148,7 +148,7 @@ function Explore(props) {
       {showAccountActivatedSuccessfullyAlert && (
         <Alert
           visible={showAccountActivatedSuccessfullyAlert}
-          message={'Your account has been activated successfully'}
+          message={"Your account has been activated successfully"}
           color={Colors.success}
           onDismiss={() => setShowAccountActivatedSuccessfullyAlert(false)}
         />
@@ -156,7 +156,7 @@ function Explore(props) {
       {showAccountActivateAlert && (
         <Alert
           visible={showAccountActivateAlert}
-          title={'Activate First'}
+          title={"Activate First"}
           message={
             "You've successfully registered your account. Please check your email for the activation link so can make full use of your account."
           }
@@ -164,7 +164,7 @@ function Explore(props) {
           onDismiss={() => setShowAccountActivateAlert(false)}
           action={() => (
             <View style={{ width: s(120) }}>
-              <RadiusButton text={'RESEND EMAIL'} />
+              <RadiusButton text={"RESEND EMAIL"} />
             </View>
           )}
         />

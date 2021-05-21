@@ -9,6 +9,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { vs } from 'react-native-size-matters';
 import { useRoute } from '@react-navigation/native';
+import { gql } from '@apollo/client';
 
 import { TextInput, Button, PasswordInput, Alert } from '../../Components';
 
@@ -18,7 +19,6 @@ import styles from './styles';
 /**
  * validation and jwt modules
  */
-
 import * as validator from '../../Validation';
 import * as jwt from '../../Apollo/jwt-request';
 import * as storage from '../../Apollo/local-storage';
@@ -26,6 +26,16 @@ import { runRefreshCron } from '../../Apollo/cache';
 /** userProfileVar is the variable for the cache to get set  userProfile attributes */
 import { userProfileVar } from '../../Apollo/cache';
 import NavigationService from '../../Navigation/NavigationService';
+
+import jwt_decode from "jwt-decode";
+
+const UPDATE_BUYER_PROFILE = gql`
+  mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
+    updateBuyerProfile(request: $request) {
+      buyerId
+    }
+  }
+`;
 
 function LoginScreen(props) {
   // refs
@@ -86,7 +96,7 @@ function LoginScreen(props) {
           .runTokenFlow(loginRequest)
           .then(function (res) {
             if (typeof res !== 'undefined') {
-              console.log(`login ok set auth`);
+              console.log("login ok set auth");
               userProfileVar({
                 email: loginRequest.username,
                 isAuth: true,
@@ -100,6 +110,7 @@ function LoginScreen(props) {
                 storage.LOCAL_STORAGE_TOKEN_KEY,
                 access_token
               );
+
               storage.setLocalStorageValue(
                 storage.LOCAL_STORAGE_USER_NAME,
                 loginInput
@@ -108,6 +119,13 @@ function LoginScreen(props) {
                 storage.LOCAL_STORAGE_USER_PASSWORD,
                 psswd
               );
+
+              var decoded = jwt_decode(access_token);
+              console.log(
+                `set buyer id ${decoded.sub} for email ${loginRequest.username} in storage`
+              );
+              storage.setLocalStorageValue(loginRequest.username, decoded.sub);
+
               NavigationService.navigate('MainScreen');
             }
             // need check for status code = 200

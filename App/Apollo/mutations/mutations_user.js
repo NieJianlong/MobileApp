@@ -115,6 +115,7 @@ export const UPDATE_BUYER_PROFILE = gql`
   }
 `;
 
+
 /**
  * @mutation createGuestBuyer
  * schema  see @mutation registerBuyer

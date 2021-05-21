@@ -87,7 +87,14 @@ const buttons = [
  */
 function UserCenter(props) {
   const [serviceItems, setServiceItems] = useState([]);
-  const { loading, error, data } = useQuery(USER_PROFILES);
+  const { loading, error, data } = useQuery(USER_PROFILES, {
+    onCompleted: (res) => {
+      debugger;
+    },
+    onError: (res) => {
+      debugger;
+    },
+  });
   const client = useApolloClient();
   debugger;
   useEffect(() => {

@@ -17,16 +17,14 @@ import * as validator from '../../Validation';
 import * as aQM from './gql/register_mutations';
 import * as jwt from '../../Apollo/jwt-request';
 import * as storage from '../../Apollo/local-storage';
-import {
-  endPointClient,
-  PUBLIC_CLIENT_ENDPOINT,
-} from '../../Apollo/public-api-v3';
 /** userProfileVar is the variable for the cache to get set  userProfile attributes */
 import { userProfileVar } from '../../Apollo/cache';
 
 import { Colors } from '../../Themes';
 import styles from './styles';
 import NavigationService from '../../Navigation/NavigationService';
+import { REGISTER_BUYER } from '../../Apollo/mutations/mutations_user';
+import { useMutation } from '@apollo/client';
 
 function RegisterScreen(props) {
   // refs
@@ -51,101 +49,81 @@ function RegisterScreen(props) {
       // Anything in here is fired on component unmount.
     };
   }, []);
-
+  let BuyerProfileRequestForCreate = {
+    userName: registerInput,
+    firstName: name,
+    lastName: lastName,
+    geoLocation: '',
+    guestBuyer: false,
+    email: registerInput,
+    phoneNumber: '',
+    userType: 'BUYER',
+    password: psswd,
+    oneClickPurchaseOn: true,
+    areaRegion: '',
+    languages: ['EN'],
+    currencies: ['EUR'],
+  };
   /**
    * REGISTER_BUYER(registerBuyer) mutation is a public api endpoint
    * see  ./gql/register_mutations
    * collect state variable and run the mutation
    * on call back update local storage
    */
-  const runRegisterBuyer = async () => {
-    console.log(`${name}::${lastName}::${registerInput}::${psswd}`);
-    // userName ===  email  && phoneNumber is required if empty
-    // backend has not published list requried fields so languages and
-    // currencies seem to be needed, hence defaults here
-    let BuyerProfileRequestForCreate = {
-      userName: registerInput,
-      firstName: name,
-      lastName: lastName,
-      geoLocation: '',
-      guestBuyer: false,
-      email: registerInput,
-      phoneNumber: '',
-      userType: 'BUYER',
-      password: psswd,
-      oneClickPurchaseOn: true,
-      areaRegion: '',
-      languages: ['EN'],
-      currencies: ['EUR'],
-    };
+  const [registerBuyer, { data }] = useMutation(REGISTER_BUYER, {
+    variables: { request: BuyerProfileRequestForCreate },
+    onCompleted: (result) => {
+      resetValidation();
+      if (typeof result.data !== 'undefined') {
+        let buyerId = result.data.registerBuyer.buyerId;
+        console.log(`registerBuyer buyerId=${buyerId}`);
+        storage.setLocalStorageValue(registerInput, buyerId);
+        userProfileVar({
+          email: registerInput,
+          isAuth: true,
+        });
+        let loginRequest = {
+          username: registerInput,
+          password: psswd,
+        };
 
-    // for some reason useMutation hook fails here so use standalone client for now
-    let client = await endPointClient(PUBLIC_CLIENT_ENDPOINT);
-    await client
-      .mutate({
-        mutation: aQM.REGISTER_BUYER,
-        variables: { request: BuyerProfileRequestForCreate },
-      })
-      .then((result) => {
-        if (typeof result.data !== 'undefined') {
-          let buyerId = result.data.registerBuyer.buyerId;
-          console.log(`registerBuyer buyerId=${buyerId}`);
-          storage.setLocalStorageValue(registerInput, buyerId);
-          userProfileVar({
-            email: registerInput,
-            isAuth: true,
+        // login here for private api jwt initial getDefaultBuyerAdress
+        jwt
+          .runTokenFlow(loginRequest)
+          .then(function (res) {
+            if (typeof res !== 'undefined') {
+              console.log('login ok set auth');
+              userProfileVar({
+                email: loginRequest.username,
+                isAuth: true,
+              });
+
+              let access_token = res.data.access_token;
+              if (access_token === 'undefined') {
+                console.log('no access token');
+              }
+              storage.setLocalStorageValue(
+                storage.LOCAL_STORAGE_TOKEN_KEY,
+                access_token
+              );
+              NavigationService.navigate('MainScreen');
+            }
+            // need check for status code = 200
+            // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
+            else {
+              console.log('psswd is not correct');
+              toggleResetValidationAlert();
+            }
+          })
+          .catch(function (err) {
+            // here we will need to deal with a  status` code 401 and refresh jwt and try again
           });
-          let loginRequest = {
-            username: registerInput,
-            password: psswd,
-          };
 
-          // login here for private api jwt initial getDefaultBuyerAdress
-          jwt
-            .runTokenFlow(loginRequest)
-            .then(function (res) {
-              if (typeof res !== 'undefined') {
-                console.log("login ok set auth");
-                userProfileVar({
-                  email: loginRequest.username,
-                  isAuth: true,
-                });
-
-                let access_token = res.data.access_token;
-                if (access_token === 'undefined') {
-                  console.log('no access token');
-                }
-                storage.setLocalStorageValue(
-                  storage.LOCAL_STORAGE_TOKEN_KEY,
-                  access_token
-                );
-                NavigationService.navigate('MainScreen');
-              }
-              // need check for status code = 200
-              // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
-              else {
-                console.log('psswd is not correct');
-                toggleResetValidationAlert();
-              }
-            })
-            .catch(function (err) {
-              // here we will need to deal with a  status` code 401 and refresh jwt and try again
-            });
-
-          NavigationService.navigate('MainScreen');
-          // NavigationService.navigate('OTPScreen', { fromScreen: 'RegisterScreen', phone: registerInput })
-        }
-      })
-      .catch((err) => {
-        console.log('mutation error ' + err);
-        return;
-      });
-  };
-
-  /**  no validation here for rapid development */
-  const onDebug = async () => {
-    runRegisterBuyer();
-  };
+        NavigationService.navigate('MainScreen');
+        // NavigationService.navigate('OTPScreen', { fromScreen: 'RegisterScreen', phone: registerInput })
+      }
+    },
+  });
 
   /**
    * currently we are only using email @see VK
@@ -179,8 +157,7 @@ function RegisterScreen(props) {
         }
         // for now use email only
         if (reporter.isEmail) {
-          await runRegisterBuyer();
-          resetValidation();
+          registerBuyer();
         } else {
           // must be phone
           setValidationDisplay(' please use email not phone');

@@ -7,9 +7,10 @@ import {
 
 import {
   FIND_BUYER_ADDRESS_BY_ID,
+  FIND_BUYER_PROFILE,
   FIND_BUYER_DEFAULT_ADDRESS_BY_ID,
-  USER_PROFILES,
-  BUYER_PROFILES,
+  FIND_GUEST_BUYER_ADDRESS_BY_ID,
+  FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID,
 } from "../App/Apollo/queries/queries_user";
 
 /**
@@ -17,6 +18,7 @@ import {
  */
 import * as jwt from "../App/Apollo/jwt-request";
 
+import * as storage from "../App/Apollo/local-storage";
 import { runTokenFlow } from "../App/Apollo/jwt-request";
 
 let JWT =
@@ -103,7 +105,7 @@ it("test getBuyerDefaultAddressByBuyerId", async () => {
     console.log(JSON.stringify(ret));
   }
 });
-
+ 
 /**
  * CREATE_DELIVERY_ADDRESS_GEOCOORDINATE is a private api
  */

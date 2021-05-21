@@ -111,12 +111,14 @@ function Explore(props) {
             renderScrollHeader={() => <ExploreHeader />}
           >
             <ProductList
+              listType="All"
               index={0}
               tabLabel="All"
               canGoNext={canGoNext}
               callBack={ableGoNext}
             />
             <ProductList
+              listType="Announcements"
               index={1}
               tabLabel="Announcements"
               isAnnouncement={true}
@@ -124,21 +126,24 @@ function Explore(props) {
               callBack={ableGoNext}
             />
             <ProductList
+              listType="Electronics"
               index={2}
               tabLabel="Electronics"
               canGoNext={canGoNext}
               callBack={ableGoNext}
             />
             <ProductList
+              listType="Food"
               index={3}
               tabLabel="Food & Beverage"
               canGoNext={canGoNext}
               callBack={ableGoNext}
             />
             <ProductList
+              listType="Fashion"
               index={4}
               goFirst={goFirst}
-              tabLabel="Fashion            kk"
+              tabLabel="Fashion"
               canGoNext={canGoNext}
               callBack={ableGoNext}
             />

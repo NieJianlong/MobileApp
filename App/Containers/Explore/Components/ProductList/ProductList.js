@@ -7,6 +7,13 @@ import { CollapsibleHeaderTabView } from 'react-native-scrollable-tab-view-colla
 import ExploreSortBar from '../ExploreSortBar';
 import { AlertContext } from '../../../Root/GlobalContext';
 import ShareOptionList from '../ShareOptionList';
+import {
+  endPointClient,
+  PUBLIC_PMANG_CLIENT_ENDPOINT,
+} from '../../../../Apollo/public-api-v3';
+import * as gqlMappers from '../../gql/gql_mappers';
+import { PRODUCT_LISTINGS_BY_STORE_ID } from '../../../../Apollo/queries/queries_prodmang';
+
 const HFlatList = HPageViewHoc(FlatList);
 const announcements = [
   {
@@ -99,17 +106,45 @@ export default function ProductList(props) {
       },
     });
   }, [dispatch]);
-  const getProductList = async () => {
-    await jwt
-      .runMockGetProductList()
-      .then(function (res) {
-        //setProducts(res.productList)
-        setProducts(JSON.parse(res.productList));
-      })
-      .catch(function (error) {});
+  const getProductList = async (type) => {
+    if (type === "All") {
+      // issue exist on backend need hard coded storeId for now
+      let client = await endPointClient(PUBLIC_PMANG_CLIENT_ENDPOINT);
+      let ret = await client
+        .query({
+          query: PRODUCT_LISTINGS_BY_STORE_ID,
+          variables: {
+            storeId: "0b950a80-7836-45b4-9ee3-42042097aafe",
+            sortfield: "wholeSalePrice",
+            sortDirection: "ASC",
+            pageNo: 0,
+            pageSize: 3,
+          },
+        })
+        .then((result) => result)
+        .catch((err) => {
+          console.log("query error" + err);
+          return;
+        });
+
+      if (typeof ret !== "undefined") {
+        let pList = gqlMappers.mapProductListingDTO(
+          ret.data.productListingsByStoreId.productListingDTOList
+        );
+        setProducts(JSON.parse(pList));
+      }
+    }
+    // await jwt
+    //   .runMockGetProductList()
+    //   .then(function (res) {
+    //     //setProducts(res.productList)
+    //     setProducts(JSON.parse(res.productList));
+    //   })
+    //   .catch(function (error) {});
   };
   useEffect(() => {
-    getProductList();
+    console.log(JSON.stringify(props.listType));
+    getProductList(props.listType);
     return () => {};
   }, [props]);
   return (
@@ -124,7 +159,8 @@ export default function ProductList(props) {
         />
       }
       showsHorizontalScrollIndicator={false}
-      data={isAnnouncement ? announcements : products}
+      // data={isAnnouncement ? announcements : products}
+      data={products}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({ item, index }) => {
         return (

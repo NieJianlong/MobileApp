@@ -56,9 +56,11 @@ export const PRODUCT_BY_ID = gql`
 /**
  *  @query   productListingDetailResponse(id: String!): ProductListingDetailResponse
  *
- *  ProductListing{id: ID! product: Product store: Store chat: Chat announcement: Announcement address: Address
- *  chatMuteFlag: Boolean wholeSalePrice: Float retailPrice: Float discount: Float numberOfItems: Int maxQuantityPerCart: Int
- *  closedDate: Date deliveryDate: Date createdAt: DateTime updatedAt: DateTime}
+ *  ProductListingDetailResponse{id: ID! photo: String productName: String rating: Int numberOfReviews: Int 
+ *  wholeSalePrice: Float retailPrice: Float percentOff: Int closedDate: Date progressBarValue: Float amountSaved: Float 
+ *  deliveryFee: Float shortName: String longName: String description: String technicalDetails: String 
+ *  optionValues: [OptionValue] relatedProducts: [String] seller: SellerDTO reviewDTO: ReviewDTO 
+ *  returnPolicies: [ReturnPolicy]}
  *
  */
 export const PRODUCT_LISTING_DETAIL_RESPONSE = gql`

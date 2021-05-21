@@ -1,29 +1,29 @@
-import React, { useState, useEffect } from "react";;
+import React, { useState, useEffect } from "react";
 import {
   View,
   StatusBar,
   Image,
   TouchableOpacity,
   Platform,
-} from "react-native";;
-import Video from "react-native-video";;
-import { SafeAreaView } from "react-native-safe-area-context";;
+} from "react-native";
+import Video from "react-native-video";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import Button from "../../Components/Button";;
+import Button from "../../Components/Button";
 
-import { Colors, Images } from "../../Themes";;
-import styles from "./styles";;
-import { vs } from "react-native-size-matters";;
-import NavigationService from "../../Navigation/NavigationService";;
+import { Colors, Images } from "../../Themes";
+import styles from "./styles";
+import { vs } from "react-native-size-matters";
+import NavigationService from "../../Navigation/NavigationService";
 import { useMutation } from "@apollo/client";
-import * as aQM from "./gql/onboard_mutations";;
-import * as storage from "../../Apollo/local-storage";;
+import * as aQM from "./gql/onboard_mutations";
+import * as storage from "../../Apollo/local-storage";
 import { getUniqueId } from "react-native-device-info";
 
-const iOS = Platform.OS === "ios";;
+const iOS = Platform.OS === "ios";
 
 function OnboardingScreen(props) {
-  const [bIdExists, setBIdExists] = useState(false);;
+  const [bIdExists, setBIdExists] = useState(false);
 
   /** this is enough to create a guest buyer */
   let BuyerProfileRequestForCreate = {

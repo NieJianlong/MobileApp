@@ -9,17 +9,6 @@ import AddressSheetContent from './AddressSheetContent';
  */
 import * as aQM from '../gql/explore_queries';
 import * as gqlMappers from '../gql/gql_mappers';
-import {
-  endPointClient,
-  PUBLIC_CLIENT_ENDPOINT,
-} from '../../../Apollo/public-api-v3';
-import { getPrivateClient } from '../../../Apollo/private-api-v3';
-import { getPrivateTestClient } from '../../../Apollo/private-api-v3';
-import {
-  LOCAL_STORAGE_TOKEN_KEY,
-  getLocalStorageValue,
-} from '../../../Apollo/local-storage';
-import * as storage from '../../../Apollo/local-storage';
 import { userProfileVar } from '../../../Apollo/cache';
 import { getUniqueId } from 'react-native-device-info';
 
@@ -60,7 +49,7 @@ export default function AddressBar() {
 
       return items;
     } catch (error) {
-      console.log(error, "fetchAllItems issues");
+      console.log(error, 'fetchAllItems issues');
     }
   };
 
@@ -142,7 +131,7 @@ export default function AddressBar() {
           if (
             result.data.getGuestBuyerDefaultAddressByBuyerId.addressId === null
           ) {
-            console.log("found null GuestBuyer addressId  creating");
+            console.log('found null GuestBuyer addressId  creating');
             toggleAddressSheet();
             return;
           } else {
@@ -172,7 +161,7 @@ export default function AddressBar() {
       .catch((err) => {
         if (typeof err !== 'undefined') {
           console.log(
-            "AddressBar fetchAddressDataGuest Query error GetGuestBuyerDefaultAddressByBuyerId" +
+            'AddressBar fetchAddressDataGuest Query error GetGuestBuyerDefaultAddressByBuyerId' +
               err
           );
         }
@@ -183,56 +172,56 @@ export default function AddressBar() {
   const fetchAddressDataBuyer = async () => {
     // call query for registerBuyerAddress by buyer id
     console.log(`AddressBar fetchAddressDataBuyer and  buyerId=${buyId}`);
-    let client = await getPrivateClient();
+
     // const token = await getLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY)
     // console.log(token)
     // let client = await  getPrivateTestClient(token)
-    await client
-      .query({
-        query: aQM.FIND_BUYER_DEFAULT_ADDRESS_BY_ID,
-        variables: { buyerId: buyId },
-      })
-      .then((result) => {
-        if (typeof result.data !== 'undefined') {
-          console.log(
-            `AddressBar fetchAddressDataBuyer address id ${result.data.getBuyerDefaultAddressByBuyerId.addressId}`
-          );
-          if (result.data.getBuyerDefaultAddressByBuyerId.addressId === null) {
-            console.log(
-              "AddressBar fetchAddressDataBuyer address is null so create"
-            );
-            toggleAddressSheet();
-            return;
-          }
-          console.log(
-            `AddressBar fetchAddressDataBuyer found getBuyerDefaultAddressByBuyerId addressId ${JSON.stringify(
-              result.data
-            )}`
-          );
-          userProfileVar({
-            ...userProfileVar(),
-            addressId: result.data.getBuyerDefaultAddressByBuyerId.addressId,
-            addressLine1: gqlMappers.mapGQLAddressToDelivery(
-              result.data.getBuyerDefaultAddressByBuyerId
-            ),
-            addressLine2: gqlMappers.mapGQLAddressToLine2(
-              result.data.getBuyerDefaultAddressByBuyerId
-            ),
-          });
-        } else {
-          console.log(
-            'AddressBar fetchAddressDataBuyer server error for query getBuyerDefaultAddressByBuyerId'
-          );
-        }
-      })
-      .catch((err) => {
-        if (typeof err !== 'undefined') {
-          console.log(
-            "AddressBar fetchAddressDataBuyer Query error getBuyerDefaultAddressByBuyerId" +
-              err
-          );
-        }
-      });
+    // await client
+    //   .query({
+    //     query: aQM.FIND_BUYER_DEFAULT_ADDRESS_BY_ID,
+    //     variables: { buyerId: buyId },
+    //   })
+    //   .then((result) => {
+    //     if (typeof result.data !== 'undefined') {
+    //       console.log(
+    //         `AddressBar fetchAddressDataBuyer address id ${result.data.getBuyerDefaultAddressByBuyerId.addressId}`
+    //       );
+    //       if (result.data.getBuyerDefaultAddressByBuyerId.addressId === null) {
+    //         console.log(
+    //           'AddressBar fetchAddressDataBuyer address is null so create'
+    //         );
+    //         toggleAddressSheet();
+    //         return;
+    //       }
+    //       console.log(
+    //         `AddressBar fetchAddressDataBuyer found getBuyerDefaultAddressByBuyerId addressId ${JSON.stringify(
+    //           result.data
+    //         )}`
+    //       );
+    //       userProfileVar({
+    //         ...userProfileVar(),
+    //         addressId: result.data.getBuyerDefaultAddressByBuyerId.addressId,
+    //         addressLine1: gqlMappers.mapGQLAddressToDelivery(
+    //           result.data.getBuyerDefaultAddressByBuyerId
+    //         ),
+    //         addressLine2: gqlMappers.mapGQLAddressToLine2(
+    //           result.data.getBuyerDefaultAddressByBuyerId
+    //         ),
+    //       });
+    //     } else {
+    //       console.log(
+    //         'AddressBar fetchAddressDataBuyer server error for query getBuyerDefaultAddressByBuyerId'
+    //       );
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     if (typeof err !== 'undefined') {
+    //       console.log(
+    //         'AddressBar fetchAddressDataBuyer Query error getBuyerDefaultAddressByBuyerId' +
+    //           err
+    //       );
+    //     }
+    //   });
   };
 
   return (

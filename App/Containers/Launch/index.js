@@ -30,6 +30,7 @@ export default function LaunchScreen() {
         email: username,
         isAuth: true,
       });
+      global.access_token = access_token;
       setLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY, access_token);
       NavigationService.navigate('MainScreen');
     } else {

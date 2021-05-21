@@ -27,7 +27,7 @@ import { runRefreshCron } from '../../Apollo/cache';
 import { userProfileVar } from '../../Apollo/cache';
 import NavigationService from '../../Navigation/NavigationService';
 
-import jwt_decode from "jwt-decode";
+import jwt_decode from 'jwt-decode';
 
 const UPDATE_BUYER_PROFILE = gql`
   mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
@@ -96,7 +96,7 @@ function LoginScreen(props) {
           .runTokenFlow(loginRequest)
           .then(function (res) {
             if (typeof res !== 'undefined') {
-              console.log("login ok set auth");
+              console.log('login ok set auth');
               userProfileVar({
                 email: loginRequest.username,
                 isAuth: true,
@@ -110,7 +110,7 @@ function LoginScreen(props) {
                 storage.LOCAL_STORAGE_TOKEN_KEY,
                 access_token
               );
-
+              global.access_token = access_token;
               storage.setLocalStorageValue(
                 storage.LOCAL_STORAGE_USER_NAME,
                 loginInput

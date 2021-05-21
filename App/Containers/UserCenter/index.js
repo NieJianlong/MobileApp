@@ -19,7 +19,7 @@ import UserHeader from './UserHeader';
 import images from '../../Themes/Images';
 import NavigationService from '../../Navigation/NavigationService';
 import { userProfileVar } from '../../Apollo/cache';
-import { useQuery } from '@apollo/client';
+import { useApolloClient, useQuery } from '@apollo/client';
 import { USER_PROFILES } from '../../Apollo/queries/queries_user';
 
 const salamiItem = [

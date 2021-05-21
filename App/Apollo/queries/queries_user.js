@@ -81,6 +81,30 @@ export const FIND_BUYER_PROFILE = gql`
   }
 `;
 
+
+/**
+ *  @query buyerProfileByUserId(userProfileId : ID!) : BuyerProfileResponse
+ * 
+ * BuyerProfileResponse { userId:ID buyerId:ID userName:String firstName:String lastName:String email:String phoneNumber:String 
+ * userType: UserType createdAt:DateTime updatedAt:DateTime oneClickPurchaseOn:Boolean guestBuyer:Boolean geoLocation: String 
+ * areaRegion:String languages:[String] currencies:[String] applicationSettings: String paymentOptions:[PaymentDetailResponse] 
+ * notifications:[NotificationResponse] preferences:[PreferenceResponse] wishLists:[WishListResponse] 
+ * shareInformations:[ShareInformationResponse] categoryPreferences:[String] productPreferences:[String] 
+ * sellerPreferences:[String] billingDetails:BillingDetailsResponse refundSalamiCredit:Float bonusSalamiCredit:Float 
+ * bonusSalamiCreditExpire:DateTime}
+ * 
+ */
+
+ export const BUYER_PROFILE_BY_USERID = gql`
+ query BuyerProfileByUserId($userProfileId: ID!) {
+  buyerProfileByUserId(userProfileId: $userProfileId) {
+    buyerId
+
+   }
+  }
+`;
+
+
 /**
  * @query  oneClickBuy
  *

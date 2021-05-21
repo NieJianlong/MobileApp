@@ -68,6 +68,14 @@ APK at android/app/build/outputs/apk/app-release.apk.
  
 terminal 1
 npx react-native start
+npx react-native start > ~/temp.log
+tail -f temp.log | grep --line-buffered LOG
 
 terminal 2
 npx react-native run-android
+
+
+cd ~/Downloads/genymotion/
+./genymotion
+
+

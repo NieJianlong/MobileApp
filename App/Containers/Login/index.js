@@ -124,6 +124,7 @@ function LoginScreen(props) {
               console.log(
                 `set buyer id ${decoded.sub} for email ${loginRequest.username} in storage`
               );
+              // this is wrong need request for buyerId from userId 
               storage.setLocalStorageValue(loginRequest.username, decoded.sub);
 
               NavigationService.navigate('MainScreen');

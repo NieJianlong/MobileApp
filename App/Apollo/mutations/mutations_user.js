@@ -2,8 +2,6 @@ import { gql } from "@apollo/client";
 
 /** ================== User Management ================ */
 
-/** buyer id for public checkout */
-export const NEW_ID = "00000000-0000-0000-0000-000000000000";
 
 /**
  *  @mutation registerUser

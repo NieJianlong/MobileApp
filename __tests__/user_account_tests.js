@@ -7,7 +7,8 @@ import {
 import {
   FIND_BUYER_PROFILE,
   BUYER_PROFILE_BY_USERID,
-} from '../App/Apollo/queries/queries_user';
+  FIND_BUYER_DEFAULT_ADDRESS_BY_ID,
+} from "../App/Apollo/queries/queries_user";
 
 import { runTokenFlow } from '../App/Apollo/jwt-request';
 
@@ -22,7 +23,7 @@ jest.mock('@react-native-community/async-storage', () =>
 );
 
 let JWT =
-  'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJIVEJHb2dMZnA3Q2F3T1FMRmlNUm9QeGRJaVFXV0pXRThvNnZPMy1kcE1rIn0.eyJleHAiOjE2MjE0ODIyOTYsImlhdCI6MTYyMTQ0NjI5NiwianRpIjoiZTE0NTE0NGEtNzkwNy00NmRkLTlhZWYtNDBjYWRhNTU2MWIwIiwiaXNzIjoiaHR0cDovL2lwLTE3Mi0zMS0yMi0xNzUudXMtZWFzdC0yLmNvbXB1dGUuaW50ZXJuYWw6ODA4MC9hdXRoL3JlYWxtcy9zYWxhbWlzbGljaW5nIiwiYXVkIjpbInVzZXItbWFuYWdlbWVudCIsImFwaS1nYXRld2F5IiwicHJvZHVjdC1tYW5hZ2VtZW50IiwiYWNjb3VudCJdLCJzdWIiOiI0M2FlYWRkZC1kZTY2LTQ1YmItODFhYS0xOTJmNGY1ZTJiMzMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJpYW0ta2V5Y2xvYWstcHJveHktc2VydmljZS1jbGllbnQiLCJzZXNzaW9uX3N0YXRlIjoiOGQwYzM0NGYtZTJkZC00MmMyLWIzMGQtMzliNzk1ZjZiYmYzIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vbG9jYWxob3N0OjgwODUiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJidXllciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7InVzZXItbWFuYWdlbWVudCI6eyJyb2xlcyI6WyJidXllciJdfSwiYXBpLWdhdGV3YXkiOnsicm9sZXMiOlsiYnV5ZXIiXX0sInByb2R1Y3QtbWFuYWdlbWVudCI6eyJyb2xlcyI6WyJidXllciJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6ImJ1MzYzWTQgYnUzMzZZUiIsImdyb3VwcyI6IltvZmZsaW5lX2FjY2VzcywgdW1hX2F1dGhvcml6YXRpb24sIGJ1eWVyXSIsInByZWZlcnJlZF91c2VybmFtZSI6ImJ1MzYzNCIsImdpdmVuX25hbWUiOiJidTM2M1k0IiwiZmFtaWx5X25hbWUiOiJidTMzNllSIiwiZW1haWwiOiJidUBlbWFpbC5jb20ifQ.pFGMeVy1e31oIfruaR-afHhdvfvr3s_PKq-uujX2CjmCGCs3eqoZAv7W00D7OkQUa0P0vRQRNS6XokdOyA8lUkA4cPC8ajE0g8_qepKCnPa2fzgEcWnmoKpF-EYLHnzlK7g7BY1ZZitOlxK0QfRL2pevb8WT5mcYOyYbhWQ_nUwtuLFrB2pnlEkYMXwfjfJpQ7ZhCjVtV2jyEcHMf3b25SR42WZWFOH9_nqWGhNWtfyoViR7yq-6c7AC8UcZkTGTcQwSBO_L32f-e2Ol1FkRy9OiLT9eNp-CrnZJKwJ2N3IdcBD9QYvMCnWnCSDpYhtTQnlzPvYfm7X11AVobLFBiA';
+  "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJIVEJHb2dMZnA3Q2F3T1FMRmlNUm9QeGRJaVFXV0pXRThvNnZPMy1kcE1rIn0.eyJleHAiOjE2MjE1NTYxMDEsImlhdCI6MTYyMTUyMDEwMSwianRpIjoiMmY0OWI0OTItYzVkZi00NjlmLWJmMDktNGQwY2FiODA1NGY2IiwiaXNzIjoiaHR0cDovL2lwLTE3Mi0zMS0yMi0xNzUudXMtZWFzdC0yLmNvbXB1dGUuaW50ZXJuYWw6ODA4MC9hdXRoL3JlYWxtcy9zYWxhbWlzbGljaW5nIiwiYXVkIjpbInVzZXItbWFuYWdlbWVudCIsImFwaS1nYXRld2F5IiwicHJvZHVjdC1tYW5hZ2VtZW50IiwiYWNjb3VudCJdLCJzdWIiOiJjMDk4MjI4OC1jYjhjLTQ3OTEtOWYzNi1iMjA2YzdmM2JiYzMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJpYW0ta2V5Y2xvYWstcHJveHktc2VydmljZS1jbGllbnQiLCJzZXNzaW9uX3N0YXRlIjoiODI4MTc5YmItNmI4OC00NjNhLWI0NmYtMGZlM2M3Zjg0YzY5IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vbG9jYWxob3N0OjgwODUiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJidXllciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7InVzZXItbWFuYWdlbWVudCI6eyJyb2xlcyI6WyJidXllciJdfSwiYXBpLWdhdGV3YXkiOnsicm9sZXMiOlsiYnV5ZXIiXX0sInByb2R1Y3QtbWFuYWdlbWVudCI6eyJyb2xlcyI6WyJidXllciJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6InRlc3R1c3IyIHl5eXkiLCJncm91cHMiOiJbb2ZmbGluZV9hY2Nlc3MsIHVtYV9hdXRob3JpemF0aW9uLCBidXllcl0iLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ6dUBlbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoidGVzdHVzcjIiLCJmYW1pbHlfbmFtZSI6Inl5eXkiLCJlbWFpbCI6Inp1QGVtYWlsLmNvbSJ9.RDM13LpX5R4MS_vewF-RQRv30qDR-vYdRtF3lVYav4kMCxWmFc43EuogAFZpnj9e2ltX7tib95xyza68-XZ5tAZ8Y6TkaBRhiMlntpeaWje0DBL3KUpUPDKfXsKei-wcBCCZGlIDp9ZPeYZ9CGGmbnD0FMkfkG5RMeYzPEziggwNzwXaIwm6HqspNsxdrHDHUHe4WbhB0AzoJ5B5bhatMSMIHo5Zk5uN8n4tq5kxtRui2yAT-hFj6myV8JEDgv-CzZ3Ybs_i7-DVq-LCyvfjjwCQ0z2gWE19Dbvq2mMbYA87yjYrvXL62Hl2Eumw4y0lHemJ88eevnZ3tbzlDfAPKw";
 
 /**
  * first login as an existing buyer to get the correct JWT token for the
@@ -33,6 +34,7 @@ let JWT =
 // yarn jest -t "makes login request"
 it('makes login request', async () => {
   let loginRequest = { username: 'bu@email.com', password: '1R2T#$6Tkop224' };
+
   let ret = await runTokenFlow(loginRequest);
   // for (const key in ret) {
   //     console.log(`${key}: ${ret[key]}`);
@@ -43,7 +45,27 @@ it('makes login request', async () => {
     // console.log(`id_token\n ${ ret.data.id_token}`)
     //   console.log(`refresh_token\n ${ ret.data.refresh_token}`)
     var decoded = jwt_decode(jwtToken);
-    console.log(decoded.sub);
+    console.log(`user id =${decoded.sub}`);
+  }
+});
+
+// node_modules/jest/bin/jest.js -t "test getBuyerDefaultAddressByBuyerId"
+it("test getBuyerDefaultAddressByBuyerId", async () => {
+  // public api
+  let client = await getPrivateTestClient(JWT);
+  let ret = await client
+    .query({
+      query: FIND_BUYER_DEFAULT_ADDRESS_BY_ID,
+      variables: { buyerId: "f3d26ef6-3666-407b-b6b5-389828487b39" },
+    })
+    .then((result) => result)
+    .catch((err) => {
+      console.log("query error " + err);
+      return;
+    });
+
+  if (typeof ret !== "undefined") {
+    console.log(JSON.stringify(ret));
   }
 });
 
@@ -152,7 +174,7 @@ it('test createPaymentDetail', async () => {
     buyerId: 'f3d26ef6-3666-407b-b6b5-389828487b39',
     paymentType: 'CREDIT_CARD',
     isDefaultPaymentType: true,
-    paymentTypeDetails: 'Visa',
+    paymentTypeDetails: "",
   };
   let ret = await client
     .mutate({

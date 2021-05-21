@@ -136,7 +136,7 @@ it("test create address", async () => {
     pinCode: "1138",
     country: "UK",
     areaCode: "XYZ123",
-    referenceId: "98ecb643-a64c-469d-99c7-fd559d244019",
+    referenceId: "f3d26ef6-3666-407b-b6b5-389828487b39",
   };
 
   let AddressRequestForCreate2 = {

@@ -39,7 +39,7 @@ const allAPIS = {
   CreatePaymentDetail: USER_PORT,
   UpdateBuyerProfile: USER_PORT,
   //product
-  ProductListingsByStoreId: PRODUCT_PORT,
+  ActiveProductListingsByStoreId: PRODUCT_PORT,
 };
 
 const customFetch = (uri, options) => {

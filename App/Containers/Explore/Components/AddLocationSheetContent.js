@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useCallback, useState } from "react";
+import React, { useRef, useContext, useCallback, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,11 +11,15 @@ import styles from "../styles";
 import { AlertContext } from "../../Root/GlobalContext";
 import * as aQM from "../gql/explore_queries";
 import * as gqlMappers from "../gql/gql_mappers";
-import * as storage from "../../../Apollo/local-storage";
 import { userProfileVar } from "../../../Apollo/cache";
 import { getUniqueId } from "react-native-device-info";
 import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
-import { useMutation } from "@apollo/client";
+import { useMutation, useReactiveVar } from "@apollo/client";
+import AsyncStorage from '@react-native-community/async-storage';
+
+import { client } from "../../../Apollo/apolloClient";
+
+ 
 
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
@@ -39,6 +43,24 @@ export default function AddLocationSheet() {
   const [numHV, setNumHV] = useState("");
   const [numFV, setNumFV] = useState("");
   const [markN, setMarkV] = useState("");
+  const [buyerId, setBuyerId] = useState("");
+
+  const userProfileVarReactive = useReactiveVar(userProfileVar);
+
+  useEffect(() => {
+    getBuyerId()
+  });
+
+ const getBuyerId = async() => {
+  let isAuth = userProfileVarReactive.isAuth;
+  if(isAuth) {
+    let buyId = await AsyncStorage.getItem(userProfileVar().email);
+    setBuyerId(buyId)
+  } else {
+    let buyId = await AsyncStorage.getItem(getUniqueId());
+    setBuyerId(buyId)
+  }
+ }
 
   const toggleAddLocationSheet = useCallback(() => {
     // found issues with updating state here
@@ -52,6 +74,7 @@ export default function AddLocationSheet() {
       },
     });
   }, [dispatch]);
+
   let AddressRequestForCreate = {
     pinCode: pinCodeV,
     defaultAddress: true,
@@ -73,30 +96,55 @@ export default function AddLocationSheet() {
    * guest flow use guest buyer id in local storage device id key
    */
   const [runAddAddessMutation, { data }] = useMutation(aQM.CREATE_ADDRESS, {
-    context:{   headers: {isPrivate: true},
+    context:{   headers: {isPrivate: false},
     variables: { request: AddressRequestForCreate },
-    onCompleted: (result) => {
-      console.log(`runAddAddessMutation ${JSON.stringify(result.data)}`);
-      if (typeof result.data !== "undefined") {
-        console.log(
-          `runAddAddessMutation update userProfileVar with addressId ${JSON.stringify(
-            result.data.createAddress.addressId
-          )}`
-        );
-        userProfileVar({
-          ...userProfileVar(),
-          addressId: result.data.createAddress.addressId,
-          addressLine1: gqlMappers.mapGQLAddressToDelivery(
-            result.data.createAddress
-          ),
-          addressLine2: gqlMappers.mapGQLAddressToLine2(
-            result.data.createAddress
-          ),
-        });
-        console.log(userProfileVar().addressId);
-      }
-    },
+    onCompleted: (data) => createAddressOnComplete(data),
+    onError: (error) => console.error('AddLocationSheet runAddAddessMutation Error ', error),
+    } ,
   });
+
+const debugAddAddessMutation = async() => {
+   console.log("debugAddAddessMutation")
+   // runAddAddessMutation()
+   let ret = await client
+   .mutate({
+     mutation: aQM.CREATE_ADDRESS,
+     variables: { request: AddressRequestForCreate },
+     context: {
+      headers: {
+        isPrivate: false,
+      },
+  }
+   })
+   .then((result) => result)
+   .catch((err) => {
+     console.log("mutation error " + err);
+ 
+   });
+   console.log(`debugAddAddessMutation ${JSON.stringify(ret)}`);
+   if (typeof ret !== "undefined") {
+    console.log(`debugAddAddessMutation ${JSON.stringify(ret)}`);
+    createAddressOnComplete(ret)
+  }
+
+}
+
+
+  const createAddressOnComplete= async(result) => {
+    console.log(`createAddressOnComplete ${JSON.stringify(result.data)}`);
+    if (typeof result.data !== "undefined") {
+      userProfileVar({
+        ...userProfileVar(),
+        addressId: result.data.createAddress.addressId,
+        addressLine1: gqlMappers.mapGQLAddressToDelivery(
+          result.data.createAddress
+        ),
+        addressLine2: gqlMappers.mapGQLAddressToLine2(
+          result.data.createAddress
+        ),
+      });
+    }
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -106,7 +154,9 @@ export default function AddLocationSheet() {
         <TouchableOpacity
           onPress={() => {
             // had to do this for issues getting local state for create address
-            runAddAddessMutation();
+            debugAddAddessMutation();
+            //debugAddAddessMutation()
+            // will close sheet
             toggleAddLocationSheet();
           }}
         >

@@ -63,9 +63,6 @@ APK at android/app/build/outputs/apk/app-release.apk.
 
 ## Production Build IOS (xcode)
 
-
-
- 
 terminal 1
 npx react-native start
 npx react-native start > ~/temp.log

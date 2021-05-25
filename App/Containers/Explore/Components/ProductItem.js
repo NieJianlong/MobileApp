@@ -42,7 +42,7 @@ function ProductItem(props) {
           if (Platform.OS === 'ios') {
             NavigationService.navigate('ProductDetailScreen');
           } else if (canGoNext) {
-            NavigationService.navigate('ProductDetailScreen');
+            NavigationService.navigate('ProductDetailScreen',{product:product});
           }
         }}
         style={styles.productContainer}
@@ -100,7 +100,7 @@ function ProductItem(props) {
                   <Text
                     style={[styles.heading6Bold, { color: Colors.secondary00 }]}
                   >
-                    30% OFF
+                           {product.percentOff}% OFF
                   </Text>
                 </View>
               </View>

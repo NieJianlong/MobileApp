@@ -43,6 +43,10 @@ function Explore(props) {
     }
   }, [showAccountActivatedSuccessfullyAlert]);
 
+  const scrollingListPaging = async () => {
+    console.log("this is scrolling action for list");
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
@@ -82,6 +86,7 @@ function Explore(props) {
                       fontWeight: "bold",
                       fontSize: 14,
                     }}
+                    onScroll={scrollingListPaging}
                   />
                   <AddressBar />
                   <View

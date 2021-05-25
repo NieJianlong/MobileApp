@@ -7,12 +7,9 @@ import { CollapsibleHeaderTabView } from 'react-native-scrollable-tab-view-colla
 import ExploreSortBar from '../ExploreSortBar';
 import { AlertContext } from '../../../Root/GlobalContext';
 import ShareOptionList from '../ShareOptionList';
-import {
-  endPointClient,
-  PUBLIC_PMANG_CLIENT_ENDPOINT,
-} from '../../../../Apollo/public-api-v3';
+import {client} from "../../../../Apollo/apolloClient"
 import * as gqlMappers from '../../gql/gql_mappers';
-import { PRODUCT_LISTINGS_BY_STORE_ID } from '../../../../Apollo/queries/queries_prodmang';
+import * as aQM from '../../gql/explore_queries';
 
 const HFlatList = HPageViewHoc(FlatList);
 const announcements = [
@@ -106,30 +103,35 @@ export default function ProductList(props) {
       },
     });
   }, [dispatch]);
+
   const getProductList = async (type) => {
     if (type === "All") {
       // issue exist on backend need hard coded storeId for now
-      let client = await endPointClient(PUBLIC_PMANG_CLIENT_ENDPOINT);
       let ret = await client
         .query({
-          query: PRODUCT_LISTINGS_BY_STORE_ID,
+          query: aQM.ACTIVE_PRODUCT_LISTINGS_BY_STORE_ID,
           variables: {
             storeId: "0b950a80-7836-45b4-9ee3-42042097aafe",
             sortfield: "wholeSalePrice",
-            sortDirection: "ASC",
+            sortDirection: "ASCENDING",
             pageNo: 0,
             pageSize: 3,
           },
+          context: {
+            headers: {
+              isPrivate: false,
+            },
+        }
         })
         .then((result) => result)
         .catch((err) => {
-          console.log("query error" + err);
+          console.log("getProductList query error" + err);
           return;
         });
 
       if (typeof ret !== "undefined") {
         let pList = gqlMappers.mapProductListingDTO(
-          ret.data.productListingsByStoreId.productListingDTOList
+          ret.data.activeProductListingsByStoreId
         );
         setProducts(JSON.parse(pList));
       }
@@ -154,6 +156,7 @@ export default function ProductList(props) {
       ListHeaderComponent={
         <ExploreSortBar
           onChange={(showAsRow) => {
+         
             setShowProductAsRows(!showProductAsRows);
           }}
         />

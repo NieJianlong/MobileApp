@@ -14,9 +14,12 @@ import { getUniqueId } from 'react-native-device-info';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import { useReactiveVar } from '@apollo/client';
+import {client} from "../../../Apollo/apolloClient"
 
 export default function AddressBar() {
   const userProfileVarReactive = useReactiveVar(userProfileVar);
+  const [addrLine1, setAddrLine1 ] =useState('')
+  const [addrLine2, setAddrLine2 ] =useState('')
 
   const { dispatch } = useContext(AlertContext);
   const toggleAddressSheet = useCallback(() => {
@@ -96,8 +99,11 @@ export default function AddressBar() {
   // need this to get the address to show in screen see App/Containers/Explore/Components/AddLocationSheetContent.js
   useEffect(() => {
     console.log(
-      'AddressBar useEffect addressUpdate' + userProfileVarReactive.addressId
+      'AddressBar useEffect addressUpdate ' + JSON.stringify(userProfileVarReactive)
     );
+    setAddrLine1(userProfileVarReactive.addressLine1)
+    setAddrLine2(userProfileVarReactive.addressLine2)
+
   }, [userProfileVarReactive.addressId]);
 
   /**
@@ -115,12 +121,15 @@ export default function AddressBar() {
 
   const fetchAddressDataGuest = async () => {
     console.log(`fetchAddessDataGuest and guest buyerId=${buyId}`);
-    let client = await endPointClient(PUBLIC_CLIENT_ENDPOINT);
     await client
       .query({
-        query: aQM.FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID, // return is not a collection
+        query: aQM.FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID,  
         variables: { buyerId: buyId },
-      })
+        context: {
+          headers: {
+            isPrivate: false,
+          },
+      }})
       .then((result) => {
         if (typeof result.data !== 'undefined') {
           console.log(
@@ -140,17 +149,19 @@ export default function AddressBar() {
                 result.data.getGuestBuyerDefaultAddressByBuyerId
               )}`
             );
+            let aL1 = gqlMappers.mapGQLAddressToDelivery(
+              result.data.getGuestBuyerDefaultAddressByBuyerId
+            )
+            let aL2 = gqlMappers.mapGQLAddressToLine2(
+              result.data.getGuestBuyerDefaultAddressByBuyerId
+            )
             userProfileVar({
               ...userProfileVar(),
-              addressId:
-                result.data.getGuestBuyerDefaultAddressByBuyerId.addressId,
-              addressLine1: gqlMappers.mapGQLAddressToDelivery(
-                result.data.getGuestBuyerDefaultAddressByBuyerId
-              ),
-              addressLine2: gqlMappers.mapGQLAddressToLine2(
-                result.data.getGuestBuyerDefaultAddressByBuyerId
-              ),
+              addressId:aL1,
+              addressLine2:aL2,
             });
+            setAddrLine1(aL1)
+            setAddrLine2(aL2)
           }
         } else {
           console.log(
@@ -172,56 +183,73 @@ export default function AddressBar() {
   const fetchAddressDataBuyer = async () => {
     // call query for registerBuyerAddress by buyer id
     console.log(`AddressBar fetchAddressDataBuyer and  buyerId=${buyId}`);
-
-    // const token = await getLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY)
-    // console.log(token)
-    // let client = await  getPrivateTestClient(token)
-    // await client
-    //   .query({
-    //     query: aQM.FIND_BUYER_DEFAULT_ADDRESS_BY_ID,
-    //     variables: { buyerId: buyId },
-    //   })
-    //   .then((result) => {
-    //     if (typeof result.data !== 'undefined') {
-    //       console.log(
-    //         `AddressBar fetchAddressDataBuyer address id ${result.data.getBuyerDefaultAddressByBuyerId.addressId}`
-    //       );
-    //       if (result.data.getBuyerDefaultAddressByBuyerId.addressId === null) {
-    //         console.log(
-    //           'AddressBar fetchAddressDataBuyer address is null so create'
-    //         );
-    //         toggleAddressSheet();
-    //         return;
-    //       }
-    //       console.log(
-    //         `AddressBar fetchAddressDataBuyer found getBuyerDefaultAddressByBuyerId addressId ${JSON.stringify(
-    //           result.data
-    //         )}`
-    //       );
-    //       userProfileVar({
-    //         ...userProfileVar(),
-    //         addressId: result.data.getBuyerDefaultAddressByBuyerId.addressId,
-    //         addressLine1: gqlMappers.mapGQLAddressToDelivery(
-    //           result.data.getBuyerDefaultAddressByBuyerId
-    //         ),
-    //         addressLine2: gqlMappers.mapGQLAddressToLine2(
-    //           result.data.getBuyerDefaultAddressByBuyerId
-    //         ),
-    //       });
-    //     } else {
-    //       console.log(
-    //         'AddressBar fetchAddressDataBuyer server error for query getBuyerDefaultAddressByBuyerId'
-    //       );
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     if (typeof err !== 'undefined') {
-    //       console.log(
-    //         'AddressBar fetchAddressDataBuyer Query error getBuyerDefaultAddressByBuyerId' +
-    //           err
-    //       );
-    //     }
-    //   });
+   let access_token= await AsyncStorage.getItem("@local_storage_token_key")
+   if(access_token == null || typeof access_token  === 'undefined') {
+    console.log(`AddressBar fetchAddressDataBuyer no token`);
+   } else {
+    console.log(`AddressBar fetchAddressDataBuyer token`+JSON.stringify(access_token));
+   }
+    await client
+      .query({
+        query: aQM.FIND_BUYER_DEFAULT_ADDRESS_BY_ID,
+        variables: { buyerId: buyId },
+        context: {
+          headers: {
+            isPrivate: true,
+            Authorization: `Bearer ${access_token}`,
+          },
+      }
+      })
+      .then((result) => {
+        console.log(
+          `AddressBar fetchAddressDataBuyer found getBuyerDefaultAddressByBuyerId addressId ${JSON.stringify(
+            result
+          )}`
+        );
+        if (typeof result.data !== 'undefined') {
+          console.log(
+            `AddressBar fetchAddressDataBuyer address id ${result.data.getBuyerDefaultAddressByBuyerId.addressId}`
+          );
+          if (result.data.getBuyerDefaultAddressByBuyerId.addressId === null) {
+            console.log(
+              'AddressBar fetchAddressDataBuyer address is null so create'
+            );
+            toggleAddressSheet();
+            return;
+          }
+          console.log(
+            `AddressBar fetchAddressDataBuyer found getBuyerDefaultAddressByBuyerId addressId ${JSON.stringify(
+              result.data
+            )}`
+          );
+          let aL1 = gqlMappers.mapGQLAddressToDelivery(
+            result.data.getBuyerDefaultAddressByBuyerId
+          )
+          let aL2 = gqlMappers.mapGQLAddressToLine2(
+            result.data.getBuyerDefaultAddressByBuyerId
+          )
+          userProfileVar({
+            ...userProfileVar(),
+            addressId: result.data.getBuyerDefaultAddressByBuyerId.addressId,
+            addressLine1:aL1,
+            addressLine2:aL2,
+          });
+          setAddrLine1(aL1)
+          setAddrLine2(aL2)
+        } else {
+          console.log(
+            'AddressBar fetchAddressDataBuyer server error for query getBuyerDefaultAddressByBuyerId'
+          );
+        }
+      })
+      .catch((err) => {
+        if (typeof err !== 'undefined') {
+          console.log(
+            'AddressBar fetchAddressDataBuyer Query error getBuyerDefaultAddressByBuyerId' +
+              err
+          );
+        }
+      });
   };
 
   return (
@@ -230,11 +258,11 @@ export default function AddressBar() {
         <Image source={Images.locationMed} style={styles.icLocation} />
         <Text style={styles.heading5Regular}>
           Deliver to -{' '}
-          {userProfileVar().addressId && userProfileVar().addressLine1}
+          {addrLine1}
         </Text>
         <View style={styles.areaContainer}>
           <Text style={styles.heading6Bold}>
-            {userProfileVar().addressId && userProfileVar().addressLine2}
+            {addrLine2}
           </Text>
         </View>
       </View>

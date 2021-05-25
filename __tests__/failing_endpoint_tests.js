@@ -6,8 +6,7 @@ import {
 import { FIND_BUYER_DEFAULT_ADDRESS_BY_ID } from "../App/Apollo/queries/queries_user";
 
 import { runTokenFlow } from "../App/Apollo/jwt-request";
-import { getPrivateTestClient } from "../App/Apollo/private-api-v3";
-import { endPointClient } from "../App/Apollo/public-api-v3";
+import { client } from "../App/Apollo/apolloClient";
 
 import jwt_decode from "jwt-decode";
 
@@ -19,7 +18,7 @@ let url =
   "http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8082/graphql";
 
 let JWT =
-  "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJIVEJHb2dMZnA3Q2F3T1FMRmlNUm9QeGRJaVFXV0pXRThvNnZPMy1kcE1rIn0.eyJleHAiOjE2MjE1Njg2NDIsImlhdCI6MTYyMTUzMjY0MiwianRpIjoiMzIyZDFhZmQtNjA4YS00MGU3LTg4MWUtN2E4OTIwOTAzMzU5IiwiaXNzIjoiaHR0cDovL2lwLTE3Mi0zMS0yMi0xNzUudXMtZWFzdC0yLmNvbXB1dGUuaW50ZXJuYWw6ODA4MC9hdXRoL3JlYWxtcy9zYWxhbWlzbGljaW5nIiwiYXVkIjpbInVzZXItbWFuYWdlbWVudCIsImFwaS1nYXRld2F5IiwicHJvZHVjdC1tYW5hZ2VtZW50IiwiYWNjb3VudCJdLCJzdWIiOiIxMmRhMjdjOC0wMGRmLTQ1MWYtYjg2Ny1lZTdkZTc2Y2NiZWEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJpYW0ta2V5Y2xvYWstcHJveHktc2VydmljZS1jbGllbnQiLCJzZXNzaW9uX3N0YXRlIjoiNTBlNzAxNjUtNTA0YS00OTZmLWE2NDgtZGE4YjZmYmJlNTU2IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vbG9jYWxob3N0OjgwODUiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJidXllciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7InVzZXItbWFuYWdlbWVudCI6eyJyb2xlcyI6WyJidXllciJdfSwiYXBpLWdhdGV3YXkiOnsicm9sZXMiOlsiYnV5ZXIiXX0sInByb2R1Y3QtbWFuYWdlbWVudCI6eyJyb2xlcyI6WyJidXllciJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6ImVycm9yVGVzdCBlcnJvclRlc3QiLCJncm91cHMiOiJbb2ZmbGluZV9hY2Nlc3MsIHVtYV9hdXRob3JpemF0aW9uLCBidXllcl0iLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJlcnJvcnRlc3QiLCJnaXZlbl9uYW1lIjoiZXJyb3JUZXN0IiwiZmFtaWx5X25hbWUiOiJlcnJvclRlc3QiLCJlbWFpbCI6ImVycm9ydGVzdEBlbWFpbC5jb20ifQ.ODNPgtqk1s9JcW5t9E9Mo3pP6KpsS9-Xu1q9UcZJ96uqB-CGni53AKhZzYkvZitE4q7qf1boW3r_d7rx9XjwyDV5SUcKQ6-WqGwV2bslKQfWf3WMil_mH6jrbinYx6sGyoY12EopZTZdW3vwOvvNBmE06C2ZE6fd4HrqszcrBytgwk50UUjxmq9LW2hqDj04oMn60EIORSNNPMPefbtdTnNzg-l1WWp3AvDsrDrKoz8Q414ZFnZkUjOptelQb8Uw21zROhOjJXX7u0rHOSNDxZBsvg8QEco9x9YTKwz7ro4RFNjlv6z3TedsxmUxvyl8Ga2dtrNqvY9oKsS0lIfSoQ";
+  "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJIVEJHb2dMZnA3Q2F3T1FMRmlNUm9QeGRJaVFXV0pXRThvNnZPMy1kcE1rIn0.eyJleHAiOjE2MjE2NDE0OTUsImlhdCI6MTYyMTYwNTQ5NSwianRpIjoiNTEwNjkzNjctYjMxZi00MTM4LWFmODQtOGVmMjg2ZWIwYzFmIiwiaXNzIjoiaHR0cDovL2lwLTE3Mi0zMS0yMi0xNzUudXMtZWFzdC0yLmNvbXB1dGUuaW50ZXJuYWw6ODA4MC9hdXRoL3JlYWxtcy9zYWxhbWlzbGljaW5nIiwiYXVkIjpbInVzZXItbWFuYWdlbWVudCIsImFwaS1nYXRld2F5IiwicHJvZHVjdC1tYW5hZ2VtZW50IiwiYWNjb3VudCJdLCJzdWIiOiJjMDk4MjI4OC1jYjhjLTQ3OTEtOWYzNi1iMjA2YzdmM2JiYzMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJpYW0ta2V5Y2xvYWstcHJveHktc2VydmljZS1jbGllbnQiLCJzZXNzaW9uX3N0YXRlIjoiY2NhMDJlMzUtYWMzNi00MDYxLWEyZTAtNDg0ZWFmOTBjYjY1IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vbG9jYWxob3N0OjgwODUiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJidXllciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7InVzZXItbWFuYWdlbWVudCI6eyJyb2xlcyI6WyJidXllciJdfSwiYXBpLWdhdGV3YXkiOnsicm9sZXMiOlsiYnV5ZXIiXX0sInByb2R1Y3QtbWFuYWdlbWVudCI6eyJyb2xlcyI6WyJidXllciJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6InRlc3R1c3IyIHl5eXkiLCJncm91cHMiOiJbb2ZmbGluZV9hY2Nlc3MsIHVtYV9hdXRob3JpemF0aW9uLCBidXllcl0iLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ6dUBlbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoidGVzdHVzcjIiLCJmYW1pbHlfbmFtZSI6Inl5eXkiLCJlbWFpbCI6Inp1QGVtYWlsLmNvbSJ9.lS3TkwP4EUaRrw53nWVCsggVAYDMrAtyyNTvrqV4MnzoNQg8cX_5d1YgD37KsOACYlINl4_2vzXwpYH-xq5fKuYyUPm7U7oqcZS-KtSQIctRncFWGXa1rbkHDoif2cCBXcAndTOvN6FTrjyagXTqtDzVO8j13n9F4ryfkaOs7GnsDc2Aoo9ZQ6gDc6NscjoAA70uyG37_ANM9vKP6ca-B-MoLipCm8wOQtRbTphX8Xj1OI1P-oRHVaYD6z-Xohn390HwyCC8XTPSvTvYoMy87PmWmILbb8mxuuo24lDf9x4Pwbt4plcCrAlRrM3YIrMBRoczhY4DoJHM7DPx319kVg";
 
 //+++++++++++++++++ first a register buyer +++++++++++++++++++
 // update numbers so no xxx exists errors
@@ -41,7 +40,6 @@ it("test register buyer fEP", async () => {
     languages: ["EN"],
     currencies: ["EUR"],
   };
-  let client = await endPointClient(url);
   let ret = await client
     .mutate({
       mutation: REGISTER_BUYER,
@@ -82,7 +80,7 @@ it("makes login request fEP", async () => {
   }
 });
 
-// node_modules/jest/bin/jest.js -t "test create address fep"
+// yarn jest -t "test create address fep"
 it("test create address fep", async () => {
   let AddressRequestForCreate = {
     defaultAddress: true,
@@ -105,11 +103,15 @@ it("test create address fep", async () => {
     referenceId: "3d1404a7-f492-441c-aefd-02fd63e69786",
   };
 
-  let client = await endPointClient(url);
+  let AddressRequestForCreate2 = {pinCode:"546532",defaultAddress:true,addressType:"SHIPPING",
+  provinceState:"Leeds",townCity:"Leeds",flat:"",villageArea:"",houseNumber:"",landMark:"",
+  referenceId:"0b8ff152-5a51-48ec-b45b-96b007d24bbb"}
+
+ 
   let ret = await client
     .mutate({
       mutation: CREATE_ADDRESS,
-      variables: { request: AddressRequestForCreate },
+      variables: { request: AddressRequestForCreate2 },
     })
     .then((result) => result)
     .catch((err) => {
@@ -122,14 +124,20 @@ it("test create address fep", async () => {
   }
 });
 
-// node_modules/jest/bin/jest.js -t "test getBuyerDefaultAddressByBuyerId fep"
+// yarn jest -t  "test getBuyerDefaultAddressByBuyerId fep"
 it("test getBuyerDefaultAddressByBuyerId fep", async () => {
   // public api
-  let client = await getPrivateTestClient(JWT);
+ 
   let ret = await client
     .query({
       query: FIND_BUYER_DEFAULT_ADDRESS_BY_ID,
-      variables: { buyerId: "3d1404a7-f492-441c-aefd-02fd63e69786" },
+      variables: { buyerId: "0b8ff152-5a51-48ec-b45b-96b007d24bbb" },
+      context: {
+        headers: {
+          isPrivate: true,
+          Authorization: `Bearer ${JWT}`,
+        },
+      },
     })
     .then((result) => result)
     .catch((err) => {

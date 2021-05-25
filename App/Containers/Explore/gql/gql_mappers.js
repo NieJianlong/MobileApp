@@ -2,6 +2,7 @@ export const mapProductListingDTO = (data) => {
   let pList = [];
   for (const element of data) {
     let bag = {
+      id:element.id,
       picture:
         "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
       name: element.productName,
@@ -9,8 +10,9 @@ export const mapProductListingDTO = (data) => {
       ratingCount: element.numberOfReviews,
       wholesalePrice: element.wholeSalePrice,
       retailPrice: element.retailPrice,
-      inStock: 100,
-      orderCount: 24,
+      percentOff:element.percentOff,
+      inStock:  element.noOfItemsInStock,
+      orderCount: 10,
       orderClose: element.closedDate,
     };
     pList.push(bag);

@@ -28,14 +28,9 @@ import { userProfileVar } from '../../Apollo/cache';
 import NavigationService from '../../Navigation/NavigationService';
 
 import jwt_decode from 'jwt-decode';
-
-const UPDATE_BUYER_PROFILE = gql`
-  mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
-    updateBuyerProfile(request: $request) {
-      buyerId
-    }
-  }
-`;
+ 
+import {BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
+import {client} from "../../Apollo/apolloClient"
 
 function LoginScreen(props) {
   // refs
@@ -121,13 +116,50 @@ function LoginScreen(props) {
               );
 
               var decoded = jwt_decode(access_token);
-              console.log(
-                `set buyer id ${decoded.sub} for email ${loginRequest.username} in storage`
-              );
               // this is wrong need request for buyerId from userId 
-              storage.setLocalStorageValue(loginRequest.username, decoded.sub);
-
-              NavigationService.navigate('MainScreen');
+              client
+              .query({
+                query: BUYER_PROFILE_BY_USERID,  
+                variables: { userProfileId: decoded.sub },
+                context: {
+                  headers: {
+                    isPrivate: true,
+                    Authorization: `Bearer ${access_token}`,
+                  },
+              }}).then((result) => {
+                if (typeof result.data !== 'undefined') {
+                  console.log(
+                    `Login BUYER_PROFILE_BY_USERID look up buyerId calls back ${JSON.stringify(
+                      result.data
+                    )}`
+                  );
+                  if (
+                    result.data.buyerProfileByUserId.buyerId === null
+                  ) {
+                    console.log('found null GuestBuyer buyerId'); 
+                  } else {
+                    console.log(
+                      `Login BUYER_PROFILE_BY_USERID found buyerId ${JSON.stringify(
+                        result.data.buyerProfileByUserId.buyerId
+                      )}`
+                    );
+                    storage.setLocalStorageValue(loginRequest.username, result.data.buyerProfileByUserId.buyerId);
+                    NavigationService.navigate('MainScreen');
+                  }
+                } else {
+                  console.log(
+                    'Login BUYER_PROFILE_BY_USERID server error'
+                  );
+                }
+              })
+              .catch((err) => {
+                if (typeof err !== 'undefined') {
+                  console.log(
+                    'Login BUYER_PROFILE_BY_USERID Query error ' +
+                      err
+                  );
+                }
+              });
             }
             // need check for status code = 200
             // below is a mock for the expected jwt shpould be something like res.data.<some json token id>

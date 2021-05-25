@@ -1,6 +1,6 @@
 import { client } from '../App/Apollo/apolloClient';
 import {
-  PRODUCT_LISTINGS_BY_STORE_ID,
+  ACTIVE_PRODUCT_LISTINGS_BY_STORE_ID,
   PRODUCT_BY_ID,
   PRODUCT_LISTING_DETAIL_RESPONSE,
 } from '../App/Apollo/queries/queries_prodmang';
@@ -17,16 +17,16 @@ jest.mock('@react-native-community/async-storage', () =>
 
  */
 
-// yarn jest -t "test productListingsByStoreId"
-it('test productListingsByStoreId', async () => {
+// yarn jest -t "test activeProductListingsByStoreId"
+it('test activeProductListingsByStoreId', async () => {
   // public api
   let ret = await client
     .query({
-      query: PRODUCT_LISTINGS_BY_STORE_ID,
+      query: ACTIVE_PRODUCT_LISTINGS_BY_STORE_ID,
       variables: {
         storeId: '0b950a80-7836-45b4-9ee3-42042097aafe',
         sortfield: 'wholeSalePrice',
-        sortDirection: 'ASC',
+        sortDirection: 'ASCENDING',
         pageNo: 0,
         pageSize: 3,
       },
@@ -38,14 +38,13 @@ it('test productListingsByStoreId', async () => {
     });
 
   if (typeof ret !== 'undefined') {
-    console.log(
-      JSON.stringify(ret.data.productListingsByStoreId.productListingDTOList)
-    );
-    console.log(ret.data.productListingsByStoreId.productListingDTOList.length);
+    // console.log(
+    //   JSON.stringify(ret.data.activeProductListingsByStoreId)
+    // );
+    console.log(ret.data.activeProductListingsByStoreId.length);
 
     let pList = [];
-    for (const element of ret.data.productListingsByStoreId
-      .productListingDTOList) {
+    for (const element of ret.data.activeProductListingsByStoreId) {
       let bag = {
         id: element.id,
         productId: element.productId,

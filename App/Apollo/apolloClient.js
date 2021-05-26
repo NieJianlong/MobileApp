@@ -40,6 +40,7 @@ const allAPIS = {
   UpdateBuyerProfile: USER_PORT,
   //product
   ActiveProductListingsByStoreId: PRODUCT_PORT,
+  AnnouncementsByOnlineStore: PRODUCT_PORT,
 };
 
 const customFetch = (uri, options) => {

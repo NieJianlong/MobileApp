@@ -3,6 +3,9 @@ import {
   ACTIVE_PRODUCT_LISTINGS_BY_STORE_ID,
   PRODUCT_BY_ID,
   PRODUCT_LISTING_DETAIL_RESPONSE,
+  ANNOUNCEMENTS_BY_ONLINE_STORE,
+  ANNOUNCEMENT_BY_PRODUCT_LISTING
+
 } from '../App/Apollo/queries/queries_prodmang';
 
 jest.mock('@react-native-community/async-storage', () =>
@@ -62,6 +65,32 @@ it('test activeProductListingsByStoreId', async () => {
     }
     console.log(JSON.stringify(pList[0]));
   }
+});
+
+
+
+// yarn jest -t "test announcementsByOnlineStore"
+it('test announcementsByOnlineStore', async () => {
+  // public api
+  let ret = await client
+    .query({
+      query: ANNOUNCEMENTS_BY_ONLINE_STORE,
+      variables: {
+        storeId: '0b950a80-7836-45b4-9ee3-42042097aafe'
+      },
+    })
+    .then((result) => result)
+    .catch((err) => {
+      console.log('query error' + err);
+      return;
+    });
+
+  if (typeof ret !== 'undefined') {
+    console.log(
+      JSON.stringify(ret.data.announcementsByOnlineStore)
+    );
+ 
+    }
 });
 
 // yarn jest -t "test productById"

@@ -121,6 +121,46 @@ export const ACTIVE_PRODUCT_LISTINGS_BY_STORE_ID = gql`
   }
 `;
 
+
+/**
+ * @query   announcementsByOnlineStore(storeId: String): [Announcement]
+ * Announcement{id: ID! referenceId: String validityInterval: Int  announcementText: String announcementDatetime: DateTime
+    createdAt: DateTime updatedAt: DateTime}
+ * 
+ */
+    export const ANNOUNCEMENTS_BY_ONLINE_STORE = gql`
+    query AnnouncementsByOnlineStore($storeId: String) {
+      announcementsByOnlineStore(storeId: $storeId) {
+          id
+          referenceId
+          validityInterval
+          announcementText
+          announcementDatetime
+          createdAt
+          updatedAt
+      }
+    }
+  `;
+
+/**
+ * @query announcementByProductListing(productListingId: String!) : Announcement
+ * schema see announcementsByOnlineStore
+ */
+ export const ANNOUNCEMENT_BY_PRODUCT_LISTING = gql`
+ query AnnouncementByProductListing($productListingId: String) {
+  announcementByProductListing(productListingId: $productListingId) {
+       id
+       referenceId
+       validityInterval
+       announcementText
+       announcementDatetime
+       createdAt
+       updatedAt
+   }
+ }
+`;
+
+
 /**
  * @query   chatById(id: String!): Chat
  */

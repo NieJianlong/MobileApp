@@ -1,94 +1,40 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
-import { FlatList, View } from 'react-native';
-import * as jwt from '../../../../Apollo/jwt-request';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+  useMemo,
+} from 'react';
+import {
+  FlatList,
+  View,
+  ActivityIndicator,
+  Text,
+  RefreshControl,
+} from 'react-native';
 import ProductItem from '../ProductItem';
 import { HPageViewHoc } from 'react-native-head-tab-view';
-import { CollapsibleHeaderTabView } from 'react-native-scrollable-tab-view-collapsible-header';
 import ExploreSortBar from '../ExploreSortBar';
 import { AlertContext } from '../../../Root/GlobalContext';
 import ShareOptionList from '../ShareOptionList';
 import { client } from '../../../../Apollo/apolloClient';
 import * as gqlMappers from '../../gql/gql_mappers';
 import * as aQM from '../../gql/explore_queries';
+import colors from '../../../../Themes/Colors';
+import { useQuery } from '@apollo/client';
 
 const HFlatList = HPageViewHoc(FlatList);
-const announcements = [
-  {
-    name: 'iPhone 11',
-    picture:
-      'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
-    rating: 3.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    deliveryDate: '22/12/2020',
-    inStock: 100,
-    orderCount: 24,
-    minOrder: 10,
-  },
-  {
-    name: 'iPhone 11',
-    picture:
-      'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
-    rating: 3.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    deliveryDate: null,
-    inStock: 100,
-    orderCount: 24,
-    minOrder: 10,
-  },
-  {
-    name: 'iPhone 11',
-    picture:
-      'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
-    rating: 3.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    deliveryDate: '22/12/2020',
-    inStock: 100,
-    orderCount: 24,
-    minOrder: 10,
-  },
-  {
-    name: 'iPhone 11',
-    picture:
-      'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
-    rating: 3.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    deliveryDate: null,
-    inStock: 100,
-    orderCount: 24,
-    minOrder: 10,
-  },
-  {
-    name: 'iPhone 11',
-    picture:
-      'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
-    rating: 3.0,
-    ratingCount: 124, // numberOfReviews
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    deliveryDate: null, // closeDate
-    inStock: 100,
-    orderCount: 24,
-    minOrder: 10,
-  },
-];
 
 /*explore productlist component */
 export default function ProductList(props) {
   // if show it as row
   const { dispatch } = useContext(AlertContext);
   const [page, setPage] = useState(0);
+  const [serverData, setServerData] = useState([]);
   const { isAnnouncement, index } = props;
-
+  const [loadingMore, setLoadingMore] = useState(true);
+  const [isRereshing, setIsRereshing] = useState(false);
   const [showProductAsRows, setShowProductAsRows] = useState(true);
-  let [products, setProducts] = useState([]);
   const toggleShareSheet = useCallback(() => {
     dispatch({
       type: 'changSheetState',
@@ -104,53 +50,68 @@ export default function ProductList(props) {
       },
     });
   }, [dispatch]);
-
-  const getProductList = async (type) => {
-    //just for testing
-    if (type === 'All' || type === 'Announcements' || type === 'Electronics') {
-      // issue exist on backend need hard coded storeId for now
-      let ret = await client
-        .query({
-          query: aQM.ACTIVE_PRODUCT_LISTINGS_BY_STORE_ID,
-          variables: {
-            storeId: '0b950a80-7836-45b4-9ee3-42042097aafe',
-            sortfield: 'wholeSalePrice',
-            sortDirection: 'ASCENDING',
-            pageNo: page,
-            pageSize: 3,
-          },
-          context: {
-            headers: {
-              isPrivate: false,
-            },
-          },
-        })
-        .then((result) => result)
-        .catch((err) => {
-          console.log('getProductList query error' + err);
-          return;
-        });
-
-      if (typeof ret !== 'undefined') {
-        let pList = gqlMappers.mapProductListingDTO(
-          ret.data.activeProductListingsByStoreId
-        );
-        setProducts(JSON.parse(pList));
-      }
-    }
-    // await jwt
-    //   .runMockGetProductList()
-    //   .then(function (res) {
-    //     //setProducts(res.productList)
-    //     setProducts(JSON.parse(res.productList));
-    //   })
-    //   .catch(function (error) {});
+  let params = {
+    storeId: '0b950a80-7836-45b4-9ee3-42042097aafe',
+    sortfield: 'wholeSalePrice',
   };
-  useEffect(() => {
-    console.log(JSON.stringify(props.listType));
-    getProductList(props.listType);
-    return () => {};
-  }, [props]);
+  switch (props.listType) {
+    case 'All':
+      params = {
+        storeId: '0b950a80-7836-45b4-9ee3-42042097aafe',
+        sortfield: 'wholeSalePrice',
+      };
+      break;
+    case 'Announcements':
+      params = {
+        storeId: '0b950a80-7836-45b4-9ee3-42042097aafe',
+        sortfield: 'wholeSalePrice',
+      };
+      break;
+    case 'Electronics':
+      params = {
+        storeId: '0b950a80-7836-45b4-9ee3-42042097aafe',
+        sortfield: 'wholeSalePrice',
+      };
+      break;
+    default:
+      break;
+  }
+  const { loading, error, data, refetch, fetchMore } = useQuery(
+    aQM.ACTIVE_PRODUCT_LISTINGS_BY_STORE_ID,
+    {
+      variables: {
+        ...params,
+        sortDirection: 'ASCENDING',
+        pageSize: 5,
+      },
+      context: {
+        headers: {
+          isPrivate: false,
+        },
+      },
+      onCompleted: (res) => {
+        setServerData(res.activeProductListingsByStoreId);
+      },
+    }
+  );
+  //Pull up the load layout
+  const LoadMoreView = useMemo(
+    () => (
+      <View style={{ alignItems: 'center' }}>
+        <ActivityIndicator
+          style={{
+            color: colors.primary,
+            margin: 10,
+          }}
+          size={'large'}
+          color={'red'}
+          animating={true}
+        />
+        <Text>Loading more</Text>
+      </View>
+    ),
+    []
+  );
   return (
     <HFlatList
       index={index}
@@ -164,11 +125,39 @@ export default function ProductList(props) {
       }
       showsHorizontalScrollIndicator={false}
       // data={isAnnouncement ? announcements : products}
-      data={products}
+      data={serverData}
       keyExtractor={(item, index) => index.toString()}
       onEndReachedThreshold={0}
+    
+      //Set pull-up loading
+      ListFooterComponent={loadingMore ? LoadMoreView : null}
+      onStartRefresh={() => {
+        setIsRereshing(true);
+        refetch().then((res) => {
+          setServerData(res.data.activeProductListingsByStoreId);
+          setIsRereshing(false);
+        });
+      }}
+      isRefreshing={isRereshing}
       onEndReached={() => {
         console.log('get more data');
+        setPage(page + 1);
+        setLoadingMore(true);
+        fetchMore &&
+          fetchMore({
+            variables: {
+              pageNo: page,
+            },
+          }).then((fetchMoreResult) => {
+            // Update variables.limit for the original query to include
+            // const { data, loading, networkStatus } = fetchMoreResult;
+            console.log(fetchMoreResult.data);
+            setServerData([
+              ...serverData,
+              ...fetchMoreResult.data.activeProductListingsByStoreId,
+            ]);
+            setLoadingMore(false);
+          });
       }}
       renderItem={({ item, index }) => {
         return (

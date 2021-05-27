@@ -8,6 +8,8 @@ import AppConfig from '../../../Config/AppConfig';
 import NavigationService from '../../../Navigation/NavigationService';
 import { StarRating, Progress } from '../../../Components';
 
+const defultUrl =
+  'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000';
 function ProductItem(props) {
   const [startX, setSartX] = useState(999);
   const [endX, setEndX] = useState(999);
@@ -42,7 +44,9 @@ function ProductItem(props) {
           if (Platform.OS === 'ios') {
             NavigationService.navigate('ProductDetailScreen');
           } else if (canGoNext) {
-            NavigationService.navigate('ProductDetailScreen',{product:product});
+            NavigationService.navigate('ProductDetailScreen', {
+              product: product,
+            });
           }
         }}
         style={styles.productContainer}
@@ -55,16 +59,16 @@ function ProductItem(props) {
             ]}
           >
             <Image
-              source={{ uri: product.picture }}
+              source={{ uri: product.photo ? product.photo : defultUrl }}
               style={styles.productImage}
             />
 
             <View style={styles.v2}>
               <View>
-                <Text style={styles.heading4Bold}>{product.name}</Text>
+                <Text style={styles.heading4Bold}>{product.productName}</Text>
                 <StarRating
                   rating={product.rating}
-                  ratingCount={product.ratingCount}
+                  ratingCount={product.numberOfReviews}
                 />
               </View>
               <View style={styles.row}>
@@ -88,7 +92,7 @@ function ProductItem(props) {
                   <NumberFormat
                     thousandSeparator={true}
                     prefix={'$'}
-                    value={product.wholesalePrice}
+                    value={product.wholeSalePrice}
                     displayType={'text'}
                     renderText={(text) => (
                       <Text style={styles.txtWholesalePrice}>{text}</Text>
@@ -100,7 +104,7 @@ function ProductItem(props) {
                   <Text
                     style={[styles.heading6Bold, { color: Colors.secondary00 }]}
                   >
-                           {product.percentOff}% OFF
+                    {product.percentOff}% OFF
                   </Text>
                 </View>
               </View>
@@ -109,16 +113,16 @@ function ProductItem(props) {
         ) : (
           <View style={[{ paddingHorizontal: AppConfig.paddingHorizontal }]}>
             <Image
-              source={{ uri: product.picture }}
+              source={{ uri: product.photo ? product.photo : defultUrl }}
               style={styles.productImageBig}
             />
 
             <View style={styles.v2}>
               <View>
-                <Text style={styles.heading4Bold}>{product.name}</Text>
+                <Text style={styles.heading4Bold}>{product.productName}</Text>
                 <StarRating
                   rating={product.rating}
-                  ratingCount={product.ratingCount}
+                  ratingCount={product.numberOfReviews}
                 />
               </View>
               <View style={styles.row}>
@@ -142,7 +146,7 @@ function ProductItem(props) {
                   <NumberFormat
                     thousandSeparator={true}
                     prefix={'$'}
-                    value={product.wholesalePrice}
+                    value={product.wholeSalePrice}
                     displayType={'text'}
                     renderText={(text) => (
                       <Text style={styles.txtWholesalePrice}>{text}</Text>
@@ -183,7 +187,7 @@ function ProductItem(props) {
                                             </TouchableOpacity> */}
 
                   <Progress
-                    maximumValue={product.inStock}
+                    maximumValue={product.noOfItemsInStock}
                     currentValue={product.orderCount}
                     barWidth={s(60)}
                     barHeight={vs(6)}
@@ -192,7 +196,7 @@ function ProductItem(props) {
                   <View style={styles.row}>
                     <Image source={Images.stock} style={styles.icStock} />
                     <Text style={styles.txtOrderNumber}>
-                      {product.orderCount}/{product.inStock}
+                      {product.orderCount}/{product.noOfItemsInStock}
                     </Text>
                     <TouchableOpacity>
                       <Image source={Images.info2} style={styles.icInfo} />
@@ -222,11 +226,11 @@ function ProductItem(props) {
           <View style={styles.v4}>
             <View>
               <Text style={styles.txtOrderClose}>Order closes on:</Text>
-              <Text style={styles.heading6Regular}>{product.orderClose}</Text>
+              <Text style={styles.heading6Regular}>{product.closedDate}</Text>
             </View>
 
             <Progress
-              maximumValue={product.inStock}
+              maximumValue={product.noOfItemsInStock}
               currentValue={product.orderCount}
               barWidth={s(60)}
               barHeight={vs(6)}
@@ -235,7 +239,7 @@ function ProductItem(props) {
             <View style={styles.row}>
               <Image source={Images.stock} style={styles.icStock} />
               <Text style={styles.txtOrderNumber}>
-                {product.orderCount}/{product.inStock}
+                {product.orderCount}/{product.noOfItemsInStock}
               </Text>
               <TouchableOpacity>
                 <Image source={Images.info2} style={styles.icInfo} />
@@ -264,7 +268,7 @@ function ProductItem(props) {
         <View style={styles.productInfoSmall}>
           <View>
             <Image
-              source={{ uri: product.picture }}
+              source={{ uri: product.photo ? product.photo : defultUrl }}
               style={styles.productImageSmall}
               resizeMode={'contain'}
             />
@@ -281,11 +285,11 @@ function ProductItem(props) {
           </View>
 
           <Text style={[styles.txtBold, { color: Colors.black }]}>
-            {product.name}
+            {product.productName}
           </Text>
           <StarRating
             rating={product.rating}
-            ratingCount={product.ratingCount}
+            ratingCount={product.numberOfReviews}
           />
 
           <View style={[styles.row, { marginTop: vs(5) }]}>
@@ -311,7 +315,7 @@ function ProductItem(props) {
               <NumberFormat
                 thousandSeparator={true}
                 prefix={'$'}
-                value={product.wholesalePrice}
+                value={product.wholeSalePrice}
                 displayType={'text'}
                 renderText={(text) => (
                   <Text style={styles.txtWholesalePrice}>{text}</Text>
@@ -331,14 +335,14 @@ function ProductItem(props) {
           style={[styles.row, { paddingHorizontal: s(8), marginTop: vs(5) }]}
         >
           <Progress
-            maximumValue={product.inStock}
+            maximumValue={product.noOfItemsInStock}
             currentValue={product.orderCount}
             barWidth={s(60)}
             barHeight={vs(6)}
           />
           <Image source={Images.stock} style={styles.icStockSmall} />
           <Text style={styles.heading6Regular}>
-            {product.orderCount}/{product.inStock}
+            {product.orderCount}/{product.noOfItemsInStock}
           </Text>
         </View>
       </TouchableOpacity>

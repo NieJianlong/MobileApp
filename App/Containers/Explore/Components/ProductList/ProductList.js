@@ -128,7 +128,6 @@ export default function ProductList(props) {
       data={serverData}
       keyExtractor={(item, index) => index.toString()}
       onEndReachedThreshold={0}
-    
       //Set pull-up loading
       ListFooterComponent={loadingMore ? LoadMoreView : null}
       onStartRefresh={() => {
@@ -136,6 +135,7 @@ export default function ProductList(props) {
         refetch().then((res) => {
           setServerData(res.data.activeProductListingsByStoreId);
           setIsRereshing(false);
+          setPage(0);
         });
       }}
       isRefreshing={isRereshing}

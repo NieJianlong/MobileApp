@@ -6,20 +6,26 @@
  * @Description: User center header layout
  * @FilePath: /MobileApp/App/Containers/UserCenter/UserHeader.js
  */
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScaledSheet, s, vs } from 'react-native-size-matters';
-import Fonts from '../../Themes/Fonts';
-import AppConfig from '../../Config/AppConfig';
-import { Button } from '../../Components';
-import fonts from '../../Themes/Fonts';
-import colors from '../../Themes/Colors';
-import NavigationService from '../../Navigation/NavigationService';
-import images from '../../Themes/Images';
-import UserAvatar from './UserAvatar';
-import { ApplicationStyles } from '../../Themes';
-import { userProfileVar } from '../../Apollo/cache';
+import React, { useState } from "react";
+import { View, Text, Image, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScaledSheet, s, vs } from "react-native-size-matters";
+import Fonts from "../../Themes/Fonts";
+import AppConfig from "../../Config/AppConfig";
+import { Button } from "../../Components";
+import fonts from "../../Themes/Fonts";
+import colors from "../../Themes/Colors";
+import NavigationService from "../../Navigation/NavigationService";
+import images from "../../Themes/Images";
+import UserAvatar from "./UserAvatar";
+import { ApplicationStyles } from "../../Themes";
+import { userProfileVar } from "../../Apollo/cache";
+import { useQuery } from "@apollo/client";
+import {
+  BUYER_PROFILE_BY_USERID,
+  FIND_BUYER_PROFILE,
+  FIND_USER_PROFILE,
+} from "../../Apollo/queries/queries_user";
 
 /**
  * @description:The user header component, which contains basic user information
@@ -28,16 +34,17 @@ import { userProfileVar } from '../../Apollo/cache';
  */
 function UserHeader(props) {
   const { needSafeArea, needEdit, islogin, setLogin } = props;
+
   const textTip = "You haven't add any personal \n details yet";
   return (
     <View style={styles.headerContainer}>
       {userProfileVar().isAuth ? (
         needSafeArea ? (
           <SafeAreaView style={styles.toppart}>
-            {userInfo(needEdit)}
+            <UserInfo />
           </SafeAreaView>
         ) : (
-          userInfo(needEdit)
+          <UserInfo />
         )
       ) : (
         <View>
@@ -53,48 +60,66 @@ function UserHeader(props) {
   );
 }
 
-function userInfo(needEdit) {
+function UserInfo() {
+  const { loading, error, data } = useQuery(FIND_USER_PROFILE, {
+    variables: { userProfileId: global.userProfileId },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {
+      debugger;
+    },
+    onError: (res) => {
+      debugger;
+    },
+  });
   return (
     <TouchableOpacity
       onPress={() => {
-        NavigationService.navigate('UserInfoScreen', {});
+        NavigationService.navigate("UserInfoScreen", {});
       }}
     >
       <View style={styles.userinfo}>
         <UserAvatar uri={images.userDefaultAvatar}></UserAvatar>
         <View style={styles.textinfo}>
           <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <Text style={ApplicationStyles.screen.heading3Bold}>
-              My Account
+              {data?.userProfile.userName}
             </Text>
-            {needEdit && (
-              <TouchableOpacity
-                onPress={() => {
-                  NavigationService.navigate('UserEditProfileScreen');
-                }}
-              >
-                <Image
-                  style={styles.editImage}
-                  source={images.userEditBtnImage}
-                ></Image>
-              </TouchableOpacity>
-            )}
+
+            <TouchableOpacity
+              onPress={() => {
+                NavigationService.navigate(
+                  "UserEditProfileScreen",
+                  data?.userProfile
+                );
+              }}
+            >
+              <Image
+                style={styles.editImage}
+                source={images.userEditBtnImage}
+              ></Image>
+            </TouchableOpacity>
           </View>
           <View style={styles.emailContainer}>
             <Image
               style={styles.email}
-              source={require('../../Images/usercenter/email.png')}
+              source={require("../../Images/usercenter/email.png")}
             ></Image>
-            <Text style={styles.emailtext}>1317272927@qq.com</Text>
+            <Text style={styles.emailtext}>{data?.userProfile.email}</Text>
           </View>
           <View style={styles.emailContainer}>
             <Image
               style={styles.email}
-              source={require('../../Images/usercenter/phone.png')}
+              source={require("../../Images/usercenter/phone.png")}
             ></Image>
-            <Text style={styles.emailtext}>17706398976</Text>
+            <Text style={styles.emailtext}>
+              {data?.userProfile.phoneNumber}
+            </Text>
           </View>
         </View>
       </View>
@@ -105,31 +130,31 @@ function userInfo(needEdit) {
 export default UserHeader;
 const styles = ScaledSheet.create({
   editImage: {
-    width: '20@s',
-    height: '20@s',
+    width: "20@s",
+    height: "20@s",
   },
   toppart: {
     backgroundColor: colors.background,
-    height: '140@vs',
+    height: "140@vs",
   },
   emailContainer: {
-    flexDirection: 'row',
-    marginTop: '3@vs',
+    flexDirection: "row",
+    marginTop: "3@vs",
   },
   emailtext: {
     color: colors.grey80,
-    fontSize: '12@s',
+    fontSize: "12@s",
     fontFamily: fonts.primary,
   },
   myaccount: {
-    fontSize: '16@s',
+    fontSize: "16@s",
     fontFamily: fonts.primary,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   email: {
-    width: '20@s',
-    height: '20@s',
-    resizeMode: 'contain',
+    width: "20@s",
+    height: "20@s",
+    resizeMode: "contain",
   },
   textinfo: {
     paddingHorizontal: AppConfig.paddingHorizontal,
@@ -138,28 +163,28 @@ const styles = ScaledSheet.create({
   userinfo: {
     paddingHorizontal: AppConfig.paddingHorizontal,
     paddingVertical: AppConfig.paddingHorizontal,
-    borderRadius: '18@s',
-    marginTop: '15@s',
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
+    borderRadius: "18@s",
+    marginTop: "15@s",
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "white",
   },
   avatar: {
-    width: '56@s',
-    height: '56@s',
-    borderRadius: '28@s',
+    width: "56@s",
+    height: "56@s",
+    borderRadius: "28@s",
   },
   nosign: {
     fontSize: 24,
-    textAlign: 'center',
+    textAlign: "center",
     fontFamily: Fonts.primary,
-    fontWeight: 'bold',
-    marginTop: '20@vs',
+    fontWeight: "bold",
+    marginTop: "20@vs",
   },
-  signbtn: { marginTop: '20@vs' },
+  signbtn: { marginTop: "20@vs" },
   headerContainer: {
     backgroundColor: colors.background,
-    justifyContent: 'space-around',
+    justifyContent: "space-around",
     paddingHorizontal: AppConfig.paddingHorizontal,
   },
 });

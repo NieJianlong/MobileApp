@@ -1,21 +1,21 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useEffect, useReducer, useRef } from "react";
 import {
   View,
   StatusBar,
   Animated,
   TouchableWithoutFeedback,
-} from 'react-native';
-import { Alert, BottomSheet } from '../../Components';
-import AppNavigation from '../../Navigation/AppNavigation';
-import colors from '../../Themes/Colors';
-import { vs } from 'react-native-size-matters';
-import { AlertContext } from './GlobalContext';
+} from "react-native";
+import { Alert, BottomSheet } from "../../Components";
+import AppNavigation from "../../Navigation/AppNavigation";
+import colors from "../../Themes/Colors";
+import { vs } from "react-native-size-matters";
+import { AlertContext } from "./GlobalContext";
 
 const initialState = {
   alert: {
     visible: false,
-    message: '',
-    title: '',
+    message: "",
+    title: "",
     color: colors.success,
     onDismiss: () => {},
   },
@@ -23,15 +23,15 @@ const initialState = {
     showSheet: false,
     children: null,
     height: 200,
-    sheetTitle: '',
+    sheetTitle: "",
     onCloseEnd: () => {},
   },
 };
 function reducer(state, action) {
   switch (action.type) {
-    case 'changAlertState':
+    case "changAlertState":
       return { ...state, alert: { ...action.payload } };
-    case 'changSheetState':
+    case "changSheetState":
       return {
         ...state,
         actionSheet: { ...state.actionSheet, ...action.payload },
@@ -54,7 +54,7 @@ function RootContainer() {
   useEffect(() => {
     if (visible) {
       setTimeout(() => {
-        dispatch({ type: 'changAlertState', payload: { visible: false } });
+        dispatch({ type: "changAlertState", payload: { visible: false } });
       }, 2100);
     }
   }, [visible]);
@@ -75,15 +75,15 @@ function RootContainer() {
         <TouchableWithoutFeedback onPress={() => {}}>
           <Animated.View
             style={{
-              width: '100%',
-              height: '100%',
-              position: 'absolute',
+              width: "100%",
+              height: "100%",
+              position: "absolute",
               top: 0,
               left: 0,
               right: 0,
               bottom: 0,
-              alignItems: 'center',
-              backgroundColor: 'rgb(29,29,29)',
+              alignItems: "center",
+              backgroundColor: "rgb(29,29,29)",
               opacity: Animated.add(0.85, Animated.multiply(-1.0, fall)),
             }}
           />
@@ -94,7 +94,7 @@ function RootContainer() {
           customRef={sheetEl}
           onCloseEnd={() => {
             dispatch({
-              type: 'changSheetState',
+              type: "changSheetState",
               payload: { showSheet: false },
             });
           }}

@@ -76,7 +76,7 @@ it("makes login request fEP", async () => {
     // console.log(`id_token\n ${ ret.data.id_token}`)
     //   console.log(`refresh_token\n ${ ret.data.refresh_token}`)
     var decoded = jwt_decode(jwtToken);
-    console.log(decoded.sub);
+    console.log(decoded);
   }
 });
 

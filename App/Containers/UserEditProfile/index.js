@@ -6,36 +6,103 @@
  * @Description: edit user profile
  * @FilePath: /MobileApp/App/Containers/UserEditProfile/index.js
  */
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { View, Text, Image, Keyboard, TouchableOpacity, SafeAreaView } from 'react-native';
-import { ScaledSheet, s } from 'react-native-size-matters';
-import { AppBar, MaterialTextInput, RightButton } from '../../Components';
-import AppConfig from '../../Config/AppConfig';
-import Colors from '../../Themes/Colors';
-import colors from '../../Themes/Colors';
-import fonts from '../../Themes/Fonts';
-import UserAvatar from '../UserCenter/UserAvatar';
-import NavigationService from '../../Navigation/NavigationService';
-import images from '../../Themes/Images';
-import { ApplicationStyles } from '../../Themes';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import ImagePicker from 'react-native-image-crop-picker';
-import ActionSheet from 'react-native-actionsheet';
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import {
+  View,
+  Text,
+  Image,
+  Keyboard,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
+import { ScaledSheet, s } from "react-native-size-matters";
+import { AppBar, MaterialTextInput, RightButton } from "../../Components";
+import AppConfig from "../../Config/AppConfig";
+import Colors from "../../Themes/Colors";
+import colors from "../../Themes/Colors";
+import fonts from "../../Themes/Fonts";
+import UserAvatar from "../UserCenter/UserAvatar";
+import NavigationService from "../../Navigation/NavigationService";
+import images from "../../Themes/Images";
+import { ApplicationStyles } from "../../Themes";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import ImagePicker from "react-native-image-crop-picker";
+import ActionSheet from "react-native-actionsheet";
+import { useRoute } from "@react-navigation/core";
+import { useMutation } from "@apollo/client";
+import { UPDATE_BUYER_PROFILE } from "../../Apollo/mutations/mutations_user";
 
-const inputs = [
-  { placeholder: 'First Name', value: 'John' },
-  { placeholder: 'Last Name', value: 'John' },
-  { placeholder: 'Email', value: '1317272927@qq.com' },
-  { placeholder: 'Phone Number', value: '56565' },
-];
 /**
  * @description:User edit page
  * @param {*} props
  * @return {*}
  */
 function UserEditProfile(props) {
+  const {
+    params: {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      userName,
+      userId,
+      buyerId,
+    },
+  } = useRoute();
+
   const [showBottom, setShowBottom] = useState(true);
   const [newAvatar, setNewAvatar] = useState(null);
+  const [newFirstName, setNewFirstName] = useState(firstName);
+  const [newLastName, setNewLastName] = useState(lastName);
+  const [newEmail, setNewEmail] = useState(email);
+  const [newPhoneNumber, setNewPhoneNumber] = useState(phoneNumber);
+  const inputs = [
+    {
+      placeholder: "First Name",
+      value: newFirstName,
+      onChangeText: (text) => setNewFirstName(text),
+    },
+    {
+      placeholder: "Last Name",
+      value: newLastName,
+      onChangeText: (text) => setNewLastName(text),
+    },
+    {
+      placeholder: "Email",
+      value: newEmail,
+      onChangeText: (text) => setNewEmail(text),
+    },
+    {
+      placeholder: "Phone Number",
+      value: newPhoneNumber,
+      onChangeText: (text) => setNewPhoneNumber(text),
+    },
+  ];
+  let BuyerProfileRequest = {
+    buyerId: global.buyerId,
+    userName: "updatedUserName",
+    firstName: "updatedfirstName",
+    lastName: "updatedlastName",
+    userType: "BUYER",
+    guestBuyer: false,
+  };
+  console.log(BuyerProfileRequest);
+  const [updateProfile, { data }] = useMutation(UPDATE_BUYER_PROFILE, {
+    variables: {
+      request: BuyerProfileRequest,
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {
+      debugger;
+    },
+    onError: (res) => {
+      debugger;
+    },
+  });
   const sheetRef = useRef();
   useEffect(() => {
     const keyboardShow = (e) => {
@@ -44,11 +111,11 @@ function UserEditProfile(props) {
     const keyboardHide = (e) => {
       setShowBottom(true);
     };
-    Keyboard.addListener('keyboardDidShow', keyboardShow);
-    Keyboard.addListener('keyboardDidHide', keyboardHide);
+    Keyboard.addListener("keyboardDidShow", keyboardShow);
+    Keyboard.addListener("keyboardDidHide", keyboardHide);
     return () => {
-      Keyboard.removeListener('keyboardDisShow', keyboardShow);
-      Keyboard.removeListener('keyboardDidHide', keyboardHide);
+      Keyboard.removeListener("keyboardDisShow", keyboardShow);
+      Keyboard.removeListener("keyboardDidHide", keyboardHide);
     };
   }, []);
   const showSheet = useCallback(() => {
@@ -79,7 +146,8 @@ function UserEditProfile(props) {
             <RightButton
               title="SAVE"
               onPress={() => {
-                NavigationService.goBack();
+                // NavigationService.goBack();
+                updateProfile();
               }}
             />
           )}
@@ -107,7 +175,7 @@ function UserEditProfile(props) {
             return (
               <View
                 key={index}
-                style={{ height: 80, justifyContent: 'center' }}
+                style={{ height: 80, justifyContent: "center" }}
               >
                 <MaterialTextInput {...item}></MaterialTextInput>
               </View>
@@ -119,13 +187,13 @@ function UserEditProfile(props) {
         <SafeAreaView style={styles.bottom}>
           <TouchableOpacity
             onPress={() => {
-              NavigationService.navigate('DeleteAccountMessageScreen');
+              NavigationService.navigate("DeleteAccountMessageScreen");
             }}
           >
             <Text
               style={[
                 ApplicationStyles.screen.heading5Bold,
-                { color: colors.grey80, textAlign: 'center' },
+                { color: colors.grey80, textAlign: "center" },
               ]}
             >
               REMOVE ACCOUNT
@@ -135,8 +203,8 @@ function UserEditProfile(props) {
       )}
       <ActionSheet
         ref={sheetRef}
-        title={'Select a new picture'}
-        options={['Camera', 'Photo Gallery', 'Cancel']}
+        title={"Select a new picture"}
+        options={["Camera", "Photo Gallery", "Cancel"]}
         cancelButtonIndex={2}
         //destructiveButtonIndex={1}
         onPress={(index) => {
@@ -156,21 +224,21 @@ export default UserEditProfile;
 const styles = ScaledSheet.create({
   save: {
     color: Colors.primary,
-    fontSize: '12@vs',
+    fontSize: "12@vs",
     fontFamily: fonts.primary,
   },
   bottom: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    paddingBottom: '15@vs',
+    paddingBottom: "15@vs",
   },
   contentContainer: {
     paddingHorizontal: AppConfig.paddingHorizontal,
   },
   container: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
@@ -178,7 +246,7 @@ const styles = ScaledSheet.create({
     backgroundColor: colors.background,
   },
   itemText: {
-    textAlign: 'center',
+    textAlign: "center",
     fontFamily: fonts.primary,
   },
 });

@@ -7,14 +7,7 @@
  * @FilePath: /MobileApp/App/Containers/UserInfo/index.js
  */
 import React, { useReducer, useEffect, useRef } from "react";
-import {
-  View,
-  Animated,
-  Image,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import { View, Animated, Image, TouchableWithoutFeedback } from "react-native";
 import UserHeader from "../UserCenter/UserHeader";
 import { ScaledSheet, s, vs } from "react-native-size-matters";
 import {
@@ -185,10 +178,7 @@ function renderSheet(sheetEl, dispatch) {
       // title={'Add your delivery address'}
     >
       <View style={{ flex: 1 }}>
-        <Image
-          style={styles.credit}
-          source={images.userCreditCardImage}
-        ></Image>
+        <Image style={styles.credit} source={images.userCreditCardImage} />
       </View>
       <View
         style={{
@@ -197,13 +187,13 @@ function renderSheet(sheetEl, dispatch) {
         }}
       >
         <View style={{ flex: 1, marginLeft: s(-15) }}>
-          <TextTip {...tips}></TextTip>
+          <TextTip {...tips} />
         </View>
         <Button
           backgroundColor="transparent"
           text="CANCEL"
           textColor={colors.grey80}
-        ></Button>
+        />
       </View>
     </BottomSheet>
   );

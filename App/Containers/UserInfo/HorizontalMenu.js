@@ -68,8 +68,8 @@ function HorizontalMenu(props) {
             return <AddressList dispatch={dispatch} />;
           case "Payment":
             return <PaymentList dispatch={dispatch} />;
-          // case "Billing":
-          //   return <BillingList dispatch={dispatch} />;
+          case "Billing":
+            return <BillingList dispatch={dispatch} />;
           default:
             return <View />;
         }

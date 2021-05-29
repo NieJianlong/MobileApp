@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { vs } from "react-native-size-matters";
-import { Button, Switch } from "../../../Components";
+
+import { Switch } from "../../../Components";
 import AppConfig from "../../../Config/AppConfig";
-import { View, FlatList, Text, Image, SafeAreaView } from "react-native";
-import colors from "../../../Themes/Colors";
-import AddressItem from "./AddressItem";
+import { View, FlatList } from "react-native";
 import TextTip from "../../../Components/EmptyReminder";
 import NavigationService from "../../../Navigation/NavigationService";
 import BillingItem from "./BillingItem";
 
 export default function BillingList({ dispatch }) {
+  const tip = "You have not added \n billing details yet";
   const [billings, setBillings] = useState([]);
   useEffect(() => {
     if (billings.length > 0) {
@@ -25,7 +24,7 @@ export default function BillingList({ dispatch }) {
         data={billings}
         ListEmptyComponent={
           <TextTip
-            textTip="You have not added \n billing details yet"
+            textTip={tip}
             subTextTip="Add your billing details to use in your next purchase"
             needButton={true}
             btnMsg="ADD BILLING DETAILS"
@@ -44,7 +43,10 @@ export default function BillingList({ dispatch }) {
                 paddingHorizontal: AppConfig.paddingHorizontal,
               }}
             >
-              <Switch label="Use the same info as my personal details"></Switch>
+              <Switch
+                label="Use the same info as my personal details"
+                onSwitch={() => {}}
+              />
             </View>
           );
         }}

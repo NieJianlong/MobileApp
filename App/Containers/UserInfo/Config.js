@@ -1,19 +1,19 @@
-import NavigationService from '../../Navigation/NavigationService';
-import images from '../../Themes/Images';
-import NoPurchase from './OnePurchase';
+import NavigationService from "../../Navigation/NavigationService";
+import images from "../../Themes/Images";
+import NoPurchase from "./OnePurchase";
 
 let replaceChars = function (str, length, fromBegin, mask) {
-  mask = mask ? mask : '*';
-  let replacement = '';
+  mask = mask ? mask : "*";
+  let replacement = "";
   for (var i = 0; i < length; i++) {
     replacement += mask;
   }
   if (fromBegin) {
-    let regexp = new RegExp('.{1,' + length + '}');
+    let regexp = new RegExp(".{1," + length + "}");
     return str.replace(regexp, replacement);
   } else {
     let regexp = new RegExp(
-      '.{' + (str.length - length) + ',' + str.length + '}'
+      ".{" + (str.length - length) + "," + str.length + "}"
     );
     return (
       str.substring(0, str.length - length) + str.replace(regexp, replacement)
@@ -23,18 +23,18 @@ let replaceChars = function (str, length, fromBegin, mask) {
 
 export const OneClickPurchaseData = [
   {
-    title: 'Home',
-    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
+    title: "Home",
+    subTitle: "4442 Brighton Circle Road, Saint Cloud MN MInesota 56303",
     isDefault: true,
-    itemType: 'address',
+    itemType: "address",
   },
   {
-    title: replaceChars('s887765453433887', 10, true, '*'),
-    subTitle: 'John Smith \nExpires 09/2022',
-    type: 'credit',
-    expires: 'Expires 09/2022',
+    title: replaceChars("s887765453433887", 10, true, "*"),
+    subTitle: "John Smith \nExpires 09/2022",
+    type: "credit",
+    expires: "Expires 09/2022",
     isDefault: true,
-    itemType: 'payment',
+    itemType: "payment",
   },
 ];
 
@@ -45,87 +45,87 @@ export const OneClickPurchaseData = [
  */
 export const AddressTestData = [
   {
-    title: 'Home',
-    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
+    title: "Home",
+    subTitle: "4442 Brighton Circle Road, Saint Cloud MN MInesota 56303",
     isDefault: true,
-    itemType: 'address',
+    itemType: "address",
   },
   {
-    title: 'Work',
-    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
+    title: "Work",
+    subTitle: "4442 Brighton Circle Road, Saint Cloud MN MInesota 56303",
     isDefault: false,
-    itemType: 'address',
+    itemType: "address",
   },
   {
-    title: 'Home',
-    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
+    title: "Home",
+    subTitle: "4442 Brighton Circle Road, Saint Cloud MN MInesota 56303",
     isDefault: false,
-    itemType: 'address',
+    itemType: "address",
   },
   {
-    title: 'Work',
-    subTitle: '4442 Brighton Circle Road, Saint Cloud MN MInesota 56303',
+    title: "Work",
+    subTitle: "4442 Brighton Circle Road, Saint Cloud MN MInesota 56303",
     isDefault: false,
-    itemType: 'address',
+    itemType: "address",
   },
 ];
 export const BillDetail = {
-  firstName: 'John',
-  lastName: 'Roots',
-  phoneOrEmailNum: '1317272927@qq.com',
-  streetName: 'Tamil Nadu Street, 12345',
-  streetNum: '666',
-  door: '7-703',
-  city: 'QingDao',
-  mstate: 'ShanDong',
-  postcode: '27009',
-  country: 'China',
-  company: 'MaShangBan',
-  taxid: 'dsds',
+  firstName: "John",
+  lastName: "Roots",
+  phoneOrEmailNum: "1317272927@qq.com",
+  streetName: "Tamil Nadu Street, 12345",
+  streetNum: "666",
+  door: "7-703",
+  city: "QingDao",
+  mstate: "ShanDong",
+  postcode: "27009",
+  country: "China",
+  company: "MaShangBan",
+  taxid: "dsds",
 };
 
 export const PaymentTestData = [
   {
-    title: replaceChars('s887765453433887', 10, true, '*'),
-    subTitle: 'John Smith \nExpires 09/2022',
-    type: 'credit',
-    expires: 'Expires 09/2022',
+    title: replaceChars("s887765453433887", 10, true, "*"),
+    subTitle: "John Smith \nExpires 09/2022",
+    type: "credit",
+    expires: "Expires 09/2022",
     isDefault: true,
-    itemType: 'payment',
+    itemType: "payment",
   },
   {
-    title: replaceChars('s887765453433887', 10, true, '*'),
-    subTitle: 'John Smith \nExpires 09/2022',
-    type: 'credit',
-    expires: 'Expires 09/2022',
+    title: replaceChars("s887765453433887", 10, true, "*"),
+    subTitle: "John Smith \nExpires 09/2022",
+    type: "credit",
+    expires: "Expires 09/2022",
     isDefault: false,
-    itemType: 'payment',
+    itemType: "payment",
   },
   {
-    title: replaceChars('s887765453433887', 10, true, '*'),
-    subTitle: 'John Smith \nExpires 09/2022',
-    type: 'credit',
-    expires: 'Expires 09/2022',
+    title: replaceChars("s887765453433887", 10, true, "*"),
+    subTitle: "John Smith \nExpires 09/2022",
+    type: "credit",
+    expires: "Expires 09/2022",
     isDefault: false,
-    itemType: 'payment',
+    itemType: "payment",
   },
 ];
 
 export const MenuConfig = [
   {
-    title: '1 Click Purchasing',
+    title: "1 Click Purchasing",
     icon: images.userPurchaseImage,
     textTip: "You haven't added a default \n purchase preference yet",
     subTextTip:
-      'Select a default address and payment method to \n activate 1 click purchasing',
+      "Select a default address and payment method to \n activate 1 click purchasing",
     needButton: true,
-    btnMsg: 'ADD 1 CLICK PURCHASING PREFERENCES',
+    btnMsg: "ADD 1 CLICK PURCHASING PREFERENCES",
     selectedIcon: images.userPurchaseImage,
     screen: NoPurchase,
-    key: 'Purchasing',
-    extra: 'EDIT 1 CLICK PURCHASING PREFERENCES',
+    key: "Purchasing",
+    extra: "EDIT 1 CLICK PURCHASING PREFERENCES",
     onPress: (callback) => {
-      NavigationService.navigate('OneClickPurchaseScreen', {
+      NavigationService.navigate("OneClickPurchaseScreen", {
         callback,
       });
     },
@@ -136,29 +136,29 @@ export const MenuConfig = [
     },
   },
   {
-    title: 'My Addresses',
+    title: "My Addresses",
     icon: images.userUAddressImage,
     selectedIcon: images.userAddressImage,
-    key: 'Addresses',
-    textTip: 'Your address list is empty',
-    subTextTip: 'You haven´t add any personal address yet',
+    key: "Addresses",
+    textTip: "Your address list is empty",
+    subTextTip: "You haven´t add any personal address yet",
     needButton: true,
-    btnMsg: 'ADD ADDRESS',
+    btnMsg: "ADD ADDRESS",
     onPress: (callback) => {
-      NavigationService.navigate('AddNewAddressScreen', {
+      NavigationService.navigate("AddNewAddressScreen", {
         callback,
-        title: 'Add new address',
+        title: "Add new address",
       });
     },
-    extra: 'ADD NEW ADDRESS',
+    extra: "ADD NEW ADDRESS",
     itemActions: {
       setDefault: (item) => {},
       doEdit: (item) => {
-        NavigationService.navigate('AddNewAddressScreen', {
+        NavigationService.navigate("AddNewAddressScreen", {
           callback: (address) => {
             // setAddresses(testData);
           },
-          title: 'EDIT ADDRESS',
+          title: "EDIT ADDRESS",
           item,
         });
       },
@@ -168,21 +168,21 @@ export const MenuConfig = [
     },
   },
   {
-    title: 'My Payment Methods',
+    title: "My Payment Methods",
     icon: images.userUPayImage,
     selectedIcon: images.userPayImage,
-    key: 'Payment',
+    key: "Payment",
     textTip: "You haven't added any payment  method yet",
     subTextTip:
-      'Add a payment method to be able to use it in your next  purchases',
+      "Add a payment method to be able to use it in your next  purchases",
     needButton: true,
-    btnMsg: 'ADD  NEW PAYMENT METHOD',
+    btnMsg: "ADD  NEW PAYMENT METHOD",
     onPress: (callback) => {
-      NavigationService.navigate('AddPaymentMethodScreen', {
+      NavigationService.navigate("AddPaymentMethodScreen", {
         callback,
       });
     },
-    extra: 'ADD  NEW PAYMENT METHOD',
+    extra: "ADD  NEW PAYMENT METHOD",
     itemActions: {
       setDefault: (item) => {},
       doEdit: (item) => {},
@@ -190,21 +190,21 @@ export const MenuConfig = [
     },
   },
   {
-    title: 'My Billing Details',
+    title: "My Billing Details",
     icon: images.userUBillingImage,
     selectedIcon: images.userBillingImage,
-    key: 'Billing',
-    textTip: 'You have not added \n billing details yet',
-    subTextTip: 'Add your billing details to use in your next purchase',
+    key: "Billing",
+    textTip: "You have not added \n billing details yet",
+    subTextTip: "Add your billing details to use in your next purchase",
     needButton: true,
-    btnMsg: 'ADD BILLING DETAILS',
+    btnMsg: "ADD BILLING DETAILS",
     onPress: (callback) => {
-      NavigationService.navigate('AddBillingDetailsScreen', {
+      NavigationService.navigate("AddBillingDetailsScreen", {
         callback,
-        title: 'Please enter your billing details',
+        title: "Please enter your billing details",
       });
     },
-    extra: '',
+    extra: "",
     itemActions: {
       setDefault: (item) => {},
       doEdit: (item) => {},

@@ -6,7 +6,7 @@
  * @Description: UserInfo Screen
  * @FilePath: /MobileApp/App/Containers/UserInfo/index.js
  */
-import React, { useReducer, useEffect, useRef } from 'react';
+import React, { useReducer, useEffect, useRef } from "react";
 import {
   View,
   Animated,
@@ -14,31 +14,30 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   Text,
-} from 'react-native';
-import UserHeader from '../UserCenter/UserHeader';
-import { ScaledSheet, s, vs } from 'react-native-size-matters';
+} from "react-native";
+import UserHeader from "../UserCenter/UserHeader";
+import { ScaledSheet, s, vs } from "react-native-size-matters";
 import {
   AppBar,
   Alert,
   BottomSheet,
   Button,
   RightButton,
-} from '../../Components';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import colors from '../../Themes/Colors';
-import HorizontalMenu from './HorizontalMenu';
-import images from '../../Themes/Images';
-import TextTip from '../../Components/EmptyReminder';
-import NavigationService from '../../Navigation/NavigationService';
-import { ApplicationStyles } from '../../Themes';
+} from "../../Components";
+import { SafeAreaView } from "react-native-safe-area-context";
+import colors from "../../Themes/Colors";
+import HorizontalMenu from "./HorizontalMenu";
+import images from "../../Themes/Images";
+import TextTip from "../../Components/EmptyReminder";
+import NavigationService from "../../Navigation/NavigationService";
 
 //Alert Context, which controls the display and hiding of an alert, for example, Add Address Success
 export const AlertContext = React.createContext({});
 //reducer,useContext+useReducer,It is easy for child components to control parent components
 const initialState = {
   visible: false,
-  message: '',
-  title: '',
+  message: "",
+  title: "",
   color: colors.success,
   onDismiss: () => {},
   action: () => {},
@@ -47,11 +46,11 @@ const initialState = {
 };
 function reducer(state, action) {
   switch (action.type) {
-    case 'changAlertState':
+    case "changAlertState":
       return { ...state, ...action.payload };
-    case 'showPaymentRemoveSheet':
+    case "showPaymentRemoveSheet":
       return { ...state, ...action.payload };
-    case 'rightButtonShow':
+    case "rightButtonShow":
       return { ...state, rightButtonShow: action.payload };
     default:
       throw new Error();
@@ -72,7 +71,7 @@ function UserInfo(props) {
   useEffect(() => {
     if (visible) {
       setTimeout(() => {
-        dispatch({ type: 'changAlertState', payload: { visible: false } });
+        dispatch({ type: "changAlertState", payload: { visible: false } });
       }, 2100);
     }
   }, [visible]);
@@ -87,17 +86,17 @@ function UserInfo(props) {
                 <RightButton
                   title="EDIT"
                   onPress={() => {
-                    NavigationService.navigate('EditBillingDetailsScreen', {
+                    NavigationService.navigate("EditBillingDetailsScreen", {
                       saveCallback: () => {},
                       removeCallback: () => {
                         dispatch({
-                          type: 'changAlertState',
+                          type: "changAlertState",
                           payload: {
                             visible: true,
                             message:
-                              'You have successfully removed your billing address.',
+                              "You have successfully removed your billing address.",
                             color: colors.secondary00,
-                            title: 'Billing Details removed',
+                            title: "Billing Details removed",
                           },
                         });
                       },
@@ -109,23 +108,23 @@ function UserInfo(props) {
           />
         </SafeAreaView>
         <View style={{ marginBottom: vs(15) }}>
-          <UserHeader needEdit islogin={true}></UserHeader>
+          <UserHeader needEdit islogin={true} />
         </View>
-        <HorizontalMenu dispatch={dispatch}></HorizontalMenu>
+        <HorizontalMenu dispatch={dispatch} />
       </View>
       {showSheet && (
         <TouchableWithoutFeedback onPress={() => {}}>
           <Animated.View
             style={{
-              width: '100%',
-              height: '100%',
-              position: 'absolute',
+              width: "100%",
+              height: "100%",
+              position: "absolute",
               top: 0,
               left: 0,
               right: 0,
               bottom: 0,
-              alignItems: 'center',
-              backgroundColor: 'rgb(29,29,29)',
+              alignItems: "center",
+              backgroundColor: "rgb(29,29,29)",
               opacity: Animated.add(0.85, Animated.multiply(-1.0, fall)),
             }}
           />
@@ -151,21 +150,21 @@ function UserInfo(props) {
  */
 function renderSheet(sheetEl, dispatch) {
   const tips = {
-    textTip: 'Remove Payment Method',
-    subTextTip: 'This action cannot be undone,\n are you sure?',
+    textTip: "Remove Payment Method",
+    subTextTip: "This action cannot be undone,\n are you sure?",
     needButton: true,
-    btnMsg: 'SURE!',
+    btnMsg: "SURE!",
     onPress: (callback) => {
       callback();
     },
     callback: () => {
       dispatch({
-        type: 'changAlertState',
+        type: "changAlertState",
         payload: {
           visible: true,
-          message: 'You have successfully removed your payment method.',
+          message: "You have successfully removed your payment method.",
           color: colors.secondary00,
-          title: 'Payment method removed',
+          title: "Payment method removed",
           showSheet: false,
         },
       });
@@ -176,7 +175,7 @@ function renderSheet(sheetEl, dispatch) {
       customRef={sheetEl}
       onCloseEnd={() => {
         dispatch({
-          type: 'showPaymentRemoveSheet',
+          type: "showPaymentRemoveSheet",
           payload: { showSheet: false },
         });
       }}
@@ -194,7 +193,7 @@ function renderSheet(sheetEl, dispatch) {
       <View
         style={{
           flex: 2,
-          justifyContent: 'flex-end',
+          justifyContent: "flex-end",
         }}
       >
         <View style={{ flex: 1, marginLeft: s(-15) }}>
@@ -213,10 +212,10 @@ export default UserInfo;
 
 const styles = ScaledSheet.create({
   credit: {
-    width: '100%',
-    maxHeight: '80@vs',
-    resizeMode: 'contain',
-    marginVertical: '25@vs',
+    width: "100%",
+    maxHeight: "80@vs",
+    resizeMode: "contain",
+    marginVertical: "25@vs",
   },
   container: {
     backgroundColor: colors.background,

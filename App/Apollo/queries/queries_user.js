@@ -242,6 +242,27 @@ export const FIND_BUYER_ADDRESS_BY_ID = gql`
   query GetBuyerAddressesById($buyerId: ID!) {
     getBuyerAddressesById(buyerId: $buyerId) {
       addressId
+      flat
+      floor
+      defaultAddress
+      block
+      building
+      houseNumber
+      streetAddress1
+      streetAddress2
+      streetAddress3
+      townCity
+      villageArea
+      district
+      provinceState
+      country
+      areaCode
+      landMark
+      pinCode
+      addressType
+      referenceId
+      createdAt
+      updatedAt
     }
   }
 `;

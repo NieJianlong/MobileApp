@@ -96,12 +96,6 @@ function UserEditProfile(props) {
         isPrivate: true,
       },
     },
-    onCompleted: (res) => {
-      debugger;
-    },
-    onError: (res) => {
-      debugger;
-    },
   });
   const sheetRef = useRef();
   useEffect(() => {

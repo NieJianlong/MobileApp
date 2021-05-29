@@ -29,6 +29,7 @@ function AddNewAddress(props) {
   const [country, setCountry] = useState("");
   const [disable, setDisable] = useState(true);
   const [landMark, setLandMark] = useState("");
+  const [asDefault, setAsDefault] = useState(false);
   useEffect(() => {
     if (
       name.length === 0 ||
@@ -56,7 +57,7 @@ function AddNewAddress(props) {
   ]);
   let AddressRequestForCreate = {
     pinCode: pincode,
-    defaultAddress: true,
+    defaultAddress: asDefault,
     addressType: "SHIPPING",
     provinceState: mstate,
     townCity: city,
@@ -163,18 +164,6 @@ function AddNewAddress(props) {
               disable={disable}
               onPress={() => {
                 addAddress();
-                if (typeof params.callback === "function") {
-                  params.callback({
-                    name,
-                    streetName,
-                    streetNum,
-                    door,
-                    city,
-                    mstate,
-                    pincode,
-                    country,
-                  });
-                }
                 NavigationService.goBack();
               }}
             />
@@ -217,7 +206,12 @@ function AddNewAddress(props) {
             </View>
           </KeyboardAwareScrollView>
           <View style={{ marginTop: 20 }}>
-            <Switch onSwitch={() => {}} label="Set as default address"></Switch>
+            <Switch
+              onSwitch={(res) => {
+                setAsDefault(res);
+              }}
+              label="Set as default address"
+            />
           </View>
         </View>
       </SafeAreaView>

@@ -9,45 +9,34 @@ import colors from "../../../Themes/Colors";
 import fonts from "../../../Themes/Fonts";
 import Fonts from "../../../Themes/Fonts";
 
-export default function AddressItem(
-  item,
-  showSheet = () => {},
-  setDefault,
-  doEdit,
-  doDelete
-) {
+export default function AddressItem({ item }) {
   return (
     <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-      <View style={[styles.item, { height: vs(122) }]}>
+      <View style={[styles.item]}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Text style={styles.itemTitle}>{item.title}</Text>
-          {item.isDefault && (
+          <Text style={styles.itemTitle}>need a name</Text>
+          {item.defaultAddress && (
             <Image style={styles.icon} source={images.check}></Image>
           )}
         </View>
         <View>
-          <Text style={styles.itemSubTitle}>{item.subTitle}</Text>
+          <Text
+            style={styles.itemSubTitle}
+          >{`${item.houseNumber}${item.flat}${item.villageArea}${item.townCity}${item.country} ${item.pinCode}`}</Text>
         </View>
 
         <View style={styles.itemBottom}>
-          {item.isDefault ? (
+          {item.defaultAddress ? (
             <View style={styles.itemTipsContainer}>
               <Text style={styles.itemTips}>Default address</Text>
             </View>
           ) : (
-            <TouchableOpacity
-              style={styles.itemSetDefault}
-              onPress={setDefault}
-            >
+            <TouchableOpacity style={styles.itemSetDefault} onPress={() => {}}>
               <Text style={styles.setDefaultText}>SET AS DEFAULT</Text>
             </TouchableOpacity>
           )}
           <View style={{ flexDirection: "row" }}>
-            <TouchableOpacity
-              onPress={(item) => {
-                doEdit(item);
-              }}
-            >
+            <TouchableOpacity onPress={(item) => {}}>
               <Image
                 style={styles.editImage}
                 source={images.userAddressEditImage}
@@ -138,7 +127,7 @@ const styles = ScaledSheet.create({
     marginTop: "15@vs",
     backgroundColor: colors.white,
     borderRadius: "16@s",
-    height: "122@vs",
+    paddingVertical: AppConfig.paddingHorizontal,
     paddingHorizontal: AppConfig.paddingHorizontal,
     justifyContent: "center",
   },

@@ -43,20 +43,24 @@ export default function PaymentList({ dispatch }) {
         keyExtractor={(item, index) => `listItem${index}`}
       />
 
-      <SafeAreaView
-        style={{
-          paddingHorizontal: AppConfig.paddingHorizontal,
-          marginBottom: vs(20),
-          marginTop: vs(20),
-        }}
-      >
-        <Button
-          text="ADD NEW PAYMENT METHOD"
-          onPress={() => {
-            NavigationService.navigate("AddPaymentMethodScreen");
+      {payments.length > 0 && (
+        <SafeAreaView
+          style={{
+            paddingHorizontal: AppConfig.paddingHorizontal,
+            marginBottom: vs(20),
+            marginTop: vs(20),
           }}
-        />
-      </SafeAreaView>
+        >
+          <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+            <Button
+              text="ADD NEW PAYMENT METHOD"
+              onPress={() => {
+                NavigationService.navigate("AddPaymentMethodScreen");
+              }}
+            />
+          </View>
+        </SafeAreaView>
+      )}
     </View>
   );
 }

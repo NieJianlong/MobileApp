@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { vs } from "react-native-size-matters";
 import { Button, Switch } from "../../../Components";
 import AppConfig from "../../../Config/AppConfig";
@@ -9,6 +9,7 @@ import TextTip from "../../../Components/EmptyReminder";
 import NavigationService from "../../../Navigation/NavigationService";
 import { useQuery } from "@apollo/client";
 import { FIND_BUYER_ADDRESS_BY_ID } from "../../../Apollo/queries/queries_user";
+import { useFocusEffect } from "@react-navigation/core";
 /**
  * @description:Display my address, list of my payment methods, display bill detail
  * @param {*} item Menu Item with a special configuration
@@ -18,7 +19,7 @@ import { FIND_BUYER_ADDRESS_BY_ID } from "../../../Apollo/queries/queries_user";
  * @return {*}
  */
 export default function AddressList({ dispatch }) {
-  const { loading, error, data } = useQuery(FIND_BUYER_ADDRESS_BY_ID, {
+  const { loading, error, data, refetch } = useQuery(FIND_BUYER_ADDRESS_BY_ID, {
     variables: {
       buyerId: global.buyerId,
     },
@@ -28,6 +29,11 @@ export default function AddressList({ dispatch }) {
       },
     },
   });
+  const refreshData = useCallback(() => {
+    debugger;
+    refetch();
+  }, [refetch]);
+  useFocusEffect(refreshData);
   useEffect(() => {
     dispatch({
       type: "rightButtonShow",
@@ -65,19 +71,20 @@ export default function AddressList({ dispatch }) {
 
       <SafeAreaView
         style={{
-          paddingHorizontal: AppConfig.paddingHorizontal,
           marginBottom: vs(20),
           marginTop: vs(20),
         }}
       >
-        <Button
-          text="ADD NEW ADDRESS"
-          onPress={() => {
-            NavigationService.navigate("AddNewAddressScreen", {
-              title: "Add new address",
-            });
-          }}
-        />
+        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+          <Button
+            text="ADD NEW ADDRESS"
+            onPress={() => {
+              NavigationService.navigate("AddNewAddressScreen", {
+                title: "Add new address",
+              });
+            }}
+          />
+        </View>
       </SafeAreaView>
     </View>
   );

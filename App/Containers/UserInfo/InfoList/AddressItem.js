@@ -6,6 +6,8 @@ import { View, FlatList, Text, Image, SafeAreaView } from "react-native";
 import images from "../../../Themes/Images";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../../../Themes/Colors";
+import fonts from "../../../Themes/Fonts";
+import Fonts from "../../../Themes/Fonts";
 
 export default function AddressItem(
   item,

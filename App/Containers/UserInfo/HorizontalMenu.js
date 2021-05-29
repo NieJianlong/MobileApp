@@ -18,6 +18,7 @@ import BillingList from "./InfoList/BillingList";
 import PaymentList from "./InfoList/PaymentList";
 import OnePurchaseList from "./InfoList/OnePurchaseList";
 import images from "../../Themes/Images";
+import { View } from "react-native";
 
 /**
  * @description: Tab menu, with animation effect
@@ -67,10 +68,10 @@ function HorizontalMenu(props) {
             return <AddressList dispatch={dispatch} />;
           case "Payment":
             return <PaymentList dispatch={dispatch} />;
-          case "Billing":
-            return <BillingList dispatch={dispatch} />;
+          // case "Billing":
+          //   return <BillingList dispatch={dispatch} />;
           default:
-            break;
+            return <View />;
         }
       }}
       defaultIndex={defaultIndex}

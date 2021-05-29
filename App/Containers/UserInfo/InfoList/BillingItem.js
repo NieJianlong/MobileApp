@@ -3,6 +3,8 @@ import { ScaledSheet, vs } from "react-native-size-matters";
 import AppConfig from "../../../Config/AppConfig";
 import { View, FlatList, Text, Image, SafeAreaView } from "react-native";
 import colors from "../../../Themes/Colors";
+import fonts from "../../../Themes/Fonts";
+import Fonts from "../../../Themes/Fonts";
 
 export default function BillingItem({ item }) {
   return (

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { ScaledSheet, vs } from "react-native-size-matters";
+import { ScaledSheet } from "react-native-size-matters";
 import AppConfig from "../../../Config/AppConfig";
-import { View, FlatList, Text, Image, SafeAreaView } from "react-native";
+import { View, Text, Image } from "react-native";
 import images from "../../../Themes/Images";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../../../Themes/Colors";
@@ -124,10 +124,6 @@ export default function AddressItem({ item, refetch }) {
 }
 
 const styles = ScaledSheet.create({
-  container: {
-    height: "100@s",
-    backgroundColor: colors.background,
-  },
   itemBottom: {
     flexDirection: "row",
     justifyContent: "space-between",

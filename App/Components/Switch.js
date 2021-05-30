@@ -5,9 +5,7 @@ import { Fonts, Colors } from "../Themes";
 
 function Switch(props) {
   const [active, setActive] = useState(props.active||false);
-
   const { disabled, label, onSwitch } = props;
-
   if (!disabled) {
     return (
       <View style={styles.row}>

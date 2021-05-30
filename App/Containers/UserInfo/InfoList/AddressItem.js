@@ -8,8 +8,12 @@ import colors from "../../../Themes/Colors";
 import fonts from "../../../Themes/Fonts";
 import Fonts from "../../../Themes/Fonts";
 import { useMutation } from "@apollo/client";
-import { DELETE_ADDRESS } from "../../../Apollo/mutations/mutations_user";
+import {
+  DELETE_ADDRESS,
+  UPDATE_ADDRESS,
+} from "../../../Apollo/mutations/mutations_user";
 import { AlertContext } from "../../Root/GlobalContext";
+import NavigationService from "../../../Navigation/NavigationService";
 
 export default function AddressItem({ item, refetch }) {
   const { dispatch } = useContext(AlertContext);
@@ -38,20 +42,45 @@ export default function AddressItem({ item, refetch }) {
       debugger;
     },
   });
-
+  const [setAddressDefault] = useMutation(UPDATE_ADDRESS, {
+    variables: {
+      request: {
+        addressType: item.addressType,
+        referenceId: item.referenceId,
+        addressId: item.addressId,
+        pinCode: item.pinCode,
+        provinceState: item.provinceState,
+        townCity: item.townCity,
+        flat: item.flat,
+        villageArea: item.villageArea,
+        houseNumber: item.houseNumber,
+        landMark: item.landMark,
+        country: item.country,
+        defaultAddress: true,
+      },
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {
+      refetch();
+    },
+  });
   return (
     <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
       <View style={[styles.item]}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Text style={styles.itemTitle}>need a name</Text>
           {item.defaultAddress && (
-            <Image style={styles.icon} source={images.check}></Image>
+            <Image style={styles.icon} source={images.check} />
           )}
         </View>
         <View>
           <Text
             style={styles.itemSubTitle}
-          >{`${item.houseNumber}${item.flat}${item.villageArea}${item.townCity}${item.country} ${item.pinCode}`}</Text>
+          >{`${item.houseNumber}${item.flat}${item.villageArea}${item.townCity}${item.provinceState}${item.country} ${item.pinCode}`}</Text>
         </View>
 
         <View style={styles.itemBottom}>
@@ -60,22 +89,28 @@ export default function AddressItem({ item, refetch }) {
               <Text style={styles.itemTips}>Default address</Text>
             </View>
           ) : (
-            <TouchableOpacity style={styles.itemSetDefault} onPress={() => {}}>
+            <TouchableOpacity
+              style={styles.itemSetDefault}
+              onPress={() => setAddressDefault()}
+            >
               <Text style={styles.setDefaultText}>SET AS DEFAULT</Text>
             </TouchableOpacity>
           )}
           <View style={{ flexDirection: "row" }}>
-            <TouchableOpacity onPress={(item) => {}}>
+            <TouchableOpacity
+              onPress={() => {
+                NavigationService.navigate("AddNewAddressScreen", {
+                  title: "Edit address",
+                  currentAddress: item,
+                });
+              }}
+            >
               <Image
                 style={styles.editImage}
                 source={images.userAddressEditImage}
               />
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={(item) => {
-                deleteAddress();
-              }}
-            >
+            <TouchableOpacity onPress={() => deleteAddress()}>
               <Image
                 style={styles.editImage}
                 source={images.userAddressTrashImage}

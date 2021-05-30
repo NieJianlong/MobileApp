@@ -1,19 +1,13 @@
-import React, { Component, useState } from 'react';
-import { Text, View, Image, TouchableOpacity } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
-import PropTypes from 'prop-types';
-
-import { Fonts, Colors, Images, ApplicationStyles } from '../Themes';
-import colors from '../Themes/Colors';
-import fonts from '../Themes/Fonts';
-
+import React, { Component, useState } from "react";
+import { Text, View, Image, TouchableOpacity } from "react-native";
+import { ScaledSheet } from "react-native-size-matters";
+import { Fonts, Colors, Images, ApplicationStyles } from "../Themes";
 function Selector(props) {
   const [active, setActive] = useState(false);
 
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(props.value || "");
 
   const { style, showError, title, data, placeholder } = props;
-
   return (
     <View>
       <View
@@ -23,10 +17,10 @@ function Selector(props) {
           <Text
             style={[
               styles.txtPlaceholder,
-              value !== '' && { color: Colors.black },
+              value !== "" && { color: Colors.black },
             ]}
           >
-            {value !== '' ? value : placeholder}
+            {value !== "" ? value : placeholder}
           </Text>
         </TouchableOpacity>
 
@@ -34,7 +28,7 @@ function Selector(props) {
           <Image
             source={Images.arrow_left}
             style={styles.icArrow}
-            resizeMode={'contain'}
+            resizeMode={"contain"}
           />
         </TouchableOpacity>
       </View>
@@ -46,7 +40,7 @@ function Selector(props) {
             onPress={() => {
               setValue(item);
               setActive(false);
-              if (typeof props.onValueChange == 'function') {
+              if (typeof props.onValueChange === "function") {
                 props.onValueChange(item);
               }
             }}
@@ -65,15 +59,15 @@ Selector.defaultProps = {};
 
 const styles = ScaledSheet.create({
   container: {
-    height: '50@vs',
+    height: "50@vs",
     backgroundColor: Colors.white,
-    borderRadius: '30@s',
+    borderRadius: "30@s",
     borderWidth: 1,
     borderColor: Colors.grey20,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: '20@s',
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: "20@s",
   },
   errorContainer: {
     borderColor: Colors.error,
@@ -81,9 +75,9 @@ const styles = ScaledSheet.create({
   errorText: {
     fontFamily: Fonts.primary,
     color: Colors.error,
-    fontSize: '14@s',
-    marginTop: '3@vs',
-    marginLeft: '15@s',
+    fontSize: "14@s",
+    marginTop: "3@vs",
+    marginLeft: "15@s",
   },
   txtTitle: {
     ...ApplicationStyles.screen.heading6Bold,
@@ -97,14 +91,14 @@ const styles = ScaledSheet.create({
     color: Colors.grey40,
   },
   icArrow: {
-    width: '22@s',
-    height: '22@s',
+    width: "22@s",
+    height: "22@s",
     tintColor: Colors.grey60,
-    transform: [{ rotate: '270deg' }],
+    transform: [{ rotate: "270deg" }],
   },
   itemContainer: {
-    paddingVertical: '7@vs',
-    paddingLeft: '20@s',
+    paddingVertical: "7@vs",
+    paddingLeft: "20@s",
   },
   itemText: {
     ...ApplicationStyles.screen.heading5Regular,

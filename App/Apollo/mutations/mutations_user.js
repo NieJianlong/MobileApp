@@ -222,7 +222,7 @@ export const UPDATE_ADDRESS = gql`
  *
  */
 export const DELETE_ADDRESS = gql`
-  mutation DeleteAddress($addressId: String!) {
+  mutation DeleteAddress($addressId: ID!) {
     deleteAddress(addressId: $addressId)
   }
 `;

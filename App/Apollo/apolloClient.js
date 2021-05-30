@@ -39,6 +39,7 @@ const allAPIS = {
   BuyerProfile: USER_PORT,
   CreatePaymentDetail: USER_PORT,
   UpdateBuyerProfile: USER_PORT,
+  DeleteAddress: USER_PORT,
   //product
   ActiveProductListingsByStoreId: PRODUCT_PORT,
   AnnouncementsByOnlineStore: PRODUCT_PORT,
@@ -47,9 +48,9 @@ const allAPIS = {
 const customFetch = (uri, options) => {
   const { operationName } = JSON.parse(options.body);
   let newUri = `${uri}${allAPIS[operationName]}`;
-  if (!newUri) {
+  if (!allAPIS[operationName]) {
     //if we forget add api in allApis,there will be a mistake
-    newUri = USER_PORT;
+    newUri = `${uri}${USER_PORT}`;
   }
   console.log("currentURL========:" + newUri);
   return fetch(newUri, options);

@@ -40,6 +40,8 @@ const allAPIS = {
   CreatePaymentDetail: USER_PORT,
   UpdateBuyerProfile: USER_PORT,
   DeleteAddress: USER_PORT,
+  UpdateAddress: USER_PORT,
+
   //product
   ActiveProductListingsByStoreId: PRODUCT_PORT,
   AnnouncementsByOnlineStore: PRODUCT_PORT,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, StatusBar, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -16,20 +16,31 @@ import NavigationService from "../../Navigation/NavigationService";
 import colors from "../../Themes/Colors";
 import { useRoute } from "@react-navigation/native";
 import { useMutation } from "@apollo/client";
-import { CREATE_ADDRESS } from "../../Apollo/mutations/mutations_user";
+import {
+  CREATE_ADDRESS,
+  UPDATE_ADDRESS,
+} from "../../Apollo/mutations/mutations_user";
+import { AlertContext } from "../Root/GlobalContext";
 
 function AddNewAddress(props) {
+  const { dispatch } = useContext(AlertContext);
+  const { params } = useRoute();
+  const { currentAddress } = params;
   const [name, setName] = useState("");
-  const [streetName, setStreetName] = useState("");
-  const [streetNum, setStreetNum] = useState("");
-  const [door, setDoor] = useState("");
-  const [city, setCity] = useState("");
-  const [mstate, setMstate] = useState("");
-  const [pincode, setPincode] = useState("");
-  const [country, setCountry] = useState("");
+  const [streetName, setStreetName] = useState(
+    currentAddress?.villageArea || ""
+  );
+  const [streetNum, setStreetNum] = useState(currentAddress?.houseNumber || "");
+  const [door, setDoor] = useState(currentAddress?.flat || "");
+  const [city, setCity] = useState(currentAddress?.townCity || "");
+  const [mstate, setMstate] = useState(currentAddress?.provinceState || "");
+  const [pincode, setPincode] = useState(currentAddress?.pinCode || "");
+  const [country, setCountry] = useState(currentAddress?.country || "");
   const [disable, setDisable] = useState(true);
-  const [landMark, setLandMark] = useState("");
-  const [asDefault, setAsDefault] = useState(false);
+  const [landMark, setLandMark] = useState(currentAddress?.landMark || "");
+  const [asDefault, setAsDefault] = useState(
+    currentAddress?.defaultAddress || false
+  );
   useEffect(() => {
     if (
       name.length === 0 ||
@@ -68,9 +79,46 @@ function AddNewAddress(props) {
     country,
     referenceId: global.buyerId,
   };
-  const [addAddress, { data }] = useMutation(CREATE_ADDRESS, {
+  const [addAddress] = useMutation(CREATE_ADDRESS, {
     variables: {
       request: AddressRequestForCreate,
+    },
+    onCompleted: (res) => {
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "New address added.",
+          color: colors.success,
+          title: "Address Added",
+        },
+      });
+      NavigationService.goBack();
+    },
+  });
+  const [updateAddress] = useMutation(UPDATE_ADDRESS, {
+    variables: {
+      request: {
+        ...AddressRequestForCreate,
+        addressId: currentAddress?.addressId,
+      },
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "You have successfully changed your address.",
+          color: colors.secondary00,
+          title: "Address Changed",
+        },
+      });
+      NavigationService.goBack();
     },
   });
   const inputs = [
@@ -81,6 +129,7 @@ function AddNewAddress(props) {
       errorMessage: null,
       keyboardType: "default",
       type: "normal",
+      value: name,
     },
     {
       placeholder: "Street Name*",
@@ -89,6 +138,7 @@ function AddNewAddress(props) {
       errorMessage: null,
       keyboardType: "default",
       type: "normal",
+      value: streetName,
     },
     {
       placeholder: "Street Number*",
@@ -97,6 +147,7 @@ function AddNewAddress(props) {
       errorMessage: null,
       keyboardType: "default",
       type: "short",
+      value: streetNum,
     },
     {
       placeholder: "Flat, Floor, Door",
@@ -105,6 +156,7 @@ function AddNewAddress(props) {
       errorMessage: null,
       keyboardType: "default",
       type: "short",
+      value: door,
     },
     {
       placeholder: "City*",
@@ -113,6 +165,7 @@ function AddNewAddress(props) {
       errorMessage: null,
       keyboardType: "default",
       type: "short",
+      value: city,
     },
     {
       placeholder: "State*",
@@ -121,6 +174,7 @@ function AddNewAddress(props) {
       errorMessage: null,
       keyboardType: "selector",
       type: "short",
+      value: mstate,
     },
     {
       placeholder: "Pincode*",
@@ -129,6 +183,7 @@ function AddNewAddress(props) {
       errorMessage: null,
       keyboardType: "decimal-pad",
       type: "short",
+      value: pincode,
     },
     {
       placeholder: "Country*",
@@ -137,6 +192,7 @@ function AddNewAddress(props) {
       errorMessage: null,
       keyboardType: "default",
       type: "short",
+      value: country,
     },
     {
       placeholder: "Land Mark",
@@ -145,11 +201,9 @@ function AddNewAddress(props) {
       errorMessage: null,
       keyboardType: "default",
       type: "normal",
+      value: landMark,
     },
   ];
-
-  const { params } = useRoute();
-
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
@@ -163,8 +217,7 @@ function AddNewAddress(props) {
               title="SAVE"
               disable={disable}
               onPress={() => {
-                addAddress();
-                NavigationService.goBack();
+                currentAddress ? updateAddress() : addAddress();
               }}
             />
           )}
@@ -192,7 +245,9 @@ function AddNewAddress(props) {
                       <Selector
                         style={{ marginBottom: vs(10) }}
                         placeholder={"Sate"}
+                        value={mstate}
                         data={["AAA", "BBB", "CCC"]}
+                        onValueChange={(text) => setMstate(text)}
                       />
                     ) : (
                       <MaterialTextInput
@@ -210,6 +265,7 @@ function AddNewAddress(props) {
               onSwitch={(res) => {
                 setAsDefault(res);
               }}
+              active={asDefault}
               label="Set as default address"
             />
           </View>

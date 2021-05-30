@@ -49,15 +49,9 @@ export default function AddressList({ dispatch }) {
             subTextTip="You haven´t add any personal address yet"
             needButton={true}
             btnMsg="ADD ADDRESS"
-            callback={() => {
-              dispatch({
-                type: "changAlertState",
-                payload: {
-                  visible: true,
-                  message: "New address added.",
-                  color: colors.success,
-                  title: "Address Added",
-                },
+            onPress={() => {
+              NavigationService.navigate("AddNewAddressScreen", {
+                title: "Add new address",
               });
             }}
           />
@@ -67,24 +61,25 @@ export default function AddressList({ dispatch }) {
         }}
         keyExtractor={(item, index) => `listItem${index}`}
       />
-
-      <SafeAreaView
-        style={{
-          marginBottom: vs(20),
-          marginTop: vs(20),
-        }}
-      >
-        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-          <Button
-            text="ADD NEW ADDRESS"
-            onPress={() => {
-              NavigationService.navigate("AddNewAddressScreen", {
-                title: "Add new address",
-              });
-            }}
-          />
-        </View>
-      </SafeAreaView>
+      {data?.getBuyerAddressesById.length > 0 && (
+        <SafeAreaView
+          style={{
+            marginBottom: vs(20),
+            marginTop: vs(20),
+          }}
+        >
+          <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+            <Button
+              text="ADD NEW ADDRESS"
+              onPress={() => {
+                NavigationService.navigate("AddNewAddressScreen", {
+                  title: "Add new address",
+                });
+              }}
+            />
+          </View>
+        </SafeAreaView>
+      )}
     </View>
   );
 }

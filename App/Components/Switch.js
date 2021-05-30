@@ -4,7 +4,7 @@ import { ScaledSheet } from "react-native-size-matters";
 import { Fonts, Colors } from "../Themes";
 
 function Switch(props) {
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(props.active||false);
 
   const { disabled, label, onSwitch } = props;
 

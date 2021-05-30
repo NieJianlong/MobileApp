@@ -30,7 +30,6 @@ export default function AddressList({ dispatch }) {
     },
   });
   const refreshData = useCallback(() => {
-    debugger;
     refetch();
   }, [refetch]);
   useFocusEffect(refreshData);
@@ -64,7 +63,7 @@ export default function AddressList({ dispatch }) {
           />
         }
         renderItem={({ item }) => {
-          return <AddressItem item={item} />;
+          return <AddressItem item={item} refetch={refetch} />;
         }}
         keyExtractor={(item, index) => `listItem${index}`}
       />

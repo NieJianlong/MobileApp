@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
 import { ScaledSheet, vs } from "react-native-size-matters";
-import { Button, Switch } from "../../../Components";
 import AppConfig from "../../../Config/AppConfig";
 import { View, FlatList, Text, Image, SafeAreaView } from "react-native";
 import images from "../../../Themes/Images";
@@ -8,8 +7,38 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../../../Themes/Colors";
 import fonts from "../../../Themes/Fonts";
 import Fonts from "../../../Themes/Fonts";
+import { useMutation } from "@apollo/client";
+import { DELETE_ADDRESS } from "../../../Apollo/mutations/mutations_user";
+import { AlertContext } from "../../Root/GlobalContext";
 
-export default function AddressItem({ item }) {
+export default function AddressItem({ item, refetch }) {
+  const { dispatch } = useContext(AlertContext);
+  const [deleteAddress, { error, data }] = useMutation(DELETE_ADDRESS, {
+    variables: { addressId: item.addressId },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {
+      if (res.deleteAddress) {
+        refetch();
+        dispatch({
+          type: "changAlertState",
+          payload: {
+            visible: true,
+            message: "You have successfully removed your address.",
+            color: colors.secondary00,
+            title: "Address Removed!",
+          },
+        });
+      }
+    },
+    onError: (res) => {
+      debugger;
+    },
+  });
+
   return (
     <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
       <View style={[styles.item]}>
@@ -42,7 +71,11 @@ export default function AddressItem({ item }) {
                 source={images.userAddressEditImage}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={(item) => {}}>
+            <TouchableOpacity
+              onPress={(item) => {
+                deleteAddress();
+              }}
+            >
               <Image
                 style={styles.editImage}
                 source={images.userAddressTrashImage}

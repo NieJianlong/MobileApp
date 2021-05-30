@@ -1,4 +1,10 @@
-import React, { useRef, useContext, useCallback, useState, useEffect } from "react";
+import React, {
+  useRef,
+  useContext,
+  useCallback,
+  useState,
+  useEffect,
+} from "react";
 import {
   View,
   Text,
@@ -15,11 +21,9 @@ import { userProfileVar } from "../../../Apollo/cache";
 import { getUniqueId } from "react-native-device-info";
 import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
 import { useMutation, useReactiveVar } from "@apollo/client";
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from "@react-native-community/async-storage";
 
 import { client } from "../../../Apollo/apolloClient";
-
- 
 
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
@@ -48,19 +52,19 @@ export default function AddLocationSheet() {
   const userProfileVarReactive = useReactiveVar(userProfileVar);
 
   useEffect(() => {
-    getBuyerId()
+    getBuyerId();
   });
 
- const getBuyerId = async() => {
-  let isAuth = userProfileVarReactive.isAuth;
-  if(isAuth) {
-    let buyId = await AsyncStorage.getItem(userProfileVar().email);
-    setBuyerId(buyId)
-  } else {
-    let buyId = await AsyncStorage.getItem(getUniqueId());
-    setBuyerId(buyId)
-  }
- }
+  const getBuyerId = async () => {
+    let isAuth = userProfileVarReactive.isAuth;
+    if (isAuth) {
+      let buyId = await AsyncStorage.getItem(userProfileVar().email);
+      setBuyerId(buyId);
+    } else {
+      let buyId = await AsyncStorage.getItem(getUniqueId());
+      setBuyerId(buyId);
+    }
+  };
 
   const toggleAddLocationSheet = useCallback(() => {
     // found issues with updating state here
@@ -96,41 +100,40 @@ export default function AddLocationSheet() {
    * guest flow use guest buyer id in local storage device id key
    */
   const [runAddAddessMutation, { data }] = useMutation(aQM.CREATE_ADDRESS, {
-    context:{   headers: {isPrivate: false},
-    variables: { request: AddressRequestForCreate },
-    onCompleted: (data) => createAddressOnComplete(data),
-    onError: (error) => console.error('AddLocationSheet runAddAddessMutation Error ', error),
-    } ,
+    context: {
+      headers: { isPrivate: false },
+      variables: { request: AddressRequestForCreate },
+      onCompleted: (data) => createAddressOnComplete(data),
+      onError: (error) =>
+        console.error("AddLocationSheet runAddAddessMutation Error ", error),
+    },
   });
 
-const debugAddAddessMutation = async() => {
-   console.log("debugAddAddessMutation")
-   // runAddAddessMutation()
-   let ret = await client
-   .mutate({
-     mutation: aQM.CREATE_ADDRESS,
-     variables: { request: AddressRequestForCreate },
-     context: {
-      headers: {
-        isPrivate: false,
-      },
-  }
-   })
-   .then((result) => result)
-   .catch((err) => {
-     console.log("mutation error " + err);
- 
-   });
-   console.log(`debugAddAddessMutation ${JSON.stringify(ret)}`);
-   if (typeof ret !== "undefined") {
+  const debugAddAddessMutation = async () => {
+    console.log("debugAddAddessMutation");
+    // runAddAddessMutation()
+    let ret = await client
+      .mutate({
+        mutation: aQM.CREATE_ADDRESS,
+        variables: { request: AddressRequestForCreate },
+        context: {
+          headers: {
+            isPrivate: false,
+          },
+        },
+      })
+      .then((result) => result)
+      .catch((err) => {
+        console.log("mutation error " + err);
+      });
     console.log(`debugAddAddessMutation ${JSON.stringify(ret)}`);
-    createAddressOnComplete(ret)
-  }
+    if (typeof ret !== "undefined") {
+      console.log(`debugAddAddessMutation ${JSON.stringify(ret)}`);
+      createAddressOnComplete(ret);
+    }
+  };
 
-}
-
-
-  const createAddressOnComplete= async(result) => {
+  const createAddressOnComplete = async (result) => {
     console.log(`createAddressOnComplete ${JSON.stringify(result.data)}`);
     if (typeof result.data !== "undefined") {
       userProfileVar({
@@ -144,7 +147,7 @@ const debugAddAddessMutation = async() => {
         ),
       });
     }
-  }
+  };
 
   return (
     <View style={{ flex: 1 }}>

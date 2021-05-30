@@ -6,76 +6,80 @@
  * @Description: In User Settings Edit
  * @FilePath: /MobileApp/App/Containers/UserCenter/index.js
  */
-import React, { useCallback, useState, useEffect } from 'react';
-import { View, StatusBar } from 'react-native';
-import { s, ScaledSheet, vs } from 'react-native-size-matters';
-import Colors from '../../Themes/Colors';
-import { Button } from '../../Components';
-import Fonts from '../../Themes/Fonts';
-import AppConfig from '../../Config/AppConfig';
-import ItemBox from './ItemBox';
-import colors from '../../Themes/Colors';
-import UserHeader from './UserHeader';
-import images from '../../Themes/Images';
-import NavigationService from '../../Navigation/NavigationService';
-import { userProfileVar } from '../../Apollo/cache';
-import { useApolloClient, useQuery } from '@apollo/client';
-import { USER_PROFILES } from '../../Apollo/queries/queries_user';
+import React, { useCallback, useState, useEffect } from "react";
+import { View, StatusBar } from "react-native";
+import { s, ScaledSheet, vs } from "react-native-size-matters";
+import Colors from "../../Themes/Colors";
+import { Button } from "../../Components";
+import Fonts from "../../Themes/Fonts";
+import AppConfig from "../../Config/AppConfig";
+import ItemBox from "./ItemBox";
+import colors from "../../Themes/Colors";
+import UserHeader from "./UserHeader";
+import images from "../../Themes/Images";
+import NavigationService from "../../Navigation/NavigationService";
+import { userProfileVar } from "../../Apollo/cache";
+import { useApolloClient, useQuery } from "@apollo/client";
+import {
+  BUYER_PROFILES,
+  FIND_BUYER_PROFILE,
+  USER_PROFILES,
+} from "../../Apollo/queries/queries_user";
 
 const salamiItem = [
   {
-    title: 'Salami Credit',
+    title: "Salami Credit",
     icon: images.userLogoImage,
     onPress: () => {
-      NavigationService.navigate('SalamiCreditScreen');
+      NavigationService.navigate("SalamiCreditScreen");
     },
   },
 ];
 const items = [
   {
-    title: 'Notifications',
+    title: "Notifications",
     icon: images.userIconImage,
     onPress: () => {
-      NavigationService.navigate('NotificationsScreen');
+      NavigationService.navigate("NotificationsScreen");
     },
   },
   {
-    title: 'Settings',
+    title: "Settings",
     icon: images.userSettingImage,
     onPress: () => {
-      NavigationService.navigate('SettingScreen');
+      NavigationService.navigate("SettingScreen");
     },
   },
   {
-    title: 'Support',
+    title: "Support",
     icon: images.userMediumImage,
     onPress: () => {
-      NavigationService.navigate('CustomerSupportScreen');
+      NavigationService.navigate("CustomerSupportScreen");
     },
   },
   {
-    title: 'Feedback',
+    title: "Feedback",
     icon: images.userStarImage,
     onPress: () => {
-      NavigationService.navigate('FeedbackScreen');
+      NavigationService.navigate("FeedbackScreen");
     },
   },
   {
-    title: 'Legal',
+    title: "Legal",
     icon: images.userDocImage,
     onPress: () => {
-      NavigationService.navigate('CustomerSupportScreen');
+      NavigationService.navigate("CustomerSupportScreen");
     },
   },
 ];
 const buttons = [
   {
-    text: 'SHARE APP',
+    text: "SHARE APP",
     backgroundColor: colors.grey80,
     onPress: () => {},
   },
   {
-    text: 'CREATE A SELLER PROFILE',
+    text: "CREATE A SELLER PROFILE",
     backgroundColor: colors.grey80,
     onPress: () => {},
   },
@@ -87,16 +91,17 @@ const buttons = [
  */
 function UserCenter(props) {
   const [serviceItems, setServiceItems] = useState([]);
-  const { loading, error, data } = useQuery(USER_PROFILES, {
-    onCompleted: (res) => {
-      debugger;
-    },
-    onError: (res) => {
-      debugger;
-    },
-  });
-  const client = useApolloClient();
-  debugger;
+  // const { loading, error, data } = useQuery(BUYER_PROFILES, {
+  //   context: { headers: { isPrivate: true } },
+  //   onCompleted: (res) => {
+  //     debugger;
+  //   },
+  //   onError: (res) => {
+  //     debugger;
+  //   },
+  // });
+  //43aeaddd-de66-45bb-81aa-192f4f5e2b33
+
   useEffect(() => {
     if (userProfileVar().isAuth) {
       setServiceItems([...salamiItem, ...items]);
@@ -141,32 +146,32 @@ function UserCenter(props) {
 const styles = ScaledSheet.create({
   nosign: {
     fontSize: 24,
-    textAlign: 'center',
+    textAlign: "center",
     fontFamily: Fonts.primary,
-    fontWeight: 'bold',
-    marginTop: '20@vs',
+    fontWeight: "bold",
+    marginTop: "20@vs",
   },
   buttonContainer: {
     paddingHorizontal: AppConfig.paddingHorizontal,
-    height: '130@vs',
-    justifyContent: 'space-around',
-    marginTop: '30@vs',
+    height: "130@vs",
+    justifyContent: "space-around",
+    marginTop: "30@vs",
   },
   itemContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     paddingHorizontal: AppConfig.paddingHorizontal,
-    justifyContent: 'space-around',
+    justifyContent: "space-around",
   },
-  signbtn: { marginTop: '20@vs' },
+  signbtn: { marginTop: "20@vs" },
   header: {
-    backgroundColor: 'white',
-    justifyContent: 'space-around',
+    backgroundColor: "white",
+    justifyContent: "space-around",
     paddingHorizontal: AppConfig.paddingHorizontal,
-    paddingBottom: '15@vs',
+    paddingBottom: "15@vs",
   },
   container: {
-    height: '100%',
+    height: "100%",
     backgroundColor: Colors.background,
   },
 });

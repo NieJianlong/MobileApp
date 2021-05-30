@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 /** ================== User Management ================ */
 // scripts for processing schema data
@@ -34,6 +34,11 @@ export const USER_PROFILES = gql`
 export const FIND_USER_PROFILE = gql`
   query UserProfile($userProfileId: ID!) {
     userProfile(userProfileId: $userProfileId) {
+      firstName
+      lastName
+      email
+      phoneNumber
+      userName
       userId
     }
   }
@@ -77,6 +82,8 @@ export const FIND_BUYER_PROFILE = gql`
       lastName
       email
       phoneNumber
+      userName
+      userId
     }
   }
 `;
@@ -98,6 +105,12 @@ export const BUYER_PROFILE_BY_USERID = gql`
   query BuyerProfileByUserId($userProfileId: ID!) {
     buyerProfileByUserId(userProfileId: $userProfileId) {
       buyerId
+      firstName
+      lastName
+      email
+      phoneNumber
+      userName
+      userId
     }
   }
 `;
@@ -229,6 +242,27 @@ export const FIND_BUYER_ADDRESS_BY_ID = gql`
   query GetBuyerAddressesById($buyerId: ID!) {
     getBuyerAddressesById(buyerId: $buyerId) {
       addressId
+      flat
+      floor
+      defaultAddress
+      block
+      building
+      houseNumber
+      streetAddress1
+      streetAddress2
+      streetAddress3
+      townCity
+      villageArea
+      district
+      provinceState
+      country
+      areaCode
+      landMark
+      pinCode
+      addressType
+      referenceId
+      createdAt
+      updatedAt
     }
   }
 `;

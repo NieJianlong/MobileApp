@@ -68,6 +68,12 @@ function UserInfo() {
         isPrivate: true,
       },
     },
+    onCompleted: (res) => {
+    
+    },
+    onError: (res) => {
+      debugger;
+    },
   });
   return (
     <TouchableOpacity

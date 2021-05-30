@@ -6,6 +6,14 @@ import { View, FlatList, Text, Image, SafeAreaView } from "react-native";
 import TextTip from "../../../Components/EmptyReminder";
 import NavigationService from "../../../Navigation/NavigationService";
 import PaymentItem from "./PaymentItem";
+import { useQuery } from "@apollo/client";
+import {
+  FIND_BUYER_ADDRESS_BY_ID,
+  FIND_BUYER_PROFILE,
+  FIND_PAYMENT_DETAIL_BY_ID,
+  FIND_USER_PROFILE,
+  PAYMENT_DETAILS,
+} from "../../../Apollo/queries/queries_user";
 /**
  * @description:Display my address, list of my payment methods, display bill detail
  * @param {*} item Menu Item with a special configuration
@@ -15,6 +23,21 @@ import PaymentItem from "./PaymentItem";
  * @return {*}
  */
 export default function PaymentList({ dispatch }) {
+  // const { loading, error, data } = useQuery(FIND_BUYER_PROFILE, {
+  //   variables: { buyerId: global.buyerId },
+  //   context: {
+  //     headers: {
+  //       isPrivate: true,
+  //     },
+  //   },
+  //   onCompleted: (res) => {
+  //     debugger;
+  //   },
+  //   onError: (res) => {
+  //     debugger;
+  //   },
+  // });
+
   const [payments, setPayments] = useState([]);
   useEffect(() => {
     dispatch({

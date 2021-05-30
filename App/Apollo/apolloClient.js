@@ -34,10 +34,14 @@ const allAPIS = {
   CreateDeliveryAddressGeoCoordinate: USER_PORT,
   CreateDeliveryAddressToOnlineStore: USER_PORT,
   UserProfiles: USER_PORT,
+  UserProfile: USER_PORT,
   BuyerProfiles: USER_PORT,
   BuyerProfile: USER_PORT,
   CreatePaymentDetail: USER_PORT,
   UpdateBuyerProfile: USER_PORT,
+  DeleteAddress: USER_PORT,
+  UpdateAddress: USER_PORT,
+
   //product
   ActiveProductListingsByStoreId: PRODUCT_PORT,
   AnnouncementsByOnlineStore: PRODUCT_PORT,
@@ -46,10 +50,11 @@ const allAPIS = {
 const customFetch = (uri, options) => {
   const { operationName } = JSON.parse(options.body);
   let newUri = `${uri}${allAPIS[operationName]}`;
-  if (!newUri) {
+  if (!allAPIS[operationName]) {
     //if we forget add api in allApis,there will be a mistake
-    newUri = USER_PORT;
+    newUri = `${uri}${USER_PORT}`;
   }
+  console.log("currentURL========:" + newUri);
   return fetch(newUri, options);
 };
 
@@ -58,9 +63,7 @@ const publicHeaders = {
   "Content-Type": "application/json",
   Accept: "application/json",
 };
-const privateHeaders = {
-  Authorization: global.access_token ? `Bearer ${global.access_token}` : "",
-};
+
 const getClient = () => {
   // let httpLink = USER_MANAGEMENT_Link;
   const authMiddleware = new ApolloLink((operation, forward) => {
@@ -68,17 +71,28 @@ const getClient = () => {
     console.log(operation);
     // add headers
     operation.setContext(({ headers = {} }) => {
+      const privateHeaders = {
+        Authorization: global.access_token
+          ? `Bearer ${global.access_token}`
+          : "",
+      };
       const { isPrivate, Authorization } = headers;
+      if (isPrivate) {
+        console.log("current token=======" + global.access_token);
+      }
       //If there is Authorization in header, it has the highest priority and is preferred to use
       if (Authorization) {
         return {
           headers: { ...publicHeaders, ...{ Authorization } },
         };
       }
+      const header = isPrivate
+        ? { ...publicHeaders, ...privateHeaders }
+        : publicHeaders;
+      console.log("header===============");
+      console.log(header);
       return {
-        headers: isPrivate
-          ? { ...publicHeaders, ...privateHeaders }
-          : publicHeaders,
+        headers: header,
       };
     });
     return forward(operation);

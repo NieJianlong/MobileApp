@@ -56,10 +56,10 @@ export const PRODUCT_BY_ID = gql`
 /**
  *  @query   productListingDetailResponse(id: String!): ProductListingDetailResponse
  *
- *  ProductListingDetailResponse{id: ID! photo: String productName: String rating: Int numberOfReviews: Int 
- *  wholeSalePrice: Float retailPrice: Float percentOff: Int closedDate: Date progressBarValue: Float amountSaved: Float 
- *  deliveryFee: Float shortName: String longName: String description: String technicalDetails: String 
- *  optionValues: [OptionValue] relatedProducts: [String] seller: SellerDTO reviewDTO: ReviewDTO 
+ *  ProductListingDetailResponse{id: ID! photo: String productName: String rating: Int numberOfReviews: Int
+ *  wholeSalePrice: Float retailPrice: Float percentOff: Int closedDate: Date progressBarValue: Float amountSaved: Float
+ *  deliveryFee: Float shortName: String longName: String description: String technicalDetails: String
+ *  optionValues: [OptionValue] relatedProducts: [String] seller: SellerDTO reviewDTO: ReviewDTO
  *  returnPolicies: [ReturnPolicy]}
  *
  */
@@ -77,13 +77,14 @@ export const PRODUCT_LISTING_DETAIL_RESPONSE = gql`
  *  : [ProductListingDTO]
  *
  * StoreDTO{ id: ID! name: String productListingDTOList: [ProductListingDTO] }
- * 
+ *
  * enum SortDirection{ UNDEFINED, ASCENDING, DESCENDING}
  *
- * ProductListingDTO {id: ID! productId: ID! photo: String productName: String rating: Int numberOfReviews: Int 
- * wholeSalePrice: Float retailPrice: Float percentOff: Int closedDate: Date progressBarValue: Float noOfItemsInStock: Int 
- * numberOfItemsAvailable: Int minQuantityPerCart: Int maxQuantityPerCart: Int}
- * 
+ * ProductListingDTO {id: ID! productId: ID! photo: String productName: String rating: Int numberOfReviews: Int
+ * wholeSalePrice: Float retailPrice: Float percentOff: Int deliveryDate: Date closedDate: Date progressBarValue: Float
+ * noOfOrderedItems: Int noOfItemsInStock: Int numberOfItemsAvailable: Int minQuantityPerCart: Int maxQuantityPerCart: Int
+ * shippingMethodsAvailable:[ShippingMethodType] returnAddress: Address collectionPointAddress: Address}
+ *
  *
  */
 export const ACTIVE_PRODUCT_LISTINGS_BY_STORE_ID = gql`
@@ -101,65 +102,62 @@ export const ACTIVE_PRODUCT_LISTINGS_BY_STORE_ID = gql`
       pageNo: $pageNo
       pageSize: $pageSize
     ) {
-        id
-        productId
-        photo
-        productName
-        rating
-        numberOfReviews
-        wholeSalePrice
-        retailPrice
-        percentOff
-        closedDate
-        progressBarValue
-        noOfItemsInStock
-        numberOfItemsAvailable
-        minQuantityPerCart
-        maxQuantityPerCart
- 
+      id
+      productId
+      photo
+      productName
+      rating
+      numberOfReviews
+      wholeSalePrice
+      retailPrice
+      percentOff
+      closedDate
+      progressBarValue
+      noOfItemsInStock
+      numberOfItemsAvailable
+      minQuantityPerCart
+      maxQuantityPerCart
     }
   }
 `;
-
 
 /**
  * @query   announcementsByOnlineStore(storeId: String): [Announcement]
  * Announcement{id: ID! referenceId: String validityInterval: Int  announcementText: String announcementDatetime: DateTime
     createdAt: DateTime updatedAt: DateTime}
- * 
+ *
  */
-    export const ANNOUNCEMENTS_BY_ONLINE_STORE = gql`
-    query AnnouncementsByOnlineStore($storeId: String) {
-      announcementsByOnlineStore(storeId: $storeId) {
-          id
-          referenceId
-          validityInterval
-          announcementText
-          announcementDatetime
-          createdAt
-          updatedAt
-      }
+export const ANNOUNCEMENTS_BY_ONLINE_STORE = gql`
+  query AnnouncementsByOnlineStore($storeId: String) {
+    announcementsByOnlineStore(storeId: $storeId) {
+      id
+      referenceId
+      validityInterval
+      announcementText
+      announcementDatetime
+      createdAt
+      updatedAt
     }
-  `;
+  }
+`;
 
 /**
  * @query announcementByProductListing(productListingId: String!) : Announcement
  * schema see announcementsByOnlineStore
  */
- export const ANNOUNCEMENT_BY_PRODUCT_LISTING = gql`
- query AnnouncementByProductListing($productListingId: String) {
-  announcementByProductListing(productListingId: $productListingId) {
-       id
-       referenceId
-       validityInterval
-       announcementText
-       announcementDatetime
-       createdAt
-       updatedAt
-   }
- }
+export const ANNOUNCEMENT_BY_PRODUCT_LISTING = gql`
+  query AnnouncementByProductListing($productListingId: String) {
+    announcementByProductListing(productListingId: $productListingId) {
+      id
+      referenceId
+      validityInterval
+      announcementText
+      announcementDatetime
+      createdAt
+      updatedAt
+    }
+  }
 `;
-
 
 /**
  * @query   chatById(id: String!): Chat

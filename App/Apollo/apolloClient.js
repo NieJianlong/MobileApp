@@ -11,7 +11,16 @@ import globalCache from "./cache";
  */
 import fetch from "cross-fetch";
 const baseUrl = "http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com";
-
+/**
+ * Keycloak              --> 8080
+ * IAM                   --> 8081
+ * UserManagement        --> 8082
+ * ProductManagement     --> 8083
+ * CartManagement        --> 8084
+ * OrderManagement       --> 8085
+ * PaymentManagement     --> 8086
+ * DeliveryManagement    --> 8087
+ */
 // const endpointDev = "http://10.0.2.2:8080/graphql"
 // 8081 --> IAM
 // 8082 --> UserManagement
@@ -19,6 +28,7 @@ const baseUrl = "http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com";
 const IAM_PORT = ":8081/graphql";
 const USER_PORT = ":8082/graphql";
 const PRODUCT_PORT = ":8083/graphql";
+const CART_PORT = ":8084/graphql";
 
 //we should add all apis here,
 const allAPIS = {
@@ -45,6 +55,9 @@ const allAPIS = {
   //product
   ActiveProductListingsByStoreId: PRODUCT_PORT,
   AnnouncementsByOnlineStore: PRODUCT_PORT,
+
+  // Cart
+  CreateCart: CART_PORT,
 };
 
 const customFetch = (uri, options) => {

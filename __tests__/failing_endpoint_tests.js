@@ -62,7 +62,7 @@ it("test register buyer fEP", async () => {
  * see test register buyer
  *
  */
-// node_modules/jest/bin/jest.js -t "makes login request fEP"
+// yarn jest -t "makes login request fEP"
 it("makes login request fEP", async () => {
   let loginRequest = { username: "errorTest@email.com", password: "Wwwwwww8" };
   // let loginRequest = { username: "zu@email.com", password: "Wwwwwwww8" };
@@ -76,6 +76,7 @@ it("makes login request fEP", async () => {
     // console.log(`id_token\n ${ ret.data.id_token}`)
     //   console.log(`refresh_token\n ${ ret.data.refresh_token}`)
     var decoded = jwt_decode(jwtToken);
+
     console.log(decoded);
   }
 });
@@ -103,11 +104,19 @@ it("test create address fep", async () => {
     referenceId: "3d1404a7-f492-441c-aefd-02fd63e69786",
   };
 
-  let AddressRequestForCreate2 = {pinCode:"546532",defaultAddress:true,addressType:"SHIPPING",
-  provinceState:"Leeds",townCity:"Leeds",flat:"",villageArea:"",houseNumber:"",landMark:"",
-  referenceId:"0b8ff152-5a51-48ec-b45b-96b007d24bbb"}
+  let AddressRequestForCreate2 = {
+    pinCode: "546532",
+    defaultAddress: true,
+    addressType: "SHIPPING",
+    provinceState: "Leeds",
+    townCity: "Leeds",
+    flat: "",
+    villageArea: "",
+    houseNumber: "",
+    landMark: "",
+    referenceId: "0b8ff152-5a51-48ec-b45b-96b007d24bbb",
+  };
 
- 
   let ret = await client
     .mutate({
       mutation: CREATE_ADDRESS,
@@ -127,7 +136,7 @@ it("test create address fep", async () => {
 // yarn jest -t  "test getBuyerDefaultAddressByBuyerId fep"
 it("test getBuyerDefaultAddressByBuyerId fep", async () => {
   // public api
- 
+
   let ret = await client
     .query({
       query: FIND_BUYER_DEFAULT_ADDRESS_BY_ID,

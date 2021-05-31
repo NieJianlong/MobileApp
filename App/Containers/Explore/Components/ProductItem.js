@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, Image, TouchableOpacity, Platform } from 'react-native';
-import { s, ScaledSheet, vs } from 'react-native-size-matters';
-import NumberFormat from 'react-number-format';
+import React, { useState, useEffect } from "react";
+import { Text, View, Image, TouchableOpacity, Platform } from "react-native";
+import { s, ScaledSheet, vs } from "react-native-size-matters";
+import NumberFormat from "react-number-format";
 
-import { Fonts, Colors, ApplicationStyles, Images } from '../../../Themes';
-import AppConfig from '../../../Config/AppConfig';
-import NavigationService from '../../../Navigation/NavigationService';
-import { StarRating, Progress } from '../../../Components';
+import { Fonts, Colors, ApplicationStyles, Images } from "../../../Themes";
+import AppConfig from "../../../Config/AppConfig";
+import NavigationService from "../../../Navigation/NavigationService";
+import { StarRating, Progress } from "../../../Components";
 
 const defultUrl =
-  'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000';
+  "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000";
 function ProductItem(props) {
   const [startX, setSartX] = useState(999);
   const [endX, setEndX] = useState(999);
@@ -24,7 +24,7 @@ function ProductItem(props) {
     goFirst,
   } = props;
 
-  if (size === 'M' || size == 'L') {
+  if (size === "M" || size == "L") {
     return (
       <TouchableOpacity
         onPressIn={({ nativeEvent }) => {
@@ -41,17 +41,17 @@ function ProductItem(props) {
         }}
         onPress={() => {
           //
-          if (Platform.OS === 'ios') {
-            NavigationService.navigate('ProductDetailScreen');
+          if (Platform.OS === "ios") {
+            NavigationService.navigate("ProductDetailScreen");
           } else if (canGoNext) {
-            NavigationService.navigate('ProductDetailScreen', {
+            NavigationService.navigate("ProductDetailScreen", {
               product: product,
             });
           }
         }}
         style={styles.productContainer}
       >
-        {size === 'M' ? (
+        {size === "M" ? (
           <View
             style={[
               styles.row,
@@ -76,9 +76,9 @@ function ProductItem(props) {
                   <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
                   <NumberFormat
                     thousandSeparator={true}
-                    prefix={'$'}
+                    prefix={"$"}
                     value={product.retailPrice}
-                    displayType={'text'}
+                    displayType={"text"}
                     renderText={(text) => (
                       <Text style={styles.txtRetailPrice}>{text}</Text>
                     )}
@@ -91,9 +91,9 @@ function ProductItem(props) {
                   </Text>
                   <NumberFormat
                     thousandSeparator={true}
-                    prefix={'$'}
+                    prefix={"$"}
                     value={product.wholeSalePrice}
-                    displayType={'text'}
+                    displayType={"text"}
                     renderText={(text) => (
                       <Text style={styles.txtWholesalePrice}>{text}</Text>
                     )}
@@ -130,9 +130,9 @@ function ProductItem(props) {
                   <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
                   <NumberFormat
                     thousandSeparator={true}
-                    prefix={'$'}
+                    prefix={"$"}
                     value={product.retailPrice}
-                    displayType={'text'}
+                    displayType={"text"}
                     renderText={(text) => (
                       <Text style={styles.txtRetailPrice}>{text}</Text>
                     )}
@@ -145,9 +145,9 @@ function ProductItem(props) {
                   </Text>
                   <NumberFormat
                     thousandSeparator={true}
-                    prefix={'$'}
+                    prefix={"$"}
                     value={product.wholeSalePrice}
-                    displayType={'text'}
+                    displayType={"text"}
                     renderText={(text) => (
                       <Text style={styles.txtWholesalePrice}>{text}</Text>
                     )}
@@ -188,7 +188,7 @@ function ProductItem(props) {
 
                   <Progress
                     maximumValue={product.noOfItemsInStock}
-                    currentValue={product.orderCount}
+                    currentValue={product.noOfOrderedItems}
                     barWidth={s(60)}
                     barHeight={vs(6)}
                   />
@@ -196,7 +196,7 @@ function ProductItem(props) {
                   <View style={styles.row}>
                     <Image source={Images.stock} style={styles.icStock} />
                     <Text style={styles.txtOrderNumber}>
-                      {product.orderCount}/{product.noOfItemsInStock}
+                      {product.noOfOrderedItems}/{product.noOfItemsInStock}
                     </Text>
                     <TouchableOpacity>
                       <Image source={Images.info2} style={styles.icInfo} />
@@ -206,7 +206,7 @@ function ProductItem(props) {
               </View>
             ) : (
               <TouchableOpacity
-                onPress={() => navigation.navigate('ProductInfoScreen')}
+                onPress={() => navigation.navigate("ProductInfoScreen")}
               >
                 <Text style={styles.txtAction}>REQUEST TO MY ONLINE STORE</Text>
               </TouchableOpacity>
@@ -231,7 +231,7 @@ function ProductItem(props) {
 
             <Progress
               maximumValue={product.noOfItemsInStock}
-              currentValue={product.orderCount}
+              currentValue={product.noOfOrderedItems}
               barWidth={s(60)}
               barHeight={vs(6)}
             />
@@ -239,7 +239,7 @@ function ProductItem(props) {
             <View style={styles.row}>
               <Image source={Images.stock} style={styles.icStock} />
               <Text style={styles.txtOrderNumber}>
-                {product.orderCount}/{product.noOfItemsInStock}
+                {product.noOfOrderedItems}/{product.noOfItemsInStock}
               </Text>
               <TouchableOpacity>
                 <Image source={Images.info2} style={styles.icInfo} />
@@ -259,10 +259,10 @@ function ProductItem(props) {
         )}
       </TouchableOpacity>
     );
-  } else if (size === 'S') {
+  } else if (size === "S") {
     return (
       <TouchableOpacity
-        onPress={() => NavigationService.navigate('ProductDetailScreen')}
+        onPress={() => NavigationService.navigate("ProductDetailScreen")}
         style={styles.productContainerSmall}
       >
         <View style={styles.productInfoSmall}>
@@ -270,7 +270,7 @@ function ProductItem(props) {
             <Image
               source={{ uri: product.photo ? product.photo : defultUrl }}
               style={styles.productImageSmall}
-              resizeMode={'contain'}
+              resizeMode={"contain"}
             />
 
             <View style={styles.productSmallActionContainer}>
@@ -298,9 +298,9 @@ function ProductItem(props) {
               {/* <Text style={styles.txtRetailPrice}>${product.retailPrice}</Text> */}
               <NumberFormat
                 thousandSeparator={true}
-                prefix={'$'}
+                prefix={"$"}
                 value={product.retailPrice}
-                displayType={'text'}
+                displayType={"text"}
                 renderText={(text) => (
                   <Text style={styles.txtRetailPrice}>{text}</Text>
                 )}
@@ -314,9 +314,9 @@ function ProductItem(props) {
               {/* <Text style={styles.txtWholesalePrice}>${product.wholesalePrice}</Text> */}
               <NumberFormat
                 thousandSeparator={true}
-                prefix={'$'}
+                prefix={"$"}
                 value={product.wholeSalePrice}
-                displayType={'text'}
+                displayType={"text"}
                 renderText={(text) => (
                   <Text style={styles.txtWholesalePrice}>{text}</Text>
                 )}
@@ -336,13 +336,13 @@ function ProductItem(props) {
         >
           <Progress
             maximumValue={product.noOfItemsInStock}
-            currentValue={product.orderCount}
+            currentValue={product.noOfOrderedItems}
             barWidth={s(60)}
             barHeight={vs(6)}
           />
           <Image source={Images.stock} style={styles.icStockSmall} />
           <Text style={styles.heading6Regular}>
-            {product.orderCount}/{product.noOfItemsInStock}
+            {product.noOfOrderedItems}/{product.noOfItemsInStock}
           </Text>
         </View>
       </TouchableOpacity>
@@ -357,142 +357,142 @@ ProductItem.defaultProps = {};
 const styles = ScaledSheet.create({
   ...ApplicationStyles.screen,
   row: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   productContainer: {
     backgroundColor: Colors.white,
-    paddingTop: '10@vs',
-    paddingBottom: '10@vs',
-    marginBottom: '16@vs',
+    paddingTop: "10@vs",
+    paddingBottom: "10@vs",
+    marginBottom: "16@vs",
   },
   productImage: {
-    width: '88@s',
-    height: '88@s',
+    width: "88@s",
+    height: "88@s",
   },
   productImageBig: {
-    width: '300@s',
-    height: '300@s',
+    width: "300@s",
+    height: "300@s",
   },
   v2: {
-    justifyContent: 'space-between',
-    height: '88@s',
+    justifyContent: "space-between",
+    height: "88@s",
   },
   txtRetailPrice: {
     ...ApplicationStyles.screen.heading4Bold,
     color: Colors.grey60,
-    textDecorationLine: 'line-through',
-    marginTop: '2@vs',
+    textDecorationLine: "line-through",
+    marginTop: "2@vs",
   },
   txtWholesalePrice: {
     ...ApplicationStyles.screen.heading4Bold,
     color: Colors.primary,
-    marginTop: '2@vs',
+    marginTop: "2@vs",
   },
   v3: {
-    marginRight: '20@s',
+    marginRight: "20@s",
   },
   percentOffContainer: {
     backgroundColor: Colors.secondary01,
-    paddingHorizontal: '10@s',
-    paddingVertical: '5@s',
-    borderRadius: '30@s',
+    paddingHorizontal: "10@s",
+    paddingVertical: "5@s",
+    borderRadius: "30@s",
   },
   txtOrderClose: {
-    fontSize: '8@s',
+    fontSize: "8@s",
     fontFamily: Fonts.primary,
     color: Colors.black,
   },
   v4: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: AppConfig.paddingHorizontal,
     borderTopWidth: 2,
     borderTopColor: Colors.grey10,
-    marginTop: '5@vs',
-    paddingTop: '10@vs',
+    marginTop: "5@vs",
+    paddingTop: "10@vs",
   },
   v5: {
     backgroundColor: Colors.grey10,
-    paddingHorizontal: '7@s',
-    paddingVertical: '3@s',
-    borderRadius: '30@s',
-    marginLeft: '5@s',
+    paddingHorizontal: "7@s",
+    paddingVertical: "3@s",
+    borderRadius: "30@s",
+    marginLeft: "5@s",
   },
   icStock: {
-    width: '22@s',
-    height: '22@s',
+    width: "22@s",
+    height: "22@s",
     tintColor: Colors.grey60,
-    marginRight: '5@s',
+    marginRight: "5@s",
   },
   txtOrderNumber: {
     ...ApplicationStyles.screen.heading6Regular,
-    fontSize: '12@s',
+    fontSize: "12@s",
   },
   icInfo: {
-    width: '22@s',
-    height: '22@s',
+    width: "22@s",
+    height: "22@s",
     tintColor: Colors.secondary00,
-    marginLeft: '5@s',
+    marginLeft: "5@s",
   },
   icShare: {
-    width: '22@s',
-    height: '22@s',
+    width: "22@s",
+    height: "22@s",
     tintColor: Colors.black,
-    marginLeft: '5@s',
+    marginLeft: "5@s",
   },
   productContainerSmall: {
-    width: '175@s',
+    width: "175@s",
     backgroundColor: Colors.white,
-    paddingTop: '5@vs',
-    paddingBottom: '5@vs',
-    marginBottom: '16@vs',
+    paddingTop: "5@vs",
+    paddingBottom: "5@vs",
+    marginBottom: "16@vs",
   },
   productInfoSmall: {
-    paddingHorizontal: '8@s',
+    paddingHorizontal: "8@s",
     borderBottomWidth: 1,
     borderBottomColor: Colors.grey10,
-    paddingBottom: '8@vs',
+    paddingBottom: "8@vs",
   },
   productImageSmall: {
-    width: '150@s',
-    height: '150@s',
-    alignSelf: 'center',
+    width: "150@s",
+    height: "150@s",
+    alignSelf: "center",
   },
   percentOffContainerSmall: {
     backgroundColor: Colors.secondary01,
-    paddingHorizontal: '5@s',
-    paddingVertical: '2@s',
-    borderRadius: '30@s',
+    paddingHorizontal: "5@s",
+    paddingVertical: "2@s",
+    borderRadius: "30@s",
   },
   roundBtnContainer: {
-    width: '24@s',
-    height: '24@s',
-    borderRadius: '15@s',
+    width: "24@s",
+    height: "24@s",
+    borderRadius: "15@s",
     backgroundColor: Colors.grey10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   roundBtnIcon: {
-    width: '15@s',
-    height: '15@s',
+    width: "15@s",
+    height: "15@s",
     tintColor: Colors.grey80,
   },
   productSmallActionContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
   },
   icStockSmall: {
-    width: '15@s',
-    height: '15@s',
+    width: "15@s",
+    height: "15@s",
     tintColor: Colors.grey60,
-    marginLeft: '10@s',
+    marginLeft: "10@s",
   },
   txtAction: {
     fontFamily: Fonts.semibold,

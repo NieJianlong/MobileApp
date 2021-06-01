@@ -55,9 +55,13 @@ const allAPIS = {
   //product
   ActiveProductListingsByStoreId: PRODUCT_PORT,
   AnnouncementsByOnlineStore: PRODUCT_PORT,
+  AnnouncementsByListingId: PRODUCT_PORT,
 
   // Cart
   CreateCart: CART_PORT,
+  AddItem: CART_PORT,
+  CartCheckout: CART_PORT,
+  ClearCart: CART_PORT,
 };
 
 const customFetch = (uri, options) => {

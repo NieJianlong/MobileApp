@@ -1,5 +1,10 @@
 import { client } from "../App/Apollo/apolloClient";
-import { CREATE_CART } from "../App/Apollo/mutations/mutations_cart";
+import {
+  CREATE_CART,
+  ADD_ITEM,
+  CLEAR_CART,
+  CART_CHECKOUT,
+} from "../App/Apollo/mutations/mutations_cart";
 import { FIND_BUYER_DEFAULT_ADDRESS_BY_ID } from "../App/Apollo/queries/queries_user";
 import { BUYER_PROFILE_BY_USERID } from "../App/Apollo/queries/queries_user";
 
@@ -105,16 +110,94 @@ it("test getBuyerDefaultAddressByBuyerId cm", async () => {
   }
 });
 
-// yarn jest -t "test create cart"
-it("test create cart", async () => {
+// yarn jest -t "test create cart cm"
+//  {"data":{"createCart":{"id":"1965b05e-d75c-49ef-8c97-d71329d30081","__typename":"Cart"}}}
+it("test create cart cm", async () => {
   let ret = await client
     .mutate({
       mutation: CREATE_CART,
       variables: {
-        request: {
-          buyerID: "f3d26ef6-3666-407b-b6b5-389828487b39",
-          deliveryAddress: "85923594-64d7-4389-9473-61e8642b5dbf",
+        buyerID: "f3d26ef6-3666-407b-b6b5-389828487b39",
+        deliveryAddress: "85923594-64d7-4389-9473-61e8642b5dbf",
+      },
+      context: {
+        headers: {
+          isPrivate: false,
         },
+      },
+    })
+    .then((result) => result)
+    .catch((err) => {
+      console.log("mutation error " + err);
+      return;
+    });
+
+  if (typeof ret !== "undefined") {
+    console.log(JSON.stringify(ret));
+  }
+});
+
+// yarn jest -t "test add item cm"
+it("test add item cm", async () => {
+  let ret = await client
+    .mutate({
+      mutation: ADD_ITEM,
+      variables: {
+        cartID: "1965b05e-d75c-49ef-8c97-d71329d30081",
+        productListingID: "b856b06f-8021-49d2-b02e-06e3f9f9970e",
+        quantity: 1,
+        shippingMethod: "DELIVERY_ADDRESS",
+      },
+      context: {
+        headers: {
+          isPrivate: false,
+        },
+      },
+    })
+    .then((result) => result)
+    .catch((err) => {
+      console.log("mutation error " + err);
+      return;
+    });
+
+  if (typeof ret !== "undefined") {
+    console.log(JSON.stringify(ret));
+  }
+});
+
+// yarn jest -t "test checkout cart cm"
+it("test checkout cart cm", async () => {
+  let ret = await client
+    .mutate({
+      mutation: CART_CHECKOUT,
+      variables: {
+        cartID: "1965b05e-d75c-49ef-8c97-d71329d30081",
+        homeDelivery: true,
+      },
+      context: {
+        headers: {
+          isPrivate: false,
+        },
+      },
+    })
+    .then((result) => result)
+    .catch((err) => {
+      console.log("mutation error " + err);
+      return;
+    });
+
+  if (typeof ret !== "undefined") {
+    console.log(JSON.stringify(ret));
+  }
+});
+
+// yarn jest -t "test clear cart cm"
+it("test clear cart cm", async () => {
+  let ret = await client
+    .mutate({
+      mutation: CLEAR_CART,
+      variables: {
+        cartID: "1965b05e-d75c-49ef-8c97-d71329d30081",
       },
       context: {
         headers: {

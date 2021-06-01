@@ -9,33 +9,68 @@ import { gql } from "@apollo/client";
  *  retailPrice: Float  percentOff: Int closedDate: Date  progressBarValue: Float }
  *
  */
+// @Depreciated
 
-export const ALL_PRODUCT_LISTINGS_DTO = gql`
-  query AllProductListingsDTO(
-    $sortfield: String!
-    $sortDirection: String!
-    $pageNo: Int!
-    $pageSize: Int!
-  ) {
-    allProductListingsDTO(
-      sortfield: $sortfield
-      sortDirection: $sortDirection
-      pageNo: $pageNo
-      pageSize: $pageSize
-    ) {
-      id
-      photo
-      productName
-      rating
-      numberOfReviews
-      wholeSalePrice
-      retailPrice
-      percentOff
-      closedDate
-      progressBarValue
-    }
-  }
-`;
+// export const ALL_PRODUCT_LISTINGS_DTO = gql`
+//   query AllProductListingsDTO(
+//     $sortfield: String!
+//     $sortDirection: String!
+//     $pageNo: Int!
+//     $pageSize: Int!
+//   ) {
+//     allProductListingsDTO(
+//       sortfield: $sortfield
+//       sortDirection: $sortDirection
+//       pageNo: $pageNo
+//       pageSize: $pageSize
+//     ) {
+//       id
+//       photo
+//       productName
+//       rating
+//       numberOfReviews
+//       wholeSalePrice
+//       retailPrice
+//       percentOff
+//       closedDate
+//       progressBarValue
+//     }
+//   }
+// `;
+
+/**
+ * query getProductListings(lattitude: Float!, longitude: Float!, filter: FilterType, filterParams: String[],
+ *                                  sortDirection: SortDirection, pageNo: Int, pageSize: Int): [ProductListing])
+ *
+ *
+ */
+// export const GET_PRODUCT_LISTINGS = gql`
+//   query GetProductListings(
+//     $lattitude: Float!, $longitude: Float!, $filter: FilterType, $filterParams: String[],
+//                                  $sortDirection: SortDirection, $pageNo: Int, $pageSize: Int
+//   ) {
+//     getProductListings(
+//       lattitude: $sortfield
+//       longitude: $sortDirection
+//       filter: $filter
+//       filterParams:$filterParams
+//       sortDirection:$sortDirection
+//       pageNo: $pageNo
+//       pageSize: $pageSize
+//     ) {
+//       id
+//       photo
+//       productName
+//       rating
+//       numberOfReviews
+//       wholeSalePrice
+//       retailPrice
+//       percentOff
+//       closedDate
+//       progressBarValue
+//     }
+//   }
+// `;
 
 /**
  *   @query  productById(id: String!): Product
@@ -114,6 +149,7 @@ export const ACTIVE_PRODUCT_LISTINGS_BY_STORE_ID = gql`
       closedDate
       progressBarValue
       noOfItemsInStock
+      noOfOrderedItems
       numberOfItemsAvailable
       minQuantityPerCart
       maxQuantityPerCart
@@ -160,5 +196,25 @@ export const ANNOUNCEMENT_BY_PRODUCT_LISTING = gql`
 `;
 
 /**
- * @query   chatById(id: String!): Chat
+ * @query  announcementsByListingId(productListingId: String): [AnnouncementDTO]
+ *
+ * AnnouncementDTO{ announcementText: String validityInterval:Int announcementDatetime: DateTime productLongName: String
+ * sellerBusinessName: String retailPrice: Float wholeSalePrice: Float percentageOff: Float deliveryDate: Date
+ * minOrderRequired: Int infoIcon: String}
  */
+export const ANNOUNCEMENT_BY_LISTING_ID = gql`
+  query AnnouncementsByListingId($productListingId: String) {
+    announcementsByListingId(productListingId: $productListingId) {
+      announcementText
+      validityInterval
+      announcementDatetime
+      productLongName
+      sellerBusinessName
+      retailPrice
+      wholeSalePrice
+      percentageOff
+      deliveryDate
+      minOrderRequired
+    }
+  }
+`;

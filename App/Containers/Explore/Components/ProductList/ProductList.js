@@ -4,24 +4,24 @@ import React, {
   useCallback,
   useContext,
   useMemo,
-} from 'react';
+} from "react";
 import {
   FlatList,
   View,
   ActivityIndicator,
   Text,
   RefreshControl,
-} from 'react-native';
-import ProductItem from '../ProductItem';
-import { HPageViewHoc } from 'react-native-head-tab-view';
-import ExploreSortBar from '../ExploreSortBar';
-import { AlertContext } from '../../../Root/GlobalContext';
-import ShareOptionList from '../ShareOptionList';
-import { client } from '../../../../Apollo/apolloClient';
-import * as gqlMappers from '../../gql/gql_mappers';
-import * as aQM from '../../gql/explore_queries';
-import colors from '../../../../Themes/Colors';
-import { useQuery } from '@apollo/client';
+} from "react-native";
+import ProductItem from "../ProductItem";
+import { HPageViewHoc } from "react-native-head-tab-view";
+import ExploreSortBar from "../ExploreSortBar";
+import { AlertContext } from "../../../Root/GlobalContext";
+import ShareOptionList from "../ShareOptionList";
+import { client } from "../../../../Apollo/apolloClient";
+import * as gqlMappers from "../../gql/gql_mappers";
+import * as aQM from "../../gql/explore_queries";
+import colors from "../../../../Themes/Colors";
+import { useQuery } from "@apollo/client";
 
 const HFlatList = HPageViewHoc(FlatList);
 
@@ -37,40 +37,40 @@ export default function ProductList(props) {
   const [showProductAsRows, setShowProductAsRows] = useState(true);
   const toggleShareSheet = useCallback(() => {
     dispatch({
-      type: 'changSheetState',
+      type: "changSheetState",
       payload: {
         showSheet: true,
         height: 580,
         children: () => (
-          <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+          <View style={{ flex: 1, justifyContent: "flex-end" }}>
             <ShareOptionList />
           </View>
         ),
-        sheetTitle: 'Share to',
+        sheetTitle: "Share to",
       },
     });
   }, [dispatch]);
   let params = {
-    storeId: '0b950a80-7836-45b4-9ee3-42042097aafe',
-    sortfield: 'wholeSalePrice',
+    storeId: "0b950a80-7836-45b4-9ee3-42042097aafe",
+    sortfield: "wholeSalePrice",
   };
   switch (props.listType) {
-    case 'All':
+    case "All":
       params = {
-        storeId: '0b950a80-7836-45b4-9ee3-42042097aafe',
-        sortfield: 'wholeSalePrice',
+        storeId: "0b950a80-7836-45b4-9ee3-42042097aafe",
+        sortfield: "wholeSalePrice",
       };
       break;
-    case 'Announcements':
+    case "Announcements":
       params = {
-        storeId: '0b950a80-7836-45b4-9ee3-42042097aafe',
-        sortfield: 'wholeSalePrice',
+        storeId: "0b950a80-7836-45b4-9ee3-42042097aafe",
+        sortfield: "wholeSalePrice",
       };
       break;
-    case 'Electronics':
+    case "Electronics":
       params = {
-        storeId: '0b950a80-7836-45b4-9ee3-42042097aafe',
-        sortfield: 'wholeSalePrice',
+        storeId: "0b950a80-7836-45b4-9ee3-42042097aafe",
+        sortfield: "wholeSalePrice",
       };
       break;
     default:
@@ -81,7 +81,7 @@ export default function ProductList(props) {
     {
       variables: {
         ...params,
-        sortDirection: 'ASCENDING',
+        sortDirection: "ASCENDING",
         pageSize: 5,
       },
       context: {
@@ -90,21 +90,30 @@ export default function ProductList(props) {
         },
       },
       onCompleted: (res) => {
-        setServerData(res.activeProductListingsByStoreId);
+        // console.log(JSON.stringify(res.activeProductListingsByStoreId));
+        console.log(
+          JSON.stringify(
+            gqlMappers.mapProductListingDTO(res.activeProductListingsByStoreId)
+          )
+        );
+
+        setServerData(
+          gqlMappers.mapProductListingDTO(res.activeProductListingsByStoreId)
+        );
       },
     }
   );
   //Pull up the load layout
   const LoadMoreView = useMemo(
     () => (
-      <View style={{ alignItems: 'center' }}>
+      <View style={{ alignItems: "center" }}>
         <ActivityIndicator
           style={{
             color: colors.primary,
             margin: 10,
           }}
-          size={'large'}
-          color={'red'}
+          size={"large"}
+          color={"red"}
           animating={true}
         />
         <Text>Loading more</Text>
@@ -140,7 +149,7 @@ export default function ProductList(props) {
       }}
       isRefreshing={isRereshing}
       onEndReached={() => {
-        console.log('get more data');
+        console.log("get more data");
         setPage(page + 1);
         setLoadingMore(true);
         fetchMore &&
@@ -166,7 +175,7 @@ export default function ProductList(props) {
             key={index.toString()}
             isAnnouncement={isAnnouncement}
             product={item}
-            size={showProductAsRows ? 'M' : 'L'}
+            size={showProductAsRows ? "M" : "L"}
             {...props}
           />
         );

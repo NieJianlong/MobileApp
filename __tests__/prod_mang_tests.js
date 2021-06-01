@@ -5,6 +5,7 @@ import {
   PRODUCT_LISTING_DETAIL_RESPONSE,
   ANNOUNCEMENTS_BY_ONLINE_STORE,
   ANNOUNCEMENT_BY_PRODUCT_LISTING,
+  ANNOUNCEMENT_BY_LISTING_ID,
 } from "../App/Apollo/queries/queries_prodmang";
 
 jest.mock("@react-native-community/async-storage", () =>
@@ -17,10 +18,12 @@ jest.mock("@react-native-community/async-storage", () =>
 8082 --> UserManagement
 8083 --> ProductManagement
 
+ get coordinates from UserManagement by delivery address as string and then pass them to ProductManagement
+
  */
 
-// yarn jest -t "test activeProductListingsByStoreId"
-it("test activeProductListingsByStoreId", async () => {
+// yarn jest -t "test activeProductListingsByStoreId pm"
+it("test activeProductListingsByStoreId pm", async () => {
   // public api
   let ret = await client
     .query({
@@ -40,7 +43,7 @@ it("test activeProductListingsByStoreId", async () => {
     });
 
   if (typeof ret !== "undefined") {
-    console.log(JSON.stringify(ret.data.activeProductListingsByStoreId));
+    console.log(JSON.stringify(ret.data));
     // console.log(ret.data.activeProductListingsByStoreId.length);
 
     // let pList = [];
@@ -120,5 +123,31 @@ it("test productListingDetailResponse", async () => {
 
   if (typeof ret !== "undefined") {
     console.log(JSON.stringify(ret));
+  }
+});
+
+// yarn jest -t "test announcementsByListingId"
+it("test announcementsByListingId", async () => {
+  // public api
+  let ret = await client
+    .query({
+      query: ANNOUNCEMENT_BY_LISTING_ID,
+      variables: {
+        productListingId: "f968e892-328a-450d-9b2b-0d7604152c85",
+      },
+      context: {
+        headers: {
+          isPrivate: false,
+        },
+      },
+    })
+    .then((result) => result)
+    .catch((err) => {
+      console.log("query error" + err);
+      return;
+    });
+
+  if (typeof ret !== "undefined") {
+    console.log(JSON.stringify(ret.data.announcementsByListingId));
   }
 });

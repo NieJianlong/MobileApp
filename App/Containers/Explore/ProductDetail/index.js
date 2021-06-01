@@ -91,6 +91,7 @@ function ProductDetail(props) {
    * temp solution todo improve
    */
   const [product, setProductFromProps] = useState({});
+  const [isReady, setIsReady] = useState(false);
 
   const scrollSectionIntoView = (section) => {
     sectionsRefs[section].current.scrollIntoView({
@@ -138,54 +139,69 @@ function ProductDetail(props) {
     console.log(
       `ProductDetail props ${JSON.stringify(props.route.params.product)}`
     );
-    //console.log(`ProductDetail props ${props.name}`)
+    setProductFromProps(props.route.params.product);
+    setIsReady(true);
   }, [props]);
 
   useEffect(() => {
     if (showPickupFromSellerSheet) {
-      pickupFromSellerSheet.current.snapTo(0);
+      if (isReady) {
+        pickupFromSellerSheet.current.snapTo(0);
+      }
     } else {
-      pickupFromSellerSheet.current.snapTo(1);
+      if (isReady) {
+        pickupFromSellerSheet.current.snapTo(1);
+      }
     }
-  }, [showPickupFromSellerSheet]);
+  }, [showPickupFromSellerSheet, isReady]);
 
   useEffect(() => {
-    if (showColorSheet) {
-      colorSheet.current.snapTo(0);
-    } else {
-      colorSheet.current.snapTo(1);
+    if (isReady) {
+      if (showColorSheet) {
+        colorSheet.current.snapTo(0);
+      } else {
+        colorSheet.current.snapTo(1);
+      }
     }
-  }, [showColorSheet]);
+  }, [showColorSheet, isReady]);
 
   useEffect(() => {
-    if (showShareSheet) {
-      shareSheet.current.snapTo(0);
-    } else {
-      shareSheet.current.snapTo(1);
+    if (isReady) {
+      if (showShareSheet) {
+        shareSheet.current.snapTo(0);
+      } else {
+        shareSheet.current.snapTo(1);
+      }
     }
-  }, [showShareSheet]);
+  }, [showShareSheet, isReady]);
 
   useEffect(() => {
-    if (showConfirmOrderSheet) {
-      confirmOrderSheet.current.snapTo(0);
-    } else {
-      confirmOrderSheet.current.snapTo(1);
+    if (isReady) {
+      if (showConfirmOrderSheet) {
+        confirmOrderSheet.current.snapTo(0);
+      } else {
+        confirmOrderSheet.current.snapTo(1);
+      }
     }
-  }, [showConfirmOrderSheet]);
+  }, [showConfirmOrderSheet, isReady]);
 
   useEffect(() => {
-    if (showAddToCartSheet) {
-      addToCartSheet.current.snapTo(0);
-    } else {
-      addToCartSheet.current.snapTo(1);
+    if (isReady) {
+      if (showAddToCartSheet) {
+        addToCartSheet.current.snapTo(0);
+      } else {
+        addToCartSheet.current.snapTo(1);
+      }
     }
-  }, [showAddToCartSheet]);
+  }, [showAddToCartSheet, isReady]);
 
   useEffect(() => {
-    if (showReportSentAlert) {
-      setTimeout(() => setShowReportSentAlert(false), 2000);
+    if (isReady) {
+      if (showReportSentAlert) {
+        setTimeout(() => setShowReportSentAlert(false), 2000);
+      }
     }
-  }, [showReportSentAlert]);
+  }, [showReportSentAlert, isReady]);
 
   const togglePickupFromSellerSheet = () =>
     setShowPickupFromSellerSheet(!showPickupFromSellerSheet);
@@ -315,7 +331,7 @@ function ProductDetail(props) {
       >
         <Image
           resizeMode={"contain"}
-          source={{ uri: product.picture }}
+          source={{ uri: product.photo }}
           style={styles.prodImage}
         />
       </TouchableOpacity>
@@ -1127,13 +1143,13 @@ function ProductDetail(props) {
           scrollEventThrottle={60}
           showsVerticalScrollIndicator={false}
         >
-          {renderSectionDetails()}
+          {isReady && renderSectionDetails()}
 
-          {renderSectionRelated()}
+          {isReady && renderSectionRelated()}
 
-          {renderSectionSeller()}
+          {isReady && renderSectionSeller()}
 
-          {renderSectionReview()}
+          {isReady && renderSectionReview()}
         </CustomScrollView>
 
         {showHeaderTabs && renderHeaderTabs()}
@@ -1153,19 +1169,19 @@ function ProductDetail(props) {
         controller={fall}
       />
 
-      {renderPickupFromSellerSheet()}
+      {isReady && renderPickupFromSellerSheet()}
 
-      {renderColorSheet()}
+      {isReady && renderColorSheet()}
 
-      {renderShareSheet()}
+      {isReady && renderShareSheet()}
 
-      {renderConfirmOrderSheet()}
+      {isReady && renderConfirmOrderSheet()}
 
-      {renderAddToCartSheet()}
+      {isReady && renderAddToCartSheet()}
 
-      {renderReviewSentAlert()}
+      {isReady && renderReviewSentAlert()}
 
-      {renderReportSentAlert()}
+      {isReady && renderReportSentAlert()}
     </View>
   );
 }

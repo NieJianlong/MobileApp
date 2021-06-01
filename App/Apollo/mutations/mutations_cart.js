@@ -18,7 +18,7 @@ const NEW_CART_ID = "00000000-0000-0000-0000-000000000000";
 export const CREATE_CART = gql`
   mutation CreateCart($buyerID: ID!, $deliveryAddress: ID!) {
     createCart(buyerID: $buyerID, deliveryAddress: $deliveryAddress) {
-      cartID
+      id
     }
   }
 `;
@@ -53,7 +53,7 @@ export const ADD_ITEM = gql`
       quantity: $quantity
       shippingMethod: $shippingMethod
     ) {
-      cartID
+      id
     }
   }
 `;
@@ -67,24 +67,20 @@ export const ADD_ITEM = gql`
 export const CLEAR_CART = gql`
   mutation ClearCart($cartID: ID!) {
     clearCart(cartID: $cartID) {
-      cartID
+      id
     }
   }
 `;
 
 /**
- * @mutation cartCheckout(cartID:ID!, buyerID:ID!, homeDelivery:Boolean!): CartCheckoutResponse
+ * @mutation cartCheckout(cartID:ID!, homeDelivery:Boolean!): CartCheckoutResponse
  * schema
  * CartCheckoutResponse{code: String! success: Boolean! message: String! orderID: ID}
  */
 export const CART_CHECKOUT = gql`
-  mutation CartCheckout($cartID: ID!, $buyerID: ID!, $homeDelivery: Boolean!) {
-    cartCheckout(
-      cartID: $cartID
-      buyerID: $buyerID
-      homeDelivery: $homeDelivery
-    ) {
-      orderID
+  mutation CartCheckout($cartID: ID!, $homeDelivery: Boolean!) {
+    cartCheckout(cartID: $cartID, homeDelivery: $homeDelivery) {
+      code
     }
   }
 `;

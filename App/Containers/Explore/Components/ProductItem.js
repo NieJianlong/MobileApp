@@ -167,17 +167,16 @@ function ProductItem(props) {
         )}
         {isAnnouncement ? (
           <View style={styles.v4}>
-            {product.deliveryDate ? (
-              <View style={styles.row}>
-                <View style={{ marginRight: s(15) }}>
-                  <Text style={styles.txtOrderClose}>Delivery Date: </Text>
-                  <Text style={styles.heading6Regular}>
-                    {product.deliveryDate}
-                  </Text>
-                </View>
+            <View style={styles.row}>
+              <View style={{ marginRight: s(15) }}>
+                <Text style={styles.txtOrderClose}>Delivery Date: </Text>
+                <Text style={styles.heading6Regular}>
+                  {product.deliveryDate}
+                </Text>
+              </View>
 
-                <View style={styles.row}>
-                  {/* <Image source={Images.stock} style={styles.icStock} />
+              <View style={styles.row}>
+                {/* <Image source={Images.stock} style={styles.icStock} />
                                             <Text style={styles.txtOrderNumber}>min {product.minOrder}</Text>
                                             <View style={styles.v5}>
                                                 <Text style={styles.txtOrderNumber}>{product.inStock} units left</Text>
@@ -186,31 +185,24 @@ function ProductItem(props) {
                                                 <Image source={Images.info2} style={styles.icInfo} />
                                             </TouchableOpacity> */}
 
-                  <Progress
-                    maximumValue={product.noOfItemsInStock}
-                    currentValue={product.noOfOrderedItems}
-                    barWidth={s(60)}
-                    barHeight={vs(6)}
-                  />
-                  <View style={{ width: s(20) }} />
-                  <View style={styles.row}>
-                    <Image source={Images.stock} style={styles.icStock} />
-                    <Text style={styles.txtOrderNumber}>
-                      {product.noOfOrderedItems}/{product.noOfItemsInStock}
-                    </Text>
-                    <TouchableOpacity>
-                      <Image source={Images.info2} style={styles.icInfo} />
-                    </TouchableOpacity>
-                  </View>
+                <Progress
+                  maximumValue={product.noOfItemsInStock}
+                  currentValue={product.noOfOrderedItems}
+                  barWidth={s(60)}
+                  barHeight={vs(6)}
+                />
+                <View style={{ width: s(20) }} />
+                <View style={styles.row}>
+                  <Image source={Images.stock} style={styles.icStock} />
+                  <Text style={styles.txtOrderNumber}>
+                    {product.noOfOrderedItems}/{product.noOfItemsInStock}
+                  </Text>
+                  <TouchableOpacity>
+                    <Image source={Images.info2} style={styles.icInfo} />
+                  </TouchableOpacity>
                 </View>
               </View>
-            ) : (
-              <TouchableOpacity
-                onPress={() => navigation.navigate("ProductInfoScreen")}
-              >
-                <Text style={styles.txtAction}>REQUEST TO MY ONLINE STORE</Text>
-              </TouchableOpacity>
-            )}
+            </View>
 
             <View style={styles.row}>
               <TouchableOpacity>

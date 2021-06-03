@@ -72,6 +72,7 @@ const customFetch = (uri, options) => {
     newUri = `${uri}${USER_PORT}`;
   }
   console.log("currentURL========:" + newUri);
+  
   return fetch(newUri, options);
 };
 
@@ -94,9 +95,9 @@ const getClient = () => {
           : "",
       };
       const { isPrivate, Authorization } = headers;
-      if (isPrivate) {
-        console.log("current token=======" + global.access_token);
-      }
+      // if (isPrivate) {
+      //   console.log("current token=======" + global.access_token);
+      // }
       //If there is Authorization in header, it has the highest priority and is preferred to use
       if (Authorization) {
         return {

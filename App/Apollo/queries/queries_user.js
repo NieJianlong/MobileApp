@@ -747,3 +747,41 @@ export const SHIPPING_DETAIL_BY_ID = gql`
     }
   }
 `;
+
+/**
+ * @query  paymentDetailsByBuyerId
+ *
+ * schema
+ * paymentDetailsByBuyerId(buyerId : ID!) : PaymentDetailResponse
+ *
+ */
+export const PAYMENT_METHODS_BY_ID = gql`
+  query PaymentDetailsByBuyerId($buyerId: ID!) {
+    paymentDetailsByBuyerId(buyerId: $buyerId) {
+      paymentDetailId
+      buyerId
+      paymentType
+      isDefaultPaymentType
+      paymentTypeDetails
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+/**
+ *  @query  billingDetailsByBuyerId
+ *
+ * schema
+ * billingDetailsByBuyerId : [BillingDetailsResponse]
+ * PaymentDetailResponse{paymentDetailId:ID buyerId:ID paymentType:String isDefaultPaymentType:Boolean
+ * paymentTypeDetails:ID createdAt:DateTime updatedAt:DateTime }
+ *
+ */
+export const BILLING_DETAIL_BY_BUYERID = gql`
+  query BillingDetailsByBuyerId($buyerId: ID!) {
+    billingDetailsByBuyerId(buyerId: $buyerId) {
+      shippingId
+    }
+  }
+`;

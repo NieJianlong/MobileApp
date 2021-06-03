@@ -94,10 +94,10 @@ function UserCenter(props) {
   // const { loading, error, data } = useQuery(BUYER_PROFILES, {
   //   context: { headers: { isPrivate: true } },
   //   onCompleted: (res) => {
-  //     debugger;
+  //
   //   },
   //   onError: (res) => {
-  //     debugger;
+  //
   //   },
   // });
   //43aeaddd-de66-45bb-81aa-192f4f5e2b33

@@ -6,10 +6,22 @@ import { View, FlatList } from "react-native";
 import TextTip from "../../../Components/EmptyReminder";
 import NavigationService from "../../../Navigation/NavigationService";
 import BillingItem from "./BillingItem";
+import { useQuery } from "@apollo/client";
+import { BILLING_DETAIL_BY_BUYERID } from "../../../Apollo/queries/queries_user";
 
 export default function BillingList({ dispatch }) {
   const tip = "You have not added \n billing details yet";
   const [billings, setBillings] = useState([]);
+  const { loading, error, data } = useQuery(BILLING_DETAIL_BY_BUYERID, {
+    variables: { buyerId: global.buyerId },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {},
+    onError: (res) => {},
+  });
   useEffect(() => {
     if (billings.length > 0) {
       dispatch({

@@ -160,7 +160,6 @@ export const ACTIVE_PRODUCT_LISTINGS_BY_STORE_ID = gql`
     ) {
       id
       productId
-      photo
       productName
       rating
       numberOfReviews

@@ -89,6 +89,7 @@ export default function ProductList(props) {
           isPrivate: false,
         },
       },
+      onError: (res) => {},
       onCompleted: (res) => {
         // console.log(JSON.stringify(res.activeProductListingsByStoreId));
         console.log(
@@ -136,7 +137,7 @@ export default function ProductList(props) {
       // data={isAnnouncement ? announcements : products}
       data={serverData}
       keyExtractor={(item, index) => index.toString()}
-      onEndReachedThreshold={0}
+      onEndReachedThreshold={0.01}
       //Set pull-up loading
       ListFooterComponent={loadingMore ? LoadMoreView : null}
       onStartRefresh={() => {
@@ -161,9 +162,14 @@ export default function ProductList(props) {
             // Update variables.limit for the original query to include
             // const { data, loading, networkStatus } = fetchMoreResult;
             console.log(fetchMoreResult.data);
+            // setServerData(
+            //   gqlMappers.mapProductListingDTO(res.activeProductListingsByStoreId)
+            // );
             setServerData([
               ...serverData,
-              ...fetchMoreResult.data.activeProductListingsByStoreId,
+              ...gqlMappers.mapProductListingDTO(
+                fetchMoreResult.data.activeProductListingsByStoreId
+              ),
             ]);
             setLoadingMore(false);
           });

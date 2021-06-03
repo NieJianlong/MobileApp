@@ -212,13 +212,13 @@ it("test createPaymentDetail", async () => {
 //  {"data":{"registerBuyer":{"buyerId":"f3d26ef6-3666-407b-b6b5-389828487b39","__typename":"BuyerProfileResponse"}}}
 it("test register buyer ua", async () => {
   let BuyerProfileRequestForCreate = {
-    userName: "bu4634",
-    firstName: "bu463Y4",
+    userName: "bu7634",
+    firstName: "bu763Y4",
     lastName: "bu336YR",
     geoLocation: "1.2.3.44",
-    phoneNumber: "+334266300124",
+    phoneNumber: "+334266300125",
     guestBuyer: false,
-    email: "bu4@email.com",
+    email: "bu5@email.com",
     userType: "BUYER",
     password: "Wwwwwwww8",
     oneClickPurchaseOn: true,

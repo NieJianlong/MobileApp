@@ -38,9 +38,7 @@ export default function AddressItem({ item, refetch }) {
         });
       }
     },
-    onError: (res) => {
-      debugger;
-    },
+    onError: (res) => {},
   });
   const [setAddressDefault] = useMutation(UPDATE_ADDRESS, {
     variables: {

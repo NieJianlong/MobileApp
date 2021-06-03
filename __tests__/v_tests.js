@@ -7,7 +7,7 @@ const INVALID_PHONE = '+4412@2345456';
 const VALID_PHONE = '+441232345456';
 
 const INVALID_EMAIL = 'drop database user;';
-const VALID_EMAIL = 'silly@billy.com';
+const VALID_EMAIL = 'silly1@billy.com';
 
 const INVALID_PASSWORD = 'short';
 const STRONG_VALID_PASSWORD = 'longerWww2!';

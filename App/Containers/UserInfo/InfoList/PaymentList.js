@@ -13,6 +13,7 @@ import {
   FIND_PAYMENT_DETAIL_BY_ID,
   FIND_USER_PROFILE,
   PAYMENT_DETAILS,
+  PAYMENT_METHODS_BY_ID,
 } from "../../../Apollo/queries/queries_user";
 /**
  * @description:Display my address, list of my payment methods, display bill detail
@@ -23,20 +24,16 @@ import {
  * @return {*}
  */
 export default function PaymentList({ dispatch }) {
-  // const { loading, error, data } = useQuery(FIND_BUYER_PROFILE, {
-  //   variables: { buyerId: global.buyerId },
-  //   context: {
-  //     headers: {
-  //       isPrivate: true,
-  //     },
-  //   },
-  //   onCompleted: (res) => {
-  //     debugger;
-  //   },
-  //   onError: (res) => {
-  //     debugger;
-  //   },
-  // });
+  const { loading, error, data } = useQuery(PAYMENT_METHODS_BY_ID, {
+    variables: { buyerId: global.buyerId },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {},
+    onError: (res) => {},
+  });
 
   const [payments, setPayments] = useState([]);
   useEffect(() => {

@@ -160,7 +160,8 @@ export const ACTIVE_PRODUCT_LISTINGS_BY_STORE_ID = gql`
     ) {
       id
       productId
-      productName
+      shortName
+      longName
       rating
       numberOfReviews
       wholeSalePrice

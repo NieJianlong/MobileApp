@@ -11,6 +11,8 @@ import colors from "../../../Themes/Colors";
 import metrics from "../../../Themes/Metrics";
 import images from "../../../Themes/Images";
 import ListItem from "../ListItem";
+import { useQuery } from "@apollo/client";
+import { FIND_ONE_CLICK_BUY } from "../../../Apollo/queries/queries_user";
 
 const items = [
   {
@@ -43,6 +45,16 @@ export default function OnePurchaseList({ dispatch }) {
   const subTip =
     "Select a default address and payment method to \n activate 1 click purchasing";
   const [payments, setPayments] = useState([]);
+  const { loading, error, data } = useQuery(FIND_ONE_CLICK_BUY, {
+    variables: { buyerId: global.buyerId },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {},
+    onError: (res) => {},
+  });
   useEffect(() => {
     dispatch({
       type: "rightButtonShow",

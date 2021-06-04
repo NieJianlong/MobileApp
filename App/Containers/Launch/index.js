@@ -18,6 +18,8 @@ import { useLazyQuery, useQuery } from "@apollo/client";
 import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 
 export default function LaunchScreen() {
+  //server often breakon，we should use a constant for testing
+  global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
   const [getBuyerId] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
     variables: { userProfileId: global.userProfileId },
     context: {
@@ -31,10 +33,12 @@ export default function LaunchScreen() {
         buyerProfileByUserId: { buyerId },
       } = res;
       global.buyerId = buyerId;
+      NavigationService.navigate("MainScreen");
     },
     onError: (res) => {
       //server often breakon，we should use a constant for testing
       global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
+      NavigationService.navigate("MainScreen");
     },
   });
   // if (data !== undefined) {
@@ -65,14 +69,13 @@ export default function LaunchScreen() {
       getBuyerId();
 
       setLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY, access_token);
-      NavigationService.navigate("MainScreen");
     } else {
       setTimeout(() => {
         //this.props.navigation.navigate('OnboardingScreen')
         NavigationService.navigate("OnboardingScreen");
       }, 2000);
     }
-  }, []);
+  }, [getBuyerId]);
   //when app open,when can do auto login
   useEffect(() => {
     autoSignIn();

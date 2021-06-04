@@ -31,8 +31,12 @@ export default function PaymentList({ dispatch }) {
         isPrivate: true,
       },
     },
-    onCompleted: (res) => {},
-    onError: (res) => {},
+    // onCompleted: (res) => {
+    //
+    // },
+    // onError: (res) => {
+    //
+    // },
   });
 
   const [payments, setPayments] = useState([]);

@@ -8,7 +8,7 @@ export const mapProductListingDTO = (data) => {
       id: element.productId,
       photo: element.photo,
       photoUrls: [element.photo],
-      productName: element.productName,
+      productName: element.shortName,
       rating: element.rating,
       numberOfReviews: element.numberOfReviews,
       wholesalePrice: element.wholeSalePrice,

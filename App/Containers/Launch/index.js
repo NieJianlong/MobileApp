@@ -14,12 +14,10 @@ import NavigationService from "../../Navigation/NavigationService";
 import { Images } from "../../Themes";
 import styles from "./styles";
 import jwt_decode from "jwt-decode";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 
 export default function LaunchScreen() {
-  //server often breakon，we should use a constant for testing
-  global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
   const [getBuyerId] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
     variables: { userProfileId: global.userProfileId },
     context: {
@@ -41,12 +39,7 @@ export default function LaunchScreen() {
       NavigationService.navigate("MainScreen");
     },
   });
-  // if (data !== undefined) {
-  //   const {
-  //     buyerProfileByUserId: { buyerId },
-  //   } = data;
-  //   global.buyerId = buyerId;
-  // }
+
   const autoSignIn = useCallback(async () => {
     //get username and possword from localStorage
     const username = await getLocalStorageValue(LOCAL_STORAGE_USER_NAME);

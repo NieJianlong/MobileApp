@@ -139,11 +139,6 @@ function LoginScreen(props) {
                     if (result.data.buyerProfileByUserId.buyerId === null) {
                       console.log("found null GuestBuyer buyerId");
                     } else {
-                      console.log(
-                        `Login BUYER_PROFILE_BY_USERID found buyerId ${JSON.stringify(
-                          result.data.buyerProfileByUserId.buyerId
-                        )}`
-                      );
                       global.buyerId = result.data.buyerProfileByUserId.buyerId;
                       storage.setLocalStorageValue(
                         loginRequest.username,

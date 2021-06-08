@@ -75,4 +75,7 @@ npx react-native run-android
 cd ~/Downloads/genymotion/
 ./genymotion
 
+npx react-native start --port=5555
+npx react-native run-android --port=5555
+
 

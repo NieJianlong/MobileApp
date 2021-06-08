@@ -50,7 +50,9 @@ function OnboardingScreen(props) {
     // first check for an existing buyer id
     let bid = await storage.getLocalStorageValue(getUniqueId());
     if (bid) {
-      console.log(`found a bid in local storage ${bid}`);
+      console.log(
+        `OnboardingScreen checkBuyerIdExists found a bid in local storage ${bid}`
+      );
       global.guestId = bid;
       setBIdExists(true);
     }
@@ -69,7 +71,7 @@ function OnboardingScreen(props) {
    */
   const onGetGuestBuyerId = async (data) => {
     let buyerId = data.createGuestBuyer.buyerId;
-    console.log("OnboardingScreen mutation createGuestBuyer=" + buyerId);
+    console.log("OnboardingScreen createGuestBuyer buyerId=" + buyerId);
     await storage.setLocalStorageValue(getUniqueId(), buyerId);
     global.guestId = buyerId;
     NavigationService.navigate("MainScreen");
@@ -125,9 +127,12 @@ function OnboardingScreen(props) {
             onPress={() => {
               // call the CREATE_GUEST_BUYER mutation see onGetGuestBuyerId callback
               if (bIdExists) {
-                console.log("found bid in local storage");
+                console.log(
+                  "OnboardingScreen CONTINUE found guest bid in local storage"
+                );
                 NavigationService.navigate("MainScreen");
               } else {
+                console.log("OnboardingScreen CONTINUE create  guest bid");
                 guestBuyerId({
                   variables: { request: BuyerProfileRequestForCreate },
                 });

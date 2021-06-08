@@ -1,23 +1,10 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useContext,
-  useMemo,
-} from "react";
-import {
-  FlatList,
-  View,
-  ActivityIndicator,
-  Text,
-  RefreshControl,
-} from "react-native";
+import React, { useState, useCallback, useContext, useMemo } from "react";
+import { FlatList, View, ActivityIndicator, Text } from "react-native";
 import ProductItem from "../ProductItem";
 import { HPageViewHoc } from "react-native-head-tab-view";
 import ExploreSortBar from "../ExploreSortBar";
 import { AlertContext } from "../../../Root/GlobalContext";
 import ShareOptionList from "../ShareOptionList";
-import { client } from "../../../../Apollo/apolloClient";
 import * as gqlMappers from "../../gql/gql_mappers";
 import * as aQM from "../../gql/explore_queries";
 import colors from "../../../../Themes/Colors";
@@ -91,13 +78,9 @@ export default function ProductList(props) {
       },
       onError: (res) => {},
       onCompleted: (res) => {
-        // console.log(JSON.stringify(res.activeProductListingsByStoreId));
-        console.log(
-          JSON.stringify(
-            gqlMappers.mapProductListingDTO(res.activeProductListingsByStoreId)
-          )
-        );
-
+        // map data from server for now
+        // add missing fields for product review
+        // update for name changes in data from server
         setServerData(
           gqlMappers.mapProductListingDTO(res.activeProductListingsByStoreId)
         );
@@ -161,7 +144,7 @@ export default function ProductList(props) {
           }).then((fetchMoreResult) => {
             // Update variables.limit for the original query to include
             // const { data, loading, networkStatus } = fetchMoreResult;
-            console.log(fetchMoreResult.data);
+            //console.log(fetchMoreResult.data);
             // setServerData(
             //   gqlMappers.mapProductListingDTO(res.activeProductListingsByStoreId)
             // );

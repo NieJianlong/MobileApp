@@ -136,9 +136,6 @@ function ProductDetail(props) {
   };
 
   useEffect(() => {
-    console.log(
-      `ProductDetail props ${JSON.stringify(props.route.params.product)}`
-    );
     setProductFromProps(props.route.params.product);
     setIsReady(true);
   }, [props]);

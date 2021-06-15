@@ -7,6 +7,7 @@ import {
 import { ScaledSheet, s, vs } from 'react-native-size-matters'
 import { Fonts, Colors } from '../Themes'
 
+//progress component
 function Progress(props) {
 
     const [active, setActive] = useState(false)
@@ -14,6 +15,7 @@ function Progress(props) {
     const {
         maximumValue,
         currentValue,
+        //container style
         style,
         barWidth,
         barHeight,

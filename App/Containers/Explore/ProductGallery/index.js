@@ -22,15 +22,17 @@ import ImageViewer from 'react-native-image-zoom-viewer'
 function ProductGallery(props) {
 
     const { params } = useRoute()
-
+    //fullscreen mode: to show a specific photo
     const [fullscreenMode, setFullscreenMode] = useState(params.fullscreenMode ?? false)
+    //current phto index
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
+    //toggle fullscreen mode when tap on a photo item
     const toggleFullscreenMode = (index) => {
         setFullscreenMode(!fullscreenMode)
         setCurrentImageIndex(index)
     }
-
+    //render paging indicator
     const renderIndicator = (currentIndex, numberOfPhotos) => {
         return (
             <View style={styles.indicatorContainer}>
@@ -49,6 +51,7 @@ function ProductGallery(props) {
 
                 {
                     fullscreenMode ?
+                        // use ImageViewer component to support zoom and pinch photo
                         <ImageViewer
                             index={currentImageIndex}
                             imageUrls={imageUrls}
@@ -56,8 +59,8 @@ function ProductGallery(props) {
                             onClick={() => toggleFullscreenMode(0)}
                             renderIndicator={(currentIndex, allSize) => renderIndicator(currentIndex, imageUrls.length)}
                         /> :
+                        //list view mode
                         <ScrollView contentContainerStyle={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-
                             {
                                 imageUrls.map((image, index) =>
                                     <TouchableOpacity key={index.toString()} onPress={() => toggleFullscreenMode(index)} >

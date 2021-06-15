@@ -10,15 +10,20 @@ import { Fonts, Colors } from '../Themes'
 import PropTypes from 'prop-types'
 import AppConfig from '../Config/AppConfig'
 
+//radius button component
 class RadiusButton extends Component {
     render() {
         const {
+            //button's name
             text,
+            //on press function
             onPress,
+            //whether to disable this button
             disabled,
             backgroundColor,
             textColor,
             disabledColor,
+            //prefix icon
             prefixIcon
         } = this.props
 

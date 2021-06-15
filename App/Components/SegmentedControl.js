@@ -7,8 +7,9 @@ import {
 import { ScaledSheet } from 'react-native-size-matters'
 import { Fonts, Colors, ApplicationStyles } from '../Themes'
 
+//segmented control component
 function SegmentedControl(props) {
-
+    //current active tab
     const [activeTab, setActiveTab] = useState(0)
 
     const {

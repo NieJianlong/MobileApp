@@ -8,10 +8,14 @@ import { ScaledSheet, s, vs } from 'react-native-size-matters'
 import Animated from 'react-native-reanimated'
 import { Fonts, Colors } from '../Themes'
 
+//component show gray background when bottom sheet apear
 function BottomSheetBackground(props) {
     const {
+        //whether to be visible
         visible,
+        //animation controller
         controller,
+        //onPRess callback
         onPress
     } = props
 

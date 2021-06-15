@@ -16,6 +16,7 @@ import { s, vs } from "react-native-size-matters";
 import Animated from "react-native-reanimated";
 import Collapsible from "react-native-collapsible";
 import Carousel from "react-native-snap-carousel";
+//help identify which component is in display
 import InView from "react-native-component-inview";
 import { ScrollIntoView, wrapScrollView } from "react-native-scroll-into-view";
 import NumberFormat from "react-number-format";
@@ -55,22 +56,32 @@ const CustomScrollView = wrapScrollView(ScrollView);
 function ProductDetail(props) {
   const fall = useRef(new Animated.Value(0)).current;
 
+  //control whether to show the hearder (display and navigation to sections)
   const [showHeaderTabs, setShowHeaderTabs] = useState(false);
+  //control whether to show the footer (display price and buy button)
   const [showFooter, setShowFooter] = useState(false);
   const [showDescription, setShowDescription] = useState(false);
-
+  //hold the section index
   const [tabIndex, setTabIndex] = useState(0);
+  //hold the index of the current product's photo
   const [photoIndex, setPhotoIndex] = useState(0);
+  //hold the quantity of product
   const [quantity, setQuantity] = useState(1);
+  //hold the price user should pay
   const [totalPrice, setTotalPrice] = useState(0);
+  //hold the index of selected color
   const [colorIndex, setColorIndex] = useState(0);
+  //hold the boolean to indicate if this product has been purchased by this user
   const [isPurchased, setIsPurchased] = useState(false);
+  //hold the boolean to indicate if this product has been liked by this user
   const [isLiked, setIsLiked] = useState(false);
-
+  //control whether to show the pickup from seller sheet
   const [showPickupFromSellerSheet, setShowPickupFromSellerSheet] = useState(
     false
   );
+  //control whether to show the color sheet
   const [showColorSheet, setShowColorSheet] = useState(false);
+  //control whether to show the add to cart sheet
   const [showAddToCartSheet, setShowAddToCartSheet] = useState(false);
   const [showConfirmOrderSheet, setShowConfirmOrderSheet] = useState(false);
   const [showShareSheet, setShowShareSheet] = useState(false);
@@ -78,6 +89,7 @@ function ProductDetail(props) {
   const [showReviewSentAlert, setShowReviewSentAlert] = useState(false);
   const [showReportSentAlert, setShowReportSentAlert] = useState(false);
 
+  //reference for sheets
   const sectionsRefs = Sections.map((_section) => React.createRef());
   const pickupFromSellerSheet = useRef();
   const colorSheet = useRef();
@@ -93,6 +105,7 @@ function ProductDetail(props) {
   const [product, setProductFromProps] = useState({});
   const [isReady, setIsReady] = useState(false);
 
+  //function to scroll the specific section
   const scrollSectionIntoView = (section) => {
     sectionsRefs[section].current.scrollIntoView({
       align: "top",
@@ -103,9 +116,11 @@ function ProductDetail(props) {
     });
   };
 
+  //handle when scrolling
   const handleScroll = (event) => {
     let threshold = height / 4;
     let y = event.nativeEvent.contentOffset.y;
+    //control when to show footer and header
     if (y > threshold && !showHeaderTabs) {
       setShowHeaderTabs(true);
       setShowFooter(false);
@@ -113,7 +128,7 @@ function ProductDetail(props) {
       setShowHeaderTabs(false);
       setShowFooter(false);
     }
-
+    //detect which tab is showing
     if (y > 1430 && tabIndex === 0) {
       setTabIndex(1);
     } else if (y > 1840 && tabIndex === 1) {
@@ -127,6 +142,7 @@ function ProductDetail(props) {
     }
   };
 
+  //handle when users stop scrolling, show footer
   const handleScrollEnd = (event) => {
     setShowFooter(true);
   };
@@ -316,6 +332,7 @@ function ProductDetail(props) {
     );
   };
 
+  //render product image item
   const _renderImageItem = ({ item, index }) => {
     return (
       <TouchableOpacity
@@ -335,10 +352,12 @@ function ProductDetail(props) {
     );
   };
 
+  //control when swipe to another image
   const onSnapToItem = (index) => {
     setPhotoIndex(index);
   };
 
+  //render product images
   const renderProductImages = () => {
     return (
       <View style={styles.imagesContainer}>
@@ -406,6 +425,7 @@ function ProductDetail(props) {
     );
   };
 
+  //render product info section
   const renderProductInfo = () => {
     return (
       <InView
@@ -744,11 +764,12 @@ function ProductDetail(props) {
       </InView>
     );
   };
-
+  //render users' reviews for the product
   const renderUserReview = () => {
     return (
       <TouchableOpacity
         onPress={() =>
+          //add new review: navigate to the rate order screen
           NavigationService.navigate("RateOrderScreen", {
             onPost: toggleReviewSentAlert,
           })
@@ -1140,6 +1161,8 @@ function ProductDetail(props) {
           scrollEventThrottle={60}
           showsVerticalScrollIndicator={false}
         >
+          {/* 4 sections of this screen */}
+
           {isReady && renderSectionDetails()}
 
           {isReady && renderSectionRelated()}
@@ -1166,6 +1189,7 @@ function ProductDetail(props) {
         controller={fall}
       />
 
+      {/* action sheets */}
       {isReady && renderPickupFromSellerSheet()}
 
       {isReady && renderColorSheet()}

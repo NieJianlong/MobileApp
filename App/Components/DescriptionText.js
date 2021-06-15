@@ -8,6 +8,7 @@ import { ScaledSheet } from 'react-native-size-matters'
 import { act } from 'react-test-renderer'
 import { Fonts, Colors, ApplicationStyles } from '../Themes'
 
+//description text component which can expand and collapse
 function DescriptionText(props) {
 
     const [active, setActive] = useState(false)

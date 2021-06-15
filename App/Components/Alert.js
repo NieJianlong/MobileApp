@@ -13,6 +13,7 @@ import PropTypes from 'prop-types'
 import AppConfig from '../Config/AppConfig'
 import { Images, Fonts, Colors, ApplicationStyles } from '../Themes'
 
+//alert component
 class Alert extends Component {
 
     constructor(props) {
@@ -26,6 +27,7 @@ class Alert extends Component {
         this.fadeIn()
     }
 
+    //fade in animation
     fadeIn = () => {
         // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(this.state.fadeAnim, {
@@ -35,6 +37,7 @@ class Alert extends Component {
         }).start()
     }
 
+    //fade out animation
     fadeOut = () => {
         // Will change fadeAnim value to 0 in 5 seconds
         Animated.timing(this.state.fadeAnim, {

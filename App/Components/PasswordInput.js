@@ -11,6 +11,7 @@ import PropTypes from 'prop-types'
 
 import { Fonts, Colors, Images } from '../Themes'
 
+//component for password input
 class PasswordInput extends Component {
 
     constructor(props) {

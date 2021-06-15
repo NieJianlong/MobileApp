@@ -8,15 +8,20 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { ScaledSheet, s } from 'react-native-size-matters'
 import { Colors, Images, ApplicationStyles } from '../Themes'
 
+//component to display and rate a product
 function StarRating(props) {
 
     const [userRating, setUserRating] = useState(0)
 
     const {
+        //rating value
         rating,
+        //number of ratings
         ratingCount,
         style,
+        //whether to show all rating information
         fullMode,
+        //whether to allow rating
         ratingMode
     } = props
 

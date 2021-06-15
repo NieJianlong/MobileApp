@@ -11,10 +11,15 @@ import NavigationService from '../Navigation/NavigationService';
 class AppBar extends Component {
   render() {
     const {
+      //whether to show app's logo
       showLogo,
+      //right button component
       rightButton,
+      //on press back button callback
       onPressBack,
+      //screen's title
       title,
+      //whether to hide back button
       hiddenBackBtn,
     } = this.props;
 

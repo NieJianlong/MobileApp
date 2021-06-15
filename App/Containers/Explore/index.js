@@ -19,13 +19,14 @@ import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimen
 function Explore(props) {
   const ref = useRef();
   const screenWidth = useWindowDimensions().width;
+  //to show an alert to users that their accounts have been activated
   const [
     showAccountActivatedSuccessfullyAlert,
     setShowAccountActivatedSuccessfullyAlert,
   ] = useState(false);
   //Fixed a bug that accidentally triggered onclick when swiping
   const [canGoNext, setCanGoNext] = useState(true);
-
+  // to show an alert to users that they need to activate their accounts
   const [showAccountActivateAlert, setShowAccountActivateAlert] = useState(
     false
   );

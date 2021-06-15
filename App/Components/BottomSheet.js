@@ -7,14 +7,21 @@ import { isIphoneX } from 'react-native-iphone-x-helper';
 import { Fonts, Colors, ApplicationStyles } from '../Themes';
 import AppConfig from '../Config/AppConfig';
 
+//component for the action sheets
 class BottomSheet extends Component {
   render() {
     const {
+      //snap point of the sheet, eg: close and open pont
       snapPoints,
+      //initial snap point
       initialSnap,
+      //reference to control the sheet
       customRef,
+      //sheet's title
       title,
+      //control animation
       callbackNode,
+      //call back when close the sheets
       onCloseEnd,
     } = this.props;
 

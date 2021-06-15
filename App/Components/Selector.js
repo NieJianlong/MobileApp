@@ -2,6 +2,8 @@ import React, { Component, useState } from "react";
 import { Text, View, Image, TouchableOpacity } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
 import { Fonts, Colors, Images, ApplicationStyles } from "../Themes";
+
+//selector component, or picker to select from a list
 function Selector(props) {
   const [active, setActive] = useState(false);
 

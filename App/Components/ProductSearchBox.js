@@ -21,6 +21,7 @@ const { width, height } = Dimensions.get('window')
 
 const results = ['iphone 12', 'iphone 12 mini', 'iphone 12 pro', 'iphone 12 pro max']
 
+//product search box component
 class ProductSearchBox extends Component {
 
     constructor(props) {

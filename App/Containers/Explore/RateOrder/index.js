@@ -36,12 +36,12 @@ class RateOrderScreen extends Component {
     componentDidMount() {
 
     }
-
+    //execute onPost function and navigate back to the previous screen
     onPost = () => {
         this.props.route.params.onPost()
         NavigationService.goBack()
     }
-
+    //handle when user want to pick from gallery
     onPressGallery = () => {
         ImagePicker.openPicker({
             //cropping: true,
@@ -52,7 +52,7 @@ class RateOrderScreen extends Component {
             this.setState({ images })
         })
     }
-
+    //handle when user want to take photos
     onPressCamera = () => {
         ImagePicker.openCamera({
             cropping: true,
@@ -66,13 +66,13 @@ class RateOrderScreen extends Component {
     showActionSheet = () => {
         this.ActionSheet.show()
     }
-
+    //remove photos from list
     removeImage = (index) => {
         let images = [...this.state.images]
         images.splice(index, 1)
         this.setState({ images })
     }
-
+    //render screen's header
     renderHeader() {
         return (
             <View style={styles.header}>

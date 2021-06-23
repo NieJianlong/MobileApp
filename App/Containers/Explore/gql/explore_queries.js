@@ -9,6 +9,95 @@ import { gql } from "@apollo/client";
  */
 
 /**
+ *
+ * @query  getListings
+ *
+ * getListings(searchOptions: SearchOptions): [ProductListingView]
+ *
+ * enum FilterType { UNDEFINED, ALL, ACTIVE, ACTIVE_BY_COORDINATES, ACTIVE_BY_COORDINATES_AND_ANNOUNCEMENT,
+    ACTIVE_BY_COORDINATES_AND_CATEGORY, ACTIVE_BY_COORDINATES_AND_SELLER, BY_LISTING_ID, BY_STORE_ID,
+    ACTIVE_BY_COORDINATES_AND_WISH_LIST, BY_COORDINATES_AND_SHARE_LIST }
+ *
+ * ProductListingView { id: String productId: String numberOfReviews: Int rating: Int closedDate: String deliveryDate: String
+ * productListingType: String shippingMethodsAvailable: String noOfOrderedItems: Int progressBarValue: Int
+ * noOfItemsInStock: Int numberOfItemsAvailable: Int minQuantityPerCart: Int maxQuantityPerCart: Int
+ * pickUpFromSeller: Boolean collectionPointAddressId: String collectionPointAddress: Address returnAddressId: String
+ * returnAddress: Address amountSaved: Float deliveryFee: Float shortName: String longName: String description: String
+ * technicalDetails: String announcementId: String productOptionValues: [ProductOptionValueView] relatedProducts: String
+ * sellerId: String seller: SellerView reviews: [ReviewView] returnPolicies: [ProductReturnPolicyView]
+ * categories: [ProductCategoryView] images: [Images] productListingsOptionGroups: [ProductListingsOptionGroup]
+ * retailPrice: Float wholeSalePrice: Float percentOff: Int }
+ *
+ * ProductListingsOptionGroup { listingId: ID productId: ID groupId: ID itemsAvailable: Int  itemsSold: Int  retailPrice: Float
+ *   wholeSalePrice: Float discount: Float optionsGroup: OptionsGroup }
+ *
+ * OptionsGroup {
+ *  groupId: ID initialItemsCount: Int itemsAvailable: Int itemsSold: Int optionsGroupPrice: Float optionsGroupDiscount: Float
+ *  optionValues: [OptionValueView]}
+ *
+ * OptionValueView{ valueId: ID optionId: ID value: String defaultOptionValue: String priceIncrease: Float discount: Float
+ *  name: String description: String}
+ *
+ */
+export const GET_LISTINGS = gql`
+  query GetListings($searchOptions: SearchOptions) {
+    getListings(searchOptions: $searchOptions) {
+      productId
+      numberOfReviews
+      rating
+      closedDate
+      deliveryDate
+      productListingType
+      shippingMethodsAvailable
+      noOfOrderedItems
+      progressBarValue
+      noOfItemsInStock
+      numberOfItemsAvailable
+      minQuantityPerCart
+      maxQuantityPerCart
+      pickUpFromSeller
+      amountSaved
+      deliveryFee
+      shortName
+      longName
+      description
+      technicalDetails
+      announcementId
+      collectionPointAddressId
+      relatedProducts
+      sellerId
+      retailPrice
+      wholeSalePrice
+      percentOff
+      photo
+      photoUrls
+      seller {
+        id
+        brandName
+        ratingCount
+      }
+      images {
+        id
+        referenceId
+        imageName
+        imageType
+        description
+        fullPath
+      }
+      productListingsOptionGroups {
+        optionsGroup {
+          groupId
+          optionValues {
+            value
+            defaultOptionValue
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
  * @mutation createAddress
  *
  * schema
@@ -130,6 +219,8 @@ export const FIND_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
 `;
 
 /**
+ *
+ *  @Depreciated
  *  @query  activeProductListingsByStoreId(storeId: String, sortfield: String, sortDirection: SortDirection, pageNo: Int, pageSize: Int)
  *  : [ProductListingDTO]
  *

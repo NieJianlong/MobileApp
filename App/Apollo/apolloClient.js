@@ -53,9 +53,10 @@ const allAPIS = {
   UpdateAddress: USER_PORT,
 
   //product
-  ActiveProductListingsByStoreId: PRODUCT_PORT,
+  // ActiveProductListingsByStoreId: PRODUCT_PORT,  @Depreciated leave here for now as backend may decise roll back
   AnnouncementsByOnlineStore: PRODUCT_PORT,
   AnnouncementsByListingId: PRODUCT_PORT,
+  GetListings: PRODUCT_PORT,
 
   // Cart
   CreateCart: CART_PORT,
@@ -72,7 +73,7 @@ const customFetch = (uri, options) => {
     newUri = `${uri}${USER_PORT}`;
   }
   console.log("currentURL========:" + newUri);
-  
+
   return fetch(newUri, options);
 };
 

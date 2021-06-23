@@ -25,13 +25,19 @@ const iOS = Platform.OS === "ios";
 function OnboardingScreen(props) {
   const [bIdExists, setBIdExists] = useState(false);
 
-  /** this is enough to create a guest buyer */
+  /** this is enough to create a guest buyer
+   *
+   * TO-DO remove use uniquie id only in local storage
+   */
   let BuyerProfileRequestForCreate = {
     guestBuyer: true,
   };
 
   let [isPlaying, setIsPlaying] = useState(true);
 
+  // TO-DO remove use uniquie id only in local storage
+  // however keep this code as they are just aslikley to roll back
+  // and say we will use guest buyer id again
   // useMutation works here, I think when the code becomes to large the useMutation stops working
   // we can only use useMutation with public endpoints
   /**

@@ -4,8 +4,8 @@ import {
   PRODUCT_BY_ID,
   PRODUCT_LISTING_DETAIL_RESPONSE,
   ANNOUNCEMENTS_BY_ONLINE_STORE,
-  ANNOUNCEMENT_BY_PRODUCT_LISTING,
   ANNOUNCEMENT_BY_LISTING_ID,
+  GET_LISTINGS,
 } from "../App/Apollo/queries/queries_prodmang";
 
 jest.mock("@react-native-community/async-storage", () =>
@@ -18,10 +18,74 @@ jest.mock("@react-native-community/async-storage", () =>
 8082 --> UserManagement
 8083 --> ProductManagement
 
- get coordinates from UserManagement by delivery address as string and then pass them to ProductManagement
-
+get-graphql-schema  http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8083/graphql > schemaPM.json
  */
 
+// @Depreciated
+// yarn jest -t "test getListings pm"
+it("test getListings pm", async () => {
+  let ret = await client
+    .query({
+      query: GET_LISTINGS,
+      variables: {
+        searchOptions: {
+          filter: "ACTIVE_BY_COORDINATES",
+          filterParams: { latitude: 1.5, longitude: 1.5 },
+          pageNo: 1,
+          pageSize: 3,
+        },
+      },
+      context: {
+        headers: {
+          isPrivate: false,
+        },
+      },
+    })
+    .then((result) => result)
+    .catch((err) => {
+      console.log("query error " + err);
+      return;
+    });
+
+  if (typeof ret !== "undefined") {
+    console.log(`num of ProductListingView ${ret.data.getListings.length}`);
+    for (let p of ret.data.getListings) {
+      console.log(`ProductListingView ${JSON.stringify(p)}`);
+      let photoUrls = p.photoUrls;
+      console.log(`photoUrls ${p.photoUrls.length}`);
+
+      //console.log(`ProductListingView ${JSON.stringify(p)}`);
+      // console.log(
+      //   `collectionPointAddressId is null? ${p.collectionPointAddressId}`
+      // );
+      // if (p.seller) {
+      //   console.log(
+      //     `seller ${p.seller.id} ${p.seller.businessName}  ${p.usersRating}`
+      //   );
+      // }
+      // if (p.collectionPointAddressId === null) {
+      //   console.log("hide pick up from seller");
+      // }
+      // console.log(`description? ${p.description}`);
+      // for (let optGroups of p.productListingsOptionGroups) {
+      //   let optG = optGroups.optionsGroup;
+      //   console.log(`optionsGroup Id == ${optG.groupId}`);
+      //   console.log(`optionsGroup name == ${optG.name}`);
+      //   console.log(`optionsGroup description == ${optG.description}`);
+      //   let optionValues = optG.optionValues;
+      //   for (let oValView of optionValues) {
+      //     console.log(`option Value == ${oValView.value}`);
+      //     console.log(
+      //       `option defaultOptionValue == ${oValView.defaultOptionValue}`
+      //     );
+      //     console.log(`option name == ${oValView.name}`);
+      //   }
+      // }
+    }
+  }
+});
+
+// @Depreciated
 // yarn jest -t "test activeProductListingsByStoreId pm"
 it("test activeProductListingsByStoreId pm", async () => {
   // public api

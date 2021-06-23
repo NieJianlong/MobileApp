@@ -152,6 +152,7 @@ function ProductDetail(props) {
   };
 
   useEffect(() => {
+    console.log(`check url ${props.route.params.product.photo}`);
     setProductFromProps(props.route.params.product);
     setIsReady(true);
   }, [props]);
@@ -498,19 +499,22 @@ function ProductDetail(props) {
                 Delivery fee:{" "}
                 <Text style={{ color: Colors.primary }}>$14.90</Text>
               </Text>
-
-              <View style={[styles.row, { marginLeft: s(10) }]}>
-                <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
-                  Pick up from seller
-                </Text>
-                <Switch
-                  onSwitch={(t) => {
-                    if (t) {
-                      togglePickupFromSellerSheet();
-                    }
-                  }}
-                />
-              </View>
+              {!product.hidePickUpFromSeller ? (
+                <View style={[styles.row, { marginLeft: s(10) }]}>
+                  <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
+                    Pick up from seller
+                  </Text>
+                  <Switch
+                    onSwitch={(t) => {
+                      if (t) {
+                        togglePickupFromSellerSheet();
+                      }
+                    }}
+                  />
+                </View>
+              ) : (
+                <View />
+              )}
             </View>
           </View>
 
@@ -544,9 +548,9 @@ function ProductDetail(props) {
             <DescriptionText
               style={styles.descriptionContainer}
               text={
-                "This is the product description vero eos et accusamus et iusto odio dignissimos ducimus" +
-                "qui blad. This is the product description vero eos et accusamus et iusto odio dignissimos ducimus" +
-                "qui blad"
+                product.seller.description
+                  ? product.seller.description
+                  : "product seller description is null because we are using test data and no one will add stuff to the database for FE team"
               }
             />
           </View>
@@ -758,7 +762,11 @@ function ProductDetail(props) {
 
           <DescriptionText
             style={{ marginTop: vs(10) }}
-            text={product.seller.description}
+            text={
+              product.seller
+                ? product.seller.description
+                : "this description is null in data from server,  this should not happen fix required on backend"
+            }
           />
         </View>
       </InView>

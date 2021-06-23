@@ -64,12 +64,13 @@ export default function ProductList(props) {
       break;
   }
   const { loading, error, data, refetch, fetchMore } = useQuery(
-    aQM.ACTIVE_PRODUCT_LISTINGS_BY_STORE_ID,
+    aQM.GET_LISTINGS,
     {
       variables: {
-        ...params,
-        sortDirection: "ASCENDING",
-        pageSize: 5,
+        filter: "ACTIVE_BY_COORDINATES",
+        filterParams: { latitude: 1.5, longitude: 1.5 },
+        pageNo: 1,
+        pageSize: 3,
       },
       context: {
         headers: {
@@ -81,9 +82,7 @@ export default function ProductList(props) {
         // map data from server for now
         // add missing fields for product review
         // update for name changes in data from server
-        setServerData(
-          gqlMappers.mapProductListingDTO(res.activeProductListingsByStoreId)
-        );
+        setServerData(gqlMappers.mapProductListingDTO(res.getListings));
       },
     }
   );
@@ -126,7 +125,7 @@ export default function ProductList(props) {
       onStartRefresh={() => {
         setIsRereshing(true);
         refetch().then((res) => {
-          setServerData(res.data.activeProductListingsByStoreId);
+          setServerData(res.data.getListings);
           setIsRereshing(false);
           setPage(0);
         });
@@ -151,7 +150,7 @@ export default function ProductList(props) {
             setServerData([
               ...serverData,
               ...gqlMappers.mapProductListingDTO(
-                fetchMoreResult.data.activeProductListingsByStoreId
+                fetchMoreResult.data.getListings
               ),
             ]);
             setLoadingMore(false);

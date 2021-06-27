@@ -21,7 +21,7 @@ jest.mock("@react-native-community/async-storage", () =>
 get-graphql-schema  http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8083/graphql > schemaPM.json
  */
 
-// @Depreciated
+//
 // yarn jest -t "test getListings pm"
 it("test getListings pm", async () => {
   let ret = await client
@@ -171,6 +171,7 @@ it("test productById", async () => {
   }
 });
 
+//  @Depreciated
 // yarn jest -t "test productListingDetailResponse"
 it("test productListingDetailResponse", async () => {
   // public api

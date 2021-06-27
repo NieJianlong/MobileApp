@@ -15,7 +15,7 @@ import AddressSheetContent from "./AddressSheetContent";
  */
 import * as aQM from "../gql/explore_queries";
 import * as gqlMappers from "../gql/gql_mappers";
-import { userProfileVar } from "../../../Apollo/cache";
+import { userProfileVar, localCartVar } from "../../../Apollo/cache";
 import { useLazyQuery, useReactiveVar } from "@apollo/client";
 
 export default function AddressBar() {
@@ -28,6 +28,7 @@ export default function AddressBar() {
   const isAuth = useMemo(() => userProfileVarReactive.isAuth, [
     userProfileVarReactive.isAuth,
   ]);
+
   const toggleAddressSheet = useCallback(() => {
     dispatch({
       type: "changSheetState",
@@ -60,6 +61,11 @@ export default function AddressBar() {
         addressId: addressResult.addressId,
         addressLine1: aL1,
         addressLine2: aL2,
+      });
+
+      localCartVar({
+        ...localCartVar(),
+        deliverAddress: addressResult.addressId,
       });
       setAddrLine1(aL1);
       setAddrLine2(aL2);
@@ -109,11 +115,12 @@ export default function AddressBar() {
       },
       onCompleted: (result) => {
         if (result) {
-          console.log(
-            `AddressBar fetchAddressData Guest/Buyer look up addressId ${JSON.stringify(
-              result.data
-            )}`
-          );
+          // debug only
+          // console.log(
+          //   `AddressBar fetchAddressData Guest/Buyer look up addressId ${JSON.stringify(
+          //     result.data
+          //   )}`
+          // );
           setAddressResult(
             isAuth
               ? result.getBuyerDefaultAddressByBuyerId

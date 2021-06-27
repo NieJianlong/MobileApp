@@ -41,7 +41,11 @@
 }
  */
 
-/** added in missing data for styling  */
+/**
+ * added in missing data for styling and null pointers due to diff names in code for the same thing
+ * also needed fields in the prduct object as we walk through the state on the way to checkout
+ * eg selected variants group id see selectedProductVariants: {},
+ */
 export const mapProductListingDTO = (data) => {
   let pList = [];
   let photoUrlsM = [
@@ -51,24 +55,11 @@ export const mapProductListingDTO = (data) => {
     "https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png",
   ];
   for (const element of data) {
-    // let images = element.images;
-    // if (images.length === 0) {
-    //   console.log("images is empty");
-    // }
-    // let photoUrls = [];
-    // for (let i of images) {
-    //   photoUrls.push(i.fullPath);
-    // }
-
     let hidePickUpFromSeller = false;
     if (element.collectionPointAddressId === null) {
       hidePickUpFromSeller = true;
     }
 
-    // if (photoUrls.length === 0) {
-    //   console.log("photoUrls is empty");
-    //   photoUrls = photoUrlsM;
-    // }
     let sellerM = {};
 
     if (element.seller) {
@@ -84,7 +75,7 @@ export const mapProductListingDTO = (data) => {
     // colors will come from options group values
     // ratingDetail will come from ?
     let bag = {
-      id: element.productId,
+      id: element.productId, // the backend will often refer to this as the product listing id so be careful
       name: element.longName, // see product item 441
       photo: element.photo,
       photoUrls:
@@ -121,6 +112,8 @@ export const mapProductListingDTO = (data) => {
         fiveStar: 309,
       },
       hidePickUpFromSeller: hidePickUpFromSeller,
+      selectedProductVariants: [], // a list of strings that are groupid's
+      selectedProductVariantsValues: [], // a list of strings that are groupid's selected values
     };
     pList.push(bag);
   }

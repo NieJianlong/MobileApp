@@ -17,7 +17,7 @@ import styles from "../styles";
 import { AlertContext } from "../../Root/GlobalContext";
 import * as aQM from "../gql/explore_queries";
 import * as gqlMappers from "../gql/gql_mappers";
-import { userProfileVar } from "../../../Apollo/cache";
+import { userProfileVar, localCartVar } from "../../../Apollo/cache";
 import { getUniqueId } from "react-native-device-info";
 import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
 import { useMutation, useReactiveVar } from "@apollo/client";
@@ -61,6 +61,8 @@ export default function AddLocationSheet() {
       let buyId = await AsyncStorage.getItem(userProfileVar().email);
       setBuyerId(buyId);
     } else {
+      // this is the guest situation and the device id maps to buyer id
+      // should have been set in onboarding
       let buyId = await AsyncStorage.getItem(getUniqueId());
       setBuyerId(buyId);
     }
@@ -145,6 +147,11 @@ export default function AddLocationSheet() {
         addressLine2: gqlMappers.mapGQLAddressToLine2(
           result.data.createAddress
         ),
+      });
+
+      localCartVar({
+        ...localCartVar(),
+        deliverAddress: result.data.createAddress.addressId,
       });
     }
   };

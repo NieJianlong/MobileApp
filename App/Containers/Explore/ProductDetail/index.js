@@ -1,4 +1,4 @@
-import React, { Component, useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   StatusBar,
@@ -14,7 +14,6 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { s, vs } from "react-native-size-matters";
 import Animated from "react-native-reanimated";
-import Collapsible from "react-native-collapsible";
 import Carousel from "react-native-snap-carousel";
 //help identify which component is in display
 import InView from "react-native-component-inview";
@@ -37,7 +36,6 @@ import {
 } from "../../../Components";
 
 import { Images, Colors } from "../../../Themes";
-import AppConfig from "../../../Config/AppConfig";
 import styles from "./styles";
 import NavigationService from "../../../Navigation/NavigationService";
 
@@ -45,6 +43,10 @@ import ProductItem from "../Components/ProductItem";
 import Review from "../Components/Review";
 import ColorOptionItem from "../Components/ColorOptionItem";
 import ShareOptionList from "../Components/ShareOptionList";
+
+/** updates for the cart */
+import { localCartVar } from "../../../Apollo/cache";
+import { useReactiveVar } from "@apollo/client";
 
 const { height } = Dimensions.get("window");
 const Sections = range(0, 4);
@@ -54,21 +56,23 @@ const carouselItemWidth = Dimensions.get("window").width;
 const CustomScrollView = wrapScrollView(ScrollView);
 
 function ProductDetail(props) {
-  const fall = useRef(new Animated.Value(0)).current;
+  /**
+   * updates for state and cart, will be used to add this product to the cart
+   * useReactiveVar => we will get updates from other screens
+   */
+  const localCartVarReactive = useReactiveVar(localCartVar);
 
+  const fall = useRef(new Animated.Value(0)).current;
   //control whether to show the hearder (display and navigation to sections)
   const [showHeaderTabs, setShowHeaderTabs] = useState(false);
   //control whether to show the footer (display price and buy button)
   const [showFooter, setShowFooter] = useState(false);
-  const [showDescription, setShowDescription] = useState(false);
   //hold the section index
   const [tabIndex, setTabIndex] = useState(0);
   //hold the index of the current product's photo
   const [photoIndex, setPhotoIndex] = useState(0);
   //hold the quantity of product
   const [quantity, setQuantity] = useState(1);
-  //hold the price user should pay
-  const [totalPrice, setTotalPrice] = useState(0);
   //hold the index of selected color
   const [colorIndex, setColorIndex] = useState(0);
   //hold the boolean to indicate if this product has been purchased by this user
@@ -152,10 +156,11 @@ function ProductDetail(props) {
   };
 
   useEffect(() => {
-    console.log(`check url ${props.route.params.product.photo}`);
+    // console.log(`check url ${props.route.params.product.photo}`);
     setProductFromProps(props.route.params.product);
     setIsReady(true);
-  }, [props]);
+    console.log(localCartVarReactive);
+  }, [props, localCartVarReactive]);
 
   useEffect(() => {
     if (showPickupFromSellerSheet) {
@@ -358,6 +363,32 @@ function ProductDetail(props) {
     setPhotoIndex(index);
   };
 
+  /**
+   * when we add an item to the cart we need to update the local cart
+   * see App/Apollo/cache.js const localCart
+   *
+   * we should not update until product variants have be added to the
+   * product object
+   */
+  const onAddItemAndNavigateToCart = () => {
+    // we need to add this product to the cart then navigate to the cart
+    console.log(
+      `add to cache then navigate ${JSON.stringify(localCartVarReactive)}`
+    );
+    product.selectedProductVariants.push([
+      { groupId1: "selval 1" },
+      { groupId2: "selval 2" },
+    ]);
+    // get latest cart values
+    let uI = localCartVarReactive.items;
+    // update cart items list
+    uI.push(product);
+    localCartVar({
+      items: uI,
+    });
+    NavigationService.navigate("CartScreen");
+  };
+
   //render product images
   const renderProductImages = () => {
     return (
@@ -379,7 +410,7 @@ function ProductDetail(props) {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => NavigationService.navigate("CartScreen")}
+            onPress={() => onAddItemAndNavigateToCart()}
             style={styles.btnRoundContainer}
           >
             <Image style={styles.btnRoundIcon} source={Images.cartMed} />

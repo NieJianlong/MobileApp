@@ -1,4 +1,4 @@
-import React, { useState, useContext, useReducer } from 'react';
+import React, { useState, useContext, useReducer, useEffect } from "react";
 import {
   StatusBar,
   View,
@@ -7,45 +7,36 @@ import {
   TouchableOpacity,
   Text,
   Image,
-} from 'react-native';
-import Empty from './Empty';
-import AddressBar from './AddressBar';
-import styles from './styles';
-import CartSummary from './CartSummary';
-import CartItem from './Cartitem';
-import { Button } from '../../Components';
-import { s, vs } from 'react-native-size-matters';
-import AppConfig from '../../Config/AppConfig';
-import colors from '../../Themes/Colors';
-import images from '../../Themes/Images';
-import NavigationService from '../../Navigation/NavigationService';
-import { AlertContext } from '../Root/GlobalContext';
-import TextTip from '../../Components/EmptyReminder';
+} from "react-native";
+import Empty from "./Empty";
+import AddressBar from "./AddressBar";
+import styles from "./styles";
+import CartSummary from "./CartSummary";
+import CartItem from "./Cartitem";
+import { Button } from "../../Components";
+import { s, vs } from "react-native-size-matters";
+import AppConfig from "../../Config/AppConfig";
+import colors from "../../Themes/Colors";
+import images from "../../Themes/Images";
+import NavigationService from "../../Navigation/NavigationService";
+import { AlertContext } from "../Root/GlobalContext";
+import TextTip from "../../Components/EmptyReminder";
 
-//Alert Context, which controls the display and hiding of an alert, for example, Add Address Success
+/** updates for local cart Appollo cache */
+import { localCartVar } from "../../Apollo/cache";
+import { useReactiveVar } from "@apollo/client";
+
 export const CartContext = React.createContext({});
-//reducer,useContext+useReducer,It is easy for child components to control parent components
-const initialState = {
-  datas: [0, 1, 2, 3, 4].map((item, index) => ({
-    id: index,
-    name: 'iPhone 11',
-    picture:
-      'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
-    rating: 3.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    orderClose: '22/12/2020',
-    inStock: 100,
-    orderCount: 24,
-    count: 1,
-  })),
-};
+
+/**
+ * cart management temporary updates here just to get somethig working for a dynamic state
+ * wtf means this is  an attempt to get something thast currenty broken to work
+ */
 function reducer(state, action) {
   const datas = state.datas;
 
   switch (action.type) {
-    case 'addCartCount':
+    case "addCartCount":
       return {
         ...state,
         datas: datas.map((item) => {
@@ -55,7 +46,7 @@ function reducer(state, action) {
           return item;
         }),
       };
-    case 'subCartCount':
+    case "subCartCount":
       return {
         ...state,
         datas: datas.map((item) => {
@@ -65,7 +56,7 @@ function reducer(state, action) {
           return item;
         }),
       };
-    case 'revomeCartCount':
+    case "revomeCartCount":
       const index = datas.findIndex((item) => item.id == action.payload);
       datas.splice(index, 1);
       return { ...state, datas };
@@ -75,8 +66,41 @@ function reducer(state, action) {
 }
 function ShoppingCart(props) {
   const [paidDuringDelivery, setPaidDuringDeliver] = useState(false);
-  const [{ datas }, dispatch] = useReducer(reducer, initialState);
+
+  /** updates for local cart Appollo cache
+   * useReactiveVar => we will get updates from other screens
+   */
+  const localCartVarReactive = useReactiveVar(localCartVar);
+
+  // we do this to match the exisitng code
+  const wtfState = { datas: localCartVarReactive.items };
+
+  // I think we need some comments explaing how you intend for these reducers to be used
+  // I am not sure if this is the best approach
+  // swap out hard coded state with data from apollo cache
+  const [{ datas }, dispatch] = useReducer(reducer, wtfState);
   const sheetContext = useContext(AlertContext);
+  // temporay fix original code fails for empty cart
+  const [isReady, setIsReady] = useState(false);
+
+  /**
+   * can be removed later,
+   * currently some parts of code break  depends on cart state
+   * we can debug state here
+   */
+  useEffect(() => {
+    console.log(
+      `ShoppingCart check data in cart ${JSON.stringify(localCartVarReactive)}`
+    );
+    if (!localCartVarReactive.items) {
+      console.log("no data in cart");
+    } else {
+      setIsReady(true);
+    }
+  }, [localCartVarReactive]);
+  /** nasavge thnks we should put the blocks of view code below into functions
+   * to make the code more readable
+   */
   return (
     <CartContext.Provider value={{ dispatch }}>
       <View style={styles.container}>
@@ -87,10 +111,10 @@ function ShoppingCart(props) {
         />
         <SafeAreaView
           style={styles.mainContainer}
-          edges={['top', 'left', 'right']}
+          edges={["top", "left", "right"]}
         >
           <SectionList
-            sections={datas.length > 0 ? [{ title: '', data: datas }] : []}
+            sections={datas.length > 0 ? [{ title: "", data: datas }] : []}
             ListEmptyComponent={() => {
               return <Empty />;
             }}
@@ -99,23 +123,23 @@ function ShoppingCart(props) {
               <View
                 style={{
                   paddingHorizontal: AppConfig.paddingHorizontal,
-                  backgroundColor: 'white',
+                  backgroundColor: "white",
                   height: 80,
                 }}
               >
                 <Button
                   onPress={() => {
-                    NavigationService.navigate('CheckoutNoAuthScreen');
+                    NavigationService.navigate("CheckoutNoAuthScreen");
                   }}
                   text="PROCEED TO CHECKOUT"
-                ></Button>
+                />
               </View>
             )}
             renderSectionFooter={() => (
               <View
                 style={{
                   paddingHorizontal: AppConfig.paddingHorizontal,
-                  backgroundColor: 'white',
+                  backgroundColor: "white",
                   height: 80,
                 }}
               >
@@ -127,15 +151,15 @@ function ShoppingCart(props) {
                       backgroundColor: colors.grey80,
                       width: s(170),
                       height: s(32),
-                      alignItems: 'center',
-                      justifyContent: 'center',
+                      alignItems: "center",
+                      justifyContent: "center",
                       marginTop: -15,
                     }}
                   >
                     <Text
                       style={[
                         styles.heading5Bold,
-                        { color: 'white', textAlign: 'center' },
+                        { color: "white", textAlign: "center" },
                       ]}
                     >
                       PAY DURING DELIVERY
@@ -144,11 +168,11 @@ function ShoppingCart(props) {
                 ) : (
                   <View
                     style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
+                      flexDirection: "row",
+                      justifyContent: "space-between",
                     }}
                   >
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: "row" }}>
                       <Text
                         style={[
                           styles.txtRegular,
@@ -160,20 +184,20 @@ function ShoppingCart(props) {
                       <TouchableOpacity
                         onPress={() => {
                           sheetContext.dispatch({
-                            type: 'changSheetState',
+                            type: "changSheetState",
                             payload: {
                               showSheet: true,
                               height: 300,
                               children: () => {
                                 const data = {
-                                  textTip: 'Paying during delivery',
+                                  textTip: "Paying during delivery",
                                   subTextTip:
-                                    'This is an explanatory text about this feature, lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professo.',
+                                    "This is an explanatory text about this feature, lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professo.",
                                   needButton: true,
-                                  btnMsg: 'OK',
+                                  btnMsg: "OK",
                                   onPress: () => {
                                     sheetContext.dispatch({
-                                      type: 'changSheetState',
+                                      type: "changSheetState",
                                       payload: {
                                         showSheet: false,
                                       },
@@ -220,15 +244,15 @@ function ShoppingCart(props) {
                 <View
                   style={{
                     marginTop: 30,
-                    flexDirection: 'row',
-                    alignItems: 'center',
+                    flexDirection: "row",
+                    alignItems: "center",
                   }}
                 >
                   <Image
                     style={{
                       width: s(28),
                       height: s(28),
-                      resizeMode: 'contain',
+                      resizeMode: "contain",
                       marginRight: s(10),
                     }}
                     source={images.shopcartInfoImage}
@@ -262,7 +286,7 @@ function ShoppingCart(props) {
             stickyHeaderIndices={0}
             ListHeaderComponent={() => {
               return datas.length > 0 ? (
-                <View style={{ backgroundColor: 'white' }}>
+                <View style={{ backgroundColor: "white" }}>
                   <AddressBar />
                   <CartSummary />
                 </View>

@@ -8,6 +8,10 @@ import {
   GET_LISTINGS,
 } from "../App/Apollo/queries/queries_prodmang";
 
+import { FIND_COORDINATES_FOR_ADDRESS_REQUEST } from "../App/Apollo/queries/queries_user";
+
+//
+
 jest.mock("@react-native-community/async-storage", () =>
   require("@react-native-community/async-storage/jest/async-storage-mock")
 );
@@ -20,6 +24,38 @@ jest.mock("@react-native-community/async-storage", () =>
 
 get-graphql-schema  http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8083/graphql > schemaPM.json
  */
+
+//
+// yarn jest -t "test callBackAddressCords pm"
+it("test callBackAddressCords pm", async () => {
+  let ret = await client
+    .query({
+      query: FIND_COORDINATES_FOR_ADDRESS_REQUEST,
+      variables: {
+        address: {
+          pinCode: "768543",
+          provinceState: "UK",
+          townCity: "London",
+          villageArea: "Bucks",
+          houseNumber: "25",
+        },
+      },
+      context: {
+        headers: {
+          isPrivate: false,
+        },
+      },
+    })
+    .then((result) => result)
+    .catch((err) => {
+      console.log("query error " + err);
+      return;
+    });
+
+  if (typeof ret !== "undefined") {
+    console.log(`CoordinateResponse ${JSON.stringify(ret)}`);
+  }
+});
 
 //
 // yarn jest -t "test getListings pm"

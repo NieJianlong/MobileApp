@@ -51,6 +51,7 @@ const allAPIS = {
   UpdateBuyerProfile: USER_PORT,
   DeleteAddress: USER_PORT,
   UpdateAddress: USER_PORT,
+  CoordinatesForAddressRequest: USER_PORT,
 
   //product
   // ActiveProductListingsByStoreId: PRODUCT_PORT,  @Depreciated leave here for now as backend may decise roll back

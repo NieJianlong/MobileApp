@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useContext, useMemo } from "react";
+import React, {
+  useState,
+  useCallback,
+  useContext,
+  useMemo,
+  useEffect,
+} from "react";
 import { FlatList, View, ActivityIndicator, Text } from "react-native";
 import ProductItem from "../ProductItem";
 import { HPageViewHoc } from "react-native-head-tab-view";
@@ -18,7 +24,7 @@ export default function ProductList(props) {
   const { dispatch } = useContext(AlertContext);
   const [page, setPage] = useState(0);
   const [serverData, setServerData] = useState([]);
-  const { isAnnouncement, index } = props;
+  const { isAnnouncement, index, location } = props;
   const [loadingMore, setLoadingMore] = useState(true);
   const [isRereshing, setIsRereshing] = useState(false);
   const [showProductAsRows, setShowProductAsRows] = useState(true);
@@ -37,10 +43,24 @@ export default function ProductList(props) {
       },
     });
   }, [dispatch]);
+
+  // constructor just used to check props are working can remove later
+  // keep until geo cord query is working
+  useEffect(() => {
+    console.log(`ProductList location prop ${JSON.stringify(location)}`);
+  }, [location]);
+
+  /**
+   * significant refactoring required here
+   * for new query
+   *
+   */
+
   let params = {
     storeId: "0b950a80-7836-45b4-9ee3-42042097aafe",
     sortfield: "wholeSalePrice",
   };
+
   switch (props.listType) {
     case "All":
       params = {
@@ -68,7 +88,7 @@ export default function ProductList(props) {
     {
       variables: {
         filter: "ACTIVE_BY_COORDINATES",
-        filterParams: { latitude: 1.5, longitude: 1.5 },
+        filterParams: { latitude: location[0], longitude: location[1] },
         pageNo: 1,
         pageSize: 3,
       },

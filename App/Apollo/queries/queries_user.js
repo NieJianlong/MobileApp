@@ -324,6 +324,27 @@ export const FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
 `;
 
 /**
+ *
+ * coordinatesForAddressRequest(address : AddressRequestToGetCoordinates!) : CoordinateResponse
+ * schema see @query addresses
+ *
+ * AddressRequestToGetCoordinates{ country:String pinCode:String provinceState:String townCity:String
+ *  villageArea:String houseNumber:String flatNumber:String landMark:String streetAddress:String }
+ *
+ * CoordinateResponse{ latitude:Float longitude:Float }
+ */
+export const FIND_COORDINATES_FOR_ADDRESS_REQUEST = gql`
+  query CoordinatesForAddressRequest(
+    $address: AddressRequestToGetCoordinates!
+  ) {
+    coordinatesForAddressRequest(address: $address) {
+      latitude
+      longitude
+    }
+  }
+`;
+
+/**
  *  @query  paymentDetails
  *
  * schema

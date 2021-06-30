@@ -30,7 +30,7 @@ function OnboardingScreen(props) {
    * TO-DO remove use uniquie id only in local storage
    */
   let BuyerProfileRequestForCreate = {
-    guestBuyer: true,
+    // guestBuyer: true,  // removed from backend schema wtf
   };
 
   let [isPlaying, setIsPlaying] = useState(true);

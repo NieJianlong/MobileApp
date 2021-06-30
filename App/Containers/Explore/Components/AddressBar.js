@@ -29,6 +29,12 @@ export default function AddressBar() {
     userProfileVarReactive.isAuth,
   ]);
 
+  /**
+   * we need to add comments for stuff like this
+   * there is a heirachy here thats not at all obvious
+   * AddressSheetContent -> AddLocationSheetContent
+   * comment should be like state updates see @AddLocationSheetContent
+   */
   const toggleAddressSheet = useCallback(() => {
     dispatch({
       type: "changSheetState",
@@ -117,11 +123,11 @@ export default function AddressBar() {
       onCompleted: (result) => {
         if (result) {
           // debug only
-          // console.log(
-          //   `AddressBar fetchAddressData Guest/Buyer look up addressId ${JSON.stringify(
-          //     result.data
-          //   )}`
-          // );
+          console.log(
+            `AddressBar fetchAddressData Guest/Buyer look up addressId ${JSON.stringify(
+              result.data
+            )}`
+          );
           setAddressResult(
             isAuth
               ? result.getBuyerDefaultAddressByBuyerId
@@ -135,16 +141,6 @@ export default function AddressBar() {
       },
     }
   );
-
-  /**
-   * we wil only toggle toggleAddressSheet if the default address does not exist
-   * for buyeror guest
-   * to do remove
-   *
-   */
-  // useEffect(() => {
-  //   toggleAddressSheet();
-  // }, [toggleAddressSheet]);
 
   useEffect(() => {
     fetchAddress();

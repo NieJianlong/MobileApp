@@ -74,22 +74,37 @@ function Explore(props) {
    * ie no initial address, guest, registered ect ....
    */
   const [runGeoQuery] = useLazyQuery(aQM.FIND_COORDINATES_FOR_ADDRESS_REQUEST, {
-    variables: localCartVarReactive.callBackAddress, // need to add some structure here  address:{vars...}
+    variables: { address: localCartVarReactive.callBackAddress }, // need to add some structure here  address:{vars...}
     context: {
       headers: {
-        isPrivate: true,
+        isPrivate: false,
       },
     },
     onCompleted: (res) => {
+      console.log(`Explore runGeoQuery onCompleted ${JSON.stringify(res)}`);
+      // data has shape below
+      // {"data":{"coordinatesForAddressRequest":{ latitude":51.50735,"longitude":-0.1277583}} }
       // just guessing for now until we can test the query
-      const { latitude, longitude } = res;
+      const {
+        coordinatesForAddressRequest: { latitude, longitude },
+      } = res;
+
+      console.log(
+        `Explore runGeoQuery debug lat long ${latitude}  ${longitude}`
+      );
       // put lattitude and longiue into state and pass thru as props
       //location.push(latitude, longitude);
       // for forseable future will need these values so backend can cope
       location.push(1.5, 1.5);
+      setLocation(location);
       setIsReady(true);
     },
-    onError: (res) => {},
+    onError: (res) => {
+      console.log(`Explore runGeoQuery onError ${JSON.stringify(res)}`);
+      location.push(1.5, 1.5);
+      setLocation(location);
+      setIsReady(true);
+    },
   });
 
   useEffect(() => {
@@ -102,13 +117,14 @@ function Explore(props) {
     if (JSON.stringify(localCartVarReactive.callBackAddress) === "{}") {
       console.log("no address in cart");
     } else {
+      console.log("run geoquery");
       // will  run the get geo co-ordinates now
-      // runGeoQuery();  currently this is broken on the backend
+      runGeoQuery(); // currently works on the backend
       // for forseable future will need these values so backend can cope
-      location.push(1.5, 1.5);
-      setIsReady(true);
+      // location.push(1.5, 1.5);
+      // setIsReady(true);
     }
-  }, [localCartVarReactive, location]);
+  }, [localCartVarReactive, runGeoQuery]);
 
   /**
    *  design  updates see below  {isReady && (

@@ -32,6 +32,7 @@ const localCart = {
   items: [], // will be the extended product object list in localCart reactive var
   buyerId: "", // can be the guest buyer id
   deliverAddress: "", // update this on lookUpDefault address, when an address is updated. cart should be cleared
+  callBackAddress: {}, // when address query  calls back add here, use for store co-ordinates ect ..., use gql mapper for now
 };
 
 export const userProfileVar = makeVar(userProfile);

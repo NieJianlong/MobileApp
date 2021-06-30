@@ -62,10 +62,11 @@ export default function AddressBar() {
         addressLine1: aL1,
         addressLine2: aL2,
       });
-
+      // callBackAddress used for gql query to get geo co-ords see useEffect Explore
       localCartVar({
         ...localCartVar(),
         deliverAddress: addressResult.addressId,
+        callBackAddress: gqlMappers.mapGQLAddressResponseToCache(addressResult),
       });
       setAddrLine1(aL1);
       setAddrLine2(aL2);

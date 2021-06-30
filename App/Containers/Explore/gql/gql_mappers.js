@@ -158,3 +158,32 @@ export const mapGQLAddressToLine2 = (data) => {
 
   return address;
 };
+
+/**
+ * possible comining in
+ * AddressResponse {addressId:ID flat:String floor:String defaultAddress:Boolean block:String
+ * building:String houseNumber:String streetAddress1:String streetAddress2:String streetAddress3:String
+ * townCity:String villageArea:String district:String provinceState:String country:String areaCode:String
+ * landMark:String pinCode:String addressType:AddressType referenceId:ID  }
+ *
+ * going out
+ * { country:String pinCode:String provinceState:String townCity:String
+ *  villageArea:String houseNumber:String flatNumber:String landMark:String streetAddress:String }
+ *
+ * for now we assume adress willuse the following shape
+ * { pinCode provinceState townCity flat villageArea houseNumber landMark }
+ *
+ */
+export const mapGQLAddressResponseToCache = (data) => {
+  let addressForCache = {
+    pinCode: data.pinCode,
+    provinceState: data.provinceState,
+    townCity: data.townCity,
+    flat: data.flat,
+    villageArea: data.villageArea,
+    houseNumber: data.houseNumber,
+    landMark: data.landMark,
+  };
+
+  return addressForCache;
+};

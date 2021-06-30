@@ -16,6 +16,12 @@ import fonts from "../../Themes/Fonts";
 import NavigationService from "../../Navigation/NavigationService";
 import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimensions";
 
+/** updates for new queries get co-ordintaes delivery address */
+/** updates for the cart */
+import { localCartVar } from "../../Apollo/cache";
+import { useReactiveVar, useLazyQuery } from "@apollo/client";
+import * as aQM from "./gql/explore_queries";
+
 function Explore(props) {
   const ref = useRef();
   const screenWidth = useWindowDimensions().width;
@@ -44,6 +50,74 @@ function Explore(props) {
     }
   }, [showAccountActivatedSuccessfullyAlert]);
 
+  /** updates for local cart Appollo cache
+   * useReactiveVar => we will get updates from other screens
+   */
+  const localCartVarReactive = useReactiveVar(localCartVar);
+
+  // temporay fix original code for empty address and new requirments
+  // imposed by backend and VK, diverges from original design
+  // only call products data when ready, ie have geo co-ords
+  const [isReady, setIsReady] = useState(false);
+  /** temp solution adding location as a prop
+   * below see <ProductList
+   * there are many ways wecould do this but we should not
+   * call out for the product data until we have the location(co-ords)
+   *
+   */
+  const [location, setLocation] = useState([]);
+
+  /**
+   * this will be the query we will run on load to get the adrress co-ords
+   * for the delivery address
+   * this will be complicated as there are many ways this can happen
+   * ie no initial address, guest, registered ect ....
+   */
+  const [runGeoQuery] = useLazyQuery(aQM.FIND_COORDINATES_FOR_ADDRESS_REQUEST, {
+    variables: localCartVarReactive.callBackAddress, // need to add some structure here  address:{vars...}
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {
+      // just guessing for now until we can test the query
+      const { latitude, longitude } = res;
+      // put lattitude and longiue into state and pass thru as props
+      //location.push(latitude, longitude);
+      // for forseable future will need these values so backend can cope
+      location.push(1.5, 1.5);
+      setIsReady(true);
+    },
+    onError: (res) => {},
+  });
+
+  useEffect(() => {
+    console.log(
+      `Explore check for address in cart ${JSON.stringify(
+        localCartVarReactive
+      )}`
+    );
+    // weird I know testing for empty object, is more perfomant this way
+    if (JSON.stringify(localCartVarReactive.callBackAddress) === "{}") {
+      console.log("no address in cart");
+    } else {
+      // will  run the get geo co-ordinates now
+      // runGeoQuery();  currently this is broken on the backend
+      // for forseable future will need these values so backend can cope
+      location.push(1.5, 1.5);
+      setIsReady(true);
+    }
+  }, [localCartVarReactive, location]);
+
+  /**
+   *  design  updates see below  {isReady && (
+   *  <ProductList
+   *  we need to only call for the product data when we have the geo-cords
+   *  see isReady location runGeoQuery
+   *  temp soln can be updated to something better later
+   *
+   */
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
@@ -110,43 +184,58 @@ function Explore(props) {
             }}
             renderScrollHeader={() => <ExploreHeader />}
           >
-            <ProductList
-              listType="All"
-              index={0}
-              tabLabel="All"
-              canGoNext={canGoNext}
-              callBack={ableGoNext}
-            />
-            <ProductList
-              listType="Announcements"
-              index={1}
-              tabLabel="Announcements"
-              isAnnouncement={true}
-              canGoNext={canGoNext}
-              callBack={ableGoNext}
-            />
-            <ProductList
-              listType="Electronics"
-              index={2}
-              tabLabel="Electronics"
-              canGoNext={canGoNext}
-              callBack={ableGoNext}
-            />
-            <ProductList
-              listType="Food"
-              index={3}
-              tabLabel="Food & Beverage"
-              canGoNext={canGoNext}
-              callBack={ableGoNext}
-            />
-            <ProductList
-              listType="Fashion"
-              index={4}
-              goFirst={goFirst}
-              tabLabel="Fashion"
-              canGoNext={canGoNext}
-              callBack={ableGoNext}
-            />
+            {isReady && (
+              <ProductList
+                listType="All"
+                location={location}
+                index={0}
+                tabLabel="All"
+                canGoNext={canGoNext}
+                callBack={ableGoNext}
+              />
+            )}
+            {isReady && (
+              <ProductList
+                listType="Announcements"
+                location={location}
+                index={1}
+                tabLabel="Announcements"
+                isAnnouncement={true}
+                canGoNext={canGoNext}
+                callBack={ableGoNext}
+              />
+            )}
+            {isReady && (
+              <ProductList
+                listType="Electronics"
+                location={location}
+                index={2}
+                tabLabel="Electronics"
+                canGoNext={canGoNext}
+                callBack={ableGoNext}
+              />
+            )}
+            {isReady && (
+              <ProductList
+                listType="Food"
+                location={location}
+                index={3}
+                tabLabel="Food & Beverage"
+                canGoNext={canGoNext}
+                callBack={ableGoNext}
+              />
+            )}
+            {isReady && (
+              <ProductList
+                listType="Fashion"
+                location={location}
+                index={4}
+                goFirst={goFirst}
+                tabLabel="Fashion"
+                canGoNext={canGoNext}
+                callBack={ableGoNext}
+              />
+            )}
           </CollapsibleHeaderTabView>
         </View>
       </SafeAreaView>

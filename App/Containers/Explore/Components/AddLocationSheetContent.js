@@ -148,10 +148,13 @@ export default function AddLocationSheet() {
           result.data.createAddress
         ),
       });
-
+      // added callback address, we need this one in appollo cache
       localCartVar({
         ...localCartVar(),
         deliverAddress: result.data.createAddress.addressId,
+        callBackAddress: gqlMappers.mapGQLAddressResponseToCache(
+          result.data.createAddress
+        ),
       });
     }
   };

@@ -179,7 +179,7 @@ export const mapGQLAddressResponseToCache = (data) => {
     pinCode: data.pinCode,
     provinceState: data.provinceState,
     townCity: data.townCity,
-    flat: data.flat,
+    flatNumber: data.flat, // another pointless change of variabe names on the backend
     villageArea: data.villageArea,
     houseNumber: data.houseNumber,
     landMark: data.landMark,

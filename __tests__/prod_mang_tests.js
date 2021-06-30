@@ -33,11 +33,11 @@ it("test callBackAddressCords pm", async () => {
       query: FIND_COORDINATES_FOR_ADDRESS_REQUEST,
       variables: {
         address: {
-          pinCode: "768543",
-          provinceState: "UK",
-          townCity: "London",
-          villageArea: "Bucks",
-          houseNumber: "25",
+          pinCode: "985674",
+          provinceState: "Foolis Place",
+          townCity: "Foolis Place",
+          villageArea: "Foolis Place",
+          flatNumber: "25",
         },
       },
       context: {

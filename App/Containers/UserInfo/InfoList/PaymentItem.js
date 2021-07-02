@@ -18,7 +18,6 @@ export default function PaymentItem({
   setDefault,
   refetch,
 }) {
-  debugger;
   const [deletePayment, { error, data }] = useMutation(DELETE_PAYMENT_DETAIL, {
     variables: { paymentDetailId: item.paymentDetailId },
     context: {
@@ -40,9 +39,7 @@ export default function PaymentItem({
         });
       }
     },
-    onError: (res) => {
-      debugger;
-    },
+    onError: (res) => {},
   });
   const tips = useMemo(
     () => ({

@@ -24,7 +24,7 @@ import { useFocusEffect, useIsFocused } from "@react-navigation/native";
  * @param {*} showSheet Display the Acction Sheet for the home page
  * @return {*}
  */
-export default function PaymentList({ dispatch }) {
+export default function PaymentList({ dispatch, xIndex }) {
   const { loading, error, refetch, data } = useQuery(PAYMENT_METHODS_BY_ID, {
     variables: { buyerId: global.buyerId },
     context: {
@@ -32,14 +32,11 @@ export default function PaymentList({ dispatch }) {
         isPrivate: true,
       },
     },
-    onCompleted: (res) => {
-      debugger;
-    },
+    onCompleted: (res) => {},
     onError: (res) => {},
   });
 
   const refreshData = useCallback(() => {
-    debugger;
     refetch();
   }, [refetch]);
   useFocusEffect(refreshData);
@@ -49,6 +46,11 @@ export default function PaymentList({ dispatch }) {
       payload: false,
     });
   }, [dispatch]);
+  useEffect(() => {
+    if (xIndex === 0) {
+      refreshData();
+    }
+  }, [refreshData, xIndex]);
   return (
     <View style={{ flex: 1 }}>
       <FlatList

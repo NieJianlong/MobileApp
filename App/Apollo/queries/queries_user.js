@@ -126,7 +126,38 @@ export const BUYER_PROFILE_BY_USERID = gql`
 export const FIND_ONE_CLICK_BUY = gql`
   query OneClickBuy($buyerId: ID!) {
     oneClickBuy(buyerId: $buyerId) {
-      defaultAddress
+      defaultAddress {
+        addressId
+        flat
+        floor
+        defaultAddress
+        block
+        building
+        houseNumber
+        streetAddress1
+        streetAddress2
+        streetAddress3
+        townCity
+        villageArea
+        district
+        provinceState
+        country
+        areaCode
+        landMark
+        pinCode
+        addressType
+        referenceId
+        createdAt
+        updatedAt
+      }
+      defaultPaymentMethod {
+        paymentDetailId
+        buyerId
+        paymentType
+        isDefaultPaymentType
+        createdAt
+        updatedAt
+      }
     }
   }
 `;

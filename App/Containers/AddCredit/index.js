@@ -7,6 +7,8 @@ import { ApplicationStyles } from "../../Themes";
 import styles from "./styles";
 import colors from "../../Themes/Colors";
 import { useRoute } from "@react-navigation/native";
+import { useMutation } from "@apollo/client";
+import { CREATE_PAYMENT_DETAIL } from "../../Apollo/mutations/mutations_user";
 
 function AddCredit(props) {
   const [name, setName] = useState("");
@@ -14,6 +16,34 @@ function AddCredit(props) {
   const [date, setDate] = useState("");
   const [cvv, setCvv] = useState("");
   const [disable, setDisable] = useState(true);
+  const [isDefaultPaymentType, setIsDefaultPaymentType] = useState(false);
+  /**
+   * buyerId:ID!
+    paymentType:PaymentType
+    isDefaultPaymentType:Boolean
+   */
+  const [addPayMent] = useMutation(CREATE_PAYMENT_DETAIL, {
+    variables: {
+      request: {
+        buyerId: global.buyerId,
+        paymentType: "CREDIT_CARD",
+        isDefaultPaymentType: isDefaultPaymentType,
+      },
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {
+      params.callback({
+        name,
+        cardNum,
+        date,
+        cvv,
+      });
+    },
+  });
   useEffect(() => {
     if (
       name.length === 0 ||
@@ -91,13 +121,7 @@ function AddCredit(props) {
               title="SAVE"
               disable={disable}
               onPress={() => {
-                params.callback({
-                  name,
-                  cardNum,
-                  date,
-                  cvv,
-                });
-                // NavigationService.goBack();
+                addPayMent();
               }}
             />
           )}
@@ -126,7 +150,9 @@ function AddCredit(props) {
           </View>
           <View style={{ marginTop: 20 }}>
             <Switch
-              onSwitch={() => {}}
+              onSwitch={(value) => {
+                setIsDefaultPaymentType(value);
+              }}
               label="Set as default payment method"
             ></Switch>
           </View>

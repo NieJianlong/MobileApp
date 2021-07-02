@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { View, StatusBar, Text, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { vs } from 'react-native-size-matters';
-import { AppBar, TextInput, Switch, RightButton } from '../../Components';
-import { ApplicationStyles } from '../../Themes';
-import styles from './styles';
-import colors from '../../Themes/Colors';
-import { useRoute } from '@react-navigation/native';
+import React, { useState, useEffect } from "react";
+import { View, StatusBar, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { vs } from "react-native-size-matters";
+import { AppBar, TextInput, Switch, RightButton } from "../../Components";
+import { ApplicationStyles } from "../../Themes";
+import styles from "./styles";
+import colors from "../../Themes/Colors";
+import { useRoute } from "@react-navigation/native";
 
 function AddCredit(props) {
-  const [name, setName] = useState('');
-  const [cardNum, setCardNum] = useState('');
-  const [date, setDate] = useState('');
-  const [cvv, setCvv] = useState('');
+  const [name, setName] = useState("");
+  const [cardNum, setCardNum] = useState("");
+  const [date, setDate] = useState("");
+  const [cvv, setCvv] = useState("");
   const [disable, setDisable] = useState(true);
   useEffect(() => {
     if (
@@ -29,27 +29,27 @@ function AddCredit(props) {
 
   const inputs = [
     {
-      placeholder: 'Type your name on the card',
+      placeholder: "Type your name on the card",
       onChangeText: (text) => setName(text),
       showError: false,
       errorMessage: null,
-      keyboardType: 'default',
-      weight: '12',
+      keyboardType: "default",
+      weight: "12",
     },
     {
-      placeholder: '000000000000000',
+      placeholder: "000000000000000",
       onChangeText: (text) => setCardNum(text),
       showError: false,
       errorMessage: null,
-      keyboardType: 'decimal-pad',
-      weight: '12',
+      keyboardType: "decimal-pad",
+      weight: "12",
     },
     {
-      placeholder: 'MM/YY',
+      placeholder: "MM/YY",
       onChangeText: (text) => {
         if (text.length <= 5) {
           if (text.length === 2) {
-            text = text + '/';
+            text = text + "/";
             setDate(text);
           } else {
             setDate(text);
@@ -59,11 +59,11 @@ function AddCredit(props) {
       showError: false,
       errorMessage: null,
       value: date,
-      keyboardType: 'decimal-pad',
-      weight: '7',
+      keyboardType: "decimal-pad",
+      weight: "7",
     },
     {
-      placeholder: 'CVV',
+      placeholder: "CVV",
       onChangeText: (text) => {
         if (text.length <= 3) {
           setCvv(text);
@@ -72,8 +72,8 @@ function AddCredit(props) {
       showError: false,
       errorMessage: null,
       value: cvv,
-      keyboardType: 'decimal-pad',
-      weight: '4.5',
+      keyboardType: "decimal-pad",
+      weight: "4.5",
     },
   ];
 
@@ -83,7 +83,7 @@ function AddCredit(props) {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar
           rightButton={() => (
@@ -106,9 +106,9 @@ function AddCredit(props) {
           <Text style={styles.heading2Bold}>Add your credit card details</Text>
           <View
             style={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              justifyContent: 'space-between',
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
             }}
           >
             {inputs.map((item, index) => {

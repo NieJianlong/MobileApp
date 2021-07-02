@@ -70,7 +70,7 @@ export default function AddressItem({ item, refetch }) {
     <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
       <View style={[styles.item]}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Text style={styles.itemTitle}>need a name</Text>
+          <Text style={styles.itemTitle}>{item.streetAddress1}</Text>
           {item.defaultAddress && (
             <Image style={styles.icon} source={images.check} />
           )}

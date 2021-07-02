@@ -80,11 +80,8 @@ function UserEditProfile(props) {
   ];
   let BuyerProfileRequest = {
     buyerId: global.buyerId,
-    userName: "updatedUserName",
     firstName: "updatedfirstName",
     lastName: "updatedlastName",
-    userType: "BUYER",
-    guestBuyer: false,
   };
   console.log(BuyerProfileRequest);
   const [updateProfile, { data }] = useMutation(UPDATE_BUYER_PROFILE, {
@@ -95,6 +92,12 @@ function UserEditProfile(props) {
       headers: {
         isPrivate: true,
       },
+    },
+    onCompleted: (res) => {
+      debugger;
+    },
+    onError: (res) => {
+      debugger;
     },
   });
   const sheetRef = useRef();

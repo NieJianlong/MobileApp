@@ -1,18 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ScaledSheet, vs } from "react-native-size-matters";
 import { Button, Switch } from "../../../Components";
 import AppConfig from "../../../Config/AppConfig";
-import { View, FlatList, Text, Image, SafeAreaView } from "react-native";
+import {
+  View,
+  FlatList,
+  Text,
+  Image,
+  SafeAreaView,
+  Dimensions,
+} from "react-native";
 import TextTip from "../../../Components/EmptyReminder";
 import NavigationService from "../../../Navigation/NavigationService";
 import PaymentItem from "./PaymentItem";
+import AddressItem from "./AddressItem";
 import { Fonts } from "../../../Themes";
 import colors from "../../../Themes/Colors";
 import metrics from "../../../Themes/Metrics";
 import images from "../../../Themes/Images";
 import ListItem from "../ListItem";
 import { useQuery } from "@apollo/client";
-import { FIND_ONE_CLICK_BUY } from "../../../Apollo/queries/queries_user";
+import {
+  FIND_BUYER_ADDRESS_BY_ID,
+  FIND_ONE_CLICK_BUY,
+  PAYMENT_METHODS_BY_ID,
+} from "../../../Apollo/queries/queries_user";
+import { useFocusEffect } from "@react-navigation/core";
 
 const items = [
   {
@@ -40,12 +53,22 @@ const items = [
  * @param {*} showSheet Display the Acction Sheet for the home page
  * @return {*}
  */
-export default function OnePurchaseList({ dispatch }) {
+export default function OnePurchaseList({ dispatch, xIndex }) {
   const tip = "You haven't added a default \n purchase preference yet";
   const subTip =
     "Select a default address and payment method to \n activate 1 click purchasing";
-  const [payments, setPayments] = useState([]);
-  const { loading, error, data } = useQuery(FIND_ONE_CLICK_BUY, {
+  const { data: addresses } = useQuery(FIND_BUYER_ADDRESS_BY_ID, {
+    variables: {
+      buyerId: global.buyerId,
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+  });
+
+  const { data: payments } = useQuery(PAYMENT_METHODS_BY_ID, {
     variables: { buyerId: global.buyerId },
     context: {
       headers: {
@@ -55,37 +78,72 @@ export default function OnePurchaseList({ dispatch }) {
     onCompleted: (res) => {},
     onError: (res) => {},
   });
+
+  const { loading, error, refetch, data } = useQuery(FIND_ONE_CLICK_BUY, {
+    variables: { buyerId: global.buyerId },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {
+      console.log(res);
+    },
+    onError: (res) => {
+      console.log(res);
+    },
+  });
+  const refreshData = useCallback(() => {
+    refetch();
+  }, [refetch]);
+  useFocusEffect(refreshData);
   useEffect(() => {
     dispatch({
       type: "rightButtonShow",
       payload: false,
     });
   }, [dispatch]);
+  useEffect(() => {
+    if (xIndex === 0) {
+      refreshData();
+    }
+  }, [refreshData, xIndex]);
   return (
-    <View style={{ flex: 1 }}>
-      <FlatList
-        data={payments}
-        ListFooterComponent={() => {
-          return (
-            payments.length > 0 && (
-              <View
-                style={{
-                  paddingHorizontal: AppConfig.paddingHorizontal,
-                  marginBottom: vs(20),
-                  marginTop: vs(20),
+    <View
+      style={{ flex: 1 }}
+      onLayout={() => {
+        debugger;
+      }}
+    >
+      {data?.oneClickBuy.defaultAddress.addressId &&
+        data?.oneClickBuy.defaultPaymentMethod.paymentDetailId && (
+          <View>
+            <PaymentItem
+              item={data?.oneClickBuy.defaultPaymentMethod}
+              refetch={refetch}
+            />
+            <AddressItem
+              item={data?.oneClickBuy.defaultAddress}
+              refetch={refetch}
+            />
+            <View
+              style={{
+                paddingHorizontal: AppConfig.paddingHorizontal,
+                marginBottom: vs(20),
+                marginTop: vs(20),
+              }}
+            >
+              <Button
+                text="EDIT 1 CLICK PURCHASING PREFERENCES"
+                onPress={() => {
+                  NavigationService.navigate("OneClickPurchaseScreen");
                 }}
-              >
-                <Button
-                  text="EDIT 1 CLICK PURCHASING PREFERENCES"
-                  onPress={() => {
-                    NavigationService.navigate("OneClickPurchaseScreen");
-                  }}
-                />
-              </View>
-            )
-          );
-        }}
-        ListEmptyComponent={
+              />
+            </View>
+          </View>
+        )}
+      {!data?.oneClickBuy.defaultAddress.addressId &&
+        !data?.oneClickBuy.defaultPaymentMethod.paymentDetailId && (
           <TextTip
             textTip={tip}
             subTextTip={subTip}
@@ -95,12 +153,51 @@ export default function OnePurchaseList({ dispatch }) {
               NavigationService.navigate("OneClickPurchaseScreen");
             }}
           />
-        }
-        renderItem={({ item }) => {
-          return <PaymentItem item={item} />;
-        }}
-        keyExtractor={(item, index) => `listItem${index}`}
-      />
+        )}
+      {data?.oneClickBuy.defaultAddress.addressId &&
+        !data?.oneClickBuy.defaultPaymentMethod.paymentDetailId && (
+          <View>
+            <AddressItem
+              item={data?.oneClickBuy.defaultAddress}
+              refetch={refetch}
+            />
+            <View
+              style={{
+                paddingHorizontal: AppConfig.paddingHorizontal,
+                marginTop: 20,
+              }}
+            >
+              <Button onPress={() => {}} text="ADD DEFAULT PAYMENT METHOD" />
+            </View>
+          </View>
+        )}
+      {!data?.oneClickBuy.defaultAddress.addressId &&
+        data?.oneClickBuy.defaultPaymentMethod.paymentDetailId && (
+          <View>
+            <PaymentItem
+              item={data?.oneClickBuy.defaultPaymentMethod}
+              refetch={refetch}
+            />
+            <View
+              style={{
+                paddingHorizontal: AppConfig.paddingHorizontal,
+                marginTop: 20,
+              }}
+            >
+              <Button
+                onPress={() => {
+                  addresses?.getBuyerAddressesById.length > 0
+                    ? NavigationService.navigate("SelectDeliveryAddressScreen")
+                    : NavigationService.navigate("AddNewAddressScreen", {
+                        title: "Add new address",
+                      });
+                }}
+                text="ADD DEFAULT ADDRESS"
+              />
+            </View>
+          </View>
+        )}
+
       <SafeAreaView style={styles.bottomlist}>
         {items.map((item, index) => {
           return <ListItem key={`listitem` + index} {...item} />;

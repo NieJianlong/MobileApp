@@ -18,7 +18,7 @@ import { useFocusEffect } from "@react-navigation/core";
  * @param {*} showSheet Display the Acction Sheet for the home page
  * @return {*}
  */
-export default function AddressList({ dispatch }) {
+export default function AddressList({ dispatch, xIndex }) {
   const { loading, error, data, refetch } = useQuery(FIND_BUYER_ADDRESS_BY_ID, {
     variables: {
       buyerId: global.buyerId,
@@ -39,6 +39,11 @@ export default function AddressList({ dispatch }) {
       payload: false,
     });
   }, [dispatch]);
+  useEffect(() => {
+    if (xIndex === 0) {
+      refreshData();
+    }
+  }, [refreshData, xIndex]);
   return (
     <View style={{ flex: 1 }}>
       <FlatList

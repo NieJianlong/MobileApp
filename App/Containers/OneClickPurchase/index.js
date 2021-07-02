@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   StatusBar,
@@ -6,20 +6,20 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScaledSheet, s, vs } from 'react-native-size-matters';
-import { AppBar, Button, RightButton } from '../../Components';
-import styles from './styles';
-import NavigationService from '../../Navigation/NavigationService';
-import colors from '../../Themes/Colors';
-import images from '../../Themes/Images';
-import AppConfig from '../../Config/AppConfig';
-import metrics from '../../Themes/Metrics';
-import fonts from '../../Themes/Fonts';
-import { PaymentTestData } from '../UserInfo/Config';
-import { ApplicationStyles } from '../../Themes';
-import { useRoute } from '@react-navigation/native';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScaledSheet, s, vs } from "react-native-size-matters";
+import { AppBar, Button, RightButton } from "../../Components";
+import styles from "./styles";
+import NavigationService from "../../Navigation/NavigationService";
+import colors from "../../Themes/Colors";
+import images from "../../Themes/Images";
+import AppConfig from "../../Config/AppConfig";
+import metrics from "../../Themes/Metrics";
+import fonts from "../../Themes/Fonts";
+import { PaymentTestData } from "../UserInfo/Config";
+import { ApplicationStyles } from "../../Themes";
+import { useRoute } from "@react-navigation/native";
 /**
  * @description: 1 Click purchase Screen
  * @param {*} props
@@ -33,7 +33,7 @@ function OneClickPurchase(props) {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar
           rightButton={() => (
@@ -41,7 +41,7 @@ function OneClickPurchase(props) {
               title="SAVE"
               onPress={() => {
                 NavigationService.navigate(
-                  'SelectDeliveryAddressScreen',
+                  "SelectDeliveryAddressScreen",
                   params
                 );
               }}
@@ -83,7 +83,7 @@ function OneClickPurchase(props) {
                     ]}
                   >
                     <View
-                      style={{ flexDirection: 'row', alignItems: 'center' }}
+                      style={{ flexDirection: "row", alignItems: "center" }}
                     >
                       <Image
                         style={styles1.paytypeIcon}
@@ -115,7 +115,7 @@ function OneClickPurchase(props) {
                         </TouchableOpacity>
                       )}
 
-                      <View style={{ flexDirection: 'row' }}>
+                      <View style={{ flexDirection: "row" }}>
                         <TouchableOpacity
                           onPress={(item) => {
                             // showSheet();
@@ -137,7 +137,7 @@ function OneClickPurchase(props) {
         </View>
         <SafeAreaView
           style={{
-            position: 'absolute',
+            position: "absolute",
             bottom: 10,
             right: 0,
             left: 0,
@@ -146,7 +146,7 @@ function OneClickPurchase(props) {
         >
           <Button
             onPress={(callback) => {
-              NavigationService.navigate('AddPaymentMethodScreen', {
+              NavigationService.navigate("AddPaymentMethodScreen", {
                 callback,
               });
             }}
@@ -163,42 +163,42 @@ function OneClickPurchase(props) {
 export default OneClickPurchase;
 const styles1 = ScaledSheet.create({
   itemBottom: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   itemTipsContainer: {
-    marginTop: '5@vs',
+    marginTop: "5@vs",
     backgroundColor: colors.secondary01,
-    borderRadius: '12@s',
-    paddingHorizontal: '10@s',
+    borderRadius: "12@s",
+    paddingHorizontal: "10@s",
   },
   setDefaultText: {
     fontFamily: fonts.primary,
-    fontSize: '16@s',
-    fontWeight: '600',
+    fontSize: "16@s",
+    fontWeight: "600",
     color: colors.secondary00,
   },
   itemSetDefault: {
-    marginTop: '12@vs',
+    marginTop: "12@vs",
 
-    height: '24@vs',
-    borderRadius: '12@s',
+    height: "24@vs",
+    borderRadius: "12@s",
   },
   itemTips: {
-    fontSize: '12@s',
+    fontSize: "12@s",
     fontFamily: fonts.primary,
     color: colors.secondary00,
-    fontWeight: '400',
+    fontWeight: "400",
 
-    backgroundColor: 'transparent',
-    textAlign: 'center',
+    backgroundColor: "transparent",
+    textAlign: "center",
   },
   credit: {
-    width: '100%',
-    maxHeight: '80@vs',
-    resizeMode: 'contain',
-    marginVertical: '25@vs',
+    width: "100%",
+    maxHeight: "80@vs",
+    resizeMode: "contain",
+    marginVertical: "25@vs",
   },
   container: {
     backgroundColor: colors.background,
@@ -206,46 +206,46 @@ const styles1 = ScaledSheet.create({
   },
 
   itemTitle: {
-    fontSize: '14@s',
+    fontSize: "14@s",
     fontFamily: fonts.primary,
     color: colors.black,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   itemSubTitle: {
-    fontSize: '14@s',
+    fontSize: "14@s",
     fontFamily: fonts.primary,
     color: colors.grey80,
   },
   paytypeIcon: {
-    width: '26@s',
-    height: '26@s',
-    resizeMode: 'contain',
+    width: "26@s",
+    height: "26@s",
+    resizeMode: "contain",
   },
   icon: {
-    width: '20@s',
-    height: '20@s',
-    marginLeft: '12@s',
-    resizeMode: 'contain',
+    width: "20@s",
+    height: "20@s",
+    marginLeft: "12@s",
+    resizeMode: "contain",
   },
   editImage: {
-    width: '24@s',
-    height: '24@s',
-    marginLeft: '12@s',
-    resizeMode: 'contain',
+    width: "24@s",
+    height: "24@s",
+    marginLeft: "12@s",
+    resizeMode: "contain",
   },
   container: {
     flex: 1,
   },
   headerText: {
-    color: 'white',
+    color: "white",
   },
   item: {
-    marginTop: '15@vs',
+    marginTop: "15@vs",
     backgroundColor: colors.white,
-    borderRadius: '16@s',
-    height: '122@vs',
+    borderRadius: "16@s",
+    height: "122@vs",
     paddingHorizontal: AppConfig.paddingHorizontal,
-    justifyContent: 'center',
-    borderColor: '#409AEF',
+    justifyContent: "center",
+    borderColor: "#409AEF",
   },
 });

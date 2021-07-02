@@ -232,9 +232,7 @@ function AddBillingDetails(props) {
       });
       NavigationService.goBack();
     },
-    onError: (res) => {
-      debugger;
-    },
+    onError: (res) => {},
   });
   useEffect(() => {
     if (addressId) {
@@ -248,9 +246,7 @@ function AddBillingDetails(props) {
     onCompleted: (res) => {
       setAddressId(res.createAddress.addressId);
     },
-    onError: (res) => {
-      debugger;
-    },
+    onError: (res) => {},
   });
 
   return (

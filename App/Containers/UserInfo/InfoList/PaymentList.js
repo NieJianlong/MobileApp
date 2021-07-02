@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { vs } from "react-native-size-matters";
 import { Button, Switch } from "../../../Components";
 import AppConfig from "../../../Config/AppConfig";
@@ -15,6 +15,7 @@ import {
   PAYMENT_DETAILS,
   PAYMENT_METHODS_BY_ID,
 } from "../../../Apollo/queries/queries_user";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 /**
  * @description:Display my address, list of my payment methods, display bill detail
  * @param {*} item Menu Item with a special configuration
@@ -24,22 +25,24 @@ import {
  * @return {*}
  */
 export default function PaymentList({ dispatch }) {
-  const { loading, error, data } = useQuery(PAYMENT_METHODS_BY_ID, {
+  const { loading, error, refetch, data } = useQuery(PAYMENT_METHODS_BY_ID, {
     variables: { buyerId: global.buyerId },
     context: {
       headers: {
         isPrivate: true,
       },
     },
-    // onCompleted: (res) => {
-    //
-    // },
-    // onError: (res) => {
-    //
-    // },
+    onCompleted: (res) => {
+      debugger;
+    },
+    onError: (res) => {},
   });
 
-  const [payments, setPayments] = useState([]);
+  const refreshData = useCallback(() => {
+    debugger;
+    refetch();
+  }, [refetch]);
+  useFocusEffect(refreshData);
   useEffect(() => {
     dispatch({
       type: "rightButtonShow",
@@ -49,7 +52,7 @@ export default function PaymentList({ dispatch }) {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        data={payments}
+        data={data?.paymentDetailsByBuyerId}
         ListEmptyComponent={
           <TextTip
             textTip="You haven't added any payment  method yet"
@@ -62,12 +65,12 @@ export default function PaymentList({ dispatch }) {
           />
         }
         renderItem={({ item }) => {
-          return <PaymentItem item={item} />;
+          return <PaymentItem item={item} refetch={refetch} />;
         }}
         keyExtractor={(item, index) => `listItem${index}`}
       />
 
-      {payments.length > 0 && (
+      {data?.paymentDetailsByBuyerId.length > 0 && (
         <SafeAreaView
           style={{
             paddingHorizontal: AppConfig.paddingHorizontal,

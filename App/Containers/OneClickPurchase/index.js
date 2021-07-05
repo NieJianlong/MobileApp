@@ -18,7 +18,6 @@ import AppConfig from "../../Config/AppConfig";
 import metrics from "../../Themes/Metrics";
 import fonts from "../../Themes/Fonts";
 import { PaymentTestData } from "../UserInfo/Config";
-import { ApplicationStyles } from "../../Themes";
 import { useRoute } from "@react-navigation/native";
 /**
  * @description: 1 Click purchase Screen

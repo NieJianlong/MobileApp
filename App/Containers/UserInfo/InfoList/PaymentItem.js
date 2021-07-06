@@ -12,12 +12,7 @@ import { AlertContext } from "../../Root/GlobalContext";
 import TextTip from "../../../Components/EmptyReminder";
 import { useMutation } from "@apollo/client";
 import { DELETE_PAYMENT_DETAIL } from "../../../Apollo/mutations/mutations_user";
-export default function PaymentItem({
-  item,
-  showSheet = () => {},
-  setDefault,
-  refetch,
-}) {
+export default function PaymentItem({ item, refetch }) {
   const [deletePayment, { error, data }] = useMutation(DELETE_PAYMENT_DETAIL, {
     variables: { paymentDetailId: item.paymentDetailId },
     context: {

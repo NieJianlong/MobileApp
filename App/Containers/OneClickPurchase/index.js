@@ -45,7 +45,7 @@ function OneClickPurchase(props) {
         <AppBar
           rightButton={() => (
             <RightButton
-              title="SAVE"
+              title="NEXT"
               onPress={() => {
                 NavigationService.navigate(
                   "SelectDeliveryAddressScreen",
@@ -102,7 +102,7 @@ function OneClickPurchase(props) {
             textColor="white"
             text="ADD NEW PAYMENT METHOD"
             backgroundColor={colors.grey80}
-          ></Button>
+          />
         </SafeAreaView>
       </SafeAreaView>
     </View>

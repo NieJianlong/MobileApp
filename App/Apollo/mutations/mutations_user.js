@@ -2,7 +2,6 @@ import { gql } from "@apollo/client";
 
 /** ================== User Management ================ */
 
-
 /**
  *  @mutation registerUser
  *  schema
@@ -265,8 +264,7 @@ export const DELETE_PAYMENT_DETAIL = gql`
 export const UPDATE_PAYMENT_DETAIL = gql`
   mutation UpdatePaymentDetail($request: PaymentDetailRequest!) {
     updatePaymentDetail(request: $request) {
-      userId
-      buyerId
+      paymentDetailId
     }
   }
 `;

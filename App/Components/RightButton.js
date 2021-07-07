@@ -1,7 +1,7 @@
-import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
-import { ApplicationStyles } from '../Themes';
-import colors from '../Themes/Colors';
+import React from "react";
+import { TouchableOpacity, Text } from "react-native";
+import { ApplicationStyles } from "../Themes";
+import colors from "../Themes/Colors";
 
 function RightButton(props) {
   const { title, onPress, disable } = props;

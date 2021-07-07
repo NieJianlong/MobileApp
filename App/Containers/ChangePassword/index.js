@@ -1,36 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import { View, StatusBar, Text, Keyboard } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { vs } from 'react-native-size-matters';
-import { AppBar, Button, PasswordInput, RightButton } from '../../Components';
-import { Colors } from '../../Themes';
-import styles from './styles';
-import NavigationService from '../../Navigation/NavigationService';
-import colors from '../../Themes/Colors';
+import React, { useState, useEffect } from "react";
+import { View, StatusBar, Text, Keyboard } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { vs } from "react-native-size-matters";
+import { AppBar, Button, PasswordInput, RightButton } from "../../Components";
+import { Colors } from "../../Themes";
+import styles from "./styles";
+import NavigationService from "../../Navigation/NavigationService";
+import colors from "../../Themes/Colors";
 
 function ChangePassword(props) {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const inputs = [
     {
-      placeholder: 'Enter your Current Password',
+      placeholder: "Enter your Current Password",
       onChangeText: (text) => setPassword(text),
       showError: false,
       errorMessage: null,
     },
     {
-      placeholder: 'Enter your New Password',
+      placeholder: "Enter your New Password",
       onChangeText: (text) => setNewPassword(text),
       showError: false,
       errorMessage: null,
     },
     {
-      placeholder: 'Repeat your New Password',
+      placeholder: "Repeat your New Password",
       onChangeText: (text) => setConfirmPassword(text),
       showError: false,
-      errorMessage: 'Password does not match',
+      errorMessage: "Password does not match",
     },
   ];
 
@@ -41,11 +41,11 @@ function ChangePassword(props) {
     const keyboardHide = (e) => {
       setKeyboardHeight(0);
     };
-    Keyboard.addListener('keyboardWillShow', keyboardShow);
-    Keyboard.addListener('keyboardWillHide', keyboardHide);
+    Keyboard.addListener("keyboardWillShow", keyboardShow);
+    Keyboard.addListener("keyboardWillHide", keyboardHide);
     return () => {
-      Keyboard.removeListener('keyboardWillShow', keyboardShow);
-      Keyboard.removeListener('keyboardWillHide', keyboardHide);
+      Keyboard.removeListener("keyboardWillShow", keyboardShow);
+      Keyboard.removeListener("keyboardWillHide", keyboardHide);
     };
   }, []);
   return (
@@ -53,24 +53,18 @@ function ChangePassword(props) {
       <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar
-          rightButton={() => {
-            return (
-              <AppBar
-                rightButton={() => (
-                  <RightButton
-                    title="UPDATE"
-                    disable={false}
-                    onPress={() => {
-                      // NavigationService.goBack();
-                    }}
-                  />
-                )}
-              />
-            );
-          }}
+          rightButton={() => (
+            <RightButton
+              title="UPDATE"
+              disable={false}
+              onPress={() => {
+                // NavigationService.goBack();
+              }}
+            />
+          )}
         />
         <View style={styles.bodyContainer}>
           <Text style={styles.heading2Bold}>Change my password</Text>
@@ -90,14 +84,14 @@ function ChangePassword(props) {
             })}
           </View>
 
-          <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
+          <View style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
             <Button
               backgroundColor="transparent"
               textColor={colors.grey80}
               onPress={() => {
-                NavigationService.navigate('');
+                NavigationService.navigate("");
               }}
-              text={'I DON’T REMEMBER MY PASSWORD'}
+              text={"I DON’T REMEMBER MY PASSWORD"}
             />
           </View>
         </View>

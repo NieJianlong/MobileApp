@@ -11,7 +11,10 @@ import Fonts from "../../../Themes/Fonts";
 import { AlertContext } from "../../Root/GlobalContext";
 import TextTip from "../../../Components/EmptyReminder";
 import { useMutation } from "@apollo/client";
-import { DELETE_PAYMENT_DETAIL } from "../../../Apollo/mutations/mutations_user";
+import {
+  DELETE_PAYMENT_DETAIL,
+  UPDATE_PAYMENT_DETAIL,
+} from "../../../Apollo/mutations/mutations_user";
 export default function PaymentItem({ item, refetch }) {
   const [deletePayment, { error, data }] = useMutation(DELETE_PAYMENT_DETAIL, {
     variables: { paymentDetailId: item.paymentDetailId },
@@ -36,6 +39,28 @@ export default function PaymentItem({ item, refetch }) {
     },
     onError: (res) => {},
   });
+  const [updatePayment, { error: updateError, data: updateData }] = useMutation(
+    UPDATE_PAYMENT_DETAIL,
+    {
+      variables: {
+        request: {
+          paymentDetailId: item.paymentDetailId,
+          buyerId: global.buyerId,
+          paymentType: item.paymentType,
+          isDefaultPaymentType: true,
+        },
+      },
+      context: {
+        headers: {
+          isPrivate: true,
+        },
+      },
+      onCompleted: (res) => {
+        refetch();
+      },
+      onError: (res) => {},
+    }
+  );
   const tips = useMemo(
     () => ({
       textTip: "Remove Payment Method",
@@ -133,7 +158,9 @@ export default function PaymentItem({ item, refetch }) {
           ) : (
             <TouchableOpacity
               style={styles.itemSetDefault}
-              onPress={setDefault}
+              onPress={() => {
+                updatePayment();
+              }}
             >
               <Text style={styles.setDefaultText}>SET AS DEFAULT</Text>
             </TouchableOpacity>

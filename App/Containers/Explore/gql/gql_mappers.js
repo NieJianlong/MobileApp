@@ -111,9 +111,13 @@ export const mapProductListingDTO = (data) => {
         fourStar: 74,
         fiveStar: 309,
       },
+      highlightBullets: element.highlightBullets,
       hidePickUpFromSeller: hidePickUpFromSeller,
-      selectedProductVariants: [], // a list of strings that are groupid's
-      selectedProductVariantsValues: [], // a list of strings that are groupid's selected values
+      selectedProductVariants: [], // a list of objects {gid, selectedVal}
+      prodVariants:
+        element.variants.length === 0
+          ? [sizeVariant, colorVariant]
+          : element.variants,
     };
     pList.push(bag);
   }
@@ -186,4 +190,89 @@ export const mapGQLAddressResponseToCache = (data) => {
   };
 
   return addressForCache;
+};
+
+/**
+ * new variants data type shape
+ *
+ * type Variant {
+    optionGroupId: ID
+    initialItemsCount: Int
+    itemsAvailable: Int
+    itemsSold: Int
+    optionsGroupPrice: Float
+    optionsGroupDiscount:Float
+    sku: String
+    defaultOptionGroup: Boolean
+    options: [KeyValuePair]
+}
+ *
+ * "variants" : [ {
+        "initialItemsCount" : 10,
+        "itemsAvailable" : 7,
+        "itemsSold" : null,
+        "optionGroupId" : "f7570204-d04a-4677-abf6-bae78690ad37",
+        "optionsGroupDiscount" : 5.0,
+        "optionsGroupPrice" : 12.1,
+        "sku" : null,
+        "options" : [ {
+          "key" : "lor sit amet, consectetur adipiscing elit, sed do eiusmod tempor in",
+          "value" : " aliquip ex ea commodo consequat. Duis aute irure dolor"
+        }, {
+          "key" : "lor sit amet, consectetur adipiscing elit, sed do eiusmod tempor in",
+          "value" : "dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exe"
+        } ]
+      } ]
+ *
+ *
+ */
+
+let sizeVariant = {
+  initialItemsCount: 10,
+  itemsAvailable: 7,
+  itemsSold: null,
+  optionGroupId: "f7570204-d04a-4677-abf6-bae78690ad1",
+  optionsGroupDiscount: 5.0,
+  optionsGroupPrice: 12.1,
+  defaultOptionGroup: true,
+  sku: null,
+  options: [
+    {
+      key: "size1",
+      value: "256",
+    },
+    {
+      key: "size2",
+      value: "512",
+    },
+    {
+      key: "size3",
+      value: "1024",
+    },
+  ],
+};
+
+let colorVariant = {
+  initialItemsCount: 10,
+  itemsAvailable: 7,
+  itemsSold: null,
+  optionGroupId: "f7570204-d04a-4677-abf6-bae78690ad2",
+  optionsGroupDiscount: 5.0,
+  optionsGroupPrice: 12.1,
+  sku: null,
+  defaultOptionGroup: false,
+  options: [
+    {
+      key: "color1",
+      value: "red",
+    },
+    {
+      key: "color2",
+      value: "green",
+    },
+    {
+      key: "color3",
+      value: "blue",
+    },
+  ],
 };

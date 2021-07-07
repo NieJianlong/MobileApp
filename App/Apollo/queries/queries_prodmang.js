@@ -15,10 +15,10 @@ import { gql } from "@apollo/client";
  * noOfItemsInStock: Int numberOfItemsAvailable: Int minQuantityPerCart: Int maxQuantityPerCart: Int
  * pickUpFromSeller: Boolean collectionPointAddressId: String collectionPointAddress: Address returnAddressId: String
  * returnAddress: Address amountSaved: Float deliveryFee: Float shortName: String longName: String description: String
- * technicalDetails: String announcementId: String productOptionValues: [ProductOptionValueView] relatedProducts: String
+ * technicalDetails: String announcementId: String highlightBullets: String productOptionValues: [ProductOptionValueView] relatedProducts: String
  * sellerId: String seller: SellerView reviews: [ReviewView] returnPolicies: [ProductReturnPolicyView]
  * categories: [ProductCategoryView] images: [Images] productListingsOptionGroups: [ProductListingsOptionGroup]
- * retailPrice: Float wholeSalePrice: Float percentOff: Int }
+ * retailPrice: Float wholeSalePrice: Float percentOff: Int variants: [Variant] }
  *
  * ProductListingsOptionGroup { listingId: ID productId: ID groupId: ID itemsAvailable: Int  itemsSold: Int  retailPrice: Float
  *   wholeSalePrice: Float discount: Float optionsGroup: OptionsGroup }
@@ -31,6 +31,13 @@ import { gql } from "@apollo/client";
  *  name: String description: String}
  *
  *  SellerView { id: ID brandName: String businessName: String avatarUrl: String usersRating: Float }
+ *
+ *  Variant { optionGroupId: ID initialItemsCount: Int itemsAvailable: Int itemsSold: Int optionsGroupPrice: Float
+ *  optionsGroupDiscount:Float sku: String defaultOptionGroup: Boolean  options: [KeyValuePair]}
+ *
+ * KeyValuePair { key: String! value: String!}
+ *
+ * ProductReturnPolicyView {id: ID productId: ID name: String description: String }
  *
  */
 export const GET_LISTINGS = gql`
@@ -65,6 +72,11 @@ export const GET_LISTINGS = gql`
       percentOff
       photo
       photoUrls
+      highlightBullets
+      returnPolicies {
+        name
+        description
+      }
       seller {
         id
         brandName
@@ -85,6 +97,20 @@ export const GET_LISTINGS = gql`
             value
             defaultOptionValue
           }
+        }
+      }
+      variants {
+        optionGroupId
+        initialItemsCount
+        itemsAvailable
+        itemsSold
+        optionsGroupPrice
+        optionsGroupDiscount
+        sku
+        defaultOptionGroup
+        options {
+          key
+          value
         }
       }
     }

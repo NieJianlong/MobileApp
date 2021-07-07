@@ -71,6 +71,6 @@ export default new InMemoryCache({
 
 export const runRefreshCron = async (tokenData) => {
   setInterval(() => {
-    console.log("runRefreshCron");
+ 
   }, 5 * 1000); // 5 secs
 };

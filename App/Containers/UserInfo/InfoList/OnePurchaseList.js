@@ -109,12 +109,7 @@ export default function OnePurchaseList({ dispatch, xIndex }) {
     }
   }, [refreshData, xIndex]);
   return (
-    <View
-      style={{ flex: 1 }}
-      onLayout={() => {
-        debugger;
-      }}
-    >
+    <View style={{ flex: 1 }} onLayout={() => {}}>
       {data?.oneClickBuy.defaultAddress.addressId &&
         data?.oneClickBuy.defaultPaymentMethod.paymentDetailId && (
           <View>

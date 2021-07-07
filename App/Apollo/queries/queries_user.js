@@ -305,7 +305,7 @@ export const FIND_BUYER_ADDRESS_BY_ID = gql`
  *  getBuyerAddressesById(buyerId : ID!) : [AddressResponse]
  * see @query addresses
  */
-export const FIND_BUYER_ADDRESS_BY_ID_ANDTPPE = gql`
+export const FIND_BUYER_ADDRESS_BY_ID_AND_TPYE = gql`
   query GetBuyerAddressByType($buyerId: ID!, $addressType: AddressType) {
     getBuyerAddressByType(buyerId: $buyerId, addressType: $addressType) {
       addressId

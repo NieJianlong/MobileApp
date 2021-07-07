@@ -26,7 +26,7 @@ function AddNewAddress(props) {
   const { dispatch } = useContext(AlertContext);
   const { params } = useRoute();
   const { currentAddress } = params;
-  const [name, setName] = useState("");
+  const [name, setName] = useState(currentAddress?.streetAddress1 || "");
   const [streetName, setStreetName] = useState(
     currentAddress?.villageArea || ""
   );
@@ -76,6 +76,7 @@ function AddNewAddress(props) {
     villageArea: streetName,
     houseNumber: streetNum,
     landMark: landMark,
+    streetAddress1: name,
     country,
     referenceId: global.buyerId,
   };

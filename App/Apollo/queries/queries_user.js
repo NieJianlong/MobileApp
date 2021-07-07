@@ -126,7 +126,38 @@ export const BUYER_PROFILE_BY_USERID = gql`
 export const FIND_ONE_CLICK_BUY = gql`
   query OneClickBuy($buyerId: ID!) {
     oneClickBuy(buyerId: $buyerId) {
-      defaultAddress
+      defaultAddress {
+        addressId
+        flat
+        floor
+        defaultAddress
+        block
+        building
+        houseNumber
+        streetAddress1
+        streetAddress2
+        streetAddress3
+        townCity
+        villageArea
+        district
+        provinceState
+        country
+        areaCode
+        landMark
+        pinCode
+        addressType
+        referenceId
+        createdAt
+        updatedAt
+      }
+      defaultPaymentMethod {
+        paymentDetailId
+        buyerId
+        paymentType
+        isDefaultPaymentType
+        createdAt
+        updatedAt
+      }
     }
   }
 `;
@@ -267,6 +298,41 @@ export const FIND_BUYER_ADDRESS_BY_ID = gql`
   }
 `;
 
+/**
+ * @query  getBuyerAddressesById
+ *
+ * schema
+ *  getBuyerAddressesById(buyerId : ID!) : [AddressResponse]
+ * see @query addresses
+ */
+export const FIND_BUYER_ADDRESS_BY_ID_AND_TPYE = gql`
+  query GetBuyerAddressByType($buyerId: ID!, $addressType: AddressType) {
+    getBuyerAddressByType(buyerId: $buyerId, addressType: $addressType) {
+      addressId
+      flat
+      floor
+      defaultAddress
+      block
+      building
+      houseNumber
+      streetAddress1
+      streetAddress2
+      streetAddress3
+      townCity
+      villageArea
+      district
+      provinceState
+      country
+      areaCode
+      landMark
+      pinCode
+      addressType
+      referenceId
+      createdAt
+      updatedAt
+    }
+  }
+`;
 /**
  * @query  getBuyerDefaultAddressByBuyerId
  *
@@ -783,7 +849,6 @@ export const PAYMENT_METHODS_BY_ID = gql`
       buyerId
       paymentType
       isDefaultPaymentType
-      paymentTypeDetails
       createdAt
       updatedAt
     }

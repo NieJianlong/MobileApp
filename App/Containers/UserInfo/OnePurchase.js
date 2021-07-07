@@ -6,20 +6,20 @@
  * @Description: User haven't added a default purchase preference yet
  * @FilePath: /MobileApp/App/Containers/UserInfo/NoPurchase.js
  */
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScaledSheet, s, vs } from 'react-native-size-matters';
-import Fonts from '../../Themes/Fonts';
-import AppConfig from '../../Config/AppConfig';
-import { Button } from '../../Components';
-import fonts from '../../Themes/Fonts';
-import colors from '../../Themes/Colors';
-import NavigationService from '../../Navigation/NavigationService';
-import images from '../../Themes/Images';
-import ListItem from './ListItem';
-import metrics from '../../Themes/Metrics';
-import TextTip from '../../Components/EmptyReminder';
+import React, { useState } from "react";
+import { View, Text, Image, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScaledSheet, s, vs } from "react-native-size-matters";
+import Fonts from "../../Themes/Fonts";
+import AppConfig from "../../Config/AppConfig";
+import { Button } from "../../Components";
+import fonts from "../../Themes/Fonts";
+import colors from "../../Themes/Colors";
+import NavigationService from "../../Navigation/NavigationService";
+import images from "../../Themes/Images";
+import ListItem from "./ListItem";
+import metrics from "../../Themes/Metrics";
+import TextTip from "../../Components/EmptyReminder";
 /**
  * @description:This component is displayed when the user does not purchase it
  * @param {*} props
@@ -29,16 +29,16 @@ function OnePurchase(props) {
   const items = [
     {
       lefticon: images.userChangePwdImage,
-      text: 'Change Password',
+      text: "Change Password",
       righticon: images.userRightBtnImage,
       onPress: () => {
-        NavigationService.navigate('ChangePasswordScreen');
+        NavigationService.navigate("ChangePasswordScreen");
       },
       hasline: true,
     },
     {
       lefticon: images.userLogoutImage,
-      text: 'Logout',
+      text: "Logout",
       righticon: images.userRightBtnImage,
       onPress: () => {},
       hasline: false,
@@ -58,30 +58,30 @@ function OnePurchase(props) {
 export default OnePurchase;
 const styles = ScaledSheet.create({
   bottomlist: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     width: metrics.screenWidth,
   },
   nosign: {
-    fontSize: '22@s',
-    textAlign: 'center',
+    fontSize: "22@s",
+    textAlign: "center",
     fontFamily: Fonts.primary,
-    fontWeight: 'bold',
-    marginTop: '25@vs',
+    fontWeight: "bold",
+    marginTop: "25@vs",
   },
   subTextTip: {
-    fontSize: '14@vs',
-    textAlign: 'center',
+    fontSize: "14@vs",
+    textAlign: "center",
     fontFamily: Fonts.primary,
-    marginTop: '5@vs',
+    marginTop: "5@vs",
     color: colors.grey80,
-    marginBottom: '10@vs',
+    marginBottom: "10@vs",
   },
-  signbtn: { marginTop: '20@vs' },
+  signbtn: { marginTop: "20@vs" },
   headerContainer: {
     backgroundColor: colors.background,
-    justifyContent: 'space-around',
+    justifyContent: "space-around",
     paddingHorizontal: AppConfig.paddingHorizontal,
-    paddingBottom: '15@vs',
+    paddingBottom: "15@vs",
   },
 });

@@ -61,8 +61,8 @@ function UserHeader(props) {
 }
 
 function UserInfo() {
-  const { loading, error, data } = useQuery(FIND_USER_PROFILE, {
-    variables: { userProfileId: global.userProfileId },
+  const { loading, error, data } = useQuery(FIND_BUYER_PROFILE, {
+    variables: { buyerId: global.buyerId },
     context: {
       headers: {
         isPrivate: true,
@@ -84,14 +84,14 @@ function UserInfo() {
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <Text style={ApplicationStyles.screen.heading3Bold}>
-              {data?.userProfile.userName}
+              {data?.buyerProfile.userName}
             </Text>
 
             <TouchableOpacity
               onPress={() => {
                 NavigationService.navigate(
                   "UserEditProfileScreen",
-                  data?.userProfile
+                  data?.buyerProfile
                 );
               }}
             >
@@ -106,7 +106,7 @@ function UserInfo() {
               style={styles.email}
               source={require("../../Images/usercenter/email.png")}
             ></Image>
-            <Text style={styles.emailtext}>{data?.userProfile.email}</Text>
+            <Text style={styles.emailtext}>{data?.buyerProfile.email}</Text>
           </View>
           <View style={styles.emailContainer}>
             <Image
@@ -114,7 +114,7 @@ function UserInfo() {
               source={require("../../Images/usercenter/phone.png")}
             ></Image>
             <Text style={styles.emailtext}>
-              {data?.userProfile.phoneNumber}
+              {data?.buyerProfile.phoneNumber}
             </Text>
           </View>
         </View>

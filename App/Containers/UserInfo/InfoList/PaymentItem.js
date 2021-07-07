@@ -1,5 +1,5 @@
-import React from "react";
-import { ScaledSheet, vs } from "react-native-size-matters";
+import React, { useCallback, useContext, useMemo } from "react";
+import { s, ScaledSheet, vs } from "react-native-size-matters";
 import { Button, Switch } from "../../../Components";
 import AppConfig from "../../../Config/AppConfig";
 import { View, FlatList, Text, Image, SafeAreaView } from "react-native";
@@ -8,14 +8,132 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../../../Themes/Colors";
 import fonts from "../../../Themes/Fonts";
 import Fonts from "../../../Themes/Fonts";
-
-export default function PaymentItem(
-  item,
-  showSheet = () => {},
-  setDefault,
-  doEdit,
-  doDelete
-) {
+import { AlertContext } from "../../Root/GlobalContext";
+import TextTip from "../../../Components/EmptyReminder";
+import { useMutation } from "@apollo/client";
+import {
+  DELETE_PAYMENT_DETAIL,
+  UPDATE_PAYMENT_DETAIL,
+} from "../../../Apollo/mutations/mutations_user";
+export default function PaymentItem({ item, refetch }) {
+  const [deletePayment, { error, data }] = useMutation(DELETE_PAYMENT_DETAIL, {
+    variables: { paymentDetailId: item.paymentDetailId },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {
+      refetch();
+      if (res.deletePaymentDetail) {
+        dispatch({
+          type: "changAlertState",
+          payload: {
+            visible: true,
+            message: "You have successfully removed your payment method.",
+            color: colors.secondary00,
+            title: "Payment method Removed!",
+          },
+        });
+      }
+    },
+    onError: (res) => {},
+  });
+  const [updatePayment, { error: updateError, data: updateData }] = useMutation(
+    UPDATE_PAYMENT_DETAIL,
+    {
+      variables: {
+        request: {
+          paymentDetailId: item.paymentDetailId,
+          buyerId: global.buyerId,
+          paymentType: item.paymentType,
+          isDefaultPaymentType: true,
+        },
+      },
+      context: {
+        headers: {
+          isPrivate: true,
+        },
+      },
+      onCompleted: (res) => {
+        refetch();
+      },
+      onError: (res) => {},
+    }
+  );
+  const tips = useMemo(
+    () => ({
+      textTip: "Remove Payment Method",
+      subTextTip: "This action cannot be undone,\n are you sure?",
+      needButton: true,
+      btnMsg: "SURE!",
+      onPress: () => {
+        dispatch({
+          type: "changSheetState",
+          payload: {
+            showSheet: false,
+            height: 600,
+            children: () => null,
+            sheetTitle: "",
+          },
+        });
+        deletePayment();
+      },
+    }),
+    [deletePayment, dispatch]
+  );
+  const { dispatch } = useContext(AlertContext);
+  const toggleSortBySheet = useCallback(() => {
+    dispatch({
+      type: "changSheetState",
+      payload: {
+        showSheet: true,
+        height: vs(320),
+        children: () => (
+          <View style={{ flex: 1 }}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Image
+                style={styles.credit}
+                source={images.userCreditCardImage}
+              />
+            </View>
+            <View
+              style={{
+                flex: 2,
+                justifyContent: "flex-end",
+              }}
+            >
+              <View style={{ flex: 1, marginLeft: s(-15) }}>
+                <TextTip {...tips} />
+              </View>
+              <Button
+                backgroundColor="transparent"
+                text="CANCEL"
+                textColor={colors.grey80}
+                onPress={() => {
+                  dispatch({
+                    type: "changSheetState",
+                    payload: {
+                      showSheet: false,
+                      height: 600,
+                      children: () => null,
+                      sheetTitle: "",
+                    },
+                  });
+                }}
+              />
+            </View>
+          </View>
+        ),
+      },
+    });
+  }, [dispatch, tips]);
   return (
     <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
       <View style={[styles.item, { height: vs(122) }]}>
@@ -24,23 +142,25 @@ export default function PaymentItem(
             style={styles.paytypeIcon}
             source={images.userPayTypeImage}
           ></Image>
-          <Text style={styles.itemTitle}>{item.title}</Text>
-          {item.isDefault && (
+          <Text style={styles.itemTitle}>***********6756</Text>
+          {item.isDefaultPaymentType && (
             <Image style={styles.icon} source={images.check}></Image>
           )}
         </View>
         <View>
-          <Text style={styles.itemSubTitle}>{item.subTitle}</Text>
+          <Text style={styles.itemSubTitle}>John.Smith</Text>
         </View>
         <View style={styles.itemBottom}>
-          {item.isDefault ? (
+          {item.isDefaultPaymentType ? (
             <View style={styles.itemTipsContainer}>
               <Text style={styles.itemTips}>Default payment method</Text>
             </View>
           ) : (
             <TouchableOpacity
               style={styles.itemSetDefault}
-              onPress={setDefault}
+              onPress={() => {
+                updatePayment();
+              }}
             >
               <Text style={styles.setDefaultText}>SET AS DEFAULT</Text>
             </TouchableOpacity>
@@ -48,7 +168,7 @@ export default function PaymentItem(
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity
               onPress={(item) => {
-                showSheet();
+                toggleSortBySheet();
               }}
             >
               <Image
@@ -138,5 +258,11 @@ const styles = ScaledSheet.create({
     height: "122@vs",
     paddingHorizontal: AppConfig.paddingHorizontal,
     justifyContent: "center",
+  },
+  credit: {
+    width: "100%",
+    maxHeight: "80@vs",
+    resizeMode: "contain",
+    marginVertical: "25@vs",
   },
 });

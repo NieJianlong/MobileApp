@@ -10,6 +10,7 @@ import NavigationService from "../../../Navigation/NavigationService";
 import { useQuery } from "@apollo/client";
 import { FIND_BUYER_ADDRESS_BY_ID } from "../../../Apollo/queries/queries_user";
 import { useFocusEffect } from "@react-navigation/core";
+import Addresses from "./Addresses";
 /**
  * @description:Display my address, list of my payment methods, display bill detail
  * @param {*} item Menu Item with a special configuration
@@ -18,7 +19,7 @@ import { useFocusEffect } from "@react-navigation/core";
  * @param {*} showSheet Display the Acction Sheet for the home page
  * @return {*}
  */
-export default function AddressList({ dispatch }) {
+export default function AddressList({ dispatch, xIndex }) {
   const { loading, error, data, refetch } = useQuery(FIND_BUYER_ADDRESS_BY_ID, {
     variables: {
       buyerId: global.buyerId,
@@ -39,28 +40,14 @@ export default function AddressList({ dispatch }) {
       payload: false,
     });
   }, [dispatch]);
+  useEffect(() => {
+    if (xIndex === 0) {
+      refreshData();
+    }
+  }, [refreshData, xIndex]);
   return (
     <View style={{ flex: 1 }}>
-      <FlatList
-        data={data?.getBuyerAddressesById}
-        ListEmptyComponent={
-          <TextTip
-            textTip="Your address list is empty"
-            subTextTip="You haven´t add any personal address yet"
-            needButton={true}
-            btnMsg="ADD ADDRESS"
-            onPress={() => {
-              NavigationService.navigate("AddNewAddressScreen", {
-                title: "Add new address",
-              });
-            }}
-          />
-        }
-        renderItem={({ item }) => {
-          return <AddressItem item={item} refetch={refetch} />;
-        }}
-        keyExtractor={(item, index) => `listItem${index}`}
-      />
+      <Addresses data={data?.getBuyerAddressesById || []} refetch={refetch} />
       {data?.getBuyerAddressesById.length > 0 && (
         <SafeAreaView
           style={{

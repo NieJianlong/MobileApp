@@ -63,13 +63,15 @@ function HorizontalMenu(props) {
       renderTab={(item, index) => {
         switch (item.key) {
           case "Purchasing":
-            return <OnePurchaseList dispatch={dispatch} />;
+            return (
+              <OnePurchaseList dispatch={dispatch} xIndex={defaultIndex} />
+            );
           case "Addresses":
-            return <AddressList dispatch={dispatch} />;
+            return <AddressList dispatch={dispatch} xIndex={defaultIndex} />;
           case "Payment":
-            return <PaymentList dispatch={dispatch} />;
+            return <PaymentList dispatch={dispatch} xIndex={defaultIndex} />;
           case "Billing":
-            return <BillingList dispatch={dispatch} />;
+            return <BillingList dispatch={dispatch} xIndex={defaultIndex} />;
           default:
             return <View />;
         }
@@ -80,7 +82,9 @@ function HorizontalMenu(props) {
       highlightStyle={{ color: "white" }}
       noHighlightStyle={{ color: "gray" }}
       headerTextStyle={styles.headerText}
-      onChangeTab={(index) => {}}
+      onChangeTab={(index) => {
+        setDefaultIndex(index);
+      }}
       headerUnderlayColor={"transparent"}
     />
   );

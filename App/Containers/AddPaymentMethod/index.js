@@ -1,14 +1,14 @@
-import React from 'react';
-import { View, StatusBar, Text, Image, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { AppBar } from '../../Components';
-import styles from './styles';
-import images from '../../Themes/Images';
-import { ScrollView } from 'react-native-gesture-handler';
-import Nav from '../../Navigation/NavigationService';
-import colors from '../../Themes/Colors';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { StackActions } from '@react-navigation/native';
+import React from "react";
+import { View, StatusBar, Text, Image, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { AppBar } from "../../Components";
+import styles from "./styles";
+import images from "../../Themes/Images";
+import { ScrollView } from "react-native-gesture-handler";
+import Nav from "../../Navigation/NavigationService";
+import colors from "../../Themes/Colors";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { StackActions } from "@react-navigation/native";
 
 const popAction = StackActions.pop(2);
 
@@ -38,7 +38,7 @@ function AddPaymentMethod(props) {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar />
         <View style={styles.bodyContainer}>
@@ -54,10 +54,10 @@ function AddPaymentMethod(props) {
                 >
                   <TouchableOpacity
                     onPress={(item) => {
-                      Nav.navigate('AddCreditScreen', {
+                      Nav.navigate("AddCreditScreen", {
                         callback: () => {
                           navigation.dispatch(popAction);
-                          if (typeof params.callback == 'function') {
+                          if (typeof params.callback == "function") {
                             params.callback();
                           }
                         },

@@ -43,6 +43,7 @@ import ProductItem from "../Components/ProductItem";
 import Review from "../Components/Review";
 import ColorOptionItem from "../Components/ColorOptionItem";
 import ShareOptionList from "../Components/ShareOptionList";
+import ProductVariants from "../Components/Variants";
 
 /** updates for the cart */
 import { localCartVar } from "../../../Apollo/cache";
@@ -108,6 +109,7 @@ function ProductDetail(props) {
    */
   const [product, setProductFromProps] = useState({});
   const [isReady, setIsReady] = useState(false);
+  const [bullets, setBullets] = useState([]);
 
   //function to scroll the specific section
   const scrollSectionIntoView = (section) => {
@@ -158,9 +160,15 @@ function ProductDetail(props) {
   useEffect(() => {
     // console.log(`check url ${props.route.params.product.photo}`);
     setProductFromProps(props.route.params.product);
+    if (product.highlightBullets) {
+      let bulls = JSON.parse(product.highlightBullets);
+      setBullets(bulls);
+    } else {
+      setBullets([]);
+    }
+
     setIsReady(true);
-    console.log(localCartVarReactive);
-  }, [props, localCartVarReactive]);
+  }, [props, localCartVarReactive, product.highlightBullets]);
 
   useEffect(() => {
     if (showPickupFromSellerSheet) {
@@ -375,10 +383,6 @@ function ProductDetail(props) {
     console.log(
       `add to cache then navigate ${JSON.stringify(localCartVarReactive)}`
     );
-    product.selectedProductVariants.push([
-      { groupId1: "selval 1" },
-      { groupId2: "selval 2" },
-    ]);
     // get latest cart values
     let uI = localCartVarReactive.items;
     // update cart items list
@@ -588,7 +592,15 @@ function ProductDetail(props) {
 
           <View style={[styles.v2, { paddingTop: vs(15) }]}>
             <Text style={styles.heading3Bold}>Details & Highlights</Text>
-            <View style={styles.row}>
+
+            {bullets.map((bul, index) => (
+              <View style={styles.row}>
+                <Text style={styles.txtDot}>•</Text>
+                <Text style={styles.txtRegular}>{bul}</Text>
+              </View>
+            ))}
+
+            {/* <View style={styles.row}>
               <Text style={styles.txtDot}>•</Text>
               <Text style={styles.txtRegular}>
                 Vero eos et accusamus et iusto odio dignissimos
@@ -607,7 +619,7 @@ function ProductDetail(props) {
               <Text style={styles.txtRegular}>
                 Vero eos et accusamus et iusto odio dignissimos
               </Text>
-            </View>
+            </View> */}
           </View>
         </View>
       </InView>
@@ -691,7 +703,10 @@ function ProductDetail(props) {
 
         {isPurchased && renderChatOptions()}
 
-        <Picker
+        {/* Upadates for variants here */}
+        <ProductVariants product={product} />
+
+        {/* <Picker
           onPress={toggleColorSheet}
           style={styles.picker}
           title={"Size"}
@@ -710,7 +725,7 @@ function ProductDetail(props) {
           style={styles.picker}
           title={"Color"}
           value={"Black"}
-        />
+        /> */}
       </View>
     );
   };

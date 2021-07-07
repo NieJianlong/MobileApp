@@ -59,6 +59,25 @@ it("test callBackAddressCords pm", async () => {
 
 //
 // yarn jest -t "test getListings pm"
+/**
+ * {"__typename":"ProductListingView","productId":"3b58bc68-c42b-49a9-8743-af7c442dd88b",
+ * "numberOfReviews":0,"rating":5,"closedDate":"2021-08-08","deliveryDate":"2021-03-09",
+ * "productListingType":"MAIN_PRODUCT_LISTING","shippingMethodsAvailable":null,"noOfOrderedItems":0,
+ * "progressBarValue":0,"noOfItemsInStock":58,"numberOfItemsAvailable":58,"minQuantityPerCart":null,
+ * "maxQuantityPerCart":30,"pickUpFromSeller":null,"amountSaved":null,"deliveryFee":null,
+ * "shortName":"Eternity NITRO","longName":"Eternity NITRO Women's Running Shoes",
+ * "description":"Let...","technicalDetails":"{ }","announcementId":"36eb1817-6ced-4df8-b938-621d945a0c38",
+ * "collectionPointAddressId":null,"relatedProducts":null,"sellerId":"3940fe30-8b1a-49f6-93ee-b12ca88d5eb3",
+ * "retailPrice":null,"wholeSalePrice":null,"percentOff":null,"photo":null,
+ * "photoUrls":["https://salamislicing-images.s3.us-east-2.amazonaws.com/3b58bc68-c42b-49a9-8743-af7c442dd88b-M.png"],
+ * "seller":{"__typename":"SellerView","id":"3940fe30-8b1a-49f6-93ee-b12ca88d5eb3",
+ *        "brandName":"od tempor i","ratingCount":4},"images":[{"__typename":"Images",
+ *        "id":"092baf30-7d31-11eb-9439-0242ac130002","referenceId":"3b58bc68-c42b-49a9-8743-af7c442dd88b",
+ *        "imageName":"3b58bc68-c42b-49a9-8743-af7c442dd88b-M.png","imageType":"PNG","description":"desc",
+ *        "fullPath":"https://salamislicing-images.s3.us-east-2.amazonaws.com/3b58bc68-c42b-49a9-8743-af7c442dd88b-M.png"}],
+ * "productListingsOptionGroups":[],
+ * "variants":[]}
+ */
 it("test getListings pm", async () => {
   let ret = await client
     .query({
@@ -86,10 +105,18 @@ it("test getListings pm", async () => {
   if (typeof ret !== "undefined") {
     console.log(`num of ProductListingView ${ret.data.getListings.length}`);
     for (let p of ret.data.getListings) {
-      console.log(`ProductListingView ${JSON.stringify(p)}`);
-      let photoUrls = p.photoUrls;
-      console.log(`photoUrls ${p.photoUrls.length}`);
+      // console.log(`ProductListingView ${JSON.stringify(p)}`);
+      // console.log(`name ${p.longName}`);
+      // let b = JSON.parse(p.highlightBullets);
+      // b.map((bul, index) => {
+      //   console.log(`bul ${bul}`);
+      // });
+      if (p.returnPolicies.length > 0) {
+        let rpn = p.returnPolicies.name;
+        let rpd = p.returnPolicies.description;
+      }
 
+      // console.log(`name ${rpn} description ${rpd}`);
       //console.log(`ProductListingView ${JSON.stringify(p)}`);
       // console.log(
       //   `collectionPointAddressId is null? ${p.collectionPointAddressId}`

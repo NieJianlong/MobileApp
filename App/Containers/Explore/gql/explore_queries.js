@@ -23,7 +23,7 @@ import { gql } from "@apollo/client";
  * noOfItemsInStock: Int numberOfItemsAvailable: Int minQuantityPerCart: Int maxQuantityPerCart: Int
  * pickUpFromSeller: Boolean collectionPointAddressId: String collectionPointAddress: Address returnAddressId: String
  * returnAddress: Address amountSaved: Float deliveryFee: Float shortName: String longName: String description: String
- * technicalDetails: String announcementId: String productOptionValues: [ProductOptionValueView] relatedProducts: String
+ * technicalDetails: String announcementId: String highlightBullets: String productOptionValues: [ProductOptionValueView] relatedProducts: String
  * sellerId: String seller: SellerView reviews: [ReviewView] returnPolicies: [ProductReturnPolicyView]
  * categories: [ProductCategoryView] images: [Images] productListingsOptionGroups: [ProductListingsOptionGroup]
  * retailPrice: Float wholeSalePrice: Float percentOff: Int }
@@ -71,6 +71,7 @@ export const GET_LISTINGS = gql`
       percentOff
       photo
       photoUrls
+      highlightBullets
       seller {
         id
         brandName
@@ -91,6 +92,20 @@ export const GET_LISTINGS = gql`
             value
             defaultOptionValue
           }
+        }
+      }
+      variants {
+        optionGroupId
+        initialItemsCount
+        itemsAvailable
+        itemsSold
+        optionsGroupPrice
+        optionsGroupDiscount
+        sku
+        defaultOptionGroup
+        options {
+          key
+          value
         }
       }
     }

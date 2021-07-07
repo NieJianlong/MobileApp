@@ -89,12 +89,19 @@ function ShoppingCart(props) {
    * we can debug state here
    */
   useEffect(() => {
-    console.log(
-      `ShoppingCart check data in cart ${JSON.stringify(localCartVarReactive)}`
-    );
     if (!localCartVarReactive.items) {
       console.log("no data in cart");
     } else {
+      if (
+        localCartVarReactive.items.length > 0 &&
+        localCartVarReactive.items[0].selectedProductVariants.length > 0
+      ) {
+        console.log(
+          `ShoppingCart check data in cart for selected variants ${JSON.stringify(
+            localCartVarReactive.items[0].selectedProductVariants
+          )}`
+        );
+      }
       setIsReady(true);
     }
   }, [localCartVarReactive]);

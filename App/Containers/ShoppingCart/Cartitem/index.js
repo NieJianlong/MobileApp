@@ -19,7 +19,7 @@ import { AlertContext } from "../../Root/GlobalContext";
 
 function index(props) {
   const { dispatch } = props;
-  // Alert and AlertContext are not correct names, very confusing,  @nsavage
+  // Alert and AlertContext are not correct semantic names, very confusing,  @nsavage
   const Alert = useContext(AlertContext);
   const { product, onPress } = props;
 
@@ -157,7 +157,9 @@ function index(props) {
           <View style={{ width: s(10) }} />
           <TouchableOpacity
             onPress={() => {
-              NavigationService.navigate("EditShoppingCartScreen");
+              NavigationService.navigate("EditShoppingCartScreen", {
+                product: product,
+              });
             }}
             style={[styles.removebtn, { width: s(60) }]}
           >

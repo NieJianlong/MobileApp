@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { View, StatusBar, Text, Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -7,12 +7,16 @@ import { Colors } from "../../Themes";
 import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
 import colors from "../../Themes/Colors";
-
+import { useMutation, useQuery } from "@apollo/client";
+import { CHANGE_PASSWORD } from "../../Apollo/mutations/mutations_user";
+import { AlertContext } from "../Root/GlobalContext";
+import * as storage from "../../Apollo/local-storage";
 function ChangePassword(props) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const { dispatch } = useContext(AlertContext);
   const inputs = [
     {
       placeholder: "Enter your Current Password",
@@ -33,7 +37,49 @@ function ChangePassword(props) {
       errorMessage: "Password does not match",
     },
   ];
-
+  const [changePwd] = useMutation(CHANGE_PASSWORD, {
+    variables: {
+      oldPassword: password,
+      newPassword: newPassword,
+      userId: global.userProfileId,
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {
+      storage.setLocalStorageValue(
+        storage.LOCAL_STORAGE_USER_PASSWORD,
+        newPassword
+      );
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "You have successfully Changed your password.",
+          color: colors.success,
+          title: "Password Changed",
+        },
+      });
+      NavigationService.goBack();
+    },
+  });
+  const changePassword = useCallback(() => {
+    if (newPassword === confirmPassword) {
+      changePwd();
+    } else {
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "The passwords you entered do not match each other.",
+          color: colors.error,
+          title: "Error!",
+        },
+      });
+    }
+  }, [changePwd, confirmPassword, dispatch, newPassword]);
   useEffect(() => {
     const keyboardShow = (e) => {
       setKeyboardHeight(e.endCoordinates.height);
@@ -60,9 +106,7 @@ function ChangePassword(props) {
             <RightButton
               title="UPDATE"
               disable={false}
-              onPress={() => {
-                // NavigationService.goBack();
-              }}
+              onPress={changePassword}
             />
           )}
         />
@@ -88,9 +132,7 @@ function ChangePassword(props) {
             <Button
               backgroundColor="transparent"
               textColor={colors.grey80}
-              onPress={() => {
-                NavigationService.navigate("");
-              }}
+              onPress={changePassword}
               text={"I DON’T REMEMBER MY PASSWORD"}
             />
           </View>

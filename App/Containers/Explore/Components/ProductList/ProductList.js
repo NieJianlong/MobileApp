@@ -88,7 +88,11 @@ export default function ProductList(props) {
     {
       variables: {
         filter: "ACTIVE_BY_COORDINATES",
-        filterParams: { latitude: location[0], longitude: location[1] },
+        filterParams: {
+          latitude: location[0],
+          longitude: location[1],
+          category: props.listType,
+        },
         pageNo: 1,
         pageSize: 3,
       },

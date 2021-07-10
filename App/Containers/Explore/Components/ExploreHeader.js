@@ -1,29 +1,29 @@
-import React, { useContext, useCallback, useState } from 'react';
-import { View, Image, Text, TouchableOpacity } from 'react-native';
-import { vs, s } from 'react-native-size-matters';
-import { Button, ProductSearchBox } from '../../../Components';
-import { Colors, Images } from '../../../Themes';
-import styles from '../styles';
-import NavigationService from '../../../Navigation/NavigationService';
+import React, { useState } from "react";
+import { View, Image, TouchableOpacity } from "react-native";
+import { vs } from "react-native-size-matters";
+import { ProductSearchBox } from "../../../Components";
+import { Images } from "../../../Themes";
+import styles from "../styles";
+import NavigationService from "../../../Navigation/NavigationService";
 
 export default function ExploreHeader() {
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState("");
   const onSearch = (keyword) => {
     setKeyword(keyword);
   };
 
-  if (keyword === '') {
+  if (keyword === "") {
     return (
       <View style={[styles.header]}>
         <View style={styles.icSearch} />
         <Image
           source={Images.logo3}
           style={styles.logo}
-          resizeMode={'contain'}
+          resizeMode={"contain"}
         />
         <TouchableOpacity
           onPress={() => {
-            NavigationService.navigate('ProductSearchScreen', {
+            NavigationService.navigate("ProductSearchScreen", {
               onSearch: onSearch,
             });
           }}
@@ -39,12 +39,12 @@ export default function ExploreHeader() {
           disabled={true}
           keyword={keyword}
           onPressDelete={() => {
-            setKeyword('');
-            NavigationService.navigate('ProductSearchScreen', {
+            setKeyword("");
+            NavigationService.navigate("ProductSearchScreen", {
               onSearch: onSearch,
             });
           }}
-          onPressBack={() => setKeyword('')}
+          onPressBack={() => setKeyword("")}
         />
       </View>
     );

@@ -19,7 +19,7 @@ import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimen
 /** updates for new queries get co-ordintaes delivery address */
 /** updates for the cart */
 import { localCartVar } from "../../Apollo/cache";
-import { useReactiveVar, useLazyQuery } from "@apollo/client";
+import { useReactiveVar, useLazyQuery, useQuery } from "@apollo/client";
 import * as aQM from "./gql/explore_queries";
 
 function Explore(props) {
@@ -58,7 +58,7 @@ function Explore(props) {
   // temporay fix original code for empty address and new requirments
   // imposed by backend and VK, diverges from original design
   // only call products data when ready, ie have geo co-ords
-  const [isReady, setIsReady] = useState(false);
+  // const [isReady, setIsReady] = useState(false);
   /** temp solution adding location as a prop
    * below see <ProductList
    * there are many ways wecould do this but we should not
@@ -97,13 +97,13 @@ function Explore(props) {
       // for forseable future will need these values so backend can cope
       location.push(1.5, 1.5);
       setLocation(location);
-      setIsReady(true);
+      // setIsReady(true);
     },
     onError: (res) => {
       console.log(`Explore runGeoQuery onError ${JSON.stringify(res)}`);
       location.push(1.5, 1.5);
       setLocation(location);
-      setIsReady(true);
+      // setIsReady(true);
     },
   });
 
@@ -125,6 +125,31 @@ function Explore(props) {
       // setIsReady(true);
     }
   }, [localCartVarReactive, runGeoQuery]);
+  const { loading, error, data, refetch, fetchMore } = useQuery(
+    aQM.GET_CATEGORIES,
+    {
+      variables: {
+        filter: "ACTIVE_BY_COORDINATES_AND_ANNOUNCEMENT",
+        filterParams: {
+          latitude: 1.5,
+          longitude: 1.5,
+        },
+        pageNo: 1,
+        pageSize: 100,
+      },
+      context: {
+        headers: {
+          isPrivate: false,
+        },
+      },
+      onError: (res) => {},
+      onCompleted: (res) => {
+        // map data from server for now
+        // add missing fields for product review
+        // update for name changes in data from server
+      },
+    }
+  );
 
   /**
    *  design  updates see below  {isReady && (
@@ -200,7 +225,7 @@ function Explore(props) {
             }}
             renderScrollHeader={() => <ExploreHeader />}
           >
-            {isReady && (
+            {location !== [] && (
               <ProductList
                 listType="All"
                 location={location}
@@ -210,7 +235,7 @@ function Explore(props) {
                 callBack={ableGoNext}
               />
             )}
-            {isReady && (
+            {location !== [] && (
               <ProductList
                 listType="Announcements"
                 location={location}
@@ -221,7 +246,7 @@ function Explore(props) {
                 callBack={ableGoNext}
               />
             )}
-            {isReady && (
+            {location !== [] && (
               <ProductList
                 listType="Electronics"
                 location={location}
@@ -231,7 +256,7 @@ function Explore(props) {
                 callBack={ableGoNext}
               />
             )}
-            {isReady && (
+            {location !== [] && (
               <ProductList
                 listType="Food"
                 location={location}
@@ -241,13 +266,14 @@ function Explore(props) {
                 callBack={ableGoNext}
               />
             )}
-            {isReady && (
+            {location !== [] && (
               <ProductList
                 listType="Fashion"
                 location={location}
                 index={4}
                 goFirst={goFirst}
-                tabLabel="Fashion"
+                //last one item we must add a invalid string for it can show normal,pls not delete
+                tabLabel="Fashion        dxx"
                 canGoNext={canGoNext}
                 callBack={ableGoNext}
               />

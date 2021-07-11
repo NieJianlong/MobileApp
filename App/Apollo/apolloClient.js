@@ -60,6 +60,8 @@ const allAPIS = {
   AnnouncementsByListingId: PRODUCT_PORT,
   GetListings: PRODUCT_PORT,
   GetPreferredCategories: PRODUCT_PORT,
+  GetAllCategories: PRODUCT_PORT,
+  SavePreferredCategories: PRODUCT_PORT,
 
   // Cart
   CreateCart: CART_PORT,

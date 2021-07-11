@@ -65,7 +65,7 @@ function Explore(props) {
    * call out for the product data until we have the location(co-ords)
    *
    */
-  const [location, setLocation] = useState([]);
+  const [location, setLocation] = useState();
 
   /**
    * this will be the query we will run on load to get the adrress co-ords
@@ -95,14 +95,13 @@ function Explore(props) {
       // put lattitude and longiue into state and pass thru as props
       //location.push(latitude, longitude);
       // for forseable future will need these values so backend can cope
-      location.push(1.5, 1.5);
-      setLocation(location);
+
+      setLocation({ latitude: 1.5, longitude: 1.5 });
       // setIsReady(true);
     },
     onError: (res) => {
       console.log(`Explore runGeoQuery onError ${JSON.stringify(res)}`);
-      location.push(1.5, 1.5);
-      setLocation(location);
+      setLocation({ latitude: 1.5, longitude: 1.5 });
       // setIsReady(true);
     },
   });
@@ -126,7 +125,7 @@ function Explore(props) {
     }
   }, [localCartVarReactive, runGeoQuery]);
   //get user's current favourite categories
-  const { data } = useQuery(aQM.GET_PREFERRED_CATEGORIES, {
+  const { data: categories, refetch } = useQuery(aQM.GET_PREFERRED_CATEGORIES, {
     variables: {
       buyerId: global.buyerId,
     },
@@ -145,6 +144,9 @@ function Explore(props) {
    *  temp soln can be updated to something better later
    *
    */
+  console.log("location====================================");
+  console.log(location);
+  console.log("====================================");
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
@@ -201,7 +203,7 @@ function Explore(props) {
                       onPress={() => {
                         NavigationService.navigate(
                           "EditCategoriesScreen",
-                          data?.getPreferredCategories
+                          categories?.getPreferredCategories
                         );
                       }}
                       style={[styles.btnAddContainer]}
@@ -214,59 +216,46 @@ function Explore(props) {
             }}
             renderScrollHeader={() => <ExploreHeader />}
           >
-            {location !== [] && (
+            {location && (
               <ProductList
                 listType="All"
-                location={location}
+                filterParams={location}
                 index={0}
+                filter="ACTIVE_BY_COORDINATES"
                 tabLabel="All"
                 canGoNext={canGoNext}
                 callBack={ableGoNext}
               />
             )}
-            {location !== [] && (
+            {location && (
               <ProductList
                 listType="Announcements"
-                location={location}
+                filterParams={location}
                 index={1}
+                filter="ACTIVE_BY_COORDINATES_AND_ANNOUNCEMENT"
                 tabLabel="Announcements"
                 isAnnouncement={true}
                 canGoNext={canGoNext}
                 callBack={ableGoNext}
               />
             )}
-            {location !== [] && (
-              <ProductList
-                listType="Electronics"
-                location={location}
-                index={2}
-                tabLabel="Electronics"
-                canGoNext={canGoNext}
-                callBack={ableGoNext}
-              />
-            )}
-            {location !== [] && (
-              <ProductList
-                listType="Food"
-                location={location}
-                index={3}
-                tabLabel="Food & Beverage"
-                canGoNext={canGoNext}
-                callBack={ableGoNext}
-              />
-            )}
-            {location !== [] && (
-              <ProductList
-                listType="Fashion"
-                location={location}
-                index={4}
-                goFirst={goFirst}
-                //last one item we must add a invalid string for it can show normal,pls not delete
-                tabLabel="Fashion        dxx"
-                canGoNext={canGoNext}
-                callBack={ableGoNext}
-              />
-            )}
+            {location &&
+              categories?.getPreferredCategories &&
+              categories?.getPreferredCategories.map((category, index) => (
+                <ProductList
+                  key={`${index}`}
+                  listType={category.name}
+                  index={index + 2}
+                  filter="ACTIVE_BY_COORDINATES_AND_CATEGORY"
+                  tabLabel={category.name}
+                  filterParams={{
+                    ...location,
+                    category: category.name,
+                  }}
+                  canGoNext={canGoNext}
+                  callBack={ableGoNext}
+                />
+              ))}
           </CollapsibleHeaderTabView>
         </View>
       </SafeAreaView>

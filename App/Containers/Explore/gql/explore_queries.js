@@ -7,7 +7,24 @@ import { gql } from "@apollo/client";
  * createAddress, updateAddress, deleteAddress
  * getGuestBuyerDefaultAddressByBuyerId,getGuestBuyerAddressesById
  */
-
+export const GET_PREFERRED_CATEGORIES = gql`
+  query GetPreferredCategories($buyerId: ID!) {
+    getPreferredCategories(buyerId: $buyerId) {
+      categoryId
+      name
+      description
+    }
+  }
+`;
+export const GET_ALL_CATEGORIES = gql`
+  query GetAllCategories {
+    getAllCategories {
+      categoryId
+      name
+      description
+    }
+  }
+`;
 /**
  *
  * @query  getListings
@@ -39,15 +56,7 @@ import { gql } from "@apollo/client";
  *  name: String description: String}
  *
  */
-export const GET_PREFERRED_CATEGORIES = gql`
-  query GetPreferredCategories($buyerId: ID!) {
-    getPreferredCategories(buyerId: $buyerId) {
-      categoryId
-      name
-      description
-    }
-  }
-`;
+
 export const GET_LISTINGS = gql`
   query GetListings($searchOptions: SearchOptions) {
     getListings(searchOptions: $searchOptions) {

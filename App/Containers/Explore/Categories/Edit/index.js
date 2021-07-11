@@ -1,20 +1,24 @@
-import React, { Component } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { View, StatusBar, Text, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import DraggableFlatList, {
-  RenderItemParams,
-} from "react-native-draggable-flatlist";
+import DraggableFlatList from "react-native-draggable-flatlist";
 
 import styles from "./styles";
 
-import { ProductSearchBox, AppBar } from "../../../../Components";
-import { Colors, Images } from "../../../../Themes";
+import { AppBar } from "../../../../Components";
+import { Images } from "../../../../Themes";
 import NavigationService from "../../../../Navigation/NavigationService";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import * as aQM from "../../gql/explore_queries";
+import { useFocusEffect } from "@react-navigation/native";
+import { SAVE_PREFERRED_CATEGORIES } from "../../../../Apollo/mutations/mutations_product";
+import { AlertContext } from "../../../Root/GlobalContext";
+import colors from "../../../../Themes/Colors";
 
 export default function EditCategoriesScreen() {
-  const { data: categories } = useQuery(aQM.GET_PREFERRED_CATEGORIES, {
+  const [removed, setRemoved] = useState([]);
+  const { dispatch } = useContext(AlertContext);
+  const { data: categories, refetch } = useQuery(aQM.GET_PREFERRED_CATEGORIES, {
     variables: {
       buyerId: global.buyerId,
     },
@@ -24,15 +28,54 @@ export default function EditCategoriesScreen() {
       },
     },
   });
-
+  const selected = useMemo(() => {
+    return categories?.getPreferredCategories.filter(
+      (item) => removed.indexOf(item) < 0
+    );
+  }, [categories?.getPreferredCategories, removed]);
+  const selectedIds = useMemo(() => {
+    return selected.map((item) => item.categoryId);
+  }, [selected]);
+  const [savePrefered] = useMutation(SAVE_PREFERRED_CATEGORIES, {
+    variables: { buyerId: global.buyerId, categories: selectedIds },
+    onCompleted: (res) => {
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "Categories updated.",
+          color: colors.success,
+          title: "update favourite categories success",
+        },
+      });
+      NavigationService.goBack();
+    },
+    onError: (res) => {
+      debugger;
+    },
+  });
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
   const renderItem = ({ item, index, drag, isActive }) => {
+    const isRemoved = removed.indexOf(item);
+    if (isRemoved >= 0) {
+      return null;
+    }
     return (
       <TouchableOpacity style={styles.itemContainer} onLongPress={drag}>
-        <View style={styles.row}>
-          <Image source={Images.trash} style={styles.icTrash} />
-          <Text style={styles.txtCategory}>{item}</Text>
-        </View>
-
+        <TouchableOpacity
+          onPress={() => {
+            setRemoved([...removed, item]);
+          }}
+        >
+          <View style={styles.row}>
+            <Image source={Images.trash} style={styles.icTrash} />
+            <Text style={styles.txtCategory}>{item.name}</Text>
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={drag}>
           <Image source={Images.move} style={styles.icMove} />
         </TouchableOpacity>
@@ -47,18 +90,20 @@ export default function EditCategoriesScreen() {
           <AppBar
             title={"Edit Categories"}
             rightButton={() => (
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  savePrefered();
+                }}
+              >
                 <Text style={styles.txtSave}>SAVE</Text>
               </TouchableOpacity>
             )}
           />
         </View>
-
         <View style={styles.body}>
           <Text style={styles.txt1}>
             To reorder categories, hold down and move
           </Text>
-
           <DraggableFlatList
             data={categories?.getPreferredCategories || []}
             renderItem={renderItem}
@@ -66,12 +111,11 @@ export default function EditCategoriesScreen() {
             onDragEnd={({ data }) => {}}
           />
         </View>
-
         <TouchableOpacity
           onPress={() =>
             NavigationService.navigate("ChooseCategoriesScreen", {
-              returnCategories: this.returnCategories,
-              categories: this.state.categories,
+              returnCategories: {},
+              categories: [],
             })
           }
           style={styles.btnAdd}

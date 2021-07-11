@@ -178,7 +178,7 @@ function Explore(props) {
                     }}
                     inactiveTextColor={colors.grey60}
                     activeTextColor={colors.primary}
-                    style={{ borderWidth: 0 }}
+                    style={{ borderWidth: 0, paddingRight: 50 }}
                     textStyle={{
                       fontFamily: fonts.primary,
                       width: "100%",

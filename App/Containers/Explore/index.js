@@ -125,31 +125,17 @@ function Explore(props) {
       // setIsReady(true);
     }
   }, [localCartVarReactive, runGeoQuery]);
-  const { loading, error, data, refetch, fetchMore } = useQuery(
-    aQM.GET_CATEGORIES,
-    {
-      variables: {
-        filter: "ACTIVE_BY_COORDINATES_AND_ANNOUNCEMENT",
-        filterParams: {
-          latitude: 1.5,
-          longitude: 1.5,
-        },
-        pageNo: 1,
-        pageSize: 100,
+  //get user's current favourite categories
+  const { data } = useQuery(aQM.GET_PREFERRED_CATEGORIES, {
+    variables: {
+      buyerId: global.buyerId,
+    },
+    context: {
+      headers: {
+        isPrivate: false,
       },
-      context: {
-        headers: {
-          isPrivate: false,
-        },
-      },
-      onError: (res) => {},
-      onCompleted: (res) => {
-        // map data from server for now
-        // add missing fields for product review
-        // update for name changes in data from server
-      },
-    }
-  );
+    },
+  });
 
   /**
    *  design  updates see below  {isReady && (
@@ -213,7 +199,10 @@ function Explore(props) {
                     <TouchableOpacity
                       // activeOpacity={1}
                       onPress={() => {
-                        NavigationService.navigate("EditCategoriesScreen");
+                        NavigationService.navigate(
+                          "EditCategoriesScreen",
+                          data?.getPreferredCategories
+                        );
                       }}
                       style={[styles.btnAddContainer]}
                     >

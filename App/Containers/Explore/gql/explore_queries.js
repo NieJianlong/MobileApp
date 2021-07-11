@@ -39,15 +39,12 @@ import { gql } from "@apollo/client";
  *  name: String description: String}
  *
  */
-export const GET_CATEGORIES = gql`
-  query GetListings($searchOptions: SearchOptions) {
-    getListings(searchOptions: $searchOptions) {
-      categories {
-        categoryId
-        productId
-        name
-        description
-      }
+export const GET_PREFERRED_CATEGORIES = gql`
+  query GetPreferredCategories($buyerId: ID!) {
+    getPreferredCategories(buyerId: $buyerId) {
+      categoryId
+      name
+      description
     }
   }
 `;

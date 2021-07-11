@@ -59,6 +59,7 @@ const allAPIS = {
   AnnouncementsByOnlineStore: PRODUCT_PORT,
   AnnouncementsByListingId: PRODUCT_PORT,
   GetListings: PRODUCT_PORT,
+  GetPreferredCategories: PRODUCT_PORT,
 
   // Cart
   CreateCart: CART_PORT,

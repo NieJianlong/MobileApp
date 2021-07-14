@@ -10,6 +10,8 @@ import AppNavigation from "../../Navigation/AppNavigation";
 import colors from "../../Themes/Colors";
 import { vs } from "react-native-size-matters";
 import { AlertContext } from "./GlobalContext";
+import Spinner from "react-native-loading-spinner-overlay";
+import tailwind from
 
 const initialState = {
   alert: {
@@ -26,6 +28,9 @@ const initialState = {
     sheetTitle: "",
     onCloseEnd: () => {},
   },
+  loading: {
+    loading: false,
+  },
 };
 function reducer(state, action) {
   switch (action.type) {
@@ -36,6 +41,8 @@ function reducer(state, action) {
         ...state,
         actionSheet: { ...state.actionSheet, ...action.payload },
       };
+    case "changLoading":
+      return { ...state, loading: { loading: action.payload } };
     default:
       throw new Error();
   }
@@ -62,6 +69,11 @@ function RootContainer() {
     <AlertContext.Provider value={{ dispatch }}>
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" />
+        <Spinner
+          visible={this.state.spinner}
+          textContent={"Loading..."}
+          textStyle={}
+        />
         <AppNavigation />
         <Alert
           visible={visible}

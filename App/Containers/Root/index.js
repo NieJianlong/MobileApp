@@ -28,7 +28,7 @@ const initialState = {
     onCloseEnd: () => {},
   },
   loading: {
-    loading: false,
+    spinner: false,
   },
 };
 function reducer(state, action) {
@@ -51,7 +51,7 @@ function RootContainer() {
     {
       alert: { visible, message, color, onDismiss, title },
       actionSheet: { showSheet, children, height, onCloseEnd, sheetTitle },
-      loading:{}
+      loading: { spinner },
     },
     dispatch,
   ] = useReducer(reducer, initialState);
@@ -70,18 +70,20 @@ function RootContainer() {
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" />
         <Spinner
-          visible={this.state.spinner}
+          visible={spinner}
           textContent={"Loading..."}
-          // textStyle={}
+          textStyle={{ color: "white" }}
         />
         <AppNavigation />
-        <Alert
-          visible={visible}
-          message={message}
-          title={title}
-          color={color}
-          onDismiss={onDismiss}
-        />
+        {visible && (
+          <Alert
+            visible={true}
+            message={message}
+            title={title}
+            color={color}
+            onDismiss={onDismiss}
+          />
+        )}
       </View>
       {showSheet && (
         <TouchableWithoutFeedback onPress={() => {}}>

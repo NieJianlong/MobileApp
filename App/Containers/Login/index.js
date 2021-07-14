@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   StatusBar,
@@ -9,11 +9,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import { useRoute } from "@react-navigation/native";
-import { gql } from "@apollo/client";
 
-import { TextInput, Button, PasswordInput, Alert } from "../../Components";
-
-import { Colors } from "../../Themes";
+import { TextInput, Button, PasswordInput } from "../../Components";
 import styles from "./styles";
 
 /**
@@ -22,7 +19,6 @@ import styles from "./styles";
 import * as validator from "../../Validation";
 import * as jwt from "../../Apollo/jwt-request";
 import * as storage from "../../Apollo/local-storage";
-import { runRefreshCron } from "../../Apollo/cache";
 /** userProfileVar is the variable for the cache to get set  userProfile attributes */
 import { userProfileVar } from "../../Apollo/cache";
 import NavigationService from "../../Navigation/NavigationService";
@@ -31,14 +27,15 @@ import jwt_decode from "jwt-decode";
 
 import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import { client } from "../../Apollo/apolloClient";
+import { AlertContext } from "../Root/GlobalContext";
+import colors from "../../Themes/Colors";
 
 function LoginScreen(props) {
   // refs
   let passwordInput = null;
+  const { dispatch } = useContext(AlertContext);
 
   let [keyboardHeight, setKeyboardHeight] = useState(0);
-  let [showResetPasswordAlert, setShowResetPasswordAlert] = useState(false);
-  let [showValidationAlert, setShowValidationAlert] = useState(false);
   let [loginInput, setLoginInput] = useState("");
   let [psswd, setPsswd] = useState("");
   const { params } = useRoute();
@@ -55,7 +52,6 @@ function LoginScreen(props) {
       //console.log ('debug message caught expected undefined parameter')
     } else {
       //  console.log (`'debug message ${props.navigation.state.params.showEms}`)
-      toggleResetPasswordAlert();
     }
 
     return () => {
@@ -63,22 +59,18 @@ function LoginScreen(props) {
       Keyboard.removeListener("keyboardWillShow", _keyboardWillShow);
       Keyboard.removeListener("keyboardWillHide", _keyboardWillHide);
     };
-  }, [props]);
-
-  // u can use this to skip login for some development, need to paste an access token to replace somejwt
-  const onDebugSignIn = async () => {
-    userProfileVar({
-      email: loginInput,
-      isAuth: true,
-    });
-    storage.setLocalStorageValue(storage.LOCAL_STORAGE_TOKEN_KEY, "somejwt");
-    NavigationService.navigate("MainScreen");
-  };
+  }, [params, props]);
 
   const onSignIn = async () => {
     // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
     console.log("onSignIn" + `${loginInput}:::${psswd}`); // to-do remove
     let ret = validator.loginDifferentiator(loginInput);
+    dispatch({
+      type: "changLoading",
+      payload: {
+        spinner: true,
+      },
+    });
     if (ret.isValid) {
       // we are good so we can test for email or phone
       if (ret.isEmail) {
@@ -162,7 +154,15 @@ function LoginScreen(props) {
             // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
             else {
               console.log("psswd is not correct");
-              toggleResetValidationAlert();
+              dispatch({
+                type: "changAlertState",
+                payload: {
+                  visible: true,
+                  message: "Check Credentials",
+                  color: colors.error,
+                  title: "email or password is invalid",
+                },
+              });
             }
           })
           .catch(function (err) {
@@ -171,7 +171,15 @@ function LoginScreen(props) {
       } else {
         //     // must be phone
         console.log("phone is valid but not implemented");
-        toggleResetValidationAlert();
+        dispatch({
+          type: "changAlertState",
+          payload: {
+            visible: true,
+            message: "Check Credentials",
+            color: colors.error,
+            title: "email or password is invalid",
+          },
+        });
         //     userProfileVar({
         //         phone: loginInput,
         //         isAuth: true
@@ -179,16 +187,16 @@ function LoginScreen(props) {
       }
     } else {
       console.log("data not valid");
-      toggleResetValidationAlert();
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "Check Credentials",
+          color: colors.error,
+          title: "email or password is invalid",
+        },
+      });
     }
-  };
-
-  const toggleResetPasswordAlert = () => {
-    setShowResetPasswordAlert(!showResetPasswordAlert);
-  };
-
-  const toggleResetValidationAlert = () => {
-    setShowValidationAlert(!showValidationAlert);
   };
 
   const _keyboardWillShow = (e) => {
@@ -197,32 +205,6 @@ function LoginScreen(props) {
 
   const _keyboardWillHide = () => {
     setKeyboardHeight(0);
-  };
-
-  const renderResetPasswordAlert = () => {
-    return (
-      <Alert
-        visible={showResetPasswordAlert}
-        title={"Email/SMS Sent"}
-        message={
-          "We have sent you an email, please use the link on it to proceed with your new password creation."
-        }
-        color={Colors.secondary00}
-        onDismiss={toggleResetPasswordAlert}
-      />
-    );
-  };
-
-  const renderValidationAlert = () => {
-    return (
-      <Alert
-        visible={showValidationAlert}
-        title={"Check Credentials"}
-        message={"message to do"}
-        color={Colors.warning}
-        onDismiss={toggleResetValidationAlert}
-      />
-    );
   };
 
   return (
@@ -279,9 +261,6 @@ function LoginScreen(props) {
           </View>
         </View>
       </SafeAreaView>
-
-      {renderResetPasswordAlert()}
-      {renderValidationAlert()}
     </View>
   );
 }

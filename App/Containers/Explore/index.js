@@ -19,7 +19,7 @@ import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimen
 /** updates for new queries get co-ordintaes delivery address */
 /** updates for the cart */
 import { localCartVar } from "../../Apollo/cache";
-import { useReactiveVar, useLazyQuery } from "@apollo/client";
+import { useReactiveVar, useLazyQuery, useQuery } from "@apollo/client";
 import * as aQM from "./gql/explore_queries";
 
 function Explore(props) {
@@ -58,14 +58,14 @@ function Explore(props) {
   // temporay fix original code for empty address and new requirments
   // imposed by backend and VK, diverges from original design
   // only call products data when ready, ie have geo co-ords
-  const [isReady, setIsReady] = useState(false);
+  // const [isReady, setIsReady] = useState(false);
   /** temp solution adding location as a prop
    * below see <ProductList
    * there are many ways wecould do this but we should not
    * call out for the product data until we have the location(co-ords)
    *
    */
-  const [location, setLocation] = useState([]);
+  const [location, setLocation] = useState();
 
   /**
    * this will be the query we will run on load to get the adrress co-ords
@@ -95,15 +95,14 @@ function Explore(props) {
       // put lattitude and longiue into state and pass thru as props
       //location.push(latitude, longitude);
       // for forseable future will need these values so backend can cope
-      location.push(1.5, 1.5);
-      setLocation(location);
-      setIsReady(true);
+
+      setLocation({ latitude: 1.5, longitude: 1.5 });
+      // setIsReady(true);
     },
     onError: (res) => {
       console.log(`Explore runGeoQuery onError ${JSON.stringify(res)}`);
-      location.push(1.5, 1.5);
-      setLocation(location);
-      setIsReady(true);
+      setLocation({ latitude: 1.5, longitude: 1.5 });
+      // setIsReady(true);
     },
   });
 
@@ -125,6 +124,17 @@ function Explore(props) {
       // setIsReady(true);
     }
   }, [localCartVarReactive, runGeoQuery]);
+  //get user's current favourite categories
+  const { data: categories, refetch } = useQuery(aQM.GET_PREFERRED_CATEGORIES, {
+    variables: {
+      buyerId: global.buyerId,
+    },
+    context: {
+      headers: {
+        isPrivate: false,
+      },
+    },
+  });
 
   /**
    *  design  updates see below  {isReady && (
@@ -134,6 +144,9 @@ function Explore(props) {
    *  temp soln can be updated to something better later
    *
    */
+  console.log("location====================================");
+  console.log(location);
+  console.log("====================================");
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
@@ -165,7 +178,7 @@ function Explore(props) {
                     }}
                     inactiveTextColor={colors.grey60}
                     activeTextColor={colors.primary}
-                    style={{ borderWidth: 0 }}
+                    style={{ borderWidth: 0, paddingRight: 50 }}
                     textStyle={{
                       fontFamily: fonts.primary,
                       width: "100%",
@@ -188,7 +201,10 @@ function Explore(props) {
                     <TouchableOpacity
                       // activeOpacity={1}
                       onPress={() => {
-                        NavigationService.navigate("EditCategoriesScreen");
+                        NavigationService.navigate(
+                          "EditCategoriesScreen",
+                          categories?.getPreferredCategories
+                        );
                       }}
                       style={[styles.btnAddContainer]}
                     >
@@ -200,58 +216,46 @@ function Explore(props) {
             }}
             renderScrollHeader={() => <ExploreHeader />}
           >
-            {isReady && (
+            {location && (
               <ProductList
                 listType="All"
-                location={location}
+                filterParams={location}
                 index={0}
+                filter="ACTIVE_BY_COORDINATES"
                 tabLabel="All"
                 canGoNext={canGoNext}
                 callBack={ableGoNext}
               />
             )}
-            {isReady && (
+            {location && (
               <ProductList
                 listType="Announcements"
-                location={location}
+                filterParams={location}
                 index={1}
+                filter="ACTIVE_BY_COORDINATES_AND_ANNOUNCEMENT"
                 tabLabel="Announcements"
                 isAnnouncement={true}
                 canGoNext={canGoNext}
                 callBack={ableGoNext}
               />
             )}
-            {isReady && (
-              <ProductList
-                listType="Electronics"
-                location={location}
-                index={2}
-                tabLabel="Electronics"
-                canGoNext={canGoNext}
-                callBack={ableGoNext}
-              />
-            )}
-            {isReady && (
-              <ProductList
-                listType="Food"
-                location={location}
-                index={3}
-                tabLabel="Food & Beverage"
-                canGoNext={canGoNext}
-                callBack={ableGoNext}
-              />
-            )}
-            {isReady && (
-              <ProductList
-                listType="Fashion"
-                location={location}
-                index={4}
-                goFirst={goFirst}
-                tabLabel="Fashion"
-                canGoNext={canGoNext}
-                callBack={ableGoNext}
-              />
-            )}
+            {location &&
+              categories?.getPreferredCategories &&
+              categories?.getPreferredCategories.map((category, index) => (
+                <ProductList
+                  key={`${index}`}
+                  listType={category.name}
+                  index={index + 2}
+                  filter="ACTIVE_BY_COORDINATES_AND_CATEGORY"
+                  tabLabel={category.name}
+                  filterParams={{
+                    ...location,
+                    category: category.name,
+                  }}
+                  canGoNext={canGoNext}
+                  callBack={ableGoNext}
+                />
+              ))}
           </CollapsibleHeaderTabView>
         </View>
       </SafeAreaView>

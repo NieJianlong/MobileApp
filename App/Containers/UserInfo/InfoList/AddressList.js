@@ -8,7 +8,10 @@ import AddressItem from "./AddressItem";
 import TextTip from "../../../Components/EmptyReminder";
 import NavigationService from "../../../Navigation/NavigationService";
 import { useQuery } from "@apollo/client";
-import { FIND_BUYER_ADDRESS_BY_ID } from "../../../Apollo/queries/queries_user";
+import {
+  FIND_BUYER_ADDRESS_BY_ID,
+  FIND_BUYER_ADDRESS_BY_ID_AND_TPYE,
+} from "../../../Apollo/queries/queries_user";
 import { useFocusEffect } from "@react-navigation/core";
 import Addresses from "./Addresses";
 /**
@@ -30,6 +33,23 @@ export default function AddressList({ dispatch, xIndex }) {
       },
     },
   });
+  // const { data: sd } = useQuery(FIND_BUYER_ADDRESS_BY_ID_AND_TPYE, {
+  //   variables: {
+  //     buyerId: global.buyerId,
+  //     addressType: "dfs",
+  //   },
+  //   context: {
+  //     headers: {
+  //       isPrivate: true,
+  //     },
+  //   },
+  //   onCompleted: (res) => {
+  //     debugger;
+  //   },
+  //   onError: (res) => {
+  //     debugger;
+  //   },
+  // });
   const refreshData = useCallback(() => {
     refetch();
   }, [refetch]);

@@ -28,7 +28,24 @@ export const REGISTER_USER = gql`
     }
   }
 `;
-
+/**
+ * @mutation change user Password
+ * schema  see @mutation changePassword
+ *
+ */
+export const CHANGE_PASSWORD = gql`
+  mutation ChangePassword(
+    $oldPassword: String!
+    $newPassword: String!
+    $userId: ID!
+  ) {
+    changePassword(
+      oldPassword: $oldPassword
+      newPassword: $newPassword
+      userId: $userId
+    )
+  }
+`;
 /**
  * @mutation deleteUserProfile
  * schema  see @mutation registerUser

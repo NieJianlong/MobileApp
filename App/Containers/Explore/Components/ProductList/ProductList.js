@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useCallback,
-  useContext,
-  useMemo,
-  useEffect,
-} from "react";
+import React, { useState, useCallback, useContext, useMemo } from "react";
 import { FlatList, View, ActivityIndicator, Text } from "react-native";
 import ProductItem from "../ProductItem";
 import { HPageViewHoc } from "react-native-head-tab-view";
@@ -24,8 +18,8 @@ export default function ProductList(props) {
   const { dispatch } = useContext(AlertContext);
   const [page, setPage] = useState(0);
   const [serverData, setServerData] = useState([]);
-  const { isAnnouncement, index, location } = props;
-  const [loadingMore, setLoadingMore] = useState(true);
+  const { isAnnouncement, index, filter, filterParams } = props;
+  const [loadingMore, setLoadingMore] = useState(false);
   const [isRereshing, setIsRereshing] = useState(false);
   const [showProductAsRows, setShowProductAsRows] = useState(true);
   const toggleShareSheet = useCallback(() => {
@@ -44,53 +38,16 @@ export default function ProductList(props) {
     });
   }, [dispatch]);
 
-  // constructor just used to check props are working can remove later
-  // keep until geo cord query is working
-  useEffect(() => {
-    console.log(`ProductList location prop ${JSON.stringify(location)}`);
-  }, [location]);
-
-  /**
-   * significant refactoring required here
-   * for new query
-   *
-   */
-
-  let params = {
-    storeId: "0b950a80-7836-45b4-9ee3-42042097aafe",
-    sortfield: "wholeSalePrice",
-  };
-
-  switch (props.listType) {
-    case "All":
-      params = {
-        storeId: "0b950a80-7836-45b4-9ee3-42042097aafe",
-        sortfield: "wholeSalePrice",
-      };
-      break;
-    case "Announcements":
-      params = {
-        storeId: "0b950a80-7836-45b4-9ee3-42042097aafe",
-        sortfield: "wholeSalePrice",
-      };
-      break;
-    case "Electronics":
-      params = {
-        storeId: "0b950a80-7836-45b4-9ee3-42042097aafe",
-        sortfield: "wholeSalePrice",
-      };
-      break;
-    default:
-      break;
-  }
   const { loading, error, data, refetch, fetchMore } = useQuery(
     aQM.GET_LISTINGS,
     {
       variables: {
-        filter: "ACTIVE_BY_COORDINATES",
-        filterParams: { latitude: location[0], longitude: location[1] },
-        pageNo: 1,
-        pageSize: 3,
+        searchOptions: {
+          filter: filter,
+          filterParams: filterParams,
+          pageNo: 0,
+          pageSize: 5,
+        },
       },
       context: {
         headers: {
@@ -139,7 +96,7 @@ export default function ProductList(props) {
       // data={isAnnouncement ? announcements : products}
       data={serverData}
       keyExtractor={(item, index) => index.toString()}
-      onEndReachedThreshold={0.01}
+      onEndReachedThreshold={0.1}
       //Set pull-up loading
       ListFooterComponent={loadingMore ? LoadMoreView : null}
       onStartRefresh={() => {

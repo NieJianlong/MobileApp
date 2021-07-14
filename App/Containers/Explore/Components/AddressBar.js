@@ -15,14 +15,14 @@ import AddressSheetContent from "./AddressSheetContent";
  */
 import * as aQM from "../gql/explore_queries";
 import * as gqlMappers from "../gql/gql_mappers";
-import { userProfileVar, localCartVar } from "../../../Apollo/cache";
+import { localCartVar, userProfileVar } from "../../../Apollo/cache";
 import { useLazyQuery, useReactiveVar } from "@apollo/client";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function AddressBar() {
   const userProfileVarReactive = useReactiveVar(userProfileVar);
   const [addrLine1, setAddrLine1] = useState("");
   const [addrLine2, setAddrLine2] = useState("");
-  const [addressResult, setAddressResult] = useState({});
   const [error, setError] = useState("");
   const { dispatch } = useContext(AlertContext);
   const isAuth = useMemo(() => userProfileVarReactive.isAuth, [
@@ -47,38 +47,6 @@ export default function AddressBar() {
     });
   }, [dispatch]);
 
-  const handleResult = useCallback(() => {
-    if (addressResult.addressId === null) {
-      console.log(
-        "AddressBar handleResult found null Guest/Buyer addressId toggleAddressSheet"
-      );
-      toggleAddressSheet();
-      return;
-    } else {
-      console.log(
-        `AddressBar fetchAddressDataGuest found GuestBuyer default address ${JSON.stringify(
-          addressResult
-        )}`
-      );
-      let aL1 = gqlMappers.mapGQLAddressToDelivery(addressResult);
-      let aL2 = gqlMappers.mapGQLAddressToLine2(addressResult);
-      userProfileVar({
-        ...userProfileVar(),
-        addressId: addressResult.addressId,
-        addressLine1: aL1,
-        addressLine2: aL2,
-      });
-      // callBackAddress used for gql query to get geo co-ords see useEffect Explore
-      localCartVar({
-        ...localCartVar(),
-        deliverAddress: addressResult.addressId,
-        callBackAddress: gqlMappers.mapGQLAddressResponseToCache(addressResult),
-      });
-      setAddrLine1(aL1);
-      setAddrLine2(aL2);
-    }
-  }, [addressResult, toggleAddressSheet]);
-
   const handleError = useCallback(() => {
     if (typeof error !== "undefined") {
       console.log(
@@ -87,11 +55,7 @@ export default function AddressBar() {
       );
     }
   }, [error]);
-  useEffect(() => {
-    if (addressResult) {
-      handleResult();
-    }
-  }, [handleResult, addressResult]);
+
   /**
    * get the list of address to populate the add addres bottom sheet
    * called when component mounts useEffect via getBuyerId
@@ -105,12 +69,14 @@ export default function AddressBar() {
    * see './gql/explore_queries'
    */
   /** FIND_BUYER_DEFAULT_ADDRESS_BY_ID is a private api */
-  const [fetchAddress] = useLazyQuery(
+  const [fetchAddress, { refetch }] = useLazyQuery(
     isAuth
       ? aQM.FIND_BUYER_DEFAULT_ADDRESS_BY_ID
       : aQM.FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID,
     {
       variables: { buyerId: isAuth ? global.buyerId : global.guestId },
+      fetchPolicy: "network-only",
+      notifyOnNetworkStatusChange: true,
       context: {
         headers: {
           isPrivate: isAuth,
@@ -125,15 +91,32 @@ export default function AddressBar() {
           // debug only
           console.log(
             `AddressBar fetchAddressData Guest/Buyer look up addressId ${JSON.stringify(
-              result.data
+              result.getBuyerDefaultAddressByBuyerId
             )}`
           );
-          setAddressResult(
-            isAuth
-              ? result.getBuyerDefaultAddressByBuyerId
-              : result.getGuestBuyerDefaultAddressByBuyerId
-          );
+          const resultJson = isAuth
+            ? result.getBuyerDefaultAddressByBuyerId
+            : result.getGuestBuyerDefaultAddressByBuyerId;
+          let aL1 = gqlMappers.mapGQLAddressToDelivery(resultJson);
+          let aL2 = gqlMappers.mapGQLAddressToLine2(resultJson);
+          if (aL1.length > 10) {
+            aL1 = aL1.substring(0, 17);
+          }
+          if (aL2.length > 10) {
+            aL2 = aL2.substring(0, 16);
+          }
+          // callBackAddress used for gql query to get geo co-ords see useEffect Explore
+          localCartVar({
+            ...localCartVar(),
+            deliverAddress: resultJson.addressId,
+            callBackAddress: gqlMappers.mapGQLAddressResponseToCache(
+              resultJson
+            ),
+          });
+          setAddrLine1(aL1);
+          setAddrLine2(aL2);
         } else {
+          toggleAddressSheet();
           console.log(
             "AddressBar fetchAddressData  Guest/Buyer  server error for query"
           );
@@ -141,34 +124,23 @@ export default function AddressBar() {
       },
     }
   );
-
-  useEffect(() => {
-    fetchAddress();
-  }, [fetchAddress]);
-
-  // need this to get the address to show in screen see App/Containers/Explore/Components/AddLocationSheetContent.js
-  useEffect(() => {
-    console.log(
-      "AddressBar useEffect addressUpdate " +
-        JSON.stringify(userProfileVarReactive)
-    );
-    setAddrLine1(userProfileVarReactive.addressLine1);
-    setAddrLine2(userProfileVarReactive.addressLine2);
-  }, [userProfileVarReactive]);
-
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchAddress();
+    }, [fetchAddress])
+  );
   return (
-    <View style={styles.addressBarContainer}>
-      <View style={styles.row}>
-        <Image source={Images.locationMed} style={styles.icLocation} />
-        <Text style={styles.heading5Regular}>Deliver to - {addrLine1}</Text>
-        <View style={styles.areaContainer}>
-          <Text style={styles.heading6Bold}>{addrLine2}</Text>
+    <TouchableOpacity onPress={toggleAddressSheet}>
+      <View style={styles.addressBarContainer}>
+        <View style={styles.row}>
+          <Image source={Images.locationMed} style={styles.icLocation} />
+          <Text style={styles.heading5Regular}>Deliver to - {addrLine1}</Text>
+          <View style={styles.areaContainer}>
+            <Text style={styles.heading6Bold}>{addrLine2}</Text>
+          </View>
         </View>
-      </View>
-
-      <TouchableOpacity onPress={toggleAddressSheet}>
         <Image source={Images.arrow_left} style={styles.icArrowDown} />
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 }

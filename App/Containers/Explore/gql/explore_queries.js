@@ -7,7 +7,24 @@ import { gql } from "@apollo/client";
  * createAddress, updateAddress, deleteAddress
  * getGuestBuyerDefaultAddressByBuyerId,getGuestBuyerAddressesById
  */
-
+export const GET_PREFERRED_CATEGORIES = gql`
+  query GetPreferredCategories($buyerId: ID!) {
+    getPreferredCategories(buyerId: $buyerId) {
+      categoryId
+      name
+      description
+    }
+  }
+`;
+export const GET_ALL_CATEGORIES = gql`
+  query GetAllCategories {
+    getAllCategories {
+      categoryId
+      name
+      description
+    }
+  }
+`;
 /**
  *
  * @query  getListings
@@ -39,6 +56,7 @@ import { gql } from "@apollo/client";
  *  name: String description: String}
  *
  */
+
 export const GET_LISTINGS = gql`
   query GetListings($searchOptions: SearchOptions) {
     getListings(searchOptions: $searchOptions) {
@@ -304,3 +322,165 @@ export const FIND_COORDINATES_FOR_ADDRESS_REQUEST = gql`
     }
   }
 `;
+
+// query { getListings (searchOptions: {})
+// {
+//     id
+//     productId
+//     numberOfReviews
+//     rating
+//     closedDate
+//     deliveryDate
+//     productListingType
+//     shippingMethodsAvailable
+//     noOfOrderedItems
+//     progressBarValue
+//     noOfItemsInStock
+//     numberOfItemsAvailable
+//     minQuantityPerCart
+//     maxQuantityPerCart
+//     pickUpFromSeller
+//     amountSaved
+//     deliveryFee
+//     shortName
+//     longName
+//     description
+//     technicalDetails
+//     photo
+//     photoUrls
+//     announcementId
+//     ratingDetail {
+//         zeroStar
+//         oneStar
+//         twoStar
+//         threeStar
+//         fourStar
+//         fiveStar
+//         sixAndMoreStar
+//     }
+//     collectionPointAddressId
+//     collectionPointAddress {
+//         id
+//         flat
+//         floor
+//         block
+//         building
+//         houseNumber
+//         streetAddress1
+//         streetAddress2
+//         townCity
+//         villageArea
+//         district
+//         provinceState
+//         country
+//         areaCode
+//         landMark
+//         pinCode
+//         addressType
+//         referenceId
+//         defaultAddress
+//     }
+//     returnAddressId
+//     returnAddress {
+//         id
+//         flat
+//         floor
+//         block
+//         building
+//         houseNumber
+//         streetAddress1
+//         streetAddress2
+//         townCity
+//         villageArea
+//         district
+//         provinceState
+//         country
+//         areaCode
+//         landMark
+//         pinCode
+//         addressType
+//         referenceId
+//         defaultAddress
+//     }
+//     productOptionValues {
+//         valueId
+//         productId
+//         optionValue
+//         defaultValue
+//         discount
+//         availabilityCounter
+//         priceIncrease
+//     }
+//     relatedProducts
+//     sellerId
+//     seller {
+//         id
+//         brandName
+//     }
+//     reviews {
+//         id
+//         productId
+//         title
+//         description
+//         ratingVote
+//         helpfulCount
+//         postedBy
+//     }
+//     returnPolicies {
+//         id
+//         productId
+//         name
+//         description
+//     }
+//     categories {
+//         categoryId
+//         productId
+//         name
+//         description
+//     }
+//     images {
+//         id
+//         referenceId
+//         imageName
+//         imageType
+//         description
+//         fullPath
+//     }
+//     variants {
+//         initialItemsCount
+//         itemsAvailable
+//         itemsSold
+//         optionGroupId
+//         optionsGroupDiscount
+//         optionsGroupPrice
+//         sku
+//         defaultOptionGroup
+//         options {
+//             key
+//             value
+//         }
+//     }
+//     productListingsOptionGroups {
+//         groupId
+//         listingId
+//         itemsAvailable
+//         itemsSold
+//         productId
+//         optionsGroup {
+//             defaultOptionGroup
+//             groupId
+//             initialItemsCount
+//             itemsAvailable
+//             optionsGroupDiscount
+//             optionsGroupPrice
+//             optionValues {
+//                 defaultOptionValue
+//                 description
+//                 name
+//                 value
+//                 priceIncrease
+//                 valueId
+//             }
+//         }
+//     }
+// }}

@@ -41,7 +41,7 @@ function reducer(state, action) {
         actionSheet: { ...state.actionSheet, ...action.payload },
       };
     case "changLoading":
-      return { ...state, loading: { loading: action.payload } };
+      return { ...state, loading: { spinner: action.payload } };
     default:
       throw new Error();
   }
@@ -55,7 +55,6 @@ function RootContainer() {
     },
     dispatch,
   ] = useReducer(reducer, initialState);
-
   const sheetEl = useRef(null);
   const fall = new Animated.Value(0);
   useEffect(() => {

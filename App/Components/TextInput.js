@@ -55,6 +55,7 @@ class CustomTextInput extends Component {
               onChangeText={onChangeText}
               multiline={multiline}
               keyboardType={keyboardType}
+              placeholderTextColor="gray"
               numberOfLines={multiline ? 5 : 1}
               value={value}
               onSubmitEditing={onSubmitEditing}

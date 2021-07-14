@@ -114,10 +114,10 @@ export const mapProductListingDTO = (data) => {
       highlightBullets: element.highlightBullets,
       hidePickUpFromSeller: hidePickUpFromSeller,
       selectedProductVariants: [], // a list of objects {gid, selectedVal}
-      prodVariants:
-        element.variants.length === 0
-          ? [sizeVariant, colorVariant]
-          : element.variants,
+      // prodVariants:
+      //   element.variants.length === 0
+      //     ? [sizeVariant, colorVariant]
+      //     : element.variants,
     };
     pList.push(bag);
   }

@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import { Text, View, Image, TouchableOpacity, TextInput } from "react-native";
+import { ScaledSheet } from "react-native-size-matters";
+import PropTypes from "prop-types";
 
-import { Fonts, Colors, Images } from '../Themes';
-import colors from '../Themes/Colors';
-import fonts from '../Themes/Fonts';
+import { Fonts, Colors, Images } from "../Themes";
+import colors from "../Themes/Colors";
+import fonts from "../Themes/Fonts";
 
 class CustomTextInput extends Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class CustomTextInput extends Component {
     this.state = {};
   }
 
-  getInnerRef = () => this.ref
+  getInnerRef = () => this.ref;
 
   render() {
     const {
@@ -28,7 +28,7 @@ class CustomTextInput extends Component {
       title,
       multiline,
       value,
-      keyboardType = 'default',
+      keyboardType = "default",
       onSubmitEditing,
       returnKeyType,
       textAlignVertical,
@@ -47,7 +47,7 @@ class CustomTextInput extends Component {
           <View style={{ flex: 1 }}>
             {hasTitle && <Text style={styles.title}>{title}</Text>}
             <TextInput
-              ref={(r) => this.ref = r}
+              ref={(r) => (this.ref = r)}
               placeholder={placeholder}
               style={styles.textInput}
               onFocus={onFocus}
@@ -59,7 +59,7 @@ class CustomTextInput extends Component {
               value={value}
               onSubmitEditing={onSubmitEditing}
               returnKeyType={returnKeyType}
-              textAlignVertical={textAlignVertical ?? 'center'}
+              textAlignVertical={textAlignVertical ?? "center"}
             />
           </View>
         </View>
@@ -76,62 +76,62 @@ CustomTextInput.defaultProps = {};
 const styles = ScaledSheet.create({
   title: {
     color: colors.grey40,
-    paddingHorizontal: '8@s',
+    paddingHorizontal: "8@s",
     fontFamily: fonts.primary,
-    fontSize: '12@s',
+    fontSize: "12@s",
     marginTop: -3,
     marginBottom: -3,
   },
   container: {
-    height: '48@vs',
+    height: "48@vs",
     backgroundColor: Colors.white,
-    borderRadius: '20@s',
+    borderRadius: "20@s",
     borderWidth: 1,
     borderColor: Colors.grey20,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingHorizontal: '10@s',
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+    paddingHorizontal: "10@s",
   },
   multilineContainer: {
-    height: '150@vs',
-    paddingVertical: '5@vs',
+    height: "150@vs",
+    paddingVertical: "5@vs",
   },
   errorContainer: {
     borderColor: Colors.error,
   },
   icSearch: {
-    width: '25@s',
-    height: '25@s',
+    width: "25@s",
+    height: "25@s",
     tintColor: Colors.grey60,
   },
   icDelete: {
-    width: '13@s',
-    height: '13@s',
+    width: "13@s",
+    height: "13@s",
     tintColor: Colors.grey80,
   },
   btnDelete: {
-    width: '18@s',
-    height: '18@s',
+    width: "18@s",
+    height: "18@s",
     backgroundColor: Colors.grey10,
-    borderRadius: '10@s',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderRadius: "10@s",
+    justifyContent: "center",
+    alignItems: "center",
   },
   textInput: {
     flex: 1,
-    paddingLeft: '5@s',
-    height: '100%',
-    fontSize: '14@s',
+    paddingLeft: "5@s",
+    height: "100%",
+    fontSize: "14@s",
     fontFamily: Fonts.primary,
     color: Colors.black,
   },
   errorText: {
     fontFamily: Fonts.primary,
     color: Colors.error,
-    fontSize: '14@s',
-    marginTop: '3@vs',
-    marginLeft: '15@s',
+    fontSize: "14@s",
+    marginTop: "3@vs",
+    marginLeft: "15@s",
   },
 });
 export default CustomTextInput;

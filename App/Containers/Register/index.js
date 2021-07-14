@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, StatusBar, Text, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState, useEffect } from "react";
+import { View, StatusBar, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 //import { vs } from 'react-native-size-matters'
 
 import {
@@ -10,21 +10,21 @@ import {
   AppBar,
   Switch,
   Alert,
-} from '../../Components';
+} from "../../Components";
 
 // validation and auth api
-import * as validator from '../../Validation';
-import * as aQM from './gql/register_mutations';
-import * as jwt from '../../Apollo/jwt-request';
-import * as storage from '../../Apollo/local-storage';
+import * as validator from "../../Validation";
+import * as aQM from "./gql/register_mutations";
+import * as jwt from "../../Apollo/jwt-request";
+import * as storage from "../../Apollo/local-storage";
 /** userProfileVar is the variable for the cache to get set  userProfile attributes */
-import { userProfileVar } from '../../Apollo/cache';
+import { userProfileVar } from "../../Apollo/cache";
 
-import { Colors } from '../../Themes';
-import styles from './styles';
-import NavigationService from '../../Navigation/NavigationService';
-import { REGISTER_BUYER } from '../../Apollo/mutations/mutations_user';
-import { useMutation } from '@apollo/client';
+import { Colors } from "../../Themes";
+import styles from "./styles";
+import NavigationService from "../../Navigation/NavigationService";
+import { REGISTER_BUYER } from "../../Apollo/mutations/mutations_user";
+import { useMutation } from "@apollo/client";
 
 function RegisterScreen(props) {
   // refs
@@ -33,15 +33,15 @@ function RegisterScreen(props) {
     emailInput,
     passwordInput = null;
   // validation
-  let [validationDisplay, setValidationDisplay] = useState('');
+  let [validationDisplay, setValidationDisplay] = useState("");
   let [showValidationAlert, setShowValidationAlert] = useState(false);
-  let [validationMessage, setValidationMessage] = useState('');
+  let [validationMessage, setValidationMessage] = useState("");
   // local state
-  let [name, setName] = useState('');
-  let [lastName, setLastName] = useState('');
+  let [name, setName] = useState("");
+  let [lastName, setLastName] = useState("");
   // registerInput  is indeterminate value that can be a phone or email
-  let [registerInput, setRegisterInput] = useState('');
-  let [psswd, setPsswd] = useState('');
+  let [registerInput, setRegisterInput] = useState("");
+  let [psswd, setPsswd] = useState("");
   // because of the way the switch component is set up this is the opposite of what you would expect
   let [termsAccepted, setTermsAccepted] = useState(true);
   useEffect(() => {
@@ -53,16 +53,16 @@ function RegisterScreen(props) {
     userName: registerInput,
     firstName: name,
     lastName: lastName,
-    geoLocation: '',
+    geoLocation: "",
     guestBuyer: false,
     email: registerInput,
-    phoneNumber: '',
-    userType: 'BUYER',
+    phoneNumber: "",
+    userType: "BUYER",
     password: psswd,
     oneClickPurchaseOn: true,
-    areaRegion: '',
-    languages: ['EN'],
-    currencies: ['EUR'],
+    areaRegion: "",
+    languages: ["EN"],
+    currencies: ["EUR"],
   };
   /**
    * REGISTER_BUYER(registerBuyer) mutation is a public api endpoint
@@ -74,7 +74,7 @@ function RegisterScreen(props) {
     variables: { request: BuyerProfileRequestForCreate },
     onCompleted: (result) => {
       resetValidation();
-      if (typeof result.data !== 'undefined') {
+      if (typeof result.data !== "undefined") {
         let buyerId = result.data.registerBuyer.buyerId;
         console.log(`registerBuyer buyerId=${buyerId}`);
         storage.setLocalStorageValue(registerInput, buyerId);
@@ -91,27 +91,27 @@ function RegisterScreen(props) {
         jwt
           .runTokenFlow(loginRequest)
           .then(function (res) {
-            if (typeof res !== 'undefined') {
-              console.log('login ok set auth');
+            if (typeof res !== "undefined") {
+              console.log("login ok set auth");
               userProfileVar({
                 email: loginRequest.username,
                 isAuth: true,
               });
 
               let access_token = res.data.access_token;
-              if (access_token === 'undefined') {
-                console.log('no access token');
+              if (access_token === "undefined") {
+                console.log("no access token");
               }
               storage.setLocalStorageValue(
                 storage.LOCAL_STORAGE_TOKEN_KEY,
                 access_token
               );
-              NavigationService.navigate('MainScreen');
+              NavigationService.navigate("MainScreen");
             }
             // need check for status code = 200
             // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
             else {
-              console.log('psswd is not correct');
+              console.log("psswd is not correct");
               toggleResetValidationAlert();
             }
           })
@@ -119,7 +119,7 @@ function RegisterScreen(props) {
             // here we will need to deal with a  status` code 401 and refresh jwt and try again
           });
 
-        NavigationService.navigate('MainScreen');
+        NavigationService.navigate("MainScreen");
         // NavigationService.navigate('OTPScreen', { fromScreen: 'RegisterScreen', phone: registerInput })
       }
     },
@@ -132,7 +132,7 @@ function RegisterScreen(props) {
   const onRegister = async () => {
     // first decide are we an email or a phone
     let registerUserValidation = { name, lastName, registerInput, psswd };
-    setValidationDisplay('');
+    setValidationDisplay("");
     console.log(`${name}::${lastName}::${registerInput}::${psswd}`);
     // here registerInput can be email not phone
     let reporter = validator.registerValidator(registerUserValidation);
@@ -144,7 +144,7 @@ function RegisterScreen(props) {
       // now check is valid password
       if (!reporter.validPassword) {
         setValidationDisplay(
-          'Password requires 1 uppercase, 1 number and min 8 characters'
+          "Password requires 1 uppercase, 1 number and min 8 characters"
         );
         return;
       }
@@ -152,7 +152,7 @@ function RegisterScreen(props) {
       if (reporter.validPhoneOrEmail) {
         console.log(`setTermsAccepted=${termsAccepted}`);
         if (termsAccepted) {
-          setValidationDisplay('Please accept terms and privacy policy');
+          setValidationDisplay("Please accept terms and privacy policy");
           return;
         }
         // for now use email only
@@ -160,20 +160,20 @@ function RegisterScreen(props) {
           registerBuyer();
         } else {
           // must be phone
-          setValidationDisplay(' please use email not phone');
+          setValidationDisplay(" please use email not phone");
         }
       } else {
-        setValidationDisplay(' phone or email is invalid');
+        setValidationDisplay(" phone or email is invalid");
       }
     } // end else => no missing fields block
   };
 
   const resetValidation = () => {
-    console.log('resetValidation');
-    setName('');
-    setLastName('');
-    setRegisterInput('');
-    setPsswd('');
+    console.log("resetValidation");
+    setName("");
+    setLastName("");
+    setRegisterInput("");
+    setPsswd("");
   };
 
   const toggleResetValidationAlert = () => {
@@ -188,7 +188,7 @@ function RegisterScreen(props) {
     return (
       <Alert
         visible={showValidationAlert}
-        title={'One or more input(s) are not correct'}
+        title={"One or more input(s) are not correct"}
         message={validationMessage}
         color={Colors.warning}
         onDismiss={toggleResetValidationAlert}
@@ -201,7 +201,7 @@ function RegisterScreen(props) {
       <StatusBar barStyle="dark-content" />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar showLogo onPressBack={() => props.navigation.goBack()} />
 
@@ -215,40 +215,40 @@ function RegisterScreen(props) {
           <TextInput
             style={styles.textInput}
             ref={(r) => (nameInput = r)}
-            placeholder={'Type your name'}
+            placeholder={"Type your name"}
             onSubmitEditing={() => lastNameInput.getInnerRef().focus()}
-            returnKeyType={'next'}
+            returnKeyType={"next"}
             onChangeText={(text) => setName(text)}
             value={name}
           />
 
           <TextInput
             style={styles.textInput}
-            placeholder={'Type your last name'}
+            placeholder={"Type your last name"}
             ref={(r) => (lastNameInput = r)}
             onSubmitEditing={() => emailInput.getInnerRef().focus()}
-            returnKeyType={'next'}
+            returnKeyType={"next"}
             onChangeText={(text) => setLastName(text)}
             value={lastName}
           />
 
           <TextInput
             style={styles.textInput}
-            placeholder={'Type your email or phone number'}
+            placeholder={"Type your email or phone number"}
             ref={(r) => (emailInput = r)}
             onSubmitEditing={() => passwordInput.getInnerRef().focus()}
-            returnKeyType={'next'}
+            returnKeyType={"next"}
             onChangeText={(text) => setRegisterInput(text)}
             value={registerInput}
           />
 
           <PasswordInput
             style={styles.textInput}
-            placeholder={'Enter your password'}
+            placeholder={"Enter your password"}
             ref={(r) => (passwordInput = r)}
             //onSubmitEditing={onRegister}
-            defaultValue={''}
-            returnKeyType={'done'}
+            defaultValue={""}
+            returnKeyType={"done"}
             onChangeText={(text) => setPsswd(text)}
             value={psswd}
           />
@@ -256,14 +256,14 @@ function RegisterScreen(props) {
           <View style={styles.switch}>
             <Switch
               onSwitch={() => {
-                console.log('termsAccepted=' + termsAccepted);
+                console.log("termsAccepted=" + termsAccepted);
                 toggleTermsAccepted();
-                console.log('termsAccepted=' + termsAccepted);
+                console.log("termsAccepted=" + termsAccepted);
               }}
             />
             <TouchableOpacity
               onPress={() =>
-                props.navigation.navigate('LegalScreen', { tabIndex: 0 })
+                props.navigation.navigate("LegalScreen", { tabIndex: 0 })
               }
             >
               <Text style={styles.txtAccept}>
@@ -281,7 +281,7 @@ function RegisterScreen(props) {
           <Button
             onPress={onRegister}
             // onPress={onDebug}
-            text={'REGISTER'}
+            text={"REGISTER"}
           />
 
           <TouchableOpacity

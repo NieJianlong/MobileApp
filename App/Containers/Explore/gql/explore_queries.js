@@ -85,29 +85,29 @@ export const GET_LISTINGS = gql`
         description
         fullPath
       }
-      productListingsOptionGroups {
-        optionsGroup {
-          groupId
-          optionValues {
-            value
-            defaultOptionValue
-          }
-        }
-      }
-      variants {
-        optionGroupId
-        initialItemsCount
-        itemsAvailable
-        itemsSold
-        optionsGroupPrice
-        optionsGroupDiscount
-        sku
-        defaultOptionGroup
-        options {
-          key
-          value
-        }
-      }
+      # productListingsOptionGroups {
+      #   optionsGroup {
+      #     groupId
+      #     optionValues {
+      #       value
+      #       defaultOptionValue
+      #     }
+      #   }
+      # }
+      # variants {
+      #   optionGroupId
+      #   initialItemsCount
+      #   itemsAvailable
+      #   itemsSold
+      #   optionsGroupPrice
+      #   optionsGroupDiscount
+      #   sku
+      #   defaultOptionGroup
+      #   options {
+      #     key
+      #     value
+      #   }
+      # }
     }
   }
 `;

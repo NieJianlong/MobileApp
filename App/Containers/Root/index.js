@@ -11,7 +11,6 @@ import colors from "../../Themes/Colors";
 import { vs } from "react-native-size-matters";
 import { AlertContext } from "./GlobalContext";
 import Spinner from "react-native-loading-spinner-overlay";
-import tailwind from
 
 const initialState = {
   alert: {
@@ -52,6 +51,7 @@ function RootContainer() {
     {
       alert: { visible, message, color, onDismiss, title },
       actionSheet: { showSheet, children, height, onCloseEnd, sheetTitle },
+      loading:{}
     },
     dispatch,
   ] = useReducer(reducer, initialState);
@@ -72,7 +72,7 @@ function RootContainer() {
         <Spinner
           visible={this.state.spinner}
           textContent={"Loading..."}
-          textStyle={}
+          // textStyle={}
         />
         <AppNavigation />
         <Alert

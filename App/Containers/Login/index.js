@@ -22,7 +22,6 @@ import * as storage from "../../Apollo/local-storage";
 /** userProfileVar is the variable for the cache to get set  userProfile attributes */
 import { userProfileVar } from "../../Apollo/cache";
 import NavigationService from "../../Navigation/NavigationService";
-
 import jwt_decode from "jwt-decode";
 
 import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
@@ -65,12 +64,7 @@ function LoginScreen(props) {
     // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
     console.log("onSignIn" + `${loginInput}:::${psswd}`); // to-do remove
     let ret = validator.loginDifferentiator(loginInput);
-    dispatch({
-      type: "changLoading",
-      payload: {
-        spinner: true,
-      },
-    });
+
     if (ret.isValid) {
       // we are good so we can test for email or phone
       if (ret.isEmail) {
@@ -79,6 +73,10 @@ function LoginScreen(props) {
           password: psswd,
         };
         // console.log(profile.data.userProfileVar.email)// to-do remove
+        dispatch({
+          type: "changLoading",
+          payload: true,
+        });
         await jwt
           .runTokenFlow(loginRequest)
           .then(function (res) {
@@ -122,6 +120,10 @@ function LoginScreen(props) {
                   },
                 })
                 .then((result) => {
+                  dispatch({
+                    type: "changLoading",
+                    payload: false,
+                  });
                   if (typeof result.data !== "undefined") {
                     console.log(
                       `Login BUYER_PROFILE_BY_USERID look up buyerId calls back ${JSON.stringify(
@@ -143,6 +145,10 @@ function LoginScreen(props) {
                   }
                 })
                 .catch((err) => {
+                  dispatch({
+                    type: "changLoading",
+                    payload: false,
+                  });
                   if (typeof err !== "undefined") {
                     console.log(
                       "Login BUYER_PROFILE_BY_USERID Query error " + err
@@ -154,6 +160,10 @@ function LoginScreen(props) {
             // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
             else {
               console.log("psswd is not correct");
+              dispatch({
+                type: "changLoading",
+                payload: false,
+              });
               dispatch({
                 type: "changAlertState",
                 payload: {
@@ -180,10 +190,6 @@ function LoginScreen(props) {
             title: "email or password is invalid",
           },
         });
-        //     userProfileVar({
-        //         phone: loginInput,
-        //         isAuth: true
-        //     })
       }
     } else {
       console.log("data not valid");

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, StatusBar, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 //import { vs } from 'react-native-size-matters'
@@ -25,8 +25,10 @@ import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
 import { REGISTER_BUYER } from "../../Apollo/mutations/mutations_user";
 import { useMutation } from "@apollo/client";
+import { AlertContext } from "../Root/GlobalContext";
 
 function RegisterScreen(props) {
+  const { dispatch } = useContext(AlertContext);
   // refs
   let nameInput,
     lastNameInput,
@@ -53,11 +55,7 @@ function RegisterScreen(props) {
     userName: registerInput,
     firstName: name,
     lastName: lastName,
-    geoLocation: "",
-    guestBuyer: false,
     email: registerInput,
-    phoneNumber: "",
-    userType: "BUYER",
     password: psswd,
     oneClickPurchaseOn: true,
     areaRegion: "",
@@ -72,7 +70,15 @@ function RegisterScreen(props) {
    */
   const [registerBuyer, { data }] = useMutation(REGISTER_BUYER, {
     variables: { request: BuyerProfileRequestForCreate },
+    onError: (error) => {
+      dispatch({
+        type: "changLoading",
+        payload: false,
+      });
+      debugger;
+    },
     onCompleted: (result) => {
+      debugger;
       resetValidation();
       if (typeof result.data !== "undefined") {
         let buyerId = result.data.registerBuyer.buyerId;
@@ -91,6 +97,10 @@ function RegisterScreen(props) {
         jwt
           .runTokenFlow(loginRequest)
           .then(function (res) {
+            dispatch({
+              type: "changLoading",
+              payload: false,
+            });
             if (typeof res !== "undefined") {
               console.log("login ok set auth");
               userProfileVar({
@@ -113,9 +123,17 @@ function RegisterScreen(props) {
             else {
               console.log("psswd is not correct");
               toggleResetValidationAlert();
+              dispatch({
+                type: "changLoading",
+                payload: false,
+              });
             }
           })
           .catch(function (err) {
+            dispatch({
+              type: "changLoading",
+              payload: false,
+            });
             // here we will need to deal with a  status` code 401 and refresh jwt and try again
           });
 
@@ -157,6 +175,10 @@ function RegisterScreen(props) {
         }
         // for now use email only
         if (reporter.isEmail) {
+          dispatch({
+            type: "changLoading",
+            payload: true,
+          });
           registerBuyer();
         } else {
           // must be phone
@@ -215,7 +237,7 @@ function RegisterScreen(props) {
           <TextInput
             style={styles.textInput}
             ref={(r) => (nameInput = r)}
-            placeholder={"Type your name"}
+            placeholder={"Type your first name"}
             onSubmitEditing={() => lastNameInput.getInnerRef().focus()}
             returnKeyType={"next"}
             onChangeText={(text) => setName(text)}

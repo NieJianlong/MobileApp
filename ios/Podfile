@@ -9,7 +9,6 @@ target 'apollo' do
   use_react_native!(:path => config["reactNativePath"])
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
-
   target 'apolloTests' do
     inherit! :complete
     # Pods for testing
@@ -19,10 +18,10 @@ target 'apollo' do
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
-#  use_flipper!
-#  post_install do |installer|
-#    flipper_post_install(installer)
-#  end
+  use_flipper!
+  post_install do |installer|
+      flipper_post_install(installer)
+  end
 end
 
 target 'apollo-tvOS' do

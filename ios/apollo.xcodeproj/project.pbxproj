@@ -20,7 +20,6 @@
 		4D549A0F26A0282D00D0DAA7 /* Blank.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D549A0E26A0282D00D0DAA7 /* Blank.swift */; };
 		4D549A1126A028ED00D0DAA7 /* libswiftWebKit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D549A1026A028ED00D0DAA7 /* libswiftWebKit.tbd */; };
 		662E2CEC40D74B72BC2F7A51 /* TitilliumWeb-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0543511077AF4E38A7007238 /* TitilliumWeb-Regular.ttf */; };
-		67E3AEDA1A70CFC5F8249BFA /* libPods-apollo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC78338C365B687F0A3036C /* libPods-apollo.a */; };
 		6B3D435D118B43BAB08F133F /* TitilliumWeb-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A8DECA8510384A5F89DBA0A5 /* TitilliumWeb-SemiBold.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8B0F476607B18A5943E4CA1D /* libPods-apollo-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7F11A16352533E40B7EBD72 /* libPods-apollo-tvOS.a */; };
@@ -110,7 +109,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D549A1126A028ED00D0DAA7 /* libswiftWebKit.tbd in Frameworks */,
-				67E3AEDA1A70CFC5F8249BFA /* libPods-apollo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -461,7 +459,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		073D6610E3BB184BA2043D92 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -964,6 +962,8 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				EXCLUDED_ARCHS = arm64;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1024,6 +1024,8 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXCLUDED_ARCHS = arm64;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

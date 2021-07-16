@@ -8,23 +8,21 @@ import {
   Dimensions,
 } from "react-native";
 import { ScaledSheet, s } from "react-native-size-matters";
-import PropTypes from "prop-types";
-
 import Highlighter from "./Highlighter";
 import Button from "./Button";
-
 import { Fonts, Colors, Images, ApplicationStyles } from "../Themes";
 import NavigationService from "../Navigation/NavigationService";
 import AppConfig from "../Config/AppConfig";
+import * as storage from "../Apollo/local-storage";
 
 const { width, height } = Dimensions.get("window");
 
-const results = [
-  "iphone 12",
-  "iphone 12 mini",
-  "iphone 12 pro",
-  "iphone 12 pro max",
-];
+// const results = [
+//   "iphone 12",
+//   "iphone 12 mini",
+//   "iphone 12 pro",
+//   "iphone 12 pro max",
+// ];
 
 //product search box component
 class ProductSearchBox extends Component {
@@ -37,7 +35,7 @@ class ProductSearchBox extends Component {
   }
 
   getResults = (keyword) => {
-    return results.filter((i) =>
+    return this.props.recentSearches.filter((i) =>
       i.toLowerCase().includes(keyword.toLowerCase())
     );
   };
@@ -65,8 +63,17 @@ class ProductSearchBox extends Component {
             placeholder={"Search products"}
             value={this.state.keyword}
             style={styles.textInput}
+            onSubmitEditing={({
+              nativeEvent: { text, eventCount, target },
+            }) => {
+              this.props.recentSearches.push(text);
+              storage.setLocalStorageValue(
+                storage.LOCAL_SEARCH_ITEM,
+                JSON.stringify(this.props.recentSearches)
+              );
+            }}
             onChangeText={(text) => {
-              this.setState({ keyword: text, results: this.getResults(text) });
+              this.setState({ keyword: text });
             }}
           />
           {this.state.keyword !== "" && (

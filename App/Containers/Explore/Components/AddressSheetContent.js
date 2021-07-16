@@ -6,6 +6,9 @@ import { Colors, Images } from "../../../Themes";
 import styles from "../styles";
 import { AlertContext } from "../../Root/GlobalContext";
 import AddLocationSheetContent from "./AddLocationSheetContent";
+import { useQuery } from "@apollo/client";
+import { FIND_BUYER_ADDRESS_BY_ID } from "../gql/explore_queries";
+import { FIND_BUYER_ADDRESS_BY_ID_AND_TPYE } from "../../../Apollo/queries/queries_user";
 
 function AddressItem(address) {
   return (
@@ -28,6 +31,21 @@ function AddressItem(address) {
 
 export default function AddressSheetContent(props) {
   const { dispatch } = useContext(AlertContext);
+
+  const { loading, error, data, refetch } = useQuery(
+    FIND_BUYER_ADDRESS_BY_ID_AND_TPYE,
+    {
+      variables: {
+        buyerId: global.buyerId,
+        addressType: "SHIPPING",
+      },
+      context: {
+        headers: {
+          isPrivate: true,
+        },
+      },
+    }
+  );
 
   const toggleAddressSheet = useCallback(() => {
     dispatch({

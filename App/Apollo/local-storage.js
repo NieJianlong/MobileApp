@@ -7,6 +7,8 @@ export const REGISTER_BUYER_ID_KEY = "@local_storage_register_id_key";
 
 export const LOCAL_STORAGE_USER_NAME = "@local_storage_user_name";
 export const LOCAL_STORAGE_USER_PASSWORD = "@local_storage_user_password";
+
+export const LOCAL_SEARCH_ITEM = "@local_storage_search_items";
 RNAsyncStorageFlipper(AsyncStorage);
 export const setLocalStorageValue = async (key, val) => {
   // console.log(`setLocalStorageValue key:${key} val ${val}`)

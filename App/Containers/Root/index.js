@@ -26,6 +26,7 @@ const initialState = {
     height: 200,
     sheetTitle: "",
     onCloseEnd: () => {},
+    enabledGestureInteraction: true,
   },
   loading: {
     spinner: false,
@@ -54,7 +55,14 @@ function RootContainer() {
   const [
     {
       alert: { visible, message, color, onDismiss, title },
-      actionSheet: { showSheet, children, height, onCloseEnd, sheetTitle },
+      actionSheet: {
+        showSheet,
+        children,
+        height,
+        onCloseEnd,
+        sheetTitle,
+        enabledGestureInteraction,
+      },
       loading: { spinner },
     },
     dispatch,
@@ -109,7 +117,10 @@ function RootContainer() {
       {showSheet && (
         <BottomSheet
           customRef={sheetEl}
+          enabledGestureInteraction={enabledGestureInteraction}
           onCloseEnd={() => {
+            // onCloseEnd
+            //   ? onCloseEnd()
             dispatch({
               type: "changSheetState",
               payload: { showSheet: false },

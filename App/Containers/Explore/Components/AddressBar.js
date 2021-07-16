@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useCallback,
-  useEffect,
-  useState,
-  useMemo,
-} from "react";
+import React, { useContext, useCallback, useState, useMemo } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import styles from "../styles";
 import { AlertContext } from "../../Root/GlobalContext";
@@ -42,10 +36,12 @@ export default function AddressBar() {
         showSheet: true,
         height: 380,
         children: () => <AddressSheetContent />,
+        onCloseEnd: () => {},
+        // enabledGestureInteraction: addrLine1.length > 0,
         sheetTitle: "Add your delivery address",
       },
     });
-  }, [dispatch]);
+  }, [addrLine1.length, dispatch]);
 
   const handleError = useCallback(() => {
     if (typeof error !== "undefined") {
@@ -69,7 +65,7 @@ export default function AddressBar() {
    * see './gql/explore_queries'
    */
   /** FIND_BUYER_DEFAULT_ADDRESS_BY_ID is a private api */
-  const [fetchAddress, { refetch }] = useLazyQuery(
+  const [fetchAddress, { loading, refetch }] = useLazyQuery(
     isAuth
       ? aQM.FIND_BUYER_DEFAULT_ADDRESS_BY_ID
       : aQM.FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID,
@@ -127,6 +123,9 @@ export default function AddressBar() {
   useFocusEffect(
     React.useCallback(() => {
       fetchAddress();
+      // if (addrLine1 === "" && !loading) {
+      //   toggleAddressSheet();
+      // }
     }, [fetchAddress])
   );
   return (

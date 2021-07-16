@@ -42,6 +42,10 @@ function reducer(state, action) {
       };
     case "changLoading":
       return { ...state, loading: { spinner: action.payload } };
+    case "loading":
+      return { ...state, loading: { spinner: true } };
+    case "hideloading":
+      return { ...state, loading: { spinner: false } };
     default:
       throw new Error();
   }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   StatusBar,
@@ -18,12 +18,12 @@ import NavigationService from "../../Navigation/NavigationService";
 import { useMutation } from "@apollo/client";
 import * as aQM from "./gql/onboard_mutations";
 import * as storage from "../../Apollo/local-storage";
-import { getUniqueId } from "react-native-device-info";
 
-const iOS = Platform.OS === "ios";
+import { AlertContext } from "../Root/GlobalContext";
 
 function OnboardingScreen(props) {
   const [bIdExists, setBIdExists] = useState(false);
+  const { dispatch } = useContext(AlertContext);
 
   /** this is enough to create a guest buyer
    *
@@ -54,7 +54,7 @@ function OnboardingScreen(props) {
   const checkBuyerIdExists = async () => {
     // lets check if a buyer id exists
     // first check for an existing buyer id
-    let bid = await storage.getLocalStorageValue(getUniqueId());
+    let bid = await storage.getLocalStorageValue(storage.GUEST_BUYER_ID_KEY);
     if (bid) {
       console.log(
         `OnboardingScreen checkBuyerIdExists found a bid in local storage ${bid}`
@@ -76,9 +76,10 @@ function OnboardingScreen(props) {
    * update local storage and navigate
    */
   const onGetGuestBuyerId = async (data) => {
+    dispatch({ type: "hideloading" });
     let buyerId = data.createGuestBuyer.buyerId;
     console.log("OnboardingScreen createGuestBuyer buyerId=" + buyerId);
-    await storage.setLocalStorageValue(getUniqueId(), buyerId);
+    await storage.setLocalStorageValue(storage.GUEST_BUYER_ID_KEY, buyerId);
     global.guestId = buyerId;
     NavigationService.navigate("MainScreen");
   };
@@ -139,6 +140,7 @@ function OnboardingScreen(props) {
                 NavigationService.navigate("MainScreen");
               } else {
                 console.log("OnboardingScreen CONTINUE create  guest bid");
+                dispatch({ type: "loading" });
                 guestBuyerId({
                   variables: { request: BuyerProfileRequestForCreate },
                 });

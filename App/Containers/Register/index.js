@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { View, StatusBar, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 //import { vs } from 'react-native-size-matters'
@@ -24,8 +24,11 @@ import { Colors } from "../../Themes";
 import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
 import { REGISTER_BUYER } from "../../Apollo/mutations/mutations_user";
-import { useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { AlertContext } from "../Root/GlobalContext";
+import colors from "../../Themes/Colors";
+import jwt_decode from "jwt-decode";
+import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 
 function RegisterScreen(props) {
   const { dispatch } = useContext(AlertContext);
@@ -51,17 +54,90 @@ function RegisterScreen(props) {
       // Anything in here is fired on component unmount.
     };
   }, []);
+  const [getBuyerId] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
+    variables: { userProfileId: global.userProfileId },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {
+      dispatch({
+        type: "changLoading",
+        payload: false,
+      });
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message:
+            "A confirmation email has been sent to your registered email address",
+          color: colors.success,
+          title: "Congratulations on your successful registration",
+        },
+      });
+      //server often breakon，we should use a constant for testing
+      const {
+        buyerProfileByUserId: { buyerId },
+      } = res;
+      global.buyerId = buyerId;
+      NavigationService.navigate("MainScreen");
+    },
+    onError: (res) => {
+      //server often breakon，we should use a constant for testing
+      global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
+      NavigationService.navigate("MainScreen");
+    },
+  });
   let BuyerProfileRequestForCreate = {
     userName: registerInput,
     firstName: name,
     lastName: lastName,
     email: registerInput,
     password: psswd,
-    oneClickPurchaseOn: true,
-    areaRegion: "",
-    languages: ["EN"],
-    currencies: ["EUR"],
+    phoneNumber: "",
   };
+  const autoSignIn = useCallback(async () => {
+    //get username and possword from localStorage
+    const username = registerInput;
+    const password = psswd;
+
+    //if username && password exits,we can login auto
+    if (username && password) {
+      console.log("====================================");
+      const { data } = await jwt.runTokenFlow({ username, password });
+      let access_token = data.access_token;
+
+      if (access_token === "undefined") {
+        console.log("no access token");
+      }
+      userProfileVar({
+        email: username,
+        isAuth: true,
+      });
+      let decoded = jwt_decode(access_token);
+      global.access_token = access_token;
+      global.userProfileId = decoded.sub;
+
+      storage.setLocalStorageValue(
+        storage.LOCAL_STORAGE_TOKEN_KEY,
+        access_token
+      );
+      global.access_token = access_token;
+      storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_NAME, username);
+      storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_PASSWORD, psswd);
+      getBuyerId();
+
+      storage.setLocalStorageValue(
+        storage.LOCAL_STORAGE_TOKEN_KEY,
+        access_token
+      );
+    }
+  }, [getBuyerId, psswd, registerInput]);
+  //when app open,when can do auto login
+  useEffect(() => {
+    autoSignIn();
+  }, [autoSignIn]);
   /**
    * REGISTER_BUYER(registerBuyer) mutation is a public api endpoint
    * see  ./gql/register_mutations
@@ -75,70 +151,30 @@ function RegisterScreen(props) {
         type: "changLoading",
         payload: false,
       });
-      debugger;
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: error.message,
+          color: colors.error,
+          title: "register failed",
+        },
+      });
     },
     onCompleted: (result) => {
-      debugger;
-      resetValidation();
-      if (typeof result.data !== "undefined") {
-        let buyerId = result.data.registerBuyer.buyerId;
+      if (typeof result.registerBuyer !== "undefined") {
+        let buyerId = result.registerBuyer.buyerId;
         console.log(`registerBuyer buyerId=${buyerId}`);
         storage.setLocalStorageValue(registerInput, buyerId);
-        userProfileVar({
-          email: registerInput,
-          isAuth: true,
-        });
-        let loginRequest = {
-          username: registerInput,
-          password: psswd,
-        };
-
         // login here for private api jwt initial getDefaultBuyerAdress
-        jwt
-          .runTokenFlow(loginRequest)
-          .then(function (res) {
-            dispatch({
-              type: "changLoading",
-              payload: false,
-            });
-            if (typeof res !== "undefined") {
-              console.log("login ok set auth");
-              userProfileVar({
-                email: loginRequest.username,
-                isAuth: true,
-              });
-
-              let access_token = res.data.access_token;
-              if (access_token === "undefined") {
-                console.log("no access token");
-              }
-              storage.setLocalStorageValue(
-                storage.LOCAL_STORAGE_TOKEN_KEY,
-                access_token
-              );
-              NavigationService.navigate("MainScreen");
-            }
-            // need check for status code = 200
-            // below is a mock for the expected jwt shpould be something like res.data.<some json token id>
-            else {
-              console.log("psswd is not correct");
-              toggleResetValidationAlert();
-              dispatch({
-                type: "changLoading",
-                payload: false,
-              });
-            }
-          })
-          .catch(function (err) {
-            dispatch({
-              type: "changLoading",
-              payload: false,
-            });
-            // here we will need to deal with a  status` code 401 and refresh jwt and try again
-          });
-
-        NavigationService.navigate("MainScreen");
+        autoSignIn();
+        // NavigationService.navigate("MainScreen");
         // NavigationService.navigate('OTPScreen', { fromScreen: 'RegisterScreen', phone: registerInput })
+      } else {
+        dispatch({
+          type: "changLoading",
+          payload: false,
+        });
       }
     },
   });
@@ -188,14 +224,6 @@ function RegisterScreen(props) {
         setValidationDisplay(" phone or email is invalid");
       }
     } // end else => no missing fields block
-  };
-
-  const resetValidation = () => {
-    console.log("resetValidation");
-    setName("");
-    setLastName("");
-    setRegisterInput("");
-    setPsswd("");
   };
 
   const toggleResetValidationAlert = () => {

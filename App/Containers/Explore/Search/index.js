@@ -11,54 +11,47 @@ import * as storage from "../../../Apollo/local-storage";
 
 function ProductSearch(props) {
   const { recentSearches } = props;
-  const renderHeader = () => {
-    return (
-      <View style={styles.header}>
-        <ProductSearchBox
-          onSelect={(item) => {
-            props.route.params.onSearch(i);
-            NavigationService.goBack();
-          }}
-        />
-      </View>
-    );
-  };
-
-  const renderBody = () => {
-    return (
-      <View style={styles.body}>
-        <Text style={styles.heading5Bold}>Recent searches</Text>
-
-        {recentSearches.map((i, index) => (
-          <View key={index.toString()} style={styles.recentSearchContainer}>
-            <View style={styles.v1}>
-              <Image style={styles.icClock} source={Images.clock} />
-              <TouchableOpacity
-                onPress={() => {
-                  props.route.params.onSearch(i);
-                  NavigationService.goBack();
-                }}
-              >
-                <Text style={styles.txtSearch}>{i}</Text>
-              </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity>
-              <Image style={styles.icDelete} source={Images.crossMedium} />
-            </TouchableOpacity>
-          </View>
-        ))}
-      </View>
-    );
-  };
-
+  console.log("recentSearches====================================");
+  console.log(recentSearches);
+  console.log("====================================");
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-        {renderHeader()}
+        <View style={styles.header}>
+          <ProductSearchBox
+            recentSearches={recentSearches}
+            onSelect={(item) => {
+              props.route.params.onSearch(i);
+              NavigationService.goBack();
+            }}
+          />
+        </View>
 
-        {renderBody()}
+        <View style={styles.body}>
+          <Text style={styles.heading5Bold}>Recent searches</Text>
+
+          {recentSearches &&
+            recentSearches.map((i, index) => (
+              <View key={index.toString()} style={styles.recentSearchContainer}>
+                <View style={styles.v1}>
+                  <Image style={styles.icClock} source={Images.clock} />
+                  <TouchableOpacity
+                    onPress={() => {
+                      props.route.params.onSearch(i);
+                      NavigationService.goBack();
+                    }}
+                  >
+                    <Text style={styles.txtSearch}>{i}</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <TouchableOpacity>
+                  <Image style={styles.icDelete} source={Images.crossMedium} />
+                </TouchableOpacity>
+              </View>
+            ))}
+        </View>
       </SafeAreaView>
     </View>
   );
@@ -67,20 +60,22 @@ function ProductSearch(props) {
 export default function Index() {
   const [recentSearches, setRecentSearches] = useState([]);
   useEffect(() => {
-    const getItems = async () => {
+    let isUnmount = false;
+    (async () => {
       try {
         const items = await storage.getLocalStorageValue(
           storage.LOCAL_SEARCH_ITEM
         );
-        return items;
+        if (!isUnmount) {
+          setRecentSearches(JSON.parse(items));
+        }
       } catch (error) {
-        return "";
+        if (!isUnmount) {
+          setRecentSearches([]);
+        }
       }
-    };
-    const items = getItems();
-    if (items.length > 0) {
-      setRecentSearches(JSON.parse(items));
-    }
+    })();
+    return () => (isUnmount = true);
   }, []);
   return <ProductSearch recentSearches={recentSearches} />;
 }

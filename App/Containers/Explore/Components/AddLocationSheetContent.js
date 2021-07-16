@@ -18,12 +18,12 @@ import { AlertContext } from "../../Root/GlobalContext";
 import * as aQM from "../gql/explore_queries";
 import * as gqlMappers from "../gql/gql_mappers";
 import { userProfileVar, localCartVar } from "../../../Apollo/cache";
-import { getUniqueId } from "react-native-device-info";
 import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
 import { useMutation, useReactiveVar } from "@apollo/client";
 import AsyncStorage from "@react-native-community/async-storage";
 
 import { client } from "../../../Apollo/apolloClient";
+import { GUEST_BUYER_ID_KEY } from "../../../Apollo/local-storage";
 
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
@@ -63,7 +63,7 @@ export default function AddLocationSheet() {
     } else {
       // this is the guest situation and the device id maps to buyer id
       // should have been set in onboarding
-      let buyId = await AsyncStorage.getItem(getUniqueId());
+      let buyId = await AsyncStorage.getItem(GUEST_BUYER_ID_KEY);
       setBuyerId(buyId);
     }
   };

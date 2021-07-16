@@ -1,135 +1,137 @@
-import React, { Component } from 'react'
-import {
-    View,
-    StatusBar,
-    Text,
-    TouchableOpacity,
-    ScrollView,
-    Keyboard
-} from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { isIphoneX } from 'react-native-iphone-x-helper'
-import { vs } from 'react-native-size-matters'
-import NavigationService from '../../Navigation/NavigationService';
-import {
-    AppBar,
-    Button,
-    TextInput,
-    MaterialTextInput
-} from '../../Components'
-import { Colors } from '../../Themes'
+import React, { Component } from "react";
+import { View, StatusBar, Text, Keyboard } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { isIphoneX } from "react-native-iphone-x-helper";
+import { vs } from "react-native-size-matters";
+import NavigationService from "../../Navigation/NavigationService";
+import { AppBar, Button, TextInput } from "../../Components";
+import { Colors } from "../../Themes";
 
-import styles from './styles'
+import styles from "./styles";
+import { useMutation } from "@apollo/client";
 
-class ForgotPasswordScreen extends Component {
+class ForgotPassword extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: "",
+      keyboardHeight: 0,
+    };
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            email: '',
-            keyboardHeight: 0,
-        }
+    Keyboard.addListener("keyboardWillShow", this._keyboardWillShow);
+    Keyboard.addListener("keyboardWillHide", this._keyboardWillHide);
+  }
 
-        Keyboard.addListener('keyboardWillShow', this._keyboardWillShow)
-        Keyboard.addListener('keyboardWillHide', this._keyboardWillHide)
-    }
+  componentWillUnmount() {
+    Keyboard.removeListener("keyboardWillShow", this._keyboardWillShow);
+    Keyboard.removeListener("keyboardWillHide", this._keyboardWillHide);
+  }
 
-    componentDidMount() {
+  _keyboardWillShow = (e) => {
+    this.setState({
+      keyboardHeight: e.endCoordinates.height,
+    });
+  };
 
-    }
+  _keyboardWillHide = () => {
+    this.setState({
+      keyboardHeight: 0,
+    });
+  };
 
-    componentWillUnmount() {
-        Keyboard.removeListener('keyboardWillShow', this._keyboardWillShow)
-        Keyboard.removeListener('keyboardWillHide', this._keyboardWillHide)
-    }
+  validateEmail = (email) => {
+    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return reg.test(email);
+  };
 
-    _keyboardWillShow = (e) => {
-        this.setState({
-            keyboardHeight: e.endCoordinates.height
-        })
-    }
+  validatePhone = (phone) => {
+    const reg = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+    return reg.test(phone);
+  };
 
-    _keyboardWillHide = () => {
-        this.setState({
-            keyboardHeight: 0
-        })
-    }
+  renderAction() {
+    return (
+      <View>
+        <Button
+          disabled={
+            !this.validateEmail(this.state.email) &&
+            !this.validatePhone(this.state.email)
+          }
+          onPress={() => {
+            if (this.validateEmail(this.state.email)) {
+              /**
+               * add router parameter here for Login screen to show EMS alert
+               */
+              // this.props.navigation.navigate('LoginScreen')
 
-    validateEmail = (email) => {
-        const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-        return reg.test(email)
-    }
+              NavigationService.navigate("LoginScreen", { showEms: true });
+            } else if (this.validatePhone(this.state.email)) {
+              /**
+               * To-Do need clarity for OTP flow
+               */
 
-    validatePhone = (phone) => {
-        const reg = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
-        return reg.test(phone)
-    }
+              NavigationService.navigate("OTPScreen", {
+                fromScreen: "ForgotPasswordScreen",
+              });
+            }
+          }}
+          text={"RESET PASSWORD"}
+        />
 
-    renderAction() {
-        return (
-            <View>
-                <Button
-                    disabled={!this.validateEmail(this.state.email) && !this.validatePhone(this.state.email)}
-                    onPress={() => {
-                        if (this.validateEmail(this.state.email)) {
-                            /**
-                             * add router parameter here for Login screen to show EMS alert
-                             */
-                           // this.props.navigation.navigate('LoginScreen')
-                           NavigationService.navigate('LoginScreen', { showEms: true });
-                      
-                        } else if (this.validatePhone(this.state.email)) {
-                            /**
-                             * To-Do need clarity for OTP flow
-                             */
+        <View
+          style={{
+            height:
+              this.state.keyboardHeight > 0
+                ? this.state.keyboardHeight
+                : isIphoneX()
+                ? 0
+                : vs(15),
+          }}
+        />
+      </View>
+    );
+  }
 
-                            NavigationService.navigate('OTPScreen', { fromScreen: 'ForgotPasswordScreen' })
-                        }
-                    }}
-                    text={'RESET PASSWORD'} />
+  render() {
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" />
+        <SafeAreaView
+          style={styles.safeArea}
+          edges={["top", "right", "left", "bottom"]}
+        >
+          <AppBar
+            showLogo={false}
+            onPressBack={() => NavigationService.goBack()}
+          />
 
-                <View style={{ height: this.state.keyboardHeight > 0 ? this.state.keyboardHeight : isIphoneX() ? 0 : vs(15) }} />
-            </View>
-        )
-    }
+          <View style={styles.bodyContainer}>
+            <Text style={styles.heading2Bold}>Forgot your password?</Text>
+            <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
+              Please enter your information below to create a new one
+            </Text>
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <StatusBar barStyle='dark-content' />
-                <SafeAreaView
-                    style={styles.safeArea}
-                    edges={['top', 'right', 'left', 'bottom']}
-                >
-                    <AppBar
-                        showLogo={false}
-                        onPressBack={() => NavigationService.goBack()}
-                    />
+            <TextInput
+              style={{ marginTop: vs(12) }}
+              placeholder={"Email or phone number"}
+              onChangeText={(text) => {
+                this.setState({ email: text });
+              }}
+            />
 
-                    <View style={styles.bodyContainer}>
-                        <Text style={styles.heading2Bold}>Forgot your password?</Text>
-                        <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
-                            Please enter your information below to create a new one
-                        </Text>
+            <View style={{ flex: 1 }} />
 
-                        <TextInput
-                            style={{ marginTop: vs(12) }}
-                            placeholder={'Email or phone number'}
-                            onChangeText={(text) => {
-                                this.setState({ email: text })
-                            }}
-
-                        />
-
-                        <View style={{ flex: 1 }} />
-
-                        {this.renderAction()}
-
-                    </View>
-                </SafeAreaView>
-            </View>
-        )
-    }
+            {this.renderAction()}
+          </View>
+        </SafeAreaView>
+      </View>
+    );
+  }
 }
 
-export default ForgotPasswordScreen
+function ForgotPasswordScreen() {
+   const  sendVerifyEmail = useMutation();
+  return <ForgotPassword />;
+}
+
+export default ForgotPasswordScreen;

@@ -193,6 +193,17 @@ export const UPDATE_SELLER_PROFILE = gql`
 `;
 
 /**
+ * @mutation updateSellerProfile
+ * schema  see @mutation registerSeller
+ *
+ */
+export const SEND_VERRIFY_EMAIL = gql`
+  mutation SendVerifyEmail($userId: ID!) {
+    sendVerifyEmail(userId: $userId)
+  }
+`;
+
+/**
  * @mutation createAddress
  *
  * schema

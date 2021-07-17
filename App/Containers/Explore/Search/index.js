@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { View, StatusBar, Text, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -8,26 +8,38 @@ import { ProductSearchBox } from "../../../Components";
 import { Images } from "../../../Themes";
 import NavigationService from "../../../Navigation/NavigationService";
 import * as storage from "../../../Apollo/local-storage";
-import { useCallback } from "react";
+import CategoryAndProductList from "../CategoryAndProductList/Index";
+import tailwind from "tailwind-rn";
+import { useRef } from "react";
 const SearchContext = React.createContext({});
+
 function ProductSearch(props) {
   return (
     <SearchContext.Consumer>
-      {({ recentSearches, changeRecentSearches }) => (
-        <View style={styles.container}>
+      {({
+        recentSearches,
+        changeRecentSearches,
+        onSearch,
+        onShowSearchBox,
+        onSetInput,
+        searchText,
+      }) => (
+        <View style={[styles.container, tailwind("bg-white")]}>
           <StatusBar barStyle="dark-content" />
           <SafeAreaView
             style={styles.container}
             edges={["top", "left", "right"]}
           >
-            <View style={styles.header}>
+            <View style={[styles.header, tailwind("my-0")]}>
               <ProductSearchBox
+                onSetInput={onSetInput}
+                keyword={searchText}
                 recentSearches={recentSearches}
                 changeRecentSearches={changeRecentSearches}
                 onSelect={(item) => {
-                  //   props.route.params.onSearch();
-                  NavigationService.goBack();
+                  onSearch(item);
                 }}
+                onShowSearchBox={onShowSearchBox}
               />
             </View>
 
@@ -35,40 +47,40 @@ function ProductSearch(props) {
               <Text style={styles.heading5Bold}>Recent searches</Text>
 
               {recentSearches &&
-                recentSearches.map((i, index) => (
-                  <View
-                    key={index.toString()}
-                    style={styles.recentSearchContainer}
+                recentSearches.map((text, index) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      onSearch(text);
+                    }}
                   >
-                    <View style={styles.v1}>
-                      <Image style={styles.icClock} source={Images.clock} />
+                    <View
+                      key={index.toString()}
+                      style={styles.recentSearchContainer}
+                    >
+                      <View style={styles.v1}>
+                        <Image style={styles.icClock} source={Images.clock} />
+
+                        <Text style={styles.txtSearch}>{text}</Text>
+                      </View>
+
                       <TouchableOpacity
                         onPress={() => {
-                          //   props.route.params.onSearch(i);
-                          NavigationService.goBack();
+                          recentSearches.splice(index, 1);
+                          storage.setLocalStorageValue(
+                            storage.LOCAL_SEARCH_ITEM,
+                            JSON.stringify(recentSearches)
+                          );
+                          const newArray = recentSearches.map((item) => item);
+                          changeRecentSearches(newArray);
                         }}
                       >
-                        <Text style={styles.txtSearch}>{i}</Text>
+                        <Image
+                          style={styles.icDelete}
+                          source={Images.crossMedium}
+                        />
                       </TouchableOpacity>
                     </View>
-
-                    <TouchableOpacity
-                      onPress={() => {
-                        recentSearches.splice(index, 1);
-                        storage.setLocalStorageValue(
-                          storage.LOCAL_SEARCH_ITEM,
-                          JSON.stringify(recentSearches)
-                        );
-                        const newArray = recentSearches.map((item) => item);
-                        changeRecentSearches(newArray);
-                      }}
-                    >
-                      <Image
-                        style={styles.icDelete}
-                        source={Images.crossMedium}
-                      />
-                    </TouchableOpacity>
-                  </View>
+                  </TouchableOpacity>
                 ))}
             </View>
           </SafeAreaView>
@@ -79,7 +91,10 @@ function ProductSearch(props) {
 }
 
 export default function Index() {
+  const [input, setInput] = useState();
   const [recentSearches, setRecentSearches] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [showSearchBox, setShowSearchBox] = useState(true);
   useEffect(() => {
     let isUnmount = false;
     (async () => {
@@ -101,16 +116,62 @@ export default function Index() {
   const changeRecentSearches = useCallback((newValue) => {
     setRecentSearches(newValue);
   }, []);
+  const onSearch = useCallback((newText) => {
+    setSearchText(newText);
+    setShowSearchBox(false);
+  }, []);
+  const onShowSearchBox = useCallback(
+    (showBox) => {
+      setShowSearchBox(showBox);
+      if (showBox && input.current) {
+        debugger;
+        input.current.focus();
+      }
+    },
+    [input]
+  );
+  const onSetInput = useCallback(
+    (inputT) => {
+      debugger;
+      setInput(inputT);
+      if (showSearchBox && inputT.current) {
+        debugger;
+        inputT.current.focus();
+      }
+    },
+    [showSearchBox]
+  );
   return (
-    <SearchContext.Provider value={{ recentSearches, changeRecentSearches }}>
-      <ProductSearch />
+    <SearchContext.Provider
+      value={{
+        recentSearches,
+        changeRecentSearches,
+        onSearch,
+        onShowSearchBox,
+        onSetInput,
+        searchText,
+      }}
+    >
+      {showSearchBox ? (
+        <ProductSearch />
+      ) : (
+        <View style={tailwind("bg-white")}>
+          <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+
+          <SafeAreaView
+            style={tailwind("flex h-full")}
+            edges={["top", "left", "right"]}
+          >
+            <CategoryAndProductList
+              keyword={searchText}
+              recentSearches={recentSearches}
+              changeRecentSearches={changeRecentSearches}
+              onSearch={onSearch}
+              onShowSearchBox={onShowSearchBox}
+            />
+          </SafeAreaView>
+        </View>
+      )}
     </SearchContext.Provider>
   );
 }
-
-// const recentSearches = [
-//   "Apple",
-//   "Cherry",
-//   "Washing machine with the ability to wash 100kg of clothes in just 1 minute",
-//   "Bucket and mop",
-// ];

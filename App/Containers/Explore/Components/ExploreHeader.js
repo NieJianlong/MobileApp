@@ -5,14 +5,19 @@ import { ProductSearchBox } from "../../../Components";
 import { Images } from "../../../Themes";
 import styles from "../styles";
 import NavigationService from "../../../Navigation/NavigationService";
+import tailwind from "tailwind-rn";
 
-export default function ExploreHeader() {
+export default function ExploreHeader(props) {
+  const {
+    searchText,
+    onShowSearchBox,
+    recentSearches,
+    changeRecentSearches,
+    onSearch,
+  } = props;
   const [keyword, setKeyword] = useState("");
-  const onSearch = (keyword) => {
-    setKeyword(keyword);
-  };
 
-  if (keyword === "") {
+  if (keyword === "" && !searchText) {
     return (
       <View style={[styles.header]}>
         <View style={styles.icSearch} />
@@ -34,19 +39,25 @@ export default function ExploreHeader() {
     );
   } else {
     return (
-      <View style={[styles.header, { paddingVertical: vs(10) }]}>
-        <ProductSearchBox
-          disabled={true}
-          keyword={keyword}
-          onPressDelete={() => {
-            setKeyword("");
-            NavigationService.navigate("ProductSearchScreen", {
-              onSearch: onSearch,
-            });
-          }}
-          onPressBack={() => setKeyword("")}
-        />
-      </View>
+      <TouchableOpacity
+        onPress={() => {
+          onShowSearchBox(true);
+        }}
+      >
+        <View style={[styles.header, { paddingVertical: vs(10) }]}>
+          <ProductSearchBox
+            keyword={keyword || searchText}
+            {...props}
+            onPressDelete={() => {
+              setKeyword("");
+              NavigationService.navigate("ProductSearchScreen", {
+                onSearch: onSearch,
+              });
+            }}
+            onPressBack={() => NavigationService.goBack()}
+          />
+        </View>
+      </TouchableOpacity>
     );
   }
 }

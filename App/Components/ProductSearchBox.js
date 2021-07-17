@@ -42,7 +42,6 @@ class ProductSearchBox extends Component {
 
   render() {
     const { disabled, onPressDelete, onPressBack, onSelect } = this.props;
-
     return (
       <View>
         <View style={styles.container}>
@@ -66,11 +65,15 @@ class ProductSearchBox extends Component {
             onSubmitEditing={({
               nativeEvent: { text, eventCount, target },
             }) => {
-              this.props.recentSearches.push(text);
-              storage.setLocalStorageValue(
-                storage.LOCAL_SEARCH_ITEM,
-                JSON.stringify(this.props.recentSearches)
-              );
+              if (this.props.recentSearches.indexOf(text) < 0) {
+                this.props.recentSearches.push(text);
+                storage.setLocalStorageValue(
+                  storage.LOCAL_SEARCH_ITEM,
+                  JSON.stringify(this.props.recentSearches)
+                );
+              }
+              const newArray = this.props.recentSearches.map((item) => item);
+              this.props.changeRecentSearches(newArray);
             }}
             onChangeText={(text) => {
               this.setState({ keyword: text });

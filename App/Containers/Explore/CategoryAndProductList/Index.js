@@ -17,6 +17,7 @@ import { localCartVar } from "../../../Apollo/cache";
 import styles from "../styles";
 
 export default function Index(props) {
+  const { textToSearch = "" } = props;
   const screenWidth = useWindowDimensions().width;
 
   /** updates for local cart Appollo cache
@@ -160,24 +161,32 @@ export default function Index(props) {
           );
         }}
         renderScrollHeader={() => (
-          <ExploreHeader searchText={props.keyword} {...props} />
+          <ExploreHeader searchText={props.textToSearch} {...props} />
         )}
       >
         {location && (
           <ProductList
             listType="All"
-            filterParams={location}
+            filterParams={{ ...location, textToSearch }}
             index={0}
-            filter="ACTIVE_BY_COORDINATES"
+            filter={
+              textToSearch.length > 0
+                ? "ACTIVE_BY_COORDINATES_AND_FULL_TEXT_SEARCH"
+                : "ACTIVE_BY_COORDINATES"
+            }
             tabLabel="All"
           />
         )}
         {location && (
           <ProductList
             listType="Announcements"
-            filterParams={location}
+            filterParams={{ ...location, textToSearch }}
             index={1}
-            filter="ACTIVE_BY_COORDINATES_AND_ANNOUNCEMENT"
+            filter={
+              textToSearch.length > 0
+                ? "ACTIVE_BY_COORDINATES_AND_FULL_TEXT_SEARCH"
+                : "ACTIVE_BY_COORDINATES_AND_ANNOUNCEMENT"
+            }
             tabLabel="Announcements"
             isAnnouncement={true}
           />
@@ -189,11 +198,16 @@ export default function Index(props) {
               key={`${index}`}
               listType={category.name}
               index={index + 2}
-              filter="ACTIVE_BY_COORDINATES_AND_CATEGORY"
+              filter={
+                textToSearch.length > 0
+                  ? "ACTIVE_BY_COORDINATES_AND_FULL_TEXT_SEARCH"
+                  : "ACTIVE_BY_COORDINATES_AND_CATEGORY"
+              }
               tabLabel={category.name}
               filterParams={{
                 ...location,
                 category: category.name,
+                textToSearch,
               }}
             />
           ))}

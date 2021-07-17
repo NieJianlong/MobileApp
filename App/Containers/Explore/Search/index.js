@@ -163,7 +163,7 @@ export default function Index() {
             edges={["top", "left", "right"]}
           >
             <CategoryAndProductList
-              keyword={searchText}
+              textToSearch={searchText}
               recentSearches={recentSearches}
               changeRecentSearches={changeRecentSearches}
               onSearch={onSearch}

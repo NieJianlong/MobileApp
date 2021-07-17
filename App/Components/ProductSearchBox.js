@@ -28,12 +28,16 @@ const { width, height } = Dimensions.get("window");
 class ProductSearchBox extends Component {
   constructor(props) {
     super(props);
+    this.textInput = React.createRef();
     this.state = {
       keyword: this.props.keyword ?? "",
       results: [],
     };
   }
-
+  componentDidMount() {
+    const { onSetInput } = this.props;
+    onSetInput && onSetInput(this.textInput);
+  }
   getResults = (keyword) => {
     return this.props.recentSearches.filter((i) =>
       i.toLowerCase().includes(keyword.toLowerCase())
@@ -41,7 +45,14 @@ class ProductSearchBox extends Component {
   };
 
   render() {
-    const { disabled, onPressDelete, onPressBack, onSelect } = this.props;
+    const {
+      disabled,
+      onShowSearchBox,
+      onPressDelete,
+      onPressBack,
+      onSelect,
+      onSetInput,
+    } = this.props;
     return (
       <View>
         <View style={styles.container}>
@@ -58,8 +69,12 @@ class ProductSearchBox extends Component {
           </TouchableOpacity>
 
           <TextInput
+            ref={this.textInput}
             editable={!disabled}
             placeholder={"Search products"}
+            onFocus={() => {
+              onShowSearchBox(true);
+            }}
             value={this.state.keyword}
             style={styles.textInput}
             onSubmitEditing={({
@@ -74,9 +89,10 @@ class ProductSearchBox extends Component {
               }
               const newArray = this.props.recentSearches.map((item) => item);
               this.props.changeRecentSearches(newArray);
+              onSelect(text);
             }}
             onChangeText={(text) => {
-              this.setState({ keyword: text });
+              this.setState({ keyword: text, results: this.getResults(text) });
             }}
           />
           {this.state.keyword !== "" && (
@@ -111,7 +127,7 @@ class ProductSearchBox extends Component {
           </View>
         )}
 
-        {this.state.results.length === 0 &&
+        {/* {this.state.results.length === 0 &&
           !disabled &&
           this.state.keyword !== "" && (
             <View style={styles.noResultContainer}>
@@ -129,7 +145,7 @@ class ProductSearchBox extends Component {
                 text={"CONTINUE EXPLORING"}
               />
             </View>
-          )}
+          )} */}
       </View>
     );
   }

@@ -13,7 +13,7 @@ export default function ExploreHeader(props) {
     onShowSearchBox,
     recentSearches,
     changeRecentSearches,
-    onSearch,
+    onSearch = () => {},
   } = props;
   const [keyword, setKeyword] = useState("");
 
@@ -28,6 +28,7 @@ export default function ExploreHeader(props) {
         />
         <TouchableOpacity
           onPress={() => {
+            debugger;
             NavigationService.navigate("ProductSearchScreen", {
               onSearch: onSearch,
             });

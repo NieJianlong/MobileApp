@@ -9,7 +9,6 @@ import CategoryAndProductList from "./CategoryAndProductList/Index";
 const SearchBarContext = React.createContext({});
 
 function Explore(props) {
-  const [showSearchBar, setShowSearchBar] = useState(false);
   //to show an alert to users that their accounts have been activated
   const [
     showAccountActivatedSuccessfullyAlert,
@@ -46,9 +45,7 @@ function Explore(props) {
         style={styles.mainContainer}
         edges={["top", "left", "right"]}
       >
-        <SearchBarContext.Provider value={{ showSearchBar }}>
-          <CategoryAndProductList />
-        </SearchBarContext.Provider>
+        <CategoryAndProductList />
       </SafeAreaView>
       {showAccountActivatedSuccessfullyAlert && (
         <Alert

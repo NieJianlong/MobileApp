@@ -10,6 +10,19 @@ import * as aQM from "../../gql/explore_queries";
 import colors from "../../../../Themes/Colors";
 import { useQuery } from "@apollo/client";
 
+const sortOptions = [
+  { title: "Last added", sortDirection: "DESCENDING", sortType: "DATE" },
+  {
+    title: "Price: low to high",
+    sortDirection: "ASCENDING",
+    sortType: "PRICE",
+  },
+  {
+    title: "Price: high to low",
+    sortDirection: "DESCENDING",
+    sortType: "PRICE",
+  },
+];
 const HFlatList = HPageViewHoc(FlatList);
 
 /*explore productlist component */
@@ -20,6 +33,7 @@ export default function ProductList(props) {
   const [serverData, setServerData] = useState([]);
   const { isAnnouncement, index, filter, filterParams } = props;
   const [loadingMore, setLoadingMore] = useState(false);
+  const [sortItem, setSortItem] = useState(sortOptions[1]);
   const [isRereshing, setIsRereshing] = useState(false);
   const [showProductAsRows, setShowProductAsRows] = useState(true);
   const toggleShareSheet = useCallback(() => {
@@ -45,7 +59,9 @@ export default function ProductList(props) {
         searchOptions: {
           filter: filter,
           filterParams: filterParams,
-          pageNo: 0,
+          sortBy: sortItem.sortType,
+          sortDirection: sortItem.sortDirection,
+          pageNo: 1,
           pageSize: 5,
         },
       },
@@ -89,6 +105,14 @@ export default function ProductList(props) {
         <ExploreSortBar
           onChange={(showAsRow) => {
             setShowProductAsRows(!showProductAsRows);
+          }}
+          option={sortItem}
+          refresh={(item) => {
+            console.log("当前选中的item====================================");
+            console.log(item);
+            console.log("====================================");
+            setSortItem(item);
+            refetch();
           }}
         />
       }

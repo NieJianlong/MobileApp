@@ -125,6 +125,7 @@ function RootContainer() {
               type: "changSheetState",
               payload: { showSheet: false },
             });
+            onCloseEnd && onCloseEnd();
           }}
           // callbackNode={new Animated.Value(0)}
           snapPoints={[vs(height), 0]}

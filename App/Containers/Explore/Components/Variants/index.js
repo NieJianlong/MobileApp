@@ -45,9 +45,9 @@ const ProductVariants = (props) => {
   if (isReady) {
     return (
       <View style={styles.pageContainer}>
-        {product.prodVariants.map((variant, index) => {
+        {/* {product.prodVariants.map((variant, index) => {
           return <Variant variant={variant} product={product} key={index} />;
-        })}
+        })} */}
       </View>
     );
   } else {

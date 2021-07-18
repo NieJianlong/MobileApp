@@ -41,13 +41,10 @@ function ProductItem(props) {
         }}
         onPress={() => {
           //
-          if (Platform.OS === "ios") {
-            NavigationService.navigate("ProductDetailScreen");
-          } else if (canGoNext) {
-            NavigationService.navigate("ProductDetailScreen", {
-              product: product,
-            });
-          }
+
+          NavigationService.navigate("ProductDetailScreen", {
+            product: product,
+          });
         }}
         style={styles.productContainer}
       >

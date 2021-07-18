@@ -28,7 +28,6 @@ export default function ExploreHeader(props) {
         />
         <TouchableOpacity
           onPress={() => {
-            debugger;
             NavigationService.navigate("ProductSearchScreen", {
               onSearch: onSearch,
             });

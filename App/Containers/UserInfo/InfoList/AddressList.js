@@ -44,10 +44,10 @@ export default function AddressList({ dispatch, xIndex }) {
   //     },
   //   },
   //   onCompleted: (res) => {
-  //     debugger;
+  //
   //   },
   //   onError: (res) => {
-  //     debugger;
+  //
   //   },
   // });
   const refreshData = useCallback(() => {

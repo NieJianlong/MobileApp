@@ -24,9 +24,7 @@ function Header({ selected }) {
     onCompleted: (res) => {
       NavigationService.goBack();
     },
-    onError: (res) => {
-      debugger;
-    },
+    onError: (res) => {},
   });
   return (
     <View style={styles.header}>
@@ -83,7 +81,6 @@ class OldChooseCategoriesScreen extends Component {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.categoriesContainer}>
             {this.state.allCategories.map((item, index) => {
-              debugger;
               let selected = this.checkSelected(item);
               return (
                 <TouchableOpacity

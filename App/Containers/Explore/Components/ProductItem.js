@@ -18,8 +18,6 @@ function ProductItem(props) {
     product,
     onPressShare,
     isAnnouncement,
-    navigation,
-    canGoNext,
     callBack,
     goFirst,
   } = props;

@@ -50,9 +50,7 @@ export default function EditCategoriesScreen() {
       });
       NavigationService.goBack();
     },
-    onError: (res) => {
-      debugger;
-    },
+    onError: (res) => {},
   });
   useFocusEffect(
     React.useCallback(() => {

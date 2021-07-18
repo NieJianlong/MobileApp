@@ -9,7 +9,6 @@ import {
   Dimensions,
   FlatList,
   ImageBackground,
-  Alert as RNAlert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { s, vs } from "react-native-size-matters";
@@ -25,12 +24,10 @@ import { range } from "lodash";
 import {
   Switch,
   StarRating,
-  Picker,
   QuantitySelector,
   DescriptionText,
   Button,
   Progress,
-  BottomSheet,
   BottomSheetBackground,
   Alert,
 } from "../../../Components";
@@ -41,8 +38,7 @@ import NavigationService from "../../../Navigation/NavigationService";
 
 import ProductItem from "../Components/ProductItem";
 import Review from "../Components/Review";
-import ColorOptionItem from "../Components/ColorOptionItem";
-import ShareOptionList from "../Components/ShareOptionList";
+
 import ProductVariants from "../Components/Variants";
 
 /** updates for the cart */
@@ -62,8 +58,6 @@ function ProductDetail(props) {
    * useReactiveVar => we will get updates from other screens
    */
   const localCartVarReactive = useReactiveVar(localCartVar);
-
-  const fall = useRef(new Animated.Value(0)).current;
   //control whether to show the hearder (display and navigation to sections)
   const [showHeaderTabs, setShowHeaderTabs] = useState(false);
   //control whether to show the footer (display price and buy button)
@@ -159,6 +153,9 @@ function ProductDetail(props) {
 
   useEffect(() => {
     // console.log(`check url ${props.route.params.product.photo}`);
+    console.log("====================================");
+    console.log(props);
+    console.log("====================================");
     setProductFromProps(props.route.params.product);
     if (product.highlightBullets) {
       let bulls = JSON.parse(product.highlightBullets);
@@ -705,27 +702,6 @@ function ProductDetail(props) {
 
         {/* Upadates for variants here */}
         <ProductVariants product={product} />
-
-        {/* <Picker
-          onPress={toggleColorSheet}
-          style={styles.picker}
-          title={"Size"}
-          value={"256GB"}
-        />
-
-        <Picker
-          onPress={toggleColorSheet}
-          style={styles.picker}
-          title={"Style"}
-          value={"OnePlus 8 Pro"}
-        />
-
-        <Picker
-          onPress={toggleColorSheet}
-          style={styles.picker}
-          title={"Color"}
-          value={"Black"}
-        /> */}
       </View>
     );
   };
@@ -1027,180 +1003,6 @@ function ProductDetail(props) {
     );
   };
 
-  const renderPickupFromSellerSheet = () => {
-    return (
-      <BottomSheet
-        customRef={pickupFromSellerSheet}
-        onCloseEnd={() => setShowPickupFromSellerSheet(false)}
-        callbackNode={fall}
-        snapPoints={[vs(290), 0]}
-        initialSnap={showPickupFromSellerSheet ? 0 : 1}
-        title={"Pick up from seller"}
-      >
-        <View style={{ flex: 1, justifyContent: "flex-end" }}>
-          <Text style={[styles.txtRegular, { textAlign: "center" }]}>
-            This is the seller's address where you have to{"\n"}go to pick up
-            your order
-          </Text>
-
-          <View style={styles.pickupLocationContainer}>
-            <Image
-              style={styles.pickupLocationIcon}
-              source={Images.locationMed}
-            />
-
-            <View style={{ marginLeft: s(10) }}>
-              <Text style={styles.heading5Bold}>Seller Address 00</Text>
-              <Text style={styles.txtRegular}>Tamil Nadu 12345, Area 4</Text>
-            </View>
-          </View>
-
-          <Button onPress={togglePickupFromSellerSheet} text={"OK"} />
-        </View>
-      </BottomSheet>
-    );
-  };
-
-  const renderColorSheet = () => {
-    return (
-      <BottomSheet
-        customRef={colorSheet}
-        onCloseEnd={() => {
-          setShowColorSheet(false);
-        }}
-        callbackNode={fall}
-        snapPoints={[vs(390), 0]}
-        initialSnap={showColorSheet ? 0 : 1}
-        title={"Color"}
-      >
-        <View style={{ flex: 1, justifyContent: "flex-end" }}>
-          {product.colors.map((item, index) => (
-            <ColorOptionItem
-              key={index.toString()}
-              defaultValue={colorIndex === index}
-              onSwitch={() => setColorIndex(index)}
-              label={item.name}
-              style={{ marginBottom: vs(16) }}
-              available={item.available}
-            />
-          ))}
-        </View>
-      </BottomSheet>
-    );
-  };
-
-  const renderShareSheet = () => {
-    return (
-      <BottomSheet
-        customRef={shareSheet}
-        onCloseEnd={() => setShowShareSheet(false)}
-        callbackNode={fall}
-        snapPoints={[vs(580), 0]}
-        initialSnap={showShareSheet ? 0 : 1}
-        title={"Share to"}
-      >
-        <View style={{ flex: 1, justifyContent: "flex-end" }}>
-          <ShareOptionList />
-        </View>
-      </BottomSheet>
-    );
-  };
-
-  const renderConfirmOrderSheet = () => {
-    return (
-      <BottomSheet
-        customRef={confirmOrderSheet}
-        onCloseEnd={() => setShowConfirmOrderSheet(false)}
-        callbackNode={fall}
-        snapPoints={[vs(310), 0]}
-        initialSnap={showConfirmOrderSheet ? 0 : 1}
-        title={"Confirm your Order"}
-      >
-        <View style={{ flex: 1, justifyContent: "flex-end" }}>
-          <View
-            style={[
-              styles.pickupLocationContainer,
-              { marginTop: 0, marginBottom: 10 },
-            ]}
-          >
-            <Image
-              style={styles.pickupLocationIcon}
-              source={Images.locationMed}
-            />
-
-            <View style={{ marginLeft: s(10) }}>
-              <Text style={styles.heading5Bold}>Seller Address 00</Text>
-              <Text style={styles.txtRegular}>Tamil Nadu 12345, Area 4</Text>
-            </View>
-          </View>
-
-          <View
-            style={[
-              styles.pickupLocationContainer,
-              { marginTop: 0, marginBottom: 20 },
-            ]}
-          >
-            <Image style={styles.mastercardIcon} source={Images.mastercard} />
-
-            <View style={{ marginLeft: s(10) }}>
-              <Text style={styles.heading5Bold}>***********6473</Text>
-              <Text style={styles.txtRegular}>User name</Text>
-            </View>
-          </View>
-
-          <Button
-            onPress={() => NavigationService.navigate("OrderPlacedScreen")}
-            text={"CONFIRM ORDER"}
-          />
-        </View>
-      </BottomSheet>
-    );
-  };
-
-  const renderAddToCartSheet = () => {
-    return (
-      <BottomSheet
-        customRef={addToCartSheet}
-        onCloseEnd={() => setShowAddToCartSheet(false)}
-        callbackNode={fall}
-        snapPoints={[vs(290), 0]}
-        initialSnap={showAddToCartSheet ? 0 : 1}
-        title={"An item has been added to your cart"}
-      >
-        <View style={{ flex: 1, justifyContent: "flex-end" }}>
-          <Text
-            style={[
-              styles.txtRegular,
-              { textAlign: "center", marginBottom: vs(25) },
-            ]}
-          >
-            There are now 2 items in your cart
-          </Text>
-
-          <Button onPress={toggleAddToCartSheet} text={"GO TO CHECKOUT"} />
-
-          <View style={styles.btnRow}>
-            <View style={styles.v5}>
-              <Button
-                onPress={toggleAddToCartSheet}
-                text={"CONTINUE"}
-                backgroundColor={Colors.grey80}
-              />
-            </View>
-
-            <View style={styles.v5}>
-              <Button
-                text={"VIEW CART"}
-                backgroundColor={Colors.grey80}
-                onPress={() => NavigationService.navigate("ShoppingCartScreen")}
-              />
-            </View>
-          </View>
-        </View>
-      </BottomSheet>
-    );
-  };
-
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -1232,31 +1034,6 @@ function ProductDetail(props) {
       </SafeAreaView>
 
       {/* background for bottom sheet */}
-      <BottomSheetBackground
-        visible={
-          showPickupFromSellerSheet ||
-          showColorSheet ||
-          showAddToCartSheet ||
-          showConfirmOrderSheet ||
-          showShareSheet
-        }
-        controller={fall}
-      />
-
-      {/* action sheets */}
-      {isReady && renderPickupFromSellerSheet()}
-
-      {isReady && renderColorSheet()}
-
-      {isReady && renderShareSheet()}
-
-      {isReady && renderConfirmOrderSheet()}
-
-      {isReady && renderAddToCartSheet()}
-
-      {isReady && renderReviewSentAlert()}
-
-      {isReady && renderReportSentAlert()}
     </View>
   );
 }

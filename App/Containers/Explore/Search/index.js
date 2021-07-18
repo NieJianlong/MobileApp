@@ -124,7 +124,6 @@ export default function Index() {
     (showBox) => {
       setShowSearchBox(showBox);
       if (showBox && input.current) {
-        debugger;
         input.current.focus();
       }
     },
@@ -132,10 +131,8 @@ export default function Index() {
   );
   const onSetInput = useCallback(
     (inputT) => {
-      debugger;
       setInput(inputT);
       if (showSearchBox && inputT.current) {
-        debugger;
         inputT.current.focus();
       }
     },

@@ -1,39 +1,46 @@
-import React, { useContext, useCallback, useState } from 'react';
+import React, { useContext, useCallback, useState } from "react";
 import {
   View,
   Image,
   Text,
   TouchableOpacity,
   SafeAreaView,
-} from 'react-native';
-import { vs, s } from 'react-native-size-matters';
-import { Colors, Images } from '../../../Themes';
-import styles from '../styles';
-import { AlertContext } from '../../Root/GlobalContext';
-import CheckBox from './CheckBox';
+} from "react-native";
+import { vs, s } from "react-native-size-matters";
+import { Images } from "../../../Themes";
+import styles from "../styles";
+import { AlertContext } from "../../Root/GlobalContext";
+import CheckBox from "./CheckBox";
 
 const sortOptions = [
-  'About to be completed',
-  'Last added',
-  'Price: low to high',
-  'Price: high to low',
+  { title: "Last added", sortDirection: "DESCENDING", sortType: "DATE" },
+  {
+    title: "Price: low to high",
+    sortDirection: "ASCENDING",
+    sortType: "PRICE",
+  },
+  {
+    title: "Price: high to low",
+    sortDirection: "DESCENDING",
+    sortType: "PRICE",
+  },
 ];
 
-function SortSheetContent({ callback }) {
-  const [sortOption, setSortOption] = useState(1);
+function SortSheetContent({ callback, option }) {
+  const [sortOption, setSortOption] = useState(option || sortOptions[1]);
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: 'flex-end' }}>
-      {sortOptions.map((i, index) => {
+    <SafeAreaView style={{ flex: 1 }}>
+      {sortOptions.map((item, index) => {
         return (
           <View key={index.toString()}>
             <View style={{ height: vs(12) }} />
             <CheckBox
-              defaultValue={sortOption === index}
+              defaultValue={sortOption.title === item.title}
               onSwitch={(t) => {
-                setSortOption(index);
-                callback(index);
+                setSortOption(item);
+                callback(item);
               }}
-              label={i}
+              label={item.title}
             />
           </View>
         );
@@ -41,28 +48,39 @@ function SortSheetContent({ callback }) {
     </SafeAreaView>
   );
 }
-export default function ExploreSortBar({ onChange }) {
+export default function ExploreSortBar({ onChange, refresh, option }) {
   const [showProductAsRows, setShowProductAsRows] = useState(true);
   const { dispatch } = useContext(AlertContext);
-  const [currentOption, setCurrentOption] = useState(1);
+  const [currentOption, setCurrentOption] = useState(option || sortOptions[1]);
+  console.log("currentOption====================================");
+  console.log(currentOption);
+  console.log("====================================");
   const toggleSortBySheet = useCallback(() => {
     dispatch({
-      type: 'changSheetState',
+      type: "changSheetState",
       payload: {
         showSheet: true,
         height: 320,
+        onCloseEnd: () => {
+          refresh && refresh(currentOption);
+        },
         children: () => (
-          <SortSheetContent callback={(index) => setCurrentOption(index)} />
+          <SortSheetContent
+            option={currentOption}
+            callback={(item) => {
+              setCurrentOption(item);
+            }}
+          />
         ),
-        sheetTitle: 'Sorty by',
+        sheetTitle: "Sorty by",
       },
     });
-  }, [dispatch]);
+  }, [currentOption, dispatch, refresh]);
   return (
     <View style={styles.sortBarContainer}>
       <TouchableOpacity onPress={toggleSortBySheet} style={styles.row}>
         <Image source={Images.arrow_left} style={styles.icArrowDown2} />
-        <Text style={styles.txtBold}>{sortOptions[currentOption]}</Text>
+        <Text style={styles.txtBold}>{currentOption.title}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {

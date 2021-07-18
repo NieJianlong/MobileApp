@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 import {
   View,
   StatusBar,
@@ -9,30 +15,25 @@ import {
   Dimensions,
   FlatList,
   ImageBackground,
-  Alert as RNAlert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { s, vs } from "react-native-size-matters";
 import Animated from "react-native-reanimated";
-import Carousel from "react-native-snap-carousel";
 //help identify which component is in display
 import InView from "react-native-component-inview";
 import { ScrollIntoView, wrapScrollView } from "react-native-scroll-into-view";
 import NumberFormat from "react-number-format";
 import moment from "moment";
 import { range } from "lodash";
-
 import {
   Switch,
   StarRating,
-  Picker,
   QuantitySelector,
   DescriptionText,
   Button,
   Progress,
   BottomSheet,
   BottomSheetBackground,
-  Alert,
 } from "../../../Components";
 
 import { Images, Colors } from "../../../Themes";
@@ -42,17 +43,19 @@ import NavigationService from "../../../Navigation/NavigationService";
 import ProductItem from "../Components/ProductItem";
 import Review from "../Components/Review";
 import ColorOptionItem from "../Components/ColorOptionItem";
-import ShareOptionList from "../Components/ShareOptionList";
 import ProductVariants from "../Components/Variants";
 
 /** updates for the cart */
 import { localCartVar } from "../../../Apollo/cache";
 import { useReactiveVar } from "@apollo/client";
+import ProductCarousel from "./ProductCarousel";
+import { AlertContext } from "../../Root/GlobalContext";
+import ConfirmOrderSheetContent from "./ConfirmOrderSheetContent";
+import AddToCartSheetContent from "./AddToCartSheetContent";
+import Picker from "../../../Components/Picker";
 
 const { height } = Dimensions.get("window");
 const Sections = range(0, 4);
-const sliderWidth = Dimensions.get("window").width;
-const carouselItemWidth = Dimensions.get("window").width;
 // Wrap the original ScrollView
 const CustomScrollView = wrapScrollView(ScrollView);
 
@@ -62,6 +65,7 @@ function ProductDetail(props) {
    * useReactiveVar => we will get updates from other screens
    */
   const localCartVarReactive = useReactiveVar(localCartVar);
+  const { dispatch } = useContext(AlertContext);
 
   const fall = useRef(new Animated.Value(0)).current;
   //control whether to show the hearder (display and navigation to sections)
@@ -70,26 +74,18 @@ function ProductDetail(props) {
   const [showFooter, setShowFooter] = useState(false);
   //hold the section index
   const [tabIndex, setTabIndex] = useState(0);
-  //hold the index of the current product's photo
-  const [photoIndex, setPhotoIndex] = useState(0);
   //hold the quantity of product
   const [quantity, setQuantity] = useState(1);
   //hold the index of selected color
   const [colorIndex, setColorIndex] = useState(0);
   //hold the boolean to indicate if this product has been purchased by this user
   const [isPurchased, setIsPurchased] = useState(false);
-  //hold the boolean to indicate if this product has been liked by this user
-  const [isLiked, setIsLiked] = useState(false);
   //control whether to show the pickup from seller sheet
   const [showPickupFromSellerSheet, setShowPickupFromSellerSheet] = useState(
     false
   );
   //control whether to show the color sheet
   const [showColorSheet, setShowColorSheet] = useState(false);
-  //control whether to show the add to cart sheet
-  const [showAddToCartSheet, setShowAddToCartSheet] = useState(false);
-  const [showConfirmOrderSheet, setShowConfirmOrderSheet] = useState(false);
-  const [showShareSheet, setShowShareSheet] = useState(false);
 
   const [showReviewSentAlert, setShowReviewSentAlert] = useState(false);
   const [showReportSentAlert, setShowReportSentAlert] = useState(false);
@@ -98,10 +94,7 @@ function ProductDetail(props) {
   const sectionsRefs = Sections.map((_section) => React.createRef());
   const pickupFromSellerSheet = useRef();
   const colorSheet = useRef();
-  const shareSheet = useRef();
-  const confirmOrderSheet = useRef();
   const addToCartSheet = useRef();
-  const _carousel = useRef();
   /**
    *
    * UPDATES for backend
@@ -153,10 +146,6 @@ function ProductDetail(props) {
     setShowFooter(true);
   };
 
-  const onLikeProduct = () => {
-    setIsLiked(!isLiked);
-  };
-
   useEffect(() => {
     // console.log(`check url ${props.route.params.product.photo}`);
     setProductFromProps(props.route.params.product);
@@ -194,36 +183,6 @@ function ProductDetail(props) {
 
   useEffect(() => {
     if (isReady) {
-      if (showShareSheet) {
-        shareSheet.current.snapTo(0);
-      } else {
-        shareSheet.current.snapTo(1);
-      }
-    }
-  }, [showShareSheet, isReady]);
-
-  useEffect(() => {
-    if (isReady) {
-      if (showConfirmOrderSheet) {
-        confirmOrderSheet.current.snapTo(0);
-      } else {
-        confirmOrderSheet.current.snapTo(1);
-      }
-    }
-  }, [showConfirmOrderSheet, isReady]);
-
-  useEffect(() => {
-    if (isReady) {
-      if (showAddToCartSheet) {
-        addToCartSheet.current.snapTo(0);
-      } else {
-        addToCartSheet.current.snapTo(1);
-      }
-    }
-  }, [showAddToCartSheet, isReady]);
-
-  useEffect(() => {
-    if (isReady) {
       if (showReportSentAlert) {
         setTimeout(() => setShowReportSentAlert(false), 2000);
       }
@@ -233,38 +192,32 @@ function ProductDetail(props) {
   const togglePickupFromSellerSheet = () =>
     setShowPickupFromSellerSheet(!showPickupFromSellerSheet);
   const toggleColorSheet = () => setShowColorSheet(!showColorSheet);
-  const toggleShareSheet = () => setShowShareSheet(!showShareSheet);
-  const toggleConfirmOrderSheet = () =>
-    setShowConfirmOrderSheet(!showConfirmOrderSheet);
-  const toggleAddToCartSheet = () => setShowAddToCartSheet(!showAddToCartSheet);
+  const toggleConfirmOrderSheet = useCallback(() => {
+    dispatch({
+      type: "changSheetState",
+      payload: {
+        showSheet: true,
+        height: 310,
+        children: () => <ConfirmOrderSheetContent />,
+        sheetTitle: "Confirm your Order",
+      },
+    });
+  }, [dispatch]);
+  const toggleAddToCartSheet = useCallback(() => {
+    dispatch({
+      type: "changSheetState",
+      payload: {
+        showSheet: true,
+        height: 290,
+        children: () => <AddToCartSheetContent />,
+        sheetTitle: "Confirm your Order",
+      },
+    });
+  }, [dispatch]);
   const toggleReviewSentAlert = () =>
     setShowReviewSentAlert(!showReviewSentAlert);
   const toggleReportSentAlert = () =>
     setShowReportSentAlert(!showReportSentAlert);
-
-  const renderReviewSentAlert = () => {
-    return (
-      <Alert
-        visible={showReviewSentAlert}
-        title={"Thanks for your review!"}
-        message={"Your review has been added successfully"}
-        color={Colors.success}
-        onDismiss={() => setShowReviewSentAlert(false)}
-      />
-    );
-  };
-
-  const renderReportSentAlert = () => {
-    return (
-      <Alert
-        visible={showReportSentAlert}
-        title={"Thanks for your report!"}
-        message={"Your report has been sent successfully"}
-        color={Colors.success}
-        onDismiss={() => setShowReportSentAlert(false)}
-      />
-    );
-  };
 
   const renderHeaderTabs = () => {
     return (
@@ -343,121 +296,6 @@ function ProductDetail(props) {
           </TouchableOpacity>
         </View>
       </SafeAreaView>
-    );
-  };
-
-  //render product image item
-  const _renderImageItem = ({ item, index }) => {
-    return (
-      <TouchableOpacity
-        key={index.toString()}
-        onPress={() =>
-          NavigationService.navigate("ProductGalleryScreen", {
-            fullscreenMode: true,
-          })
-        }
-      >
-        <Image
-          resizeMode={"contain"}
-          source={{ uri: product.photo }}
-          style={styles.prodImage}
-        />
-      </TouchableOpacity>
-    );
-  };
-
-  //control when swipe to another image
-  const onSnapToItem = (index) => {
-    setPhotoIndex(index);
-  };
-
-  /**
-   * when we add an item to the cart we need to update the local cart
-   * see App/Apollo/cache.js const localCart
-   *
-   * we should not update until product variants have be added to the
-   * product object
-   */
-  const onAddItemAndNavigateToCart = () => {
-    // we need to add this product to the cart then navigate to the cart
-    console.log(
-      `add to cache then navigate ${JSON.stringify(localCartVarReactive)}`
-    );
-    // get latest cart values
-    let uI = localCartVarReactive.items;
-    // update cart items list
-    uI.push(product);
-    localCartVar({
-      items: uI,
-    });
-    NavigationService.navigate("CartScreen");
-  };
-
-  //render product images
-  const renderProductImages = () => {
-    return (
-      <View style={styles.imagesContainer}>
-        <Carousel
-          ref={_carousel}
-          data={product.photoUrls}
-          renderItem={_renderImageItem}
-          sliderWidth={sliderWidth}
-          itemWidth={carouselItemWidth}
-          onSnapToItem={onSnapToItem}
-        />
-        <View style={styles.row1}>
-          <TouchableOpacity
-            onPress={() => NavigationService.goBack()}
-            style={styles.btnRoundContainer}
-          >
-            <Image style={styles.btnRoundIcon} source={Images.arrow_left} />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => onAddItemAndNavigateToCart()}
-            style={styles.btnRoundContainer}
-          >
-            <Image style={styles.btnRoundIcon} source={Images.cartMed} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.row2}>
-          <View style={{ flexDirection: "row" }}>
-            <TouchableOpacity
-              onPress={onLikeProduct}
-              style={styles.btnRoundContainer}
-            >
-              <Image
-                style={[
-                  styles.btnRoundIcon,
-                  isLiked && { tintColor: Colors.primary },
-                ]}
-                source={isLiked ? Images.likeFilled : Images.likeMed}
-              />
-            </TouchableOpacity>
-            <View style={{ width: s(12) }} />
-            <TouchableOpacity
-              onPress={toggleShareSheet}
-              style={styles.btnRoundContainer}
-            >
-              <Image style={styles.btnRoundIcon} source={Images.share} />
-            </TouchableOpacity>
-          </View>
-
-          <TouchableOpacity
-            onPress={() =>
-              NavigationService.navigate("ProductGalleryScreen", {
-                fullscreenMode: false,
-              })
-            }
-            style={styles.photoNumberContainer}
-          >
-            <Text style={styles.photoNumberTxt}>
-              {photoIndex + 1}/{product.photoUrls.length}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
     );
   };
 
@@ -706,7 +544,7 @@ function ProductDetail(props) {
         {/* Upadates for variants here */}
         <ProductVariants product={product} />
 
-        {/* <Picker
+        <Picker
           onPress={toggleColorSheet}
           style={styles.picker}
           title={"Size"}
@@ -725,7 +563,7 @@ function ProductDetail(props) {
           style={styles.picker}
           title={"Color"}
           value={"Black"}
-        /> */}
+        />
       </View>
     );
   };
@@ -994,7 +832,7 @@ function ProductDetail(props) {
   const renderSectionDetails = () => {
     return (
       <ScrollIntoView align={"top"} key={"section0"} ref={sectionsRefs[0]}>
-        {renderProductImages()}
+        <ProductCarousel product={product} />
 
         {renderProductInfo()}
 
@@ -1089,118 +927,6 @@ function ProductDetail(props) {
     );
   };
 
-  const renderShareSheet = () => {
-    return (
-      <BottomSheet
-        customRef={shareSheet}
-        onCloseEnd={() => setShowShareSheet(false)}
-        callbackNode={fall}
-        snapPoints={[vs(580), 0]}
-        initialSnap={showShareSheet ? 0 : 1}
-        title={"Share to"}
-      >
-        <View style={{ flex: 1, justifyContent: "flex-end" }}>
-          <ShareOptionList />
-        </View>
-      </BottomSheet>
-    );
-  };
-
-  const renderConfirmOrderSheet = () => {
-    return (
-      <BottomSheet
-        customRef={confirmOrderSheet}
-        onCloseEnd={() => setShowConfirmOrderSheet(false)}
-        callbackNode={fall}
-        snapPoints={[vs(310), 0]}
-        initialSnap={showConfirmOrderSheet ? 0 : 1}
-        title={"Confirm your Order"}
-      >
-        <View style={{ flex: 1, justifyContent: "flex-end" }}>
-          <View
-            style={[
-              styles.pickupLocationContainer,
-              { marginTop: 0, marginBottom: 10 },
-            ]}
-          >
-            <Image
-              style={styles.pickupLocationIcon}
-              source={Images.locationMed}
-            />
-
-            <View style={{ marginLeft: s(10) }}>
-              <Text style={styles.heading5Bold}>Seller Address 00</Text>
-              <Text style={styles.txtRegular}>Tamil Nadu 12345, Area 4</Text>
-            </View>
-          </View>
-
-          <View
-            style={[
-              styles.pickupLocationContainer,
-              { marginTop: 0, marginBottom: 20 },
-            ]}
-          >
-            <Image style={styles.mastercardIcon} source={Images.mastercard} />
-
-            <View style={{ marginLeft: s(10) }}>
-              <Text style={styles.heading5Bold}>***********6473</Text>
-              <Text style={styles.txtRegular}>User name</Text>
-            </View>
-          </View>
-
-          <Button
-            onPress={() => NavigationService.navigate("OrderPlacedScreen")}
-            text={"CONFIRM ORDER"}
-          />
-        </View>
-      </BottomSheet>
-    );
-  };
-
-  const renderAddToCartSheet = () => {
-    return (
-      <BottomSheet
-        customRef={addToCartSheet}
-        onCloseEnd={() => setShowAddToCartSheet(false)}
-        callbackNode={fall}
-        snapPoints={[vs(290), 0]}
-        initialSnap={showAddToCartSheet ? 0 : 1}
-        title={"An item has been added to your cart"}
-      >
-        <View style={{ flex: 1, justifyContent: "flex-end" }}>
-          <Text
-            style={[
-              styles.txtRegular,
-              { textAlign: "center", marginBottom: vs(25) },
-            ]}
-          >
-            There are now 2 items in your cart
-          </Text>
-
-          <Button onPress={toggleAddToCartSheet} text={"GO TO CHECKOUT"} />
-
-          <View style={styles.btnRow}>
-            <View style={styles.v5}>
-              <Button
-                onPress={toggleAddToCartSheet}
-                text={"CONTINUE"}
-                backgroundColor={Colors.grey80}
-              />
-            </View>
-
-            <View style={styles.v5}>
-              <Button
-                text={"VIEW CART"}
-                backgroundColor={Colors.grey80}
-                onPress={() => NavigationService.navigate("ShoppingCartScreen")}
-              />
-            </View>
-          </View>
-        </View>
-      </BottomSheet>
-    );
-  };
-
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -1233,13 +959,7 @@ function ProductDetail(props) {
 
       {/* background for bottom sheet */}
       <BottomSheetBackground
-        visible={
-          showPickupFromSellerSheet ||
-          showColorSheet ||
-          showAddToCartSheet ||
-          showConfirmOrderSheet ||
-          showShareSheet
-        }
+        visible={showPickupFromSellerSheet || showColorSheet}
         controller={fall}
       />
 
@@ -1247,16 +967,6 @@ function ProductDetail(props) {
       {isReady && renderPickupFromSellerSheet()}
 
       {isReady && renderColorSheet()}
-
-      {isReady && renderShareSheet()}
-
-      {isReady && renderConfirmOrderSheet()}
-
-      {isReady && renderAddToCartSheet()}
-
-      {isReady && renderReviewSentAlert()}
-
-      {isReady && renderReportSentAlert()}
     </View>
   );
 }

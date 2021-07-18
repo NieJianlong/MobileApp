@@ -92,11 +92,11 @@ export default function ProductCarousel({ product }) {
       <Carousel
         ref={_carousel}
         data={product.photoUrls}
-        renderItem={(item, index) => {
+        renderItem={({ item, index }) => {
           //render product image item
           return (
             <TouchableOpacity
-              key={index.toString()}
+              key={`{index}`}
               onPress={() =>
                 NavigationService.navigate("ProductGalleryScreen", {
                   fullscreenMode: true,

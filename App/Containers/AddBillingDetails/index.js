@@ -191,6 +191,18 @@ function AddBillingDetails(props) {
     },
   ];
   const { params } = useRoute();
+  billingAddress: {
+    referenceId: "123e4567-e89b-12d3-a456-556642440009",
+    pinCode: postcode,
+    addressType: "BILLING",
+    provinceState: mstate,
+    townCity: city,
+    flat: door,
+    villageArea: streetName,
+    houseNumber: streetNum,
+    country:"china",
+    referenceId: global.buyerId,
+}
   let AddressRequestForCreate = {
     pinCode: postcode,
     addressType: "BILLING",

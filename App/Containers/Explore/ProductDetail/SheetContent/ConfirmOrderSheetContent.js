@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, Image, Text } from "react-native";
 import { s, vs } from "react-native-size-matters";
-import { Button } from "../../../Components";
-import { Images } from "../../../Themes";
-import styles from "./styles";
-import NavigationService from "../../../Navigation/NavigationService";
+import { Button } from "../../../../Components";
+import { Images } from "../../../../Themes";
+import styles from "../styles";
+import NavigationService from "../../../../Navigation/NavigationService";
 
 export default function ConfirmOrderSheetContent() {
   return (

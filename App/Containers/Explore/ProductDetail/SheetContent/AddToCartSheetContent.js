@@ -8,12 +8,12 @@ import React, {
 import { View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { s, vs } from "react-native-size-matters";
-import { Button } from "../../../Components";
+import { Button } from "../../../../Components";
 
-import { Colors } from "../../../Themes";
-import styles from "./styles";
-import NavigationService from "../../../Navigation/NavigationService";
-import { AlertContext } from "../../Root/GlobalContext";
+import { Colors } from "../../../../Themes";
+import styles from "../styles";
+import NavigationService from "../../../../Navigation/NavigationService";
+import { AlertContext } from "../../../Root/GlobalContext";
 
 export default function AddToCartSheetContent() {
   const { dispatch } = useContext(AlertContext);

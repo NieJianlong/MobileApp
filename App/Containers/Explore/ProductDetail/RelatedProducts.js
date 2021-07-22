@@ -19,7 +19,6 @@ export default function RelatedProducts() {
       <View style={styles.relatedProductsContainer}>
         <View style={styles.relatedProductsHeader}>
           <Text style={styles.heading3Bold}>Related products</Text>
-
           <TouchableOpacity>
             <Text style={[styles.heading5Bold, { color: Colors.secondary00 }]}>
               See all

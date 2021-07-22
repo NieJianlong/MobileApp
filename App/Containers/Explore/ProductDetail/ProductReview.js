@@ -30,9 +30,7 @@ const renderUserReview = () => {
     >
       <Text style={styles.heading4Bold}>Rate and review this product</Text>
       <Text style={styles.txtRegular}>Share your experience</Text>
-
       <View style={{ height: vs(20) }} />
-
       <StarRating ratingMode />
     </TouchableOpacity>
   );
@@ -49,20 +47,15 @@ export default function ProductReview({ product, isPurchased, tabIndex }) {
         }}
       >
         <Text style={styles.heading3Bold}>Product Reviews</Text>
-
         <Review
           rating={product.rating}
           ratingCount={product.ratingCount}
           ratingDetail={product.ratingDetail}
         />
       </InView>
-
       <View style={{ height: vs(15) }} />
-
       {isPurchased && renderUserReview()}
-
       <View style={{ height: vs(15) }} />
-
       {comments.map((comment, index) => (
         <View key={index.toString()} style={styles.commentContainer}>
           <View style={[styles.row, { marginBottom: vs(5) }]}>
@@ -80,11 +73,9 @@ export default function ProductReview({ product, isPurchased, tabIndex }) {
               {moment(comment.comment.createdDate).fromNow()}
             </Text>
           </View>
-
           <Text style={[styles.heading5Bold, { marginTop: vs(5) }]}>
             {comment.comment.title}
           </Text>
-
           <DescriptionText
             previewLength={150}
             text={
@@ -94,7 +85,6 @@ export default function ProductReview({ product, isPurchased, tabIndex }) {
               "odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas mol"
             }
           />
-
           {comment.comment.photos.length > 0 && (
             <View style={{ marginTop: vs(10) }}>
               <FlatList
@@ -113,14 +103,12 @@ export default function ProductReview({ product, isPurchased, tabIndex }) {
               />
             </View>
           )}
-
           <View style={[styles.row, { marginTop: vs(15) }]}>
             <TouchableOpacity style={styles.btnGrey}>
               <Text style={[styles.heading5Bold, { color: Colors.white }]}>
                 HELPFUL ({comment.comment.like})
               </Text>
             </TouchableOpacity>
-
             <TouchableOpacity
               onPress={() =>
                 NavigationService.navigate("ReportScreen", {
@@ -158,7 +146,6 @@ export default function ProductReview({ product, isPurchased, tabIndex }) {
                       "odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas mol"
                     }
                   />
-
                   <View style={[styles.row, { marginTop: vs(15) }]}>
                     <TouchableOpacity style={styles.btnGrey}>
                       <Text
@@ -167,7 +154,6 @@ export default function ProductReview({ product, isPurchased, tabIndex }) {
                         HELPFUL ({comment.comment.like})
                       </Text>
                     </TouchableOpacity>
-
                     <TouchableOpacity style={{ marginLeft: s(20) }}>
                       <Text
                         style={[styles.heading5Bold, { color: Colors.grey60 }]}

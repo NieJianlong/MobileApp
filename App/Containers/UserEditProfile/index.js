@@ -6,7 +6,13 @@
  * @Description: edit user profile
  * @FilePath: /MobileApp/App/Containers/UserEditProfile/index.js
  */
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useContext,
+} from "react";
 import {
   View,
   Text,
@@ -31,6 +37,7 @@ import ActionSheet from "react-native-actionsheet";
 import { useRoute } from "@react-navigation/core";
 import { useMutation } from "@apollo/client";
 import { UPDATE_BUYER_PROFILE } from "../../Apollo/mutations/mutations_user";
+import { AlertContext } from "../Root/GlobalContext";
 
 /**
  * @description:User edit page
@@ -39,16 +46,9 @@ import { UPDATE_BUYER_PROFILE } from "../../Apollo/mutations/mutations_user";
  */
 function UserEditProfile(props) {
   const {
-    params: {
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      userName,
-      userId,
-      buyerId,
-    },
+    params: { firstName, lastName, email, phoneNumber },
   } = useRoute();
+  const { dispatch } = useContext(AlertContext);
 
   const [showBottom, setShowBottom] = useState(true);
   const [newAvatar, setNewAvatar] = useState(null);
@@ -80,8 +80,10 @@ function UserEditProfile(props) {
   ];
   let BuyerProfileRequest = {
     buyerId: global.buyerId,
-    firstName: "updatedfirstName",
-    lastName: "updatedlastName",
+    firstName: newFirstName,
+    lastName: newLastName,
+    email: newEmail,
+    phoneNumber: newPhoneNumber,
   };
   console.log(BuyerProfileRequest);
   const [updateProfile, { data }] = useMutation(UPDATE_BUYER_PROFILE, {
@@ -93,8 +95,25 @@ function UserEditProfile(props) {
         isPrivate: true,
       },
     },
-    onCompleted: (res) => {},
-    onError: (res) => {},
+    onCompleted: (res) => {
+      dispatch({ type: "hideloading" });
+      if (res) {
+        dispatch({
+          type: "changAlertState",
+          payload: {
+            visible: true,
+            message: "You have successfully updated your ptofile.",
+            color: colors.success,
+            title: "Profile Changed!",
+          },
+        });
+      }
+      debugger;
+    },
+    onError: (res) => {
+      dispatch({ type: "hideloading" });
+      debugger;
+    },
   });
   const sheetRef = useRef();
   useEffect(() => {
@@ -140,6 +159,7 @@ function UserEditProfile(props) {
               title="SAVE"
               onPress={() => {
                 // NavigationService.goBack();
+                dispatch({ type: "loading" });
                 updateProfile();
               }}
             />

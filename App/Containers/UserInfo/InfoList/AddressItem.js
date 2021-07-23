@@ -25,6 +25,7 @@ export default function AddressItem({ item, refetch }) {
       },
     },
     onCompleted: (res) => {
+      dispatch({ type: "hideloading" });
       if (res.deleteAddress) {
         refetch();
         dispatch({
@@ -66,6 +67,7 @@ export default function AddressItem({ item, refetch }) {
       },
     },
     onCompleted: (res) => {
+      dispatch({ type: "hideloading" });
       refetch();
       dispatch({
         type: "changAlertState",

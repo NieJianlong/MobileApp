@@ -1,7 +1,10 @@
 import * as React from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import LaunchScreen from "../Containers/Launch";
@@ -74,6 +77,7 @@ import TabBar from "./TabBar";
 const Stack = createStackNavigator();
 
 const Tab = createBottomTabNavigator();
+const LoginStack = createStackNavigator();
 
 function TabNav() {
   return (
@@ -89,8 +93,31 @@ function TabNav() {
 
 function PrimaryNav() {
   return (
-    <Stack.Navigator initialRouteName={"LaunchScreen"} headerMode={"none"}>
-      <Stack.Screen name={"LaunchScreen"} component={LaunchScreen} />
+    <Stack.Navigator
+      initialRouteName={"LaunchScreen"}
+      headerMode={"none"}
+      screenOptions={({ route, navigation }) => {
+        let cardStyleInterpolator = CardStyleInterpolators.forHorizontalIOS;
+        switch (route.name) {
+          case "MainScreen":
+            cardStyleInterpolator = CardStyleInterpolators.forNoAnimation;
+            break;
+
+          default:
+            break;
+        }
+        return {
+          // headerTintColor: "#21c064",
+          // headerTitleStyle: styles.headerTitleStyle,
+          cardStyleInterpolator: cardStyleInterpolator,
+        };
+      }}
+    >
+      <Stack.Screen
+        name={"LaunchScreen"}
+        component={LaunchScreen}
+        screenOptions={{ gesturesEnabled: false }}
+      />
       <Stack.Screen name={"MainScreen"} component={TabNav} />
       <Stack.Screen name={"OnboardingScreen"} component={OnboardingScreen} />
       <Stack.Screen
@@ -263,7 +290,15 @@ function PrimaryNav() {
     </Stack.Navigator>
   );
 }
-
+// function RootStackScreen() {
+//   return (
+//     <LoginStack.Navigator mode="modal" headerMode={"none"}>
+//       {/*  */}
+//       <LoginStack.Screen name="PrimaryNav" component={PrimaryNav} />
+//       <LoginStack.Screen name="LoginScreen" component={LoginScreen} />
+//     </LoginStack.Navigator>
+//   );
+// }
 export default class AppRouter extends React.Component {
   render() {
     return (

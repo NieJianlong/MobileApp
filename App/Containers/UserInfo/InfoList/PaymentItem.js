@@ -15,6 +15,7 @@ import {
   DELETE_PAYMENT_DETAIL,
   UPDATE_PAYMENT_DETAIL,
 } from "../../../Apollo/mutations/mutations_user";
+
 export default function PaymentItem({ item, refetch }) {
   const [deletePayment, { error, data }] = useMutation(DELETE_PAYMENT_DETAIL, {
     variables: { paymentDetailId: item.paymentDetailId },
@@ -24,6 +25,7 @@ export default function PaymentItem({ item, refetch }) {
       },
     },
     onCompleted: (res) => {
+      dispatch({ type: "hideloading" });
       refetch();
       if (res.deletePaymentDetail) {
         dispatch({
@@ -37,7 +39,9 @@ export default function PaymentItem({ item, refetch }) {
         });
       }
     },
-    onError: (res) => {},
+    onError: (res) => {
+      dispatch({ type: "hideloading" });
+    },
   });
   const [updatePayment, { error: updateError, data: updateData }] = useMutation(
     UPDATE_PAYMENT_DETAIL,
@@ -57,8 +61,11 @@ export default function PaymentItem({ item, refetch }) {
       },
       onCompleted: (res) => {
         refetch();
+        dispatch({ type: "hideloading" });
       },
-      onError: (res) => {},
+      onError: (res) => {
+        dispatch({ type: "hideloading" });
+      },
     }
   );
   const tips = useMemo(
@@ -77,6 +84,7 @@ export default function PaymentItem({ item, refetch }) {
             sheetTitle: "",
           },
         });
+        dispatch({ type: "loading" });
         deletePayment();
       },
     }),
@@ -159,6 +167,7 @@ export default function PaymentItem({ item, refetch }) {
             <TouchableOpacity
               style={styles.itemSetDefault}
               onPress={() => {
+                dispatch({ type: "loading" });
                 updatePayment();
               }}
             >

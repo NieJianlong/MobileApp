@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { View, StatusBar, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -9,6 +9,7 @@ import colors from "../../Themes/Colors";
 import { useRoute } from "@react-navigation/native";
 import { useMutation } from "@apollo/client";
 import { CREATE_PAYMENT_DETAIL } from "../../Apollo/mutations/mutations_user";
+import { AlertContext } from "../Root/GlobalContext";
 
 function AddCredit(props) {
   const [name, setName] = useState("");
@@ -17,6 +18,7 @@ function AddCredit(props) {
   const [cvv, setCvv] = useState("");
   const [disable, setDisable] = useState(true);
   const [isDefaultPaymentType, setIsDefaultPaymentType] = useState(false);
+  const { dispatch } = useContext(AlertContext);
   /**
    * buyerId:ID!
     paymentType:PaymentType
@@ -36,6 +38,16 @@ function AddCredit(props) {
       },
     },
     onCompleted: (res) => {
+      dispatch({ type: "hideloading" });
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "You have successfully added new payment method.",
+          color: colors.secondary00,
+          title: "Payment method added!",
+        },
+      });
       params.callback({
         name,
         cardNum,
@@ -43,7 +55,26 @@ function AddCredit(props) {
         cvv,
       });
     },
+    onError: (res) => {
+      dispatch({ type: "hideloading" });
+    },
   });
+  const onAddPayMent = useCallback(() => {
+    if (disable) {
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "",
+          color: colors.error,
+          title: "Make sure you have entered the correct information",
+        },
+      });
+    } else {
+      dispatch({ type: "loading" });
+      addPayMent();
+    }
+  }, [addPayMent, disable, dispatch]);
   useEffect(() => {
     if (
       name.length === 0 ||
@@ -120,9 +151,7 @@ function AddCredit(props) {
             <RightButton
               title="SAVE"
               disable={disable}
-              onPress={() => {
-                addPayMent();
-              }}
+              onPress={onAddPayMent}
             />
           )}
         />

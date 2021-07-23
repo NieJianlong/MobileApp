@@ -5,7 +5,6 @@ import { vs } from "react-native-size-matters";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   AppBar,
-  TextInput,
   Switch,
   RightButton,
   MaterialTextInput,
@@ -45,7 +44,9 @@ function AddNewAddress(props) {
     if (
       name.length === 0 ||
       streetName.length === 0 ||
+      streetNum.length === 0 ||
       door.length === 0 ||
+      city.length === 0 ||
       mstate.length === 0 ||
       pincode.length === 0 ||
       country.length === 0 ||
@@ -94,7 +95,11 @@ function AddNewAddress(props) {
           title: "Address Added",
         },
       });
+      dispatch({ type: "hideloading" });
       NavigationService.goBack();
+    },
+    onError: (error) => {
+      dispatch({ type: "hideloading" });
     },
   });
   const [updateAddress] = useMutation(UPDATE_ADDRESS, {
@@ -110,6 +115,7 @@ function AddNewAddress(props) {
       },
     },
     onCompleted: (res) => {
+      dispatch({ type: "hideloading" });
       dispatch({
         type: "changAlertState",
         payload: {
@@ -119,7 +125,11 @@ function AddNewAddress(props) {
           title: "Address Changed",
         },
       });
+
       NavigationService.goBack();
+    },
+    onError: (error) => {
+      dispatch({ type: "hideloading" });
     },
   });
   const inputs = [
@@ -218,7 +228,21 @@ function AddNewAddress(props) {
               title="SAVE"
               disable={disable}
               onPress={() => {
-                currentAddress ? updateAddress() : addAddress();
+                if (disable) {
+                  dispatch({
+                    type: "changAlertState",
+                    payload: {
+                      visible: true,
+                      message: "",
+                      color: colors.error,
+                      title:
+                        "Make sure you have entered the correct information",
+                    },
+                  });
+                } else {
+                  dispatch({ type: "loading" });
+                  currentAddress ? updateAddress() : addAddress();
+                }
               }}
             />
           )}

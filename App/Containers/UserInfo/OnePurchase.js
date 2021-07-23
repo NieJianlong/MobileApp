@@ -6,20 +6,18 @@
  * @Description: User haven't added a default purchase preference yet
  * @FilePath: /MobileApp/App/Containers/UserInfo/NoPurchase.js
  */
-import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import React from "react";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScaledSheet, s, vs } from "react-native-size-matters";
 import Fonts from "../../Themes/Fonts";
 import AppConfig from "../../Config/AppConfig";
-import { Button } from "../../Components";
-import fonts from "../../Themes/Fonts";
 import colors from "../../Themes/Colors";
 import NavigationService from "../../Navigation/NavigationService";
 import images from "../../Themes/Images";
 import ListItem from "./ListItem";
 import metrics from "../../Themes/Metrics";
-import TextTip from "../../Components/EmptyReminder";
+import * as storage from "../../Apollo/local-storage";
 /**
  * @description:This component is displayed when the user does not purchase it
  * @param {*} props
@@ -36,19 +34,12 @@ function OnePurchase(props) {
       },
       hasline: true,
     },
-    {
-      lefticon: images.userLogoutImage,
-      text: "Logout",
-      righticon: images.userRightBtnImage,
-      onPress: () => {},
-      hasline: false,
-    },
   ];
   return (
     <View style={{ width: metrics.screenWidth }}>
       <SafeAreaView style={styles.bottomlist}>
         {items.map((item, index) => {
-          return <ListItem key={`listitem` + index} {...item}></ListItem>;
+          return <ListItem key={`listitem` + index} {...item} />;
         })}
       </SafeAreaView>
     </View>

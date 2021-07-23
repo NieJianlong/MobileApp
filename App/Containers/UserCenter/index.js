@@ -19,12 +19,6 @@ import UserHeader from "./UserHeader";
 import images from "../../Themes/Images";
 import NavigationService from "../../Navigation/NavigationService";
 import { userProfileVar } from "../../Apollo/cache";
-import { useApolloClient, useQuery } from "@apollo/client";
-import {
-  BUYER_PROFILES,
-  FIND_BUYER_PROFILE,
-  USER_PROFILES,
-} from "../../Apollo/queries/queries_user";
 
 const salamiItem = [
   {
@@ -117,7 +111,7 @@ function UserCenter(props) {
         backgroundColor={colors.background}
       />
       <View style={{ marginTop: vs(10) }}>
-        <UserHeader needSafeArea></UserHeader>
+        <UserHeader needSafeArea />
       </View>
 
       {/* All the items usercenter */}
@@ -125,7 +119,7 @@ function UserCenter(props) {
         {/*hide salami credit when user not sign in*/}
         {serviceItems.map((item, i) => (
           <View key={i}>
-            <ItemBox {...item}></ItemBox>
+            <ItemBox {...item} />
           </View>
         ))}
         {!userProfileVar().isAuth && (
@@ -135,7 +129,7 @@ function UserCenter(props) {
       <View style={styles.buttonContainer}>
         {buttons.map((item, i) => (
           <View key={`button` + i} style={{ marginTop: 15 }}>
-            <Button {...item}></Button>
+            <Button {...item} />
           </View>
         ))}
       </View>

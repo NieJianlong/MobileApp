@@ -53,6 +53,7 @@ function ChangePassword(props) {
         storage.LOCAL_STORAGE_USER_PASSWORD,
         newPassword
       );
+      dispatch({ type: "hideloading" });
       dispatch({
         type: "changAlertState",
         payload: {
@@ -66,7 +67,24 @@ function ChangePassword(props) {
     },
   });
   const changePassword = useCallback(() => {
+    if (
+      password.length === 0 ||
+      newPassword.length === 0 ||
+      confirmPassword.length === 0
+    ) {
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "Please confirm that you have entered all fileds.",
+          color: colors.error,
+          title: "Error!",
+        },
+      });
+      return;
+    }
     if (newPassword === confirmPassword) {
+      dispatch({ type: "loading" });
       changePwd();
     } else {
       dispatch({
@@ -79,7 +97,7 @@ function ChangePassword(props) {
         },
       });
     }
-  }, [changePwd, confirmPassword, dispatch, newPassword]);
+  }, [changePwd, confirmPassword, dispatch, newPassword, password.length]);
   useEffect(() => {
     const keyboardShow = (e) => {
       setKeyboardHeight(e.endCoordinates.height);
@@ -128,14 +146,14 @@ function ChangePassword(props) {
             })}
           </View>
 
-          <View style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
+          {/* <View style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
             <Button
               backgroundColor="transparent"
               textColor={colors.grey80}
               onPress={changePassword}
               text={"I DON’T REMEMBER MY PASSWORD"}
             />
-          </View>
+          </View> */}
         </View>
       </SafeAreaView>
     </View>

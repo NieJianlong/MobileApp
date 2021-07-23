@@ -16,7 +16,10 @@ import {
 import { StackActions } from "@react-navigation/native";
 import Addresses from "../UserInfo/InfoList/Addresses";
 import { useQuery } from "@apollo/client";
-import { FIND_BUYER_ADDRESS_BY_ID } from "../../Apollo/queries/queries_user";
+import {
+  FIND_BUYER_ADDRESS_BY_ID,
+  FIND_BUYER_ADDRESS_BY_ID_AND_TPYE,
+} from "../../Apollo/queries/queries_user";
 /**
  * @description: The user selects the shipping address page
  * @param {*} props
@@ -27,16 +30,20 @@ function SelectDeliveryAddress(props) {
   const context = useContext(AlertContext);
   const popAction = StackActions.pop(2);
   const navigation = useNavigation();
-  const { loading, error, data, refetch } = useQuery(FIND_BUYER_ADDRESS_BY_ID, {
-    variables: {
-      buyerId: global.buyerId,
-    },
-    context: {
-      headers: {
-        isPrivate: true,
+  const { loading, error, data, refetch } = useQuery(
+    FIND_BUYER_ADDRESS_BY_ID_AND_TPYE,
+    {
+      variables: {
+        buyerId: global.buyerId,
+        type: "SHIPPING",
       },
-    },
-  });
+      context: {
+        headers: {
+          isPrivate: true,
+        },
+      },
+    }
+  );
   const refreshData = useCallback(() => {
     refetch();
   }, [refetch]);
@@ -84,7 +91,7 @@ function SelectDeliveryAddress(props) {
           </Text>
 
           <Addresses
-            data={data?.getBuyerAddressesById || []}
+            data={data?.getBuyerAddressByType || []}
             refetch={refetch}
           />
         </View>

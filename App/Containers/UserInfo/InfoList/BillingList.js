@@ -56,7 +56,7 @@ export default function BillingList({ dispatch }) {
               }}
             >
               <Switch
-                label="Use the same info as my personal details"
+                label="Use the same info as default delivery address"
                 onSwitch={() => {}}
               />
             </View>

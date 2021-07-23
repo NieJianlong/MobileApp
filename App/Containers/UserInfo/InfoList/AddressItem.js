@@ -38,7 +38,9 @@ export default function AddressItem({ item, refetch }) {
         });
       }
     },
-    onError: (res) => {},
+    onError: (res) => {
+      dispatch({ type: "hideloading" });
+    },
   });
   const [setAddressDefault] = useMutation(UPDATE_ADDRESS, {
     variables: {
@@ -53,6 +55,7 @@ export default function AddressItem({ item, refetch }) {
         villageArea: item.villageArea,
         houseNumber: item.houseNumber,
         landMark: item.landMark,
+        streetAddress1: item.streetAddress1,
         country: item.country,
         defaultAddress: true,
       },
@@ -64,6 +67,18 @@ export default function AddressItem({ item, refetch }) {
     },
     onCompleted: (res) => {
       refetch();
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "You have successfully Changed your default address.",
+          color: colors.secondary00,
+          title: "Default Address Changed!",
+        },
+      });
+    },
+    onError: (error) => {
+      dispatch({ type: "hideloading" });
     },
   });
   return (
@@ -89,7 +104,10 @@ export default function AddressItem({ item, refetch }) {
           ) : (
             <TouchableOpacity
               style={styles.itemSetDefault}
-              onPress={() => setAddressDefault()}
+              onPress={() => {
+                dispatch({ type: "loading" });
+                setAddressDefault();
+              }}
             >
               <Text style={styles.setDefaultText}>SET AS DEFAULT</Text>
             </TouchableOpacity>
@@ -108,7 +126,12 @@ export default function AddressItem({ item, refetch }) {
                 source={images.userAddressEditImage}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => deleteAddress()}>
+            <TouchableOpacity
+              onPress={() => {
+                dispatch({ type: "loading" });
+                deleteAddress();
+              }}
+            >
               <Image
                 style={styles.editImage}
                 source={images.userAddressTrashImage}

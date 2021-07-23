@@ -1,14 +1,7 @@
-import React from 'react';
-import {
-  ScrollView,
-  View,
-  Dimensions,
-  FlatList,
-  TouchableHighlight,
-  Text,
-} from 'react-native';
-import DynamicTabViewScrollHeader from './DynamicTabViewScrollHeader';
-import PropTypes from 'prop-types';
+import React from "react";
+import { View, Dimensions, FlatList } from "react-native";
+import DynamicTabViewScrollHeader from "./DynamicTabViewScrollHeader";
+import PropTypes from "prop-types";
 /**
  * @description: Custom Tab Menu component
  * @param {*}
@@ -19,7 +12,7 @@ class DynamicTabView extends React.Component {
     super(props);
     this.state = {
       index: this.props.defaultIndex,
-      containerWidth: Dimensions.get('window').width,
+      containerWidth: Dimensions.get("window").width,
       begin_offset: null,
       end_offset: null,
     };
@@ -145,7 +138,7 @@ class DynamicTabView extends React.Component {
           styleCustomization={this.props.styleCustomization}
           renderItem={this._renderTab}
           scrollEventThrottle={10}
-          keyboardDismissMode={'on-drag'}
+          keyboardDismissMode={"on-drag"}
           getItemLayout={this.getItemLayout}
           pagingEnabled={true}
           onMomentumScrollBegin={this._onCalculateIndex}
@@ -162,16 +155,16 @@ const defaultStyle = {
     flex: 1,
   },
   headerContainer: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   tabContainer: {
     flex: 1,
   },
   labelStyle: {
-    color: 'white',
+    color: "white",
   },
   indicatorStyle: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     marginVertical: 1,
     bottom: 4, //indicatorStyle is implemented in absolute in the library
     height: 4,

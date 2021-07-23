@@ -1,11 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { vs } from "react-native-size-matters";
-import { Button, Switch } from "../../../Components";
+import { Button } from "../../../Components";
 import AppConfig from "../../../Config/AppConfig";
-import { View, FlatList, Text, Image, SafeAreaView } from "react-native";
-import colors from "../../../Themes/Colors";
-import AddressItem from "./AddressItem";
-import TextTip from "../../../Components/EmptyReminder";
+import { View, SafeAreaView } from "react-native";
 import NavigationService from "../../../Navigation/NavigationService";
 import { useQuery } from "@apollo/client";
 import {
@@ -14,6 +11,7 @@ import {
 } from "../../../Apollo/queries/queries_user";
 import { useFocusEffect } from "@react-navigation/core";
 import Addresses from "./Addresses";
+import { AlertContext } from "../../Root/GlobalContext";
 /**
  * @description:Display my address, list of my payment methods, display bill detail
  * @param {*} item Menu Item with a special configuration
@@ -23,33 +21,37 @@ import Addresses from "./Addresses";
  * @return {*}
  */
 export default function AddressList({ dispatch, xIndex }) {
-  const { loading, error, data, refetch } = useQuery(FIND_BUYER_ADDRESS_BY_ID, {
-    variables: {
-      buyerId: global.buyerId,
-    },
-    context: {
-      headers: {
-        isPrivate: true,
-      },
-    },
-  });
-  // const { data: sd } = useQuery(FIND_BUYER_ADDRESS_BY_ID_AND_TPYE, {
+  // const { loading, error, data, refetch } = useQuery(FIND_BUYER_ADDRESS_BY_ID, {
   //   variables: {
   //     buyerId: global.buyerId,
-  //     addressType: "dfs",
   //   },
   //   context: {
   //     headers: {
   //       isPrivate: true,
   //     },
   //   },
-  //   onCompleted: (res) => {
-  //
-  //   },
-  //   onError: (res) => {
-  //
-  //   },
   // });
+  const { dispatch: globalDispatch } = useContext(AlertContext);
+  const { loading, error, data, refetch } = useQuery(
+    FIND_BUYER_ADDRESS_BY_ID_AND_TPYE,
+    {
+      variables: {
+        buyerId: global.buyerId,
+        addressType: "SHIPPING",
+      },
+      context: {
+        headers: {
+          isPrivate: true,
+        },
+      },
+      onCompleted: (res) => {
+        globalDispatch({ type: "hideloading" });
+      },
+      onError: (res) => {
+        globalDispatch({ type: "hideloading" });
+      },
+    }
+  );
   const refreshData = useCallback(() => {
     refetch();
   }, [refetch]);
@@ -67,8 +69,8 @@ export default function AddressList({ dispatch, xIndex }) {
   }, [refreshData, xIndex]);
   return (
     <View style={{ flex: 1 }}>
-      <Addresses data={data?.getBuyerAddressesById || []} refetch={refetch} />
-      {data?.getBuyerAddressesById.length > 0 && (
+      <Addresses data={data?.getBuyerAddressByType || []} refetch={refetch} />
+      {data?.getBuyerAddressByType.length > 0 && (
         <SafeAreaView
           style={{
             marginBottom: vs(20),

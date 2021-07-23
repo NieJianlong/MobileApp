@@ -66,6 +66,12 @@ export default function OnePurchaseList({ dispatch, xIndex }) {
         isPrivate: true,
       },
     },
+    // onCompleted: (res) => {
+    //   dispatch({ type: "hideloading" });
+    // },
+    // onError: (res) => {
+    //   dispatch({ type: "hideloading" });
+    // },
   });
 
   const { data: payments } = useQuery(PAYMENT_METHODS_BY_ID, {
@@ -75,8 +81,12 @@ export default function OnePurchaseList({ dispatch, xIndex }) {
         isPrivate: true,
       },
     },
-    onCompleted: (res) => {},
-    onError: (res) => {},
+    // onCompleted: (res) => {
+    //   dispatch({ type: "hideloading" });
+    // },
+    // onError: (res) => {
+    //   dispatch({ type: "hideloading" });
+    // },
   });
 
   const { loading, error, refetch, data } = useQuery(FIND_ONE_CLICK_BUY, {
@@ -94,6 +104,7 @@ export default function OnePurchaseList({ dispatch, xIndex }) {
     },
   });
   const refreshData = useCallback(() => {
+    // dispatch({ type: "loading" });
     refetch();
   }, [refetch]);
   useFocusEffect(refreshData);

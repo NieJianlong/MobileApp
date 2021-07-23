@@ -25,6 +25,7 @@ import NavigationService from "../../Navigation/NavigationService";
 import TextTip from "../../Components/EmptyReminder";
 import images from "../../Themes/Images";
 import metrics from "../../Themes/Metrics";
+import * as storage from "../../Apollo/local-storage";
 
 function DeleteAccountMessage(props) {
   const textTip = "Are you sure you want to remove  your account?";
@@ -41,16 +42,17 @@ function DeleteAccountMessage(props) {
       <SafeAreaView>
         <AppBar />
       </SafeAreaView>
-      <Image style={styles.trash} source={images.userTrashImage}></Image>
-      <TextTip {...param}></TextTip>
+      <Image style={styles.trash} source={images.userTrashImage} />
+      <TextTip {...param} />
       <SafeAreaView style={styles.bottom}>
         <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <Button
             onPress={() => {
+              storage.setLocalStorageEmpty();
               NavigationService.navigate("OnboardingScreen");
             }}
             text="CONFIRM"
-          ></Button>
+          />
           <TouchableOpacity
             style={{ margin: 20 }}
             onPress={() => {

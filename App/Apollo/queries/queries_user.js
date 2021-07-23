@@ -867,7 +867,7 @@ export const PAYMENT_METHODS_BY_ID = gql`
 export const BILLING_DETAIL_BY_BUYERID = gql`
   query BillingDetailsByBuyerId($buyerId: ID!) {
     billingDetailsByBuyerId(buyerId: $buyerId) {
-      shippingId
+      billingDetailsId
     }
   }
 `;

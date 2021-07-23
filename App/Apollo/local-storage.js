@@ -30,3 +30,16 @@ export const getLocalStorageValue = async (key) => {
 
   return " ";
 };
+export const setLocalStorageEmpty = async () => {
+  try {
+    await AsyncStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, "");
+    await AsyncStorage.setItem(REGISTER_BUYER_ID_KEY, "");
+    await AsyncStorage.setItem(LOCAL_STORAGE_USER_NAME, "");
+    await AsyncStorage.setItem(LOCAL_STORAGE_USER_PASSWORD, "");
+    await AsyncStorage.setItem(LOCAL_SEARCH_ITEM, "");
+  } catch (err) {
+    console.log(`getLocalStorageValue error ${err}`);
+  }
+
+  return " ";
+};

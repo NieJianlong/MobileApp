@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { View, StatusBar, Text, TouchableOpacity } from "react-native";
+import { View, StatusBar, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import { AppBar, TextInput, Switch, RightButton } from "../../Components";
-import { ApplicationStyles } from "../../Themes";
 import styles from "./styles";
 import colors from "../../Themes/Colors";
 import { useRoute } from "@react-navigation/native";

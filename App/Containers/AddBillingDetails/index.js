@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import {
   View,
   StatusBar,
@@ -60,6 +60,31 @@ function AddBillingDetails(props) {
     };
   }, []);
   useEffect(() => {
+    console.log("firstName====================================");
+    console.log(firstName);
+    console.log("lastName====================================");
+    console.log(lastName);
+    console.log("phoneOrEmailNum====================================");
+    console.log(phoneOrEmailNum);
+    console.log("streetName====================================");
+    console.log(streetName);
+    console.log("streetNum====================================");
+    console.log(streetNum);
+    console.log("door====================================");
+    console.log(door);
+    console.log("city====================================");
+    console.log(city);
+    console.log("mstate====================================");
+    console.log(mstate);
+    console.log("postcode====================================");
+    console.log(postcode);
+    console.log("country====================================");
+    console.log(country);
+    console.log("company====================================");
+    console.log(company);
+    console.log("taxid====================================");
+    console.log(taxid);
+    console.log("====================================");
     if (
       firstName.length === 0 ||
       lastName.length === 0 ||
@@ -205,7 +230,7 @@ function AddBillingDetails(props) {
   // }
   let AddressRequestForCreate = {
     pinCode: postcode,
-    addressType: "BILLING",
+    addressType: disable ? "BILLING" : "SHIPPING",
     provinceState: mstate,
     townCity: city,
     flat: door,
@@ -213,6 +238,7 @@ function AddBillingDetails(props) {
     houseNumber: streetNum,
     country,
     referenceId: global.buyerId,
+    defaultAddress: disable,
   };
   const [addBilling] = useMutation(CREATE_BILLING_DETAILS, {
     variables: {
@@ -233,6 +259,7 @@ function AddBillingDetails(props) {
       },
     },
     onCompleted: (res) => {
+      dispatch({ type: "hideloading" });
       dispatch({
         type: "changAlertState",
         payload: {
@@ -244,7 +271,9 @@ function AddBillingDetails(props) {
       });
       NavigationService.goBack();
     },
-    onError: (res) => {},
+    onError: (res) => {
+      dispatch({ type: "hideloading" });
+    },
   });
   useEffect(() => {
     if (addressId) {
@@ -258,9 +287,27 @@ function AddBillingDetails(props) {
     onCompleted: (res) => {
       setAddressId(res.createAddress.addressId);
     },
-    onError: (res) => {},
+    onError: (res) => {
+      dispatch({ type: "hideloading" });
+    },
   });
 
+  const onAddBilling = useCallback(() => {
+    if (disable) {
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "",
+          color: colors.error,
+          title: "Make sure you have entered the correct information",
+        },
+      });
+    } else {
+      dispatch({ type: "loading" });
+      addAddress();
+    }
+  }, [addAddress, disable, dispatch]);
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
@@ -275,7 +322,7 @@ function AddBillingDetails(props) {
                 title="SAVE"
                 disable={disable}
                 onPress={() => {
-                  addAddress();
+                  onAddBilling();
                 }}
               />
             );
@@ -289,8 +336,8 @@ function AddBillingDetails(props) {
             <View style={{ marginTop: 20 }}>
               <Switch
                 onSwitch={() => {}}
-                label="Use the same info as my personal details"
-              ></Switch>
+                label="Use the same info as default delivery address"
+              />
             </View>
             <View
               style={{
@@ -311,7 +358,9 @@ function AddBillingDetails(props) {
                     {item.keyboardType === "selector" ? (
                       <Selector
                         placeholder={"Sate"}
+                        value={mstate}
                         data={["AAA", "BBB", "CCC"]}
+                        onValueChange={(text) => setMstate(text)}
                       />
                     ) : (
                       <MaterialTextInput {...item} />

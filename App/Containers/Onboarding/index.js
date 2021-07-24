@@ -59,7 +59,7 @@ function OnboardingScreen(props) {
       console.log(
         `OnboardingScreen checkBuyerIdExists found a bid in local storage ${bid}`
       );
-      global.guestId = bid;
+      global.buyerId = bid;
       setBIdExists(true);
     }
   };
@@ -80,7 +80,7 @@ function OnboardingScreen(props) {
     let buyerId = data.createGuestBuyer.buyerId;
     console.log("OnboardingScreen createGuestBuyer buyerId=" + buyerId);
     await storage.setLocalStorageValue(storage.GUEST_BUYER_ID_KEY, buyerId);
-    global.guestId = buyerId;
+    global.buyerId = buyerId;
     NavigationService.navigate("MainScreen");
   };
 

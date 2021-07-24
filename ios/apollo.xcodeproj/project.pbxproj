@@ -27,8 +27,8 @@
 		98302704ECFE4C4BA7AC8580 /* TitilliumWeb-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D418CCE0EE94B6A892D33FD /* TitilliumWeb-Italic.ttf */; };
 		A9BE04A937A64A9E844A3AFD /* TitilliumWeb-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5C76EB5051F84412A0397EBF /* TitilliumWeb-BoldItalic.ttf */; };
 		C2AACF35B837405AAB2673B3 /* TitilliumWeb-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A88DE07EACF4AB38DA3727E /* TitilliumWeb-ExtraLight.ttf */; };
+		CBD4B1E355D096D3411E27F2 /* libPods-apollo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC78338C365B687F0A3036C /* libPods-apollo.a */; };
 		CBE367E5B24B4867A4F2D4FA /* TitilliumWeb-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C3A4CA19602543FAA746200D /* TitilliumWeb-Light.ttf */; };
-		D6BB001FC3BA5DBD5CDF6418 /* libPods-apollo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC78338C365B687F0A3036C /* libPods-apollo.a */; };
 		DF89754BEFA44C5FBA904AB4 /* TitilliumWeb-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE7E404C168D43E1A5F67AFE /* TitilliumWeb-Bold.ttf */; };
 		F2DBF2E407F57B84E6F1797A /* libPods-apollo-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B10A88F96FACEA6340304308 /* libPods-apollo-tvOSTests.a */; };
 		F47C0F92C98D4A0BB4C2D55A /* TitilliumWeb-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 652CA42BD9B74B569DADE703 /* TitilliumWeb-SemiBoldItalic.ttf */; };
@@ -110,7 +110,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D549A1126A028ED00D0DAA7 /* libswiftWebKit.tbd in Frameworks */,
-				D6BB001FC3BA5DBD5CDF6418 /* libPods-apollo.a in Frameworks */,
+				CBD4B1E355D096D3411E27F2 /* libPods-apollo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,15 +492,11 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-apollo/Pods-apollo-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/double-conversion/double-conversion.framework/double-conversion",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes/hermes.framework/hermes",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/double-conversion.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -572,15 +568,11 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-apollo-apolloTests/Pods-apollo-apolloTests-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/double-conversion/double-conversion.framework/double-conversion",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes/hermes.framework/hermes",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/double-conversion.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -779,7 +771,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VZB384Y7C9;
 				ENABLE_BITCODE = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = apollo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -811,7 +802,6 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VZB384Y7C9;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = apollo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -975,7 +965,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				EXCLUDED_ARCHS = arm64;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1037,7 +1027,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				EXCLUDED_ARCHS = arm64;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

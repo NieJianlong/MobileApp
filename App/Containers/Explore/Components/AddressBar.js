@@ -1,4 +1,10 @@
-import React, { useContext, useCallback, useState, useMemo } from "react";
+import React, {
+  useContext,
+  useCallback,
+  useState,
+  useMemo,
+  useEffect,
+} from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import styles from "../styles";
 import { AlertContext } from "../../Root/GlobalContext";
@@ -12,6 +18,7 @@ import * as gqlMappers from "../gql/gql_mappers";
 import { localCartVar, userProfileVar } from "../../../Apollo/cache";
 import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
 import { useFocusEffect } from "@react-navigation/native";
+import PubSub from "pubsub-js";
 
 export default function AddressBar() {
   const userProfileVarReactive = useReactiveVar(userProfileVar);
@@ -65,7 +72,7 @@ export default function AddressBar() {
    * see './gql/explore_queries'
    */
   /** FIND_BUYER_DEFAULT_ADDRESS_BY_ID is a private api */
-  
+
   const { loading, refetch } = useQuery(
     isAuth
       ? aQM.FIND_BUYER_DEFAULT_ADDRESS_BY_ID
@@ -124,14 +131,22 @@ export default function AddressBar() {
       },
     }
   );
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     fetchAddress();
-  //     if (addrLine1 === "" && !loading) {
-  //       toggleAddressSheet();
-  //     }
-  //   }, [addrLine1, fetchAddress, loading, toggleAddressSheet])
-  // );
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch();
+      // if (addrLine1 === "" && !loading) {
+      //   toggleAddressSheet();
+      // }
+    }, [refetch])
+  );
+  useEffect(() => {
+    let refresh = PubSub.subscribe("refresh-address", () => {
+      refetch();
+    });
+    return () => {
+      PubSub.unsubscribe(refresh);
+    };
+  });
   return (
     <TouchableOpacity onPress={toggleAddressSheet}>
       <View style={styles.addressBarContainer}>

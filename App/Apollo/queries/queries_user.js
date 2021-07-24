@@ -333,6 +333,40 @@ export const FIND_BUYER_ADDRESS_BY_ID_AND_TPYE = gql`
     }
   }
 `;
+export const FIND_GUEST_ADDRESS_BY_ID_AND_TPYE = gql`
+  query GetGuestBuyerAddressByType(
+    $guestBuyerId: ID!
+    $addressType: AddressType
+  ) {
+    getGuestBuyerAddressByType(
+      guestBuyerId: $guestBuyerId
+      addressType: $addressType
+    ) {
+      addressId
+      flat
+      floor
+      defaultAddress
+      block
+      building
+      houseNumber
+      streetAddress1
+      streetAddress2
+      streetAddress3
+      townCity
+      villageArea
+      district
+      provinceState
+      country
+      areaCode
+      landMark
+      pinCode
+      addressType
+      referenceId
+      createdAt
+      updatedAt
+    }
+  }
+`;
 /**
  * @query  getBuyerDefaultAddressByBuyerId
  *

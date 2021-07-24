@@ -1,28 +1,24 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { View, StatusBar, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import {
-  AppBar,
-  Switch,
-  RightButton,
-  MaterialTextInput,
-  Selector,
-} from "../../../Components";
+import { Switch, MaterialTextInput, Selector } from "../../../Components";
 import styles from "./styles";
-import NavigationService from "../../../Navigation/NavigationService";
+
 import colors from "../../../Themes/Colors";
-import { useRoute } from "@react-navigation/native";
-import { useMutation } from "@apollo/client";
-import {
-  CREATE_ADDRESS,
-  UPDATE_ADDRESS,
-} from "../../../Apollo/mutations/mutations_user";
+import { useMutation, useReactiveVar } from "@apollo/client";
+import { CREATE_ADDRESS } from "../../../Apollo/mutations/mutations_user";
 import { AlertContext } from "../../Root/GlobalContext";
+import PubSub from "pubsub-js";
+import { userProfileVar } from "../../../Apollo/cache";
 
 function AddLocationSheetContent(props) {
   const { dispatch } = useContext(AlertContext);
+  const userProfileVarReactive = useReactiveVar(userProfileVar);
+  const isAuth = useMemo(() => userProfileVarReactive.isAuth, [
+    userProfileVarReactive.isAuth,
+  ]);
   const [name, setName] = useState("");
   const [streetName, setStreetName] = useState("");
   const [streetNum, setStreetNum] = useState("");
@@ -63,7 +59,7 @@ function AddLocationSheetContent(props) {
   ]);
   let AddressRequestForCreate = {
     pinCode: pincode,
-    defaultAddress: asDefault,
+    defaultAddress: isAuth ? asDefault : true,
     addressType: "SHIPPING",
     provinceState: mstate,
     townCity: city,
@@ -80,6 +76,7 @@ function AddLocationSheetContent(props) {
       request: AddressRequestForCreate,
     },
     onCompleted: (res) => {
+      PubSub.publish("refresh-address", "");
       dispatch({
         type: "changAlertState",
         payload: {
@@ -90,7 +87,12 @@ function AddLocationSheetContent(props) {
         },
       });
       dispatch({ type: "hideloading" });
-      NavigationService.goBack();
+      dispatch({
+        type: "changSheetState",
+        payload: {
+          showSheet: false,
+        },
+      });
     },
     onError: (error) => {
       dispatch({ type: "hideloading" });
@@ -192,14 +194,30 @@ function AddLocationSheetContent(props) {
           <Text style={styles.popupTitle}>Add your delivery address</Text>
           <TouchableOpacity
             onPress={() => {
-              // // had to do this for issues getting local state for create address
-              // debugAddAddessMutation();
-              // //debugAddAddessMutation()
-              // // will close sheet
-              // toggleAddLocationSheet();
+              if (disable) {
+                dispatch({
+                  type: "changAlertState",
+                  payload: {
+                    visible: true,
+                    message: "",
+                    color: colors.error,
+                    title: "Make sure you have entered the correct information",
+                  },
+                });
+              } else {
+                dispatch({ type: "loading" });
+                addAddress();
+              }
             }}
           >
-            <Text style={styles.txtSave}>SAVE</Text>
+            <Text
+              style={[
+                styles.txtSave,
+                { color: disable ? colors.grey40 : colors.grey80 },
+              ]}
+            >
+              SAVE
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -240,15 +258,17 @@ function AddLocationSheetContent(props) {
               })}
             </View>
           </KeyboardAwareScrollView>
-          <View style={{ marginTop: 20 }}>
-            <Switch
-              onSwitch={(res) => {
-                setAsDefault(res);
-              }}
-              active={asDefault}
-              label="Set as default address"
-            />
-          </View>
+          {isAuth && (
+            <View style={{ marginTop: 20 }}>
+              <Switch
+                onSwitch={(res) => {
+                  setAsDefault(res);
+                }}
+                active={asDefault}
+                label="Set as default address"
+              />
+            </View>
+          )}
         </View>
       </SafeAreaView>
     </View>

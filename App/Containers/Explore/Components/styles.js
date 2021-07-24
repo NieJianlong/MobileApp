@@ -71,7 +71,7 @@ export default ScaledSheet.create({
     flex: 1,
   },
   txtSave: {
-    color: Colors.grey40,
+    color: Colors.grey80,
     fontSize: "13@s",
     fontFamily: Fonts.semibold,
   },

@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from "react";
+import React, { useContext, useCallback, useMemo } from "react";
 import { View, Image, Text, TouchableOpacity } from "react-native";
 import { vs, s } from "react-native-size-matters";
 import { Button } from "../../../Components";
@@ -6,9 +6,13 @@ import { Colors, Images } from "../../../Themes";
 import styles from "../styles";
 import { AlertContext } from "../../Root/GlobalContext";
 import AddLocationSheetContent from "./AddLocationSheetContent";
-import { useQuery } from "@apollo/client";
-import { FIND_BUYER_ADDRESS_BY_ID } from "../gql/explore_queries";
-import { FIND_BUYER_ADDRESS_BY_ID_AND_TPYE } from "../../../Apollo/queries/queries_user";
+import Addresses from "../../UserInfo/InfoList/Addresses";
+import { useQuery, useReactiveVar } from "@apollo/client";
+import {
+  FIND_BUYER_ADDRESS_BY_ID_AND_TPYE,
+  FIND_GUEST_ADDRESS_BY_ID_AND_TPYE,
+} from "../../../Apollo/queries/queries_user";
+import { userProfileVar } from "../../../Apollo/cache";
 
 function AddressItem(address) {
   return (
@@ -31,17 +35,22 @@ function AddressItem(address) {
 
 export default function AddressSheetContent(props) {
   const { dispatch } = useContext(AlertContext);
-
+  const userProfileVarReactive = useReactiveVar(userProfileVar);
+  const isAuth = useMemo(() => userProfileVarReactive.isAuth, [
+    userProfileVarReactive.isAuth,
+  ]);
+  const variables = isAuth
+    ? { buyerId: global.buyerId, addressType: "SHIPPING" }
+    : { guestBuyerId: global.buyerId, addressType: "SHIPPING" };
   const { loading, error, data, refetch } = useQuery(
-    FIND_BUYER_ADDRESS_BY_ID_AND_TPYE,
+    isAuth
+      ? FIND_BUYER_ADDRESS_BY_ID_AND_TPYE
+      : FIND_GUEST_ADDRESS_BY_ID_AND_TPYE,
     {
-      variables: {
-        buyerId: global.buyerId,
-        addressType: "SHIPPING",
-      },
+      variables: variables,
       context: {
         headers: {
-          isPrivate: true,
+          isPrivate: isAuth,
         },
       },
     }
@@ -68,18 +77,16 @@ export default function AddressSheetContent(props) {
         text={"ADD ADDRESS"}
       />
       <View style={{ height: vs(20) }} />
-      <AddressItem
-        address={{
-          name: "Address Name 00",
-          address: "Tamil Nadu 33243",
-        }}
-      />
-      <AddressItem
-        address={{
-          name: "Address Name 01",
-          address: "Tamil Nadu 33243",
-        }}
-      />
+      {isAuth && data?.getBuyerAddressByType && (
+        <Addresses
+          data={
+            isAuth
+              ? data?.getBuyerAddressByType
+              : data?.getGuestBuyerAddressByType
+          }
+          refetch={refetch}
+        />
+      )}
     </View>
   );
 }

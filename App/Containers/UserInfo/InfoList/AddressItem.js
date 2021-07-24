@@ -1,9 +1,15 @@
 import React, { useContext } from "react";
 import { ScaledSheet } from "react-native-size-matters";
 import AppConfig from "../../../Config/AppConfig";
-import { View, Text, Image } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity as RNTouchableOpacity,
+  Platform,
+} from "react-native";
 import images from "../../../Themes/Images";
-import { TouchableOpacity } from "react-native-gesture-handler";
+
 import colors from "../../../Themes/Colors";
 import fonts from "../../../Themes/Fonts";
 import Fonts from "../../../Themes/Fonts";
@@ -14,6 +20,10 @@ import {
 } from "../../../Apollo/mutations/mutations_user";
 import { AlertContext } from "../../Root/GlobalContext";
 import NavigationService from "../../../Navigation/NavigationService";
+
+import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
+const TouchableOpacity =
+  Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
 
 export default function AddressItem({ item, refetch }) {
   const { dispatch } = useContext(AlertContext);

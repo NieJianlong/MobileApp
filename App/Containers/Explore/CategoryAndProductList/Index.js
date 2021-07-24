@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import AddressBar from "../Components/AddressBar";
 import ExploreHeader from "../Components/ExploreHeader";
 import ProductList from "../Components/ProductList/ProductList";
@@ -13,7 +13,7 @@ import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimen
 import { Images } from "../../../Themes";
 import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
 import * as aQM from "../gql/explore_queries";
-import { localCartVar } from "../../../Apollo/cache";
+import { localCartVar, userProfileVar } from "../../../Apollo/cache";
 import styles from "../styles";
 
 export default function Index(props) {
@@ -24,7 +24,10 @@ export default function Index(props) {
    * useReactiveVar => we will get updates from other screens
    */
   const localCartVarReactive = useReactiveVar(localCartVar);
-
+  const userProfileVarReactive = useReactiveVar(userProfileVar);
+  const isAuth = useMemo(() => userProfileVarReactive.isAuth, [
+    userProfileVarReactive.isAuth,
+  ]);
   // temporay fix original code for empty address and new requirments
   // imposed by backend and VK, diverges from original design
   // only call products data when ready, ie have geo co-ords
@@ -131,7 +134,7 @@ export default function Index(props) {
                 }}
               />
               <AddressBar />
-              {location && categories?.getPreferredCategories && (
+              {location && categories?.getPreferredCategories && isAuth && (
                 <View
                   style={{
                     backgroundColor: "white",

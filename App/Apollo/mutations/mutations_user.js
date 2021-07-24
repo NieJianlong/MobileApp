@@ -136,6 +136,22 @@ export const CREATE_GUEST_BUYER = gql`
   mutation CreateGuestBuyer($request: BuyerProfileRequestForCreate!) {
     createGuestBuyer(request: $request) {
       buyerId
+      userName
+      firstName
+      lastName
+      email
+      phoneNumber
+      userType
+      createdAt
+      updatedAt
+      oneClickPurchaseOn
+      guestBuyer
+      geoLocation
+      country
+      languages
+      currencies
+      applicationSettings
+      paymentOptions
     }
   }
 `;

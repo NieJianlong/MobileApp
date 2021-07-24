@@ -65,12 +65,13 @@ export default function AddressBar() {
    * see './gql/explore_queries'
    */
   /** FIND_BUYER_DEFAULT_ADDRESS_BY_ID is a private api */
+  
   const { loading, refetch } = useQuery(
     isAuth
       ? aQM.FIND_BUYER_DEFAULT_ADDRESS_BY_ID
       : aQM.FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID,
     {
-      variables: { buyerId: isAuth ? global.buyerId : global.guestId },
+      variables: { buyerId: global.buyerId },
       fetchPolicy: "network-only",
       notifyOnNetworkStatusChange: true,
       context: {

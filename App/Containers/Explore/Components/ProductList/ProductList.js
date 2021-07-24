@@ -10,6 +10,7 @@ import * as aQM from "../../gql/explore_queries";
 import colors from "../../../../Themes/Colors";
 import { useQuery } from "@apollo/client";
 import { client } from "../../../../Apollo/apolloClient";
+const pageSize = 5;
 
 const sortOptions = [
   { title: "Last added", sortDirection: "DESCENDING", sortType: "DATE" },
@@ -31,6 +32,7 @@ export default function ProductList(props) {
   // if show it as row
   const { dispatch } = useContext(AlertContext);
   const [page, setPage] = useState(0);
+  const [noMore, setNoMore] = useState(false);
   const [serverData, setServerData] = useState([]);
   const { isAnnouncement, index, filter, filterParams } = props;
   const [loadingMore, setLoadingMore] = useState(false);
@@ -57,7 +59,7 @@ export default function ProductList(props) {
     filterParams: filterParams,
     sortBy: sortItem.sortType,
     sortDirection: sortItem.sortDirection,
-    pageSize: 5,
+    pageSize,
   };
 
   const { loading, error, data, refetch, fetchMore } = useQuery(
@@ -109,9 +111,6 @@ export default function ProductList(props) {
           }}
           option={sortItem}
           refresh={(item) => {
-            console.log("当前选中的item====================================");
-            console.log(item);
-            console.log("====================================");
             setSortItem(item);
             refetch();
           }}
@@ -135,37 +134,33 @@ export default function ProductList(props) {
       isRefreshing={isRereshing}
       onEndReached={async () => {
         console.log("get more data");
-        setPage(page + 1);
+        if (noMore) {
+          return;
+        }
         setLoadingMore(true);
-        const { data: fetchMoreResult } = await client.query(aQM.GET_LISTINGS, {
+        const moreData = await client.query({
+          query: aQM.GET_LISTINGS,
           variables: {
-            searchOptions: { ...searchOptions, pageNo: page },
+            searchOptions: { ...searchOptions, pageNo: page + 1 },
           },
           context: {
             headers: {
               isPrivate: false,
             },
           },
-          onError: (res) => {},
         });
+        console.log(moreData);
         setServerData([
           ...serverData,
-          ...gqlMappers.mapProductListingDTO(fetchMoreResult.data.getListings),
+          ...gqlMappers.mapProductListingDTO(moreData.data.getListings),
         ]);
         setLoadingMore(false);
-        // fetchMore &&
-        //   fetchMore({
-        //     variables: {
-        //       pageNo: page,
-        //     },
-        //   }).then((fetchMoreResult) => {
-        //     // Update variables.limit for the original query to include
-        //     // const { data, loading, networkStatus } = fetchMoreResult;
-        //     //console.log(fetchMoreResult.data);
-        //     // setServerData(
-        //     //   gqlMappers.mapProductListingDTO(res.activeProductListingsByStoreId)
-        //     // );
-        //   });
+        if (moreData.data.getListings.length < pageSize) {
+          setNoMore(true);
+        } else {
+          setNoMore(false);
+        }
+        setPage(page + 1);
       }}
       renderItem={({ item, index }) => {
         return (

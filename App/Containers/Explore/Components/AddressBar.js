@@ -10,7 +10,7 @@ import AddressSheetContent from "./AddressSheetContent";
 import * as aQM from "../gql/explore_queries";
 import * as gqlMappers from "../gql/gql_mappers";
 import { localCartVar, userProfileVar } from "../../../Apollo/cache";
-import { useLazyQuery, useReactiveVar } from "@apollo/client";
+import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
 import { useFocusEffect } from "@react-navigation/native";
 
 export default function AddressBar() {
@@ -37,7 +37,7 @@ export default function AddressBar() {
         height: 380,
         children: () => <AddressSheetContent />,
         onCloseEnd: () => {},
-        // enabledGestureInteraction: addrLine1.length > 0,
+        enabledGestureInteraction: addrLine1.length > 0,
         sheetTitle: "Add your delivery address",
       },
     });
@@ -65,7 +65,7 @@ export default function AddressBar() {
    * see './gql/explore_queries'
    */
   /** FIND_BUYER_DEFAULT_ADDRESS_BY_ID is a private api */
-  const [fetchAddress, { loading, refetch }] = useLazyQuery(
+  const { loading, refetch } = useQuery(
     isAuth
       ? aQM.FIND_BUYER_DEFAULT_ADDRESS_BY_ID
       : aQM.FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID,
@@ -111,6 +111,9 @@ export default function AddressBar() {
           });
           setAddrLine1(aL1);
           setAddrLine2(aL2);
+          if (aL1.length === 0) {
+            toggleAddressSheet();
+          }
         } else {
           toggleAddressSheet();
           console.log(
@@ -120,14 +123,14 @@ export default function AddressBar() {
       },
     }
   );
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchAddress();
-      // if (addrLine1 === "" && !loading) {
-      //   toggleAddressSheet();
-      // }
-    }, [fetchAddress])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     fetchAddress();
+  //     if (addrLine1 === "" && !loading) {
+  //       toggleAddressSheet();
+  //     }
+  //   }, [addrLine1, fetchAddress, loading, toggleAddressSheet])
+  // );
   return (
     <TouchableOpacity onPress={toggleAddressSheet}>
       <View style={styles.addressBarContainer}>

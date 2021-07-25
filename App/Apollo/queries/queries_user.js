@@ -908,6 +908,7 @@ export const BILLING_DETAIL_BY_BUYERID = gql`
       email
       phoneNumber
       billingAddress {
+        addressId
         villageArea
         houseNumber
 
@@ -925,11 +926,11 @@ export const BILLING_DETAIL_BY_BUYERID = gql`
         streetAddress3
 
         district
-        
+
         country
         areaCode
         landMark
-      
+
         addressType
         referenceId
         createdAt

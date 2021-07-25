@@ -13,14 +13,17 @@ import PubSub from "pubsub-js";
 
 export default function BillingList({ dispatch }) {
   const tip = "You have not added \n billing details yet";
-  const { loading, error, data } = useQuery(BILLING_DETAIL_BY_BUYERID, {
-    variables: { buyerId: global.buyerId },
-    context: {
-      headers: {
-        isPrivate: true,
+  const { loading, error, refetch, data } = useQuery(
+    BILLING_DETAIL_BY_BUYERID,
+    {
+      variables: { buyerId: global.buyerId },
+      context: {
+        headers: {
+          isPrivate: true,
+        },
       },
-    },
-  });
+    }
+  );
   // if (data) {
   //   if (data?.billingDetailsByBuyerId.length > 0) {
   //     console.log("====================================");
@@ -34,9 +37,22 @@ export default function BillingList({ dispatch }) {
   //   }
   // }
   useEffect(() => {
+    let refresh = PubSub.subscribe("refresh-billing-detail", () => {
+      refetch();
+    });
+    return () => {
+      PubSub.unsubscribe(refresh);
+    };
+  });
+
+  useEffect(() => {
     let refresh = PubSub.subscribe("go-edit-billing-detail", () => {
-      NavigationService.navigate("EditBillingDetailsScreen", {
+      NavigationService.navigate("AddBillingDetailsScreen", {
         title: "Edit billing details",
+        billingDetails: {
+          ...data?.billingDetailsByBuyerId[0],
+          ...data?.billingDetailsByBuyerId[0].billingAddress,
+        },
       });
     });
     return () => {
@@ -83,7 +99,8 @@ export default function BillingList({ dispatch }) {
                 item[0] === "pinCode" ||
                 item[0] === "country" ||
                 item[0] === "taxCode" ||
-                item[0] === "houseNumber"
+                item[0] === "houseNumber" ||
+                item[0] === "company"
               ) {
                 let item1 = item;
                 if (item[0] === "villageArea") {

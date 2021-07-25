@@ -498,10 +498,10 @@ export const CREATE_BILLING_DETAILS = gql`
 /**
  * @mutation deleteBillingDetails
  * schema  see @mutation createBillingDetails
- *
+ *deleteBillingDetails(billingDetailsId: String!)
  */
 export const DELETE_BILLING_DETAILS = gql`
-  mutation DeleteBillingDetails($billingDetailsId: ID!) {
+  mutation DeleteBillingDetails($billingDetailsId: String!) {
     deleteBillingDetails(billingDetailsId: $billingDetailsId)
   }
 `;
@@ -515,7 +515,6 @@ export const UPDATE_BILLING_DETAILS = gql`
   mutation UpdateBillingDetails($request: BillingDetailsRequest!) {
     updateBillingDetails(request: $request) {
       billingDetailsId
-      buyerId
     }
   }
 `;

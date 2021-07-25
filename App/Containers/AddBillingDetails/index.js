@@ -15,8 +15,8 @@ import {
   RightButton,
   MaterialTextInput,
   Selector,
+  Button,
 } from "../../Components";
-import { ApplicationStyles } from "../../Themes";
 import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
 import colors from "../../Themes/Colors";
@@ -28,6 +28,7 @@ import {
 } from "../../Apollo/mutations/mutations_user";
 import { AlertContext } from "../Root/GlobalContext";
 import * as validator from "../../Validation";
+import AppConfig from "../../Config/AppConfig";
 
 function AddBillingDetails(props) {
   const { dispatch } = useContext(AlertContext);
@@ -203,18 +204,21 @@ function AddBillingDetails(props) {
     },
   ];
   const { params } = useRoute();
-  //   billingAddress: {
-  //     referenceId: "123e4567-e89b-12d3-a456-556642440009",
-  //     pinCode: postcode,
-  //     addressType: "BILLING",
-  //     provinceState: mstate,
-  //     townCity: city,
-  //     flat: door,
-  //     villageArea: streetName,
-  //     houseNumber: streetNum,
-  //     country:"china",
-  //     referenceId: global.buyerId,
-  // }
+  const [showBottom, setShowBottom] = useState(true);
+  useEffect(() => {
+    const keyboardShow = (e) => {
+      setShowBottom(false);
+    };
+    const keyboardHide = (e) => {
+      setShowBottom(true);
+    };
+    Keyboard.addListener("keyboardDidShow", keyboardShow);
+    Keyboard.addListener("keyboardDidHide", keyboardHide);
+    return () => {
+      Keyboard.removeListener("keyboardDisShow", keyboardShow);
+      Keyboard.removeListener("keyboardDidHide", keyboardHide);
+    };
+  }, []);
   let AddressRequestForCreate = {
     pinCode: postcode,
     addressType: disable ? "BILLING" : "SHIPPING",
@@ -247,6 +251,7 @@ function AddBillingDetails(props) {
           country,
           referenceId: global.buyerId,
           defaultAddress: disable,
+          streetAddress1: "billing",
         },
 
         taxCode: taxid,
@@ -392,6 +397,31 @@ function AddBillingDetails(props) {
             </View>
           </View>
         </KeyboardAwareScrollView>
+        {showBottom && (
+          <View
+            style={{
+              position: "absolute",
+              bottom: 10,
+              right: 0,
+              backgroundColor: colors.background,
+              left: 0,
+              paddingHorizontal: AppConfig.paddingHorizontal,
+            }}
+          >
+            <Button
+              onPress={() => {
+                if (params) {
+                  if (typeof params.removeCallback == "function") {
+                    params.removeCallback();
+                  }
+                }
+              }}
+              textColor={colors.grey80}
+              text="REMOVE BILLING DETAILS"
+              backgroundColor="transparent"
+            />
+          </View>
+        )}
       </SafeAreaView>
     </View>
   );

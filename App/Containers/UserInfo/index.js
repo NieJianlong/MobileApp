@@ -23,6 +23,7 @@ import HorizontalMenu from "./HorizontalMenu";
 import images from "../../Themes/Images";
 import TextTip from "../../Components/EmptyReminder";
 import NavigationService from "../../Navigation/NavigationService";
+import PubSub from "pubsub-js";
 
 //Alert Context, which controls the display and hiding of an alert, for example, Add Address Success
 export const AlertContext = React.createContext({});
@@ -79,21 +80,7 @@ function UserInfo(props) {
                 <RightButton
                   title="EDIT"
                   onPress={() => {
-                    NavigationService.navigate("EditBillingDetailsScreen", {
-                      saveCallback: () => {},
-                      removeCallback: () => {
-                        dispatch({
-                          type: "changAlertState",
-                          payload: {
-                            visible: true,
-                            message:
-                              "You have successfully removed your billing address.",
-                            color: colors.secondary00,
-                            title: "Billing Details removed",
-                          },
-                        });
-                      },
-                    });
+                    PubSub.publish("go-edit-billing-detail");
                   }}
                 />
               ) : null

@@ -902,6 +902,42 @@ export const BILLING_DETAIL_BY_BUYERID = gql`
   query BillingDetailsByBuyerId($buyerId: ID!) {
     billingDetailsByBuyerId(buyerId: $buyerId) {
       billingDetailsId
+      firstName
+      lastName
+      companyName
+      email
+      phoneNumber
+      billingAddress {
+        villageArea
+        houseNumber
+
+        flat
+        floor
+        townCity
+        provinceState
+        pinCode
+        defaultAddress
+        block
+        building
+
+        streetAddress1
+        streetAddress2
+        streetAddress3
+
+        district
+        
+        country
+        areaCode
+        landMark
+      
+        addressType
+        referenceId
+        createdAt
+        updatedAt
+      }
+      taxCode
+      createdAt
+      updatedAt
     }
   }
 `;

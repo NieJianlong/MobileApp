@@ -12,7 +12,7 @@ import NavigationService from "../../../Navigation/NavigationService";
  * @param {*} showSheet Display the Acction Sheet for the home page
  * @return {*}
  */
-export default function Addresses({ data, refetch }) {
+export default function Addresses({ data, refetch, isCheckout = false }) {
   return (
     <FlatList
       data={data}
@@ -30,7 +30,9 @@ export default function Addresses({ data, refetch }) {
         />
       }
       renderItem={({ item }) => {
-        return <AddressItem item={item} refetch={refetch} />;
+        return (
+          <AddressItem item={item} refetch={refetch} isCheckout={isCheckout} />
+        );
       }}
       keyExtractor={(item, index) => `listItem${index}`}
     />

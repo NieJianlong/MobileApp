@@ -14,7 +14,6 @@ import {
 
 // validation and auth api
 import * as validator from "../../Validation";
-import * as aQM from "./gql/register_mutations";
 import * as jwt from "../../Apollo/jwt-request";
 import * as storage from "../../Apollo/local-storage";
 /** userProfileVar is the variable for the cache to get set  userProfile attributes */

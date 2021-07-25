@@ -20,12 +20,12 @@ import {
 } from "../../../Apollo/mutations/mutations_user";
 import { AlertContext } from "../../Root/GlobalContext";
 import NavigationService from "../../../Navigation/NavigationService";
-
+import PubSub from "pubsub-js";
 import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
 
-export default function AddressItem({ item, refetch }) {
+export default function AddressItem({ item, refetch, isCheckout }) {
   const { dispatch } = useContext(AlertContext);
   const [deleteAddress, { error, data }] = useMutation(DELETE_ADDRESS, {
     variables: { addressId: item.addressId },
@@ -36,6 +36,7 @@ export default function AddressItem({ item, refetch }) {
     },
     onCompleted: (res) => {
       dispatch({ type: "hideloading" });
+      PubSub.publish("refresh-address", "");
       if (res.deleteAddress) {
         refetch();
         dispatch({
@@ -78,6 +79,7 @@ export default function AddressItem({ item, refetch }) {
     },
     onCompleted: (res) => {
       dispatch({ type: "hideloading" });
+      PubSub.publish("refresh-address", "");
       refetch();
       dispatch({
         type: "changAlertState",
@@ -125,19 +127,21 @@ export default function AddressItem({ item, refetch }) {
             </TouchableOpacity>
           )}
           <View style={{ flexDirection: "row" }}>
-            <TouchableOpacity
-              onPress={() => {
-                NavigationService.navigate("AddNewAddressScreen", {
-                  title: "Edit address",
-                  currentAddress: item,
-                });
-              }}
-            >
-              <Image
-                style={styles.editImage}
-                source={images.userAddressEditImage}
-              />
-            </TouchableOpacity>
+            {!isCheckout && (
+              <TouchableOpacity
+                onPress={() => {
+                  NavigationService.navigate("AddNewAddressScreen", {
+                    title: "Edit address",
+                    currentAddress: item,
+                  });
+                }}
+              >
+                <Image
+                  style={styles.editImage}
+                  source={images.userAddressEditImage}
+                />
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
               onPress={() => {
                 dispatch({ type: "loading" });

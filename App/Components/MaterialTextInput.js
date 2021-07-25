@@ -1,16 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { ScaledSheet, vs } from 'react-native-size-matters';
-import { TextField, OutlinedTextField } from 'react-native-material-textfield';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState, useRef } from "react";
+import { ScaledSheet, vs } from "react-native-size-matters";
+import { TextField, OutlinedTextField } from "react-native-material-textfield";
+import PropTypes from "prop-types";
 
-import { Fonts, Colors, Images } from '../Themes';
-import colors from '../Themes/Colors';
+import { Fonts, Colors, Images } from "../Themes";
+import colors from "../Themes/Colors";
 
 function MaterialTextInput(props) {
   const inputRef = useRef();
   const {
     placeholder,
-    value = '',
+    value = "",
     keyboardType,
     onChangeText = () => {},
   } = props;
@@ -34,7 +34,7 @@ function MaterialTextInput(props) {
           setPadding(true);
         }
       }}
-      lineType={'none'}
+      lineType={"none"}
       onChangeText={(text) => {
         onChangeText(text);
       }}
@@ -53,36 +53,36 @@ MaterialTextInput.defaultProps = {};
 
 const styles = ScaledSheet.create({
   container: {
-    height: '46@vs',
+    height: "46@vs",
     backgroundColor: Colors.white,
-    borderRadius: '23@s',
+    borderRadius: "23@s",
     borderWidth: 1,
     borderColor: Colors.grey20,
-    justifyContent: 'center',
-    paddingHorizontal: '15@s',
+    justifyContent: "center",
+    paddingHorizontal: "15@s",
   },
   icSearch: {
-    width: '25@s',
-    height: '25@s',
+    width: "25@s",
+    height: "25@s",
     tintColor: Colors.grey60,
   },
   icDelete: {
-    width: '13@s',
-    height: '13@s',
+    width: "13@s",
+    height: "13@s",
     tintColor: Colors.grey80,
   },
   btnDelete: {
-    width: '18@s',
-    height: '18@s',
+    width: "18@s",
+    height: "18@s",
     backgroundColor: Colors.grey10,
-    borderRadius: '10@s',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderRadius: "10@s",
+    justifyContent: "center",
+    alignItems: "center",
   },
   textInput: {
-    paddingLeft: '5@s',
-    height: '100%',
-    fontSize: '14@s',
+    paddingLeft: "5@s",
+    height: "100%",
+    fontSize: "14@s",
     fontFamily: Fonts.primary,
     color: Colors.black,
   },

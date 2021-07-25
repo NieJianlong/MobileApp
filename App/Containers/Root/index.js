@@ -86,15 +86,6 @@ function RootContainer() {
           textStyle={{ color: "white" }}
         />
         <AppNavigation />
-        {visible && (
-          <Alert
-            visible={true}
-            message={message}
-            title={title}
-            color={color}
-            onDismiss={onDismiss}
-          />
-        )}
       </View>
       {showSheet && (
         <TouchableWithoutFeedback onPress={() => {}}>
@@ -134,6 +125,15 @@ function RootContainer() {
         >
           {children()}
         </BottomSheet>
+      )}
+      {visible && (
+        <Alert
+          visible={true}
+          message={message}
+          title={title}
+          color={color}
+          onDismiss={onDismiss}
+        />
       )}
     </AlertContext.Provider>
   );

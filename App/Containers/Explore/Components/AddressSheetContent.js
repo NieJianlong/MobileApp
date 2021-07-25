@@ -84,6 +84,7 @@ export default function AddressSheetContent(props) {
               ? data?.getBuyerAddressByType
               : data?.getGuestBuyerAddressByType
           }
+          isCheckout={true}
           refetch={refetch}
         />
       )}

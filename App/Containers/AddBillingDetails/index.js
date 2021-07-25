@@ -27,12 +27,14 @@ import {
   CREATE_BILLING_DETAILS,
 } from "../../Apollo/mutations/mutations_user";
 import { AlertContext } from "../Root/GlobalContext";
+import * as validator from "../../Validation";
 
 function AddBillingDetails(props) {
   const { dispatch } = useContext(AlertContext);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [phoneOrEmailNum, setPhoneOrEmailNum] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNum, setPhoneNum] = useState("");
   const [streetName, setStreetName] = useState("");
   const [streetNum, setStreetNum] = useState("");
   const [door, setDoor] = useState("");
@@ -60,35 +62,11 @@ function AddBillingDetails(props) {
     };
   }, []);
   useEffect(() => {
-    console.log("firstName====================================");
-    console.log(firstName);
-    console.log("lastName====================================");
-    console.log(lastName);
-    console.log("phoneOrEmailNum====================================");
-    console.log(phoneOrEmailNum);
-    console.log("streetName====================================");
-    console.log(streetName);
-    console.log("streetNum====================================");
-    console.log(streetNum);
-    console.log("door====================================");
-    console.log(door);
-    console.log("city====================================");
-    console.log(city);
-    console.log("mstate====================================");
-    console.log(mstate);
-    console.log("postcode====================================");
-    console.log(postcode);
-    console.log("country====================================");
-    console.log(country);
-    console.log("company====================================");
-    console.log(company);
-    console.log("taxid====================================");
-    console.log(taxid);
-    console.log("====================================");
     if (
       firstName.length === 0 ||
       lastName.length === 0 ||
-      phoneOrEmailNum.length === 0 ||
+      email.length === 0 ||
+      phoneNum.length === 0 ||
       streetName.length === 0 ||
       streetNum.length === 0 ||
       door.length === 0 ||
@@ -106,7 +84,6 @@ function AddBillingDetails(props) {
   }, [
     firstName,
     lastName,
-    phoneOrEmailNum,
     streetName,
     streetNum,
     door,
@@ -116,6 +93,8 @@ function AddBillingDetails(props) {
     country,
     company,
     taxid,
+    email,
+    phoneNum,
   ]);
   const inputs = [
     {
@@ -135,8 +114,16 @@ function AddBillingDetails(props) {
       type: "short",
     },
     {
-      placeholder: "Email or phone number*",
-      onChangeText: (text) => setPhoneOrEmailNum(text),
+      placeholder: "Email",
+      onChangeText: (text) => setEmail(text),
+      showError: false,
+      errorMessage: null,
+      keyboardType: "default",
+      type: "normal",
+    },
+    {
+      placeholder: "phone number*",
+      onChangeText: (text) => setPhoneNum(text),
       showError: false,
       errorMessage: null,
       keyboardType: "default",
@@ -247,9 +234,21 @@ function AddBillingDetails(props) {
         firstName: firstName,
         lastName: lastName,
         companyName: company,
-        email: phoneOrEmailNum,
-        phoneNumber: phoneOrEmailNum,
-        billingAddressId: addressId,
+        email: email,
+        phoneNumber: phoneNum,
+        billingAddress: {
+          pinCode: postcode,
+          addressType: disable ? "BILLING" : "SHIPPING",
+          provinceState: mstate,
+          townCity: city,
+          flat: door,
+          villageArea: streetName,
+          houseNumber: streetNum,
+          country,
+          referenceId: global.buyerId,
+          defaultAddress: disable,
+        },
+
         taxCode: taxid,
       },
     },
@@ -304,10 +303,32 @@ function AddBillingDetails(props) {
         },
       });
     } else {
-      dispatch({ type: "loading" });
-      addAddress();
+      if (!validator.isValidEmail(email)) {
+        dispatch({
+          type: "changAlertState",
+          payload: {
+            visible: true,
+            message: "",
+            color: colors.error,
+            title: "The email format you entered is incorrect.",
+          },
+        });
+      } else if (!validator.isValidPhone(phoneNum)) {
+        dispatch({
+          type: "changAlertState",
+          payload: {
+            visible: true,
+            message: "",
+            color: colors.error,
+            title: "The phone no format you entered is incorrect.",
+          },
+        });
+      } else {
+        dispatch({ type: "loading" });
+        addAddress();
+      }
     }
-  }, [addAddress, disable, dispatch]);
+  }, [addAddress, disable, dispatch, email, phoneNum]);
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />

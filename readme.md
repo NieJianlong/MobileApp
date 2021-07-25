@@ -79,3 +79,8 @@ npx react-native start --port=5555
 npx react-native run-android --port=5555
 
 
+get-graphql-schema  http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8083/graphql > schemaPM.graphql
+
+get-graphql-schema  http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8082/graphql > schemaUM.graphql
+
+

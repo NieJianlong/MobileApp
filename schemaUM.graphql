@@ -103,7 +103,7 @@ input BillingDetailsRequest {
   companyName: String
   email: String
   phoneNumber: String
-  billingAddressId: ID!
+  billingAddress: AddressRequest
   taxCode: String
 }
 
@@ -114,7 +114,7 @@ input BillingDetailsRequestForCreate {
   companyName: String
   email: String
   phoneNumber: String
-  billingAddressId: ID!
+  billingAddress: AddressRequestForCreate!
   taxCode: String
 }
 
@@ -126,7 +126,7 @@ type BillingDetailsResponse {
   companyName: String
   email: String
   phoneNumber: String
-  billingAddressId: ID
+  billingAddress: AddressResponse
   taxCode: String
   createdAt: DateTime
   updatedAt: DateTime
@@ -545,6 +545,9 @@ type Query {
   sellerToOnlineStoreById(sellerId: ID!, storeId: ID!): SellerToOnlineStoreResponse
   shippingDetails: [ShippingDetailResponse]
   shippingDetailById(shippingId: ID!): ShippingDetailResponse
+  userHasVerifiedEmail(userId: ID!): Boolean
+  deliveryAddressForBuyer(buyerId: ID!): AddressResponse
+  deliveryAddressForGuestBuyer(buyerId: ID!): AddressResponse
 }
 
 input SellerProfileRequest {

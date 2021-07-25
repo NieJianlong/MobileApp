@@ -7,6 +7,9 @@ import fonts from "../../../Themes/Fonts";
 import Fonts from "../../../Themes/Fonts";
 
 export default function BillingItem({ item }) {
+  console.log("====================================");
+  console.log(item);
+  console.log("====================================");
   return (
     <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
       <View style={[styles.item, { height: vs(65) }]}>

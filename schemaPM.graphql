@@ -116,6 +116,12 @@ type KeyValuePair {
   value: String!
 }
 
+input ListingVariantRequest {
+  variantId: String!
+  priceId: String!
+  quantity: Int!
+}
+
 type ListingVariantView {
   listingId: ID!
   variantId: ID!
@@ -128,143 +134,76 @@ type ListingVariantView {
   options: [KeyValuePair]
 }
 
-"""
-  mutations
-Mutation: to add products
-"""
+"""mutations"""
 type Mutation {
-  """
-    this query will add product listing based on product listing request .
-     Fields : productId : String!,   storeId: String,  chatId: String,
-  announcementId: String,    addressId: String, chatMuteFlag: Boolean
-    numberOfItems: Int, maxQuantityPerCart: Int, wholeSalePrice: Float,
-  retailPrice: Float, discount: Float, closedDate: Date,deliveryDate: Date,
-  pickupFromSeller: Boolean
-  {
-  "productListingRequest": {
-    "productId": "d0c25217-6d68-4ccc-a404-d90d5c13e1e9",
-    "storeId": "0b950a80-7836-45b4-9ee3-42042097aafe",
-    "chatId": "",
-    "announcementId": "",
-    "returnAddressId": "fc2eb415-7f57-4f09-8fdc-2a885579e179",
-    "collectionPointAddressId": "b105be7f-693d-41bb-a727-b301e813096a",
-    "chatMuteFlag": true,
-   "numberOfItems": 60,
-    "minQuantityPerCart": 0,
-    "maxQuantityPerCart": 0,
-    "wholeSalePrice": "40",
-    "retailPrice": "50",
-    "discount": "60",
-   "closedDate": "2021-06-06",
-   "deliveryDate": "2021-06-01",
-   "pickupFromSeller": true,
-    "productListingType": "MAIN_PRODUCT_LISTING"
-  }
-  }
-  """
+  """this query will add product listing based on product listing request ."""
   addProductListing(productListingRequest: ProductListingRequest): ProductListing
-
-  """
-   this query will add announcement based on product id , validity interval ( how
-  many seconds to be valid ) , announcement  text
-   , announcementDatetime: DateTime
-  createdAt: DateTime, updatedAt: DateTime - will remove these parameters at next refactoring
-  """
   addAnnouncement(productId: String, validityInterval: Int, announcementText: String, announcementDatetime: DateTime, createdAt: DateTime, updatedAt: DateTime): Announcement!
 
   """
   add Parent category should add a main category that can have sub-categories
-  Parameters : name type String , description type string
-  Response : Category type,  id: ID!, name: String,   description: String, 
-  parentCategory: Category,  createdAt: DateTime, updatedAt: DateTime,
-  subCategories: [Category]
-  {
-    "name": "parent 2 Category",
-     "description": "this is parent 2 Category"
-    }
   """
   addParentCategory(name: String, description: String): Category!
 
-  """
-  add sub category - is a category that has a parent category
-  Parameters: name type String, description type String , parent category Id type String
-  Response: the Category type
-   {
-     "categoryId": "ac664456-043b-4345-a8fd-19a9b467d64c",
-     "name": "sub category",
-    "description": "this is sub category",
-     "parentCategoryId": "cc19bd1d-60f2-4773-acd4-873ad77698e0"
-   }
-  """
+  """add sub category - is a category that has a parent category"""
   addSubCategory(name: String, description: String, parentCategoryId: String): Category!
 
-  """
-  add product to wish list - product
-  Parameters: product Id type String , buyer id type String
-  Response: the Whishlist type
-  """
+  """add product to wish list - product"""
   addProductToWishlist(productId: String!, buyerId: String!): Wishlist!
 
-  """
-  add review dto  - add review for a product
-  Parameters: product id type String, description type String ,  productId type String, sellerId type String
-  imagesList type list of String ( the list with paths for product images)
-  Response: ProductReviewView type
-  """
+  """add review dto  - add review for a product"""
   addProductReview(productId: String, title: String!, description: String!, ratingVote: Int!, sellerId: String, postedBy: String!): ProductReviewView!
 
-  """
-  add review report
-  Parameters: reviewId type String, postedBy type String , description type String, reason type String
-  Response: ReportReviewView type
-  """
+  """add review report"""
   addReportReview(reviewId: String!, title: String!, description: String!, reason: String!, reporterType: ReporterType!, postedBy: String!): ReportReviewView
 
   """
   add product options for product
-  Parameters: productId type String, productListingId type String, name of the
-  option type String, description for option type String
-  Response: ProductOptions type
   addProductOptionsForProduct( productId: String, productListingId: String,
   name: String, description: String): ProductOptions
   add request for product to be present in a specific online store
-  Parameters: productId type String , storeId type String, requests - total number of requests  type Integer
-  Response: ProductRequestCount
   """
   addRequestForProduct(productId: String, storeId: String, requests: Int): ProductRequestCount
 
-  """
-  add share information about a product
-  Parameters: productId type String, buyerId type String, share title - the
-  title of the share - type String, target Email Address type String
-  productPageUrl type String
-  Response: the ShareInformation type
-  """
+  """add share information about a product"""
   addShareInformation(productId: String, buyerId: String, shareTitle: String, targetEmailAddress: String, shareChannel: String, productPageUrl: String): ShareInformation
+  deleteProduct(productId: String!): Boolean
   createStoreByName(storeInput: StoreInput!): Store
   updateStoreByName(storeName: String!, storeInput: StoreInput!): Store
-
-  """
-  increment helpful count in reviews table
-  @param reviewId
-  @return the value already incremented
-  """
   incrementHelpfulCount(reviewId: String!): Int
-
-  """
-  images sent as form fields "fileNNN" with type "file"
-  productInput sent as the field "operations"
-  in multipart/form-data
-  """
   createProductGeneral(productInput: ProductInputStep1!): ProductStep1Response!
   updateProductGeneral(productInput: ProductUpdateStep1!): ProductStep1Response!
+  createProductStockAndPricing(productInput: ProductInputStep2!): Product!
+  createProductReturnPolicy(productInput: ProductInputStep3!): Product!
   savePreferredCategories(buyerId: ID!, categories: [ID]): String
+  addProductListingVariants(productListingVariantRequest: ProductListingVariantRequest): [ProductListingVariant]
 }
 
 enum OnlineStoreType {
   UNDEFINED
   MAIN_ONLINE_STORE
   ANNOUNCEMENT_ONLINE_STORE
+}
+
+type Option {
+  optionId: ID!
+  name: String
+  description: String
+  values: [OptionValue]
+}
+
+type OptionValue {
+  valueId: ID!
+  value: String
+}
+
+input OptionValueInput {
+  name: String!
+  value: String!
+}
+
+type PolicyNameView {
+  name: String
 }
 
 """types"""
@@ -291,6 +230,26 @@ input ProductInputStep1 {
   brand: String
   keywords: [String]
   highlightBullets: [String]
+}
+
+input ProductInputStep2 {
+  productId: ID!
+  sellerSku: String
+  retailPrice: Float!
+  wholeSalePrice: Float!
+  profit: Float
+  currency: String!
+  weight: Float
+  weightUnit: String
+  size: String
+  sizeUnit: String
+  itemsInStock: Int!
+  variantInputs: [ProductVariantInput]
+}
+
+input ProductInputStep3 {
+  productId: ID!
+  returnPolicyInputs: [ReturnPolicyInput]!
 }
 
 type ProductListing {
@@ -328,6 +287,9 @@ input ProductListingRequest {
   pickupFromSeller: Boolean
   productListingType: ProductListingType
   shippingMethodsAvailable: [ShippingMethodType]
+  openUntil: Date
+  minSoldQuantity: Int
+  startDate: DateTime
 }
 
 """
@@ -340,48 +302,66 @@ enum ProductListingType {
   ANNOUNCEMENT_PRODUCT_LISTING
 }
 
+type ProductListingVariant {
+  listingId: ID!
+  variantId: ID!
+  productId: ID!
+  priceId: ID
+  itemsAvailable: Int
+  itemsSold: Int
+}
+
+input ProductListingVariantRequest {
+  listingId: String!
+  variants: [ListingVariantRequest]!
+}
+
 type ProductListingView {
-  id: String
-  productId: String
+  photo: String
+  photoUrls: [String]
+  shortName: String
+  numberOfStars: Float
   numberOfReviews: Int
+  retailPrice: Float
+  wholeSalePrice: Float
+  percentOff: Int
+  deliveryFee: Float
+  amountSaved: Float
+  pickUpFromSeller: Boolean
+  openUntil: String
+  noOfOrderedItems: Int
+  noOfItemsInStock: Int
+  description: String
+  technicalDetails: String
+  highlightBullets: String
+  seller: SellerView
+  returnPolicies: [ProductReturnPolicyView]
+  listingVariants: [ListingVariantView]
+  relatedProducts: String
+  reviews: [ReviewView]
+  listingId: String
+  productId: String
+  storeId: String
+  status: String
   rating: Int
   closedDate: String
   deliveryDate: String
   productListingType: String
   shippingMethodsAvailable: String
-  noOfOrderedItems: Int
   progressBarValue: Int
-  noOfItemsInStock: Int
   numberOfItemsAvailable: Int
   minQuantityPerCart: Int
   maxQuantityPerCart: Int
-  pickUpFromSeller: Boolean
   collectionPointAddressId: String
   collectionPointAddress: Address
   returnAddressId: String
   returnAddress: Address
-  amountSaved: Float
-  deliveryFee: Float
-  shortName: String
   longName: String
-  description: String
-  technicalDetails: String
-  highlightBullets: String
   ratingDetail: RatingDetail
   announcementId: String
-  relatedProducts: String
   sellerId: String
-  seller: SellerView
-  reviews: [ReviewView]
-  returnPolicies: [ProductReturnPolicyView]
   categories: [ProductCategoryView]
   images: [Images]
-  listingVariants: [ListingVariantView]
-  retailPrice: Float
-  wholeSalePrice: Float
-  percentOff: Int
-  photo: String
-  photoUrls: [String]
 }
 
 type ProductRequestCount {
@@ -397,6 +377,7 @@ type ProductReturnPolicyView {
   productId: ID
   name: String
   description: String
+  value: String
 }
 
 type ProductReviewView {
@@ -437,6 +418,15 @@ input ProductUpdateStep1 {
   highlightBullets: [String]
 }
 
+input ProductVariantInput {
+  sellerSku: String
+  retailPrice: Float!
+  wholeSalePrice: Float!
+  itemsInStock: Int!
+  defaultVariant: Boolean!
+  options: [OptionValueInput]
+}
+
 type ProductView {
   productId: ID
   sellerId: ID
@@ -461,82 +451,26 @@ type ProductView {
   taxPercentage: Float
   categories: [ProductCategoryView]
   variants: [Variant]
+  productReturnPolicyViews: [ProductReturnPolicyView]
+  images: [Images]
 }
 
-"""
-  queries
-The Root Query for the application
-"""
+"""queries"""
 type Query {
-  """getProductByProductId if product belongs to caller"""
   getProductByProductId(productId: String!): ProductView!
-
-  """
-  get product by id
-  Parameters: id type String
-  Response: the Product type
-  """
-  productById(id: String!): Product
-
-  """
-  get store by id
-  Parameters: id type String
-  Response: the Store type
-  """
   store(id: ID!): Store!
-
-  """
-  get store by name
-  Parameters: name type String
-  Response: the Store type
-  """
   getStoreByName(name: String!): Store!
-
-  """
-  get chat by id
-  Parameters: id type String
-  Response: the Chat type
-  """
   chatById(id: String!): Chat
-
-  """
-  get share information by product id
-  Parameters: the product id type String
-  Response: the ShareInformation type
-  """
   getShareInformationByProductId(productId: String): [ShareInformation]
-
-  """
-  get announcements by store id
-  Parameters: the store id type String
-  Response: the Announcement type
-  """
   announcementsByOnlineStore(storeId: String): [Announcement]
-
-  """
-  get productlisting by delivery geo point or other filter
-  It founds strores with area containing the delivery point
-  and then product listings for that stores
-  Parameters: geo point, searchOptions
-  Response: the ProductListing type
-  """
   getListings(searchOptions: SearchOptions): [ProductListingView]
   getProducts(searchOptions: SearchOptions): [ProductView]
-
-  """get stores with area containing given point"""
   onlineStoreByGeoCoordinates(latitude: Float!, longitude: Float!): [Store]
-
-  """
-  get announcements by product listing id
-  Parameters: the product listing id type String
-  Response: the Announcement DTO type
-  {
-   "productListingId": "f968e892-328a-450d-9b2b-0d7604152c85"
-  }
-  """
   announcementsByListingId(productListingId: String): [AnnouncementDTO]
   getAllCategories: [CategoryView]!
   getPreferredCategories(buyerId: ID!): [CategoryView]!
+  getOptionReference: [Option]!
+  getPolicyNames: [PolicyNameView]!
 }
 
 type RatingDetail {
@@ -560,6 +494,11 @@ type ReportReviewView {
   title: String
   description: String
   postedById: String
+}
+
+input ReturnPolicyInput {
+  name: String!
+  value: String!
 }
 
 type ReviewView {

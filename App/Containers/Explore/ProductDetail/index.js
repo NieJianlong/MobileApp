@@ -9,22 +9,14 @@ import {
   Dimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { s, vs } from "react-native-size-matters";
+import { vs } from "react-native-size-matters";
 import { ScrollIntoView, wrapScrollView } from "react-native-scroll-into-view";
 import { range } from "lodash";
-import { StarRating } from "../../../Components";
-
 import { Images, Colors } from "../../../Themes";
 import styles from "./styles";
-import NavigationService from "../../../Navigation/NavigationService";
 import ProductVariants from "../Components/Variants";
-
-/** updates for the cart */
-import { localCartVar } from "../../../Apollo/cache";
-import { useReactiveVar } from "@apollo/client";
 import ProductCarousel from "./ProductCarousel";
 import { AlertContext } from "../../Root/GlobalContext";
-
 import Picker from "../../../Components/Picker";
 import ColorSheetContent from "./SheetContent/ColorSheetContent";
 import ChatOptions from "./ChatOptions";
@@ -33,6 +25,8 @@ import StoreInfo from "./StoreInfo";
 import DetailFooter from "./DetailFooter";
 import ProductReview from "./ProductReview";
 import ProductInfo from "./ProductInfo";
+import { useRoute } from "@react-navigation/native";
+import HeaderTabs from "./HeaderTabs";
 
 const { height } = Dimensions.get("window");
 const Sections = range(0, 4);
@@ -40,12 +34,10 @@ const Sections = range(0, 4);
 const CustomScrollView = wrapScrollView(ScrollView);
 
 function ProductDetail(props) {
-  /**
-   * updates for state and cart, will be used to add this product to the cart
-   * useReactiveVar => we will get updates from other screens
-   */
-  const localCartVarReactive = useReactiveVar(localCartVar);
   const { dispatch } = useContext(AlertContext);
+  const {
+    params: { product },
+  } = useRoute();
 
   //control whether to show the hearder (display and navigation to sections)
   const [showHeaderTabs, setShowHeaderTabs] = useState(false);
@@ -53,22 +45,11 @@ function ProductDetail(props) {
   const [showFooter, setShowFooter] = useState(false);
   //hold the section index
   const [tabIndex, setTabIndex] = useState(0);
-
   //hold the boolean to indicate if this product has been purchased by this user
   const [isPurchased, setIsPurchased] = useState(false);
 
-  const [showReviewSentAlert, setShowReviewSentAlert] = useState(false);
-
   //reference for sheets
   const sectionsRefs = Sections.map((_section) => React.createRef());
-  /**
-   *
-   * UPDATES for backend
-   * temp solution todo improve
-   */
-  const [product, setProductFromProps] = useState({});
-  const [isReady, setIsReady] = useState(false);
-  const [bullets, setBullets] = useState([]);
 
   //function to scroll the specific section
   const scrollSectionIntoView = (section) => {
@@ -112,19 +93,6 @@ function ProductDetail(props) {
     setShowFooter(true);
   };
 
-  useEffect(() => {
-    // console.log(`check url ${props.route.params.product.photo}`);
-    setProductFromProps(props.route.params.product);
-    if (product.highlightBullets) {
-      let bulls = JSON.parse(product.highlightBullets);
-      setBullets(bulls);
-    } else {
-      setBullets([]);
-    }
-
-    setIsReady(true);
-  }, [props, localCartVarReactive, product.highlightBullets]);
-
   const toggleColorSheet = useCallback(() => {
     dispatch({
       type: "changSheetState",
@@ -136,42 +104,6 @@ function ProductDetail(props) {
       },
     });
   }, [dispatch]);
-
-  const toggleReviewSentAlert = () =>
-    setShowReviewSentAlert(!showReviewSentAlert);
-
-  const renderHeaderTabs = () => {
-    return (
-      <SafeAreaView style={styles.headerTabsSafeArea} edges={["top"]}>
-        <View style={styles.headerTabsContainer}>
-          {tabs.map((i, index) => (
-            <TouchableOpacity
-              key={index.toString()}
-              onPress={() => {
-                setTabIndex(index);
-                scrollSectionIntoView(index);
-              }}
-              style={[
-                styles.headerTabItem,
-                tabIndex === index && { borderBottomColor: Colors.primary },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.heading5Bold,
-                  {
-                    color: tabIndex === index ? Colors.primary : Colors.grey60,
-                  },
-                ]}
-              >
-                {i}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </SafeAreaView>
-    );
-  };
 
   const renderOptions = () => {
     return (
@@ -229,18 +161,6 @@ function ProductDetail(props) {
     );
   };
 
-  const renderSectionDetails = () => {
-    return (
-      <ScrollIntoView align={"top"} key={"section0"} ref={sectionsRefs[0]}>
-        <ProductCarousel product={product} />
-
-        <ProductInfo />
-
-        {renderOptions()}
-      </ScrollIntoView>
-    );
-  };
-
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -255,34 +175,37 @@ function ProductDetail(props) {
           scrollEventThrottle={60}
           showsVerticalScrollIndicator={false}
         >
-          {/* 4 sections of this screen */}
-
-          {isReady && renderSectionDetails()}
-
-          {isReady && (
-            <ScrollIntoView key={"section1"} ref={sectionsRefs[1]}>
-              <RelatedProducts />
-            </ScrollIntoView>
-          )}
-
-          {isReady && (
-            <ScrollIntoView key={"section2"} ref={sectionsRefs[2]}>
-              <StoreInfo tabIndex={tabIndex} product={product} />
-            </ScrollIntoView>
-          )}
-
-          {isReady && (
-            <ScrollIntoView key={"section3"} ref={sectionsRefs[3]}>
-              <ProductReview
-                product={product}
-                tabIndex={tabIndex}
-                isPurchased={isPurchased}
-              />
-            </ScrollIntoView>
-          )}
+          <ScrollIntoView align={"top"} key={"section0"} ref={sectionsRefs[0]}>
+            <ProductCarousel product={product} />
+            <ProductInfo
+              product={product}
+              setTabIndex={setTabIndex}
+              scrollSectionIntoView={scrollSectionIntoView}
+            />
+            {renderOptions()}
+          </ScrollIntoView>
+          <ScrollIntoView key={"section1"} ref={sectionsRefs[1]}>
+            <RelatedProducts />
+          </ScrollIntoView>
+          <ScrollIntoView key={"section2"} ref={sectionsRefs[2]}>
+            <StoreInfo tabIndex={tabIndex} product={product} />
+          </ScrollIntoView>
+          <ScrollIntoView key={"section3"} ref={sectionsRefs[3]}>
+            <ProductReview
+              product={product}
+              tabIndex={tabIndex}
+              isPurchased={isPurchased}
+            />
+          </ScrollIntoView>
         </CustomScrollView>
 
-        {showHeaderTabs && renderHeaderTabs()}
+        {showHeaderTabs && (
+          <HeaderTabs
+            tabIndex={tabIndex}
+            setTabIndex={setTabIndex}
+            scrollSectionIntoView={scrollSectionIntoView}
+          />
+        )}
 
         {showFooter && <DetailFooter product={product} />}
       </SafeAreaView>
@@ -291,5 +214,3 @@ function ProductDetail(props) {
 }
 
 export default ProductDetail;
-
-const tabs = ["Details", "Related", "Seller", "Review"];

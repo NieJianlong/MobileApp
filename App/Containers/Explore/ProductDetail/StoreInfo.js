@@ -4,11 +4,14 @@ import { vs } from "react-native-size-matters";
 import InView from "react-native-component-inview";
 import { StarRating, DescriptionText } from "../../../Components";
 
-import { Images, Colors } from "../../../Themes";
+import { Colors } from "../../../Themes";
 import styles from "./styles";
 import NavigationService from "../../../Navigation/NavigationService";
 
 export default function StoreInfo({ tabIndex, product }) {
+  if (!product.seller) {
+    return null;
+  }
   return (
     <InView
       onChange={(isVisible) => {

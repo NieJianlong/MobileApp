@@ -33,6 +33,7 @@ export default function ProductInfo({
       },
     });
   }, [dispatch]);
+
   return (
     <InView
       onChange={(isVisible) => {
@@ -163,12 +164,13 @@ export default function ProductInfo({
         <View style={[styles.v2, { paddingTop: vs(15) }]}>
           <Text style={styles.heading3Bold}>Details & Highlights</Text>
 
-          {bullets.map((bul, index) => (
-            <View style={styles.row}>
-              <Text style={styles.txtDot}>•</Text>
-              <Text style={styles.txtRegular}>{bul}</Text>
-            </View>
-          ))}
+          {product.highlightBullets &&
+            JSON.parse(product.highlightBullets).map((bul, index) => (
+              <View style={styles.row}>
+                <Text style={styles.txtDot}>•</Text>
+                <Text style={styles.txtRegular}>{bul}</Text>
+              </View>
+            ))}
 
           {/* <View style={styles.row}>
               <Text style={styles.txtDot}>•</Text>

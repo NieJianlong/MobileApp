@@ -52,7 +52,12 @@ function UserHeader(props) {
             <Text style={styles.nosign}>{textTip}</Text>
           </SafeAreaView>
           <View style={styles.signbtn}>
-            <Button onPress={setLogin} text="SIGN IN"></Button>
+            <Button
+              onPress={() => {
+                NavigationService.navigate("OnboardingScreen");
+              }}
+              text="SIGN IN"
+            />
           </View>
         </View>
       )}

@@ -6,17 +6,17 @@
  * @Description: User haven't added a default purchase preference yet
  * @FilePath: /MobileApp/App/Containers/UserInfo/NoPurchase.js
  */
-import React from 'react';
-import { View, Text } from 'react-native';
-import { ScaledSheet } from 'react-native-size-matters';
-import Fonts from '../Themes/Fonts';
-import AppConfig from '../Config/AppConfig';
+import React from "react";
+import { View, Text } from "react-native";
+import { ScaledSheet } from "react-native-size-matters";
+import Fonts from "../Themes/Fonts";
+import AppConfig from "../Config/AppConfig";
 
-import colors from '../Themes/Colors';
-import metrics from '../Themes/Metrics';
-import { ApplicationStyles } from '../Themes';
-import PropTypes from 'prop-types';
-import Button from './Button';
+import colors from "../Themes/Colors";
+import metrics from "../Themes/Metrics";
+import { ApplicationStyles } from "../Themes";
+import PropTypes from "prop-types";
+import Button from "./Button";
 /**
  * @description:Prompt component, user user does not add address information, do not add payment information when the display
  * @param {*} props
@@ -52,23 +52,23 @@ EmptyReminder.propTypes = {
 export default EmptyReminder;
 const styles = ScaledSheet.create({
   nosign: {
-    fontSize: '22@s',
-    textAlign: 'center',
-    marginTop: '25@vs',
+    fontSize: "22@s",
+    textAlign: "center",
+    marginTop: "25@vs",
   },
   subTextTip: {
-    fontSize: '14@vs',
-    textAlign: 'center',
+    fontSize: "14@vs",
+    textAlign: "center",
     fontFamily: Fonts.primary,
-    marginTop: '5@vs',
+    marginTop: "5@vs",
     color: colors.grey80,
-    marginBottom: '10@vs',
+    marginBottom: "10@vs",
   },
-  signbtn: { marginTop: '20@vs' },
+  signbtn: { marginTop: "20@vs" },
   headerContainer: {
     backgroundColor: colors.background,
-    justifyContent: 'space-around',
+    justifyContent: "space-around",
     paddingHorizontal: AppConfig.paddingHorizontal,
-    paddingBottom: '15@vs',
+    paddingBottom: "15@vs",
   },
 });

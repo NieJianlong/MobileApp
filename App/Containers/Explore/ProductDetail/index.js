@@ -1,25 +1,14 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
-import {
-  View,
-  StatusBar,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  Text,
-  Dimensions,
-} from "react-native";
+import React, { useState, useContext, useCallback } from "react";
+import { View, StatusBar, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import { ScrollIntoView, wrapScrollView } from "react-native-scroll-into-view";
 import { range } from "lodash";
-import { Images, Colors } from "../../../Themes";
 import styles from "./styles";
 import ProductVariants from "../Components/Variants";
 import ProductCarousel from "./ProductCarousel";
 import { AlertContext } from "../../Root/GlobalContext";
-import Picker from "../../../Components/Picker";
 import ColorSheetContent from "./SheetContent/ColorSheetContent";
-import ChatOptions from "./ChatOptions";
 import RelatedProducts from "./RelatedProducts";
 import StoreInfo from "./StoreInfo";
 import DetailFooter from "./DetailFooter";
@@ -27,8 +16,8 @@ import ProductReview from "./ProductReview";
 import ProductInfo from "./ProductInfo";
 import { useRoute } from "@react-navigation/native";
 import HeaderTabs from "./HeaderTabs";
+import metrics from "../../../Themes/Metrics";
 
-const { height } = Dimensions.get("window");
 const Sections = range(0, 4);
 // Wrap the original ScrollView
 const CustomScrollView = wrapScrollView(ScrollView);
@@ -64,7 +53,7 @@ function ProductDetail(props) {
 
   //handle when scrolling
   const handleScroll = (event) => {
-    let threshold = height / 4;
+    let threshold = metrics.screenHeight / 4;
     let y = event.nativeEvent.contentOffset.y;
     //control when to show footer and header
     if (y > threshold && !showHeaderTabs) {
@@ -105,65 +94,8 @@ function ProductDetail(props) {
     });
   }, [dispatch]);
 
-  const renderOptions = () => {
-    return (
-      <View style={styles.optionContainer}>
-        <View style={styles.noteContainer}>
-          <Text style={styles.heading6Regular}>
-            Covered by Seller Name 7 day return policy, for:
-          </Text>
-
-          <View style={[styles.rowSpaceBetween, { marginTop: vs(15) }]}>
-            <Image
-              resizeMode={"contain"}
-              style={styles.returnPolicyImage}
-              source={Images.returnPolicy3}
-            />
-            <Image
-              resizeMode={"contain"}
-              style={styles.returnPolicyImage}
-              source={Images.returnPolicy2}
-            />
-            <Image
-              resizeMode={"contain"}
-              style={styles.returnPolicyImage}
-              source={Images.returnPolicy1}
-            />
-          </View>
-        </View>
-
-        {isPurchased && <ChatOptions />}
-
-        {/* Upadates for variants here */}
-        <ProductVariants product={product} />
-
-        <Picker
-          onPress={toggleColorSheet}
-          style={styles.picker}
-          title={"Size"}
-          value={"256GB"}
-        />
-
-        <Picker
-          onPress={toggleColorSheet}
-          style={styles.picker}
-          title={"Style"}
-          value={"OnePlus 8 Pro"}
-        />
-
-        <Picker
-          onPress={toggleColorSheet}
-          style={styles.picker}
-          title={"Color"}
-          value={"Black"}
-        />
-      </View>
-    );
-  };
-
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
       <SafeAreaView
         style={styles.mainContainer}
         edges={["top", "left", "right"]}
@@ -182,7 +114,7 @@ function ProductDetail(props) {
               setTabIndex={setTabIndex}
               scrollSectionIntoView={scrollSectionIntoView}
             />
-            {renderOptions()}
+            {/* need to add ProductVariants components */}
           </ScrollIntoView>
           <ScrollIntoView key={"section1"} ref={sectionsRefs[1]}>
             <RelatedProducts />

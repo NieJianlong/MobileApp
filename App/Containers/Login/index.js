@@ -254,7 +254,7 @@ function LoginScreen(props) {
 
           <View style={styles.row}>
             <TouchableOpacity
-              onPress={() => NavigationService.navigate("ForgotPasswordScreen")}
+            // onPress={() => NavigationService.navigate("ForgotPasswordScreen")}
             >
               <Text style={styles.txtAction}>I FORGOT MY PASSWORD</Text>
             </TouchableOpacity>

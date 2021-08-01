@@ -79,7 +79,7 @@ export default function ProductList(props) {
         // add missing fields for product review
         // update for name changes in data from server
         setNoMore(false);
-        setServerData(gqlMappers.mapProductListingDTO(res.getListings));
+        setServerData(res.getListings);
       },
     }
   );
@@ -153,10 +153,7 @@ export default function ProductList(props) {
           },
         });
         console.log(moreData);
-        setServerData([
-          ...serverData,
-          ...gqlMappers.mapProductListingDTO(moreData.data.getListings),
-        ]);
+        setServerData([...serverData, ...moreData.data.getListings]);
         setLoadingMore(false);
         if (moreData.data.getListings.length < pageSize) {
           setNoMore(true);

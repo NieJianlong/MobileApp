@@ -45,7 +45,7 @@ export default function ProductInfo({
       <View style={styles.infoContainer}>
         <View style={styles.v2}>
           <View>
-            <Text style={styles.heading2Bold}>{product.name}</Text>
+            <Text style={styles.heading2Bold}>{product.longName}</Text>
             <TouchableOpacity onPress={() => scrollSectionIntoView(3)}>
               <StarRating
                 fullMode
@@ -91,7 +91,7 @@ export default function ProductInfo({
               <Text
                 style={[styles.heading6Bold, { color: Colors.secondary00 }]}
               >
-                30% OFF
+                {product.percentOff}% OFF
               </Text>
             </View>
 
@@ -103,7 +103,9 @@ export default function ProductInfo({
           <View style={[styles.row, { marginVertical: vs(10) }]}>
             <Text style={styles.heading5Regular}>
               Delivery fee:{" "}
-              <Text style={{ color: Colors.primary }}>$14.90</Text>
+              <Text style={{ color: Colors.primary }}>
+                ${product.deliveryFee}
+              </Text>
             </Text>
             {!product.hidePickUpFromSeller ? (
               <View style={[styles.row, { marginLeft: s(10) }]}>
@@ -153,11 +155,7 @@ export default function ProductInfo({
           <Text style={styles.heading3Bold}>Product Description</Text>
           <DescriptionText
             style={styles.descriptionContainer}
-            text={
-              product.seller.description
-                ? product.seller.description
-                : "product seller description is null because we are using test data and no one will add stuff to the database for FE team"
-            }
+            text={product.description}
           />
         </View>
 

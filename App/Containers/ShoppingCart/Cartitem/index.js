@@ -34,7 +34,7 @@ function index(props) {
         <Image source={{ uri: product.photo }} style={styles.productImage} />
         <View style={styles.v2}>
           <View>
-            <Text style={styles.heading4Bold}>{product.name}</Text>
+            <Text style={styles.heading4Bold}>{product.longName}</Text>
             <Text
               style={[
                 styles.heading4Bold,

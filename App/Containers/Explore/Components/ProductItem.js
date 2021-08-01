@@ -60,7 +60,7 @@ function ProductItem(props) {
 
             <View style={styles.v2}>
               <View>
-                <Text style={styles.heading4Bold}>{product.productName}</Text>
+                <Text style={styles.heading4Bold}>{product.shortName}</Text>
                 <StarRating
                   rating={product.rating}
                   ratingCount={product.numberOfReviews}
@@ -114,7 +114,7 @@ function ProductItem(props) {
 
             <View style={styles.v2}>
               <View>
-                <Text style={styles.heading4Bold}>{product.productName}</Text>
+                <Text style={styles.heading4Bold}>{product.shortName}</Text>
                 <StarRating
                   rating={product.rating}
                   ratingCount={product.numberOfReviews}
@@ -272,7 +272,7 @@ function ProductItem(props) {
           </View>
 
           <Text style={[styles.txtBold, { color: Colors.black }]}>
-            {product.productName}
+            {product.shortName}
           </Text>
           <StarRating
             rating={product.rating}

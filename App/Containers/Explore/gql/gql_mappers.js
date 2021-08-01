@@ -78,14 +78,13 @@ export const mapProductListingDTO = (data) => {
       id: element.productId, // the backend will often refer to this as the product listing id so be careful
       name: element.longName, // see product item 441
       photo: element.photo,
-      photoUrls:
-        element.photoUrls.length !== 0 ? element.photoUrls : photoUrlsM,
+      photoUrls: element.photoUrls.length !== 0 ? element.photoUrls : [],
       productName: element.shortName,
-      rating: element.rating ? element.rating : 75,
-      numberOfReviews: element.numberOfReviews ? element.numberOfReviews : 75,
-      wholesalePrice: element.wholeSalePrice ? element.wholeSalePrice : 200,
-      retailPrice: element.retailPrice ? element.retailPrice : 250,
-      percentOff: element.percentOff ? element.percentOff : 30,
+      rating: element.rating,
+      numberOfReviews: element.numberOfReviews,
+      wholesalePrice: element.wholeSalePrice,
+      retailPrice: element.retailPrice,
+      percentOff: element.percentOff,
       noOfItemsInStock:
         element.noOfItemsInStock !== 0 ? element.noOfItemsInStock : 32,
       noOfOrderedItems:

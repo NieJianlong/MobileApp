@@ -47,11 +47,11 @@ export default function ProductReview({ product, isPurchased, tabIndex }) {
         }}
       >
         <Text style={styles.heading3Bold}>Product Reviews</Text>
-        <Review
+        {/* <Review
           rating={product.rating}
           ratingCount={product.ratingCount}
           ratingDetail={product.ratingDetail}
-        />
+        /> */}
       </InView>
       <View style={{ height: vs(15) }} />
       {isPurchased && renderUserReview()}

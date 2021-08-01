@@ -22,7 +22,7 @@ jest.mock("@react-native-community/async-storage", () =>
 8082 --> UserManagement
 8083 --> ProductManagement
 
-get-graphql-schema  http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8083/graphql > schemaPM.json
+get-graphql-schema  http://ec2-3-141-165-215.us-east-2.compute.amazonaws.com:8083/graphql > schemaPM.json
  */
 
 //

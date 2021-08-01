@@ -78,6 +78,7 @@ export default function ProductList(props) {
         // map data from server for now
         // add missing fields for product review
         // update for name changes in data from server
+        setNoMore(false);
         setServerData(gqlMappers.mapProductListingDTO(res.getListings));
       },
     }
@@ -125,15 +126,17 @@ export default function ProductList(props) {
       ListFooterComponent={loadingMore ? LoadMoreView : null}
       onStartRefresh={() => {
         setIsRereshing(true);
-        refetch().then((res) => {
-          setServerData(res.data.getListings);
-          setIsRereshing(false);
-          setPage(0);
-        });
+        refetch &&
+          refetch().then((res) => {
+            setServerData(res.data.getListings);
+            setIsRereshing(false);
+            setNoMore(false);
+            setPage(0);
+          });
       }}
       isRefreshing={isRereshing}
       onEndReached={async () => {
-        console.log("get more data");
+        console.log("get more data" + noMore);
         if (noMore) {
           return;
         }

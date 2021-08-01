@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback } from "react";
-import { View, StatusBar, ScrollView } from "react-native";
+import { View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import { ScrollIntoView, wrapScrollView } from "react-native-scroll-into-view";
@@ -81,18 +81,6 @@ function ProductDetail(props) {
   const handleScrollEnd = (event) => {
     setShowFooter(true);
   };
-
-  const toggleColorSheet = useCallback(() => {
-    dispatch({
-      type: "changSheetState",
-      payload: {
-        showSheet: true,
-        height: 390,
-        children: () => <ColorSheetContent />,
-        sheetTitle: "Color",
-      },
-    });
-  }, [dispatch]);
 
   return (
     <View style={styles.container}>

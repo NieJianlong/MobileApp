@@ -1,16 +1,11 @@
-import {
-  ApolloClient,
-  HttpLink,
-  ApolloLink,
-  InMemoryCache,
-  concat,
-} from "@apollo/client";
+import { ApolloClient, HttpLink, ApolloLink, concat } from "@apollo/client";
 import globalCache from "./cache";
 /**
  * need fetch as we are not in a browser
  */
 import fetch from "cross-fetch";
-const baseUrl = "http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com";
+// const baseUrl = "http://ec2-3-141-165-215.us-east-2.compute.amazonaws.com";
+const baseUrl = "http://ec2-3-141-165-215.us-east-2.compute.amazonaws.com";
 /**
  * Keycloak              --> 8080
  * IAM                   --> 8081

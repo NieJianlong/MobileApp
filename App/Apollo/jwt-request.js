@@ -7,7 +7,7 @@ import * as localStorage from "./local-storage";
  *
  */
 const LOGIN_ENDPOINT =
-  "http://ec2-18-191-146-179.us-east-2.compute.amazonaws.com:8081/api/sso/authentication/login";
+  "http://ec2-3-141-165-215.us-east-2.compute.amazonaws.com:8081/api/sso/authentication/login";
 
 // Axios automatically serialize object to JSON
 export const runTokenFlow = async (loginRequest) => {

@@ -94,6 +94,11 @@ export const GET_LISTINGS = gql`
         id
         brandName
         ratingCount
+        avatarUrl
+        usersRating
+        name
+        description
+        ratingCount
       }
       images {
         id

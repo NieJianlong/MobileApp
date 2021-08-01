@@ -44,17 +44,13 @@ export default function StoreInfo({ tabIndex, product }) {
         <StarRating
           fullMode
           style={{ marginTop: vs(10) }}
-          rating={product.seller.rating}
+          rating={product.seller.usersRating}
           ratingCount={product.seller.ratingCount}
         />
 
         <DescriptionText
           style={{ marginTop: vs(10) }}
-          text={
-            product.seller
-              ? product.seller.description
-              : "this description is null in data from server,  this should not happen fix required on backend"
-          }
+          text={product.seller.description}
         />
       </View>
     </InView>

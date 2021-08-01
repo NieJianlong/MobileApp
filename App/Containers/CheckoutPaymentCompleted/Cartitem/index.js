@@ -34,7 +34,7 @@ function index(props) {
           style={[styles.v2, { maxWidth: '90%', justifyContent: 'center' }]}
         >
           <View>
-            <Text style={[styles.heading4Bold]}>{product.name}</Text>
+            <Text style={[styles.heading4Bold]}>{product.longName}</Text>
             <View style={{ flexDirection: 'row' }}>
               <Text
                 style={[

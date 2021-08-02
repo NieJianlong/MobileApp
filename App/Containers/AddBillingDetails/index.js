@@ -258,7 +258,7 @@ function AddBillingDetails(props) {
       : billingAddress,
     taxCode: taxid,
   };
-  debugger;
+
   const [addBilling] = useMutation(
     billingDetails.billingDetailsId
       ? UPDATE_BILLING_DETAILS

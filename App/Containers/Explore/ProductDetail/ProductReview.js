@@ -47,127 +47,123 @@ export default function ProductReview({ product, isPurchased, tabIndex }) {
         }}
       >
         <Text style={styles.heading3Bold}>Product Reviews</Text>
-        {/* <Review
+        <Review
           rating={product.rating}
-          ratingCount={product.ratingCount}
+          ratingCount={product.numberOfReviews}
           ratingDetail={product.ratingDetail}
-        /> */}
+        />
       </InView>
       <View style={{ height: vs(15) }} />
       {isPurchased && renderUserReview()}
       <View style={{ height: vs(15) }} />
-      {comments.map((comment, index) => (
-        <View key={index.toString()} style={styles.commentContainer}>
-          <View style={[styles.row, { marginBottom: vs(5) }]}>
-            <View style={styles.sellerAvatarContainer}>
-              <Image
-                source={{ uri: comment.user.avatar }}
-                style={styles.sellerAvatar}
-              />
+      {product.reviews &&
+        product.reviews.map((comment, index) => (
+          <View key={index.toString()} style={styles.commentContainer}>
+            <View style={[styles.row, { marginBottom: vs(5) }]}>
+              <View style={styles.sellerAvatarContainer}>
+                {/* <Image
+                  source={{ uri: comment.user.avatar }}
+                  style={styles.sellerAvatar}
+                /> */}
+              </View>
+              <Text style={styles.heading5Bold}>{comment.postedBy}</Text>
             </View>
-            <Text style={styles.heading5Bold}>{comment.user.name}</Text>
-          </View>
-          <View style={styles.row}>
-            <StarRating rating={comment.comment.rating} />
-            <Text style={styles.heading6Regular}>
-              {moment(comment.comment.createdDate).fromNow()}
+            <View style={styles.row}>
+              <StarRating rating={comment.ratingVote} />
+              <Text style={styles.heading6Regular}>
+                {/* {moment(comment.comment.createdDate).fromNow()} */}
+              </Text>
+            </View>
+            <Text style={[styles.heading5Bold, { marginTop: vs(5) }]}>
+              {comment.title}
             </Text>
-          </View>
-          <Text style={[styles.heading5Bold, { marginTop: vs(5) }]}>
-            {comment.comment.title}
-          </Text>
-          <DescriptionText
-            previewLength={150}
-            text={
-              "At vero eoset accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium" +
-              "voluptatum deleniti atque corrupti quos dolores et quas mol" +
-              "At vero eoset accusamus et iusto" +
-              "odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas mol"
-            }
-          />
-          {comment.comment.photos.length > 0 && (
-            <View style={{ marginTop: vs(10) }}>
-              <FlatList
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                data={comment.comment.photos}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => (
-                  <ImageBackground
-                    key={index.toString()}
-                    borderRadius={5}
-                    source={{ uri: item }}
-                    style={styles.commentPhoto}
-                  />
-                )}
-              />
+            <DescriptionText previewLength={150} text={comment.description} />
+            {/* {comment.comment.photos.length > 0 && (
+              <View style={{ marginTop: vs(10) }}>
+                <FlatList
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  data={comment.comment.photos}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item, index }) => (
+                    <ImageBackground
+                      key={index.toString()}
+                      borderRadius={5}
+                      source={{ uri: item }}
+                      style={styles.commentPhoto}
+                    />
+                  )}
+                />
+              </View>
+            )} */}
+            <View style={[styles.row, { marginTop: vs(15) }]}>
+              <TouchableOpacity style={styles.btnGrey}>
+                <Text style={[styles.heading5Bold, { color: Colors.white }]}>
+                  HELPFUL ({comment.helpfulCount ? comment.helpfulCount : 0})
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  NavigationService.navigate("ReportScreen", {
+                    onSubmit: () => {},
+                  })
+                }
+                style={{ marginLeft: s(20) }}
+              >
+                <Text style={[styles.heading5Bold, { color: Colors.grey60 }]}>
+                  REPORT
+                </Text>
+              </TouchableOpacity>
             </View>
-          )}
-          <View style={[styles.row, { marginTop: vs(15) }]}>
-            <TouchableOpacity style={styles.btnGrey}>
-              <Text style={[styles.heading5Bold, { color: Colors.white }]}>
-                HELPFUL ({comment.comment.like})
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                NavigationService.navigate("ReportScreen", {
-                  onSubmit: () => {},
-                })
-              }
-              style={{ marginLeft: s(20) }}
-            >
-              <Text style={[styles.heading5Bold, { color: Colors.grey60 }]}>
-                REPORT
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          {comment.comment.reply.length > 0 && (
-            <View style={{ marginLeft: s(15), marginTop: vs(20) }}>
-              {comment.comment.reply.map((item, index) => (
-                <View key={index.toString()}>
-                  <View style={[styles.row, { marginBottom: vs(5) }]}>
-                    <View style={styles.sellerAvatarContainer}>
-                      <Image
-                        source={{ uri: item.user.avatar }}
-                        style={styles.sellerAvatar}
-                      />
+{/* 
+            {comment.comment.reply.length > 0 && (
+              <View style={{ marginLeft: s(15), marginTop: vs(20) }}>
+                {comment.comment.reply.map((item, index) => (
+                  <View key={index.toString()}>
+                    <View style={[styles.row, { marginBottom: vs(5) }]}>
+                      <View style={styles.sellerAvatarContainer}>
+                        <Image
+                          source={{ uri: item.user.avatar }}
+                          style={styles.sellerAvatar}
+                        />
+                      </View>
+                      <Text style={styles.heading5Bold}>{item.user.name}</Text>
                     </View>
-                    <Text style={styles.heading5Bold}>{item.user.name}</Text>
-                  </View>
 
-                  <DescriptionText
-                    previewLength={150}
-                    text={
-                      "At vero eoset accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium" +
-                      "voluptatum deleniti atque corrupti quos dolores et quas mol" +
-                      "At vero eoset accusamus et iusto" +
-                      "odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas mol"
-                    }
-                  />
-                  <View style={[styles.row, { marginTop: vs(15) }]}>
-                    <TouchableOpacity style={styles.btnGrey}>
-                      <Text
-                        style={[styles.heading5Bold, { color: Colors.white }]}
-                      >
-                        HELPFUL ({comment.comment.like})
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ marginLeft: s(20) }}>
-                      <Text
-                        style={[styles.heading5Bold, { color: Colors.grey60 }]}
-                      >
-                        REPORT
-                      </Text>
-                    </TouchableOpacity>
+                    <DescriptionText
+                      previewLength={150}
+                      text={
+                        "At vero eoset accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium" +
+                        "voluptatum deleniti atque corrupti quos dolores et quas mol" +
+                        "At vero eoset accusamus et iusto" +
+                        "odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas mol"
+                      }
+                    />
+                    <View style={[styles.row, { marginTop: vs(15) }]}>
+                      <TouchableOpacity style={styles.btnGrey}>
+                        <Text
+                          style={[styles.heading5Bold, { color: Colors.white }]}
+                        >
+                          HELPFUL ({comment.comment.like})
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={{ marginLeft: s(20) }}>
+                        <Text
+                          style={[
+                            styles.heading5Bold,
+                            { color: Colors.grey60 },
+                          ]}
+                        >
+                          REPORT
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
-              ))}
-            </View>
-          )}
-        </View>
-      ))}
+                ))}
+              </View>
+            )} */}
+          </View>
+        ))}
     </View>
   );
 }

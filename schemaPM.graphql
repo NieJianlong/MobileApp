@@ -116,8 +116,13 @@ type KeyValuePair {
   value: String!
 }
 
-input ListingVariantRequest {
-  variantId: String!
+input ListingStatusInput {
+  listingId: String!
+  status: ProductListingStatus!
+}
+
+input ListingVariantInput {
+  variantId: String
   priceId: String!
   quantity: Int!
 }
@@ -137,7 +142,7 @@ type ListingVariantView {
 """mutations"""
 type Mutation {
   """this query will add product listing based on product listing request ."""
-  addProductListing(productListingRequest: ProductListingRequest): ProductListing
+  addProductListing(productListingInput: ProductListingInput): ProductListing
   addAnnouncement(productId: String, validityInterval: Int, announcementText: String, announcementDatetime: DateTime, createdAt: DateTime, updatedAt: DateTime): Announcement!
 
   """
@@ -176,7 +181,12 @@ type Mutation {
   createProductStockAndPricing(productInput: ProductInputStep2!): Product!
   createProductReturnPolicy(productInput: ProductInputStep3!): Product!
   savePreferredCategories(buyerId: ID!, categories: [ID]): String
-  addProductListingVariants(productListingVariantRequest: ProductListingVariantRequest): [ProductListingVariant]
+  addProductListingVariants(productListingVariantInput: ProductListingVariantInput): [ProductListingVariant]
+  updateListingStatus(listingStatusInput: ListingStatusInput): ProductListing
+  updateProductStatus(productStatusInput: ProductStatusInput): Product
+  deleteProductListing(listingId: String!): Boolean
+  createOption(option: OptionInput): Option
+  deleteOption(optionId: String!): Boolean
 }
 
 enum OnlineStoreType {
@@ -190,6 +200,12 @@ type Option {
   name: String
   description: String
   values: [OptionValue]
+}
+
+input OptionInput {
+  name: String!
+  description: String
+  values: [String]!
 }
 
 type OptionValue {
@@ -228,6 +244,7 @@ input ProductInputStep1 {
   categoryId: String
   vendor: String
   brand: String
+  technicalDetails: String
   keywords: [String]
   highlightBullets: [String]
 }
@@ -266,9 +283,10 @@ type ProductListing {
   deliveryDate: Date
   collectionPointAddress: Address
   shippingMethodsAvailable: [ShippingMethodType]
+  productListingStatus: ProductListingStatus
 }
 
-input ProductListingRequest {
+input ProductListingInput {
   productId: String!
   storeId: String
   chatId: String
@@ -292,6 +310,17 @@ input ProductListingRequest {
   startDate: DateTime
 }
 
+enum ProductListingStatus {
+  UNDEFINED
+  DRAFT
+  HIDDEN
+  OPEN
+  SUSPENDED
+  CLOSED
+  RETIRED
+  ACTIVE
+}
+
 """
  Product listing schema
 enums
@@ -304,16 +333,16 @@ enum ProductListingType {
 
 type ProductListingVariant {
   listingId: ID!
-  variantId: ID!
+  variantId: ID
   productId: ID!
   priceId: ID
   itemsAvailable: Int
   itemsSold: Int
 }
 
-input ProductListingVariantRequest {
+input ProductListingVariantInput {
   listingId: String!
-  variants: [ListingVariantRequest]!
+  variants: [ListingVariantInput]!
 }
 
 type ProductListingView {
@@ -399,6 +428,11 @@ enum ProductStatus {
   DELETED
 }
 
+input ProductStatusInput {
+  productId: ID!
+  productStatus: ProductStatus
+}
+
 type ProductStep1Response {
   productId: ID!
 }
@@ -439,6 +473,7 @@ type ProductView {
   photo: String
   itemsInStock: Int
   highlightBullets: String
+  technicalDetails: String
   warrantyDetails: String
   productType: String
   productStatus: String

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Text, View, TouchableOpacity, Image } from "react-native";
 import { ScaledSheet, s, vs } from "react-native-size-matters";
 import { Fonts, Colors, ApplicationStyles, Images } from "../../../Themes";
-import AppConfig from "../../../Config/AppConfig";
 import { StarRating } from "../../../Components";
 
 const getMax = (ratingDetail) => {
@@ -19,10 +18,8 @@ const MAX_WIDTH = 150;
 
 function Review(props) {
   const [active, setActive] = useState(props.defaultValue ?? false);
-
   const { ratingDetail, rating, ratingCount } = props;
   const maxRating = getMax(ratingDetail);
-
   return (
     <View style={styles.container}>
       <View>
@@ -31,7 +28,12 @@ function Review(props) {
           <View
             style={[
               styles.bar,
-              { width: s((ratingDetail.fiveStar / maxRating) * MAX_WIDTH) },
+              {
+                width:
+                  maxRating > 0
+                    ? s((ratingDetail.fiveStar / maxRating) * MAX_WIDTH)
+                    : 100,
+              },
             ]}
           />
         </View>
@@ -41,7 +43,12 @@ function Review(props) {
           <View
             style={[
               styles.bar,
-              { width: s((ratingDetail.fourStar / maxRating) * MAX_WIDTH) },
+              {
+                width:
+                  maxRating > 0
+                    ? s((ratingDetail.fourStar / maxRating) * MAX_WIDTH)
+                    : 100,
+              },
             ]}
           />
         </View>
@@ -51,7 +58,12 @@ function Review(props) {
           <View
             style={[
               styles.bar,
-              { width: s((ratingDetail.threeStar / maxRating) * MAX_WIDTH) },
+              {
+                width:
+                  maxRating > 0
+                    ? s((ratingDetail.fourStar / maxRating) * MAX_WIDTH)
+                    : 100,
+              },
             ]}
           />
         </View>
@@ -61,7 +73,12 @@ function Review(props) {
           <View
             style={[
               styles.bar,
-              { width: s((ratingDetail.twoStar / maxRating) * MAX_WIDTH) },
+              {
+                width:
+                  maxRating > 0
+                    ? s((ratingDetail.threeStar / maxRating) * MAX_WIDTH)
+                    : 100,
+              },
             ]}
           />
         </View>
@@ -71,7 +88,12 @@ function Review(props) {
           <View
             style={[
               styles.bar,
-              { width: s((ratingDetail.oneStar / maxRating) * MAX_WIDTH) },
+              {
+                width:
+                  maxRating > 0
+                    ? s((ratingDetail.twoStar / maxRating) * MAX_WIDTH)
+                    : 100,
+              },
             ]}
           />
         </View>

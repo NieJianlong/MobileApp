@@ -108,6 +108,56 @@ export const GET_LISTINGS = gql`
         description
         fullPath
       }
+      numberOfStars
+      openUntil
+      returnPolicies {
+        id
+        productId
+        name
+        description
+        value
+      }
+      listingVariants {
+        listingId
+        variantId
+        productId
+        defaultVariant
+        retailPrice
+        wholeSalePrice
+        fullPath
+        itemsInStock
+        options {
+          key
+          value
+        }
+      }
+      reviews {
+        id
+        productId
+        sellerId
+        title
+        description
+        ratingVote
+        helpfulCount
+        postedBy
+      }
+      listingId
+      storeId
+      status
+      #collectionPointAddress: Address
+      returnAddressId
+      #returnAddress: Address
+      ratingDetail {
+        zeroStar
+        oneStar
+        twoStar
+        threeStar
+        fourStar
+        fiveStar
+        sixAndMoreStar
+      }
+      #categories: [ProductCategoryView]
+
       # productListingsOptionGroups {
       #   optionsGroup {
       #     groupId

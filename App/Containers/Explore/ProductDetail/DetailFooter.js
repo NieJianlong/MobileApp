@@ -13,6 +13,7 @@ import AddToCartSheetContent from "./SheetContent/AddToCartSheetContent";
 
 export default function DetailFooter({ product }) {
   const { dispatch } = useContext(AlertContext);
+
   //hold the quantity of product
   const [quantity, setQuantity] = useState(1);
   const toggleConfirmOrderSheet = useCallback(() => {
@@ -66,7 +67,7 @@ export default function DetailFooter({ product }) {
             <NumberFormat
               thousandSeparator={true}
               prefix={"$"}
-              value={quantity * product.wholesalePrice}
+              value={quantity * product.wholeSalePrice}
               displayType={"text"}
               renderText={(text) => (
                 <Text style={[styles.txtRegular, { color: Colors.white }]}>

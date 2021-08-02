@@ -108,11 +108,9 @@ function UserEditProfile(props) {
           },
         });
       }
-      debugger;
     },
     onError: (res) => {
       dispatch({ type: "hideloading" });
-      debugger;
     },
   });
   const sheetRef = useRef();

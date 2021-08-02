@@ -102,6 +102,9 @@ function ProductDetail(props) {
               setTabIndex={setTabIndex}
               scrollSectionIntoView={scrollSectionIntoView}
             />
+            {product.listingVariants && (
+              <ProductVariants variants={product.listingVariants} />
+            )}
             {/* need to add ProductVariants components */}
           </ScrollIntoView>
           <ScrollIntoView key={"section1"} ref={sectionsRefs[1]}>

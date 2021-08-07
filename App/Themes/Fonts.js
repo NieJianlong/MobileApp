@@ -1,7 +1,7 @@
 const type = {
-  base: 'Avenir-Book',
-  bold: 'Avenir-Black',
-  emphasis: 'HelveticaNeue-Italic',
+  base: "Avenir-Book",
+  bold: "Avenir-Black",
+  emphasis: "HelveticaNeue-Italic",
 };
 
 const size = {
@@ -19,16 +19,16 @@ const size = {
 };
 
 const fonts = {
-  primary: 'TitilliumWeb-Regular',
-  semibold: 'TitilliumWeb-Bold',
-  bold: 'TitilliumWeb-Bold',
+  primary: "TitilliumWeb-Regular",
+  semibold: "TitilliumWeb-Bold",
+  bold: "TitilliumWeb-Bold",
   style: {
     h1: {
       fontFamily: type.base,
       fontSize: size.h1,
     },
     h2: {
-      fontWeight: 'bold',
+      fontWeight: "bold",
       fontSize: size.h2,
     },
     h3: {
@@ -58,9 +58,9 @@ const fonts = {
   },
 
   type: {
-    base: 'Avenir-Book',
-    bold: 'Avenir-Black',
-    emphasis: 'HelveticaNeue-Italic',
+    base: "Avenir-Book",
+    bold: "Avenir-Black",
+    emphasis: "HelveticaNeue-Italic",
   },
 };
 

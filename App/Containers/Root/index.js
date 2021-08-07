@@ -4,6 +4,7 @@ import {
   StatusBar,
   Animated,
   TouchableWithoutFeedback,
+  Text,
 } from "react-native";
 import { Alert, BottomSheet } from "../../Components";
 import AppNavigation from "../../Navigation/AppNavigation";
@@ -80,6 +81,7 @@ function RootContainer() {
     <AlertContext.Provider value={{ dispatch }}>
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" />
+        <Text>dsfdsdsfdsf</Text>
         <Spinner
           visible={spinner}
           textContent={"Loading..."}

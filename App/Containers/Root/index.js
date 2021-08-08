@@ -81,7 +81,6 @@ function RootContainer() {
     <AlertContext.Provider value={{ dispatch }}>
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" />
-        <Text>dsfdsdsfdsf</Text>
         <Spinner
           visible={spinner}
           textContent={"Loading..."}

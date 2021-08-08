@@ -61,8 +61,7 @@
     "react-native-video": "^5.1.1",
     "react-number-format": "^4.6.3",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",
-    "rn-async-storage-flipper": "^0.0.10",
-    "tailwind-rn": "^3.0.1"
+    "rn-async-storage-flipper": "^0.0.10"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",

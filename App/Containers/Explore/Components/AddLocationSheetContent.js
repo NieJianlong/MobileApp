@@ -8,7 +8,10 @@ import styles from "./styles";
 
 import colors from "../../../Themes/Colors";
 import { useMutation, useReactiveVar } from "@apollo/client";
-import { CREATE_ADDRESS } from "../../../Apollo/mutations/mutations_user";
+import {
+  CREATE_ADDRESS,
+  CREATE_ADDRESS_FOR_GUEST,
+} from "../../../Apollo/mutations/mutations_user";
 import { AlertContext } from "../../Root/GlobalContext";
 import PubSub from "pubsub-js";
 import { userProfileVar } from "../../../Apollo/cache";
@@ -71,33 +74,37 @@ function AddLocationSheetContent(props) {
     country,
     referenceId: global.buyerId,
   };
-  const [addAddress] = useMutation(CREATE_ADDRESS, {
-    variables: {
-      request: AddressRequestForCreate,
-    },
-    onCompleted: (res) => {
-      PubSub.publish("refresh-address", "");
-      dispatch({
-        type: "changAlertState",
-        payload: {
-          visible: true,
-          message: "New address added.",
-          color: colors.success,
-          title: "Address Added",
-        },
-      });
-      dispatch({ type: "hideloading" });
-      dispatch({
-        type: "changSheetState",
-        payload: {
-          showSheet: false,
-        },
-      });
-    },
-    onError: (error) => {
-      dispatch({ type: "hideloading" });
-    },
-  });
+
+  const [addAddress] = useMutation(
+    isAuth ? CREATE_ADDRESS : CREATE_ADDRESS_FOR_GUEST,
+    {
+      variables: {
+        request: AddressRequestForCreate,
+      },
+      onCompleted: (res) => {
+        PubSub.publish("refresh-address", "");
+        dispatch({
+          type: "changAlertState",
+          payload: {
+            visible: true,
+            message: "New address added.",
+            color: colors.success,
+            title: "Address Added",
+          },
+        });
+        dispatch({ type: "hideloading" });
+        dispatch({
+          type: "changSheetState",
+          payload: {
+            showSheet: false,
+          },
+        });
+      },
+      onError: (error) => {
+        dispatch({ type: "hideloading" });
+      },
+    }
+  );
 
   const inputs = [
     {

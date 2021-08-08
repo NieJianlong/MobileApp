@@ -5,16 +5,9 @@ import { ProductSearchBox } from "../../../Components";
 import { Images } from "../../../Themes";
 import styles from "../styles";
 import NavigationService from "../../../Navigation/NavigationService";
-import tailwind from "tailwind-rn";
 
 export default function ExploreHeader(props) {
-  const {
-    searchText,
-    onShowSearchBox,
-    recentSearches,
-    changeRecentSearches,
-    onSearch = () => {},
-  } = props;
+  const { searchText, onShowSearchBox, onSearch = () => {} } = props;
   const [keyword, setKeyword] = useState("");
 
   if (keyword === "" && !searchText) {

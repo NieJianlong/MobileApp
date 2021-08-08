@@ -1,17 +1,8 @@
 import React from "react";
-import {
-  View,
-  Image,
-  TouchableOpacity,
-  Text,
-  FlatList,
-  ImageBackground,
-} from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
 import { s, vs } from "react-native-size-matters";
 import InView from "react-native-component-inview";
-import moment from "moment";
 import { StarRating, DescriptionText } from "../../../Components";
-
 import { Colors } from "../../../Themes";
 import styles from "./styles";
 import NavigationService from "../../../Navigation/NavigationService";
@@ -115,7 +106,7 @@ export default function ProductReview({ product, isPurchased, tabIndex }) {
                 </Text>
               </TouchableOpacity>
             </View>
-{/* 
+            {/* 
             {comment.comment.reply.length > 0 && (
               <View style={{ marginLeft: s(15), marginTop: vs(20) }}>
                 {comment.comment.reply.map((item, index) => (

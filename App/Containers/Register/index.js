@@ -94,7 +94,7 @@ function RegisterScreen(props) {
     lastName: lastName,
     email: registerInput,
     password: psswd,
-    phoneNumber: "",
+    // phoneNumber: "",
   };
   const autoSignIn = useCallback(async () => {
     //get username and possword from localStorage

@@ -8,8 +8,8 @@ import NavigationService from "../../../Navigation/NavigationService";
 import BillingItem from "./BillingItem";
 import { useQuery } from "@apollo/client";
 import { BILLING_DETAIL_BY_BUYERID } from "../../../Apollo/queries/queries_user";
-import tailwind from "tailwind-rn";
 import PubSub from "pubsub-js";
+import { t } from "react-native-tailwindcss";
 
 export default function BillingList({ dispatch }) {
   const tip = "You have not added \n billing details yet";
@@ -82,7 +82,7 @@ export default function BillingList({ dispatch }) {
       </View>
       {data?.billingDetailsByBuyerId.length > 0 ? (
         <SafeAreaView>
-          <ScrollView contentContainerStyle={tailwind("pb-8")}>
+          <ScrollView contentContainerStyle={[t.pB8]}>
             {Object.entries({
               ...data?.billingDetailsByBuyerId[0],
               ...data?.billingDetailsByBuyerId[0].billingAddress,

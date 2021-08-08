@@ -37,17 +37,17 @@ export default function AddressBar() {
    * comment should be like state updates see @AddLocationSheetContent
    */
   const toggleAddressSheet = useCallback(() => {
-    // dispatch({
-    //   type: "changSheetState",
-    //   payload: {
-    //     showSheet: true,
-    //     height: 380,
-    //     children: () => <AddressSheetContent />,
-    //     onCloseEnd: () => {},
-    //     // enabledGestureInteraction: addrLine1.length > 0,
-    //     sheetTitle: "Add your delivery address",
-    //   },
-    // });
+    dispatch({
+      type: "changSheetState",
+      payload: {
+        showSheet: true,
+        height: 380,
+        children: () => <AddressSheetContent />,
+        onCloseEnd: () => {},
+        // enabledGestureInteraction: addrLine1.length > 0,
+        sheetTitle: "Add your delivery address",
+      },
+    });
   }, [addrLine1.length, dispatch]);
 
   const handleError = useCallback(() => {

@@ -12,8 +12,9 @@ import { AppBar } from "../../../../Components";
 import NavigationService from "../../../../Navigation/NavigationService";
 import { useMutation, useQuery } from "@apollo/client";
 import * as aQM from "../../gql/explore_queries";
-import tailwind from "tailwind-rn";
+
 import { SAVE_PREFERRED_CATEGORIES } from "../../../../Apollo/mutations/mutations_product";
+import { t } from "react-native-tailwindcss";
 
 function Header({ selected }) {
   const selectedIds = useMemo(() => {
@@ -132,7 +133,7 @@ export default function ChooseCategoriesScreen() {
   });
   const { data: allCategories } = useQuery(aQM.GET_ALL_CATEGORIES);
   return (
-    <View style={tailwind("h-full")}>
+    <View style={[t.hFull]}>
       {categories !== undefined && allCategories !== undefined && (
         <OldChooseCategoriesScreen
           selected={categories?.getPreferredCategories || []}

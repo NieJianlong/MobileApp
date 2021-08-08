@@ -175,8 +175,8 @@ export default function ProductInfo({
               <Text style={styles.txtRegular}>
                 Vero eos et accusamus et iusto odio dignissimos
               </Text>
-            </View>
-
+            </View>jjjh
+            
             <View style={styles.row}>
               <Text style={styles.txtDot}>•</Text>
               <Text style={styles.txtRegular}>

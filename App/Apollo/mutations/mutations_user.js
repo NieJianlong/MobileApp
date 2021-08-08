@@ -245,6 +245,13 @@ export const CREATE_ADDRESS = gql`
     }
   }
 `;
+export const CREATE_ADDRESS_FOR_GUEST = gql`
+  mutation CreateAddressForGuestBuyer($request: AddressRequestForCreate!) {
+    createAddressForGuestBuyer(request: $request) {
+      addressId
+    }
+  }
+`;
 
 /**
  * @mutation updateAddress

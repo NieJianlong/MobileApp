@@ -3,14 +3,12 @@ import { View, StatusBar, Text, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import styles from "./styles";
-
 import { ProductSearchBox } from "../../../Components";
 import { Images } from "../../../Themes";
-import NavigationService from "../../../Navigation/NavigationService";
 import * as storage from "../../../Apollo/local-storage";
 import CategoryAndProductList from "../CategoryAndProductList/Index";
-import tailwind from "tailwind-rn";
-import { useRef } from "react";
+import { t } from "react-native-tailwindcss";
+
 const SearchContext = React.createContext({});
 
 function ProductSearch(props) {
@@ -152,11 +150,11 @@ export default function Index() {
       {showSearchBox ? (
         <ProductSearch />
       ) : (
-        <View style={tailwind("bg-white")}>
+        <View style={[t.bgWhite]}>
           <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
 
           <SafeAreaView
-            style={tailwind("flex h-full")}
+            style={[t.flex, t.hFull]}
             edges={["top", "left", "right"]}
           >
             <CategoryAndProductList

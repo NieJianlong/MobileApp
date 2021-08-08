@@ -6,8 +6,20 @@ import { Colors } from "../../../Themes";
 import styles from "./styles";
 
 import ProductItem from "../Components/ProductItem";
+import { useQuery } from "@apollo/client";
+import { GET_RELATED_PRODYCTS } from "../../../Apollo/queries/queries_prodmang";
 
-export default function RelatedProducts() {
+export default function RelatedProducts({ productId }) {
+  //alert(productId);
+  const { data, error } = useQuery(GET_RELATED_PRODYCTS, {
+    variables: { productId },
+    onCompleted: (res) => {
+      debugger;
+    },
+    onError: (res) => {
+      debugger;
+    },
+  });
   return (
     <InView
       onChange={(isVisible) => {

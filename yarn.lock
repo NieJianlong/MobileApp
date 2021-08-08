@@ -1587,6 +1587,13 @@
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.3.tgz"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
 
+"@types/react-reconciler@^0.18.0":
+  version "0.18.0"
+  resolved "https://registry.nlark.com/@types/react-reconciler/download/@types/react-reconciler-0.18.0.tgz#fce2b444103f44904e73eba349ac6552e2771f64"
+  integrity sha1-/OK0RBA/RJBOc+ujSaxlUuJ3H2Q=
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*":
   version "17.0.2"
   resolved "https://registry.npmjs.org/@types/react/-/react-17.0.2.tgz"
@@ -4033,6 +4040,15 @@ hosted-git-info@^2.1.4:
   version "2.8.8"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.8.8.tgz"
   integrity sha512-f/wzC2QaWBs7t9IYqB4T3sR1xviIViXJRJTWBlx2Gf3g0Xi5vI7Yy4koXQ1c9OYDGHN9sBy1DQ2AB8fqZBWhUg==
+
+hox@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.nlark.com/hox/download/hox-1.1.4.tgz#3925e19c0f6ec6ec9840f25cdd0d4fe99709f4bc"
+  integrity sha1-OSXhnA9uxuyYQPJc3Q1P6ZcJ9Lw=
+  dependencies:
+    "@types/hoist-non-react-statics" "^3.3.1"
+    "@types/react-reconciler" "^0.18.0"
+    react-reconciler "^0.25.1"
 
 html-encoding-sniffer@^2.0.1:
   version "2.0.1"
@@ -6980,6 +6996,16 @@ react-number-format@^4.6.3:
   integrity sha512-AZJwR/2mnl1cTRxQRjIITKp+Rg+4bYgjNylw7it7+x9UyIUAEpEK3fETKCqC5F2mVW8S41Xc6gpeH3VcJbPRsg==
   dependencies:
     prop-types "^15.7.2"
+
+react-reconciler@^0.25.1:
+  version "0.25.1"
+  resolved "https://registry.nlark.com/react-reconciler/download/react-reconciler-0.25.1.tgz#f9814d59d115e1210762287ce987801529363aaa"
+  integrity sha1-+YFNWdEV4SEHYih86YeAFSk2Oqo=
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.19.1"
 
 react-refresh@^0.4.0:
   version "0.4.3"

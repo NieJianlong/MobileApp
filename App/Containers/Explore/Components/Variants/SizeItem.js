@@ -1,8 +1,8 @@
 import React from "react";
-import { View, Image, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { t } from "react-native-tailwindcss";
 
-export default function ColorItem({ item, currentVariant, onChangeVariant }) {
+export default function SizeItem({ item, currentVariant, onChangeVariant }) {
   const selectedItem = currentVariant.options.find((jtem) => {
     return jtem.value === item.value;
   });
@@ -23,17 +23,17 @@ export default function ColorItem({ item, currentVariant, onChangeVariant }) {
           t.itemsCenter,
           t.mR2,
           t.border,
-          t.rounded,
           selected ? t.borderPrimary : t.borderGray300,
+          t.rounded,
         ]}
       >
-        <Image
-          source={{ uri: item.fullPath }}
-          style={[t.wFull, t.h32]}
+        <View
+          style={[t.wFull, t.h10, t.bgRed100, t.justifyCenter, t.pX4]}
           resizeMode="contain"
-        />
-        <View style={[t.w32]}>
+        >
           <Text style={[t.fontSemibold, t.textLg]}>{item.value}</Text>
+        </View>
+        <View style={[t.w32, t.pY2]}>
           <Text style={selected ? [t.textLg] : [t.textSm]}>
             {selected ? `$${item.wholeSalePrice}` : "See available"}
           </Text>

@@ -89,7 +89,7 @@ function RegisterScreen(props) {
     },
   });
   let BuyerProfileRequestForCreate = {
-    userName: registerInput,
+    // userName: registerInput,
     firstName: name,
     lastName: lastName,
     email: registerInput,

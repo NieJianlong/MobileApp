@@ -48,6 +48,13 @@ type AnnouncementDTO {
   infoIcon: String
 }
 
+input AnnouncementInput {
+  listingId: String!
+  announcementText: String!
+  validityInterval: Int!
+  announcementDate: DateTime!
+}
+
 type Buyer {
   id: ID!
 }
@@ -67,6 +74,31 @@ type CategoryView {
 
 type Chat {
   id: ID!
+}
+
+input CollectionPointInput {
+  listingId: String!
+  streetAddress1: String!
+  streetAddress2: String
+  townCity: String!
+  country: String!
+  provinceState: String!
+  areaCode: String!
+  openingHours: [String]
+}
+
+type CourierDeliveryDetails {
+  courierDeliveryId: ID!
+  courierName: String
+  shippingFees: Float
+  shippingFeesTaxes: Float
+}
+
+input CourierDeliveryDetailsInput {
+  listingId: String!
+  courierName: String!
+  shippingFees: Float
+  shippingFeesTaxes: Float
 }
 
 scalar Date
@@ -136,6 +168,8 @@ type ListingVariantView {
   wholeSalePrice: Float
   fullPath: String
   itemsInStock: Int
+  itemsAvailable: Int
+  itemsSold: Int
   options: [KeyValuePair]
 }
 
@@ -155,6 +189,7 @@ type Mutation {
 
   """add product to wish list - product"""
   addProductToWishlist(productId: String!, buyerId: String!): Wishlist!
+  deleteProductFromWishlist(productId: String!, buyerId: String!): Int!
 
   """add review dto  - add review for a product"""
   addProductReview(productId: String, title: String!, description: String!, ratingVote: Int!, sellerId: String, postedBy: String!): ProductReviewView!
@@ -181,10 +216,15 @@ type Mutation {
   createProductStockAndPricing(productInput: ProductInputStep2!): Product!
   createProductReturnPolicy(productInput: ProductInputStep3!): Product!
   savePreferredCategories(buyerId: ID!, categories: [ID]): String
+  updateProductListing(productListingUpdateInput: ProductListingUpdateInput): ProductListing
   addProductListingVariants(productListingVariantInput: ProductListingVariantInput): [ProductListingVariant]
   updateListingStatus(listingStatusInput: ListingStatusInput): ProductListing
   updateProductStatus(productStatusInput: ProductStatusInput): Product
   deleteProductListing(listingId: String!): Boolean
+  cloneListing(listingId: String!): ProductListing
+  addListingCollectionPoint(collectionPointInput: CollectionPointInput): Address
+  addListingAnnouncement(announcementInput: AnnouncementInput): Announcement
+  addListingCourierDeliveryDetails(courierDeliveryInput: CourierDeliveryDetailsInput): CourierDeliveryDetails
   createOption(option: OptionInput): Option
   deleteOption(optionId: String!): Boolean
 }
@@ -220,6 +260,10 @@ input OptionValueInput {
 
 type PolicyNameView {
   name: String
+}
+
+type Price {
+  id: ID!
 }
 
 """types"""
@@ -275,15 +319,15 @@ type ProductListing {
   store: Store
   chat: Chat
   announcement: Announcement
-  returnAddress: Address
   chatMuteFlag: Boolean
   numberOfItems: Int
   maxQuantityPerCart: Int
   closedDate: Date
   deliveryDate: Date
-  collectionPointAddress: Address
-  shippingMethodsAvailable: [ShippingMethodType]
   productListingStatus: ProductListingStatus
+  minSoldQuantity: Int
+  openUntil: Date
+  startDate: DateTime
 }
 
 input ProductListingInput {
@@ -291,20 +335,12 @@ input ProductListingInput {
   storeId: String
   chatId: String
   announcementId: String
-  returnAddressId: String
-  collectionPointAddressId: String
   chatMuteFlag: Boolean
   numberOfItems: Int
   minQuantityPerCart: Int
   maxQuantityPerCart: Int
-  wholeSalePrice: Float
-  retailPrice: Float
-  discount: Float
-  closedDate: Date
-  deliveryDate: Date
   pickupFromSeller: Boolean
   productListingType: ProductListingType
-  shippingMethodsAvailable: [ShippingMethodType]
   openUntil: Date
   minSoldQuantity: Int
   startDate: DateTime
@@ -331,11 +367,28 @@ enum ProductListingType {
   ANNOUNCEMENT_PRODUCT_LISTING
 }
 
+input ProductListingUpdateInput {
+  listingId: String!
+  productId: String!
+  storeId: String
+  chatId: String
+  announcementId: String
+  chatMuteFlag: Boolean
+  numberOfItems: Int
+  minQuantityPerCart: Int
+  maxQuantityPerCart: Int
+  pickupFromSeller: Boolean
+  productListingType: ProductListingType
+  openUntil: Date
+  minSoldQuantity: Int
+  startDate: DateTime
+}
+
 type ProductListingVariant {
-  listingId: ID!
+  productListing: ProductListing!
   variantId: ID
   productId: ID!
-  priceId: ID
+  price: Price
   itemsAvailable: Int
   itemsSold: Int
 }
@@ -353,6 +406,7 @@ type ProductListingView {
   numberOfReviews: Int
   retailPrice: Float
   wholeSalePrice: Float
+  salePercentage: Float
   percentOff: Int
   deliveryFee: Float
   amountSaved: Float
@@ -371,6 +425,7 @@ type ProductListingView {
   listingId: String
   productId: String
   storeId: String
+  storeName: String
   status: String
   rating: Int
   closedDate: String
@@ -381,6 +436,10 @@ type ProductListingView {
   numberOfItemsAvailable: Int
   minQuantityPerCart: Int
   maxQuantityPerCart: Int
+  qtyAvailable: Int
+  minSoldQuantity: Int
+  itemSold: Int
+  createOn: String
   collectionPointAddressId: String
   collectionPointAddress: Address
   returnAddressId: String
@@ -499,6 +558,7 @@ type Query {
   getShareInformationByProductId(productId: String): [ShareInformation]
   announcementsByOnlineStore(storeId: String): [Announcement]
   getListings(searchOptions: SearchOptions): [ProductListingView]
+  getListingNeedAcceptOrReject: [ProductListingView]
   getProducts(searchOptions: SearchOptions): [ProductView]
   onlineStoreByGeoCoordinates(latitude: Float!, longitude: Float!): [Store]
   announcementsByListingId(productListingId: String): [AnnouncementDTO]
@@ -506,6 +566,8 @@ type Query {
   getPreferredCategories(buyerId: ID!): [CategoryView]!
   getOptionReference: [Option]!
   getPolicyNames: [PolicyNameView]!
+  getRelatedProducts(productId: ID!): [ProductView]
+  isProductInWishlist(productId: String!, buyerId: String!): Boolean!
 }
 
 type RatingDetail {
@@ -586,12 +648,6 @@ type ShareInformation {
   shareChannel: String
   productPageUrl: String
   shareTitle: String
-}
-
-enum ShippingMethodType {
-  UNDEFINED
-  DELIVERY_ADDRESS
-  COLLECTION_POINT
 }
 
 enum SortDirection {

@@ -151,7 +151,6 @@ input BuyerProfileRequest {
 
 input BuyerProfileRequestForCreate {
   password: String
-  userName: String
   firstName: String
   lastName: String
   email: String
@@ -339,6 +338,9 @@ type Mutation {
   createAddress(request: AddressRequestForCreate!): AddressResponse
   deleteAddress(addressId: ID!): Boolean
   updateAddress(request: AddressRequest!): AddressResponse
+  createAddressForGuestBuyer(request: AddressRequestForCreate!): AddressResponse
+  deleteAddressForGuestBuyer(addressId: ID!): Boolean
+  updateAddressForGuestBuyer(request: AddressRequest!): AddressResponse
   createPaymentDetail(request: PaymentDetailRequestForCreate!): PaymentDetailResponse
   deletePaymentDetail(paymentDetailId: ID!): Boolean
   updatePaymentDetail(request: PaymentDetailRequest!): PaymentDetailResponse
@@ -357,6 +359,9 @@ type Mutation {
   createBillingDetails(request: BillingDetailsRequestForCreate!): BillingDetailsResponse
   deleteBillingDetails(billingDetailsId: String!): Boolean
   updateBillingDetails(request: BillingDetailsRequest!): BillingDetailsResponse
+  createBillingDetailsForGuestBuyer(request: BillingDetailsRequestForCreate!): BillingDetailsResponse
+  deleteBillingDetailsForGuestBuyer(billingDetailsId: String!): Boolean
+  updateBillingDetailsForGuestBuyer(request: BillingDetailsRequest!): BillingDetailsResponse
   createChat(request: ChatRequestForCreate!): ChatResponse
   deleteChat(chatId: ID!): Boolean
   updateChat(request: ChatRequest!): ChatResponse
@@ -496,6 +501,7 @@ enum PreferenceType {
 type Query {
   buyerProfiles: [BuyerProfileResponse]
   buyerProfile(buyerId: ID!): BuyerProfileResponse
+  guestBuyerProfile(guestBuyerId: ID!): BuyerProfileResponse
   oneClickBuy(buyerId: ID!): OneClickBuyResponse
   buyerProfileByUserId(userProfileId: ID!): BuyerProfileResponse
   getRefundSalamiCredit(buyerId: ID!): Float
@@ -504,6 +510,7 @@ type Query {
   sellerProfileByUserId(userProfileId: ID!): SellerProfileResponse
   addresses: [AddressResponse]
   addressById(addressId: ID!): AddressResponse
+  addressByIdForGuestBuyer(addressId: ID!, guestBuyerId: ID!): AddressResponse
   getSellerAddressesById(sellerId: ID!): [AddressResponse]
   getBuyerAddressesById(buyerId: ID!): [AddressResponse]
   getGuestBuyerAddressesById(buyerId: ID!): [AddressResponse]
@@ -530,6 +537,7 @@ type Query {
   billingDetails: [BillingDetailsResponse]
   billingDetailsById(billingDetailsId: ID!): BillingDetailsResponse
   billingDetailsByBuyerId(buyerId: ID!): [BillingDetailsResponse]
+  billingDetailsByGuestBuyerId(guestBuyerId: ID!): [BillingDetailsResponse]
   chats: [ChatResponse]
   chatById(chatId: ID!): ChatResponse
   chatMessages: [ChatMessageResponse]
@@ -566,7 +574,6 @@ input SellerProfileRequest {
 }
 
 input SellerProfileRequestForCreate {
-  userName: String!
   password: String!
   firstName: String
   lastName: String

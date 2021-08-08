@@ -4,6 +4,7 @@ import globalCache from "./cache";
  * need fetch as we are not in a browser
  */
 import fetch from "cross-fetch";
+import { GET_RELATED_PRODYCTS } from "./queries/queries_prodmang";
 // const baseUrl = "http://ec2-3-141-165-215.us-east-2.compute.amazonaws.com";
 const baseUrl = "http://ec2-3-141-165-215.us-east-2.compute.amazonaws.com";
 /**
@@ -57,7 +58,7 @@ const allAPIS = {
   GetPreferredCategories: PRODUCT_PORT,
   GetAllCategories: PRODUCT_PORT,
   SavePreferredCategories: PRODUCT_PORT,
-
+  GetRelatedProducts: PRODUCT_PORT,
   // Cart
   CreateCart: CART_PORT,
   AddItem: CART_PORT,

@@ -108,7 +108,7 @@ function ProductDetail(props) {
             {/* need to add ProductVariants components */}
           </ScrollIntoView>
           <ScrollIntoView key={"section1"} ref={sectionsRefs[1]}>
-            <RelatedProducts />
+            <RelatedProducts productId={product.productId} />
           </ScrollIntoView>
           <ScrollIntoView key={"section2"} ref={sectionsRefs[2]}>
             <StoreInfo tabIndex={tabIndex} product={product} />

@@ -121,15 +121,15 @@ export default function OnePurchaseList({ dispatch, xIndex }) {
   }, [refreshData, xIndex]);
   return (
     <View style={{ flex: 1 }} onLayout={() => {}}>
-      {data?.oneClickBuy.defaultAddress.addressId &&
-        data?.oneClickBuy.defaultPaymentMethod.paymentDetailId && (
+      {data?.oneClickBuy?.defaultAddress?.addressId &&
+        data?.oneClickBuy?.defaultPaymentMethod?.paymentDetailId && (
           <View>
             <PaymentItem
-              item={data?.oneClickBuy.defaultPaymentMethod}
+              item={data?.oneClickBuy?.defaultPaymentMethod}
               refetch={refetch}
             />
             <AddressItem
-              item={data?.oneClickBuy.defaultAddress}
+              item={data?.oneClickBuy?.defaultAddress}
               refetch={refetch}
             />
             <View
@@ -148,8 +148,8 @@ export default function OnePurchaseList({ dispatch, xIndex }) {
             </View>
           </View>
         )}
-      {!data?.oneClickBuy.defaultAddress.addressId &&
-        !data?.oneClickBuy.defaultPaymentMethod.paymentDetailId && (
+      {!data?.oneClickBuy?.defaultAddress?.addressId &&
+        !data?.oneClickBuy?.defaultPaymentMethod?.paymentDetailId && (
           <TextTip
             textTip={tip}
             subTextTip={subTip}
@@ -160,11 +160,11 @@ export default function OnePurchaseList({ dispatch, xIndex }) {
             }}
           />
         )}
-      {data?.oneClickBuy.defaultAddress.addressId &&
-        !data?.oneClickBuy.defaultPaymentMethod.paymentDetailId && (
+      {data?.oneClickBuy?.defaultAddress?.addressId &&
+        !data?.oneClickBuy?.defaultPaymentMethod?.paymentDetailId && (
           <View>
             <AddressItem
-              item={data?.oneClickBuy.defaultAddress}
+              item={data?.oneClickBuy?.defaultAddress}
               refetch={refetch}
             />
             <View
@@ -177,11 +177,11 @@ export default function OnePurchaseList({ dispatch, xIndex }) {
             </View>
           </View>
         )}
-      {!data?.oneClickBuy.defaultAddress.addressId &&
-        data?.oneClickBuy.defaultPaymentMethod.paymentDetailId && (
+      {!data?.oneClickBuy?.defaultAddress?.addressId &&
+        data?.oneClickBuy?.defaultPaymentMethod?.paymentDetailId && (
           <View>
             <PaymentItem
-              item={data?.oneClickBuy.defaultPaymentMethod}
+              item={data?.oneClickBuy?.defaultPaymentMethod}
               refetch={refetch}
             />
             <View

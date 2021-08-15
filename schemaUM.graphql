@@ -339,7 +339,7 @@ type Mutation {
   deleteAddress(addressId: ID!): Boolean
   updateAddress(request: AddressRequest!): AddressResponse
   createAddressForGuestBuyer(request: AddressRequestForCreate!): AddressResponse
-  deleteAddressForGuestBuyer(addressId: ID!): Boolean
+  deleteAddressForGuestBuyer(addressId: ID!, guestBuyerId: ID!): Boolean
   updateAddressForGuestBuyer(request: AddressRequest!): AddressResponse
   createPaymentDetail(request: PaymentDetailRequestForCreate!): PaymentDetailResponse
   deletePaymentDetail(paymentDetailId: ID!): Boolean
@@ -357,10 +357,10 @@ type Mutation {
   deleteWishList(wishListId: ID!): Boolean
   updateWishList(request: WishListRequest!): WishListResponse
   createBillingDetails(request: BillingDetailsRequestForCreate!): BillingDetailsResponse
-  deleteBillingDetails(billingDetailsId: String!): Boolean
+  deleteBillingDetails(billingDetailsId: ID!): Boolean
   updateBillingDetails(request: BillingDetailsRequest!): BillingDetailsResponse
   createBillingDetailsForGuestBuyer(request: BillingDetailsRequestForCreate!): BillingDetailsResponse
-  deleteBillingDetailsForGuestBuyer(billingDetailsId: String!): Boolean
+  deleteBillingDetailsForGuestBuyer(billingDetailsId: ID!, guestBuyer: ID): Boolean
   updateBillingDetailsForGuestBuyer(request: BillingDetailsRequest!): BillingDetailsResponse
   createChat(request: ChatRequestForCreate!): ChatResponse
   deleteChat(chatId: ID!): Boolean

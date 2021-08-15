@@ -264,6 +264,12 @@ type PolicyNameView {
 
 type Price {
   id: ID!
+  currency: String
+  retailPrice: Float
+  wholeSalePrice: Float
+  salePercentage: Float
+  totalQuantityPrice: Float
+  taxPercentage: Float
 }
 
 """types"""
@@ -496,6 +502,12 @@ type ProductStep1Response {
   productId: ID!
 }
 
+enum ProductType {
+  UNDEFINED
+  DONT_USE_ME_1
+  DONT_USE_ME_2
+}
+
 input ProductUpdateStep1 {
   productId: ID!
   productStatus: ProductStatus!
@@ -520,9 +532,21 @@ input ProductVariantInput {
   options: [OptionValueInput]
 }
 
+type ProductVariantView {
+  variantId: ID
+  productId: ID
+  retailPrice: Float
+  wholeSalePrice: Float
+  fullPath: String
+  itemsInStock: Int
+  defaultVariant: Boolean
+  options: [KeyValuePair]
+}
+
 type ProductView {
   productId: ID
   sellerId: ID
+  sellerAddress: String
   vendorSku: String
   sellerSku: String
   shortName: String
@@ -543,15 +567,21 @@ type ProductView {
   salePercentage: Float
   totalQuantityPrice: Float
   taxPercentage: Float
-  categories: [ProductCategoryView]
-  variants: [Variant]
+  numberOfStars: Float
+  numberOfReviews: Int
+  totalNumberOfStars: Int
+  variants: [ProductVariantView]
   productReturnPolicyViews: [ProductReturnPolicyView]
+  reviews: [ReviewView]
+  categories: [ProductCategoryView]
   images: [Images]
+  ratingDetail: RatingDetail
 }
 
 """queries"""
 type Query {
   getProductByProductId(productId: String!): ProductView!
+  getStores: [Store]
   store(id: ID!): Store!
   getStoreByName(name: String!): Store!
   chatById(id: String!): Chat
@@ -559,6 +589,9 @@ type Query {
   announcementsByOnlineStore(storeId: String): [Announcement]
   getListings(searchOptions: SearchOptions): [ProductListingView]
   getListingNeedAcceptOrReject: [ProductListingView]
+  getSellerListingGroupByProduct(options: SellerFilterOptions): SellerListingGroupResponse
+  getSellerListing(productId: String, options: SellerFilterOptions): SellerListingResponse
+  getSellerListingStores: [SellerListingStoreView]
   getProducts(searchOptions: SearchOptions): [ProductView]
   onlineStoreByGeoCoordinates(latitude: Float!, longitude: Float!): [Store]
   announcementsByListingId(productListingId: String): [AnnouncementDTO]
@@ -628,6 +661,85 @@ input SearchOptions {
   pageSize: Int
 }
 
+enum SellerDateFilter {
+  LAST_7_DAYS
+  LAST_30_DAYS
+}
+
+input SellerFilterOptions {
+  filterType: SellerFilterType!
+  dateFilterValue: SellerDateFilter
+  productTypeFilterValue: ProductType
+  storeFilterValues: [String]
+  pageOption: SellerPageOption!
+}
+
+enum SellerFilterType {
+  NONE
+  START_DATE
+  PRODUCT_TYPE
+  STORE
+  START_DATE_AND_PRODUCT_TYPE
+  START_DATE_AND_STORE
+  PRODUCT_TYPE_AND_STORE
+  START_DATE_AND_PRODUCT_TYPE_AND_STORE
+}
+
+type SellerListingGroupResponse {
+  content: [SellerListingGroupView]
+  pageNo: Int
+  pageSize: Int
+  totalPages: Int
+  totalElements: Int
+}
+
+type SellerListingGroupView {
+  productId: ID
+  shortName: String
+  ended: Int
+  active: Int
+  total: Int
+}
+
+type SellerListingResponse {
+  content: [SellerListingView]
+  pageNo: Int
+  pageSize: Int
+  totalPages: Int
+  totalElements: Int
+}
+
+type SellerListingStoreView {
+  storeId: ID
+  storeName: String
+}
+
+type SellerListingView {
+  listingId: ID
+  productId: ID
+  shortName: String
+  mainPhotoUrl: String
+  startDate: DateTime
+  closedDate: Date
+  openUntil: Date
+  minSoldQuantity: Int
+  daysLeft: Int
+  totalItemsAvailable: Int
+  totalItemsSold: Int
+  storeId: ID
+  storeName: String
+  priceId: ID
+  wholeSalePrice: Float
+  retailPrice: Float
+  salePercentage: Float
+  categories: [String]
+}
+
+input SellerPageOption {
+  pageNumber: Int!
+  pageSize: Int!
+}
+
 type SellerView {
   id: ID
   brandName: String
@@ -682,17 +794,6 @@ input StoreInput {
   onlineStoreType: OnlineStoreType
   createdBy: ID
   area: String
-}
-
-type Variant {
-  variantId: ID!
-  productId: ID!
-  defaultVariant: Boolean
-  retailPrice: Float
-  wholeSalePrice: Float
-  fullPath: String
-  itemsInStock: Int
-  options: [KeyValuePair]
 }
 
 type Wishlist {

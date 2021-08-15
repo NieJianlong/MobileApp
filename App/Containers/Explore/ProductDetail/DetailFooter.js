@@ -10,6 +10,8 @@ import styles from "./styles";
 import { AlertContext } from "../../Root/GlobalContext";
 import ConfirmOrderSheetContent from "./SheetContent/ConfirmOrderSheetContent";
 import AddToCartSheetContent from "./SheetContent/AddToCartSheetContent";
+import Realm from "realm";
+import { RealmConnector } from "../../../db/connector";
 
 export default function DetailFooter({ product }) {
   const { dispatch } = useContext(AlertContext);
@@ -28,6 +30,9 @@ export default function DetailFooter({ product }) {
     });
   }, [dispatch]);
   const toggleAddToCartSheet = useCallback(() => {
+    Realm.open(RealmConnector).then((realm) => {
+      alert(realm);
+    });
     dispatch({
       type: "changSheetState",
       payload: {

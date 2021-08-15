@@ -59,6 +59,10 @@ const allAPIS = {
   GetAllCategories: PRODUCT_PORT,
   SavePreferredCategories: PRODUCT_PORT,
   GetRelatedProducts: PRODUCT_PORT,
+  AddProductToWishlist: PRODUCT_PORT,
+  DeleteProductFromWishlist: PRODUCT_PORT,
+  IsProductInWishlist: PRODUCT_PORT,
+
   // Cart
   CreateCart: CART_PORT,
   AddItem: CART_PORT,

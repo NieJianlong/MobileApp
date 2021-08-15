@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, TouchableOpacity, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Colors } from "../../../Themes";

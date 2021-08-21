@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { View, Image, TouchableOpacity, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -10,16 +10,33 @@ import styles from "./styles";
 import { AlertContext } from "../../Root/GlobalContext";
 import ConfirmOrderSheetContent from "./SheetContent/ConfirmOrderSheetContent";
 import AddToCartSheetContent from "./SheetContent/AddToCartSheetContent";
-import Realm from "realm";
-import { RealmConnector } from "../../../db/connector";
 import "react-native-get-random-values";
-import { nanoid } from "nanoid";
+import useRealm from "../../../hooks/useRealm";
 
 export default function DetailFooter({ product }) {
   const { dispatch } = useContext(AlertContext);
 
+  const { realm } = useRealm();
+  const info = realm.objectForPrimaryKey("ShoppingCart", product.productId);
+  const [quantity, setQuantity] = useState(info?.cartInfo[0]?.quantity || 1);
+  const [cartInfo, setCartInfo] = useState(info);
+
+  // useEffect(() => {
+  //   if (info) {
+  //     setCartInfo({ ddd: "dsdf" });
+  //     console.log("info.cartInfo[0]====================================");
+  //     console.log(info.cartInfo[0]);
+  //     console.log("====================================");
+  //     alert("为何");
+  //     console.log("quantity====================================");
+  //     console.log(info.cartInfo[0]?.quantity);
+  //     console.log("====================================");
+  //     //此处需要修改
+  //     setQuantity(50);
+  //   }
+  // }, [product.productId, realm]);
   //hold the quantity of product
-  const [quantity, setQuantity] = useState(1);
+
   const toggleConfirmOrderSheet = useCallback(() => {
     dispatch({
       type: "changSheetState",
@@ -32,30 +49,55 @@ export default function DetailFooter({ product }) {
     });
   }, [dispatch]);
   const toggleAddToCartSheet = useCallback(() => {
-    Realm.open(RealmConnector).then((realm) => {
-      realm.write(() => {
+    const shoppingCartId = product.productId;
+    realm.write(() => {
+      if (cartInfo) {
+        alert("哪里" + quantity);
+        realm.create(
+          "ShoppingCart",
+          {
+            id: shoppingCartId,
+            product: product,
+            cartInfo: [
+              {
+                quantity: quantity,
+                variant: null,
+              },
+            ],
+            created: new Date(),
+            updated: new Date(),
+          },
+          true
+        );
+      } else {
         realm.create("ShoppingCart", {
-          id: nanoid(),
+          id: shoppingCartId,
           product: product,
-          quantity: quantity,
+          cartInfo: [
+            {
+              quantity: quantity,
+              variant: null,
+            },
+          ],
           created: new Date(),
           updated: new Date(),
         });
-      });
-      const tasks = realm.objects("ShoppingCart");
-      console.log(
-        `The lists of tasks are: ${JSON.stringify(tasks.map((task) => task))}`
-      );
+      }
     });
-    dispatch({
-      type: "changSheetState",
-      payload: {
-        showSheet: true,
-        height: 290,
-        children: () => <AddToCartSheetContent />,
-        sheetTitle: "Confirm your Order",
-      },
-    });
+    // const tasks = realm.objects("ShoppingCart");
+    // console.log(
+    //   `The lists of tasks are: ${JSON.stringify(tasks.map((task) => task))}`
+    // );
+
+    // dispatch({
+    //   type: "changSheetState",
+    //   payload: {
+    //     showSheet: true,
+    //     height: 290,
+    //     children: () => <AddToCartSheetContent />,
+    //     sheetTitle: "Confirm your Order",
+    //   },
+    // });
   }, [dispatch]);
   return (
     <SafeAreaView style={styles.footerSafeArea} edges={["bottom"]}>

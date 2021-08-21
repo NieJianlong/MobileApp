@@ -1,6 +1,6 @@
 export const RatingDetail = {
   name: "RatingDetail",
-  primaryKey: "id",
+  // primaryKey: "id",
   properties: {
     id: { type: "string?", default: null },
     productId: { type: "string?", default: null },

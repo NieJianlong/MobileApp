@@ -7,6 +7,7 @@ import { RatingDetail } from "./schemas/RatingDetail";
 import { ReviewView } from "./schemas/ReviewView";
 import { SellerView } from "./schemas/SellerView";
 import { ShoppingCart } from "./schemas/ShoppingCart";
+import { CartInfo } from "./schemas/CartInfo";
 
 export const DB = "mobile.realm";
 export const RealmConnector = {
@@ -21,6 +22,7 @@ export const RealmConnector = {
     SellerView,
     ProductSchema,
     ShoppingCart,
+    CartInfo,
   ],
   schemaVersion: 0,
   deleteRealmIfMigrationNeeded: true,

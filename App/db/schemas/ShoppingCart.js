@@ -3,7 +3,7 @@ export const ShoppingCart = {
   primaryKey: "id",
   properties: {
     id: "string",
-    product: "Product",
+    product: "ProductSchema",
     quantity: "int",
     created: "date",
     updated: "date",

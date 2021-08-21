@@ -8,7 +8,6 @@ import styles from "./styles";
 import ProductVariants from "../Components/Variants";
 import ProductCarousel from "./ProductCarousel";
 import { AlertContext } from "../../Root/GlobalContext";
-import ColorSheetContent from "./SheetContent/ColorSheetContent";
 import RelatedProducts from "./RelatedProducts";
 import StoreInfo from "./StoreInfo";
 import DetailFooter from "./DetailFooter";

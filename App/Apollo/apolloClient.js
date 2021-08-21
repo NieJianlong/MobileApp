@@ -5,8 +5,8 @@ import globalCache from "./cache";
  */
 import fetch from "cross-fetch";
 import { GET_RELATED_PRODYCTS } from "./queries/queries_prodmang";
-// const baseUrl = "http://ec2-3-141-165-215.us-east-2.compute.amazonaws.com";
-const baseUrl = "http://ec2-3-141-165-215.us-east-2.compute.amazonaws.com";
+// const baseUrl = "http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com";
+const baseUrl = "http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com";
 /**
  * Keycloak              --> 8080
  * IAM                   --> 8081

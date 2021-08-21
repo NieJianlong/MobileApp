@@ -1,7 +1,7 @@
 export const KeyValuePair = {
   name: "KeyValuePair",
   properties: {
-    key: "string",
-    value: "string",
+    key: { type: "string?", default: null },
+    value: { type: "string?", default: null },
   },
 };

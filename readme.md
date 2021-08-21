@@ -81,6 +81,6 @@ cd ~/Downloads/genymotion/
 npx react-native start --port=5555
 npx react-native run-android --port=5555
 
-get-graphql-schema http://ec2-3-141-165-215.us-east-2.compute.amazonaws.com:8083/graphql > schemaPM.graphql
+get-graphql-schema http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com:8083/graphql > schemaPM.graphql
 
-get-graphql-schema http://ec2-3-141-165-215.us-east-2.compute.amazonaws.com:8082/graphql > schemaUM.graphql
+get-graphql-schema http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com:8082/graphql > schemaUM.graphql

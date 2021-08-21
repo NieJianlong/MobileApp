@@ -12,6 +12,8 @@ import ConfirmOrderSheetContent from "./SheetContent/ConfirmOrderSheetContent";
 import AddToCartSheetContent from "./SheetContent/AddToCartSheetContent";
 import Realm from "realm";
 import { RealmConnector } from "../../../db/connector";
+import "react-native-get-random-values";
+import { nanoid } from "nanoid";
 
 export default function DetailFooter({ product }) {
   const { dispatch } = useContext(AlertContext);
@@ -31,7 +33,19 @@ export default function DetailFooter({ product }) {
   }, [dispatch]);
   const toggleAddToCartSheet = useCallback(() => {
     Realm.open(RealmConnector).then((realm) => {
-      alert(realm);
+      realm.write(() => {
+        realm.create("ShoppingCart", {
+          id: nanoid(),
+          product: product,
+          quantity: quantity,
+          created: new Date(),
+          updated: new Date(),
+        });
+      });
+      const tasks = realm.objects("ShoppingCart");
+      console.log(
+        `The lists of tasks are: ${JSON.stringify(tasks.map((task) => task))}`
+      );
     });
     dispatch({
       type: "changSheetState",

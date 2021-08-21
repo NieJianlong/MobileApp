@@ -3,8 +3,8 @@ export const ShoppingCart = {
   primaryKey: "id",
   properties: {
     id: "string",
+    cartInfo: { type: "list", objectType: "CartInfo", default: null },
     product: "ProductSchema",
-    quantity: "int",
     created: "date",
     updated: "date",
   },

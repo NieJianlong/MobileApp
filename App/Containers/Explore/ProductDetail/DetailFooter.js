@@ -21,22 +21,6 @@ export default function DetailFooter({ product }) {
   const [quantity, setQuantity] = useState(info?.cartInfo[0]?.quantity || 1);
   const [cartInfo, setCartInfo] = useState(info);
 
-  // useEffect(() => {
-  //   if (info) {
-  //     setCartInfo({ ddd: "dsdf" });
-  //     console.log("info.cartInfo[0]====================================");
-  //     console.log(info.cartInfo[0]);
-  //     console.log("====================================");
-  //     alert("为何");
-  //     console.log("quantity====================================");
-  //     console.log(info.cartInfo[0]?.quantity);
-  //     console.log("====================================");
-  //     //此处需要修改
-  //     setQuantity(50);
-  //   }
-  // }, [product.productId, realm]);
-  //hold the quantity of product
-
   const toggleConfirmOrderSheet = useCallback(() => {
     dispatch({
       type: "changSheetState",
@@ -52,7 +36,6 @@ export default function DetailFooter({ product }) {
     const shoppingCartId = product.productId;
     realm.write(() => {
       if (cartInfo) {
-        alert("哪里" + quantity);
         realm.create(
           "ShoppingCart",
           {
@@ -98,14 +81,16 @@ export default function DetailFooter({ product }) {
     //     sheetTitle: "Confirm your Order",
     //   },
     // });
-  }, [dispatch]);
+  }, [cartInfo, product, quantity, realm]);
   return (
     <SafeAreaView style={styles.footerSafeArea} edges={["bottom"]}>
       <QuantitySelector
         minimumValue={1}
         maximumValue={100}
         value={quantity}
-        onChange={(value) => setQuantity(value)}
+        onChange={(value) => {
+          setQuantity(value);
+        }}
       />
 
       <View style={{ height: vs(15) }} />

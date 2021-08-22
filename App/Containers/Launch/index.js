@@ -48,6 +48,8 @@ export default function LaunchScreen() {
 
     //if username && password exits,we can login auto
     if (username && password) {
+      //just for test
+      NavigationService.navigate("MainScreen");
       const { data } = await runTokenFlow({ username, password });
       let access_token = data.access_token;
       if (access_token === "undefined") {

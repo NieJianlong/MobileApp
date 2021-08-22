@@ -4,10 +4,8 @@ import { s, ScaledSheet, vs } from "react-native-size-matters";
 import { Fonts, Colors, ApplicationStyles, Images } from "../../../Themes";
 import AppConfig from "../../../Config/AppConfig";
 import NavigationService from "../../../Navigation/NavigationService";
-import { StarRating } from "../../../Components";
 import images from "../../../Themes/Images";
 import colors from "../../../Themes/Colors";
-import fonts from "../../../Themes/Fonts";
 
 /**
  * issues

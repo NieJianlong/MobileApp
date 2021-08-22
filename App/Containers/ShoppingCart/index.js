@@ -25,6 +25,7 @@ import TextTip from "../../Components/EmptyReminder";
 /** updates for local cart Appollo cache */
 import { localCartVar } from "../../Apollo/cache";
 import { useReactiveVar } from "@apollo/client";
+import useRealm from "../../hooks/useRealm";
 
 export const CartContext = React.createContext({});
 
@@ -65,51 +66,19 @@ function reducer(state, action) {
   }
 }
 function ShoppingCart(props) {
+  const { realm } = useRealm();
+  const mydatas = realm.objects("ShoppingCart");
+  console.log("mydatas====================================");
+  console.log(mydatas);
+  console.log("====================================");
   const [paidDuringDelivery, setPaidDuringDeliver] = useState(false);
-
-  /** updates for local cart Appollo cache
-   * useReactiveVar => we will get updates from other screens
-   */
-  const localCartVarReactive = useReactiveVar(localCartVar);
-
-  // we do this to match the exisitng code
-  const wtfState = { datas: localCartVarReactive.items };
-
-  // I think we need some comments explaing how you intend for these reducers to be used
-  // I am not sure if this is the best approach
-  // swap out hard coded state with data from apollo cache
-  const [{ datas }, dispatch] = useReducer(reducer, wtfState);
   const sheetContext = useContext(AlertContext);
-  // temporay fix original code fails for empty cart
-  const [isReady, setIsReady] = useState(false);
 
-  /**
-   * can be removed later,
-   * currently some parts of code break  depends on cart state
-   * we can debug state here
-   */
-  useEffect(() => {
-    if (!localCartVarReactive.items) {
-      console.log("no data in cart");
-    } else {
-      if (
-        localCartVarReactive.items.length > 0 &&
-        localCartVarReactive.items[0].selectedProductVariants.length > 0
-      ) {
-        console.log(
-          `ShoppingCart check data in cart for selected variants ${JSON.stringify(
-            localCartVarReactive.items[0].selectedProductVariants
-          )}`
-        );
-      }
-      setIsReady(true);
-    }
-  }, [localCartVarReactive]);
   /** nasavge thnks we should put the blocks of view code below into functions
    * to make the code more readable
    */
   return (
-    <CartContext.Provider value={{ dispatch }}>
+    <CartContext.Provider>
       <View style={styles.container}>
         <StatusBar
           barStyle="dark-content"
@@ -121,7 +90,7 @@ function ShoppingCart(props) {
           edges={["top", "left", "right"]}
         >
           <SectionList
-            sections={datas.length > 0 ? [{ title: "", data: datas }] : []}
+            sections={mydatas.length > 0 ? [{ title: "", data: mydatas }] : []}
             ListEmptyComponent={() => {
               return <Empty />;
             }}
@@ -292,7 +261,7 @@ function ShoppingCart(props) {
             stickySectionHeadersEnabled={true}
             stickyHeaderIndices={0}
             ListHeaderComponent={() => {
-              return datas.length > 0 ? (
+              return mydatas.length > 0 ? (
                 <View style={{ backgroundColor: "white" }}>
                   <AddressBar />
                   <CartSummary />
@@ -300,7 +269,10 @@ function ShoppingCart(props) {
               ) : null;
             }}
             renderItem={({ item }) => {
-              return <CartItem dispatch={dispatch} product={item} />;
+              console.log("item====================================");
+              console.log(item);
+              console.log("====================================");
+              return <CartItem product={item} />;
             }}
             keyExtractor={(item, index) => `lll${index}`}
           />

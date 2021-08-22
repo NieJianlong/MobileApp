@@ -1,12 +1,12 @@
 import axios from "axios";
 import * as localStorage from "./local-storage";
+import AppConfig from "../Config/AppConfig";
 /**
  * we first obtain the jwt, then store in localstorage, then
  * private appoloo client will read from local strogae for auth requests
  *
  */
-const LOGIN_ENDPOINT =
-  "http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com:8081/api/sso/authentication/login";
+const LOGIN_ENDPOINT = `${AppConfig.baseUrl}:8081/api/sso/authentication/login`;
 
 // Axios automatically serialize object to JSON
 export const runTokenFlow = async (loginRequest) => {

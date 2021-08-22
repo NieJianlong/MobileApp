@@ -1,15 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { ScaledSheet, vs } from "react-native-size-matters";
-import { Button, Switch } from "../../../Components";
+import { Button } from "../../../Components";
 import AppConfig from "../../../Config/AppConfig";
-import {
-  View,
-  FlatList,
-  Text,
-  Image,
-  SafeAreaView,
-  Dimensions,
-} from "react-native";
+import { View, SafeAreaView } from "react-native";
 import TextTip from "../../../Components/EmptyReminder";
 import NavigationService from "../../../Navigation/NavigationService";
 import PaymentItem from "./PaymentItem";

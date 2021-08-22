@@ -1,15 +1,15 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-import { s, vs } from 'react-native-size-matters';
-import { Button } from '../../../Components';
-import AppConfig from '../../../Config/AppConfig';
-import colors from '../../../Themes/Colors';
-import styles from '../styles';
+import React from "react";
+import { View, Text } from "react-native";
+import { s, vs } from "react-native-size-matters";
+s;
+import AppConfig from "../../../Config/AppConfig";
+import colors from "../../../Themes/Colors";
+import styles from "../styles";
 
 function index(props) {
   return (
     <View style={{ padding: AppConfig.paddingHorizontal }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.heading4Bold}>Subtotal (2 items)</Text>
         <Text style={[styles.heading4Bold, { color: colors.primary }]}>
           $1,639.97
@@ -17,9 +17,9 @@ function index(props) {
       </View>
       <View
         style={{
-          flexDirection: 'row',
+          flexDirection: "row",
           marginTop: vs(10),
-          justifyContent: 'space-between',
+          justifyContent: "space-between",
         }}
       >
         <Text style={[styles.heading4Regular, { fontSize: s(14) }]}>
@@ -29,7 +29,6 @@ function index(props) {
           $490 (30%)
         </Text>
       </View>
-     
     </View>
   );
 }

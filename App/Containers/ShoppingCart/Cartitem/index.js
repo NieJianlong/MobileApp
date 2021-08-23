@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Text, View, TouchableOpacity, Image, TextInput } from "react-native";
 import { s, ScaledSheet, vs } from "react-native-size-matters";
 import { Fonts, Colors, ApplicationStyles, Images } from "../../../Themes";
@@ -14,12 +14,19 @@ import colors from "../../../Themes/Colors";
  *
  */
 import { AlertContext } from "../../Root/GlobalContext";
-
-function index(props) {
+import useRealm from "../../../hooks/useRealm";
+const defultUrl =
+  "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000";
+function Index(props) {
   const { dispatch } = props;
+  const { realm } = useRealm();
   // Alert and AlertContext are not correct semantic names, very confusing,  @nsavage
   const Alert = useContext(AlertContext);
-  const { product, onPress } = props;
+  const {
+    product: { product, cartInfo },
+    onPress,
+  } = props;
+  const [quantity, setQuantity] = useState(cartInfo[0].quantity);
 
   return (
     <TouchableOpacity
@@ -29,10 +36,13 @@ function index(props) {
       <View
         style={[styles.row, { paddingHorizontal: AppConfig.paddingHorizontal }]}
       >
-        <Image source={{ uri: product.photo }} style={styles.productImage} />
+        <Image
+          source={{ uri: product.photo ?? defultUrl }}
+          style={styles.productImage}
+        />
         <View style={styles.v2}>
           <View>
-            <Text style={styles.heading4Bold}>{product.longName}</Text>
+            <Text style={styles.heading4Bold}>{product.shortName}</Text>
             <Text
               style={[
                 styles.heading4Bold,
@@ -53,7 +63,7 @@ function index(props) {
                 WHOLE SALE PRICE
               </Text>
               <Text style={styles.txtWholesalePrice}>
-                ${product.wholesalePrice}
+                ${product.wholeSalePrice}
               </Text>
             </View>
 
@@ -85,7 +95,27 @@ function index(props) {
                     },
                   });
                 } else {
-                  dispatch({ type: "subCartCount", payload: product.id });
+                  realm.write(() => {
+                    const shoppingCartId = product.productId;
+                    realm.create(
+                      "ShoppingCart",
+                      {
+                        id: shoppingCartId,
+                        product: product,
+                        cartInfo: [
+                          {
+                            quantity: quantity - 1,
+                            variant: null,
+                          },
+                        ],
+                        created: new Date(),
+                        updated: new Date(),
+                      },
+                      true
+                    );
+                  });
+                  setQuantity(quantity - 1);
+                  // dispatch({ type: "subCartCount", payload: product.id });
                 }
               }}
             >
@@ -98,10 +128,29 @@ function index(props) {
                 }
               />
             </TouchableOpacity>
-            <TextInput style={styles.cartinput} value={product.count + ""} />
+            <TextInput style={styles.cartinput} value={quantity + ""} />
             <TouchableOpacity
               onPress={() => {
-                dispatch({ type: "addCartCount", payload: product.id });
+                realm.write(() => {
+                  const shoppingCartId = product.productId;
+                  realm.create(
+                    "ShoppingCart",
+                    {
+                      id: shoppingCartId,
+                      product: product,
+                      cartInfo: [
+                        {
+                          quantity: quantity + 1,
+                          variant: null,
+                        },
+                      ],
+                      created: new Date(),
+                      updated: new Date(),
+                    },
+                    true
+                  );
+                });
+                setQuantity(quantity + 1);
               }}
             >
               <Image style={styles.cartadd} source={images.shopcartAddImage} />
@@ -345,4 +394,4 @@ const styles = ScaledSheet.create({
   },
 });
 
-export default index;
+export default Index;

@@ -6,6 +6,7 @@ import AppConfig from "../../../Config/AppConfig";
 import NavigationService from "../../../Navigation/NavigationService";
 import images from "../../../Themes/Images";
 import colors from "../../../Themes/Colors";
+import PubSub from "pubsub-js";
 
 /**
  * issues
@@ -18,7 +19,6 @@ import useRealm from "../../../hooks/useRealm";
 const defultUrl =
   "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000";
 function Index(props) {
-  const { dispatch } = props;
   const { realm } = useRealm();
   // Alert and AlertContext are not correct semantic names, very confusing,  @nsavage
   const Alert = useContext(AlertContext);
@@ -84,7 +84,7 @@ function Index(props) {
             <TouchableOpacity
               onPress={() => {
                 if (product.count === 1) {
-                  dispatch({ type: "revomeCartCount", payload: product.id });
+                  //dispatch({ type: "revomeCartCount", payload: product.id });
                   Alert.dispatch({
                     type: "changAlertState",
                     payload: {
@@ -115,7 +115,6 @@ function Index(props) {
                     );
                   });
                   setQuantity(quantity - 1);
-                  // dispatch({ type: "subCartCount", payload: product.id });
                 }
               }}
             >
@@ -183,7 +182,13 @@ function Index(props) {
           <TouchableOpacity
             style={styles.removebtn}
             onPress={() => {
-              dispatch({ type: "revomeCartCount", payload: product.id });
+              realm.write(() => {
+                // Delete the task from the realm.
+                realm.delete(props.product);
+                // Discard the reference.
+                PubSub.publish("refresh-shoppingcart");
+                props.product = null;
+              });
               Alert.dispatch({
                 type: "changAlertState",
                 payload: {

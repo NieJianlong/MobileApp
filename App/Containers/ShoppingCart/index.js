@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 import Empty from "./Empty";
-import AddressBar from "./AddressBar";
+import AddressBar from "../Explore/Components/AddressBar";
 import styles from "./styles";
 import CartSummary from "./CartSummary";
 import CartItem from "./Cartitem";
@@ -22,9 +22,6 @@ import NavigationService from "../../Navigation/NavigationService";
 import { AlertContext } from "../Root/GlobalContext";
 import TextTip from "../../Components/EmptyReminder";
 
-/** updates for local cart Appollo cache */
-import { localCartVar } from "../../Apollo/cache";
-import { useReactiveVar } from "@apollo/client";
 import useRealm from "../../hooks/useRealm";
 
 export const CartContext = React.createContext({});

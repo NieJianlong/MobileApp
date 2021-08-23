@@ -21,55 +21,26 @@ import images from "../../Themes/Images";
 import NavigationService from "../../Navigation/NavigationService";
 import { AlertContext } from "../Root/GlobalContext";
 import TextTip from "../../Components/EmptyReminder";
+import PubSub from "pubsub-js";
 
 import useRealm from "../../hooks/useRealm";
 
 export const CartContext = React.createContext({});
 
-/**
- * cart management temporary updates here just to get somethig working for a dynamic state
- * wtf means this is  an attempt to get something thast currenty broken to work
- */
-function reducer(state, action) {
-  const datas = state.datas;
-
-  switch (action.type) {
-    case "addCartCount":
-      return {
-        ...state,
-        datas: datas.map((item) => {
-          if (item.id == action.payload) {
-            item.count = item.count + 1;
-          }
-          return item;
-        }),
-      };
-    case "subCartCount":
-      return {
-        ...state,
-        datas: datas.map((item) => {
-          if (item.id == action.payload) {
-            item.count = item.count - 1;
-          }
-          return item;
-        }),
-      };
-    case "revomeCartCount":
-      const index = datas.findIndex((item) => item.id == action.payload);
-      datas.splice(index, 1);
-      return { ...state, datas };
-    default:
-      throw new Error();
-  }
-}
 function ShoppingCart(props) {
   const { realm } = useRealm();
-  const mydatas = realm.objects("ShoppingCart");
-  console.log("mydatas====================================");
-  console.log(mydatas);
-  console.log("====================================");
+  const [mydatas, setMydatas] = useState(realm.objects("ShoppingCart"));
+  // const mydatas = realm.objects("ShoppingCart");
   const [paidDuringDelivery, setPaidDuringDeliver] = useState(false);
   const sheetContext = useContext(AlertContext);
+  useEffect(() => {
+    let refresh = PubSub.subscribe("refresh-address", () => {
+      setMydatas(realm.objects("ShoppingCart"));
+    });
+    return () => {
+      PubSub.unsubscribe(refresh);
+    };
+  }, [realm]);
 
   /** nasavge thnks we should put the blocks of view code below into functions
    * to make the code more readable
@@ -266,9 +237,6 @@ function ShoppingCart(props) {
               ) : null;
             }}
             renderItem={({ item }) => {
-              console.log("item====================================");
-              console.log(item);
-              console.log("====================================");
               return <CartItem product={item} />;
             }}
             keyExtractor={(item, index) => `lll${index}`}

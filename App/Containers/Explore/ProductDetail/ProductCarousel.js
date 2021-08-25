@@ -1,6 +1,18 @@
-import React, { useState, useRef, useCallback, useContext } from "react";
-import { View, Image, TouchableOpacity, Text } from "react-native";
-import { s, vs } from "react-native-size-matters";
+import React, {
+  useState,
+  useRef,
+  useCallback,
+  useContext,
+  useEffect,
+} from "react";
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  Text,
+  useWindowDimensions,
+} from "react-native";
+import { s } from "react-native-size-matters";
 import Carousel from "react-native-snap-carousel";
 
 import { Images, Colors } from "../../../Themes";
@@ -9,22 +21,31 @@ import NavigationService from "../../../Navigation/NavigationService";
 import { AlertContext } from "../../Root/GlobalContext";
 import ShareOptionList from "../Components/ShareOptionList";
 import metrics from "../../../Themes/Metrics";
-import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
-import { localCartVar } from "../../../Apollo/cache";
-import Realm from "realm";
+import { useMutation, useQuery } from "@apollo/client";
+
+import PubSub from "pubsub-js";
 
 import {
   ADD_PRODUCT_TO_WISHLIST,
   DELETE_PRODUCT_FROM_WISHLIST,
 } from "../../../Apollo/mutations/mutations_product";
 import { IS_PRODDCT_IN_WISHLIST } from "../../../Apollo/queries/queries_prodmang";
+import useRealm from "../../../hooks/useRealm";
+import { t } from "react-native-tailwindcss";
 //render product images
 export default function ProductCarousel({ product }) {
-  /**
-   * updates for state and cart, will be used to add this product to the cart
-   * useReactiveVar => we will get updates from other screens
-   */
-  const localCartVarReactive = useReactiveVar(localCartVar);
+  const { realm } = useRealm();
+  const [mydatas, setMydatas] = useState(realm.objects("ShoppingCart"));
+  const { width } = useWindowDimensions();
+
+  useEffect(() => {
+    let refresh = PubSub.subscribe("refresh-shoppingcart", () => {
+      setMydatas(realm.objects("ShoppingCart"));
+    });
+    return () => {
+      PubSub.unsubscribe(refresh);
+    };
+  }, [realm]);
   const _carousel = useRef();
   const { dispatch } = useContext(AlertContext);
   const { data, refetch } = useQuery(IS_PRODDCT_IN_WISHLIST, {
@@ -112,17 +133,6 @@ export default function ProductCarousel({ product }) {
    * product object
    */
   const onAddItemAndNavigateToCart = () => {
-    // we need to add this product to the cart then navigate to the cart
-    console.log(
-      `add to cache then navigate ${JSON.stringify(localCartVarReactive)}`
-    );
-    // get latest cart values
-    let uI = localCartVarReactive.items;
-    // update cart items list
-    uI.push(product);
-    localCartVar({
-      items: uI,
-    });
     NavigationService.navigate("CartScreen");
   };
   return (
@@ -163,7 +173,7 @@ export default function ProductCarousel({ product }) {
 
         <TouchableOpacity
           onPress={() => onAddItemAndNavigateToCart()}
-          style={styles.btnRoundContainer}
+          style={[styles.btnRoundContainer, t.justifyCenter, t.itemsCenter]}
         >
           <Image style={styles.btnRoundIcon} source={Images.cartMed} />
         </TouchableOpacity>
@@ -207,6 +217,20 @@ export default function ProductCarousel({ product }) {
           </Text>
         </TouchableOpacity>
       </View>
+      {mydatas.length > 0 && (
+        <View
+          style={[
+            t.bgPrimary,
+            t.w3,
+            t.h3,
+            t.roundedFull,
+            t.absolute,
+            t.right0,
+            { marginLeft: width - 30 },
+            t.mT6,
+          ]}
+        />
+      )}
     </View>
   );
 }

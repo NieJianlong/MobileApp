@@ -34,7 +34,7 @@ function ShoppingCart(props) {
   const [paidDuringDelivery, setPaidDuringDeliver] = useState(false);
   const sheetContext = useContext(AlertContext);
   useEffect(() => {
-    let refresh = PubSub.subscribe("refresh-address", () => {
+    let refresh = PubSub.subscribe("refresh-shoppingcart", () => {
       setMydatas(realm.objects("ShoppingCart"));
     });
     return () => {

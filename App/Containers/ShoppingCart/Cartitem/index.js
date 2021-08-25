@@ -115,6 +115,7 @@ function Index(props) {
                     );
                   });
                   setQuantity(quantity - 1);
+                  PubSub.publish("refresh-shoppingcart");
                 }
               }}
             >
@@ -150,6 +151,7 @@ function Index(props) {
                   );
                 });
                 setQuantity(quantity + 1);
+                PubSub.publish("refresh-shoppingcart");
               }}
             >
               <Image style={styles.cartadd} source={images.shopcartAddImage} />

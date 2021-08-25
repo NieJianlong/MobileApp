@@ -1,6 +1,6 @@
 export const ProductSchema = {
   name: "ProductSchema",
-  primaryKey: "productId",
+  // primaryKey: "productId",
   properties: {
     photo: { type: "string?", default: null },
     photoUrls: { type: "string[]", default: null },

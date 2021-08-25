@@ -9,9 +9,10 @@ import { Images, Colors } from "../../../Themes";
 import styles from "./styles";
 import { AlertContext } from "../../Root/GlobalContext";
 import ConfirmOrderSheetContent from "./SheetContent/ConfirmOrderSheetContent";
-import AddToCartSheetContent from "./SheetContent/AddToCartSheetContent";
 import "react-native-get-random-values";
 import useRealm from "../../../hooks/useRealm";
+import colors from "../../../Themes/Colors";
+import PubSub from "pubsub-js";
 
 export default function DetailFooter({ product }) {
   const { dispatch } = useContext(AlertContext);
@@ -66,6 +67,16 @@ export default function DetailFooter({ product }) {
           updated: new Date(),
         });
       }
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "",
+          color: colors.success,
+          title: "Added to Shopping Cart Success",
+        },
+      });
+      PubSub.publish("refresh-shoppingcart");
     });
     // const tasks = realm.objects("ShoppingCart");
     // console.log(

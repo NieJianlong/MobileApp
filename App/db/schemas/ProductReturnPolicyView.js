@@ -1,6 +1,6 @@
 export const ProductReturnPolicyView = {
   name: "ProductReturnPolicyView",
-  primaryKey: "id",
+  // primaryKey: "id",
   properties: {
     id: { type: "string?", default: null },
     productId: { type: "string?", default: null },

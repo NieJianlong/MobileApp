@@ -1,6 +1,6 @@
 export const SellerView = {
   name: "SellerView",
-  primaryKey: "id",
+  // primaryKey: "id",
   properties: {
     id: { type: "string?", default: null },
     brandName: { type: "string?", default: null },

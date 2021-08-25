@@ -1,6 +1,6 @@
 export const ListingVariantView = {
   name: "ListingVariantView",
-  primaryKey: "listingId",
+  // primaryKey: "listingId",
   properties: {
     listingId: { type: "string?", default: null },
     variantId: { type: "string?", default: null },

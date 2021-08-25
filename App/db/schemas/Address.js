@@ -1,6 +1,6 @@
 export const Address = {
   name: "Address",
-  primaryKey: "id",
+  // primaryKey: "id",
   properties: {
     id: { type: "string?", default: null },
     flat: { type: "string?", default: null },

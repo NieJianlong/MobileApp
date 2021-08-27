@@ -71,7 +71,7 @@ function Index(props) {
               <Text
                 style={[styles.heading6Bold, { color: Colors.secondary00 }]}
               >
-                30% OFF
+                {product.percentOff}
               </Text>
             </View>
           </View>

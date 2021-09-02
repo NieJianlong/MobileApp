@@ -7,7 +7,7 @@ import { ProductSearchBox } from "../../../Components";
 import { Images } from "../../../Themes";
 import * as storage from "../../../Apollo/local-storage";
 import CategoryAndProductList from "../CategoryAndProductList/Index";
-import { t } from "react-native-tailwindcss";
+import { t, theme } from "react-native-tailwindcss";
 
 const SearchContext = React.createContext({});
 
@@ -22,13 +22,13 @@ function ProductSearch(props) {
         onSetInput,
         searchText,
       }) => (
-        <View style={[styles.container, tailwind("bg-white")]}>
+        <View style={[styles.container, theme.bgWhite]}>
           <StatusBar barStyle="dark-content" />
           <SafeAreaView
             style={styles.container}
             edges={["top", "left", "right"]}
           >
-            <View style={[styles.header, tailwind("my-0")]}>
+            <View style={[styles.header, theme.mY0]}>
               <ProductSearchBox
                 onSetInput={onSetInput}
                 keyword={searchText}

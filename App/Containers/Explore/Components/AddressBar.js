@@ -16,7 +16,7 @@ import AddressSheetContent from "./AddressSheetContent";
 import * as aQM from "../gql/explore_queries";
 import * as gqlMappers from "../gql/gql_mappers";
 import { localCartVar, userProfileVar } from "../../../Apollo/cache";
-import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import { useFocusEffect } from "@react-navigation/native";
 import PubSub from "pubsub-js";
 

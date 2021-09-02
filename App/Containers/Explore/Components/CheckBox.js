@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity, Image } from 'react-native';
-import { ScaledSheet, s } from 'react-native-size-matters';
-import { Fonts, Colors, ApplicationStyles, Images } from '../../../Themes';
-import AppConfig from '../../../Config/AppConfig';
+import React, { useState, useEffect } from "react";
+import { Text, View, TouchableOpacity, Image } from "react-native";
+import { ScaledSheet, s } from "react-native-size-matters";
+import { Fonts, Colors, ApplicationStyles, Images } from "../../../Themes";
+import AppConfig from "../../../Config/AppConfig";
 
 function CheckBox(props) {
   const [active, setActive] = useState(props.defaultValue ?? false);
@@ -24,7 +24,7 @@ function CheckBox(props) {
           active && { borderColor: Colors.secondary00 },
         ]}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           {hasIcon && (
             <View
               style={{
@@ -43,7 +43,7 @@ function CheckBox(props) {
           <Image
             source={Images.check}
             style={styles.icCheck}
-            resizeMode={'contain'}
+            resizeMode={"contain"}
           />
         )}
       </TouchableOpacity>
@@ -59,24 +59,24 @@ CheckBox.defaultProps = {};
 
 const styles = ScaledSheet.create({
   container: {
-    height: '46@vs',
+    height: "46@vs",
     backgroundColor: Colors.white,
-    borderRadius: '20@s',
-    paddingHorizontal: '20@vs',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
+    borderRadius: "20@s",
+    paddingHorizontal: "20@vs",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
     borderColor: Colors.grey10,
     borderWidth: 2,
   },
   txt: {
-    color: 'rgb(24,24,101)',
+    color: "rgb(24,24,101)",
     fontSize: AppConfig.fontSize,
     fontFamily: Fonts.semibold,
   },
   icCheck: {
-    width: '15@s',
-    height: '15@s',
+    width: "15@s",
+    height: "15@s",
   },
 });
 

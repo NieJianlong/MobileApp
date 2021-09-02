@@ -8,7 +8,7 @@
  * see https://reactnative.dev/docs/intro-react
  *
  */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image } from "react-native";
 import { t } from "react-native-tailwindcss";
 
@@ -131,9 +131,14 @@ const ProductVariants = ({ variants }) => {
   const onChangeVariant = (value) => {
     setCurrentVariant(value);
   };
+  useEffect(() => {
+    if (currentVariant) {
+    }
+  }, [currentVariant]);
   if (variants.length === 0) {
     return null;
   }
+
   const sections = [];
   const colors = { title: "Color", content: [] };
   const sizes = { title: "Size", content: [] };
@@ -164,6 +169,7 @@ const ProductVariants = ({ variants }) => {
       }
     }
   }
+
   return (
     <AccordionView
       sections={sections}

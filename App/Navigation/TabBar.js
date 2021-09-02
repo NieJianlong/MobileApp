@@ -1,5 +1,5 @@
-import React, { Component, useEffect, useMemo, useState } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import { View, TouchableOpacity, Image } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { isIphoneX } from "react-native-iphone-x-helper";
@@ -61,9 +61,7 @@ function TabBar(props) {
           const onPress = () => {
             props.navigation.navigate(route.name);
           };
-          console.log("route.name====================================");
-          console.log(route.name + idx);
-          console.log("====================================");
+
           return (
             <View style={styles.iconContainer}>
               <TouchableOpacity onPress={onPress}>
@@ -75,7 +73,7 @@ function TabBar(props) {
                     isFocused && { tintColor: Colors.primary },
                   ]}
                 />
-                {route.name === "CartScreen" && (
+                {route.name === "CartScreen" && quantity > 0 && (
                   <View style={[t.absolute, t.top0, t.right0, t.mL5]}>
                     <Badge>{quantity}</Badge>
                   </View>

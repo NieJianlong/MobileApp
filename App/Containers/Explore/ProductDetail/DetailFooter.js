@@ -13,6 +13,8 @@ import "react-native-get-random-values";
 import useRealm from "../../../hooks/useRealm";
 import colors from "../../../Themes/Colors";
 import PubSub from "pubsub-js";
+import { useQuery } from "@apollo/client";
+import { GET_LOCAL_CART } from "../../../Apollo/cache";
 
 export default function DetailFooter({ product }) {
   const { dispatch } = useContext(AlertContext);
@@ -21,6 +23,14 @@ export default function DetailFooter({ product }) {
   const info = realm.objectForPrimaryKey("ShoppingCart", product.productId);
   const [quantity, setQuantity] = useState(info?.cartInfo[0]?.quantity || 1);
   const [cartInfo, setCartInfo] = useState(info);
+  const {
+    data: { localCartVar },
+    loading,
+    error,
+  } = useQuery(GET_LOCAL_CART);
+  console.log("result====================================");
+  console.log(localCartVar);
+  console.log("====================================");
 
   const toggleConfirmOrderSheet = useCallback(() => {
     dispatch({

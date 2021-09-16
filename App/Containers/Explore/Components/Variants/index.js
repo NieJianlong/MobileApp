@@ -8,7 +8,7 @@
  * see https://reactnative.dev/docs/intro-react
  *
  */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { View, Text, Image } from "react-native";
 import { t } from "react-native-tailwindcss";
 
@@ -17,7 +17,12 @@ import ColorItem from "./ColorItem";
 import { ScrollView } from "react-native-gesture-handler";
 import SizeItem from "./SizeItem";
 import images from "../../../../Themes/Images";
-
+import useRealm from "../../../../hooks/useRealm";
+import { useQuery } from "@apollo/client";
+import { GET_LOCAL_CART } from "../../../../Apollo/cache";
+import "react-native-get-random-values";
+import { nanoid } from "nanoid";
+import PubSub from "pubsub-js";
 class AccordionView extends React.Component {
   state = {
     activeSections: [],
@@ -120,25 +125,57 @@ class AccordionView extends React.Component {
  *  props.product.prodVariants
  *  array of variants for this product
  */
-const ProductVariants = ({ variants }) => {
+const ProductVariants = ({ product, variants }) => {
   // to do reduce number props if possible
   console.log(variants);
+  const { realm } = useRealm();
+  const {
+    data: { localCartVar },
+  } = useQuery(GET_LOCAL_CART);
+
   const [currentVariant, setCurrentVariant] = useState(
     variants.length > 0
       ? variants.find((item) => item.defaultVariant === true)
       : null
   );
+  const info = useMemo(() => {
+    return realm
+      .objects("ShoppingCart")
+      .filtered("product.productId == $0", product.productId)
+      .filtered("addressId == $0", localCartVar.deliverAddress)
+      .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
+  }, [
+    currentVariant?.variantId,
+    localCartVar.deliverAddress,
+    product.productId,
+    realm,
+  ]);
+  useEffect(() => {
+    alert("sdsd");
+    realm.write(() => {
+      if (!info) {
+        realm.create("ShoppingCart", {
+          id: nanoid(),
+          quantity: 0,
+          variantId: currentVariant ? currentVariant.variantId : "",
+          variant: currentVariant,
+          isDraft: true,
+          addressId: localCartVar.deliverAddress,
+          productId: product.productId,
+          product,
+          created: new Date(),
+          updated: new Date(),
+        });
+      }
+      PubSub.publish("refresh-shoppingcart");
+    });
+  }, [info, currentVariant, realm, localCartVar.deliverAddress, product]);
   const onChangeVariant = (value) => {
     setCurrentVariant(value);
   };
-  useEffect(() => {
-    if (currentVariant) {
-    }
-  }, [currentVariant]);
   if (variants.length === 0) {
     return null;
   }
-
   const sections = [];
   const colors = { title: "Color", content: [] };
   const sizes = { title: "Size", content: [] };

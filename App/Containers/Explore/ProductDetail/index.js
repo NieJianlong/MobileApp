@@ -102,7 +102,10 @@ function ProductDetail(props) {
               scrollSectionIntoView={scrollSectionIntoView}
             />
             {product.listingVariants && (
-              <ProductVariants variants={product.listingVariants} />
+              <ProductVariants
+                variants={product.listingVariants}
+                product={product}
+              />
             )}
             {/* need to add ProductVariants components */}
           </ScrollIntoView>

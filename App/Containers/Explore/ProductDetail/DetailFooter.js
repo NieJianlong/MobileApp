@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { View, Image, TouchableOpacity, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -15,23 +21,35 @@ import colors from "../../../Themes/Colors";
 import PubSub from "pubsub-js";
 import { useQuery } from "@apollo/client";
 import { GET_LOCAL_CART } from "../../../Apollo/cache";
+import { nanoid } from "nanoid";
 
 export default function DetailFooter({ product }) {
   const { dispatch } = useContext(AlertContext);
-
+  console.log("product====================================");
+  console.log(product);
+  console.log("====================================");
   const { realm } = useRealm();
-  const info = realm.objectForPrimaryKey("ShoppingCart", product.productId);
-  const [quantity, setQuantity] = useState(info?.cartInfo[0]?.quantity || 1);
-  const [cartInfo, setCartInfo] = useState(info);
+
   const {
     data: { localCartVar },
-    loading,
-    error,
   } = useQuery(GET_LOCAL_CART);
-  console.log("result====================================");
-  console.log(localCartVar);
-  console.log("====================================");
-
+  const currentVariant = useMemo(() => {
+    if (product.listingVariants) {
+      const variant = product.listingVariants.find(
+        (item) => item.defaultVariant === true
+      );
+      return variant;
+    } else {
+      return null;
+    }
+  }, [product]);
+  const info = realm
+    .objects("ShoppingCart")
+    .filtered("product.productId == $0", product.productId)
+    .filtered("addressId == $0", localCartVar.deliverAddress)
+    .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
+  const [cartInfo, setCartInfo] = useState(info);
+  const [quantity, setQuantity] = useState(info?.quantity || 1);
   const toggleConfirmOrderSheet = useCallback(() => {
     dispatch({
       type: "changSheetState",
@@ -44,35 +62,21 @@ export default function DetailFooter({ product }) {
     });
   }, [dispatch]);
   const toggleAddToCartSheet = useCallback(() => {
-    const shoppingCartId = product.productId;
+    const shoppingCartId = nanoid();
     realm.write(() => {
       if (cartInfo) {
-        realm.create(
-          "ShoppingCart",
-          {
-            id: shoppingCartId,
-            product: product,
-            cartInfo: [
-              {
-                quantity: quantity,
-                variant: null,
-              },
-            ],
-            created: new Date(),
-            updated: new Date(),
-          },
-          true
-        );
+        cartInfo.quantity = quantity;
+        cartInfo.isDraft = false;
       } else {
         realm.create("ShoppingCart", {
           id: shoppingCartId,
-          product: product,
-          cartInfo: [
-            {
-              quantity: quantity,
-              variant: null,
-            },
-          ],
+          quantity,
+          variantId: currentVariant ? currentVariant.variantId : "",
+          variant: currentVariant,
+          isDraft: false,
+          addressId: localCartVar.deliverAddress,
+          productId: product.productId,
+          product,
           created: new Date(),
           updated: new Date(),
         });

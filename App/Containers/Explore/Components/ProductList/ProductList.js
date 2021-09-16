@@ -5,7 +5,6 @@ import { HPageViewHoc } from "react-native-head-tab-view";
 import ExploreSortBar from "../ExploreSortBar";
 import { AlertContext } from "../../../Root/GlobalContext";
 import ShareOptionList from "../ShareOptionList";
-import * as gqlMappers from "../../gql/gql_mappers";
 import * as aQM from "../../gql/explore_queries";
 import colors from "../../../../Themes/Colors";
 import { useQuery } from "@apollo/client";

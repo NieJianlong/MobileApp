@@ -41,7 +41,7 @@ function TabBar(props) {
     let currentQuantity = 0;
     for (let index = 0; index < mydatas.length; index++) {
       const element = mydatas[index];
-      currentQuantity = currentQuantity + element.cartInfo[0].quantity;
+      currentQuantity = currentQuantity + element.quantity;
     }
     return currentQuantity;
   }, [mydatas]);

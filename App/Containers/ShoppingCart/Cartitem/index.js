@@ -23,10 +23,10 @@ function Index(props) {
   // Alert and AlertContext are not correct semantic names, very confusing,  @nsavage
   const Alert = useContext(AlertContext);
   const {
-    product: { product, cartInfo },
+    product: { product },
     onPress,
   } = props;
-  const [quantity, setQuantity] = useState(cartInfo[0].quantity);
+  const [quantity, setQuantity] = useState(props.product.quantity);
 
   return (
     <TouchableOpacity
@@ -83,7 +83,7 @@ function Index(props) {
           <View style={styles.counter}>
             <TouchableOpacity
               onPress={() => {
-                if (product.count === 1) {
+                if (quantity === 1) {
                   //dispatch({ type: "revomeCartCount", payload: product.id });
                   Alert.dispatch({
                     type: "changAlertState",
@@ -96,23 +96,7 @@ function Index(props) {
                   });
                 } else {
                   realm.write(() => {
-                    const shoppingCartId = product.productId;
-                    realm.create(
-                      "ShoppingCart",
-                      {
-                        id: shoppingCartId,
-                        product: product,
-                        cartInfo: [
-                          {
-                            quantity: quantity - 1,
-                            variant: null,
-                          },
-                        ],
-                        created: new Date(),
-                        updated: new Date(),
-                      },
-                      true
-                    );
+                    props.product.quantity = quantity - 1;
                   });
                   setQuantity(quantity - 1);
                   PubSub.publish("refresh-shoppingcart");
@@ -132,23 +116,7 @@ function Index(props) {
             <TouchableOpacity
               onPress={() => {
                 realm.write(() => {
-                  const shoppingCartId = product.productId;
-                  realm.create(
-                    "ShoppingCart",
-                    {
-                      id: shoppingCartId,
-                      product: product,
-                      cartInfo: [
-                        {
-                          quantity: quantity + 1,
-                          variant: null,
-                        },
-                      ],
-                      created: new Date(),
-                      updated: new Date(),
-                    },
-                    true
-                  );
+                  props.product.quantity = quantity + 1;
                 });
                 setQuantity(quantity + 1);
                 PubSub.publish("refresh-shoppingcart");

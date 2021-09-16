@@ -1,4 +1,4 @@
-import React, { useState, useContext, useReducer, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   StatusBar,
   View,
@@ -14,7 +14,7 @@ import styles from "./styles";
 import CartSummary from "./CartSummary";
 import CartItem from "./Cartitem";
 import { Button } from "../../Components";
-import { s, vs } from "react-native-size-matters";
+import { s } from "react-native-size-matters";
 import AppConfig from "../../Config/AppConfig";
 import colors from "../../Themes/Colors";
 import images from "../../Themes/Images";
@@ -24,23 +24,41 @@ import TextTip from "../../Components/EmptyReminder";
 import PubSub from "pubsub-js";
 
 import useRealm from "../../hooks/useRealm";
+import { useQuery } from "@apollo/client";
+import { GET_LOCAL_CART } from "../../Apollo/cache";
 
 export const CartContext = React.createContext({});
 
 function ShoppingCart(props) {
   const { realm } = useRealm();
-  const [mydatas, setMydatas] = useState(realm.objects("ShoppingCart"));
+  const {
+    data: { localCartVar },
+  } = useQuery(GET_LOCAL_CART);
+  const [mydatas, setMydatas] = useState(
+    realm
+      .objects("ShoppingCart")
+      .filtered("addressId == $0", localCartVar.deliverAddress)
+      .filtered("quantity > 0")
+      .filtered("isDraft == false")
+  );
+
   // const mydatas = realm.objects("ShoppingCart");
   const [paidDuringDelivery, setPaidDuringDeliver] = useState(false);
   const sheetContext = useContext(AlertContext);
   useEffect(() => {
     let refresh = PubSub.subscribe("refresh-shoppingcart", () => {
-      setMydatas(realm.objects("ShoppingCart"));
+      setMydatas(
+        realm
+          .objects("ShoppingCart")
+          .filtered("addressId == $0", localCartVar.deliverAddress)
+          .filtered("quantity > 0")
+          .filtered("isDraft == false")
+      );
     });
     return () => {
       PubSub.unsubscribe(refresh);
     };
-  }, [realm]);
+  }, [localCartVar.deliverAddress, realm]);
 
   /** nasavge thnks we should put the blocks of view code below into functions
    * to make the code more readable

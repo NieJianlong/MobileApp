@@ -146,7 +146,6 @@ const ProductVariants = ({ product, variants }) => {
       .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
   }, [currentVariant?.variantId, localCartVar, product.productId, realm]);
   useEffect(() => {
-    alert("sdsd");
     realm.write(() => {
       if (!info) {
         realm.create("ShoppingCart", {

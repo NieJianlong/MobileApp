@@ -34,7 +34,9 @@ function Index(props) {
 
   return (
     <TouchableOpacity
-      onPress={() => NavigationService.navigate("ProductDetailScreen")}
+      onPress={() =>
+        NavigationService.navigate("ProductDetailScreen", { product })
+      }
       style={[styles.productContainer, { opacity: product.id == 1 ? 0.6 : 1 }]}
     >
       <View

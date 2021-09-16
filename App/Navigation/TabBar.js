@@ -9,8 +9,13 @@ import useRealm from "../hooks/useRealm";
 import PubSub from "pubsub-js";
 import { t } from "react-native-tailwindcss";
 import { Badge } from "react-native-paper";
+import { useQuery } from "@apollo/client";
+import { GET_LOCAL_CART } from "../Apollo/cache";
 
 function TabBar(props) {
+  const {
+    data: { localCartVar },
+  } = useQuery(GET_LOCAL_CART);
   const getIconSource = (routeName, isFocused) => {
     switch (routeName) {
       case "ExploreScreen":
@@ -28,15 +33,30 @@ function TabBar(props) {
 
   const { routes, index } = props.state;
   const { realm } = useRealm();
-  const [mydatas, setMydatas] = useState(realm.objects("ShoppingCart"));
+  const [mydatas, setMydatas] = useState(
+    realm
+      .objects("ShoppingCart")
+      .filtered("addressId == $0", localCartVar.deliverAddress)
+      .filtered("quantity > 0")
+      .filtered("isDraft == false")
+  );
+  console.log("localCartVar====================================");
+  console.log(localCartVar);
+  console.log("====================================");
   useEffect(() => {
     let refresh = PubSub.subscribe("refresh-shoppingcart", () => {
-      setMydatas(realm.objects("ShoppingCart"));
+      setMydatas(
+        realm
+          .objects("ShoppingCart")
+          .filtered("addressId == $0", localCartVar.deliverAddress)
+          .filtered("quantity > 0")
+          .filtered("isDraft == false")
+      );
     });
     return () => {
       PubSub.unsubscribe(refresh);
     };
-  }, [realm]);
+  }, [localCartVar.deliverAddress, realm]);
   const quantity = useMemo(() => {
     let currentQuantity = 0;
     for (let index = 0; index < mydatas.length; index++) {

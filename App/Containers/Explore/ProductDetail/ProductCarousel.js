@@ -32,15 +32,30 @@ import {
 import { IS_PRODDCT_IN_WISHLIST } from "../../../Apollo/queries/queries_prodmang";
 import useRealm from "../../../hooks/useRealm";
 import { t } from "react-native-tailwindcss";
+import { GET_LOCAL_CART } from "../../../Apollo/cache";
 //render product images
 export default function ProductCarousel({ product }) {
   const { realm } = useRealm();
-  const [mydatas, setMydatas] = useState(realm.objects("ShoppingCart"));
+  const {
+    data: { localCartVar },
+  } = useQuery(GET_LOCAL_CART);
+  const [mydatas, setMydatas] = useState(
+    realm
+      .objects("ShoppingCart")
+      .filtered("addressId == $0", localCartVar.deliverAddress)
+      .filtered("quantity > 0")
+      .filtered("isDraft == false")
+  );
   const { width } = useWindowDimensions();
-
   useEffect(() => {
     let refresh = PubSub.subscribe("refresh-shoppingcart", () => {
-      setMydatas(realm.objects("ShoppingCart"));
+      setMydatas(
+        realm
+          .objects("ShoppingCart")
+          .filtered("addressId == $0", localCartVar().deliverAddress)
+          .filtered("quantity > 0")
+          .filtered("isDraft == false")
+      );
     });
     return () => {
       PubSub.unsubscribe(refresh);

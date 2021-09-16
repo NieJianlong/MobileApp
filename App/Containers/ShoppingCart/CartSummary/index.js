@@ -51,18 +51,20 @@ function CartSummary(props) {
     let originalBilling = 0;
     for (let index = 0; index < mydatas.length; index++) {
       const element = mydatas[index];
-      originalBilling =
-        originalBilling + element.variant
-          ? element.variant.retailPrice * element.quantity
-          : element.product.retailPrice * element.quantity;
-      currentBilling =
-        currentBilling + element.variant
-          ? element.variant.wholeSalePrice * element.quantity
-          : element.product.wholeSalePrice * element.quantity;
+      if (element.variant) {
+        originalBilling =
+          originalBilling + element.variant.retailPrice * element.quantity;
+        currentBilling =
+          currentBilling + element.variant.wholeSalePrice * element.quantity;
+      } else {
+        originalBilling =
+          originalBilling + element.product.retailPrice * element.quantity;
+        currentBilling =
+          currentBilling + element.product.wholeSalePrice * element.quantity;
+      }
     }
     const total = new BigNumber(currentBilling).toFixed(2);
     const saving = new BigNumber(originalBilling - currentBilling).toFixed(2);
-
     return {
       total: total,
       saving: saving,

@@ -249,7 +249,11 @@ function ProductItem(props) {
   } else if (size === "S") {
     return (
       <TouchableOpacity
-        onPress={() => NavigationService.navigate("ProductDetailScreen")}
+        onPress={() =>
+          NavigationService.navigate("ProductDetailScreen", {
+            product: product,
+          })
+        }
         style={styles.productContainerSmall}
       >
         <View style={styles.productInfoSmall}>

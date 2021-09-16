@@ -52,7 +52,7 @@ export default function ProductCarousel({ product }) {
       setMydatas(
         realm
           .objects("ShoppingCart")
-          .filtered("addressId == $0", localCartVar().deliverAddress)
+          .filtered("addressId == $0", localCartVar.deliverAddress)
           .filtered("quantity > 0")
           .filtered("isDraft == false")
       );
@@ -60,7 +60,7 @@ export default function ProductCarousel({ product }) {
     return () => {
       PubSub.unsubscribe(refresh);
     };
-  }, [realm]);
+  }, [localCartVar.deliverAddress, realm]);
   const _carousel = useRef();
   const { dispatch } = useContext(AlertContext);
   const { data, refetch } = useQuery(IS_PRODDCT_IN_WISHLIST, {

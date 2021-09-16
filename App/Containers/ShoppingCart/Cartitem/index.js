@@ -16,6 +16,7 @@ import PubSub from "pubsub-js";
  */
 import { AlertContext } from "../../Root/GlobalContext";
 import useRealm from "../../../hooks/useRealm";
+import BigNumber from "bignumber.js";
 const defultUrl =
   "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000";
 function Index(props) {
@@ -23,9 +24,12 @@ function Index(props) {
   // Alert and AlertContext are not correct semantic names, very confusing,  @nsavage
   const Alert = useContext(AlertContext);
   const {
-    product: { product },
+    product: { product, variant },
     onPress,
   } = props;
+  console.log("product");
+  console.log(props.product.variant);
+  console.log("====================================");
   const [quantity, setQuantity] = useState(props.product.quantity);
 
   return (
@@ -55,7 +59,12 @@ function Index(props) {
           <View style={styles.row}>
             <View style={styles.v3}>
               <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
-              <Text style={styles.txtRetailPrice}>${product.retailPrice}</Text>
+              <Text style={styles.txtRetailPrice}>
+                $
+                {BigNumber(
+                  variant ? variant.retailPrice : product.retailPrice
+                ).toFixed(2) + ""}
+              </Text>
             </View>
 
             <View style={styles.v3}>
@@ -63,7 +72,10 @@ function Index(props) {
                 WHOLE SALE PRICE
               </Text>
               <Text style={styles.txtWholesalePrice}>
-                ${product.wholeSalePrice}
+                $
+                {BigNumber(
+                  variant ? variant.wholeSalePrice : product.wholeSalePrice
+                ).toFixed(2) + ""}
               </Text>
             </View>
 
@@ -71,7 +83,7 @@ function Index(props) {
               <Text
                 style={[styles.heading6Bold, { color: Colors.secondary00 }]}
               >
-                {product.percentOff}
+                {product.percentOff}% OFF
               </Text>
             </View>
           </View>

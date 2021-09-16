@@ -58,7 +58,7 @@ function ShoppingCart(props) {
     return () => {
       PubSub.unsubscribe(refresh);
     };
-  }, [localCartVar.deliverAddress, realm]);
+  }, [localCartVar, realm]);
 
   /** nasavge thnks we should put the blocks of view code below into functions
    * to make the code more readable

@@ -7,18 +7,35 @@ import useRealm from "../../../hooks/useRealm";
 import colors from "../../../Themes/Colors";
 import styles from "../styles";
 import PubSub from "pubsub-js";
+import { useQuery } from "@apollo/client";
+import { GET_LOCAL_CART } from "../../../Apollo/cache";
 
 function CartSummary(props) {
   const { realm } = useRealm();
-  const [mydatas, setMydatas] = useState(realm.objects("ShoppingCart"));
+  const {
+    data: { localCartVar },
+  } = useQuery(GET_LOCAL_CART);
+  const [mydatas, setMydatas] = useState(
+    realm
+      .objects("ShoppingCart")
+      .filtered("addressId == $0", localCartVar.deliverAddress)
+      .filtered("quantity > 0")
+      .filtered("isDraft == false")
+  );
   useEffect(() => {
     let refresh = PubSub.subscribe("refresh-shoppingcart", () => {
-      setMydatas(realm.objects("ShoppingCart"));
+      setMydatas(
+        realm
+          .objects("ShoppingCart")
+          .filtered("addressId == $0", localCartVar.deliverAddress)
+          .filtered("quantity > 0")
+          .filtered("isDraft == false")
+      );
     });
     return () => {
       PubSub.unsubscribe(refresh);
     };
-  }, [realm]);
+  }, [localCartVar.deliverAddress, realm]);
   const quantity = useMemo(() => {
     let currentQuantity = 0;
     for (let index = 0; index < mydatas.length; index++) {

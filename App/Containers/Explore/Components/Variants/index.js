@@ -144,12 +144,7 @@ const ProductVariants = ({ product, variants }) => {
       .filtered("product.productId == $0", product.productId)
       .filtered("addressId == $0", localCartVar.deliverAddress)
       .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
-  }, [
-    currentVariant?.variantId,
-    localCartVar.deliverAddress,
-    product.productId,
-    realm,
-  ]);
+  }, [currentVariant?.variantId, localCartVar, product.productId, realm]);
   useEffect(() => {
     alert("sdsd");
     realm.write(() => {
@@ -169,7 +164,7 @@ const ProductVariants = ({ product, variants }) => {
       }
       PubSub.publish("refresh-shoppingcart");
     });
-  }, [info, currentVariant, realm, localCartVar.deliverAddress, product]);
+  }, [info, currentVariant, realm, localCartVar, product]);
   const onChangeVariant = (value) => {
     setCurrentVariant(value);
   };

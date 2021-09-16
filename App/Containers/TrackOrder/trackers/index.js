@@ -1,32 +1,32 @@
-import React from 'react';
-import { View, Image, Text } from 'react-native';
-import { ApplicationStyles } from '../../../Themes';
-import images from '../../../Themes/Images';
-import { vs, s, ScaledSheet } from 'react-native-size-matters';
-import colors from '../../../Themes/Colors';
+import React from "react";
+import { View, Image, Text } from "react-native";
+import { ApplicationStyles } from "../../../Themes";
+import images from "../../../Themes/Images";
+import { vs, s, ScaledSheet } from "react-native-size-matters";
+import colors from "../../../Themes/Colors";
 
 const trackers = [
   {
-    title: 'Your order has been registered',
-    subtitle: '20 Oct, 2020 3.30PM',
+    title: "Your order has been registered",
+    subtitle: "20 Oct, 2020 3.30PM",
     status: 0,
     hasline: true,
   },
   {
-    title: 'Order packed and ready for shipping',
-    subtitle: '20 Oct, 2020 8.30PM',
+    title: "Order packed and ready for shipping",
+    subtitle: "20 Oct, 2020 8.30PM",
     status: 0,
     hasline: true,
   },
   {
-    title: 'Order sent',
-    subtitle: 'Order in transit',
+    title: "Order sent",
+    subtitle: "Order in transit",
     status: 1,
     hasline: true,
   },
   {
-    title: 'Your order has been delivered',
-    subtitle: 'Your order has been delivered succesfully',
+    title: "Your order has been delivered",
+    subtitle: "Your order has been delivered succesfully",
     status: 1,
     hasline: false,
   },
@@ -34,33 +34,33 @@ const trackers = [
 
 const returnStatus = [
   {
-    title: 'The product has been received by the seller',
-    subtitle: '20 Oct, 2020 3.30PM',
+    title: "The product has been received by the seller",
+    subtitle: "20 Oct, 2020 3.30PM",
     status: 0,
     hasline: true,
   },
   {
-    title: 'The product is being reviewed',
-    subtitle: '20 Oct, 2020 8.30PM',
+    title: "The product is being reviewed",
+    subtitle: "20 Oct, 2020 8.30PM",
     status: 0,
     hasline: true,
   },
   {
-    title: 'Refund sent',
-    subtitle: 'Order in transit',
+    title: "Refund sent",
+    subtitle: "Order in transit",
     status: 1,
     hasline: true,
   },
   {
-    title: 'The refund has been received by the buyer',
-    subtitle: 'Your refund has been sent succesfully',
+    title: "The refund has been received by the buyer",
+    subtitle: "Your refund has been sent succesfully",
     status: 1,
     hasline: false,
   },
 ];
 function index(props) {
   const { type } = props;
-  const items = type === 'track' ? trackers : returnStatus;
+  const items = type === "track" ? trackers : returnStatus;
   return (
     <View style={{ paddingTop: vs(15), paddingBottom: vs(15) }}>
       {items.map((item, index) => {
@@ -70,10 +70,10 @@ function index(props) {
         }
 
         return (
-          <View key={`jiangshan${index}`} style={{ flexDirection: 'row' }}>
+          <View key={`jiangshan${index}`} style={{ flexDirection: "row" }}>
             <View>
               <Image
-                style={{ width: 60, height: 25, resizeMode: 'contain' }}
+                style={{ width: 60, height: 25, resizeMode: "contain" }}
                 source={
                   item.status === 0
                     ? images.orderCheckImage
@@ -82,7 +82,7 @@ function index(props) {
               />
               {item.hasline && (
                 <Image
-                  style={{ width: 60, height: 80, resizeMode: 'contain' }}
+                  style={{ width: 60, height: 80, resizeMode: "contain" }}
                   source={
                     nextItem.status == 0
                       ? images.orderLineImage
@@ -103,10 +103,10 @@ function index(props) {
               >
                 {item.title}
               </Text>
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: "row" }}>
                 {item.status === 0 && (
                   <Image
-                    style={{ width: 22, height: 24, resizeMode: 'contain' }}
+                    style={{ width: 22, height: 24, resizeMode: "contain" }}
                     source={images.orderClockImage}
                   />
                 )}

@@ -9,6 +9,7 @@ import styles from "../styles";
 import PubSub from "pubsub-js";
 import { useQuery } from "@apollo/client";
 import { GET_LOCAL_CART } from "../../../Apollo/cache";
+import BigNumber from "bignumber.js";
 
 function CartSummary(props) {
   const { realm } = useRealm();
@@ -44,12 +45,36 @@ function CartSummary(props) {
     }
     return currentQuantity;
   }, [mydatas]);
+
+  const money = useMemo(() => {
+    let currentBilling = 0;
+    let originalBilling = 0;
+    for (let index = 0; index < mydatas.length; index++) {
+      const element = mydatas[index];
+      originalBilling =
+        originalBilling + element.variant
+          ? element.variant.retailPrice * element.quantity
+          : element.product.retailPrice * element.quantity;
+      currentBilling =
+        currentBilling + element.variant
+          ? element.variant.wholeSalePrice * element.quantity
+          : element.product.wholeSalePrice * element.quantity;
+    }
+    const total = new BigNumber(currentBilling).toFixed(2);
+    const saving = new BigNumber(originalBilling - currentBilling).toFixed(2);
+
+    return {
+      total: total,
+      saving: saving,
+      percent: BigNumber(saving).dividedBy(total).multipliedBy(100).toFixed(2),
+    };
+  }, [mydatas]);
   return (
     <View style={{ padding: AppConfig.paddingHorizontal }}>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Text style={styles.heading4Bold}>Subtotal (2 items)</Text>
+        <Text style={styles.heading4Bold}>Subtotal ({quantity} items)</Text>
         <Text style={[styles.heading4Bold, { color: colors.primary }]}>
-          $1,639.97
+          ${money.total}
         </Text>
       </View>
       <View
@@ -63,7 +88,7 @@ function CartSummary(props) {
           You save
         </Text>
         <Text style={[styles.heading4Regular, { fontSize: s(14) }]}>
-          $490 (30%)
+          ${money.saving} ({money.percent + ""}%)
         </Text>
       </View>
     </View>

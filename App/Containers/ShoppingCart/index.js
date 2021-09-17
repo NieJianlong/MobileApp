@@ -46,6 +46,13 @@ function ShoppingCart(props) {
   const [paidDuringDelivery, setPaidDuringDeliver] = useState(false);
   const sheetContext = useContext(AlertContext);
   useEffect(() => {
+    setMydatas(
+      realm
+        .objects("ShoppingCart")
+        .filtered("addressId == $0", localCartVar.deliverAddress)
+        .filtered("quantity > 0")
+        .filtered("isDraft == false")
+    );
     let refresh = PubSub.subscribe("refresh-shoppingcart", () => {
       setMydatas(
         realm
@@ -58,7 +65,7 @@ function ShoppingCart(props) {
     return () => {
       PubSub.unsubscribe(refresh);
     };
-  }, [localCartVar, realm]);
+  }, [localCartVar.deliverAddress, realm]);
 
   /** nasavge thnks we should put the blocks of view code below into functions
    * to make the code more readable

@@ -102,7 +102,6 @@ function PrimaryNav() {
           case "MainScreen":
             cardStyleInterpolator = CardStyleInterpolators.forNoAnimation;
             break;
-
           default:
             break;
         }

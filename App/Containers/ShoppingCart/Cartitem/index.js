@@ -339,8 +339,6 @@ const styles = ScaledSheet.create({
   },
   productInfoSmall: {
     paddingHorizontal: "8@s",
-    // borderBottomWidth: 1,
-    // borderBottomColor: Colors.grey10,
     paddingBottom: "8@vs",
   },
   productImageSmall: {

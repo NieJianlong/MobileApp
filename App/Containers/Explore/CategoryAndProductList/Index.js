@@ -40,6 +40,10 @@ export default function Index(props) {
    */
   const [location, setLocation] = useState();
 
+  console.log("localCartVar()====================================");
+  console.log(localCartVar());
+  console.log("====================================");
+
   /**
    * this will be the query we will run on load to get the adrress co-ords
    * for the delivery address
@@ -47,7 +51,18 @@ export default function Index(props) {
    * ie no initial address, guest, registered ect ....
    */
   const [runGeoQuery] = useLazyQuery(aQM.FIND_COORDINATES_FOR_ADDRESS_REQUEST, {
-    variables: { address: localCartVarReactive.callBackAddress }, // need to add some structure here  address:{vars...}
+    // variables: { address: localCartVarReactive.callBackAddress }, // need to add some structure here  address:{vars...}
+    variables: {
+      address: {
+        pinCode: "500001",
+        provinceState: "Hyderabad",
+        townCity: "Hyderabad",
+        flatNumber: "Asa89",
+        villageArea: "Mallepalli - AC Guards Rd",
+        houseNumber: "10",
+        landMark: "Ddd",
+      },
+    },
     context: {
       headers: {
         isPrivate: false,

@@ -377,7 +377,22 @@ export const FIND_COORDINATES_FOR_ADDRESS_REQUEST = gql`
     }
   }
 `;
-
+export const GetCountries = gql`
+  query GetCountries {
+    getCountries {
+      id
+      countryName
+    }
+  }
+`;
+export const FIND_COORDINATES_FOR_ADDRESSID = gql`
+  query CoordinatesForAddress($address: string) {
+    coordinatesForAddress(address: $address) {
+      latitude
+      longitude
+    }
+  }
+`;
 // query { getListings (searchOptions: {})
 // {
 //     id

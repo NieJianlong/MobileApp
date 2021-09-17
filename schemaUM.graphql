@@ -1,6 +1,10 @@
-"""Exposes a URL that specifies the behaviour of this scalar."""
+"""
+Exposes a URL that specifies the behaviour of this scalar.
+"""
 directive @specifiedBy(
-  """The URL that specifies the behaviour of this scalar."""
+  """
+  The URL that specifies the behaviour of this scalar.
+  """
   url: String!
 ) on SCALAR
 
@@ -279,6 +283,17 @@ type CoordinateResponse {
   longitude: Float
 }
 
+type CountryResponse {
+  id: ID
+  countryName: String
+}
+
+type CountryStateResponse {
+  id: ID
+  stateName: String
+  countryId: ID
+}
+
 scalar DateTime
 
 type DeliveryAddressesByOnlineStoresResponse {
@@ -327,9 +342,17 @@ type Mutation {
   createGuestBuyer(request: BuyerProfileRequestForCreate!): BuyerProfileResponse
   addRefundSalamiCredit(buyerId: ID!, refundAmount: Float!): Float
   useRefundSalamiCredit(buyerId: ID!, amount: Float!): Float
-  addBonusSalamiCredit(buyerId: ID!, amount: Float!, bonusSalamiCreditExpire: DateTime): Float
+  addBonusSalamiCredit(
+    buyerId: ID!
+    amount: Float!
+    bonusSalamiCreditExpire: DateTime
+  ): Float
   rateSeller(sellerId: ID!, rating: Float!, buyerId: ID!): Boolean
-  changePassword(oldPassword: String!, newPassword: String!, userId: ID!): Boolean
+  changePassword(
+    oldPassword: String!
+    newPassword: String!
+    userId: ID!
+  ): Boolean
   registerSeller(request: SellerProfileRequestForCreate!): SellerProfileResponse
   deleteSellerProfile(sellerId: ID!): Boolean
   updateSellerProfile(request: SellerProfileRequest!): SellerProfileResponse
@@ -341,48 +364,81 @@ type Mutation {
   createAddressForGuestBuyer(request: AddressRequestForCreate!): AddressResponse
   deleteAddressForGuestBuyer(addressId: ID!, guestBuyerId: ID!): Boolean
   updateAddressForGuestBuyer(request: AddressRequest!): AddressResponse
-  createPaymentDetail(request: PaymentDetailRequestForCreate!): PaymentDetailResponse
+  createPaymentDetail(
+    request: PaymentDetailRequestForCreate!
+  ): PaymentDetailResponse
   deletePaymentDetail(paymentDetailId: ID!): Boolean
   updatePaymentDetail(request: PaymentDetailRequest!): PaymentDetailResponse
-  createNotification(request: NotificationRequestForCreate!): NotificationResponse
+  createNotification(
+    request: NotificationRequestForCreate!
+  ): NotificationResponse
   deleteNotification(notificationId: ID!): Boolean
   updateNotification(request: NotificationRequest!): NotificationResponse
   createPreference(request: PreferenceRequestForCreate!): PreferenceResponse
   deletePreference(preferenceId: ID!): Boolean
   updatePreference(request: PreferenceRequest!): PreferenceResponse
-  createShareInformation(request: ShareInformationRequestForCreate!): ShareInformationResponse
+  createShareInformation(
+    request: ShareInformationRequestForCreate!
+  ): ShareInformationResponse
   deleteShareInformation(shareInformationId: ID!): Boolean
-  updateShareInformation(request: ShareInformationRequest!): ShareInformationResponse
+  updateShareInformation(
+    request: ShareInformationRequest!
+  ): ShareInformationResponse
   createWishList(request: WishListRequestForCreate!): WishListResponse
   deleteWishList(wishListId: ID!): Boolean
   updateWishList(request: WishListRequest!): WishListResponse
-  createBillingDetails(request: BillingDetailsRequestForCreate!): BillingDetailsResponse
+  createBillingDetails(
+    request: BillingDetailsRequestForCreate!
+  ): BillingDetailsResponse
   deleteBillingDetails(billingDetailsId: ID!): Boolean
   updateBillingDetails(request: BillingDetailsRequest!): BillingDetailsResponse
-  createBillingDetailsForGuestBuyer(request: BillingDetailsRequestForCreate!): BillingDetailsResponse
-  deleteBillingDetailsForGuestBuyer(billingDetailsId: ID!, guestBuyer: ID): Boolean
-  updateBillingDetailsForGuestBuyer(request: BillingDetailsRequest!): BillingDetailsResponse
+  createBillingDetailsForGuestBuyer(
+    request: BillingDetailsRequestForCreate!
+  ): BillingDetailsResponse
+  deleteBillingDetailsForGuestBuyer(
+    billingDetailsId: ID!
+    guestBuyer: ID
+  ): Boolean
+  updateBillingDetailsForGuestBuyer(
+    request: BillingDetailsRequest!
+  ): BillingDetailsResponse
   createChat(request: ChatRequestForCreate!): ChatResponse
   deleteChat(chatId: ID!): Boolean
   updateChat(request: ChatRequest!): ChatResponse
   createChatMessage(request: ChatMessageRequestForCreate!): ChatMessageResponse
   deleteChatMessage(chatMessageId: ID!): Boolean
   updateChatMessage(request: ChatMessageRequest!): ChatMessageResponse
-  createChatSubscriber(request: ChatSubscriberRequestForCreate!): ChatSubscriberResponse
+  createChatSubscriber(
+    request: ChatSubscriberRequestForCreate!
+  ): ChatSubscriberResponse
   deleteChatSubscriber(buyerId: ID!, chatId: ID!): Boolean
   updateChatSubscriber(request: ChatSubscriberRequest!): ChatSubscriberResponse
-  createDeliveryAddressGeoCoordinate(request: DeliveryAddressGeoCoordinateRequestForCreate!): DeliveryAddressGeoCoordinateResponse
+  createDeliveryAddressGeoCoordinate(
+    request: DeliveryAddressGeoCoordinateRequestForCreate!
+  ): DeliveryAddressGeoCoordinateResponse
   deleteDeliveryAddressGeoCoordinate(id: ID!): Boolean
-  updateDeliveryAddressGeoCoordinate(request: DeliveryAddressGeoCoordinateRequest!): DeliveryAddressGeoCoordinateResponse
-  createDeliveryAddressToOnlineStore(request: DeliveryAddressToOnlineStoreRequestForCreate!): DeliveryAddressToOnlineStoreResponse
+  updateDeliveryAddressGeoCoordinate(
+    request: DeliveryAddressGeoCoordinateRequest!
+  ): DeliveryAddressGeoCoordinateResponse
+  createDeliveryAddressToOnlineStore(
+    request: DeliveryAddressToOnlineStoreRequestForCreate!
+  ): DeliveryAddressToOnlineStoreResponse
   deleteDeliveryAddressToOnlineStore(addressId: ID!, storeId: ID!): Boolean
-  updateDeliveryAddressToOnlineStore(request: DeliveryAddressToOnlineStoreRequest!): DeliveryAddressToOnlineStoreResponse
-  createShippingDetail(request: ShippingDetailRequestForCreate!): ShippingDetailResponse
+  updateDeliveryAddressToOnlineStore(
+    request: DeliveryAddressToOnlineStoreRequest!
+  ): DeliveryAddressToOnlineStoreResponse
+  createShippingDetail(
+    request: ShippingDetailRequestForCreate!
+  ): ShippingDetailResponse
   deleteShippingDetail(shippingId: ID!): Boolean
   updateShippingDetail(request: ShippingDetailRequest!): ShippingDetailResponse
-  createSellerToOnlineStore(request: SellerToOnlineStoreRequestForCreate!): SellerToOnlineStoreResponse
+  createSellerToOnlineStore(
+    request: SellerToOnlineStoreRequestForCreate!
+  ): SellerToOnlineStoreResponse
   deleteSellerToOnlineStore(sellerId: ID!, storeId: ID!): Boolean
-  updateSellerToOnlineStore(request: SellerToOnlineStoreRequest!): SellerToOnlineStoreResponse
+  updateSellerToOnlineStore(
+    request: SellerToOnlineStoreRequest!
+  ): SellerToOnlineStoreResponse
 }
 
 input NotificationRequest {
@@ -515,10 +571,21 @@ type Query {
   getBuyerAddressesById(buyerId: ID!): [AddressResponse]
   getGuestBuyerAddressesById(buyerId: ID!): [AddressResponse]
   coordinatesForAddress(address: String!): CoordinateResponse
-  coordinatesForAddressRequest(address: AddressRequestToGetCoordinates!): CoordinateResponse
-  getGuestBuyerAddressByType(guestBuyerId: ID!, addressType: AddressType): [AddressResponse]
-  getBuyerAddressByType(buyerId: ID!, addressType: AddressType): [AddressResponse]
-  getSellerAddressByType(sellerId: ID!, addressType: AddressType): [AddressResponse]
+  coordinatesForAddressRequest(
+    address: AddressRequestToGetCoordinates!
+  ): CoordinateResponse
+  getGuestBuyerAddressByType(
+    guestBuyerId: ID!
+    addressType: AddressType
+  ): [AddressResponse]
+  getBuyerAddressByType(
+    buyerId: ID!
+    addressType: AddressType
+  ): [AddressResponse]
+  getSellerAddressByType(
+    sellerId: ID!
+    addressType: AddressType
+  ): [AddressResponse]
   getSellerDefaultAddressBySellerId(sellerId: ID!): AddressResponse
   getBuyerDefaultAddressByBuyerId(buyerId: ID!): AddressResponse
   getGuestBuyerDefaultAddressByBuyerId(buyerId: ID!): AddressResponse
@@ -545,17 +612,30 @@ type Query {
   chatSubscribers: [ChatSubscriberResponse]
   chatSubscriberById(buyerId: ID!, chatId: ID!): ChatSubscriberResponse
   deliveryAddressGeoCoordinates: [DeliveryAddressGeoCoordinateResponse]
-  deliveryAddressGeoCoordinateById(addressId: ID!): DeliveryAddressGeoCoordinateResponse
+  deliveryAddressGeoCoordinateById(
+    addressId: ID!
+  ): DeliveryAddressGeoCoordinateResponse
   deliveryAddressToOnlineStores: [DeliveryAddressToOnlineStoreResponse]
-  deliveryAddressToOnlineStoreById(addressId: ID!, storeId: ID!): DeliveryAddressToOnlineStoreResponse
-  deliveryAddressesByOnlineStores(storeIds: [ID]): DeliveryAddressesByOnlineStoresResponse
+  deliveryAddressToOnlineStoreById(
+    addressId: ID!
+    storeId: ID!
+  ): DeliveryAddressToOnlineStoreResponse
+  deliveryAddressesByOnlineStores(
+    storeIds: [ID]
+  ): DeliveryAddressesByOnlineStoresResponse
   sellerToOnlineStores: [SellerToOnlineStoreResponse]
-  sellerToOnlineStoreById(sellerId: ID!, storeId: ID!): SellerToOnlineStoreResponse
+  sellerToOnlineStoreById(
+    sellerId: ID!
+    storeId: ID!
+  ): SellerToOnlineStoreResponse
   shippingDetails: [ShippingDetailResponse]
   shippingDetailById(shippingId: ID!): ShippingDetailResponse
   userHasVerifiedEmail(userId: ID!): Boolean
   deliveryAddressForBuyer(buyerId: ID!): AddressResponse
   deliveryAddressForGuestBuyer(buyerId: ID!): AddressResponse
+  getCountries: [CountryResponse]
+  getSupportedLanguages: [SupportedLanguageResponse]
+  getStatesByCountryId(countryId: ID!): [CountryStateResponse]
 }
 
 input SellerProfileRequest {
@@ -747,6 +827,11 @@ enum ShippingStatus {
   DELIVERY_FAILED
 }
 
+type SupportedLanguageResponse {
+  id: ID
+  language: String
+}
+
 enum UserType {
   SELLER
   UNDEFINED
@@ -783,4 +868,3 @@ type WishListResponse {
   createdAt: DateTime
   updatedAt: DateTime
 }
-

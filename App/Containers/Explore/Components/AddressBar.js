@@ -48,7 +48,7 @@ export default function AddressBar() {
         sheetTitle: "Add your delivery address",
       },
     });
-  }, [addrLine1.length, dispatch]);
+  }, [dispatch]);
 
   const handleError = useCallback(() => {
     if (typeof error !== "undefined") {
@@ -80,6 +80,7 @@ export default function AddressBar() {
       console.log("====================================");
     },
   });
+
   const { loading, refetch } = useQuery(
     isAuth
       ? aQM.FIND_BUYER_DEFAULT_ADDRESS_BY_ID

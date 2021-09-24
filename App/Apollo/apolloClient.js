@@ -54,6 +54,7 @@ const allAPIS = {
 
   //product
   // ActiveProductListingsByStoreId: PRODUCT_PORT,  @Depreciated leave here for now as backend may decise roll back
+  OnlineStoreByGeoCoordinates: PRODUCT_PORT,
   AnnouncementsByOnlineStore: PRODUCT_PORT,
   AnnouncementsByListingId: PRODUCT_PORT,
   GetListings: PRODUCT_PORT,

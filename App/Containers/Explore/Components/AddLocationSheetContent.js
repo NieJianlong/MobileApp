@@ -7,7 +7,7 @@ import { Switch, MaterialTextInput, Selector } from "../../../Components";
 import styles from "./styles";
 
 import colors from "../../../Themes/Colors";
-import { useMutation, useReactiveVar } from "@apollo/client";
+import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import {
   CREATE_ADDRESS,
   CREATE_ADDRESS_FOR_GUEST,
@@ -15,8 +15,16 @@ import {
 import { AlertContext } from "../../Root/GlobalContext";
 import PubSub from "pubsub-js";
 import { userProfileVar } from "../../../Apollo/cache";
+import { GetStatesByCountryId } from "../gql/explore_queries";
 
 function AddLocationSheetContent(props) {
+  //123e4567-e89b-12d3-a456-556642440000
+  const { data } = useQuery(GetStatesByCountryId, {
+    variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
+  });
+  console.log("data====================================");
+  console.log(data);
+  console.log("====================================");
   const { dispatch } = useContext(AlertContext);
   const userProfileVarReactive = useReactiveVar(userProfileVar);
   const isAuth = useMemo(() => userProfileVarReactive.isAuth, [
@@ -71,7 +79,7 @@ function AddLocationSheetContent(props) {
     houseNumber: streetNum,
     landMark: landMark,
     streetAddress1: name,
-    country,
+    country: "India",
     referenceId: global.buyerId,
   };
 
@@ -167,18 +175,19 @@ function AddLocationSheetContent(props) {
       showError: false,
       errorMessage: null,
       keyboardType: "decimal-pad",
-      type: "short",
+      // type: "short",
+      type: "normal",
       value: pincode,
     },
-    {
-      placeholder: "Country*",
-      onChangeText: (text) => setCountry(text),
-      showError: false,
-      errorMessage: null,
-      keyboardType: "default",
-      type: "short",
-      value: country,
-    },
+    // {
+    //   placeholder: "Country*",
+    //   onChangeText: (text) => setCountry(text),
+    //   showError: false,
+    //   errorMessage: null,
+    //   keyboardType: "selector",
+    //   type: "short",
+    //   value: country,
+    // },
     {
       placeholder: "Land Mark",
       onChangeText: (text) => setLandMark(text),

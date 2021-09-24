@@ -28,6 +28,7 @@ export default function Index(props) {
   const isAuth = useMemo(() => userProfileVarReactive.isAuth, [
     userProfileVarReactive.isAuth,
   ]);
+
   // temporay fix original code for empty address and new requirments
   // imposed by backend and VK, diverges from original design
   // only call products data when ready, ie have geo co-ords
@@ -39,10 +40,6 @@ export default function Index(props) {
    *
    */
   const [location, setLocation] = useState({ latitude: "", longitude: "" });
-
-  console.log("localCartVar()====================================");
-  console.log(localCartVar());
-  console.log("====================================");
 
   /**
    * this will be the query we will run on load to get the adrress co-ords
@@ -89,11 +86,15 @@ export default function Index(props) {
       variables: { ...location },
     }
   );
+
   useEffect(() => {
     if (location.latitude) {
       getStoneIds();
     }
   }, [getStoneIds, location]);
+  console.log("storeIds====================================");
+  console.log(storeIds);
+  console.log("====================================");
   useEffect(() => {
     console.log(
       `Explore check for address in cart ${JSON.stringify(
@@ -185,12 +186,17 @@ export default function Index(props) {
         {location && (
           <ProductList
             listType="All"
-            filterParams={{ ...location, textToSearch }}
+            filterParams={{
+              stores: storeIds?.onlineStoreByGeoCoordinates
+                ? storeIds.onlineStoreByGeoCoordinates.map((item) => item.id)
+                : [],
+              textToSearch,
+            }}
             index={0}
             filter={
               textToSearch.length > 0
-                ? "ACTIVE_BY_COORDINATES_AND_FULL_TEXT_SEARCH"
-                : "ACTIVE_BY_COORDINATES"
+                ? "ACTIVE_BY_STORES_AND_FULL_TEXT_SEARCH"
+                : "ACTIVE_BY_STORES"
             }
             tabLabel="All"
           />
@@ -198,12 +204,17 @@ export default function Index(props) {
         {location && (
           <ProductList
             listType="Announcements"
-            filterParams={{ ...location, textToSearch }}
+            filterParams={{
+              stores: storeIds?.onlineStoreByGeoCoordinates
+                ? storeIds.onlineStoreByGeoCoordinates.map((item) => item.id)
+                : [],
+              textToSearch,
+            }}
             index={1}
             filter={
               textToSearch.length > 0
-                ? "ACTIVE_BY_COORDINATES_AND_FULL_TEXT_SEARCH"
-                : "ACTIVE_BY_COORDINATES_AND_ANNOUNCEMENT"
+                ? "ACTIVE_BY_STORES_AND_FULL_TEXT_SEARCH"
+                : "ACTIVE_BY_STORES_AND_ANNOUNCEMENT"
             }
             tabLabel="Announcements"
             isAnnouncement={true}
@@ -218,12 +229,14 @@ export default function Index(props) {
               index={index + 2}
               filter={
                 textToSearch.length > 0
-                  ? "ACTIVE_BY_COORDINATES_AND_FULL_TEXT_SEARCH"
-                  : "ACTIVE_BY_COORDINATES_AND_CATEGORY"
+                  ? "ACTIVE_BY_STORES_AND_FULL_TEXT_SEARCH"
+                  : "ACTIVE_BY_STORES_AND_CATEGORY"
               }
               tabLabel={category.name}
               filterParams={{
-                ...location,
+                stores: storeIds?.onlineStoreByGeoCoordinates
+                  ? storeIds.onlineStoreByGeoCoordinates.map((item) => item.id)
+                  : [],
                 category: category.name,
                 textToSearch,
               }}

@@ -38,7 +38,7 @@ export default function Index(props) {
    * call out for the product data until we have the location(co-ords)
    *
    */
-  const [location, setLocation] = useState();
+  const [location, setLocation] = useState({ latitude: "", longitude: "" });
 
   console.log("localCartVar()====================================");
   console.log(localCartVar());
@@ -51,18 +51,7 @@ export default function Index(props) {
    * ie no initial address, guest, registered ect ....
    */
   const [runGeoQuery] = useLazyQuery(aQM.FIND_COORDINATES_FOR_ADDRESS_REQUEST, {
-    // variables: { address: localCartVarReactive.callBackAddress }, // need to add some structure here  address:{vars...}
-    variables: {
-      address: {
-        pinCode: "500001",
-        provinceState: "Hyderabad",
-        townCity: "Hyderabad",
-        flatNumber: "Asa89",
-        villageArea: "Mallepalli - AC Guards Rd",
-        houseNumber: "10",
-        landMark: "Ddd",
-      },
-    },
+    variables: { address: localCartVarReactive.callBackAddress }, // need to add some structure here  address:{vars...}
     context: {
       headers: {
         isPrivate: false,
@@ -84,7 +73,7 @@ export default function Index(props) {
       //location.push(latitude, longitude);
       // for forseable future will need these values so backend can cope
 
-      setLocation({ latitude: 1.5, longitude: 1.5 });
+      setLocation({ latitude, longitude });
       // setIsReady(true);
     },
     onError: (res) => {
@@ -94,6 +83,17 @@ export default function Index(props) {
     },
   });
 
+  const [getStoneIds, { data: storeIds }] = useLazyQuery(
+    aQM.OnlineStoreByGeoCoordinates,
+    {
+      variables: { ...location },
+    }
+  );
+  useEffect(() => {
+    if (location.latitude) {
+      getStoneIds();
+    }
+  }, [getStoneIds, location]);
   useEffect(() => {
     console.log(
       `Explore check for address in cart ${JSON.stringify(

@@ -240,6 +240,14 @@ export const FIND_GUEST_BUYER_ADDRESS_BY_ID = gql`
   }
 `;
 
+export const OnlineStoreByGeoCoordinates = gql`
+  query OnlineStoreByGeoCoordinates($latitude: Float!, $longitude: Float!) {
+    onlineStoreByGeoCoordinates(latitude: $latitude, longitude: $longitude) {
+      id
+    }
+  }
+`;
+
 /**
  * @query  getBuyerAddressesById
  *
@@ -386,10 +394,19 @@ export const GetCountries = gql`
   }
 `;
 export const FIND_COORDINATES_FOR_ADDRESSID = gql`
-  query CoordinatesForAddress($address: string) {
+  query CoordinatesForAddress($address: String) {
     coordinatesForAddress(address: $address) {
       latitude
       longitude
+    }
+  }
+`;
+export const GetStatesByCountryId = gql`
+  query GetStatesByCountryId($countryId: ID!) {
+    getStatesByCountryId(countryId: $countryId) {
+      id
+      stateName
+      countryId
     }
   }
 `;

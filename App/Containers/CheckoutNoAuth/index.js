@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   TouchableOpacity,
@@ -6,15 +6,15 @@ import {
   Image,
   SafeAreaView,
   StatusBar,
-} from 'react-native';
-import AppConfig from '../../Config/AppConfig';
-import { s, ScaledSheet } from 'react-native-size-matters';
-import fonts from '../../Themes/Fonts';
-import colors from '../../Themes/Colors';
-import { AppBar } from '../../Components';
-import NavigationService from '../../Navigation/NavigationService';
-import { ApplicationStyles } from '../../Themes';
-import images from '../../Themes/Images';
+} from "react-native";
+import AppConfig from "../../Config/AppConfig";
+import { s, ScaledSheet } from "react-native-size-matters";
+import fonts from "../../Themes/Fonts";
+import colors from "../../Themes/Colors";
+import { AppBar } from "../../Components";
+import NavigationService from "../../Navigation/NavigationService";
+import { ApplicationStyles } from "../../Themes";
+import images from "../../Themes/Images";
 
 function CheckoutNoAuth(props) {
   return (
@@ -22,7 +22,7 @@ function CheckoutNoAuth(props) {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar />
         <View
@@ -33,20 +33,20 @@ function CheckoutNoAuth(props) {
         >
           <TouchableOpacity
             onPress={() => {
-              NavigationService.navigate('LoginScreen', {
+              NavigationService.navigate("LoginScreen", {
                 callback: () => {
-                  NavigationService.navigate('CheckOutPersonalDetailsScreen');
+                  NavigationService.navigate("CheckOutPersonalDetailsScreen");
                 },
               });
             }}
           >
             <View
               style={{
-                backgroundColor: 'white',
+                backgroundColor: "white",
                 paddingHorizontal: AppConfig.paddingHorizontal,
                 borderRadius: s(16),
                 height: s(80),
-                justifyContent: 'center',
+                justifyContent: "center",
               }}
             >
               <Text style={ApplicationStyles.screen.heading2Bold}>Sign In</Text>
@@ -54,11 +54,11 @@ function CheckoutNoAuth(props) {
           </TouchableOpacity>
           <Image
             source={images.shopcartOrImage}
-            style={{ height: 80, width: '100%', resizeMode: 'contain' }}
+            style={{ height: 80, width: "100%", resizeMode: "contain" }}
           />
           <TouchableOpacity
             onPress={() => {
-              NavigationService.navigate('CheckOutPersonalDetailsScreen');
+              NavigationService.navigate("CheckOutPersonalDetailsScreen");
             }}
           >
             <View style={styles.item_container}>
@@ -68,7 +68,7 @@ function CheckoutNoAuth(props) {
               <Text
                 style={[
                   ApplicationStyles.screen.heading4Bold,
-                  { color: colors.grey60, fontWeight: 'normal' },
+                  { color: colors.grey60, fontWeight: "normal" },
                 ]}
               >
                 You can continue as guest and only fill the mandatory details.
@@ -88,7 +88,7 @@ const styles = ScaledSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
@@ -96,15 +96,15 @@ const styles = ScaledSheet.create({
   },
   title: {
     fontFamily: fonts.primary,
-    fontSize: '16@s',
+    fontSize: "16@s",
     color: colors.black,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   item_container: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     paddingHorizontal: AppConfig.paddingHorizontal,
     borderRadius: s(16),
     height: 160,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
 });

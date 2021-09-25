@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { View, Text } from "react-native";
 import { s, vs } from "react-native-size-matters";
-s;
 import AppConfig from "../../../Config/AppConfig";
 import useRealm from "../../../hooks/useRealm";
 import colors from "../../../Themes/Colors";

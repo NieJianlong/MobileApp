@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { GiftedChat } from 'react-native-gifted-chat';
-import { View, StatusBar, SafeAreaView } from 'react-native';
-import ChatHeader from './ChatHeader';
-import colors from '../../Themes/Colors';
+import React, { useState, useCallback, useEffect } from "react";
+import { GiftedChat } from "react-native-gifted-chat";
+import { View, StatusBar, SafeAreaView } from "react-native";
+import ChatHeader from "./ChatHeader";
+import colors from "../../Themes/Colors";
 
 function Chat() {
   const [messages, setMessages] = useState([]);
@@ -11,12 +11,12 @@ function Chat() {
     setMessages([
       {
         _id: 1,
-        text: 'Hello developer',
+        text: "Hello developer",
         createdAt: new Date(),
         user: {
           _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
+          name: "React Native",
+          avatar: "https://placeimg.com/140/140/any",
         },
       },
     ]);
@@ -31,7 +31,7 @@ function Chat() {
   return (
     <View style={{ flex: 1 }}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView style={{ backgroundColor: 'white' }}>
+      <SafeAreaView style={{ backgroundColor: "white" }}>
         <ChatHeader />
       </SafeAreaView>
       <GiftedChat

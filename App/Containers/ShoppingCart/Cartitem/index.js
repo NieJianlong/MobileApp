@@ -194,7 +194,7 @@ function Index(props) {
           <TouchableOpacity
             onPress={() => {
               NavigationService.navigate("EditShoppingCartScreen", {
-                product: product,
+                product: props.product,
               });
             }}
             style={[styles.removebtn, { width: s(60) }]}

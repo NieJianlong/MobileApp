@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRoute } from "@react-navigation/native";
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  SafeAreaView,
-  StatusBar,
-  SectionList,
-} from "react-native";
+import { View, Text, SafeAreaView, StatusBar, SectionList } from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";

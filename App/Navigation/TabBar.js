@@ -40,9 +40,6 @@ function TabBar(props) {
       .filtered("quantity > 0")
       .filtered("isDraft == false")
   );
-  console.log("localCartVar====================================");
-  console.log(localCartVar);
-  console.log("====================================");
   useEffect(() => {
     setMydatas(
       realm

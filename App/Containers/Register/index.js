@@ -305,9 +305,7 @@ function RegisterScreen(props) {
           <View style={styles.switch}>
             <Switch
               onSwitch={() => {
-                console.log("termsAccepted=" + termsAccepted);
                 toggleTermsAccepted();
-                console.log("termsAccepted=" + termsAccepted);
               }}
             />
             <TouchableOpacity

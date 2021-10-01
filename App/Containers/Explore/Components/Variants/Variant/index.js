@@ -37,7 +37,6 @@ const Variant = (props) => {
       }
     }
     product.selectedProductVariants.push(selectedVariant);
-    console.log(product.selectedProductVariants);
   };
 
   // this will run on button select
@@ -45,10 +44,8 @@ const Variant = (props) => {
   const buildSimpleView = (list, gid) => {
     // check for undefined
     if (list) {
-      console.log(`render selectedValueDisplay ${selectedValueDisplay}`);
       return list.map((opt, k) => {
         if (selectedValueDisplay === opt.value) {
-          console.log("render selected");
           return (
             <View key={k}>
               <TouchableOpacity

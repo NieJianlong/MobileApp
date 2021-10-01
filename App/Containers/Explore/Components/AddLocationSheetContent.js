@@ -22,9 +22,6 @@ function AddLocationSheetContent(props) {
   const { data } = useQuery(GetStatesByCountryId, {
     variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
   });
-  console.log("data====================================");
-  console.log(data);
-  console.log("====================================");
   const { dispatch } = useContext(AlertContext);
   const userProfileVarReactive = useReactiveVar(userProfileVar);
   const isAuth = useMemo(() => userProfileVarReactive.isAuth, [

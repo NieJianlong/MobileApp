@@ -237,7 +237,6 @@ function CheckOutPersonalDetails(props) {
                 // Validation here, simply check in state and set validation message if requried
                 // make an object so code is more concise in validate function
                 let reporter = updateForCacheAndValidation();
-                console.log(JSON.stringify(reporter));
                 if (reporter.hasMissing) {
                   setValidationDisplay(`${reporter.missingVal}`);
                 } else if (!reporter.validPhoneOrEmail) {

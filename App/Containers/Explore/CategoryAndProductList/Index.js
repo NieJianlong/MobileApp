@@ -55,7 +55,6 @@ export default function Index(props) {
       },
     },
     onCompleted: (res) => {
-      console.log(`Explore runGeoQuery onCompleted ${JSON.stringify(res)}`);
       // data has shape below
       // {"data":{"coordinatesForAddressRequest":{ latitude":51.50735,"longitude":-0.1277583}} }
       // just guessing for now until we can test the query
@@ -92,9 +91,6 @@ export default function Index(props) {
       getStoneIds();
     }
   }, [getStoneIds, location]);
-  console.log("storeIds====================================");
-  console.log(storeIds);
-  console.log("====================================");
   useEffect(() => {
     console.log(
       `Explore check for address in cart ${JSON.stringify(

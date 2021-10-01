@@ -80,7 +80,6 @@ const customFetch = (uri, options) => {
     //if we forget add api in allApis,there will be a mistake
     newUri = `${uri}${USER_PORT}`;
   }
-  console.log("currentURL========:" + newUri);
 
   return fetch(newUri, options);
 };
@@ -94,8 +93,6 @@ const publicHeaders = {
 const getClient = () => {
   // let httpLink = USER_MANAGEMENT_Link;
   const authMiddleware = new ApolloLink((operation, forward) => {
-    console.log(forward);
-    console.log(operation);
     // add headers
     operation.setContext(({ headers = {} }) => {
       const privateHeaders = {
@@ -116,8 +113,6 @@ const getClient = () => {
       const header = isPrivate
         ? { ...publicHeaders, ...privateHeaders }
         : publicHeaders;
-      console.log("header===============");
-      console.log(header);
       return {
         headers: header,
       };

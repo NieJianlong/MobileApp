@@ -52,9 +52,6 @@ export default function ExploreSortBar({ onChange, refresh, option }) {
   const [showProductAsRows, setShowProductAsRows] = useState(true);
   const { dispatch } = useContext(AlertContext);
   const [currentOption, setCurrentOption] = useState(option || sortOptions[1]);
-  console.log("currentOption====================================");
-  console.log(currentOption);
-  console.log("====================================");
   const toggleSortBySheet = useCallback(() => {
     dispatch({
       type: "changSheetState",

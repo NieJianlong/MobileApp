@@ -132,9 +132,6 @@ export default function AddressBar() {
           }
         } else {
           toggleAddressSheet();
-          console.log(
-            "AddressBar fetchAddressData  Guest/Buyer  server error for query"
-          );
         }
       },
     }

@@ -192,7 +192,6 @@ function LoginScreen(props) {
         });
       }
     } else {
-      console.log("data not valid");
       dispatch({
         type: "changAlertState",
         payload: {

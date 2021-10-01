@@ -27,9 +27,6 @@ function Index(props) {
     product: { product, variant },
     onPress,
   } = props;
-  console.log("product");
-  console.log(props.product.variant);
-  console.log("====================================");
   const [quantity, setQuantity] = useState(props.product.quantity);
 
   return (

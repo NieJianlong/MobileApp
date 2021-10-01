@@ -25,9 +25,6 @@ import { nanoid } from "nanoid";
 
 export default function DetailFooter({ product }) {
   const { dispatch } = useContext(AlertContext);
-  console.log("product====================================");
-  console.log(product);
-  console.log("====================================");
   const { realm } = useRealm();
 
   const {

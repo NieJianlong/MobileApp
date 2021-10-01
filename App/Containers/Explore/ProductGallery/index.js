@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRoute } from "@react-navigation/native";
 
-import { Colors, Images } from "../../../Themes";
+import { Colors } from "../../../Themes";
 import styles from "./styles";
 
 import { AppBar } from "../../../Components";

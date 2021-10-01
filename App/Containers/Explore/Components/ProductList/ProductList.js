@@ -151,7 +151,6 @@ export default function ProductList(props) {
             },
           },
         });
-        console.log(moreData);
         setServerData([...serverData, ...moreData.data.getListings]);
         setLoadingMore(false);
         if (moreData.data.getListings.length < pageSize) {

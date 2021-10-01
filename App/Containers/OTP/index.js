@@ -42,8 +42,6 @@ function OTPScreen(props) {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
     Keyboard.addListener("keyboardWillHide", _keyboardWillHide);
 
-    console.log(JSON.stringify(props));
-
     setTimeout(() => {
       setAllowToResendCode(true);
     }, 10000);
@@ -65,11 +63,9 @@ function OTPScreen(props) {
 
   const onValidate = async () => {
     var otpCode = field1.concat(field2).concat(field3).concat(field4);
-    console.log(otpCode);
     await jwt
       .runMockOTPFlow(otpCode)
       .then(function (res) {
-        console.log(res.validateOK);
         if (res.validateOK === "OK") {
           if (params.fromScreen === "ForgotPasswordScreen") {
             NavigationService.navigate("CreateNewPasswordScreen");

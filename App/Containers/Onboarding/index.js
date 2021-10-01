@@ -78,7 +78,6 @@ function OnboardingScreen(props) {
   const onGetGuestBuyerId = async (data) => {
     dispatch({ type: "hideloading" });
     let buyerId = data.createGuestBuyer.buyerId;
-    console.log("OnboardingScreen createGuestBuyer buyerId=" + buyerId);
     await storage.setLocalStorageValue(storage.GUEST_BUYER_ID_KEY, buyerId);
     global.buyerId = buyerId;
     NavigationService.navigate("MainScreen");

@@ -108,13 +108,6 @@ export default function ProductCarousel({ product }) {
     },
     onError: (res) => {},
   });
-
-  if (data?.isProductInWishlist) {
-    console.log("isLike====================================");
-    console.log();
-    console.log("====================================");
-    console.log(data);
-  }
   //hold the index of the current product's photo
   const [photoIndex, setPhotoIndex] = useState(0);
 

@@ -18,16 +18,10 @@ import * as ecM from "./editCartMappers.js";
  */
 function EditShoppingCart(props) {
   const { params } = useRoute();
-  console.log("params====================================");
-  console.log(params);
-  console.log("====================================");
   const [product, setProductFromProps] = useState({});
 
   useEffect(() => {
-    console.log("EditShoppingCart constructor");
     setProductFromProps(params.product);
-    console.log(JSON.stringify(product.prodVariants));
-    console.log(JSON.stringify(product.selectedProductVariants));
   }, [params, product]);
 
   const [state, setState] = useState(ecM.hardCodedState);
@@ -101,11 +95,6 @@ function EditShoppingCart(props) {
                     onSwitch={(t) => {
                       const selectedDic = state.selected;
                       selectedDic[sectionTitle] = item.title;
-                      console.log(" picker update");
-                      console.log({
-                        ...state,
-                        selected: { ...selectedDic },
-                      });
                       setState({ ...state, selected: { ...selectedDic } });
                     }}
                     hasIcon={section.title === "Color"}

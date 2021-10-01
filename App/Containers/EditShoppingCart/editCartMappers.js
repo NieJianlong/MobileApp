@@ -1,7 +1,4 @@
 export const productToStateMapper = (product) => {
-  console.log("product====================================");
-  console.log(product);
-  console.log("====================================");
   let editState = {};
   let selected = {};
   let prodSelVariants = [];

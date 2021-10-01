@@ -29,7 +29,7 @@ class AccordionView extends React.Component {
   };
 
   _renderHeader = (content, index, isActive, sections) => {
-    const valueItem = this.props.currentVariant.options.find(
+    const valueItem = this.props.currentVariant?.options?.find(
       (item) => item.key === content.title
     );
     return (
@@ -47,13 +47,13 @@ class AccordionView extends React.Component {
       >
         <View>
           <Text style={[t.textLg, t.fontPrimary]}>{content.title}:</Text>
-          <Text style={[t.textLg, t.fontSemibold]}>{valueItem.value}</Text>
+          <Text style={[t.textLg, t.fontSemibold]}>{valueItem?.value}</Text>
         </View>
         <View style={[t.flexRow, t.itemsCenter]}>
           {content.title === "Color" && (
             <Image
               source={{
-                uri: this.props.currentVariant.fullPath,
+                uri: this.props.currentVariant?.fullPath,
               }}
               resizeMode="contain"
               style={[t.h12, t.w12]}
@@ -85,7 +85,7 @@ class AccordionView extends React.Component {
               return (
                 <ColorItem
                   item={item}
-                  currentVariant={this.props.currentVariant}
+                  currentVariant={this.props.currentVariant ?? null}
                   onChangeVariant={this.props.onChangeVariant}
                 />
               );
@@ -135,7 +135,7 @@ const ProductVariants = ({ product, variants }) => {
 
   const [currentVariant, setCurrentVariant] = useState(
     variants.length > 0
-      ? variants.find((item) => item.defaultVariant === true)
+      ? variants.find((item) => item.defaultVariant === true) ?? null
       : null
   );
   const info = useMemo(() => {
@@ -146,23 +146,25 @@ const ProductVariants = ({ product, variants }) => {
       .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
   }, [currentVariant?.variantId, localCartVar, product.productId, realm]);
   useEffect(() => {
-    realm.write(() => {
-      if (!info) {
-        realm.create("ShoppingCart", {
-          id: nanoid(),
-          quantity: 0,
-          variantId: currentVariant ? currentVariant.variantId : "",
-          variant: currentVariant,
-          isDraft: true,
-          addressId: localCartVar.deliverAddress,
-          productId: product.productId,
-          product,
-          created: new Date(),
-          updated: new Date(),
-        });
-      }
-      PubSub.publish("refresh-shoppingcart");
-    });
+    if (currentVariant) {
+      realm.write(() => {
+        if (!info) {
+          realm.create("ShoppingCart", {
+            id: nanoid(),
+            quantity: 0,
+            variantId: currentVariant ? currentVariant.variantId : "",
+            variant: currentVariant,
+            isDraft: true,
+            addressId: localCartVar.deliverAddress,
+            productId: product.productId,
+            product,
+            created: new Date(),
+            updated: new Date(),
+          });
+        }
+        PubSub.publish("refresh-shoppingcart");
+      });
+    }
   }, [info, currentVariant, realm, localCartVar, product]);
   const onChangeVariant = (value) => {
     setCurrentVariant(value);

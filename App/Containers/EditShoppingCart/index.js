@@ -18,11 +18,7 @@ import * as ecM from "./editCartMappers.js";
  */
 function EditShoppingCart(props) {
   const { params } = useRoute();
-  const [product, setProductFromProps] = useState({});
-
-  useEffect(() => {
-    setProductFromProps(params.product);
-  }, [params, product]);
+  const [product, setProductFromProps] = useState(params.product);
 
   const [state, setState] = useState(ecM.hardCodedState);
   return (

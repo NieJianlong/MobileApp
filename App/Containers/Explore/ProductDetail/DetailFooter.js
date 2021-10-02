@@ -60,6 +60,9 @@ export default function DetailFooter({ product }) {
   }, [dispatch]);
   const toggleAddToCartSheet = useCallback(() => {
     const shoppingCartId = nanoid();
+    if (!currentVariant.defaultVariant) {
+      currentVariant.defaultVariant = false;
+    }
     realm.write(() => {
       if (cartInfo) {
         cartInfo.quantity = quantity;

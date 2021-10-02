@@ -1,3 +1,4 @@
+import BigNumber from "bignumber.js";
 import React from "react";
 import { View, Image, Text, TouchableOpacity } from "react-native";
 import { t } from "react-native-tailwindcss";
@@ -35,7 +36,9 @@ export default function ColorItem({ item, currentVariant, onChangeVariant }) {
         <View style={[t.w32]}>
           <Text style={[t.fontSemibold, t.textLg]}>{item.value}</Text>
           <Text style={selected ? [t.textLg] : [t.textSm]}>
-            {selected ? `$${item.wholeSalePrice}` : "See available"}
+            {selected
+              ? `$${BigNumber(item.wholeSalePrice).toFixed(2)}`
+              : "See available"}
           </Text>
           <Text
             style={

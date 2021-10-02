@@ -37,11 +37,13 @@ function ShoppingCart(props) {
   const [mydatas, setMydatas] = useState(
     realm
       .objects("ShoppingCart")
-      .filtered("addressId == $0", localCartVar.deliverAddress)
+      // .filtered("addressId == $0", localCartVar.deliverAddress)
       .filtered("quantity > 0")
       .filtered("isDraft == false")
   );
-
+  console.log("mydatas====================================");
+  console.log(mydatas);
+  console.log("====================================");
   // const mydatas = realm.objects("ShoppingCart");
   const [paidDuringDelivery, setPaidDuringDeliver] = useState(false);
   const sheetContext = useContext(AlertContext);
@@ -49,7 +51,7 @@ function ShoppingCart(props) {
     setMydatas(
       realm
         .objects("ShoppingCart")
-        .filtered("addressId == $0", localCartVar.deliverAddress)
+        // .filtered("addressId == $0", localCartVar.deliverAddress)
         .filtered("quantity > 0")
         .filtered("isDraft == false")
     );
@@ -57,7 +59,7 @@ function ShoppingCart(props) {
       setMydatas(
         realm
           .objects("ShoppingCart")
-          .filtered("addressId == $0", localCartVar.deliverAddress)
+          // .filtered("addressId == $0", localCartVar.deliverAddress)
           .filtered("quantity > 0")
           .filtered("isDraft == false")
       );

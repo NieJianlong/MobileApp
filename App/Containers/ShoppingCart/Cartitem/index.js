@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Text, View, TouchableOpacity, Image, TextInput } from "react-native";
-import { s, ScaledSheet, vs } from "react-native-size-matters";
-import { Fonts, Colors, ApplicationStyles, Images } from "../../../Themes";
+import { s, ScaledSheet } from "react-native-size-matters";
+import { Fonts, Colors, ApplicationStyles } from "../../../Themes";
 import AppConfig from "../../../Config/AppConfig";
 import NavigationService from "../../../Navigation/NavigationService";
 import images from "../../../Themes/Images";
@@ -40,7 +40,7 @@ function Index(props) {
         style={[styles.row, { paddingHorizontal: AppConfig.paddingHorizontal }]}
       >
         <Image
-          source={{ uri: product.photo ?? defultUrl }}
+          source={{ uri: product.photoUrls ? product.photoUrls[0] : defultUrl }}
           style={styles.productImage}
         />
         <View style={styles.v2}>
@@ -65,7 +65,6 @@ function Index(props) {
                 ).toFixed(2) + ""}
               </Text>
             </View>
-
             <View style={styles.v3}>
               <Text style={[styles.txtNoteBold, { color: Colors.black }]}>
                 WHOLE SALE PRICE

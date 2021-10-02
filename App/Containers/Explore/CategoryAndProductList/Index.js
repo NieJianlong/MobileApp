@@ -74,7 +74,7 @@ export default function Index(props) {
     },
     onError: (res) => {
       console.log(`Explore runGeoQuery onError ${JSON.stringify(res)}`);
-      setLocation({ latitude: 1.5, longitude: 1.5 });
+      setLocation({ latitude: 17.38405, longitude: 78.45636 });
       // setIsReady(true);
     },
   });

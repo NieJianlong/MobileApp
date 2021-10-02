@@ -127,7 +127,7 @@ class AccordionView extends React.Component {
  */
 const ProductVariants = ({ product, variants }) => {
   // to do reduce number props if possible
-  console.log(variants);
+
   const { realm } = useRealm();
   const {
     data: { localCartVar },
@@ -184,7 +184,10 @@ const ProductVariants = ({ product, variants }) => {
     const options = variant.options;
     for (let jndex = 0; jndex < options.length; jndex++) {
       const option = options[jndex];
-      const currentValue = { ...variant, value: option.value };
+      const currentValue = {
+        ...JSON.parse(JSON.stringify(variant)),
+        value: option.value,
+      };
       if (
         option.key === "Color" &&
         colors.content.indexOf(currentValue) === -1
@@ -202,7 +205,6 @@ const ProductVariants = ({ product, variants }) => {
       }
     }
   }
-
   return (
     <AccordionView
       sections={sections}

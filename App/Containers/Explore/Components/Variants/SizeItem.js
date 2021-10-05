@@ -7,6 +7,7 @@ export default function SizeItem({ item, currentVariant, onChangeVariant }) {
   const selectedItem = currentVariant.options.find((jtem) => {
     return jtem.value === item.value;
   });
+
   const selected = selectedItem?.value === item.value;
   return (
     <TouchableOpacity
@@ -37,7 +38,7 @@ export default function SizeItem({ item, currentVariant, onChangeVariant }) {
         <View style={[t.w32, t.pY2]}>
           <Text style={selected ? [t.textLg] : [t.textSm]}>
             {selected
-              ? `$${BigNumber(item.wholeSalePrice).toFixed(2)}`
+              ? `$${BigNumber(currentVariant.wholeSalePrice).toFixed(2)}`
               : "See available"}
           </Text>
           <Text

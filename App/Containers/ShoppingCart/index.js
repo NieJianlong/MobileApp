@@ -22,7 +22,6 @@ import NavigationService from "../../Navigation/NavigationService";
 import { AlertContext } from "../Root/GlobalContext";
 import TextTip from "../../Components/EmptyReminder";
 import PubSub from "pubsub-js";
-
 import useRealm from "../../hooks/useRealm";
 import { useQuery } from "@apollo/client";
 import { GET_LOCAL_CART } from "../../Apollo/cache";
@@ -37,13 +36,11 @@ function ShoppingCart(props) {
   const [mydatas, setMydatas] = useState(
     realm
       .objects("ShoppingCart")
-      // .filtered("addressId == $0", localCartVar.deliverAddress)
+      .filtered("addressId == $0", localCartVar.deliverAddress)
       .filtered("quantity > 0")
       .filtered("isDraft == false")
   );
-  console.log("mydatas====================================");
-  console.log(mydatas);
-  console.log("====================================");
+
   // const mydatas = realm.objects("ShoppingCart");
   const [paidDuringDelivery, setPaidDuringDeliver] = useState(false);
   const sheetContext = useContext(AlertContext);
@@ -51,7 +48,7 @@ function ShoppingCart(props) {
     setMydatas(
       realm
         .objects("ShoppingCart")
-        // .filtered("addressId == $0", localCartVar.deliverAddress)
+        .filtered("addressId == $0", localCartVar.deliverAddress)
         .filtered("quantity > 0")
         .filtered("isDraft == false")
     );
@@ -59,7 +56,7 @@ function ShoppingCart(props) {
       setMydatas(
         realm
           .objects("ShoppingCart")
-          // .filtered("addressId == $0", localCartVar.deliverAddress)
+          .filtered("addressId == $0", localCartVar.deliverAddress)
           .filtered("quantity > 0")
           .filtered("isDraft == false")
       );
@@ -69,6 +66,9 @@ function ShoppingCart(props) {
     };
   }, [localCartVar.deliverAddress, realm]);
 
+  console.log("mydatas====================================");
+  console.log(mydatas);
+  console.log("====================================");
   /** nasavge thnks we should put the blocks of view code below into functions
    * to make the code more readable
    */

@@ -85,7 +85,6 @@ function UserEditProfile(props) {
     email: newEmail,
     phoneNumber: newPhoneNumber,
   };
-  console.log(BuyerProfileRequest);
   const [updateProfile, { data }] = useMutation(UPDATE_BUYER_PROFILE, {
     variables: {
       request: BuyerProfileRequest,

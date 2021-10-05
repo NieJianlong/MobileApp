@@ -29,6 +29,9 @@ function Index(props) {
   } = props;
   const [quantity, setQuantity] = useState(props.product.quantity);
 
+  console.log("variant====================================");
+  console.log(variant);
+  console.log("====================================");
   return (
     <TouchableOpacity
       onPress={() =>
@@ -190,7 +193,7 @@ function Index(props) {
           <TouchableOpacity
             onPress={() => {
               NavigationService.navigate("EditShoppingCartScreen", {
-                product: props.product,
+                product: JSON.parse(JSON.stringify(props.product)),
               });
             }}
             style={[styles.removebtn, { width: s(60) }]}

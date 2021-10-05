@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useCallback, useContext, useMemo, useState } from "react";
 import { View, Image, TouchableOpacity, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -22,24 +16,16 @@ import PubSub from "pubsub-js";
 import { useQuery } from "@apollo/client";
 import { GET_LOCAL_CART } from "../../../Apollo/cache";
 import { nanoid } from "nanoid";
+import BigNumber from "bignumber.js";
 
-export default function DetailFooter({ product }) {
+export default function DetailFooter({ product, currentVariant }) {
   const { dispatch } = useContext(AlertContext);
   const { realm } = useRealm();
 
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
-  const currentVariant = useMemo(() => {
-    if (product.listingVariants) {
-      const variant = product.listingVariants.find(
-        (item) => item.defaultVariant === true
-      );
-      return variant;
-    } else {
-      return null;
-    }
-  }, [product]);
+
   const info = realm
     .objects("ShoppingCart")
     .filtered("product.productId == $0", product.productId)
@@ -106,7 +92,15 @@ export default function DetailFooter({ product }) {
     //     sheetTitle: "Confirm your Order",
     //   },
     // });
-  }, [cartInfo, product, quantity, realm]);
+  }, [
+    currentVariant,
+    realm,
+    cartInfo,
+    dispatch,
+    quantity,
+    localCartVar.deliverAddress,
+    product,
+  ]);
   return (
     <SafeAreaView style={styles.footerSafeArea} edges={["bottom"]}>
       <QuantitySelector
@@ -138,7 +132,9 @@ export default function DetailFooter({ product }) {
             <NumberFormat
               thousandSeparator={true}
               prefix={"$"}
-              value={quantity * product.wholeSalePrice}
+              value={`${BigNumber(quantity * product.wholeSalePrice).toFixed(
+                2
+              )}`}
               displayType={"text"}
               renderText={(text) => (
                 <Text style={[styles.txtRegular, { color: Colors.white }]}>

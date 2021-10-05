@@ -125,9 +125,8 @@ class AccordionView extends React.Component {
  *  props.product.prodVariants
  *  array of variants for this product
  */
-const ProductVariants = ({ product, variants }) => {
+const ProductVariants = ({ product, variants, onChange }) => {
   // to do reduce number props if possible
-
   const { realm } = useRealm();
   const {
     data: { localCartVar },
@@ -139,12 +138,13 @@ const ProductVariants = ({ product, variants }) => {
       : null
   );
   const info = useMemo(() => {
+    alert("ssd·12");
     return realm
       .objects("ShoppingCart")
       .filtered("product.productId == $0", product.productId)
       .filtered("addressId == $0", localCartVar.deliverAddress)
       .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
-  }, [currentVariant?.variantId, localCartVar, product.productId, realm]);
+  }, [currentVariant, localCartVar, product.productId, realm]);
   useEffect(() => {
     if (currentVariant) {
       realm.write(() => {
@@ -162,23 +162,24 @@ const ProductVariants = ({ product, variants }) => {
             updated: new Date(),
           });
         }
-        PubSub.publish("refresh-shoppingcart");
+        PubSub.publish("refresh-shoppingcart", { variant: currentVariant });
       });
     }
   }, [info, currentVariant, realm, localCartVar, product]);
   const onChangeVariant = (value) => {
+    onChange(value);
     setCurrentVariant(value);
   };
   if (variants.length === 0) {
     return null;
   }
   const sections = [];
-  const colors = { title: "Color", content: [] };
-  const sizes = { title: "Size", content: [] };
-  const styles = { title: "Style", content: [] };
-  sections.push(colors);
-  sections.push(sizes);
-  sections.push(styles);
+  // const colors = { title: "Color", content: [] };
+  // const sizes = { title: "Size", content: [] };
+  // const styles = { title: "Style", content: [] };
+  // sections.push(colors);
+  // sections.push(sizes);
+  // sections.push(styles);
   for (let index = 0; index < variants.length; index++) {
     const variant = variants[index];
     const options = variant.options;
@@ -188,21 +189,27 @@ const ProductVariants = ({ product, variants }) => {
         ...JSON.parse(JSON.stringify(variant)),
         value: option.value,
       };
-      if (
-        option.key === "Color" &&
-        colors.content.indexOf(currentValue) === -1
-      ) {
-        colors.content.push(currentValue);
+      const item = sections.find((item) => item.title === option.key);
+      if (item && item.content.indexOf(currentValue) === -1) {
+        item.content.push(currentValue);
+      } else {
+        sections.push({ title: option.key, content: [currentValue] });
       }
-      if (option.key === "Size" && sizes.content.indexOf(currentValue) === -1) {
-        sizes.content.push(currentValue);
-      }
-      if (
-        option.key === "Style" &&
-        colors.content.indexOf(currentValue) === -1
-      ) {
-        styles.content.push(currentValue);
-      }
+      // if (
+      //   option.key === "Color" &&
+      //   colors.content.indexOf(currentValue) === -1
+      // ) {
+      //   colors.content.push(currentValue);
+      // }
+      // if (option.key === "Size" && sizes.content.indexOf(currentValue) === -1) {
+      //   sizes.content.push(currentValue);
+      // }
+      // if (
+      //   option.key === "Style" &&
+      //   colors.content.indexOf(currentValue) === -1
+      // ) {
+      //   styles.content.push(currentValue);
+      // }
     }
   }
   return (

@@ -45,7 +45,7 @@ export default function LaunchScreen() {
     //get username and possword from localStorage
     const username = await getLocalStorageValue(LOCAL_STORAGE_USER_NAME);
     const password = await getLocalStorageValue(LOCAL_STORAGE_USER_PASSWORD);
-    NavigationService.navigate("MainScreen");
+    // NavigationService.navigate("MainScreen");
     //if username && password exits,we can login auto
     if (username && password) {
       //just for test
@@ -91,9 +91,6 @@ export default function LaunchScreen() {
         `OnboardingScreen checkBuyerIdExists found a bid in local storage ${bid}`
       );
       global.buyerId = bid;
-      console.log("global.buyerId====================================");
-      console.log(global.buyerId);
-      console.log("====================================");
       return true;
     } else {
       return false;

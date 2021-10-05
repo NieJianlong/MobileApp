@@ -26,7 +26,12 @@ function ProductDetail(props) {
   const {
     params: { product },
   } = useRoute();
-
+  const [currentVariant, setCurrentVariant] = useState(
+    product.listingVariants.length > 0
+      ? product.listingVariants.find((item) => item.defaultVariant === true) ??
+          null
+      : null
+  );
   //control whether to show the hearder (display and navigation to sections)
   const [showHeaderTabs, setShowHeaderTabs] = useState(false);
   //control whether to show the footer (display price and buy button)
@@ -105,6 +110,9 @@ function ProductDetail(props) {
               <ProductVariants
                 variants={product.listingVariants}
                 product={product}
+                onChange={(variant) => {
+                  setCurrentVariant(variant);
+                }}
               />
             )}
             {/* need to add ProductVariants components */}
@@ -132,7 +140,9 @@ function ProductDetail(props) {
           />
         )}
 
-        {showFooter && <DetailFooter product={product} />}
+        {showFooter && (
+          <DetailFooter product={product} currentVariant={currentVariant} />
+        )}
       </SafeAreaView>
     </View>
   );

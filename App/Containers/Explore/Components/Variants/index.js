@@ -50,7 +50,7 @@ class AccordionView extends React.Component {
           <Text style={[t.textLg, t.fontSemibold]}>{valueItem?.value}</Text>
         </View>
         <View style={[t.flexRow, t.itemsCenter]}>
-          {content.title === "Color" && (
+          {index === 0 && (
             <Image
               source={{
                 uri: this.props.currentVariant?.fullPath,
@@ -81,15 +81,15 @@ class AccordionView extends React.Component {
           //防止显示重复
           if (currentArray.indexOf(item.value) < 0) {
             currentArray.push(item.value);
-            if (section.title === "Color") {
-              return (
-                <ColorItem
-                  item={item}
-                  currentVariant={this.props.currentVariant ?? null}
-                  onChangeVariant={this.props.onChangeVariant}
-                />
-              );
-            }
+            // if (section.title === "Color") {
+            //   return (
+            //     <ColorItem
+            //       item={item}
+            //       currentVariant={this.props.currentVariant ?? null}
+            //       onChangeVariant={this.props.onChangeVariant}
+            //     />
+            //   );
+            // }
             return (
               <SizeItem
                 item={item}
@@ -138,7 +138,6 @@ const ProductVariants = ({ product, variants, onChange }) => {
       : null
   );
   const info = useMemo(() => {
-    alert("ssd·12");
     return realm
       .objects("ShoppingCart")
       .filtered("product.productId == $0", product.productId)
@@ -174,12 +173,6 @@ const ProductVariants = ({ product, variants, onChange }) => {
     return null;
   }
   const sections = [];
-  // const colors = { title: "Color", content: [] };
-  // const sizes = { title: "Size", content: [] };
-  // const styles = { title: "Style", content: [] };
-  // sections.push(colors);
-  // sections.push(sizes);
-  // sections.push(styles);
   for (let index = 0; index < variants.length; index++) {
     const variant = variants[index];
     const options = variant.options;
@@ -195,21 +188,6 @@ const ProductVariants = ({ product, variants, onChange }) => {
       } else {
         sections.push({ title: option.key, content: [currentValue] });
       }
-      // if (
-      //   option.key === "Color" &&
-      //   colors.content.indexOf(currentValue) === -1
-      // ) {
-      //   colors.content.push(currentValue);
-      // }
-      // if (option.key === "Size" && sizes.content.indexOf(currentValue) === -1) {
-      //   sizes.content.push(currentValue);
-      // }
-      // if (
-      //   option.key === "Style" &&
-      //   colors.content.indexOf(currentValue) === -1
-      // ) {
-      //   styles.content.push(currentValue);
-      // }
     }
   }
   return (

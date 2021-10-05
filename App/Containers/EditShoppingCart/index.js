@@ -20,12 +20,6 @@ function EditShoppingCart(props) {
   const { params } = useRoute();
   const [product, setProductFromProps] = useState(params.product);
   const sections = [];
-  // const colors = { title: "Color", data: [] };
-  // const sizes = { title: "Size", data: [] };
-  // const styles = { title: "Style", data: [] };
-  // sections.push(colors);
-  // sections.push(sizes);
-  // sections.push(styles);
   for (
     let index = 0;
     index < product.product?.listingVariants?.length;
@@ -45,15 +39,6 @@ function EditShoppingCart(props) {
       } else {
         sections.push({ title: option.key, data: [currentValue] });
       }
-      // if (option.key === "Color" && colors.data.indexOf(currentValue) === -1) {
-      //   colors.data.push(currentValue);
-      // }
-      // if (option.key === "Size" && sizes.data.indexOf(currentValue) === -1) {
-      //   sizes.data.push(currentValue);
-      // }
-      // if (option.key === "Style" && colors.data.indexOf(currentValue) === -1) {
-      //   styles.data.push(currentValue);
-      // }
     }
   }
 
@@ -117,7 +102,6 @@ function EditShoppingCart(props) {
             )}
             renderItem={({ item, section, separators }, index) => {
               console.log(item);
-              console.log(section);
               const sectionTitle = section.title;
               const selectedValue = state.selected[sectionTitle];
               return (

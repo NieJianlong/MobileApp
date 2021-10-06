@@ -103,7 +103,6 @@ function RegisterScreen(props) {
 
     //if username && password exits,we can login auto
     if (username && password) {
-      console.log("====================================");
       const { data } = await jwt.runTokenFlow({ username, password });
       let access_token = data.access_token;
 

@@ -45,7 +45,7 @@ export default function LaunchScreen() {
     //get username and possword from localStorage
     const username = await getLocalStorageValue(LOCAL_STORAGE_USER_NAME);
     const password = await getLocalStorageValue(LOCAL_STORAGE_USER_PASSWORD);
-    // NavigationService.navigate("MainScreen");
+    //NavigationService.navigate("MainScreen");
     //if username && password exits,we can login auto
     if (username && password) {
       //just for test

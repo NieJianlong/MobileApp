@@ -65,10 +65,6 @@ function ShoppingCart(props) {
       PubSub.unsubscribe(refresh);
     };
   }, [localCartVar.deliverAddress, realm]);
-
-  console.log("mydatas====================================");
-  console.log(mydatas);
-  console.log("====================================");
   /** nasavge thnks we should put the blocks of view code below into functions
    * to make the code more readable
    */

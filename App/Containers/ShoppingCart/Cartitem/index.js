@@ -29,9 +29,6 @@ function Index(props) {
   } = props;
   const [quantity, setQuantity] = useState(props.product.quantity);
 
-  console.log("variant====================================");
-  console.log(variant);
-  console.log("====================================");
   return (
     <TouchableOpacity
       onPress={() =>

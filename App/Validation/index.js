@@ -50,8 +50,6 @@ export const isValidPassword = (loginInput) => {
 /** a function to decide an input is a valid phone or an email */
 export const loginDifferentiator = (loginInput) => {
   let diff = { isValid: false };
-  // first check email
-  // console.log('first check email for '+loginInput)
   if (isValidEmail(loginInput)) {
     diff.isEmail = true;
     diff.isValid = true;

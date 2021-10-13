@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useMemo } from "react";
 import {
   StatusBar,
   View,
@@ -23,8 +23,9 @@ import { AlertContext } from "../Root/GlobalContext";
 import TextTip from "../../Components/EmptyReminder";
 import PubSub from "pubsub-js";
 import useRealm from "../../hooks/useRealm";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { GET_LOCAL_CART } from "../../Apollo/cache";
+import { IsListingAvailable } from "../Explore/gql/explore_queries";
 
 export const CartContext = React.createContext({});
 
@@ -65,6 +66,28 @@ function ShoppingCart(props) {
       PubSub.unsubscribe(refresh);
     };
   }, [localCartVar.deliverAddress, realm]);
+
+  const isAvailableList = useMemo(() => {
+    return mydatas?.map((item) => {
+      return {
+        listingId: item?.product?.listingId,
+        variantId: item.variantId ?? "",
+        quantity: item.quantity,
+      };
+    });
+  }, [mydatas]);
+  const [queryAvailble, { data: availbleList }] = useLazyQuery(
+    IsListingAvailable,
+    {
+      variables: { listings: isAvailableList },
+    }
+  );
+  useEffect(() => {
+    if (isAvailableList.length > 0) {
+      queryAvailble();
+    }
+  }, [isAvailableList, queryAvailble]);
+
   /** nasavge thnks we should put the blocks of view code below into functions
    * to make the code more readable
    */
@@ -259,8 +282,13 @@ function ShoppingCart(props) {
                 </View>
               ) : null;
             }}
-            renderItem={({ item }) => {
-              return <CartItem product={item} />;
+            renderItem={({ item, index }) => {
+              let itemAvailble = true;
+              if (availbleList) {
+                const i = availbleList.isListingAvailable[index];
+                itemAvailble = i.isAvailable;
+              }
+              return <CartItem product={item} availble={itemAvailble} />;
             }}
             keyExtractor={(item, index) => `lll${index}`}
           />

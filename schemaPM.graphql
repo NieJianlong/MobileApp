@@ -73,6 +73,8 @@ type CollectionPoint {
   collectionPointId: ID
   address: Address
   openingHours: [String]
+  contactPerson: String
+  contactNumber: String
 }
 
 type CollectionPointDetailView {
@@ -85,6 +87,8 @@ type CollectionPointDetailView {
   areaCode: String
   openingHours: [String]
   deliveryOption: DeliveryOption
+  contactPerson: String
+  contactNumber: String
 }
 
 input CollectionPointInput {
@@ -96,6 +100,8 @@ input CollectionPointInput {
   provinceState: String!
   areaCode: String!
   openingHours: [String]
+  contactNumber: String
+  contactPhone: String
   deliveryOption: DeliveryOption!
 }
 
@@ -128,7 +134,7 @@ scalar DateTime
 enum DeliveryOption {
   UNDEFINED
   COURIER_DELIVERY
-  SELLER_MANAGED_DELIVERY
+  SELLER_DIRECT_DELIVERY
   COLLECTION_POINT_PICKUP
   SELLER_LOCATION_PICKUP
 }
@@ -151,15 +157,8 @@ enum FilterType {
   UNDEFINED
   ALL
   ACTIVE
-  ACTIVE_BY_COORDINATES
-  ACTIVE_BY_COORDINATES_AND_ANNOUNCEMENT
-  ACTIVE_BY_COORDINATES_AND_CATEGORY
-  ACTIVE_BY_COORDINATES_AND_SELLER
   BY_LISTING_ID
   BY_STORE_ID
-  ACTIVE_BY_COORDINATES_AND_WISH_LIST
-  ACTIVE_BY_COORDINATES_AND_FULL_TEXT_SEARCH
-  BY_COORDINATES_AND_SHARE_LIST
   BY_SELLER
   ACTIVE_BY_STORES
   ACTIVE_BY_STORES_AND_ANNOUNCEMENT
@@ -168,6 +167,8 @@ enum FilterType {
   ACTIVE_BY_STORES_AND_WISH_LIST
   ACTIVE_BY_STORES_AND_FULL_TEXT_SEARCH
   BY_STORES_AND_SHARE_LIST
+  BY_PRODUCT_ID
+  BY_PRODUCT_IDS
 }
 
 type Images {
@@ -177,6 +178,21 @@ type Images {
   imageType: String
   description: String
   fullPath: String
+}
+
+input IsListingAvailableInput {
+  listingId: ID!
+  variantId: ID
+
+  """null if product has only one variant"""
+  quantity: Int!
+}
+
+type IsListingAvailableResponse {
+  listingId: ID
+  variantId: ID
+  isAvailable: Boolean
+  reason: String
 }
 
 type KeyValuePair {
@@ -197,7 +213,7 @@ input ListingVariantInput {
 
 type ListingVariantView {
   listingId: ID!
-  variantId: ID!
+  variantId: ID
   productId: ID
   defaultVariant: Boolean
   retailPrice: Float
@@ -261,8 +277,10 @@ type Mutation {
   cloneListing(listingIds: [String]!, startDate: DateTime): [ProductListing]
   createRecurringListings(recurringInput: RecurringListingInput): [ProductListing]
   saveListingCollectionPoint(collectionPointInput: CollectionPointInput): CollectionPoint
-  saveListingSellerManagedDelivery(sellerDeliveryInput: SellerManagedDeliveryInput): SellerManagedDeliveryResponse
+  saveListingSellerDirectDelivery(sellerDeliveryInput: SellerDirectDeliveryInput): SellerDirectDeliveryResponse
   saveListingCourierDeliveryDetails(courierDeliveryInput: CourierDeliveryDetailsInput): CourierDeliveryDetails
+  reduceSoldQuantity(input: VariantSoldQuantityInput): Boolean
+  incrementSoldQuantity(input: VariantSoldQuantityInput): Boolean
   createOption(option: OptionInput): Option
   deleteOption(optionId: String!): Boolean
 }
@@ -298,6 +316,7 @@ input OptionValueInput {
 
 type PolicyNameView {
   name: String
+  values: [String]
 }
 
 type Price {
@@ -406,18 +425,21 @@ input ProductListingsInput {
   collectionPoint: CollectionPointInput
   sellerLocationPickup: CollectionPointInput
   courierDeliveryDetails: CourierDeliveryDetailsInput
-  sellerManagedDelivery: SellerManagedDeliveryInput
+  sellerDirectDelivery: SellerDirectDeliveryInput
 }
 
 enum ProductListingStatus {
   UNDEFINED
   DRAFT
   HIDDEN
-  OPEN
-  SUSPENDED
-  CLOSED
-  RETIRED
   ACTIVE
+  SUCCESSFUL
+  ACCEPTED
+  REJECTED
+  OPEN
+  CLOSED
+  SUSPENDED
+  RETIRED
 }
 
 """
@@ -428,6 +450,7 @@ enum ProductListingType {
   UNDEFINED
   MAIN_PRODUCT_LISTING
   ANNOUNCEMENT_PRODUCT_LISTING
+  RECURRING_PRODUCT_LISTING
 }
 
 input ProductListingUpdateInput {
@@ -663,6 +686,7 @@ type Query {
   findReviews(reviewSearchOptions: ReviewSearchOptions!): [ReviewResponse]
   getProductReviewSummaryResponse(productId: ID!): ReviewSummaryResponse
   getSellerReviewSummaryResponse(sellerId: ID!): ReviewSummaryResponse
+  isListingAvailable(listings: [IsListingAvailableInput]): [IsListingAvailableResponse]
 }
 
 type RatingDetail {
@@ -747,6 +771,7 @@ type ReviewView {
   ratingVote: Int
   helpfulCount: Int
   postedBy: ID
+  userName: String
 }
 
 input SearchOptions {
@@ -771,6 +796,22 @@ input SearchOptions {
 enum SellerDateFilter {
   LAST_7_DAYS
   LAST_30_DAYS
+}
+
+type SellerDirectDeliveryDetailView {
+  announcementId: ID
+  deliveryDate: Date
+}
+
+input SellerDirectDeliveryInput {
+  listingId: String
+  deliveryDate: Date
+}
+
+type SellerDirectDeliveryResponse {
+  announcementId: ID
+  referenceId: ID
+  deliveryDate: Date
 }
 
 input SellerFilterOptions {
@@ -811,7 +852,7 @@ type SellerListingDetailView {
   collectionPoint: CollectionPointDetailView
   sellerLocationPickup: CollectionPointDetailView
   courierDelivery: CourierDeliveryDetailView
-  sellerManagedDelivery: SellerManagedDeliveryDetailView
+  sellerDirectDelivery: SellerDirectDeliveryDetailView
 }
 
 type SellerListingGroupResponse {
@@ -886,22 +927,6 @@ type SellerListingView {
   retailPrice: Float
   salePercentage: Float
   categories: [String]
-}
-
-type SellerManagedDeliveryDetailView {
-  announcementId: ID
-  deliveryDate: Date
-}
-
-input SellerManagedDeliveryInput {
-  listingId: String
-  deliveryDate: Date
-}
-
-type SellerManagedDeliveryResponse {
-  announcementId: ID
-  referenceId: ID
-  deliveryDate: Date
 }
 
 input SellerPageOption {
@@ -1008,6 +1033,12 @@ input StoreInput {
   onlineStoreType: OnlineStoreType
   createdBy: ID
   area: String
+}
+
+input VariantSoldQuantityInput {
+  listingId: String!
+  variantId: String!
+  quantity: Int!
 }
 
 type Wishlist {

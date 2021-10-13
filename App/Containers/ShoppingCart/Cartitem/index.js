@@ -25,16 +25,18 @@ function Index(props) {
   const Alert = useContext(AlertContext);
   const {
     product: { product, variant },
+    availble,
     onPress,
   } = props;
   const [quantity, setQuantity] = useState(props.product.quantity);
 
   return (
     <TouchableOpacity
+      disabled={!availble}
       onPress={() =>
         NavigationService.navigate("ProductDetailScreen", { product })
       }
-      style={[styles.productContainer, { opacity: product.id == 1 ? 0.6 : 1 }]}
+      style={[styles.productContainer, { opacity: availble ? 1 : 0.6 }]}
     >
       <View
         style={[styles.row, { paddingHorizontal: AppConfig.paddingHorizontal }]}
@@ -89,9 +91,10 @@ function Index(props) {
       </View>
 
       <View style={styles.v4}>
-        {product.id !== 1 ? (
+        {availble ? (
           <View style={styles.counter}>
             <TouchableOpacity
+              disabled={!availble}
               onPress={() => {
                 if (quantity === 1) {
                   //dispatch({ type: "revomeCartCount", payload: product.id });
@@ -124,6 +127,7 @@ function Index(props) {
             </TouchableOpacity>
             <TextInput style={styles.cartinput} value={quantity + ""} />
             <TouchableOpacity
+              disabled={!availble}
               onPress={() => {
                 realm.write(() => {
                   props.product.quantity = quantity + 1;
@@ -161,6 +165,7 @@ function Index(props) {
         <View style={styles.row}>
           <TouchableOpacity
             style={styles.removebtn}
+            disabled={!availble}
             onPress={() => {
               realm.write(() => {
                 // Delete the task from the realm.
@@ -188,6 +193,7 @@ function Index(props) {
           </TouchableOpacity>
           <View style={{ width: s(10) }} />
           <TouchableOpacity
+            disabled={!availble}
             onPress={() => {
               NavigationService.navigate("EditShoppingCartScreen", {
                 product: JSON.parse(JSON.stringify(props.product)),

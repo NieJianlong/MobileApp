@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   View,
   StatusBar,
@@ -6,23 +6,23 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import moment from 'moment';
-import { s, vs } from 'react-native-size-matters';
-import Animated from 'react-native-reanimated';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import moment from "moment";
+import { s, vs } from "react-native-size-matters";
+import Animated from "react-native-reanimated";
 
 import {
   Button,
   BottomSheet,
   BottomSheetBackground,
-} from '../../../Components';
-import CheckBox from '../Components/CheckBox';
-import SearchBox from '../Components/SearchBox';
-import NavigationService from '../../../Navigation/NavigationService';
-import { Colors, Images } from '../../../Themes';
+} from "../../../Components";
+import CheckBox from "../Components/CheckBox";
+import SearchBox from "../Components/SearchBox";
+import NavigationService from "../../../Navigation/NavigationService";
+import { Colors, Images } from "../../../Themes";
 
-import styles from './styles';
+import styles from "./styles";
 
 class OrderScreen extends Component {
   fall = new Animated.Value(0);
@@ -60,7 +60,7 @@ class OrderScreen extends Component {
         callbackNode={this.fall}
         snapPoints={[vs(380), 0]}
         initialSnap={this.state.showFilterSheet ? 0 : 1}
-        title={'Sort by'}
+        title={"Sort by"}
       >
         <View style={{ flex: 1 }}>
           {sortOptions.map((i, index) => {
@@ -97,7 +97,7 @@ class OrderScreen extends Component {
           <Image
             source={Images.logo3}
             style={styles.logo}
-            resizeMode={'contain'}
+            resizeMode={"contain"}
           />
 
           {this.state.hasOrders ? (
@@ -130,7 +130,7 @@ class OrderScreen extends Component {
 
         <Button
           onPress={() => NavigationService.goBack()}
-          text={'EXPLORE PRODUCTS'}
+          text={"EXPLORE PRODUCTS"}
         />
       </View>
     );
@@ -154,7 +154,7 @@ class OrderScreen extends Component {
     return (
       <TouchableOpacity
         onPress={() => {
-          NavigationService.navigate('GroupInfoScreen', { type: item.type });
+          NavigationService.navigate("GroupInfoScreen", { type: item.type });
         }}
         disabled={item.isCompleted}
         key={index.toString()}
@@ -173,7 +173,7 @@ class OrderScreen extends Component {
               )}
             </View>
             <Text style={styles.txt3}>
-              {item.lastMessage.author}:{' '}
+              {item.lastMessage.author}:{" "}
               <Text style={{ color: Colors.grey60 }}>
                 {item.lastMessage.content}
               </Text>
@@ -228,7 +228,7 @@ class OrderScreen extends Component {
         <StatusBar barStyle="dark-content" />
         <SafeAreaView
           style={styles.safeArea}
-          edges={['top', 'right', 'left', 'bottom']}
+          edges={["top", "right", "left", "bottom"]}
         >
           {this.renderHeader()}
 
@@ -257,59 +257,59 @@ const orders = [
   {
     isCompleted: false,
     isAnnoucement: true,
-    name: 'iPhone 11',
+    name: "iPhone 11",
     picture:
-      'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
     lastMessage: {
-      content: 'Last Christmas',
-      time: '2021-02-22',
-      author: 'Christie',
+      content: "Last Christmas",
+      time: "2021-02-22",
+      author: "Christie",
     },
     unreadCount: 4,
-    type: 'history',
+    type: "history",
   },
   {
     isCompleted: false,
     isAnnoucement: false,
-    name: 'iPhone 11',
+    name: "iPhone 11",
     picture:
-      'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
     lastMessage: {
-      content: 'Last Christmas',
-      time: '2020-09-12',
-      author: 'Christie',
+      content: "Last Christmas",
+      time: "2020-09-12",
+      author: "Christie",
     },
     unreadCount: 3,
-    type: 'incompleted',
+    type: "incompleted",
   },
   {
     isCompleted: false,
     isAnnoucement: false,
-    name: 'iPhone 11',
+    name: "iPhone 11",
     picture:
-      'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
     lastMessage: {
-      content: 'Last Christmas',
-      time: '2019-09-12',
-      author: 'Christie',
+      content: "Last Christmas",
+      time: "2019-09-12",
+      author: "Christie",
     },
     unreadCount: 0,
-    type: 'reached',
+    type: "reached",
   },
   {
     isCompleted: false,
     isAnnoucement: false,
-    name: 'iPhone 11',
+    name: "iPhone 11",
     picture:
-      'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
+      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
     lastMessage: {
-      content: 'Last Christmas',
-      time: '2019-09-12',
-      author: 'Christie',
+      content: "Last Christmas",
+      time: "2019-09-12",
+      author: "Christie",
     },
     unreadCount: 0,
-    type: 'received',
+    type: "received",
   },
 ];
 
-const sortOptions = ['Not 100% slices product', 'Completed'];
+const sortOptions = ["Not 100% slices product", "Completed"];

@@ -12,13 +12,17 @@ import metrics from "../../Themes/Metrics";
 import { ApplicationStyles } from "../../Themes";
 
 import * as ecM from "./editCartMappers.js";
+import { lowerFirst } from "lodash";
+import useRealm from "../../hooks/useRealm";
 
 /**
  * we are coming here from a navigation event
  */
 function EditShoppingCart(props) {
   const { params } = useRoute();
+  const { realm } = useRealm();
   const [product, setProductFromProps] = useState(params.product);
+  const [selected, setSelected] = useState(product.variant);
   const sections = [];
   for (
     let index = 0;
@@ -33,16 +37,16 @@ function EditShoppingCart(props) {
         ...JSON.parse(JSON.stringify(variant)),
         value: option.value,
       };
-      const item = sections.find((item) => item.title === option.key);
-      if (item && item.data.indexOf(currentValue) === -1) {
-        item.data.push(currentValue);
-      } else {
+      const item = sections.find((i) => i.title === option.key);
+      if (!item) {
         sections.push({ title: option.key, data: [currentValue] });
+      } else {
+        if (!item.data.find((j) => j.value === currentValue.value)) {
+          item.data.push(currentValue);
+        }
       }
     }
   }
-
-  const [state, setState] = useState(ecM.hardCodedState);
   if (!product.product?.listingVariants || sections.length === 0) {
     return null;
   }
@@ -78,7 +82,6 @@ function EditShoppingCart(props) {
         />
         <View style={{ height: metrics.screenHeight - vs(64) }}>
           <SectionList
-            extraData={state}
             contentContainerStyle={{ paddingBottom: vs(44) }}
             sections={sections}
             renderSectionHeader={({ section: { title } }) => (
@@ -101,9 +104,11 @@ function EditShoppingCart(props) {
               </View>
             )}
             renderItem={({ item, section, separators }, index) => {
-              console.log(item);
-              const sectionTitle = section.title;
-              const selectedValue = state.selected[sectionTitle];
+              const optionValue = item.options.find(
+                (i) => i.key === section.title
+              );
+              const selectedOption =
+                selected.options?.find((i) => i.key === section.title) ?? null;
               return (
                 <View
                   style={{
@@ -112,17 +117,15 @@ function EditShoppingCart(props) {
                 >
                   <View style={{ height: vs(12) }} />
                   <CheckBox
-                    defaultValue={selectedValue === item.title}
+                    defaultValue={selectedOption?.value === optionValue.value}
                     onSwitch={(t) => {
-                      const selectedDic = state.selected;
-                      selectedDic[sectionTitle] = item.title;
-                      setState({ ...state, selected: { ...selectedDic } });
+                      setSelected(item);
                     }}
-                    hasIcon={section.title === "Color"}
+                    hasIcon={false}
                     iconColor={item.color}
-                    label={item.title}
+                    label={optionValue.value}
                   />
-                  {selectedValue !== item.title && (
+                  {selectedOption?.value !== optionValue.value && (
                     <Text
                       style={[
                         { position: "absolute", top: vs(25), right: 40 },

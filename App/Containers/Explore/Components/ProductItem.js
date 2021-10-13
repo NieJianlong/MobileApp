@@ -55,8 +55,8 @@ function ProductItem(props) {
           >
             <Image
               source={{
-                uri: product.photoUrls.length
-                  ? product.photoUrls[0]
+                uri: product?.photoUrls?.length
+                  ? product?.photoUrls[0]
                   : defultUrl,
               }}
               style={styles.productImage}

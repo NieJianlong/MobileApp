@@ -192,6 +192,7 @@ type BuyerProfileResponse {
   refundSalamiCredit: Float
   bonusSalamiCredit: Float
   bonusSalamiCreditExpire: DateTime
+  walletId: ID
 }
 
 input ChatMessageRequest {
@@ -394,6 +395,8 @@ type Mutation {
   createSellerToOnlineStore(request: SellerToOnlineStoreRequestForCreate!): SellerToOnlineStoreResponse
   deleteSellerToOnlineStore(sellerId: ID!, storeId: ID!): Boolean
   updateSellerToOnlineStore(request: SellerToOnlineStoreRequest!): SellerToOnlineStoreResponse
+  setWalletToBuyer(buyerId: ID!, walletId: ID!): BuyerProfileResponse
+  setEscrowAccountToSeller(sellerId: ID, escrowAccountId: ID!): SellerProfileResponse
 }
 
 input NotificationRequest {
@@ -621,6 +624,7 @@ type SellerProfileResponse {
   vstGstNumber: String
   usersRating: String
   sellerType: SellerType
+  escrowAccountId: ID
 }
 
 input SellerToOnlineStoreRequest {

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { useMutation, useQuery } from "@apollo/client";
 import {
   View,
   StatusBar,
@@ -93,13 +94,11 @@ class OrderScreen extends Component {
       return (
         <View style={styles.header}>
           <View style={styles.icSearch} />
-
           <Image
             source={Images.logo3}
             style={styles.logo}
             resizeMode={"contain"}
           />
-
           {this.state.hasOrders ? (
             <TouchableOpacity
               onPress={() => {

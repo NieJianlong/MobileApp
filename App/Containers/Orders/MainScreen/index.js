@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import {
   View,
   StatusBar,
@@ -24,22 +24,19 @@ import NavigationService from "../../../Navigation/NavigationService";
 import { Colors, Images } from "../../../Themes";
 
 import styles from "./styles";
+import { GetBuyerOrders } from "../orderQuery.js/index";
 
-class OrderScreen extends Component {
+class Order extends Component {
   fall = new Animated.Value(0);
-
   constructor(props) {
     super(props);
     this.state = {
       hasOrders: true,
       sortOption: 0,
-
       showFilterSheet: false,
       isSearching: false,
     };
   }
-
-  componentDidMount() {}
 
   toggleFilterSheet = () => {
     this.setState({ showFilterSheet: !this.state.showFilterSheet }, () => {
@@ -126,7 +123,6 @@ class OrderScreen extends Component {
             You can start exploring products right now!
           </Text>
         </View>
-
         <Button
           onPress={() => NavigationService.goBack()}
           text={"EXPLORE PRODUCTS"}
@@ -250,8 +246,24 @@ class OrderScreen extends Component {
   }
 }
 
-export default OrderScreen;
+function OrderScreen() {
+  const { data } = useQuery(GetBuyerOrders, {
+    variables: { buyerId: global.buyerId, searchString: "" },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+  });
+  if (data) {
+    console.log("data====================================");
+    console.log(data);
+    console.log("====================================");
+  }
+  return <Order />;
+}
 
+export default OrderScreen;
 const orders = [
   {
     isCompleted: false,

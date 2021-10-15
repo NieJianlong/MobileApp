@@ -27,7 +27,7 @@ const IAM_PORT = ":8081/graphql";
 const USER_PORT = ":8082/graphql";
 const PRODUCT_PORT = ":8083/graphql";
 const CART_PORT = ":8084/graphql";
-
+const ORDER_PORT = ":8085/graphql";
 //we should add all apis here,
 const allAPIS = {
   //public api
@@ -72,6 +72,8 @@ const allAPIS = {
   AddItem: CART_PORT,
   CartCheckout: CART_PORT,
   ClearCart: CART_PORT,
+
+  GetBuyerOrders: ORDER_PORT,
 };
 
 const customFetch = (uri, options) => {

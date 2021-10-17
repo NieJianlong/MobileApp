@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useMemo } from "react";
 import { useQuery } from "@apollo/client";
 import {
   View,
@@ -9,7 +9,6 @@ import {
   Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import moment from "moment";
 import { s, vs } from "react-native-size-matters";
 import Animated from "react-native-reanimated";
 
@@ -25,13 +24,14 @@ import { Colors, Images } from "../../../Themes";
 
 import styles from "./styles";
 import { GetBuyerOrders } from "../orderQuery.js/index";
+import { t } from "react-native-tailwindcss";
+import moment from "moment";
 
 class Order extends Component {
   fall = new Animated.Value(0);
   constructor(props) {
     super(props);
     this.state = {
-      hasOrders: true,
       sortOption: 0,
       showFilterSheet: false,
       isSearching: false,
@@ -96,7 +96,7 @@ class Order extends Component {
             style={styles.logo}
             resizeMode={"contain"}
           />
-          {this.state.hasOrders ? (
+          {this.props.orderItems.length > 0 ? (
             <TouchableOpacity
               onPress={() => {
                 this.setState({ isSearching: true });
@@ -123,10 +123,12 @@ class Order extends Component {
             You can start exploring products right now!
           </Text>
         </View>
-        <Button
-          onPress={() => NavigationService.goBack()}
-          text={"EXPLORE PRODUCTS"}
-        />
+        <View style={[t.pX6]}>
+          <Button
+            onPress={() => NavigationService.goBack()}
+            text={"EXPLORE PRODUCTS"}
+          />
+        </View>
       </View>
     );
   }
@@ -146,6 +148,16 @@ class Order extends Component {
   }
 
   renderOrderItem = (item, index) => {
+    let detail = "";
+    const statusText = item.latestStatus.replaceAll("_", " ");
+    detail =
+      statusText.substring(0, 1) +
+      statusText.substring(1, statusText.length).toLowerCase() +
+      " at " +
+      moment(item.orderDatetime).format("DD/MM/YYYY");
+    console.log("item====================================");
+    console.log(detail);
+    console.log("====================================");
     return (
       <TouchableOpacity
         onPress={() => {
@@ -156,22 +168,27 @@ class Order extends Component {
         style={[styles.itemContainer, item.isCompleted && { opacity: 0.5 }]}
       >
         <View style={styles.row}>
-          <Image source={{ uri: item.picture }} style={styles.itemAvatar} />
-
+          <Image
+            source={{ uri: item.photo }}
+            resizeMode="contain"
+            style={styles.itemAvatar}
+          />
           <View style={styles.v2}>
             <View style={styles.row}>
-              <Text style={styles.heading5Bold}>{item.name}</Text>
-              {item.isAnnoucement && (
+              <Text style={styles.heading5Bold}>{item.shortName}</Text>
+
+              {/* {item.isAnnoucement && (
                 <View style={styles.annoucementContainer}>
                   <Text style={styles.annoucementText}>Announcement</Text>
                 </View>
-              )}
+              )} */}
             </View>
             <Text style={styles.txt3}>
-              {item.lastMessage.author}:{" "}
+              {detail}
+              {/* {item.lastMessage.author}:{" "}
               <Text style={{ color: Colors.grey60 }}>
                 {item.lastMessage.content}
-              </Text>
+              </Text> */}
             </Text>
           </View>
         </View>
@@ -181,14 +198,14 @@ class Order extends Component {
             <Text style={styles.heading6Regular}>COMPLETED</Text>
           ) : (
             <Text style={styles.heading6Regular}>
-              {moment(item.lastMessage.time).fromNow()}
+              {/* {moment(item.lastMessage.time).fromNow()} */}
             </Text>
           )}
-          {item.unreadCount > 0 && (
+          {/* {item.unreadCount > 0 && (
             <View style={styles.unreadContainer}>
               <Text style={styles.unreadNumber}>{item.unreadCount}</Text>
             </View>
-          )}
+          )} */}
         </View>
       </TouchableOpacity>
     );
@@ -199,15 +216,16 @@ class Order extends Component {
     } else {
       return (
         <View style={styles.bodyContainer}>
-          {this.state.hasOrders ? (
+          {this.props.orderItems.length > 0 ? (
             <ScrollView showsVerticalScrollIndicator={false}>
               <View style={styles.v1}>
-                <Text style={styles.heading1Bold}>Chats</Text>
-
+                <Text style={styles.heading1Bold}>Orders</Text>
                 {this.renderFilter()}
               </View>
               <View style={{ height: vs(15) }} />
-              {orders.map((item, index) => this.renderOrderItem(item, index))}
+              {this.props.orderItems.map((item, index) =>
+                this.renderOrderItem(item, index)
+              )}
             </ScrollView>
           ) : (
             this.renderNoOrder()
@@ -226,10 +244,8 @@ class Order extends Component {
           edges={["top", "right", "left", "bottom"]}
         >
           {this.renderHeader()}
-
           {this.renderBody()}
         </SafeAreaView>
-
         {/* background for bottom sheet */}
         <BottomSheetBackground
           visible={
@@ -239,7 +255,6 @@ class Order extends Component {
           }
           controller={this.fall}
         />
-
         {this.renderFilterSheet()}
       </View>
     );
@@ -255,72 +270,82 @@ function OrderScreen() {
       },
     },
   });
-  if (data) {
-    console.log("data====================================");
-    console.log(data);
-    console.log("====================================");
-  }
-  return <Order />;
+  const orderItems = useMemo(() => {
+    let finalItems = [];
+    if (data) {
+      data.getBuyerOrders.map((item) => {
+        if (item.orderItems) {
+          item.orderItems.map((i) => {
+            finalItems.push({ ...item, ...i });
+          });
+        }
+      });
+      return finalItems;
+    } else {
+      return [];
+    }
+  }, [data]);
+  return <Order orderItems={orderItems} />;
 }
 
 export default OrderScreen;
-const orders = [
-  {
-    isCompleted: false,
-    isAnnoucement: true,
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    lastMessage: {
-      content: "Last Christmas",
-      time: "2021-02-22",
-      author: "Christie",
-    },
-    unreadCount: 4,
-    type: "history",
-  },
-  {
-    isCompleted: false,
-    isAnnoucement: false,
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    lastMessage: {
-      content: "Last Christmas",
-      time: "2020-09-12",
-      author: "Christie",
-    },
-    unreadCount: 3,
-    type: "incompleted",
-  },
-  {
-    isCompleted: false,
-    isAnnoucement: false,
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    lastMessage: {
-      content: "Last Christmas",
-      time: "2019-09-12",
-      author: "Christie",
-    },
-    unreadCount: 0,
-    type: "reached",
-  },
-  {
-    isCompleted: false,
-    isAnnoucement: false,
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    lastMessage: {
-      content: "Last Christmas",
-      time: "2019-09-12",
-      author: "Christie",
-    },
-    unreadCount: 0,
-    type: "received",
-  },
-];
+// const orders = [
+//   {
+//     isCompleted: false,
+//     isAnnoucement: true,
+//     name: "iPhone 11",
+//     picture:
+//       "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
+//     lastMessage: {
+//       content: "Last Christmas",
+//       time: "2021-02-22",
+//       author: "Christie",
+//     },
+//     unreadCount: 4,
+//     type: "history",
+//   },
+//   {
+//     isCompleted: false,
+//     isAnnoucement: false,
+//     name: "iPhone 11",
+//     picture:
+//       "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
+//     lastMessage: {
+//       content: "Last Christmas",
+//       time: "2020-09-12",
+//       author: "Christie",
+//     },
+//     unreadCount: 3,
+//     type: "incompleted",
+//   },
+//   {
+//     isCompleted: false,
+//     isAnnoucement: false,
+//     name: "iPhone 11",
+//     picture:
+//       "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
+//     lastMessage: {
+//       content: "Last Christmas",
+//       time: "2019-09-12",
+//       author: "Christie",
+//     },
+//     unreadCount: 0,
+//     type: "reached",
+//   },
+//   {
+//     isCompleted: false,
+//     isAnnoucement: false,
+//     name: "iPhone 11",
+//     picture:
+//       "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
+//     lastMessage: {
+//       content: "Last Christmas",
+//       time: "2019-09-12",
+//       author: "Christie",
+//     },
+//     unreadCount: 0,
+//     type: "received",
+//   },
+// ];
 
 const sortOptions = ["Not 100% slices product", "Completed"];

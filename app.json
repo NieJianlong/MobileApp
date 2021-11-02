@@ -1,4 +1,7 @@
 {
   "name": "apollo",
-  "displayName": "apollo"
+  "displayName": "apollo",
+  "androidStatusBar": {
+    "backgroundColor": "#000000"
+  }
 }

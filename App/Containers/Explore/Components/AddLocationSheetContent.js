@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
-import { View, StatusBar, Text, TouchableOpacity } from "react-native";
+import { View, StatusBar, Text, TouchableOpacity, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -235,7 +235,11 @@ function AddLocationSheetContent(props) {
         </View>
 
         <View style={styles.bodyContainer}>
-          <KeyboardAwareScrollView>
+          <KeyboardAwareScrollView
+            enableOnAndroid={true}
+            extraHeight={90}
+            extraScrollHeight={90}
+          >
             <View
               style={{
                 flexDirection: "row",
@@ -275,6 +279,7 @@ function AddLocationSheetContent(props) {
             <View style={{ marginTop: 20 }}>
               <Switch
                 onSwitch={(res) => {
+                  console.log(res);
                   setAsDefault(res);
                 }}
                 active={asDefault}

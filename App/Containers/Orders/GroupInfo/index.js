@@ -5,22 +5,45 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  FlatList,
-  ImageBackground,
   ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "./styles";
 import { AppBar } from "../../../Components";
 import ProductInfo from "../Components/ProductInfo";
-import ProductItem from "../../Explore/Components/ProductItem";
 import { Images } from "../../../Themes";
 import NavigationService from "../../../Navigation/NavigationService";
-import { useRoute } from "@react-navigation/core";
-import { s } from "react-native-size-matters";
+import { useNavigation, useRoute } from "@react-navigation/core";
+import { useQuery } from "@apollo/client";
+import { GET_LISTINGS } from "../../Explore/gql/explore_queries";
+import ProductItem from "../../Explore/Components/ProductItem";
 
 function GroupInfoScreen(props) {
   const { params } = useRoute();
+  console.log("params====================================");
+  console.log(params);
+  console.log("====================================");
+  const { loading, error, data, refetch, fetchMore } = useQuery(GET_LISTINGS, {
+    variables: {
+      searchOptions: {
+        filter: "BY_LISTING_ID",
+        filterParams: {
+          listingId: params.item.listingId ?? "",
+        },
+      },
+    },
+    context: {
+      headers: {
+        isPrivate: false,
+      },
+    },
+    onError: (res) => {},
+  });
+  if (data) {
+    console.log("data====================================");
+    console.log(data);
+    console.log("====================================");
+  }
   function renderAction(icon, text, action) {
     return (
       <TouchableOpacity onPress={action} style={styles.actionContainer}>
@@ -30,10 +53,8 @@ function GroupInfoScreen(props) {
             source={icon}
             style={styles.actionIcon}
           />
-
           <Text style={styles.heading5Bold}>{text}</Text>
         </View>
-
         <Image source={Images.arrow_left} style={styles.icArrow} />
       </TouchableOpacity>
     );
@@ -83,55 +104,31 @@ function GroupInfoScreen(props) {
       </View>
     );
   }
-  function renderMediaItem({ item, index }) {
-    return (
-      <ImageBackground
-        borderRadius={s(5)}
-        source={{ uri: item.url }}
-        style={styles.mediaItemContainer}
-      ></ImageBackground>
-    );
-  }
-  function renderMediaSection() {
-    return (
-      <View>
-        <Text style={styles.sectionName}>Media, Links and Docs</Text>
 
-        <FlatList
-          data={media}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={renderMediaItem}
-          contentContainerStyle={{ paddingHorizontal: s(15) }}
-        />
-      </View>
-    );
-  }
-  function renderRelatedProducts() {
-    return (
-      <View>
-        <Text style={styles.sectionName}>
-          Who bought this items also bought below items:
-        </Text>
-
-        {products.map((item, index) => (
-          <ProductItem size={"M"} product={item} />
-        ))}
-      </View>
-    );
-  }
   function renderBody() {
-    return (
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.body}>
-        <ProductInfo product={product} />
-
-        {renderActions()}
-
-        {renderMediaSection()}
-
-        {renderRelatedProducts()}
-      </ScrollView>
-    );
+    if (data) {
+      return (
+        <ScrollView showsVerticalScrollIndicator={false} style={styles.body}>
+          <ProductItem
+            isAnnouncement={false}
+            product={data.getListings[0]}
+            size={"M"}
+            notShowBottom={true}
+          />
+          {/* <ProductInfo product={data.getListings[0]} /> */}
+          {renderActions()}
+        </ScrollView>
+      );
+    }
+    if (!data) {
+      return null;
+    }
+    // return data ? (
+    //   <ScrollView showsVerticalScrollIndicator={false} style={styles.body}>
+    //     <ProductInfo product={data.GetListings[0]} />
+    //     {renderActions()}
+    //   </ScrollView>
+    // ) : null;
   }
   return (
     <View style={styles.container}>
@@ -147,119 +144,3 @@ function GroupInfoScreen(props) {
 }
 
 export default GroupInfoScreen;
-
-const product = {
-  name: "iPhone 11",
-  picture:
-    "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-  rating: 3.0,
-  ratingCount: 124,
-  retailPrice: 2345,
-  wholesalePrice: 1542,
-  orderClose: "22/12/2020",
-  inStock: 100,
-  orderCount: 24,
-};
-
-const media = [
-  {
-    type: "image",
-    url:
-      "https://cdn.pocket-lint.com/r/s/1200x/assets/images/142227-phones-review-iphone-x-review-photos-image1-ahdsiyvum0.jpg",
-  },
-  {
-    type: "image",
-    url:
-      "https://cdn.pocket-lint.com/r/s/1200x/assets/images/142227-phones-review-iphone-x-review-photos-image1-ahdsiyvum0.jpg",
-  },
-  {
-    type: "image",
-    url:
-      "https://cdn.pocket-lint.com/r/s/1200x/assets/images/142227-phones-review-iphone-x-review-photos-image1-ahdsiyvum0.jpg",
-  },
-  {
-    type: "image",
-    url:
-      "https://cdn.pocket-lint.com/r/s/1200x/assets/images/142227-phones-review-iphone-x-review-photos-image1-ahdsiyvum0.jpg",
-  },
-  {
-    type: "image",
-    url:
-      "https://cdn.pocket-lint.com/r/s/1200x/assets/images/142227-phones-review-iphone-x-review-photos-image1-ahdsiyvum0.jpg",
-  },
-];
-
-const products = [
-  {
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    rating: 3.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    orderClose: "22/12/2020",
-    inStock: 100,
-    orderCount: 24,
-  },
-  {
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    rating: 4.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    orderClose: "22/12/2020",
-    inStock: 100,
-    orderCount: 24,
-  },
-  {
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    rating: 3.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    orderClose: "22/12/2020",
-    inStock: 100,
-    orderCount: 24,
-  },
-  {
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    rating: 3.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    orderClose: "22/12/2020",
-    inStock: 100,
-    orderCount: 24,
-  },
-  {
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    rating: 3.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    orderClose: "22/12/2020",
-    inStock: 100,
-    orderCount: 24,
-  },
-  {
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    rating: 3.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    orderClose: "22/12/2020",
-    inStock: 100,
-    orderCount: 24,
-  },
-];

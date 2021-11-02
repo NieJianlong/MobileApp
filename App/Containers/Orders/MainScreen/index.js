@@ -156,12 +156,15 @@ class Order extends Component {
       " at " +
       moment(item.orderDatetime).format("DD/MM/YYYY");
     console.log("item====================================");
-    console.log(detail);
+    console.log(item);
     console.log("====================================");
     return (
       <TouchableOpacity
         onPress={() => {
-          NavigationService.navigate("GroupInfoScreen", { type: item.type });
+          NavigationService.navigate("GroupInfoScreen", {
+            type: item.type,
+            item: item,
+          });
         }}
         disabled={item.isCompleted}
         key={index.toString()}

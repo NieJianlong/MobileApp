@@ -101,11 +101,14 @@ function RegisterScreen(props) {
     const username = registerInput;
     const password = psswd;
 
+    console.log('hello ========================>');
+
     //if username && password exits,we can login auto
     if (username && password) {
       const { data } = await jwt.runTokenFlow({ username, password });
       let access_token = data.access_token;
 
+      console.log(`=======================> ${access_token}`);
       if (access_token === "undefined") {
         console.log("no access token");
       }
@@ -203,6 +206,7 @@ function RegisterScreen(props) {
       // now check is valid email or phone
       if (reporter.validPhoneOrEmail) {
         console.log(`setTermsAccepted=${termsAccepted}`);
+
         if (termsAccepted) {
           setValidationDisplay("Please accept terms and privacy policy");
           return;

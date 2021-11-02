@@ -2288,11 +2288,6 @@ bignumber.js@^9.0.1:
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.0.1.tgz#8d7ba124c882bfd8e43260c67475518d0689e4e5"
   integrity sha512-IdZR9mh6ahOBv/hYGiXyVuyCetmGJhtYkqLBpTStdhEGjegpPlUawydyaF3pbIOFynJTpllEs+NP+CS9jKFLjA==
 
-bignumber@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/bignumber/-/bignumber-1.1.0.tgz#e6ab0a743da5f3ea018e5c17597d121f7868c159"
-  integrity sha1-5qsKdD2l8+oBjlwXWX0SH3howVk=
-
 bindings@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.5.0.tgz#10353c9e945334bc0511a6d90b38fbc7c9c504df"
@@ -7050,10 +7045,10 @@ react-native-head-tab-view@3.0.4:
   resolved "https://registry.npmjs.org/react-native-head-tab-view/-/react-native-head-tab-view-3.0.4.tgz"
   integrity sha512-FdXCaZHWjb0PBhu67mbZf3rvuQjudJ6PcbTanobxOnHZvCVi0Slg1kNLRyjgJP/mbl3OvUUja6ZzXxprRTrWhg==
 
-react-native-image-crop-picker@^0.35.3:
-  version "0.35.3"
-  resolved "https://registry.npmjs.org/react-native-image-crop-picker/-/react-native-image-crop-picker-0.35.3.tgz"
-  integrity sha512-JMBmtfdJvxvPNTjSmiqNaBuEAqwwzyYvgvwiOU8ikIE113RD6hPV+wpxGFCqGJPzJF/JO6uEzpDOcFCfHZbmtQ==
+react-native-image-crop-picker@^0.36.4:
+  version "0.36.4"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.36.4.tgz#13a659fc296bea695a88a36de9eacd1e4aebc9b8"
+  integrity sha512-FOWkYbCEh78V5/aK9HqMSvRnQJtelGwj0UOu1zhE49gO6e4YoKKNBvA15jweAMM/kPA+omDXBIgJaruonoEXGA==
 
 react-native-image-pan-zoom@^2.1.12:
   version "2.1.12"

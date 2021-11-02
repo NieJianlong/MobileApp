@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   TouchableOpacity,
@@ -6,16 +6,16 @@ import {
   Image,
   SafeAreaView,
   StatusBar,
-} from 'react-native';
-import AppConfig from '../../Config/AppConfig';
-import { vs, s, ScaledSheet } from 'react-native-size-matters';
-import fonts from '../../Themes/Fonts';
-import colors from '../../Themes/Colors';
-import { AppBar, Button } from '../../Components';
-import NavigationService from '../../Navigation/NavigationService';
-import images from '../../Themes/Images';
-import Content from './Content';
-import { ApplicationStyles } from '../../Themes';
+} from "react-native";
+import AppConfig from "../../Config/AppConfig";
+import { vs, s, ScaledSheet } from "react-native-size-matters";
+import fonts from "../../Themes/Fonts";
+import colors from "../../Themes/Colors";
+import { AppBar, Button } from "../../Components";
+import NavigationService from "../../Navigation/NavigationService";
+import images from "../../Themes/Images";
+import Content from "./Content";
+import { ApplicationStyles } from "../../Themes";
 
 function ReturnProductStep3(props) {
   return (
@@ -23,7 +23,7 @@ function ReturnProductStep3(props) {
       style={{
         flex: 1,
         backgroundColor: colors.background,
-        position: 'absolute',
+        position: "absolute",
         top: 0,
         left: 0,
         right: 0,
@@ -33,7 +33,7 @@ function ReturnProductStep3(props) {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar
           hiddenBackBtn
@@ -41,8 +41,8 @@ function ReturnProductStep3(props) {
             return (
               <TouchableOpacity
                 onPress={() => {
-                  NavigationService.navigate('GroupInfoScreen', {
-                    type: 'returnstatus',
+                  NavigationService.navigate("GroupInfoScreen", {
+                    type: "returnstatus",
                   });
                   // NavigationService.goBack();
                 }}
@@ -65,7 +65,7 @@ function ReturnProductStep3(props) {
               fontSize: s(24),
               fontFamily: fonts.primary,
               color: colors.black,
-              fontWeight: '600',
+              fontWeight: "600",
             }}
           >
             Your return label
@@ -79,12 +79,12 @@ function ReturnProductStep3(props) {
           >
             <View
               style={{
-                width: '100%',
+                width: "100%",
                 height: vs(24),
-                flexDirection: 'row',
-                justifyContent: 'center',
-                backgroundColor: 'white',
-                alignItems: 'center',
+                flexDirection: "row",
+                justifyContent: "center",
+                backgroundColor: "white",
+                alignItems: "center",
               }}
             >
               <Text
@@ -98,7 +98,7 @@ function ReturnProductStep3(props) {
               <Text
                 style={[
                   ApplicationStyles.screen.heading4Regular,
-                  { color: colors.black, marginLeft: s(5), fontWeight: 'bold' },
+                  { color: colors.black, marginLeft: s(5), fontWeight: "bold" },
                 ]}
               >
                 Dec 2, 2020
@@ -109,7 +109,7 @@ function ReturnProductStep3(props) {
       </SafeAreaView>
       <SafeAreaView
         style={{
-          position: 'absolute',
+          position: "absolute",
           bottom: 0,
           left: 0,
           right: 0,
@@ -127,8 +127,8 @@ export default ReturnProductStep3;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,
-    fontSize: '16@s',
+    fontSize: "16@s",
     color: colors.black,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

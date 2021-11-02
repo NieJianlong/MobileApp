@@ -4,7 +4,7 @@ const AppConfig = {
   fontSize: s(15),
   paddingHorizontal: s(15),
   // baseUrl: "http://ec2-18-117-210-203.us-east-2.compute.amazonaws.com",
-  baseUrl: "http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com",
+  baseUrl: "https://dev-api.salamislicing.in/",
 };
 
 export default AppConfig;

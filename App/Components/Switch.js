@@ -1,10 +1,18 @@
 import React, { useState } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity as RNTouchableOpacity,
+  Platform,
+} from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
 import { Fonts, Colors } from "../Themes";
+import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
+const TouchableOpacity =
+  Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
 
 function Switch(props) {
-  const [active, setActive] = useState(props.active||false);
+  const [active, setActive] = useState(props.active || false);
   const { disabled, label, onSwitch } = props;
   if (!disabled) {
     return (

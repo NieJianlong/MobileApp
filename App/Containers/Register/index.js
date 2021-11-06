@@ -252,7 +252,6 @@ function RegisterScreen(props) {
         edges={["top", "right", "left", "bottom"]}
       >
         <AppBar showLogo onPressBack={() => props.navigation.goBack()} />
-
         <View style={styles.bodyContainer}>
           <Text style={styles.heading2Bold}>Register</Text>
 

@@ -6,7 +6,7 @@ import AppConfig from "../Config/AppConfig";
  * private appoloo client will read from local strogae for auth requests
  *
  */
-const LOGIN_ENDPOINT = `${AppConfig.baseUrl}:8081/api/sso/authentication/login`;
+const LOGIN_ENDPOINT = `${AppConfig.baseUrl}iam/api/sso/authentication/login`;
 
 // Axios automatically serialize object to JSON
 export const runTokenFlow = async (loginRequest) => {

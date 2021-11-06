@@ -1,19 +1,9 @@
 import React, { Component } from "react";
-import {
-  View,
-  StatusBar,
-  Text,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { View, StatusBar, Text, Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import styles from "./styles";
-
-import { ProductSearchBox, AppBar } from "../../../Components";
-import { Colors, Images } from "../../../Themes";
-import NavigationService from "../../../Navigation/NavigationService";
+import { AppBar } from "../../../Components";
+import { Images } from "../../../Themes";
 import { vs } from "react-native-size-matters";
 
 class OrderDetailScreen extends Component {

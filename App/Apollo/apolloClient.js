@@ -24,10 +24,10 @@ const baseUrl = AppConfig.baseUrl;
 // 8082 --> UserManagement
 // 8083 --> ProductManagement
 const IAM_PORT = ":8081/graphql";
-const USER_PORT = ":8082/graphql";
-const PRODUCT_PORT = ":8083/graphql";
+const USER_PORT = "um/graphql";
+const PRODUCT_PORT = "pm/graphql";
 const CART_PORT = ":8084/graphql";
-const ORDER_PORT = ":8085/graphql";
+const ORDER_PORT = "om/graphql";
 //we should add all apis here,
 const allAPIS = {
   //public api

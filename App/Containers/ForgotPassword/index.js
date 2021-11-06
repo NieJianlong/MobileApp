@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useCallback, useEffect } from "react";
 import { View, StatusBar, Text, Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { isIphoneX } from "react-native-iphone-x-helper";
@@ -9,6 +9,7 @@ import { Colors } from "../../Themes";
 
 import styles from "./styles";
 import { useMutation } from "@apollo/client";
+import { ForgotPasswordStep1SendNotificationEmail } from "./forgot_mutation";
 
 class ForgotPassword extends Component {
   constructor(props) {
@@ -63,8 +64,8 @@ class ForgotPassword extends Component {
                * add router parameter here for Login screen to show EMS alert
                */
               // this.props.navigation.navigate('LoginScreen')
-
-              NavigationService.navigate("LoginScreen", { showEms: true });
+              this.props.onGetCode(this.state.email);
+              //NavigationService.navigate("LoginScreen", { showEms: true });
             } else if (this.validatePhone(this.state.email)) {
               /**
                * To-Do need clarity for OTP flow
@@ -130,8 +131,19 @@ class ForgotPassword extends Component {
 }
 
 function ForgotPasswordScreen() {
-   const  sendVerifyEmail = useMutation();
-  return <ForgotPassword />;
+  const [getValidateCode] = useMutation(
+    ForgotPasswordStep1SendNotificationEmail
+  );
+  const getCode = useCallback(
+    (email) => {
+      getValidateCode({
+        variables: { email },
+      });
+    },
+    [getValidateCode]
+  );
+
+  return <ForgotPassword onGetCode={getCode} />;
 }
 
 export default ForgotPasswordScreen;

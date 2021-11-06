@@ -192,6 +192,8 @@ type BuyerProfileResponse {
   refundSalamiCredit: Float
   bonusSalamiCredit: Float
   bonusSalamiCreditExpire: DateTime
+  selectedCountry: CountryResponse
+  selectedSupportedLanguage: SupportedLanguageResponse
   walletId: ID
 }
 
@@ -291,6 +293,8 @@ type CountryStateResponse {
   countryId: ID
 }
 
+scalar Date
+
 scalar DateTime
 
 type DeliveryAddressesByOnlineStoresResponse {
@@ -331,6 +335,21 @@ type DeliveryAddressToOnlineStoreResponse {
   updatedAt: DateTime
 }
 
+type ForgotPasswordStep1Response {
+  email: String
+  phoneNumber: String
+  message: String
+}
+
+type ForgotPasswordStep2Response {
+  message: String
+  actionToken: String
+}
+
+type ForgotPasswordStep3Response {
+  message: String
+}
+
 type Mutation {
   registerGuestBuyerToBuyer(request: BuyerProfileRequest!): BuyerProfileResponse
   registerBuyer(request: BuyerProfileRequestForCreate!): BuyerProfileResponse
@@ -340,8 +359,18 @@ type Mutation {
   addRefundSalamiCredit(buyerId: ID!, refundAmount: Float!): Float
   useRefundSalamiCredit(buyerId: ID!, amount: Float!): Float
   addBonusSalamiCredit(buyerId: ID!, amount: Float!, bonusSalamiCreditExpire: DateTime): Float
+  addProductRefundToWallet(buyerId: ID!, transactionReference: ID!, amount: Float!): SalamiWalletTransactionResponse
+  refillSalamiCredit(amount: Float!, transactionReference: ID!): SalamiWalletTransactionResponse
+  grantGiftPromotion(buyerId: ID!, amount: Float!, expiryDate: Date): SalamiWalletGiftTransactionResponse
+  reduceOrderAmountFromWallet(amount: Float!, transactionReference: ID!): ReduceWalletResponse
   rateSeller(sellerId: ID!, rating: Float!, buyerId: ID!): Boolean
   changePassword(oldPassword: String!, newPassword: String!, userId: ID!): Boolean
+  forgotPasswordStep1SendNotificationEmail(email: String!): ForgotPasswordStep1Response
+  forgotPasswordStep1SendNotificationSms(sms: String!): ForgotPasswordStep1Response
+  forgotPasswordStep2VerifyTokenEmail(email: String!, tokenCode: String): ForgotPasswordStep2Response
+  forgotPasswordStep2VerifyTokenSms(sms: String!, tokenCode: String): ForgotPasswordStep2Response
+  forgotPasswordStep3ChangeByEmail(actionTokenValue: String!, newPassword: String!, confirmPassword: String!): ForgotPasswordStep3Response
+  forgotPasswordStep3ChangeBySms(actionTokenValue: String!, newPassword: String!, confirmPassword: String!): ForgotPasswordStep3Response
   registerSeller(request: SellerProfileRequestForCreate!): SellerProfileResponse
   deleteSellerProfile(sellerId: ID!): Boolean
   updateSellerProfile(request: SellerProfileRequest!): SellerProfileResponse
@@ -395,8 +424,18 @@ type Mutation {
   createSellerToOnlineStore(request: SellerToOnlineStoreRequestForCreate!): SellerToOnlineStoreResponse
   deleteSellerToOnlineStore(sellerId: ID!, storeId: ID!): Boolean
   updateSellerToOnlineStore(request: SellerToOnlineStoreRequest!): SellerToOnlineStoreResponse
+  setCountryForUser(userId: ID!, countryId: ID!): CountryResponse
+  setSupportedLanguageForUser(userId: ID!, supportedLanguageId: ID!): SupportedLanguageResponse
   setWalletToBuyer(buyerId: ID!, walletId: ID!): BuyerProfileResponse
   setEscrowAccountToSeller(sellerId: ID, escrowAccountId: ID!): SellerProfileResponse
+  createSellerContact(request: SellerContactRequestForCreate!): SellerContactResponse
+  updateSellerContact(request: SellerContactRequest!): SellerContactResponse
+  deleteSellerContact(contactId: ID!): Boolean
+  sellerContactForSeller(sellerId: ID!): [SellerContactResponse]
+  createSellerBillingDetails(request: SellerBillingDetailsRequestForCreate!): SellerBillingDetailsResponse
+  updateSellerBillingDetails(request: SellerBillingDetailsRequest!): SellerBillingDetailsResponse
+  deleteSellerBillingDetails(billingDetailsId: ID!): Boolean
+  sellerBillingDetailsForSeller(sellerId: ID!): SellerBillingDetailsResponse
 }
 
 input NotificationRequest {
@@ -519,6 +558,7 @@ type Query {
   oneClickBuy(buyerId: ID!): OneClickBuyResponse
   buyerProfileByUserId(userProfileId: ID!): BuyerProfileResponse
   getRefundSalamiCredit(buyerId: ID!): Float
+  getBuyerSalamiWalletBalance: SalamiWalletResponse
   sellerProfiles: [SellerProfileResponse]
   sellerProfile(sellerId: ID!): SellerProfileResponse
   sellerProfileByUserId(userProfileId: ID!): SellerProfileResponse
@@ -573,6 +613,114 @@ type Query {
   getCountries: [CountryResponse]
   getSupportedLanguages: [SupportedLanguageResponse]
   getStatesByCountryId(countryId: ID!): [CountryStateResponse]
+  sellerContacts: [SellerContactResponse]
+  sellerContactById(contactId: ID!): SellerContactResponse
+  sellerContactsBySeller(sellerId: ID!): [SellerContactResponse]
+  sellerBillingDetails: [SellerBillingDetailsResponse]
+  sellerBillingDetailsById(billingDetailsId: ID!): SellerBillingDetailsResponse
+  sellerBillingDetailsForSeller(sellerId: ID!): SellerBillingDetailsResponse
+}
+
+type ReduceWalletResponse {
+  orderAmount: Float
+  remainingOrderAmount: Float
+  usedGiftAmount: Float
+  usedWalletAmount: Float
+}
+
+type SalamiWalletGiftTransactionResponse {
+  giftTransactionId: ID
+  walletId: ID
+  giftParentTransactionId: ID
+  transactionAmount: Float
+  transactionType: WalletTransactionType
+  transactionReference: ID
+  transactionTimestamp: DateTime
+  giftExpiryDate: Date
+}
+
+type SalamiWalletResponse {
+  walletId: ID
+  buyerId: ID
+  walletBalance: Float
+  giftBalance: Float
+}
+
+type SalamiWalletTransactionResponse {
+  transactionId: ID
+  walletId: ID
+  transactionAmount: Float
+  transactionType: WalletTransactionType
+  transactionReference: ID
+  transactionTimestamp: DateTime
+}
+
+input SellerBillingDetailsRequest {
+  billingDetailsId: ID!
+  sellerId: ID!
+  accountName: String
+  bankName: String
+  bankAddress: String
+  internationalRoutingCode: String
+  domesticRoutingCode: String
+  ibanCode: String
+  accountNumber: String
+}
+
+input SellerBillingDetailsRequestForCreate {
+  sellerId: ID
+  accountName: String
+  bankName: String
+  bankAddress: String
+  internationalRoutingCode: String
+  domesticRoutingCode: String
+  ibanCode: String
+  accountNumber: String
+}
+
+type SellerBillingDetailsResponse {
+  billingDetailsId: ID
+  sellerId: ID
+  accountName: String
+  bankName: String
+  bankAddress: String
+  internationalRoutingCode: String
+  domesticRoutingCode: String
+  ibanCode: String
+  accountNumber: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input SellerContactRequest {
+  contactId: ID!
+  sellerId: ID!
+  contactName: String
+  contactEmail: String
+  contactPhoneNumber: String
+  supportEmail: String
+  supportPhoneNumber: String
+}
+
+input SellerContactRequestForCreate {
+  sellerId: ID
+  contactName: String
+  contactEmail: String
+  contactPhoneNumber: String
+  supportEmail: String
+  supportPhoneNumber: String
+}
+
+type SellerContactResponse {
+  contactId: ID
+  sellerId: ID
+  contactName: String
+  contactEmail: String
+  contactPhoneNumber: String
+  supportEmail: String
+  supportPhoneNumber: String
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input SellerProfileRequest {
@@ -588,6 +736,10 @@ input SellerProfileRequest {
   govCompanyId: String
   vstGstNumber: String
   sellerType: SellerType
+  avatarUrl: String
+  shortName: String
+  middleName: String
+  vatCode: String
 }
 
 input SellerProfileRequestForCreate {
@@ -603,6 +755,12 @@ input SellerProfileRequestForCreate {
   govCompanyId: String
   vstGstNumber: String
   sellerType: SellerType
+  avatarUrl: String
+  shortName: String
+  middleName: String
+  vatCode: String
+  sellerContact: SellerContactRequestForCreate
+  sellerBillingDetails: SellerBillingDetailsRequestForCreate
 }
 
 type SellerProfileResponse {
@@ -624,7 +782,14 @@ type SellerProfileResponse {
   vstGstNumber: String
   usersRating: String
   sellerType: SellerType
+  selectedCountry: CountryResponse
+  selectedSupportedLanguage: SupportedLanguageResponse
   escrowAccountId: ID
+  avatarUrl: String
+  shortName: String
+  vatCode: String
+  sellerBillingDetails: SellerBillingDetailsResponse
+  sellerContacts: [SellerContactResponse]
 }
 
 input SellerToOnlineStoreRequest {
@@ -783,6 +948,17 @@ enum UserType {
   RETAIL_BUYER
   COMPANY_BUYER
   SUPER_ADMIN
+}
+
+enum WalletTransactionType {
+  UNDEFINED
+  GIFT_PROMOTION_GRANTED
+  GIFT_PROMOTION_USED
+  GIFT_PROMOTION_EXPIRED
+  PRODUCT_REFUND
+  SALAMI_CREDITS_REFILL
+  PRODUCT_PURCHASE
+  MONTHLY_AGGREGATE
 }
 
 input WishListRequest {

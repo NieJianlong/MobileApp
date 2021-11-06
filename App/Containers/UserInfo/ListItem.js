@@ -7,24 +7,44 @@
  * @FilePath: /MobileApp/App/Containers/UserInfo/ListItem.js
  */
 import React from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, DevSettings } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
 import * as storage from "../../Apollo/local-storage";
 import NavigationService from "../../Navigation/NavigationService";
+import { useReactiveVar } from "@apollo/client";
+import { localCartVar, userProfileVar } from "../../Apollo/cache";
+import { useNavigation } from "@react-navigation/core";
 /**
  * @description:tab menu item
  * @param {*} props
  * @return {*}
  */
 function ListItem(props) {
+  const navigation = useNavigation();
+  const localCartVarReactive = useReactiveVar(localCartVar);
+  const userProfileVarReactive = useReactiveVar(userProfileVar);
   const { lefticon, text, righticon, onPress, hasline, leftStyle } = props;
   return (
     <TouchableOpacity
-      onPress={() => {
+      onPress={async () => {
         if (text === "Logout") {
-          storage.setLocalStorageEmpty();
+          // global.buyerId = "";
+          // localCartVarReactive.buyerId = "";
+          // localCartVarReactive.callBackAddress = null;
+          // localCartVarReactive.deliverAddress = null;
+          // localCartVarReactive.items = [];
+          // userProfileVarReactive.addressId = null;
+          // userProfileVarReactive.addressLine1 = null;
+          // userProfileVarReactive.addressLine2 = null;
+          // userProfileVarReactive.email = "";
+          // userProfileVarReactive.isAuth = false;
+          // userProfileVarReactive.phone = "";
+          await storage.setLocalStorageEmpty();
+
+          // navigation.reset("OnboardingScreen");
           NavigationService.navigate("OnboardingScreen");
+          DevSettings.reload();
         } else {
           onPress();
         }

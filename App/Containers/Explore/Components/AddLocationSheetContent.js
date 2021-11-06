@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
-import { View, StatusBar, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  StatusBar,
+  Text,
+  TouchableOpacity as RNTouchableOpacity,
+  Platform,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -17,6 +23,9 @@ import PubSub from "pubsub-js";
 import { userProfileVar } from "../../../Apollo/cache";
 import { GetStatesByCountryId } from "../gql/explore_queries";
 
+import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
+const TouchableOpacity =
+  Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
 function AddLocationSheetContent(props) {
   //123e4567-e89b-12d3-a456-556642440000
   const { data } = useQuery(GetStatesByCountryId, {
@@ -47,7 +56,6 @@ function AddLocationSheetContent(props) {
       city.length === 0 ||
       mstate.length === 0 ||
       pincode.length === 0 ||
-      country.length === 0 ||
       landMark.length === 0
     ) {
       setDisable(true);

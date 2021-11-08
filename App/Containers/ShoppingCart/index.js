@@ -219,7 +219,7 @@ function ShoppingCart(props) {
                         </Text>
                       </TouchableOpacity>
                     </View>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => NavigationService.navigate('PaymentScreen')}>
                       <Text
                         style={[
                           styles.txtRegular,

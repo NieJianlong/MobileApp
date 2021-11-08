@@ -73,6 +73,7 @@ import RefundScreen from "../Containers/Refund";
 import CancelOrderCompletedScreen from "../Containers/CancelOrderCompleted";
 import ReportGroupScreen from "../Containers/ReportGroup";
 import TabBar from "./TabBar";
+import PaymentScreen from '../Containers/payments';
 
 const Stack = createStackNavigator();
 
@@ -286,6 +287,7 @@ function PrimaryNav() {
         component={CancelOrderCompletedScreen}
       />
       <Stack.Screen name={"ReportGroupScreen"} component={ReportGroupScreen} />
+      <Stack.Screen name={"PaymentScreen"} component={PaymentScreen}/>
     </Stack.Navigator>
   );
 }

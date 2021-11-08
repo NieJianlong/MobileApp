@@ -19,27 +19,37 @@ import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import * as storage from "../../Apollo/local-storage";
 
 export default function LaunchScreen() {
-  const [getBuyerId] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
+  const [getBuyerId, {data, called, error}] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
     variables: { userProfileId: global.userProfileId },
     context: {
       headers: {
         isPrivate: true,
       },
     },
-    onCompleted: (res) => {
-      //server often breakon，we should use a constant for testing
-      const {
-        buyerProfileByUserId: { buyerId },
-      } = res;
-      global.buyerId = buyerId;
-      NavigationService.navigate("MainScreen");
-    },
-    onError: (res) => {
-      //server often breakon，we should use a constant for testing
+  });
+
+  useEffect(() => {    
+    if (error) {
       global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
       NavigationService.navigate("MainScreen");
-    },
-  });
+    }
+
+    if (called && data) {
+      const {
+        buyerProfileByUserId: { buyerId } = {},
+      } = data;
+
+      if (buyerId) {
+        global.buyerId = buyerId;
+        NavigationService.navigate("MainScreen");
+
+      } else {
+        global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
+        NavigationService.navigate("MainScreen");
+      }
+    }
+
+  }, [data, called, error])
 
   const autoSignIn = useCallback(async () => {
     //get username and possword from localStorage

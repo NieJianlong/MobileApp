@@ -87,7 +87,7 @@ function TabBar(props) {
           };
 
           return (
-            <View style={styles.iconContainer}>
+            <View key={idx} style={styles.iconContainer}>
               <TouchableOpacity onPress={onPress}>
                 <Image
                   resizeMode={"contain"}

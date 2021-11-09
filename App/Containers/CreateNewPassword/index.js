@@ -17,6 +17,8 @@ import { Colors } from "../../Themes";
 import styles from "./styles";
 
 class CreateNewPasswordScreen extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -29,11 +31,16 @@ class CreateNewPasswordScreen extends Component {
     Keyboard.addListener("keyboardWillHide", this._keyboardWillHide);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this._isMounted = true;
+  }
 
   componentWillUnmount() {
-    Keyboard.removeListener("keyboardWillShow", this._keyboardWillShow);
-    Keyboard.removeListener("keyboardWillHide", this._keyboardWillHide);
+    if (this._isMounted) {
+      this._isMounted = false;
+      Keyboard.removeListener("keyboardWillShow", this._keyboardWillShow);
+      Keyboard.removeListener("keyboardWillHide", this._keyboardWillHide);
+    }
   }
 
   _keyboardWillShow = (e) => {

@@ -6,9 +6,12 @@ import { InMemoryCache } from "@apollo/client";
  * on user login
  */
 const userProfile = {
+  userId: "",
+  buyerId: "",
+  userName: "",
   email: "",
   isAuth: false,
-  phone: 0,
+  phone: "",
   addressId: "",
   addressLine1: "",
   addressLine2: "",

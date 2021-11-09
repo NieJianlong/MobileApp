@@ -81,12 +81,6 @@ function LoginScreen(props) {
           .runTokenFlow(loginRequest)
           .then(function (res) {
             if (typeof res !== "undefined") {
-              console.log("login ok set auth");
-              userProfileVar({
-                email: loginRequest.username,
-                isAuth: true,
-              });
-
               let access_token = res.data.access_token;
               if (access_token === "undefined") {
                 console.log("no access token");
@@ -130,14 +124,25 @@ function LoginScreen(props) {
                         result.data
                       )}`
                     );
-                    if (result.data.buyerProfileByUserId.buyerId === null) {
+                    const { buyerProfileByUserId } = result.data
+                    if (buyerProfileByUserId.buyerId === null) {
                       console.log("found null GuestBuyer buyerId");
                     } else {
-                      global.buyerId = result.data.buyerProfileByUserId.buyerId;
+                      global.buyerId = buyerProfileByUserId.buyerId;
                       storage.setLocalStorageValue(
                         loginRequest.username,
-                        result.data.buyerProfileByUserId.buyerId
+                        buyerProfileByUserId.buyerId
                       );
+
+                      userProfileVar({
+                        userId: buyerProfileByUserId?.userId,
+                        buyerId: buyerProfileByUserId?.buyerId,
+                        userName: buyerProfileByUserId?.userName,
+                        email: buyerProfileByUserId?.email,
+                        phone: buyerProfileByUserId?.phoneNumber,
+                        isAuth: true,
+                      });
+
                       NavigationService.navigate("MainScreen");
                     }
                   } else {

@@ -17,6 +17,7 @@ import jwt_decode from "jwt-decode";
 import { useLazyQuery } from "@apollo/client";
 import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import * as storage from "../../Apollo/local-storage";
+import AppConfig from "../../Config/AppConfig";
 
 export default function LaunchScreen() {
   const [getBuyerId, {data, called, error}] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
@@ -30,21 +31,30 @@ export default function LaunchScreen() {
 
   useEffect(() => {    
     if (error) {
-      global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
+      global.buyerId = AppConfig.guestId;
       NavigationService.navigate("MainScreen");
     }
 
     if (called && data) {
       const {
-        buyerProfileByUserId: { buyerId } = {},
+        buyerProfileByUserId,
       } = data;
+      
+      userProfileVar({
+        userId: buyerProfileByUserId?.userId,
+        buyerId: buyerProfileByUserId?.buyerId,
+        userName: buyerProfileByUserId?.userName,
+        email: buyerProfileByUserId?.email,
+        phone: buyerProfileByUserId?.phoneNumber,
+        isAuth: true,
+      });
 
-      if (buyerId) {
-        global.buyerId = buyerId;
+      if (buyerProfileByUserId?.buyerId) {
+        global.buyerId = buyerProfileByUserId?.buyerId;
         NavigationService.navigate("MainScreen");
 
       } else {
-        global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
+        global.buyerId = AppConfig.guestId;
         NavigationService.navigate("MainScreen");
       }
     }
@@ -65,11 +75,9 @@ export default function LaunchScreen() {
       if (access_token === "undefined") {
         console.log("no access token");
       }
-      userProfileVar({
-        email: username,
-        isAuth: true,
-      });
+
       let decoded = jwt_decode(access_token);
+
       global.access_token = access_token;
       global.userProfileId = decoded.sub;
       getBuyerId();

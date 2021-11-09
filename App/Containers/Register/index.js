@@ -77,9 +77,19 @@ function RegisterScreen(props) {
       });
       //server often breakon，we should use a constant for testing
       const {
-        buyerProfileByUserId: { buyerId },
+        buyerProfileByUserId,
       } = res;
-      global.buyerId = buyerId;
+
+      userProfileVar({
+        userId: buyerProfileByUserId?.userId,
+        buyerId: buyerProfileByUserId?.buyerId,
+        userName: buyerProfileByUserId?.userName,
+        email: buyerProfileByUserId?.email,
+        phone: buyerProfileByUserId?.phoneNumber,
+        isAuth: true,
+      });
+
+      global.buyerId = buyerProfileByUserId.buyerId;
       NavigationService.navigate("MainScreen");
     },
     onError: (res) => {
@@ -112,10 +122,7 @@ function RegisterScreen(props) {
       if (access_token === "undefined") {
         console.log("no access token");
       }
-      userProfileVar({
-        email: username,
-        isAuth: true,
-      });
+      
       let decoded = jwt_decode(access_token);
       global.access_token = access_token;
       global.userProfileId = decoded.sub;

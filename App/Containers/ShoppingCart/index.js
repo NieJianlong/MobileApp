@@ -23,8 +23,8 @@ import { AlertContext } from "../Root/GlobalContext";
 import TextTip from "../../Components/EmptyReminder";
 import PubSub from "pubsub-js";
 import useRealm from "../../hooks/useRealm";
-import { useLazyQuery, useQuery } from "@apollo/client";
-import { GET_LOCAL_CART } from "../../Apollo/cache";
+import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
+import { GET_LOCAL_CART, userProfileVar } from "../../Apollo/cache";
 import { IsListingAvailable } from "../Explore/gql/explore_queries";
 
 export const CartContext = React.createContext({});
@@ -34,6 +34,7 @@ function ShoppingCart(props) {
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
+  const userProfile = useReactiveVar(userProfileVar);
   const [mydatas, setMydatas] = useState(
     realm
       .objects("ShoppingCart")
@@ -91,6 +92,22 @@ function ShoppingCart(props) {
   /** nasavge thnks we should put the blocks of view code below into functions
    * to make the code more readable
    */
+  const onProceed = () => {
+    console.log('global.buyerId ==>', global.buyerId)
+    console.log('userProfile ==>', userProfile);
+
+    if (userProfile?.isAuth && global.buyerId !== AppConfig.guestId) {
+      if (userProfile.phone) {
+
+      
+      } else {
+
+      }
+
+    } else {
+      NavigationService.navigate("CheckoutNoAuthScreen");
+    }
+  }
   return (
     <CartContext.Provider>
       <View style={styles.container}>
@@ -118,9 +135,7 @@ function ShoppingCart(props) {
                 }}
               >
                 <Button
-                  onPress={() => {
-                    NavigationService.navigate("CheckoutNoAuthScreen");
-                  }}
+                  onPress={onProceed}
                   text="PROCEED TO CHECKOUT"
                 />
               </View>
@@ -288,7 +303,7 @@ function ShoppingCart(props) {
                 const i = availbleList.isListingAvailable[index];
                 itemAvailble = i.isAvailable;
               }
-              return <CartItem product={item} availble={itemAvailble} />;
+              return <CartItem key={index} product={item} availble={itemAvailble} />;
             }}
             keyExtractor={(item, index) => `lll${index}`}
           />

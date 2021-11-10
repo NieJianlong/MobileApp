@@ -64,7 +64,7 @@ function ShoppingCart(props) {
       );
     });
     return () => {
-      PubSub.unsubscribe(refresh);
+      if(refresh) PubSub.unsubscribe(refresh);
     };
   }, [localCartVar.deliverAddress, realm]);
 
@@ -301,7 +301,7 @@ function ShoppingCart(props) {
               let itemAvailble = true;
               if (availbleList) {
                 const i = availbleList.isListingAvailable[index];
-                itemAvailble = i.isAvailable;
+                itemAvailble = i?.isAvailable;
               }
               return <CartItem key={index} product={item} availble={itemAvailble} />;
             }}

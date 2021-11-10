@@ -149,7 +149,7 @@ export default function AddressBar() {
       refetch();
     });
     return () => {
-      PubSub.unsubscribe(refresh);
+      if(refresh) PubSub.unsubscribe(refresh);
     };
   });
   return (

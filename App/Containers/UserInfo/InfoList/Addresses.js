@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 import AddressItem from "./AddressItem";
 import TextTip from "../../../Components/EmptyReminder";
 import NavigationService from "../../../Navigation/NavigationService";

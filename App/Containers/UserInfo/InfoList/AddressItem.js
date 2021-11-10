@@ -57,19 +57,10 @@ export default function AddressItem({ item, refetch, isCheckout }) {
   const [setAddressDefault] = useMutation(UPDATE_ADDRESS, {
     variables: {
       request: {
-        addressType: item.addressType,
-        referenceId: item.referenceId,
         addressId: item.addressId,
-        pinCode: item.pinCode,
-        provinceState: item.provinceState,
-        townCity: item.townCity,
-        flat: item.flat,
-        villageArea: item.villageArea,
-        houseNumber: item.houseNumber,
-        landMark: item.landMark,
-        streetAddress1: item.streetAddress1,
-        country: item.country,
+        referenceId: item.referenceId,
         defaultAddress: true,
+        addressType: item.addressType
       },
     },
     context: {

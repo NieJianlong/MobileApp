@@ -73,13 +73,13 @@ export default function AddressBar() {
    */
   /** FIND_BUYER_DEFAULT_ADDRESS_BY_ID is a private api */
 
-  const { data } = useQuery(aQM.GetCountries, {
-    onCompleted: (res) => {
-      console.log("data====================================");
-      console.log(data);
-      console.log("====================================");
-    },
-  });
+  // const { data } = useQuery(aQM.GetCountries, {
+  //   onCompleted: (res) => {
+  //     console.log("data====================================");
+  //     console.log(data);
+  //     console.log("====================================");
+  //   },
+  // });
 
   const { loading, refetch } = useQuery(
     isAuth

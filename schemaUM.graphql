@@ -605,6 +605,7 @@ type Query {
   deliveryAddressesByOnlineStores(storeIds: [ID]): DeliveryAddressesByOnlineStoresResponse
   sellerToOnlineStores: [SellerToOnlineStoreResponse]
   sellerToOnlineStoreById(sellerId: ID!, storeId: ID!): SellerToOnlineStoreResponse
+  onlineStoresForSeller(sellerId: ID!): [SellerToOnlineStoreResponse]
   shippingDetails: [ShippingDetailResponse]
   shippingDetailById(shippingId: ID!): ShippingDetailResponse
   userHasVerifiedEmail(userId: ID!): Boolean
@@ -653,6 +654,28 @@ type SalamiWalletTransactionResponse {
   transactionType: WalletTransactionType
   transactionReference: ID
   transactionTimestamp: DateTime
+}
+
+input SellerAddressRequestForCreate {
+  flat: String
+  floor: String
+  defaultAddress: Boolean
+  block: String
+  building: String
+  houseNumber: String
+  streetAddress1: String
+  streetAddress2: String
+  streetAddress3: String
+  townCity: String
+  villageArea: String
+  district: String
+  provinceState: String
+  country: String
+  areaCode: String
+  landMark: String
+  pinCode: String
+  addressType: AddressType
+  referenceId: String
 }
 
 input SellerBillingDetailsRequest {
@@ -740,6 +763,14 @@ input SellerProfileRequest {
   shortName: String
   middleName: String
   vatCode: String
+  sellerName: String
+  nationalIdNumber: String
+  nationalIdNumberValidated: Boolean
+  taxNumber: String
+  taxNumberValidated: Boolean
+  vatCodeValidated: Boolean
+  commChamberRegNum: String
+  commChamberRegNumValidated: Boolean
 }
 
 input SellerProfileRequestForCreate {
@@ -759,8 +790,18 @@ input SellerProfileRequestForCreate {
   shortName: String
   middleName: String
   vatCode: String
-  sellerContact: SellerContactRequestForCreate
-  sellerBillingDetails: SellerBillingDetailsRequestForCreate
+  sellerContact: SellerContactRequestForCreate!
+  sellerBillingDetails: SellerBillingDetailsRequestForCreate!
+  sellerToOnlineStore: SellerToOnlineStoreRequestForRegister!
+  sellerAddress: SellerAddressRequestForCreate!
+  sellerName: String
+  nationalIdNumber: String
+  nationalIdNumberValidated: Boolean
+  taxNumber: String
+  taxNumberValidated: Boolean
+  vatCodeValidated: Boolean
+  commChamberRegNum: String
+  commChamberRegNumValidated: Boolean
 }
 
 type SellerProfileResponse {
@@ -790,21 +831,46 @@ type SellerProfileResponse {
   vatCode: String
   sellerBillingDetails: SellerBillingDetailsResponse
   sellerContacts: [SellerContactResponse]
+  sellerName: String
+  nationalIdNumber: String
+  nationalIdNumberValidated: Boolean
+  taxNumber: String
+  taxNumberValidated: Boolean
+  vatCodeValidated: Boolean
+  commChamberRegNum: String
+  commChamberRegNumValidated: Boolean
 }
 
 input SellerToOnlineStoreRequest {
   sellerId: ID!
   storeId: ID!
+  upcForAllProducts: Boolean
+  manufacturerBrandOwner: Boolean
+  governmentRegisteredTm: Boolean
 }
 
 input SellerToOnlineStoreRequestForCreate {
   sellerId: ID!
   storeId: ID!
+  upcForAllProducts: Boolean
+  manufacturerBrandOwner: Boolean
+  governmentRegisteredTm: Boolean
+}
+
+input SellerToOnlineStoreRequestForRegister {
+  sellerId: ID
+  storeId: ID!
+  upcForAllProducts: Boolean
+  manufacturerBrandOwner: Boolean
+  governmentRegisteredTm: Boolean
 }
 
 type SellerToOnlineStoreResponse {
   sellerId: ID!
   storeId: ID!
+  upcForAllProducts: Boolean
+  manufacturerBrandOwner: Boolean
+  governmentRegisteredTm: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }

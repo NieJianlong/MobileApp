@@ -1,4 +1,4 @@
-import React, { Component, useCallback, useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { View, StatusBar, Image } from "react-native";
 import { userProfileVar } from "../../Apollo/cache";
 import { runTokenFlow } from "../../Apollo/jwt-request";
@@ -18,6 +18,7 @@ import { useLazyQuery } from "@apollo/client";
 import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import * as storage from "../../Apollo/local-storage";
 import AppConfig from "../../Config/AppConfig";
+import GetBillingDetail from "../../hooks/billingDetails";
 
 export default function LaunchScreen() {
   const [getBuyerId, {data, called, error}] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
@@ -40,20 +41,17 @@ export default function LaunchScreen() {
         buyerProfileByUserId,
       } = data;
 
-      console.log({buyerProfileByUserId});
-      
-      userProfileVar({
-        userId: buyerProfileByUserId?.userId,
-        buyerId: buyerProfileByUserId?.buyerId,
-        userName: buyerProfileByUserId?.userName,
-        email: buyerProfileByUserId?.email,
-        phone: buyerProfileByUserId?.phoneNumber,
-        isAuth: true,
-      });
-
       if (buyerProfileByUserId?.buyerId) {
+        userProfileVar({
+          userId: buyerProfileByUserId?.userId,
+          buyerId: buyerProfileByUserId?.buyerId,
+          userName: buyerProfileByUserId?.userName,
+          email: buyerProfileByUserId?.email,
+          phone: buyerProfileByUserId?.phoneNumber,
+          isAuth: true,
+        });
+
         global.buyerId = buyerProfileByUserId?.buyerId;
-        NavigationService.navigate("MainScreen");
 
       } else {
         global.buyerId = AppConfig.guestId;
@@ -62,6 +60,12 @@ export default function LaunchScreen() {
     }
 
   }, [data, called, error])
+
+  const { isBillingLoaded } = GetBillingDetail();
+
+  useEffect(() => {
+    if (isBillingLoaded) NavigationService.navigate('MainScreen');
+  }, [isBillingLoaded]);
 
   const autoSignIn = useCallback(async () => {
     //get username and possword from localStorage

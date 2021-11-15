@@ -28,6 +28,7 @@ import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import { client } from "../../Apollo/apolloClient";
 import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
+import GetBillingDetail from "../../hooks/billingDetails";
 
 function LoginScreen(props) {
   // refs
@@ -38,6 +39,7 @@ function LoginScreen(props) {
   let [loginInput, setLoginInput] = useState("");
   let [psswd, setPsswd] = useState("");
   const { params } = useRoute();
+  const { isBillingLoaded } = GetBillingDetail();
 
   useEffect(() => {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
@@ -59,6 +61,10 @@ function LoginScreen(props) {
       Keyboard.removeListener("keyboardWillHide", _keyboardWillHide);
     };
   }, [params, props]);
+
+  useEffect(() => {
+    if (isBillingLoaded) NavigationService.navigate('MainScreen');
+  }, [isBillingLoaded]);
 
   const onSignIn = async () => {
     // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
@@ -142,9 +148,8 @@ function LoginScreen(props) {
                         phone: buyerProfileByUserId?.phoneNumber,
                         isAuth: true,
                       });
-
-                      NavigationService.navigate("MainScreen");
                     }
+
                   } else {
                     console.log("Login BUYER_PROFILE_BY_USERID server error");
                   }

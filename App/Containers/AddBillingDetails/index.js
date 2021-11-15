@@ -15,7 +15,7 @@ import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
 import colors from "../../Themes/Colors";
 import { useRoute } from "@react-navigation/native";
-import { useQuery, useMutation, useReactiveVar, useLazyQuery } from "@apollo/client";
+import { useMutation, useReactiveVar, useLazyQuery } from "@apollo/client";
 import {
   CREATE_BILLING_DETAILS,
   DELETE_BILLING_DETAILS,
@@ -29,41 +29,30 @@ import AppConfig from "../../Config/AppConfig";
 import PubSub from "pubsub-js";
 import { userProfileVar } from "../../Apollo/cache";
 import { Billing_Actions } from "./const";
+import GetBillingDetail from "../../hooks/billingDetails";
 
 function AddBillingDetails(props) {
   const {
-    params: { title, billingDetails = {}, actionType = Billing_Actions.billing, actionButtonText = 'SAVE' },
+    params: { title, actionType = Billing_Actions.billing, actionButtonText = 'SAVE' },
   } = useRoute();
   const userProfile = useReactiveVar(userProfileVar);
 
-  const [getBillingAddress, { loading, error, refetch, data }] = useLazyQuery(
-    BILLING_DETAIL_BY_BUYERID,
-    {
-      variables: { buyerId: global.buyerId },
-      context: {
-        headers: {
-          isPrivate: true,
-        },
-      },
-    }
-  );
+  const { billingDetail } = GetBillingDetail();
 
   const { dispatch } = useContext(AlertContext);
-  const [firstName, setFirstName] = useState(billingDetails.firstName || "");
-  const [lastName, setLastName] = useState(billingDetails.lastName || "");
-  const [email, setEmail] = useState(billingDetails.email || "");
-  const [phoneNum, setPhoneNum] = useState(billingDetails.phoneNumber || "");
-  const [streetName, setStreetName] = useState(
-    billingDetails.villageArea || ""
-  );
-  const [streetNum, setStreetNum] = useState(billingDetails.houseNumber || "");
-  const [door, setDoor] = useState(billingDetails.flat || "");
-  const [city, setCity] = useState(billingDetails.townCity || "");
-  const [mstate, setMstate] = useState(billingDetails.provinceState || "");
-  const [postcode, setPostCode] = useState(billingDetails.pinCode || "");
-  const [country, setCountry] = useState(billingDetails.country || "");
-  const [company, setCompany] = useState(billingDetails.companyName || "");
-  const [taxid, setTaxid] = useState(billingDetails.taxCode || "");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNum, setPhoneNum] = useState("");
+  const [streetName, setStreetName] = useState("");
+  const [streetNum, setStreetNum] = useState("");
+  const [door, setDoor] = useState("");
+  const [city, setCity] = useState("");
+  const [mstate, setMstate] = useState("");
+  const [postcode, setPostCode] = useState("");
+  const [country, setCountry] = useState("");
+  const [company, setCompany] = useState("");
+  const [taxid, setTaxid] = useState("");
   const [disable, setDisable] = useState(true);
 
   useEffect(() => {
@@ -76,8 +65,6 @@ function AddBillingDetails(props) {
     Keyboard.addListener("keyboardWillShow", keyboardShow);
     Keyboard.addListener("keyboardWillHide", keyboardHide);
 
-    getBillingAddress();
-
     return () => {
       Keyboard.removeListener("keyboardWillShow", keyboardShow);
       Keyboard.removeListener("keyboardWillHide", keyboardHide);
@@ -85,11 +72,7 @@ function AddBillingDetails(props) {
   }, []);
 
   useEffect(() => {
-    if (loading, error) return;
-
-    if (data) {
-      const billingDetail = data.billingDetailsByBuyerId[0];
-      console.log(billingDetail)
+    if (billingDetail) {
       setFirstName(billingDetail.firstName);
       setLastName(billingDetail.lastName);
       setPhoneNum(billingDetail.phoneNumber);
@@ -105,7 +88,7 @@ function AddBillingDetails(props) {
       setTaxid(billingDetail.taxCode);
     }
     
-  }, [loading, error, data])
+  }, [billingDetail])
   
   useEffect(() => {
     if (
@@ -284,21 +267,21 @@ function AddBillingDetails(props) {
     companyName: company,
     email: email,
     phoneNumber: phoneNum,
-    billingAddress: billingDetails.billingDetailsId
-      ? { addressId: billingDetails.addressId, ...billingAddress }
+    billingAddress: billingDetail?.billingDetailsId
+      ? { addressId: billingDetail?.billingDetailsId, ...billingAddress }
       : billingAddress,
     taxCode: taxid,
   };
 
   const [addBilling] = useMutation(
-    billingDetails.billingDetailsId
+    billingDetail?.billingDetailsId
       ? UPDATE_BILLING_DETAILS
       : CREATE_BILLING_DETAILS,
     {
       variables: {
-        request: billingDetails.billingDetailsId
+        request: billingDetail?.billingDetailsId
           ? {
-              billingDetailsId: billingDetails.billingDetailsId,
+              billingDetailsId: billingDetail?.billingDetailsId,
               ...request,
             }
           : request,
@@ -315,7 +298,7 @@ function AddBillingDetails(props) {
           type: "changAlertState",
           payload: {
             visible: true,
-            message: billingDetails.billingDetailsId
+            message: billingDetail?.billingDetailsId
               ? "Billing details updated"
               : "Billing details Added",
             color: colors.success,
@@ -340,7 +323,7 @@ function AddBillingDetails(props) {
 
   const [deleteBilling] = useMutation(DELETE_BILLING_DETAILS, {
     variables: {
-      billingDetailsId: billingDetails.billingDetailsId,
+      billingDetailsId: billingDetail?.billingDetailsId,
     },
     context: {
       headers: {
@@ -469,7 +452,7 @@ function AddBillingDetails(props) {
             </View>
           </View>
         </KeyboardAwareScrollView>
-        {billingDetails.billingDetailsId && (
+        {billingDetail?.billingDetailsId && actionType !== Billing_Actions.billing && (
           <View
             style={{
               position: "absolute",

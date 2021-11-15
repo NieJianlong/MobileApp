@@ -16,6 +16,12 @@ function MaterialTextInput(props) {
   } = props;
   const [padding, setPadding] = useState(false);
 
+  useEffect(() => {
+    if (inputRef && inputRef.current) {
+      inputRef.current.setValue(value);
+    }
+  }, [value])
+
   return (
     <TextField
       ref={inputRef}

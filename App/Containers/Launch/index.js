@@ -39,6 +39,8 @@ export default function LaunchScreen() {
       const {
         buyerProfileByUserId,
       } = data;
+
+      console.log({buyerProfileByUserId});
       
       userProfileVar({
         userId: buyerProfileByUserId?.userId,
@@ -77,7 +79,7 @@ export default function LaunchScreen() {
       }
 
       let decoded = jwt_decode(access_token);
-
+      console.log({decoded})
       global.access_token = access_token;
       global.userProfileId = decoded.sub;
       getBuyerId();

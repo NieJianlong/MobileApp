@@ -17,7 +17,7 @@ function RazarPay(){
                     key: 'rzp_test_owK1UREmxZCSL2',
                     amount: '50000',
                     name: 'Acme Corp',
-                    order_id: 'order_II1RyXkTypjHYU',//Replace this with an order_id created using Orders API.
+                    order_id: 'order_IKjwMWQ66vcQb1',//Replace this with an order_id created using Orders API.
                     prefill: {
                     email: 'bluestar929@outlook.com',
                     contact: '8616525825013',

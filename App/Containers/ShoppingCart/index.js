@@ -26,6 +26,7 @@ import useRealm from "../../hooks/useRealm";
 import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
 import { GET_LOCAL_CART, userProfileVar } from "../../Apollo/cache";
 import { IsListingAvailable } from "../Explore/gql/explore_queries";
+import { Billing_Actions } from "../AddBillingDetails/const";
 
 export const CartContext = React.createContext({});
 
@@ -95,14 +96,32 @@ function ShoppingCart(props) {
   const onProceed = () => {
     console.log('global.buyerId ==>', global.buyerId)
     console.log('userProfile ==>', userProfile);
+    console.log('carts ==>', mydatas);
+    console.log({localCartVar});
+
+    const reqData = {
+      buyerId: userProfile.buyerId,
+      shippingAddressId: localCartVar.deliverAddress,
+      billingDetailsId: '',
+      useSalamiWallet: true,
+      cartItems: mydatas.map(item => ({ listingId: item.product.listingId, variantId: item.variantId, quantity: item.quantity }))
+    }
+
+    console.log('reqData ==>', JSON.stringify(reqData))
 
     if (userProfile?.isAuth && global.buyerId !== AppConfig.guestId) {
-      if (userProfile.phone) {
+      // if (userProfile.phone) {
 
       
-      } else {
+      // } else {
 
+      // }
+      const params = {
+        title: "Please enter your billing details",
+        actionButtonText: 'NEXT',
+        actionType: Billing_Actions.billing,
       }
+      NavigationService.navigate("AddBillingDetailsScreen", params);
 
     } else {
       NavigationService.navigate("CheckoutNoAuthScreen");
@@ -300,6 +319,7 @@ function ShoppingCart(props) {
             renderItem={({ item, index }) => {
               let itemAvailble = true;
               if (availbleList) {
+                console.log(availbleList.isListingAvailable)
                 const i = availbleList.isListingAvailable[index];
                 itemAvailble = i?.isAvailable;
               }

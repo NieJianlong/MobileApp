@@ -15,21 +15,39 @@ import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
 import colors from "../../Themes/Colors";
 import { useRoute } from "@react-navigation/native";
-import { useMutation } from "@apollo/client";
+import { useQuery, useMutation, useReactiveVar, useLazyQuery } from "@apollo/client";
 import {
   CREATE_BILLING_DETAILS,
   DELETE_BILLING_DETAILS,
   UPDATE_BILLING_DETAILS,
 } from "../../Apollo/mutations/mutations_user";
+import { BILLING_DETAIL_BY_BUYERID } from "../../Apollo/queries/queries_user";
+
 import { AlertContext } from "../Root/GlobalContext";
 import * as validator from "../../Validation";
 import AppConfig from "../../Config/AppConfig";
 import PubSub from "pubsub-js";
+import { userProfileVar } from "../../Apollo/cache";
+import { Billing_Actions } from "./const";
 
 function AddBillingDetails(props) {
   const {
-    params: { title, billingDetails = {} },
+    params: { title, billingDetails = {}, actionType = Billing_Actions.billing, actionButtonText = 'SAVE' },
   } = useRoute();
+  const userProfile = useReactiveVar(userProfileVar);
+
+  const [getBillingAddress, { loading, error, refetch, data }] = useLazyQuery(
+    BILLING_DETAIL_BY_BUYERID,
+    {
+      variables: { buyerId: global.buyerId },
+      context: {
+        headers: {
+          isPrivate: true,
+        },
+      },
+    }
+  );
+
   const { dispatch } = useContext(AlertContext);
   const [firstName, setFirstName] = useState(billingDetails.firstName || "");
   const [lastName, setLastName] = useState(billingDetails.lastName || "");
@@ -46,8 +64,8 @@ function AddBillingDetails(props) {
   const [country, setCountry] = useState(billingDetails.country || "");
   const [company, setCompany] = useState(billingDetails.companyName || "");
   const [taxid, setTaxid] = useState(billingDetails.taxCode || "");
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [disable, setDisable] = useState(true);
+
   useEffect(() => {
     const keyboardShow = (e) => {
       setKeyboardHeight(e.endCoordinates.height);
@@ -57,11 +75,38 @@ function AddBillingDetails(props) {
     };
     Keyboard.addListener("keyboardWillShow", keyboardShow);
     Keyboard.addListener("keyboardWillHide", keyboardHide);
+
+    getBillingAddress();
+
     return () => {
       Keyboard.removeListener("keyboardWillShow", keyboardShow);
       Keyboard.removeListener("keyboardWillHide", keyboardHide);
     };
   }, []);
+
+  useEffect(() => {
+    if (loading, error) return;
+
+    if (data) {
+      const billingDetail = data.billingDetailsByBuyerId[0];
+      console.log(billingDetail)
+      setFirstName(billingDetail.firstName);
+      setLastName(billingDetail.lastName);
+      setPhoneNum(billingDetail.phoneNumber);
+      setEmail(billingDetail.email);
+      setStreetName(billingDetail.billingAddress.villageArea);
+      setStreetNum(billingDetail.billingAddress.streetAddress1);
+      setDoor(billingDetail.billingAddress.flat);
+      setCity(billingDetail.billingAddress.townCity);
+      setMstate(billingDetail.billingAddress.provinceState);
+      setPostCode(billingDetail.billingAddress.pinCode);
+      setCountry(billingDetail.billingAddress.country);
+      setCompany(billingDetail.companyName);
+      setTaxid(billingDetail.taxCode);
+    }
+    
+  }, [loading, error, data])
+  
   useEffect(() => {
     if (
       firstName.length === 0 ||
@@ -97,6 +142,7 @@ function AddBillingDetails(props) {
     email,
     phoneNum,
   ]);
+
   const inputs = [
     {
       placeholder: "First Name*",
@@ -218,21 +264,6 @@ function AddBillingDetails(props) {
     },
   ];
 
-  const [showBottom, setShowBottom] = useState(true);
-  useEffect(() => {
-    const keyboardShow = (e) => {
-      setShowBottom(false);
-    };
-    const keyboardHide = (e) => {
-      setShowBottom(true);
-    };
-    Keyboard.addListener("keyboardDidShow", keyboardShow);
-    Keyboard.addListener("keyboardDidHide", keyboardHide);
-    return () => {
-      Keyboard.removeListener("keyboardDisShow", keyboardShow);
-      Keyboard.removeListener("keyboardDidHide", keyboardHide);
-    };
-  }, []);
   const billingAddress = {
     pinCode: postcode,
     addressType: disable ? "BILLING" : "SHIPPING",
@@ -242,12 +273,12 @@ function AddBillingDetails(props) {
     villageArea: streetName,
     houseNumber: streetNum,
     country,
-    referenceId: global.buyerId,
+    referenceId: userProfile.buyerId,
     defaultAddress: disable,
     streetAddress1: "billing",
   };
   const request = {
-    buyerId: global.buyerId,
+    buyerId: userProfile.buyerId,
     firstName: firstName,
     lastName: lastName,
     companyName: company,
@@ -291,7 +322,15 @@ function AddBillingDetails(props) {
             title: "Success",
           },
         });
-        NavigationService.goBack();
+
+        switch (actionType) {
+          case Billing_Actions.billing:
+
+            break;
+
+          default:
+            NavigationService.goBack();
+        }
       },
       onError: (res) => {
         dispatch({ type: "hideloading" });
@@ -338,6 +377,7 @@ function AddBillingDetails(props) {
           title: "Make sure you have entered the correct information",
         },
       });
+
     } else {
       if (!validator.isValidEmail(email)) {
         dispatch({
@@ -365,6 +405,7 @@ function AddBillingDetails(props) {
       }
     }
   }, [addBilling, disable, dispatch, email, phoneNum]);
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
@@ -376,7 +417,7 @@ function AddBillingDetails(props) {
           rightButton={() => {
             return (
               <RightButton
-                title="SAVE"
+                title={actionButtonText}
                 disable={disable}
                 onPress={() => {
                   onAddBilling();
@@ -390,12 +431,12 @@ function AddBillingDetails(props) {
             <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
               {title}
             </Text>
-            <View style={{ marginTop: 20 }}>
+            {/* <View style={{ marginTop: 20 }}>
               <Switch
                 onSwitch={() => {}}
                 label="Use the same info as default delivery address"
               />
-            </View>
+            </View> */}
             <View
               style={{
                 flexDirection: "row",

@@ -24,22 +24,21 @@ import TextTip from "../../Components/EmptyReminder";
 import PubSub from "pubsub-js";
 import useRealm from "../../hooks/useRealm";
 import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
-import { GET_LOCAL_CART, userProfileVar } from "../../Apollo/cache";
+import { localCartVar, userProfileVar } from "../../Apollo/cache";
 import { IsListingAvailable } from "../Explore/gql/explore_queries";
 import { Billing_Actions } from "../AddBillingDetails/const";
+import { CreateOrder } from "../../hooks/order";
 
 export const CartContext = React.createContext({});
 
 function ShoppingCart(props) {
   const { realm } = useRealm();
-  const {
-    data: { localCartVar },
-  } = useQuery(GET_LOCAL_CART);
+  const localCart = localCartVar();
   const userProfile = useReactiveVar(userProfileVar);
   const [mydatas, setMydatas] = useState(
     realm
       .objects("ShoppingCart")
-      .filtered("addressId == $0", localCartVar.deliverAddress)
+      .filtered("addressId == $0", localCart.deliverAddress)
       .filtered("quantity > 0")
       .filtered("isDraft == false")
   );
@@ -51,7 +50,7 @@ function ShoppingCart(props) {
     setMydatas(
       realm
         .objects("ShoppingCart")
-        .filtered("addressId == $0", localCartVar.deliverAddress)
+        .filtered("addressId == $0", localCart.deliverAddress)
         .filtered("quantity > 0")
         .filtered("isDraft == false")
     );
@@ -59,7 +58,7 @@ function ShoppingCart(props) {
       setMydatas(
         realm
           .objects("ShoppingCart")
-          .filtered("addressId == $0", localCartVar.deliverAddress)
+          .filtered("addressId == $0", localCart.deliverAddress)
           .filtered("quantity > 0")
           .filtered("isDraft == false")
       );
@@ -67,7 +66,7 @@ function ShoppingCart(props) {
     return () => {
       if(refresh) PubSub.unsubscribe(refresh);
     };
-  }, [localCartVar.deliverAddress, realm]);
+  }, [localCart.deliverAddress, realm]);
 
   const isAvailableList = useMemo(() => {
     return mydatas?.map((item) => {
@@ -94,28 +93,19 @@ function ShoppingCart(props) {
    * to make the code more readable
    */
   const onProceed = () => {
-    console.log('global.buyerId ==>', global.buyerId)
-    console.log('userProfile ==>', userProfile);
-    console.log('carts ==>', mydatas);
-    console.log({localCartVar});
-
-    const reqData = {
-      buyerId: userProfile.buyerId,
-      shippingAddressId: localCartVar.deliverAddress,
-      billingDetailsId: '',
-      useSalamiWallet: true,
-      cartItems: mydatas.map(item => ({ listingId: item.product.listingId, variantId: item.variantId, quantity: item.quantity }))
-    }
-
-    console.log('reqData ==>', JSON.stringify(reqData))
+    localCartVar({
+      ...localCart,
+      items: mydatas.map(item => ({ listingId: item.product.listingId, variantId: item.variantId, quantity: item.quantity }))
+    })
 
     if (userProfile?.isAuth && global.buyerId !== AppConfig.guestId) {
-      // if (userProfile.phone) {
+      if (userProfile.phone) {
 
       
-      // } else {
+      } else {
 
-      // }
+      }
+      
       const params = {
         title: "Please enter your billing details",
         actionButtonText: 'NEXT',
@@ -319,7 +309,6 @@ function ShoppingCart(props) {
             renderItem={({ item, index }) => {
               let itemAvailble = true;
               if (availbleList) {
-                console.log(availbleList.isListingAvailable)
                 const i = availbleList.isListingAvailable[index];
                 itemAvailble = i?.isAvailable;
               }

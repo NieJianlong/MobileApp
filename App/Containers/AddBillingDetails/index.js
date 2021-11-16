@@ -21,19 +21,18 @@ import {
   DELETE_BILLING_DETAILS,
   UPDATE_BILLING_DETAILS,
 } from "../../Apollo/mutations/mutations_user";
-import { BILLING_DETAIL_BY_BUYERID } from "../../Apollo/queries/queries_user";
 
 import { AlertContext } from "../Root/GlobalContext";
 import * as validator from "../../Validation";
 import AppConfig from "../../Config/AppConfig";
 import PubSub from "pubsub-js";
 import { userProfileVar } from "../../Apollo/cache";
-import { Billing_Actions } from "./const";
+import { Action_Type, Billing_Type } from "./const";
 import GetBillingDetail from "../../hooks/billingDetails";
 
 function AddBillingDetails(props) {
   const {
-    params: { title, actionType = Billing_Actions.billing, actionButtonText = 'SAVE' },
+    params: { title, billingType = Billing_Type.BILLING, actionType = Action_Type.SAVE },
   } = useRoute();
   const userProfile = useReactiveVar(userProfileVar);
 
@@ -53,7 +52,8 @@ function AddBillingDetails(props) {
   const [country, setCountry] = useState("");
   const [company, setCompany] = useState("");
   const [taxid, setTaxid] = useState("");
-  const [disable, setDisable] = useState(true);
+  const [isEmpty, setIsEmpty] = useState(true);
+  const [useDefaultAddress, setUseDefaultAddress] = useState(true);
 
   useEffect(() => {
     const keyboardShow = (e) => {
@@ -106,9 +106,9 @@ function AddBillingDetails(props) {
       company.length === 0 ||
       taxid.length === 0
     ) {
-      setDisable(true);
+      setIsEmpty(true);
     } else {
-      setDisable(false);
+      setIsEmpty(false);
     }
   }, [
     firstName,
@@ -249,7 +249,7 @@ function AddBillingDetails(props) {
 
   const billingAddress = {
     pinCode: postcode,
-    addressType: disable ? "BILLING" : "SHIPPING",
+    addressType: billingType,
     provinceState: mstate,
     townCity: city,
     flat: door,
@@ -257,8 +257,8 @@ function AddBillingDetails(props) {
     houseNumber: streetNum,
     country,
     referenceId: userProfile.buyerId,
-    defaultAddress: disable,
-    streetAddress1: "billing",
+    defaultAddress: useDefaultAddress,
+    streetAddress1: streetNum,
   };
   const request = {
     buyerId: userProfile.buyerId,
@@ -307,7 +307,7 @@ function AddBillingDetails(props) {
         });
 
         switch (actionType) {
-          case Billing_Actions.billing:
+          case Billing_Type.BILLING:
 
             break;
 
@@ -350,7 +350,7 @@ function AddBillingDetails(props) {
   });
 
   const onAddBilling = useCallback(() => {
-    if (disable) {
+    if (isEmpty && !useDefaultAddress ) {
       dispatch({
         type: "changAlertState",
         payload: {
@@ -387,7 +387,7 @@ function AddBillingDetails(props) {
         addBilling();
       }
     }
-  }, [addBilling, disable, dispatch, email, phoneNum]);
+  }, [addBilling, isEmpty, dispatch, email, phoneNum]);
 
   return (
     <View style={styles.container}>
@@ -400,8 +400,8 @@ function AddBillingDetails(props) {
           rightButton={() => {
             return (
               <RightButton
-                title={actionButtonText}
-                disable={disable}
+                title={actionType}
+                disable={isEmpty && !useDefaultAddress}
                 onPress={() => {
                   onAddBilling();
                 }}
@@ -414,12 +414,12 @@ function AddBillingDetails(props) {
             <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
               {title}
             </Text>
-            {/* <View style={{ marginTop: 20 }}>
+            <View style={{ marginTop: 20 }}>
               <Switch
-                onSwitch={() => {}}
+                onSwitch={(b) => setUseDefaultAddress(b)}
                 label="Use the same info as default delivery address"
               />
-            </View> */}
+            </View>
             <View
               style={{
                 flexDirection: "row",
@@ -452,7 +452,7 @@ function AddBillingDetails(props) {
             </View>
           </View>
         </KeyboardAwareScrollView>
-        {billingDetail?.billingDetailsId && actionType !== Billing_Actions.billing && (
+        {billingDetail?.billingDetailsId && billingType !== Billing_Type.BILLING && (
           <View
             style={{
               position: "absolute",

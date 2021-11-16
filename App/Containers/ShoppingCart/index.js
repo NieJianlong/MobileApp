@@ -26,8 +26,7 @@ import useRealm from "../../hooks/useRealm";
 import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
 import { localCartVar, userProfileVar } from "../../Apollo/cache";
 import { IsListingAvailable } from "../Explore/gql/explore_queries";
-import { Billing_Actions } from "../AddBillingDetails/const";
-import { CreateOrder } from "../../hooks/order";
+import { Action_Type, Billing_Type } from "../AddBillingDetails/const";
 
 export const CartContext = React.createContext({});
 
@@ -105,11 +104,11 @@ function ShoppingCart(props) {
       } else {
 
       }
-      
+
       const params = {
         title: "Please enter your billing details",
-        actionButtonText: 'NEXT',
-        actionType: Billing_Actions.billing,
+        actionButtonText: Action_Type.NEXT,
+        actionType: Billing_Type.BILLING,
       }
       NavigationService.navigate("AddBillingDetailsScreen", params);
 

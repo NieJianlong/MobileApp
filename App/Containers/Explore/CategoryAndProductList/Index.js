@@ -40,7 +40,11 @@ export default function Index(props) {
    *
    */
   const [location, setLocation] = useState({ latitude: "", longitude: "" });
-
+  console.log(
+    "localCartVarReactive.callBackAddress===================================="
+  );
+  console.log(localCartVarReactive.callBackAddress);
+  console.log("====================================");
   /**
    * this will be the query we will run on load to get the adrress co-ords
    * for the delivery address
@@ -74,8 +78,9 @@ export default function Index(props) {
       // setIsReady(true);
     },
     onError: (res) => {
+      setLocation({ latitude: "17.38405", longitude: "78.45636" });
       console.log(`Explore runGeoQuery onError ${JSON.stringify(res)}`);
-      setLocation({ latitude: 17.38405, longitude: 78.45636 });
+      // setLocation({ latitude: 17.38405, longitude: 78.45636 });
       // setIsReady(true);
     },
   });

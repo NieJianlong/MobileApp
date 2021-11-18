@@ -14,7 +14,7 @@ import colors from "../../Themes/Colors";
 import { AppBar } from "../../Components";
 import NavigationService from "../../Navigation/NavigationService";
 import { ApplicationStyles } from "../../Themes";
-
+import { Page_CheckoutGuestOrderDetail } from "../../Navigation/const";
 
 function CheckoutAuth(props) {
   return (
@@ -57,7 +57,7 @@ function CheckoutAuth(props) {
         
         <TouchableOpacity
           onPress={() => {
-            NavigationService.navigate("CheckOutPersonalDetailsScreen");
+            NavigationService.navigate(Page_CheckoutGuestOrderDetail);
           }}
         >
           <View style={{...styles.item_container, borderWidth: s(2), borderColor: colors.grey60}}>

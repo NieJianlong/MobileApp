@@ -64,7 +64,7 @@ export default function LaunchScreen() {
   const { isBillingLoaded } = GetBillingDetail();
 
   useEffect(() => {
-    if (isBillingLoaded) NavigationService.navigate('MainScreen');
+    if (isBillingLoaded) NavigationService.navigate('CheckoutAuthcreen');
   }, [isBillingLoaded]);
 
   const autoSignIn = useCallback(async () => {

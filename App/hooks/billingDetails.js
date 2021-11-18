@@ -36,14 +36,19 @@ const GetBillingDetail = () => {
         }
     
         if (data) {
-            const billingData = data.billingDetailsByBuyerId[0];
-            userProfileVar({
-                ...userProfile,
-                billingDetailsId: billingData.billingDetailsId
-            });
+            const billingDatas = data.billingDetailsByBuyerId;
+
+            if ((billingDatas || []).length > 1) {
+                userProfileVar({
+                    ...userProfile,
+                    billingDetailsId: billingDatas[0].billingDetailsId
+                });
+
+                setBillingDetail(billingDatas[0]);
+            }
 
             setIsBillingLoaded(true);
-            setBillingDetail(billingData);
+
         }
     }, [loading, error, data]);
 

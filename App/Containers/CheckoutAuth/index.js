@@ -6,6 +6,7 @@ import {
   Image,
   SafeAreaView,
   StatusBar,
+  Platform,
 } from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { s, ScaledSheet } from "react-native-size-matters";
@@ -16,7 +17,7 @@ import NavigationService from "../../Navigation/NavigationService";
 import { ApplicationStyles } from "../../Themes";
 import images from "../../Themes/Images";
 
-function CheckoutNoAuth(props) {
+function CheckoutAuth(props) {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
@@ -26,10 +27,7 @@ function CheckoutNoAuth(props) {
       >
         <AppBar />
         <View
-          style={{
-            paddingHorizontal: AppConfig.paddingHorizontal,
-            paddingTop: 100,
-          }}
+          style={styles.item_wrapper}
         >
           <TouchableOpacity
             onPress={() => {
@@ -40,40 +38,42 @@ function CheckoutNoAuth(props) {
               });
             }}
           >
-            <View
-              style={{
-                backgroundColor: "white",
-                paddingHorizontal: AppConfig.paddingHorizontal,
-                borderRadius: s(16),
-                height: s(80),
-                justifyContent: "center",
-              }}
-            >
+            <View style={{...styles.item_container, borderWidth: s(4)}}>
               <Text style={ApplicationStyles.screen.heading2Bold}>Sign In</Text>
+              <Text style={styles.text}>Use your saved addresses and information for a faster checkout experience!</Text>
             </View>
           </TouchableOpacity>
-          <Image
-            source={images.shopcartOrImage}
-            style={{ height: 80, width: "100%", resizeMode: "contain" }}
-          />
+
           <TouchableOpacity
             onPress={() => {
               NavigationService.navigate("CheckOutPersonalDetailsScreen");
             }}
           >
-            <View style={styles.item_container}>
+            <View style={{...styles.item_container, borderWidth: s(2)}}>
+              <Text style={ApplicationStyles.screen.heading2Bold}>
+                Register
+              </Text>
+              <Text
+                style={styles.text}
+              >
+                Don’t have an account? Make one today to save addresses and checkout faster in the future!
+              </Text>
+            </View>
+          </TouchableOpacity>
+          
+          <TouchableOpacity
+            onPress={() => {
+              NavigationService.navigate("CheckOutPersonalDetailsScreen");
+            }}
+          >
+            <View style={{...styles.item_container, borderWidth: s(2), borderColor: colors.grey60}}>
               <Text style={ApplicationStyles.screen.heading2Bold}>
                 Continue as guest
               </Text>
               <Text
-                style={[
-                  ApplicationStyles.screen.heading4Bold,
-                  { color: colors.grey60, fontWeight: "normal" },
-                ]}
+                style={styles.text}
               >
-                You can continue as guest and only fill the mandatory details.
-                You'll have the chance to create an account at the end of the
-                process.
+                Requires only the mandatory information for your order. Great for trying out SalamiSlicing!
               </Text>
             </View>
           </TouchableOpacity>
@@ -83,7 +83,7 @@ function CheckoutNoAuth(props) {
   );
 }
 
-export default CheckoutNoAuth;
+export default CheckoutAuth;
 const styles = ScaledSheet.create({
   container: {
     flex: 1,
@@ -93,18 +93,30 @@ const styles = ScaledSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+    borderColor: '#f00'
   },
-  title: {
+  safeArea: {
+    flex: 1,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
+  text: {
     fontFamily: fonts.primary,
-    fontSize: "16@s",
-    color: colors.black,
-    fontWeight: "600",
+    fontSize: "14@s",
+    color: colors.grey60,
+    fontWeight: "400",
+    marginTop: "18@s"
+  },
+  item_wrapper: {
+    flex: 1,
+    paddingHorizontal: AppConfig.paddingHorizontal,
+    justifyContent: 'space-evenly'
   },
   item_container: {
     backgroundColor: "white",
-    paddingHorizontal: AppConfig.paddingHorizontal,
+    padding: s(24),
     borderRadius: s(16),
     height: 160,
     justifyContent: "center",
+    borderColor: colors.primary,
   },
 });

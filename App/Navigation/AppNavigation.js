@@ -53,7 +53,7 @@ import CustomerSupportScreen from "../Containers/CustomerSupport";
 import FeedbackScreen from "../Containers/Feedback";
 import ShoppingCartScreen from "../Containers/ShoppingCart";
 import EditShoppingCartScreen from "../Containers/EditShoppingCart";
-import CheckoutNoAuthScreen from "../Containers/CheckoutNoAuth";
+import CheckoutAuthcreen from "../Containers/CheckoutAuth";
 import CheckOutPersonalDetailsScreen from "../Containers/CheckOutPersonalDetails";
 import CheckoutBillingDetailsScreen from "../Containers/CheckoutBillingDetails";
 import AddCheckoutPaymentMethodScreen from "../Containers/AddCheckoutPaymentMethod";
@@ -227,8 +227,8 @@ function PrimaryNav() {
         component={EditShoppingCartScreen}
       />
       <Stack.Screen
-        name={"CheckoutNoAuthScreen"}
-        component={CheckoutNoAuthScreen}
+        name={"CheckoutAuthcreen"}
+        component={CheckoutAuthcreen}
       />
       <Stack.Screen
         name={"CheckOutPersonalDetailsScreen"}

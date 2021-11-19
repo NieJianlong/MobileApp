@@ -87,7 +87,8 @@ const styles = ScaledSheet.create({
   },
   item_wrapper: {
     flex: 1,
-    paddingHorizontal: AppConfig.paddingHorizontal,
+    marginRight: s(-26),
+    marginLeft: s(56),
     justifyContent: 'space-evenly'
   },
   item_container: {

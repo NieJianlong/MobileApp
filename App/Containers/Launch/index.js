@@ -19,6 +19,7 @@ import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import * as storage from "../../Apollo/local-storage";
 import AppConfig from "../../Config/AppConfig";
 import GetBillingDetail from "../../hooks/billingDetails";
+import { Page_CheckoutAuth } from "../../Navigation/const";
 
 export default function LaunchScreen() {
   const [getBuyerId, {data, called, error}] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
@@ -64,7 +65,7 @@ export default function LaunchScreen() {
   const { isBillingLoaded } = GetBillingDetail();
 
   useEffect(() => {
-    if (isBillingLoaded) NavigationService.navigate('CheckoutAuthcreen');
+    if (isBillingLoaded) NavigationService.navigate(Page_CheckoutAuth);
   }, [isBillingLoaded]);
 
   const autoSignIn = useCallback(async () => {

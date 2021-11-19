@@ -53,7 +53,7 @@ import CustomerSupportScreen from "../Containers/CustomerSupport";
 import FeedbackScreen from "../Containers/Feedback";
 import ShoppingCartScreen from "../Containers/ShoppingCart";
 import EditShoppingCartScreen from "../Containers/EditShoppingCart";
-import CheckoutAuthcreen from "../Containers/CheckoutAuth";
+import CheckoutAuthScreen from "../Containers/CheckoutAuth";
 import CheckOutPersonalDetailsScreen from "../Containers/CheckOutPersonalDetails";
 import CheckoutBillingDetailsScreen from "../Containers/CheckoutBillingDetails";
 import AddCheckoutPaymentMethodScreen from "../Containers/AddCheckoutPaymentMethod";
@@ -74,7 +74,7 @@ import CancelOrderCompletedScreen from "../Containers/CancelOrderCompleted";
 import ReportGroupScreen from "../Containers/ReportGroup";
 import TabBar from "./TabBar";
 import PaymentScreen from '../Containers/payments';
-import { Page_CheckoutGuestOrderDetail } from "./const";
+import { Page_CheckoutAuth, Page_CheckoutGuestOrderDetail } from "./const";
 import CheckoutGuestOrderDetail from "../Containers/CheckoutGuestOrderDetail";
 
 const Stack = createStackNavigator();
@@ -229,8 +229,8 @@ function PrimaryNav() {
         component={EditShoppingCartScreen}
       />
       <Stack.Screen
-        name={"CheckoutAuthcreen"}
-        component={CheckoutAuthcreen}
+        name={Page_CheckoutAuth}
+        component={CheckoutAuthScreen}
       />
       <Stack.Screen
         name={"CheckOutPersonalDetailsScreen"}

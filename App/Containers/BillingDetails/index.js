@@ -10,15 +10,43 @@ import BaseScreen from "../BaseScreen";
 import { AppBar, Switch } from "../../Components";
 import { AlertContext } from "../Root/GlobalContext";
 
-import AddressIcon from './AddressIcon.png'
-
 import styles from './styles';
 import BillingAddressBottomSheet from "../../Components/BillingAddressBottomSheet";
 import { billingAddrsses } from "./constant";
+import { Action_Type, Billing_Type } from "../AddBillingDetails/const";
+import NavigationService from "../../Navigation/NavigationService";
+import images from "../../Themes/Images";
 
 function BillingDetails(props) {
     const { dispatch } = useContext(AlertContext);
     const [isSameAsDelivery, setIsSameAsDelivery] = useState(true);
+
+    const onAddressClick = (id) => {
+        console.log('id ==>', id);
+
+        dispatch({
+            type: 'changSheetState',
+            payload: {
+                showSheet: false,
+            }
+        })
+    }
+
+    const onAddNewAddress = () => {
+        dispatch({
+            type: 'changSheetState',
+            payload: {
+                showSheet: false,
+            }
+        })
+
+        const params = {
+            title: 'Please enter your billing details',
+            billingType: Billing_Type.BILLING,
+            actionType: Action_Type.NEXT,
+        };
+        NavigationService.navigate("AddBillingDetailsScreen", params);
+    }
 
     return (
         <BaseScreen {...props}>
@@ -53,14 +81,18 @@ function BillingDetails(props) {
                         payload: {
                             showSheet: true,
                             sheetTitle: 'Billing Address',
-                            children: <BillingAddressBottomSheet addresses={billingAddrsses} onPress={(id) => console.log('id ===>', id)}/>,
+                            children:   <BillingAddressBottomSheet
+                                            addresses={billingAddrsses}
+                                            onAddressClick={onAddressClick}
+                                            onAddNewAddress={onAddNewAddress}
+                                        />,
                             height: 320,
                         }
                     })}
                 >
                     <View style={styles.saveAddress}>
                         <View style={styles.addressIcon}>
-                            <Image source={AddressIcon} />
+                            <Image source={images.addressIcon} />
                         </View>
                         <Text style={styles.saveAddressText}>Use a saved address or add new address</Text>
                     </View>

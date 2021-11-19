@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { View, StatusBar, Text, Keyboard } from "react-native";
+import { View, StatusBar, Text, Keyboard, TouchableOpacity, Image } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs, s } from "react-native-size-matters";
@@ -29,6 +29,7 @@ import PubSub from "pubsub-js";
 import { userProfileVar } from "../../Apollo/cache";
 import { Action_Type, Billing_Type } from "./const";
 import GetBillingDetail from "../../hooks/billingDetails";
+import images from "../../Themes/Images";
 
 function AddBillingDetails(props) {
   const {
@@ -411,7 +412,7 @@ function AddBillingDetails(props) {
         />
         <KeyboardAwareScrollView>
           <View style={styles.bodyContainer}>
-            <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
+            <Text style={[styles.heading2Bold, { fontSize: s(20) }]}>
               {title}
             </Text>
             <View style={{ marginTop: 20 }}>
@@ -420,6 +421,17 @@ function AddBillingDetails(props) {
                 label="Use the same info as default delivery address"
               />
             </View>
+            <TouchableOpacity
+              onPress={() => {}}
+            >
+              <View style={styles.saveAddress}>
+                <View style={styles.addressIcon}>
+                  <Image source={images.addressIcon} />
+                </View>
+                <Text style={styles.saveAddressText}>Use a saved address</Text>
+              </View>
+            </TouchableOpacity>
+
             <View
               style={{
                 flexDirection: "row",

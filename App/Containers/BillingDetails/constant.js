@@ -13,4 +13,11 @@ export const billingAddrsses = [
         street: '298 Ivy Lane Hopewell',
         area: 'Area 2',
     },
+    {
+        id: '3',
+        name: 'Address Name',
+        number: '002',
+        street: '298 Ivy Lane Hopewell',
+        area: 'Area 2',
+    },
 ]

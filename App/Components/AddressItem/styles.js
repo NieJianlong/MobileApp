@@ -1,11 +1,9 @@
 import { s, ScaledSheet } from "react-native-size-matters";
 import Colors from "../../Themes/Colors";
-import { ApplicationStyles } from "../../Themes";
 import { Fonts } from "../../Themes";
 
 const styles = ScaledSheet.create({
     container: {
-        width: '100%',
         borderRadius: s(16),
         borderWidth: s(1),
         borderColor: Colors.grey10,
@@ -15,7 +13,7 @@ const styles = ScaledSheet.create({
         paddingVertical: s(12),
     },
     touch: {
-        width: '100%',
+        // width: '100%',
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',

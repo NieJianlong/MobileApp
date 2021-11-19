@@ -8,6 +8,7 @@ import AddressItem from "../AddressItem";
 import { Colors } from "../../Themes";
 
 import styles from './styles';
+import { FlatList } from "react-native-gesture-handler";
 
 function BillingAddressBottomSheet({addresses, onAddressClick, onAddNewAddress}) {
     return (
@@ -19,7 +20,12 @@ function BillingAddressBottomSheet({addresses, onAddressClick, onAddNewAddress})
                     text={"ADD ADDRESS"}
                 />
             </View>
-            {(addresses || []).map((address, i) => <AddressItem key={i} onPress={onAddressClick} {...address}/>) }
+            <FlatList
+                style = {{width: '100%'}}
+                data={addresses || []}
+                renderItem={({item}) => <AddressItem onPress={onAddressClick} {...item}/>}
+                keyExtractor={item => item.id}
+            />
         </View>
     );
 }

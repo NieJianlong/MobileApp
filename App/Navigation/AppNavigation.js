@@ -74,8 +74,9 @@ import CancelOrderCompletedScreen from "../Containers/CancelOrderCompleted";
 import ReportGroupScreen from "../Containers/ReportGroup";
 import TabBar from "./TabBar";
 import PaymentScreen from '../Containers/payments';
-import { Page_CheckoutAuth, Page_CheckoutGuestOrderDetail } from "./const";
+import { Page_BillingDetails, Page_CheckoutAuth, Page_CheckoutGuestOrderDetail } from "./const";
 import CheckoutGuestOrderDetail from "../Containers/CheckoutGuestOrderDetail";
+import BillingDetails from "../Containers/BillingDetails";
 
 const Stack = createStackNavigator();
 
@@ -291,6 +292,7 @@ function PrimaryNav() {
       <Stack.Screen name={"ReportGroupScreen"} component={ReportGroupScreen} />
       <Stack.Screen name={"PaymentScreen"} component={PaymentScreen}/>
       <Stack.Screen name={Page_CheckoutGuestOrderDetail} component={CheckoutGuestOrderDetail} />
+      <Stack.Screen name={Page_BillingDetails} component={BillingDetails} />
     </Stack.Navigator>
   );
 }

@@ -7,14 +7,13 @@ import {
 
 import BaseScreen from "../BaseScreen";
 
-import AppConfig from "../../Config/AppConfig";
 import { s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
 import colors from "../../Themes/Colors";
 import { AppBar } from "../../Components";
 import NavigationService from "../../Navigation/NavigationService";
 import { ApplicationStyles } from "../../Themes";
-import { Page_CheckoutGuestOrderDetail } from "../../Navigation/const";
+import { Page_BillingDetails, Page_CheckoutGuestOrderDetail } from "../../Navigation/const";
 
 function CheckoutAuth(props) {
   return (
@@ -40,7 +39,7 @@ function CheckoutAuth(props) {
 
         <TouchableOpacity
           onPress={() => {
-            NavigationService.navigate("CheckOutPersonalDetailsScreen");
+            NavigationService.navigate(Page_BillingDetails);
           }}
         >
           <View style={{...styles.item_container, borderWidth: s(2)}}>

@@ -23,15 +23,26 @@ import Button from "./Button";
  * @return {*}
  */
 function EmptyReminder(props) {
-  const { textTip, subTextTip, needButton, btnMsg, onPress, callback } = props;
+  const {
+    textTip,
+    subTextTip,
+    needButton,
+    btnMsg,
+    onPress,
+    callback,
+    style,
+    width,
+  } = props;
   return (
-    <View style={{ flex: 1, width: metrics.screenWidth }}>
+    <View
+      style={[{ flex: 1, width: width ? width : metrics.screenWidth }, style]}
+    >
       <View style={styles.headerContainer}>
         <Text style={[ApplicationStyles.screen.heading4Bold, styles.nosign]}>
           {textTip}
         </Text>
         <Text style={[styles.subTextTip]}>{subTextTip}</Text>
-        <View style={styles.signbtn}>
+        <View style={[styles.signbtn, { width: "100%" }]}>
           {needButton && (
             <Button onPress={() => onPress(callback)} text={btnMsg}></Button>
           )}
@@ -68,6 +79,7 @@ const styles = ScaledSheet.create({
   headerContainer: {
     backgroundColor: colors.background,
     justifyContent: "space-around",
+    alignItems: "center",
     paddingHorizontal: AppConfig.paddingHorizontal,
     paddingBottom: "15@vs",
   },

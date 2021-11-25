@@ -163,9 +163,12 @@ function RegisterScreen(props) {
       if (typeof result.registerBuyer !== "undefined") {
         let buyerId = result.registerBuyer.buyerId;
         console.log(`registerBuyer buyerId=${buyerId}`);
-        storage.setLocalStorageValue(registerInput, buyerId);
-        // login here for private api jwt initial getDefaultBuyerAdress
-        autoSignIn();
+        if (buyerId) {
+          storage.setLocalStorageValue(registerInput, buyerId);
+          // login here for private api jwt initial getDefaultBuyerAdress
+          autoSignIn();
+        }
+
         // NavigationService.navigate("MainScreen");
         // NavigationService.navigate('OTPScreen', { fromScreen: 'RegisterScreen', phone: registerInput })
       } else {

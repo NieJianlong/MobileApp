@@ -35,7 +35,7 @@ function SelectDeliveryAddress(props) {
     {
       variables: {
         buyerId: global.buyerId,
-        type: "SHIPPING",
+        addressType: "SHIPPING",
       },
       context: {
         headers: {
@@ -104,7 +104,7 @@ function SelectDeliveryAddress(props) {
             paddingHorizontal: AppConfig.paddingHorizontal,
           }}
         >
-          <Button
+          {/* <Button
             onPress={(callback) => {
               NavigationService.navigate("AddNewAddressScreen", {
                 callback,
@@ -114,7 +114,7 @@ function SelectDeliveryAddress(props) {
             textColor="white"
             text="Add new address"
             backgroundColor={colors.grey80}
-          />
+          /> */}
         </SafeAreaView>
       </SafeAreaView>
     </View>

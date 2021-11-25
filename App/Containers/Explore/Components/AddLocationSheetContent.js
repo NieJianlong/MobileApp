@@ -94,6 +94,11 @@ function AddLocationSheetContent(props) {
       variables: {
         request: AddressRequestForCreate,
       },
+      context: {
+        headers: {
+          isPrivate: isAuth,
+        },
+      },
       onCompleted: (res) => {
         PubSub.publish("refresh-address", "");
         dispatch({
@@ -212,7 +217,7 @@ function AddLocationSheetContent(props) {
       >
         <View style={styles.popupHeader}>
           <Text style={[styles.txtSave, { color: "transparent" }]}>SAVE</Text>
-          <Text style={styles.popupTitle}>Add your delivery address</Text>
+          {/* <Text style={styles.popupTitle}>Add your delivery address</Text> */}
           <TouchableOpacity
             onPress={() => {
               if (disable) {

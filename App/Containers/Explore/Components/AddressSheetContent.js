@@ -68,8 +68,8 @@ export default function AddressSheetContent(props) {
     });
   }, [dispatch]);
   return (
-    <View style={{ flex: 1, justifyContent: "flex-start" }}>
-      <View style={{ height: vs(12) }} />
+    <View style={[{ flex: 1, justifyContent: "flex-start" }]}>
+      <View style={{ height: vs(30) }} />
       <Button
         backgroundColor={Colors.grey80}
         prefixIcon={Images.add1}
@@ -84,6 +84,7 @@ export default function AddressSheetContent(props) {
               ? data?.getBuyerAddressByType
               : data?.getGuestBuyerAddressByType
           }
+          needempty={false}
           isCheckout={true}
           refetch={refetch}
         />

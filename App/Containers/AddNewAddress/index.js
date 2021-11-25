@@ -85,6 +85,11 @@ function AddNewAddress(props) {
     variables: {
       request: AddressRequestForCreate,
     },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
     onCompleted: (res) => {
       dispatch({
         type: "changAlertState",

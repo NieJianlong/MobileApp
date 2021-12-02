@@ -132,6 +132,12 @@ type BillingDetailsResponse {
   updatedAt: DateTime
 }
 
+enum BusinessType {
+  UNDEFINED
+  BUSINESS_SELLER
+  INDIVIDUAL_SELLER
+}
+
 input BuyerProfileRequest {
   buyerId: ID!
   firstName: String
@@ -657,25 +663,12 @@ type SalamiWalletTransactionResponse {
 }
 
 input SellerAddressRequestForCreate {
-  flat: String
-  floor: String
-  defaultAddress: Boolean
-  block: String
-  building: String
-  houseNumber: String
+  townCity: String
   streetAddress1: String
   streetAddress2: String
-  streetAddress3: String
-  townCity: String
-  villageArea: String
-  district: String
   provinceState: String
   country: String
   areaCode: String
-  landMark: String
-  pinCode: String
-  addressType: AddressType
-  referenceId: String
 }
 
 input SellerBillingDetailsRequest {
@@ -686,8 +679,8 @@ input SellerBillingDetailsRequest {
   bankAddress: String
   internationalRoutingCode: String
   domesticRoutingCode: String
-  ibanCode: String
   accountNumber: String
+  ifscCode: String
 }
 
 input SellerBillingDetailsRequestForCreate {
@@ -697,8 +690,8 @@ input SellerBillingDetailsRequestForCreate {
   bankAddress: String
   internationalRoutingCode: String
   domesticRoutingCode: String
-  ibanCode: String
   accountNumber: String
+  ifscCode: String
 }
 
 type SellerBillingDetailsResponse {
@@ -709,8 +702,8 @@ type SellerBillingDetailsResponse {
   bankAddress: String
   internationalRoutingCode: String
   domesticRoutingCode: String
-  ibanCode: String
   accountNumber: String
+  ifscCode: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -771,6 +764,11 @@ input SellerProfileRequest {
   vatCodeValidated: Boolean
   commChamberRegNum: String
   commChamberRegNumValidated: Boolean
+  businessType: BusinessType
+  storeName: String
+  productsUpcAvailable: Boolean
+  manufacturerBrandOwner: Boolean
+  registeredTrademarksOwner: Boolean
 }
 
 input SellerProfileRequestForCreate {
@@ -790,9 +788,9 @@ input SellerProfileRequestForCreate {
   shortName: String
   middleName: String
   vatCode: String
+  storeName: String
   sellerContact: SellerContactRequestForCreate!
-  sellerBillingDetails: SellerBillingDetailsRequestForCreate!
-  sellerToOnlineStore: SellerToOnlineStoreRequestForRegister!
+  sellerBillingDetails: SellerBillingDetailsRequestForCreate
   sellerAddress: SellerAddressRequestForCreate!
   sellerName: String
   nationalIdNumber: String
@@ -802,6 +800,14 @@ input SellerProfileRequestForCreate {
   vatCodeValidated: Boolean
   commChamberRegNum: String
   commChamberRegNumValidated: Boolean
+  businessType: BusinessType!
+  productsUpcAvailable: Boolean!
+  manufacturerBrandOwner: Boolean!
+  registeredTrademarksOwner: Boolean!
+  aadharCardDocument: Upload
+  panCardDocument: Upload
+  vatNumberDocument: Upload
+  gstinNumberDocument: Upload
 }
 
 type SellerProfileResponse {
@@ -831,6 +837,13 @@ type SellerProfileResponse {
   vatCode: String
   sellerBillingDetails: SellerBillingDetailsResponse
   sellerContacts: [SellerContactResponse]
+  middleName: String
+  businessType: BusinessType
+  sellerValidationStatus: SellerValidationStatus
+  storeName: String
+  productsUpcAvailable: Boolean
+  manufacturerBrandOwner: Boolean
+  registeredTrademarksOwner: Boolean
   sellerName: String
   nationalIdNumber: String
   nationalIdNumberValidated: Boolean
@@ -857,14 +870,6 @@ input SellerToOnlineStoreRequestForCreate {
   governmentRegisteredTm: Boolean
 }
 
-input SellerToOnlineStoreRequestForRegister {
-  sellerId: ID
-  storeId: ID!
-  upcForAllProducts: Boolean
-  manufacturerBrandOwner: Boolean
-  governmentRegisteredTm: Boolean
-}
-
 type SellerToOnlineStoreResponse {
   sellerId: ID!
   storeId: ID!
@@ -879,6 +884,13 @@ enum SellerType {
   UNDEFINED
   MAIN_SELLER
   ANNOUNCEMENT_SELLER
+}
+
+enum SellerValidationStatus {
+  UNDEFINED
+  PENDING
+  ACCEPTED
+  DECLINED
 }
 
 enum ShareChannel {
@@ -1000,6 +1012,8 @@ type SupportedLanguageResponse {
   id: ID
   language: String
 }
+
+scalar Upload
 
 enum UserType {
   SELLER

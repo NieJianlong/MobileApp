@@ -6,6 +6,8 @@ import { Alert, RadiusButton } from "../../Components";
 import { Colors } from "../../Themes";
 import styles from "./styles";
 import CategoryAndProductList from "./CategoryAndProductList/Index";
+import { useMutation } from "@apollo/client";
+import { SendVerifyEmail } from "../Register/gql/register_mutations";
 const SearchBarContext = React.createContext({});
 
 function Explore(props) {
@@ -14,11 +16,22 @@ function Explore(props) {
     showAccountActivatedSuccessfullyAlert,
     setShowAccountActivatedSuccessfullyAlert,
   ] = useState(false);
+  const [sendVerifyEmail] = useMutation(SendVerifyEmail);
   //Fixed a bug that accidentally triggered onclick when swiping
   // to show an alert to users that they need to activate their accounts
   const [showAccountActivateAlert, setShowAccountActivateAlert] = useState(
     false
   );
+  useEffect(() => {
+    sendVerifyEmail({
+      variables: { userId: global.userProfileId },
+      context: {
+        headers: {
+          isPrivate: true,
+        },
+      },
+    });
+  }, [sendVerifyEmail]);
   // const setSearchBar = useCallback(() => {
   //   setShowSearchBar
   // }, [input]);

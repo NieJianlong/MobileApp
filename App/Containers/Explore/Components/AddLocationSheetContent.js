@@ -217,7 +217,7 @@ function AddLocationSheetContent(props) {
       >
         <View style={styles.popupHeader}>
           <Text style={[styles.txtSave, { color: "transparent" }]}>SAVE</Text>
-          {/* <Text style={styles.popupTitle}>Add your delivery address</Text> */}
+          <Text style={styles.popupTitle}>Add your delivery address</Text>
           <TouchableOpacity
             onPress={() => {
               if (disable) {

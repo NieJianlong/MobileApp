@@ -28,6 +28,7 @@ import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
 import jwt_decode from "jwt-decode";
 import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
+import { SendVerifyEmail } from "./gql/register_mutations";
 
 function RegisterScreen(props) {
   const { dispatch } = useContext(AlertContext);
@@ -142,6 +143,7 @@ function RegisterScreen(props) {
    * collect state variable and run the mutation
    * on call back update local storage
    */
+  const [sendVerifyEmail] = useMutation(SendVerifyEmail);
   const [registerBuyer, { data }] = useMutation(REGISTER_BUYER, {
     variables: { request: BuyerProfileRequestForCreate },
     onError: (error) => {
@@ -165,6 +167,7 @@ function RegisterScreen(props) {
         console.log(`registerBuyer buyerId=${buyerId}`);
         if (buyerId) {
           storage.setLocalStorageValue(registerInput, buyerId);
+          sendVerifyEmail({ variables: { userId: buyerId } });
           // login here for private api jwt initial getDefaultBuyerAdress
           autoSignIn();
         }

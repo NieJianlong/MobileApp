@@ -1,24 +1,29 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '10.0'
+platform :ios, '11.0'
 
 target 'apollo' do
   config = use_native_modules!
 
-  use_react_native!(:path => config["reactNativePath"])
+  use_react_native!(
+    :path => config["reactNativePath"],
+    :hermes_enabled => false
+  )
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
   target 'apolloTests' do
     inherit! :complete
     # Pods for testing
   end
+  
 
   # Enables Flipper.
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
-  use_flipper!({ 'Flipper' => '0.98.0' })
+  # use_flipper!({ 'Flipper' => '0.98.0','Flipper-Folly' => '2.6'  })
+  use_flipper!({ 'Flipper-Folly' => '2.6.9', 'Flipper' => '0.100.0' })
   post_install do |installer|
       installer.pods_project.targets.each do |target|
         target.build_configurations.each do |config|

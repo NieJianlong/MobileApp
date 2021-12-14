@@ -362,6 +362,7 @@ type Mutation {
   deleteBuyerProfile(buyerId: ID!): Boolean
   updateBuyerProfile(request: BuyerProfileRequest!): BuyerProfileResponse
   createGuestBuyer(request: BuyerProfileRequestForCreate!): BuyerProfileResponse
+  validateCode(request: ValidateCodeRequest!): ValidateCodeResponse
   addRefundSalamiCredit(buyerId: ID!, refundAmount: Float!): Float
   useRefundSalamiCredit(buyerId: ID!, amount: Float!): Float
   addBonusSalamiCredit(buyerId: ID!, amount: Float!, bonusSalamiCreditExpire: DateTime): Float
@@ -789,7 +790,7 @@ input SellerProfileRequestForCreate {
   middleName: String
   vatCode: String
   storeName: String
-  sellerContact: SellerContactRequestForCreate!
+  sellerContact: SellerContactRequestForCreate
   sellerBillingDetails: SellerBillingDetailsRequestForCreate
   sellerAddress: SellerAddressRequestForCreate!
   sellerName: String
@@ -1028,6 +1029,22 @@ enum UserType {
   RETAIL_BUYER
   COMPANY_BUYER
   SUPER_ADMIN
+}
+
+input ValidateCodeRequest {
+  userId: ID!
+  validationType: ValidationType!
+  tokenCode: String!
+}
+
+type ValidateCodeResponse {
+  status: Boolean
+  extraMessage: String
+}
+
+enum ValidationType {
+  SMS
+  EMAIL
 }
 
 enum WalletTransactionType {

@@ -19,9 +19,8 @@ function Explore(props) {
   const [sendVerifyEmail] = useMutation(SendVerifyEmail);
   //Fixed a bug that accidentally triggered onclick when swiping
   // to show an alert to users that they need to activate their accounts
-  const [showAccountActivateAlert, setShowAccountActivateAlert] = useState(
-    false
-  );
+  const [showAccountActivateAlert, setShowAccountActivateAlert] =
+    useState(false);
   useEffect(() => {
     sendVerifyEmail({
       variables: { userId: global.userProfileId },

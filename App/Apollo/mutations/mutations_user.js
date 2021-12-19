@@ -95,6 +95,7 @@ export const REGISTER_BUYER = gql`
   mutation RegisterBuyer($request: BuyerProfileRequestForCreate!) {
     registerBuyer(request: $request) {
       buyerId
+      userId
     }
   }
 `;

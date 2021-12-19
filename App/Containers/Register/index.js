@@ -167,9 +167,24 @@ function RegisterScreen(props) {
         console.log(`registerBuyer buyerId=${buyerId}`);
         if (buyerId) {
           storage.setLocalStorageValue(registerInput, buyerId);
-          sendVerifyEmail({ variables: { userId: buyerId } });
+          dispatch({
+            type: "changLoading",
+            payload: false,
+          });
+          // 56alert(result.registerBuyer.userId);
+          sendVerifyEmail({
+            variables: { userId: result.registerBuyer.userId },
+          });
+          NavigationService.navigate("OTPScreen", {
+            fromScreen: "RegisterScreen",
+            phone: registerInput,
+            userId: result.registerBuyer.userId,
+            password: psswd,
+          });
+
+          // NavigationService.navigate("");
           // login here for private api jwt initial getDefaultBuyerAdress
-          autoSignIn();
+          // autoSignIn();
         }
 
         // NavigationService.navigate("MainScreen");
@@ -260,7 +275,6 @@ function RegisterScreen(props) {
         <AppBar showLogo onPressBack={() => props.navigation.goBack()} />
         <View style={styles.bodyContainer}>
           <Text style={styles.heading2Bold}>Register</Text>
-
           <Text style={styles.heading4Regular}>
             Create an account to have access to the best promos in your area!
           </Text>
@@ -284,7 +298,6 @@ function RegisterScreen(props) {
             onChangeText={(text) => setLastName(text)}
             value={lastName}
           />
-
           <TextInput
             style={styles.textInput}
             placeholder={"Type your email or phone number"}
@@ -305,7 +318,6 @@ function RegisterScreen(props) {
             onChangeText={(text) => setPsswd(text)}
             value={psswd}
           />
-
           <View style={styles.switch}>
             <Switch
               onSwitch={() => {

@@ -96,7 +96,7 @@ function OnboardingScreen(props) {
       />
       <Video
         ref={(ref) => (player = ref)}
-        source={{ uri: "http://www.exit109.com/~dnn/clips/RW20seconds_1.mp4" }}
+        source={require("../../../assets/video/video.mp4")}
         style={styles.backgroundVideo}
         resizeMode={"cover"}
         repeat

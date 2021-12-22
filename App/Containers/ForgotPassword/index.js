@@ -1,4 +1,4 @@
-import React, { Component, useCallback, useEffect } from "react";
+import React, { Component, useCallback, useContext, useEffect } from "react";
 import { View, StatusBar, Text, Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { isIphoneX } from "react-native-iphone-x-helper";
@@ -10,6 +10,8 @@ import { Colors } from "../../Themes";
 import styles from "./styles";
 import { useMutation } from "@apollo/client";
 import { ForgotPasswordStep1SendNotificationEmail } from "./forgot_mutation";
+import colors from "../../Themes/Colors";
+import { AlertContext } from "../Root/GlobalContext";
 
 class ForgotPassword extends Component {
   constructor(props) {
@@ -41,7 +43,8 @@ class ForgotPassword extends Component {
   };
 
   validateEmail = (email) => {
-    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const reg =
+      /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/;
     return reg.test(email);
   };
 
@@ -134,13 +137,33 @@ function ForgotPasswordScreen() {
   const [getValidateCode] = useMutation(
     ForgotPasswordStep1SendNotificationEmail
   );
+  const { dispatch } = useContext(AlertContext);
   const getCode = useCallback(
     (email) => {
       getValidateCode({
         variables: { email },
+        onError: () => {
+          dispatch({
+            type: "changAlertState",
+            payload: {
+              visible: true,
+              message: "Invalid email address",
+              color: colors.error,
+              title: "Failed",
+            },
+          });
+        },
+        onCompleted: (res) => {
+          NavigationService.navigate("OTPScreen", {
+            fromScreen: "ForgotPasswordScreen",
+            phone: email,
+            userId: "",
+            password: "",
+          });
+        },
       });
     },
-    [getValidateCode]
+    [dispatch, getValidateCode]
   );
 
   return <ForgotPassword onGetCode={getCode} />;

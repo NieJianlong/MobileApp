@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useCallback, useContext } from "react";
 import {
   View,
   StatusBar,
@@ -15,8 +15,14 @@ import { AppBar, Button, TextInput, PasswordInput } from "../../Components";
 import { Colors } from "../../Themes";
 
 import styles from "./styles";
+import { useMutation } from "@apollo/client";
+import { ForgotPasswordStep3ChangeByEmail } from "../OTP/gql/validate";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { AlertContext } from "../Root/GlobalContext";
+import colors from "../../Themes/Colors";
+import NavigationService from "../../Navigation/NavigationService";
 
-class CreateNewPasswordScreen extends Component {
+class CreateNewPassword extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -65,7 +71,11 @@ class CreateNewPasswordScreen extends Component {
             this.state.confirmPassword !== this.state.password
           }
           onPress={() => {
-            this.props.navigation.navigate("ExploreScreen");
+            this.props.onGetCode(
+              this.state.password,
+              this.state.confirmPassword
+            );
+            // this.props.navigation.navigate("ExploreScreen");
           }}
           text={"CREATE NEW PASSWORD"}
         />
@@ -132,5 +142,50 @@ class CreateNewPasswordScreen extends Component {
     );
   }
 }
+function CreateNewPasswordScreen() {
+  const { params } = useRoute();
+  console.log("params====================================");
+  console.log(params);
+  console.log("====================================");
+  const navigation = useNavigation();
+  const { dispatch } = useContext(AlertContext);
+  const [createNewPsw] = useMutation(ForgotPasswordStep3ChangeByEmail);
+  const reSetPsw = useCallback(
+    (newPassword, confirmPassword) => {
+      createNewPsw({
+        variables: {
+          actionTokenValue: params.actionTokenValue,
+          newPassword,
+          confirmPassword,
+        },
+        onError: () => {
+          dispatch({
+            type: "changAlertState",
+            payload: {
+              visible: true,
+              message: "Failed to set password",
+              color: colors.error,
+              title: "Failed",
+            },
+          });
+        },
+        onCompleted: (res) => {
+          dispatch({
+            type: "changAlertState",
+            payload: {
+              visible: true,
+              message: "You have successfully set the password",
+              color: colors.success,
+              title: "Success",
+            },
+          });
+          NavigationService.navigate("LoginScreen");
+        },
+      });
+    },
+    [createNewPsw, dispatch, params.actionTokenValue]
+  );
 
+  return <CreateNewPassword onGetCode={reSetPsw} navigation={navigation} />;
+}
 export default CreateNewPasswordScreen;

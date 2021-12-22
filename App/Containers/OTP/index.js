@@ -21,7 +21,10 @@ import styles from "./styles";
 import * as jwt from "../../Apollo/jwt-request";
 import NavigationService from "../../Navigation/NavigationService";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { ValidateCode } from "./gql/validate";
+import {
+  ForgotPasswordStep2VerifyTokenEmail,
+  ValidateCode,
+} from "./gql/validate";
 import { userProfileVar } from "../../Apollo/cache";
 import * as storage from "../../Apollo/local-storage";
 import jwt_decode from "jwt-decode";
@@ -47,6 +50,8 @@ function OTPScreen(props) {
       alert("Validation fails");
     },
   });
+
+  const [resetPasswordStep2] = useMutation(ForgotPasswordStep2VerifyTokenEmail);
 
   let [keyboardHeight, setKeyboardHeight] = useState(0);
   let [allowToResendCode, setAllowToResendCode] = useState(false);
@@ -159,7 +164,7 @@ function OTPScreen(props) {
   };
 
   const onValidate = async () => {
-    var otpCode = field1
+    const otpCode = field1
       .concat(field2)
       .concat(field3)
       .concat(field4)
@@ -298,12 +303,39 @@ function OTPScreen(props) {
             field5 === ""
           }
           onPress={() => {
-            onValidate();
-            // if (params.fromScreen === 'ForgotPasswordScreen') {
-            //     props.navigation.navigate('CreateNewPasswordScreen')
-            // } else {
-            //     props.navigation.navigate('ExploreScreen')
-            // }
+            if (params.fromScreen === "ForgotPasswordScreen") {
+              const otpCode = field1
+                .concat(field2)
+                .concat(field3)
+                .concat(field4)
+                .concat(field5);
+              resetPasswordStep2({
+                variables: { email: params.phone, tokenCode: otpCode },
+                onCompleted: (res) => {
+                  NavigationService.navigate("CreateNewPasswordScreen", {
+                    actionTokenValue:
+                      res.forgotPasswordStep2VerifyTokenEmail.actionToken,
+                  });
+                },
+                //等待修改
+                onError: () => {
+                  dispatch({
+                    type: "changAlertState",
+                    payload: {
+                      visible: true,
+                      message: "Invalid verification code",
+                      color: colors.error,
+                      title: "Failed",
+                    },
+                  });
+                  NavigationService.navigate("CreateNewPasswordScreen", {
+                    actionTokenValue: "error",
+                  });
+                },
+              });
+            } else {
+              onValidate();
+            }
           }}
           text={"VALIDATE"}
         />

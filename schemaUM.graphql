@@ -385,6 +385,8 @@ type Mutation {
   updateSellerProfile(request: SellerProfileRequest!): SellerProfileResponse
   sendVerifyEmail(userId: ID!): Boolean
   sendVerifySms(userId: ID!): Boolean
+  resendVerificationCodeInEmail(emailAddress: String!): ResendCodeResponse
+  resendVerificationCodeInSms(phoneNumber: String!): ResendCodeResponse
   createAddress(request: AddressRequestForCreate!): AddressResponse
   deleteAddress(addressId: ID!): Boolean
   updateAddress(request: AddressRequest!): AddressResponse
@@ -636,6 +638,11 @@ type ReduceWalletResponse {
   remainingOrderAmount: Float
   usedGiftAmount: Float
   usedWalletAmount: Float
+}
+
+type ResendCodeResponse {
+  status: Boolean
+  extraMessage: String
 }
 
 type SalamiWalletGiftTransactionResponse {

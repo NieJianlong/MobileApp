@@ -43,8 +43,8 @@ function OTPScreen(props) {
       autoSignIn();
     },
     onError: (error) => {
-      autoSignIn();
-      // alert("验证失败");
+      // autoSignIn();
+      alert("Validation fails");
     },
   });
 
@@ -64,7 +64,6 @@ function OTPScreen(props) {
       },
     },
     onCompleted: (res) => {
-      alert("咋回事");
       dispatch({
         type: "changLoading",
         payload: false,
@@ -87,7 +86,6 @@ function OTPScreen(props) {
       NavigationService.navigate("MainScreen");
     },
     onError: (res) => {
-      alert("咋回事");
       //server often breakon，we should use a constant for testing
       global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
       NavigationService.navigate("MainScreen");
@@ -96,10 +94,10 @@ function OTPScreen(props) {
   const autoSignIn = async () => {
     if (params.phone && params.password) {
       const { data } = await jwt.runTokenFlow({
-        // username: params.phone,
-        // password: params.password,
-        username: "vijay.msbi@gmail.com",
-        password: "123456789",
+        username: params.phone,
+        password: params.password,
+        //username: "vijay.msbi@gmail.com",
+        //password: "123456789",
       });
       let access_token = data.access_token;
 
@@ -128,9 +126,7 @@ function OTPScreen(props) {
         storage.LOCAL_STORAGE_USER_PASSWORD,
         params.password
       );
-      alert("谁能告诉我");
       getBuyerId();
-
       storage.setLocalStorageValue(
         storage.LOCAL_STORAGE_TOKEN_KEY,
         access_token

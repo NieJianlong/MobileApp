@@ -86,7 +86,6 @@ function OnboardingScreen(props) {
   const togglePlayPauseVideo = () => {
     setIsPlaying(!isPlaying);
   };
-
   return (
     <View style={styles.container}>
       <StatusBar
@@ -125,7 +124,6 @@ function OnboardingScreen(props) {
           />
 
           <View style={{ height: vs(12) }} />
-
           <Button
             text={"CONTINUE"}
             backgroundColor={Colors.white}

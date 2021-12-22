@@ -172,9 +172,9 @@ function RegisterScreen(props) {
             payload: false,
           });
           // 56alert(result.registerBuyer.userId);
-          sendVerifyEmail({
-            variables: { userId: result.registerBuyer.userId },
-          });
+          // sendVerifyEmail({
+          //   variables: { userId: result.registerBuyer.userId },
+          // });
           NavigationService.navigate("OTPScreen", {
             fromScreen: "RegisterScreen",
             phone: registerInput,

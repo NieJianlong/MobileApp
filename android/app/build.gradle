@@ -125,6 +125,8 @@ def nativeArchitectures = project.getProperties().get("reactNativeDebugArchitect
 def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
+    def buildConfig = rootProject.extensions.getByName("ext")
+
     ndkVersion rootProject.ext.ndkVersion
     
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -138,6 +140,7 @@ android {
         applicationId "com.apollo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        compileSdkVersion rootProject.ext.compileSdkVersion
         versionCode 1   
         versionName "1.0"
         multiDexEnabled true

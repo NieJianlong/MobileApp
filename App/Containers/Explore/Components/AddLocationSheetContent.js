@@ -86,6 +86,8 @@ function AddLocationSheetContent(props) {
     }
   );
   const onSubmit = (data) => {
+    dispatch({ type: "loading" });
+
     addAddress({
       variables: {
         request: {

@@ -68,7 +68,6 @@ export default ScaledSheet.create({
     fontSize: AppConfig.fontSize,
     fontFamily: Fonts.semibold,
     textAlign: "center",
-    flex: 1,
   },
   txtSave: {
     color: Colors.grey80,

@@ -64,9 +64,6 @@ function LoginScreen(props) {
     // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
     console.log("onSignIn" + `${loginInput}:::${psswd}`); // to-do remove
     let ret = validator.loginDifferentiator(loginInput);
-    console.log("ret====================================");
-    console.log(ret);
-    console.log("====================================");
     if (ret.isValid) {
       // we are good so we can test for email or phone
       if (ret.isEmail) {

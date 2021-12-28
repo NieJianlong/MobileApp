@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useMemo } from "react";
 import { s, ScaledSheet, vs } from "react-native-size-matters";
-import { Button, Switch } from "../../../Components";
+import { Button } from "../../../Components";
 import AppConfig from "../../../Config/AppConfig";
-import { View, FlatList, Text, Image, SafeAreaView } from "react-native";
+import { View, Text, Image } from "react-native";
 import images from "../../../Themes/Images";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../../../Themes/Colors";

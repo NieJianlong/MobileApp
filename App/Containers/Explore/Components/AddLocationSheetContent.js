@@ -51,7 +51,11 @@ function AddLocationSheetContent(props) {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      provinceState: "Assam",
+    },
+  });
   const [open, setOpen] = useState();
   const [addAddress] = useMutation(
     isAuth ? CREATE_ADDRESS : CREATE_ADDRESS_FOR_GUEST,
@@ -220,14 +224,17 @@ function AddLocationSheetContent(props) {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.bodyContainer}>
-          <KeyboardAwareScrollView>
+        <View style={[styles.bodyContainer]}>
+          <KeyboardAwareScrollView contentContainerStyle={[t.flex1]}>
             <View
-              style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                justifyContent: "space-between",
-              }}
+              style={[
+                {
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  justifyContent: "space-between",
+                },
+                t.flex1,
+              ]}
             >
               {inputs.map((item, index) => {
                 return (
@@ -254,8 +261,10 @@ function AddLocationSheetContent(props) {
                               setOpen={setOpen}
                               items={items}
                               setValue={onChange}
-                              onChangeValue={onChange}
                               setItems={setItems}
+                              // onChangeValue={(item) =>
+                              //   console.log(item.label, item.value)
+                              // }
                               placeholderStyle={[
                                 { color: colors.grey40, fontSize: 16 },
                               ]}

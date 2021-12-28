@@ -25,9 +25,10 @@ export default function Index(props) {
    */
   const localCartVarReactive = useReactiveVar(localCartVar);
   const userProfileVarReactive = useReactiveVar(userProfileVar);
-  const isAuth = useMemo(() => userProfileVarReactive.isAuth, [
-    userProfileVarReactive.isAuth,
-  ]);
+  const isAuth = useMemo(
+    () => userProfileVarReactive.isAuth,
+    [userProfileVarReactive.isAuth]
+  );
 
   // temporay fix original code for empty address and new requirments
   // imposed by backend and VK, diverges from original design
@@ -62,13 +63,13 @@ export default function Index(props) {
       // data has shape below
       // {"data":{"coordinatesForAddressRequest":{ latitude":51.50735,"longitude":-0.1277583}} }
       // just guessing for now until we can test the query
-      const {
-        coordinatesForAddressRequest: { latitude, longitude },
-      } = res;
+      // const {
+      //   coordinatesForAddressRequest: { latitude, longitude },
+      // } = res;
 
-      console.log(
-        `Explore runGeoQuery debug lat long ${latitude}  ${longitude}`
-      );
+      // console.log(
+      //   `Explore runGeoQuery debug lat long ${latitude}  ${longitude}`
+      // );
       // put lattitude and longiue into state and pass thru as props
       //location.push(latitude, longitude);
       // for forseable future will need these values so backend can cope

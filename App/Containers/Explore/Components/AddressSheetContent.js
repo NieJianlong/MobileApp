@@ -36,9 +36,10 @@ function AddressItem(address) {
 export default function AddressSheetContent(props) {
   const { dispatch } = useContext(AlertContext);
   const userProfileVarReactive = useReactiveVar(userProfileVar);
-  const isAuth = useMemo(() => userProfileVarReactive.isAuth, [
-    userProfileVarReactive.isAuth,
-  ]);
+  const isAuth = useMemo(
+    () => userProfileVarReactive.isAuth,
+    [userProfileVarReactive.isAuth]
+  );
   const variables = isAuth
     ? { buyerId: global.buyerId, addressType: "SHIPPING" }
     : { guestBuyerId: global.buyerId, addressType: "SHIPPING" };

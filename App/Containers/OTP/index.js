@@ -10,24 +10,29 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { isIphoneX } from "react-native-iphone-x-helper";
-import { vs } from "react-native-size-matters";
+import { s, vs } from "react-native-size-matters";
 import { useRoute } from "@react-navigation/native";
 
 import { AppBar, Button } from "../../Components";
-import { Colors } from "../../Themes";
+import { Colors, Fonts } from "../../Themes";
 
 import styles from "./styles";
 
 import * as jwt from "../../Apollo/jwt-request";
 import NavigationService from "../../Navigation/NavigationService";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { ValidateCode } from "./gql/validate";
+import {
+  ForgotPasswordStep2VerifyTokenEmail,
+  ValidateCode,
+} from "./gql/validate";
 import { userProfileVar } from "../../Apollo/cache";
 import * as storage from "../../Apollo/local-storage";
 import jwt_decode from "jwt-decode";
 import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import colors from "../../Themes/Colors";
 import { AlertContext } from "../Root/GlobalContext";
+import CountDown from "react-native-countdown-component";
+import { t } from "react-native-tailwindcss";
 
 function OTPScreen(props) {
   const { dispatch } = useContext(AlertContext);
@@ -47,6 +52,8 @@ function OTPScreen(props) {
       alert("Validation fails");
     },
   });
+
+  const [resetPasswordStep2] = useMutation(ForgotPasswordStep2VerifyTokenEmail);
 
   let [keyboardHeight, setKeyboardHeight] = useState(0);
   let [allowToResendCode, setAllowToResendCode] = useState(false);
@@ -159,7 +166,7 @@ function OTPScreen(props) {
   };
 
   const onValidate = async () => {
-    var otpCode = field1
+    const otpCode = field1
       .concat(field2)
       .concat(field3)
       .concat(field4)
@@ -223,7 +230,6 @@ function OTPScreen(props) {
             }
           }}
         />
-
         <TextInput
           style={onFocus === 3 ? styles.txtInputFocused : styles.txtInput}
           maxLength={1}
@@ -298,16 +304,42 @@ function OTPScreen(props) {
             field5 === ""
           }
           onPress={() => {
-            onValidate();
-            // if (params.fromScreen === 'ForgotPasswordScreen') {
-            //     props.navigation.navigate('CreateNewPasswordScreen')
-            // } else {
-            //     props.navigation.navigate('ExploreScreen')
-            // }
+            if (params.fromScreen === "ForgotPasswordScreen") {
+              const otpCode = field1
+                .concat(field2)
+                .concat(field3)
+                .concat(field4)
+                .concat(field5);
+              resetPasswordStep2({
+                variables: { email: params.phone, tokenCode: otpCode },
+                onCompleted: (res) => {
+                  NavigationService.navigate("CreateNewPasswordScreen", {
+                    actionTokenValue:
+                      res.forgotPasswordStep2VerifyTokenEmail.actionToken,
+                  });
+                },
+                //等待修改
+                onError: () => {
+                  dispatch({
+                    type: "changAlertState",
+                    payload: {
+                      visible: true,
+                      message: "Invalid verification code",
+                      color: colors.error,
+                      title: "Failed",
+                    },
+                  });
+                  NavigationService.navigate("CreateNewPasswordScreen", {
+                    actionTokenValue: "error",
+                  });
+                },
+              });
+            } else {
+              onValidate();
+            }
           }}
           text={"VALIDATE"}
         />
-
         <View
           style={{
             height:
@@ -339,6 +371,42 @@ function OTPScreen(props) {
           {renderOTPInput()}
 
           <View style={{ flex: 1 }} />
+          {params.fromScreen !== "ForgotPasswordScreen" && (
+            <TouchableOpacity
+              style={[
+                t.flexRow,
+                t.bgPrimary,
+                t.justifyCenter,
+                t.itemsCenter,
+                {
+                  borderRadius: s(22),
+                },
+              ]}
+            >
+              <CountDown
+                until={60}
+                onFinish={() => alert("finished")}
+                onPress={() => alert("hello")}
+                timeToShow={["S"]}
+                size={20}
+                running={true}
+                digitStyle={{}}
+                digitTxtStyle={[t.textWhite]}
+                timeLabels={[""]}
+              />
+              <Text
+                style={[
+                  t.textWhite,
+                  {
+                    fontFamily: Fonts.semibold,
+                    fontSize: s(15),
+                  },
+                ]}
+              >
+                Resend the verification code
+              </Text>
+            </TouchableOpacity>
+          )}
 
           {renderAction()}
         </View>

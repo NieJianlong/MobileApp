@@ -5,15 +5,15 @@ import {
   Text,
   TouchableOpacity as RNTouchableOpacity,
   Platform,
+  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Switch, MaterialTextInput, Selector } from "../../../Components";
+import { MaterialTextInput, Button } from "../../../Components";
 import styles from "./styles";
-
 import colors from "../../../Themes/Colors";
-import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
+import { useMutation, useReactiveVar } from "@apollo/client";
 import {
   CREATE_ADDRESS,
   CREATE_ADDRESS_FOR_GUEST,
@@ -21,79 +21,41 @@ import {
 import { AlertContext } from "../../Root/GlobalContext";
 import PubSub from "pubsub-js";
 import { userProfileVar } from "../../../Apollo/cache";
-import { GetStatesByCountryId } from "../gql/explore_queries";
-
 import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
+import DropDownPicker from "react-native-dropdown-picker";
+import { t } from "react-native-tailwindcss";
+import { Controller, useForm } from "react-hook-form";
+import lodash from "lodash";
+
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
+
 function AddLocationSheetContent(props) {
   //123e4567-e89b-12d3-a456-556642440000
-  const { data } = useQuery(GetStatesByCountryId, {
-    variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
-  });
-  const { dispatch } = useContext(AlertContext);
+  // const [selectedState, setSelectedState] = useState();
+  // const { data } = useQuery(GetStatesByCountryId, {
+  //   variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
+  // });
+  // if (data) {
+  //   console.log("data====================================");
+  //   console.log(data);
+  //   console.log("====================================");
+  // }
   const userProfileVarReactive = useReactiveVar(userProfileVar);
-  const isAuth = useMemo(() => userProfileVarReactive.isAuth, [
-    userProfileVarReactive.isAuth,
-  ]);
-  const [name, setName] = useState("");
-  const [streetName, setStreetName] = useState("");
-  const [streetNum, setStreetNum] = useState("");
-  const [door, setDoor] = useState("");
-  const [city, setCity] = useState("");
-  const [mstate, setMstate] = useState("");
-  const [pincode, setPincode] = useState("");
-  const [country, setCountry] = useState("");
-  const [disable, setDisable] = useState(true);
-  const [landMark, setLandMark] = useState("");
-  const [asDefault, setAsDefault] = useState(false);
-  useEffect(() => {
-    if (
-      name.length === 0 ||
-      streetName.length === 0 ||
-      streetNum.length === 0 ||
-      door.length === 0 ||
-      city.length === 0 ||
-      mstate.length === 0 ||
-      pincode.length === 0 ||
-      landMark.length === 0
-    ) {
-      setDisable(true);
-    } else {
-      setDisable(false);
-    }
-  }, [
-    name,
-    streetName,
-    streetNum,
-    door,
-    city,
-    mstate,
-    pincode,
-    country,
-    landMark,
-  ]);
-  let AddressRequestForCreate = {
-    pinCode: pincode,
-    defaultAddress: isAuth ? asDefault : true,
-    addressType: "SHIPPING",
-    provinceState: mstate,
-    townCity: city,
-    flat: door,
-    villageArea: streetName,
-    houseNumber: streetNum,
-    landMark: landMark,
-    streetAddress1: name,
-    country: "India",
-    referenceId: global.buyerId,
-  };
+  const isAuth = useMemo(
+    () => userProfileVarReactive.isAuth,
+    [userProfileVarReactive.isAuth]
+  );
 
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const [open, setOpen] = useState();
   const [addAddress] = useMutation(
     isAuth ? CREATE_ADDRESS : CREATE_ADDRESS_FOR_GUEST,
     {
-      variables: {
-        request: AddressRequestForCreate,
-      },
       context: {
         headers: {
           isPrivate: isAuth,
@@ -123,89 +85,110 @@ function AddLocationSheetContent(props) {
       },
     }
   );
+  const onSubmit = (data) => {
+    dispatch({ type: "loading" });
+
+    addAddress({
+      variables: {
+        request: {
+          ...data,
+          country: "India",
+          referenceId: global.buyerId,
+          addressType: "SHIPPING",
+          defaultAddress: true,
+        },
+      },
+    });
+  };
+  const [showInfo, setShowInfo] = useState(false);
+  const [items, setItems] = useState([
+    { label: "Andhra Pradesh", value: "Andhra Pradesh" },
+    { label: "Arunachal Pradesh", value: "Arunachal Pradesh" },
+    { label: "Assam", value: "Assam" },
+    { label: "Bihar", value: "Bihar" },
+    { label: "Chhattisgarh", value: "Chhattisgarh" },
+    { label: "Goa", value: "Goa" },
+    { label: "Gujarat", value: "Gujarat" },
+    { label: "Haryana", value: "Haryana" },
+    { label: "Himachal Pradesh", value: "Himachal Pradesh" },
+    { label: "Jharkhand", value: "Jharkhand" },
+    { label: "Karnataka", value: "Karnataka" },
+    { label: "Kerala", value: "Kerala" },
+    { label: "Madhya Pradesh", value: "Madhya Pradesh" },
+    { label: "Maharashtra", value: "Maharashtra" },
+    { label: "Manipur", value: "Manipur" },
+    { label: "Meghalaya", value: "Meghalaya" },
+    { label: "Mizoram", value: "Mizoram" },
+    { label: "Nagaland", value: "Nagaland" },
+    { label: "Odisha", value: "Odisha" },
+    { label: "Punjab", value: "Punjab" },
+    { label: "Rajasthan", value: "Rajasthan" },
+    { label: "Sikkim", value: "Sikkim" },
+    { label: "Tamil Nadu", value: "Tamil Nadu" },
+    { label: "Telangana", value: "Telangana" },
+    { label: "Tripura", value: "Tripura" },
+    { label: "Uttarakhand", value: "Uttarakhand" },
+    { label: "Uttar Pradesh", value: "Uttar Pradesh" },
+    { label: "West Bengal", value: "West Bengal" },
+  ]);
+  const { dispatch } = useContext(AlertContext);
+
+  let AddressRequestForCreate = {
+    // pinCode: pincode,
+    // defaultAddress: true,
+    // addressType: "SHIPPING",
+    // provinceState: mstate,
+    // townCity: city,
+    // flat: door,
+    // villageArea: streetName,
+    // houseNumber: streetNum,
+    // landMark: landMark,
+    // streetAddress1: name,
+    // country: "India",
+    // referenceId: global.buyerId,
+  };
 
   const inputs = [
     {
-      placeholder: "Address Name (ex. home)*",
-      onChangeText: (text) => setName(text),
+      placeholder: "Flat/Home No.,Apartment/Building Name*",
       showError: false,
       errorMessage: null,
       keyboardType: "default",
       type: "normal",
-      value: name,
+      name: "building",
     },
     {
-      placeholder: "Street Name*",
-      onChangeText: (text) => setStreetName(text),
+      placeholder: "Street / Colony Name*",
+      showError: false,
+      errorMessage: null,
+      type: "normal",
+      name: "streetAddress1",
+    },
+
+    {
+      placeholder: "City / Town / Village*",
       showError: false,
       errorMessage: null,
       keyboardType: "default",
       type: "normal",
-      value: streetName,
-    },
-    {
-      placeholder: "Street Number*",
-      onChangeText: (text) => setStreetNum(text),
-      showError: false,
-      errorMessage: null,
-      keyboardType: "default",
-      type: "short",
-      value: streetNum,
-    },
-    {
-      placeholder: "Flat, Floor, Door",
-      onChangeText: (text) => setDoor(text),
-      showError: false,
-      errorMessage: null,
-      keyboardType: "default",
-      type: "short",
-      value: door,
-    },
-    {
-      placeholder: "City*",
-      onChangeText: (text) => setCity(text),
-      showError: false,
-      errorMessage: null,
-      keyboardType: "default",
-      type: "short",
-      value: city,
-    },
-    {
-      placeholder: "State*",
-      onChangeText: (text) => setMstate(text),
-      showError: false,
-      errorMessage: null,
-      keyboardType: "selector",
-      type: "short",
-      value: mstate,
+      name: "townCity",
     },
     {
       placeholder: "Pincode*",
-      onChangeText: (text) => setPincode(text),
       showError: false,
       errorMessage: null,
       keyboardType: "decimal-pad",
       // type: "short",
       type: "normal",
-      value: pincode,
+      name: "pinCode",
     },
-    // {
-    //   placeholder: "Country*",
-    //   onChangeText: (text) => setCountry(text),
-    //   showError: false,
-    //   errorMessage: null,
-    //   keyboardType: "selector",
-    //   type: "short",
-    //   value: country,
-    // },
     {
-      placeholder: "Land Mark",
-      onChangeText: (text) => setLandMark(text),
+      placeholder: "State*",
       showError: false,
       errorMessage: null,
-      keyboardType: "default",
+      keyboardType: "selector",
       type: "normal",
-      value: landMark,
+      name: "provinceState",
     },
   ];
   return (
@@ -215,35 +198,25 @@ function AddLocationSheetContent(props) {
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        <View style={styles.popupHeader}>
-          <Text style={[styles.txtSave, { color: "transparent" }]}>SAVE</Text>
+        <View style={[t.itemsCenter, t.h16, t.mT4, t.flexCol]}>
+          {/* <Text style={[styles.txtSave, { color: "transparent" }]}>SAVE</Text> */}
           <Text style={styles.popupTitle}>Add your delivery address</Text>
           <TouchableOpacity
+            style={[t.flexRow, t.itemsCenter]}
             onPress={() => {
-              if (disable) {
-                dispatch({
-                  type: "changAlertState",
-                  payload: {
-                    visible: true,
-                    message: "",
-                    color: colors.error,
-                    title: "Make sure you have entered the correct information",
-                  },
-                });
-              } else {
-                dispatch({ type: "loading" });
-                addAddress();
-              }
+              setShowInfo(!showInfo);
+              setTimeout(() => {
+                setShowInfo(false);
+              }, 2000);
             }}
           >
-            <Text
-              style={[
-                styles.txtSave,
-                { color: disable ? colors.grey40 : colors.grey80 },
-              ]}
-            >
-              SAVE
+            <Text style={[{ color: colors.grey80, marginTop: 8 }]}>
+              Please separate your address with commas
             </Text>
+            <Image
+              source={require("../../../Images/info.png")}
+              style={[t.mT2]}
+            />
           </TouchableOpacity>
         </View>
 
@@ -261,22 +234,73 @@ function AddLocationSheetContent(props) {
                   <View
                     key={index}
                     style={{
-                      width: item.type == "short" ? "48%" : "100%",
+                      width: item.type === "short" ? "48%" : "100%",
                       marginTop: vs(18),
                     }}
                   >
                     {item.keyboardType === "selector" ? (
-                      <Selector
-                        style={{ marginBottom: vs(10) }}
-                        placeholder={"Sate"}
-                        value={mstate}
-                        data={["AAA", "BBB", "CCC"]}
-                        onValueChange={(text) => setMstate(text)}
-                      />
+                      <View>
+                        <Controller
+                          control={control}
+                          rules={{
+                            required: true,
+                          }}
+                          render={({ field: { onChange, value } }) => (
+                            <DropDownPicker
+                              listMode="SCROLLVIEW"
+                              placeholder="State (Province)*"
+                              value={value}
+                              open={open}
+                              setOpen={setOpen}
+                              items={items}
+                              setValue={onChange}
+                              onChangeValue={onChange}
+                              setItems={setItems}
+                              placeholderStyle={[
+                                { color: colors.grey40, fontSize: 16 },
+                              ]}
+                              // containerStyle={[t.bgBlue300]}
+                              style={[
+                                {
+                                  borderRadius: 20,
+                                  height: vs(46),
+                                  borderColor: colors.grey20,
+                                },
+                              ]}
+                              dropDownContainerStyle={{ borderWidth: 0 }}
+                            />
+                          )}
+                          name={item.name}
+                        />
+                        {lodash.get(errors, item.name) && (
+                          <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
+                            This is required.
+                          </Text>
+                        )}
+                      </View>
                     ) : (
-                      <MaterialTextInput
-                        style={{ marginTop: vs(18) }}
-                        {...item}
+                      <Controller
+                        control={control}
+                        rules={{
+                          required: true,
+                        }}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                          <View>
+                            <MaterialTextInput
+                              style={{ marginTop: vs(18) }}
+                              {...item}
+                              onChangeText={onChange}
+                              onBlur={onBlur}
+                              value={value}
+                            />
+                            {lodash.get(errors, item.name) && (
+                              <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
+                                This is required.
+                              </Text>
+                            )}
+                          </View>
+                        )}
+                        name={item.name}
                       />
                     )}
                   </View>
@@ -284,18 +308,14 @@ function AddLocationSheetContent(props) {
               })}
             </View>
           </KeyboardAwareScrollView>
-          {isAuth && (
-            <View style={{ marginTop: 20 }}>
-              <Switch
-                onSwitch={(res) => {
-                  setAsDefault(res);
-                }}
-                active={asDefault}
-                label="Set as default address"
-              />
-            </View>
-          )}
+          <Button text="CONFIRM ADDRESS" onPress={handleSubmit(onSubmit)} />
         </View>
+        {showInfo && (
+          <Image
+            source={require("../../../Images/Infoalert.png")}
+            style={[t.wFull, t.absolute, t.mT20]}
+          />
+        )}
       </SafeAreaView>
     </View>
   );

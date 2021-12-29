@@ -105,9 +105,11 @@ export default function AddressItem({ item, refetch, isCheckout }) {
           )}
         </View>
         <View>
-          <Text
-            style={styles.itemSubTitle}
-          >{`${item.houseNumber}${item.flat}${item.villageArea}${item.townCity}${item.provinceState}${item.country} ${item.pinCode}`}</Text>
+          <Text style={styles.itemSubTitle}>{`${item.houseNumber ?? ""}${
+            item.flat ?? ""
+          }${item.villageArea ?? ""}${item.townCity}${item.provinceState}${
+            item.country
+          } ${item.pinCode}`}</Text>
         </View>
 
         <View style={styles.itemBottom}>

@@ -53,7 +53,7 @@ function AddLocationSheetContent(props) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      provinceState: "Assam",
+      provinceState: "Telangana",
     },
   });
   const [open, setOpen] = useState();

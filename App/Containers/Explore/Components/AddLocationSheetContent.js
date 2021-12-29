@@ -51,11 +51,7 @@ function AddLocationSheetContent(props) {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      provinceState: "Telangana",
-    },
-  });
+  } = useForm();
   const [open, setOpen] = useState();
   const [addAddress] = useMutation(
     isAuth ? CREATE_ADDRESS : CREATE_ADDRESS_FOR_GUEST,
@@ -136,21 +132,6 @@ function AddLocationSheetContent(props) {
     { label: "West Bengal", value: "West Bengal" },
   ]);
   const { dispatch } = useContext(AlertContext);
-
-  let AddressRequestForCreate = {
-    // pinCode: pincode,
-    // defaultAddress: true,
-    // addressType: "SHIPPING",
-    // provinceState: mstate,
-    // townCity: city,
-    // flat: door,
-    // villageArea: streetName,
-    // houseNumber: streetNum,
-    // landMark: landMark,
-    // streetAddress1: name,
-    // country: "India",
-    // referenceId: global.buyerId,
-  };
 
   const inputs = [
     {

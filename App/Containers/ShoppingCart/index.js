@@ -119,7 +119,14 @@ function ShoppingCart(props) {
               >
                 <Button
                   onPress={() => {
-                    NavigationService.navigate("CheckoutNoAuthScreen");
+                    if (global.access_token === "") {
+                      NavigationService.navigate("CheckoutNoAuthScreen");
+                    } else {
+                      NavigationService.navigate("CheckoutResumeScreen", {
+                        orderStatus: 0,
+                        data: mydatas,
+                      });
+                    }
                   }}
                   text="PROCEED TO CHECKOUT"
                 />

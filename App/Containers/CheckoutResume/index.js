@@ -1,42 +1,53 @@
-import React, { useState } from 'react';
-import { View, ScrollView, SafeAreaView, StatusBar } from 'react-native';
-import AppConfig from '../../Config/AppConfig';
-import { vs } from 'react-native-size-matters';
-import colors from '../../Themes/Colors';
-import { AppBar, Button } from '../../Components';
-import CartItem from './Cartitem';
-import metrics from '../../Themes/Metrics';
-import BottomSummary from './Summary';
-import DeliverInfo from './DeliverInfo';
-import NavigationService from '../../Navigation/NavigationService';
-import { useRoute } from '@react-navigation/native';
+import React, { useState, useMemo } from "react";
+import { View, ScrollView, SafeAreaView, StatusBar } from "react-native";
+import AppConfig from "../../Config/AppConfig";
+import { vs } from "react-native-size-matters";
+import colors from "../../Themes/Colors";
+import { AppBar, Button } from "../../Components";
+import CartItem from "./Cartitem";
+import metrics from "../../Themes/Metrics";
+import BottomSummary from "./Summary";
+import DeliverInfo from "./DeliverInfo";
+import NavigationService from "../../Navigation/NavigationService";
+import { useRoute } from "@react-navigation/native";
+import BigNumber from "bignumber.js";
 
 //orderStatus：1,completed
 function CheckoutResume(props) {
   const { params } = useRoute();
-  const { orderStatus } = params;
-  const [orders, setOrders] = useState(
-    [0, 1, 2, 3, 4].map((item, index) => ({
-      id: index,
-      name: 'The product name can be longer and occupy two lines',
-      picture:
-        'https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000',
-      rating: 3.0,
-      ratingCount: 124,
-      retailPrice: 2345,
-      wholesalePrice: 1542,
-      orderClose: '22/12/2020',
-      inStock: 100,
-      orderCount: 24,
-      count: 1,
-    }))
-  );
+  const { orderStatus, data } = params;
+  const money = useMemo(() => {
+    let currentBilling = 0;
+    let originalBilling = 0;
+    for (let index = 0; index < data.length; index++) {
+      const element = data[index];
+      if (element.variant) {
+        originalBilling =
+          originalBilling + element.variant.retailPrice * element.quantity;
+        currentBilling =
+          currentBilling + element.variant.wholeSalePrice * element.quantity;
+      } else {
+        originalBilling =
+          originalBilling + element.product.retailPrice * element.quantity;
+        currentBilling =
+          currentBilling + element.product.wholeSalePrice * element.quantity;
+      }
+    }
+    const total = new BigNumber(currentBilling).toFixed(2);
+    const saving = new BigNumber(originalBilling - currentBilling).toFixed(2);
+    return {
+      total: total,
+      saving: saving,
+      percent: BigNumber(saving).dividedBy(total).multipliedBy(100).toFixed(2),
+    };
+  }, [data]);
+
   return (
     <View
       style={{
         flex: 1,
         backgroundColor: colors.background,
-        position: 'absolute',
+        position: "absolute",
         top: 0,
         left: 0,
         right: 0,
@@ -46,10 +57,10 @@ function CheckoutResume(props) {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={{ flex: 1 }}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar
-          title={orderStatus === 1 ? 'Order 782788' : 'Review your details'}
+          title={orderStatus === 1 ? "Order 782788" : "Review your details"}
         />
         <View style={{ flex: 1 }}>
           <ScrollView
@@ -60,19 +71,30 @@ function CheckoutResume(props) {
           >
             <DeliverInfo orderStatus={orderStatus} />
             <View>
-              {orders.map((item, index) => (
-                <CartItem key={index.toString()} product={item} />
-              ))}
+              {data.map((item, index) => {
+                console.log("Itemm", item);
+                return (
+                  <CartItem
+                    key={index.toString()}
+                    product={item}
+                    availble={true}
+                  />
+                );
+              })}
             </View>
 
-            <BottomSummary orderStatus={orderStatus} />
+            <BottomSummary
+              orderStatus={orderStatus}
+              subTotal={money.total}
+              saving={money.saving}
+            />
           </ScrollView>
         </View>
       </SafeAreaView>
       {orderStatus != 1 && (
         <SafeAreaView
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: 0,
             right: 0,
             bottom: 0,
@@ -81,7 +103,7 @@ function CheckoutResume(props) {
           <View
             style={{
               height: vs(80),
-              width: '100%',
+              width: "100%",
               backgroundColor: colors.white,
               paddingHorizontal: AppConfig.paddingHorizontal,
               paddingTop: vs(15),
@@ -89,10 +111,10 @@ function CheckoutResume(props) {
           >
             <Button
               onPress={() => {
-                NavigationService.navigate('CheckoutPaymentCompletedScreen');
+                NavigationService.navigate("CheckoutPaymentCompletedScreen");
               }}
-              text="PROCEED"
-            ></Button>
+              text={"PROCEED"}
+            />
           </View>
         </SafeAreaView>
       )}

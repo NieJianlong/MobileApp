@@ -89,7 +89,7 @@ export default function Index(props) {
   const [getStoneIds, { data: storeIds }] = useLazyQuery(
     aQM.OnlineStoreByGeoCoordinates,
     {
-      variables: { ...location },
+      variables: { ...location, pageable: { page: 0, size: 100 } },
     }
   );
 

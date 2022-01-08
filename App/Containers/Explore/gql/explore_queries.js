@@ -241,8 +241,16 @@ export const FIND_GUEST_BUYER_ADDRESS_BY_ID = gql`
 `;
 
 export const OnlineStoreByGeoCoordinates = gql`
-  query OnlineStoreByGeoCoordinates($latitude: Float!, $longitude: Float!) {
-    onlineStoreByGeoCoordinates(latitude: $latitude, longitude: $longitude) {
+  query OnlineStoreByGeoCoordinates(
+    $latitude: Float!
+    $longitude: Float!
+    $pageable: StorePageable!
+  ) {
+    onlineStoreByGeoCoordinates(
+      latitude: $latitude
+      longitude: $longitude
+      pageable: $pageable
+    ) {
       id
     }
   }

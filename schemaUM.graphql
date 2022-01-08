@@ -358,6 +358,11 @@ type ForgotPasswordStep3Response {
   message: String
 }
 
+type GenericResponse {
+  status: Boolean
+  message: String
+}
+
 type Mutation {
   registerGuestBuyerToBuyer(request: BuyerProfileRequest!): BuyerProfileResponse
   registerBuyer(request: BuyerProfileRequestForCreate!): BuyerProfileResponse
@@ -447,6 +452,8 @@ type Mutation {
   updateSellerBillingDetails(request: SellerBillingDetailsRequest!): SellerBillingDetailsResponse
   deleteSellerBillingDetails(billingDetailsId: ID!): Boolean
   sellerBillingDetailsForSeller(sellerId: ID!): SellerBillingDetailsResponse
+  acceptSellerRegistrationDocuments(sellerId: ID!): GenericResponse
+  rejectSellerValidation(sellerId: ID!, rejectReason: RegistrationRejectedReason!, rejectNote: String): GenericResponse
 }
 
 input NotificationRequest {
@@ -631,6 +638,7 @@ type Query {
   sellerBillingDetails: [SellerBillingDetailsResponse]
   sellerBillingDetailsById(billingDetailsId: ID!): SellerBillingDetailsResponse
   sellerBillingDetailsForSeller(sellerId: ID!): SellerBillingDetailsResponse
+  getSellerDocumentKeys(sellerId: ID!): [SellerDocumentResponse]
 }
 
 type ReduceWalletResponse {
@@ -638,6 +646,14 @@ type ReduceWalletResponse {
   remainingOrderAmount: Float
   usedGiftAmount: Float
   usedWalletAmount: Float
+}
+
+enum RegistrationRejectedReason {
+  UNDEFINED
+  NO_NATIONAL_ID_CARD_SUPPLIED
+  NO_TAX_NUMBER_CARD_SUPPLIED
+  FALSE_INFORMATION
+  OFFENSIVE_SHOP_OR_SELLER_NAME
 }
 
 type ResendCodeResponse {
@@ -749,6 +765,10 @@ type SellerContactResponse {
   updatedAt: DateTime
 }
 
+type SellerDocumentResponse {
+  documentKey: String
+}
+
 input SellerProfileRequest {
   sellerId: ID!
   firstName: String
@@ -779,6 +799,7 @@ input SellerProfileRequest {
   productsUpcAvailable: Boolean
   manufacturerBrandOwner: Boolean
   registeredTrademarksOwner: Boolean
+  storeShortName: String
 }
 
 input SellerProfileRequestForCreate {
@@ -818,6 +839,7 @@ input SellerProfileRequestForCreate {
   panCardDocument: FileUpload
   vatNumberDocument: FileUpload
   gstinNumberDocument: FileUpload
+  storeShortName: String
 }
 
 type SellerProfileResponse {
@@ -862,30 +884,25 @@ type SellerProfileResponse {
   vatCodeValidated: Boolean
   commChamberRegNum: String
   commChamberRegNumValidated: Boolean
+  storeShortName: String
+  registrationRejectedNotes: String
+  registrationRejectedReason: RegistrationRejectedReason
+  validationStatusChangedBy: ID
 }
 
 input SellerToOnlineStoreRequest {
   sellerId: ID!
   storeId: ID!
-  upcForAllProducts: Boolean
-  manufacturerBrandOwner: Boolean
-  governmentRegisteredTm: Boolean
 }
 
 input SellerToOnlineStoreRequestForCreate {
   sellerId: ID!
   storeId: ID!
-  upcForAllProducts: Boolean
-  manufacturerBrandOwner: Boolean
-  governmentRegisteredTm: Boolean
 }
 
 type SellerToOnlineStoreResponse {
   sellerId: ID!
   storeId: ID!
-  upcForAllProducts: Boolean
-  manufacturerBrandOwner: Boolean
-  governmentRegisteredTm: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1024,18 +1041,19 @@ type SupportedLanguageResponse {
 }
 
 enum UserType {
-  SELLER
   UNDEFINED
   ADMIN
   BUYER
-  MAIN_SELLER
-  ANNOUNCEMENT_SELLER
-  BUYER_SELLER
-  TESTING_USER
   GUEST_BUYER
-  RETAIL_BUYER
+  SELLER
   COMPANY_BUYER
-  SUPER_ADMIN
+  SOP1
+  SOP2
+  SOP3
+  SOP4
+  SOP5
+  SOP6
+  SOP7
 }
 
 input ValidateCodeRequest {

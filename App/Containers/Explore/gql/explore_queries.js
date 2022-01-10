@@ -251,7 +251,13 @@ export const OnlineStoreByGeoCoordinates = gql`
       longitude: $longitude
       pageable: $pageable
     ) {
-      id
+      content {
+        id
+      }
+      pageNo
+      pageSize
+      totalPages
+      totalElements
     }
   }
 `;

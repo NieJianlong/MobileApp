@@ -112,29 +112,29 @@ export const PaymentTestData = [
 ];
 
 export const MenuConfig = [
-  {
-    title: "1 Click Purchasing",
-    icon: images.userPurchaseImage,
-    textTip: "You haven't added a default \n purchase preference yet",
-    subTextTip:
-      "Select a default address and payment method to \n activate 1 click purchasing",
-    needButton: true,
-    btnMsg: "ADD 1 CLICK PURCHASING PREFERENCES",
-    selectedIcon: images.userPurchaseImage,
-    screen: NoPurchase,
-    key: "Purchasing",
-    extra: "EDIT 1 CLICK PURCHASING PREFERENCES",
-    onPress: (callback) => {
-      NavigationService.navigate("OneClickPurchaseScreen", {
-        callback,
-      });
-    },
-    itemActions: {
-      setDefault: (item) => {},
-      doEdit: (item) => {},
-      doDelete: (showRemoveSheet) => {},
-    },
-  },
+  // {
+  //   title: "1 Click Purchasing",
+  //   icon: images.userPurchaseImage,
+  //   textTip: "You haven't added a default \n purchase preference yet",
+  //   subTextTip:
+  //     "Select a default address and payment method to \n activate 1 click purchasing",
+  //   needButton: true,
+  //   btnMsg: "ADD 1 CLICK PURCHASING PREFERENCES",
+  //   selectedIcon: images.userPurchaseImage,
+  //   screen: NoPurchase,
+  //   key: "Purchasing",
+  //   extra: "EDIT 1 CLICK PURCHASING PREFERENCES",
+  //   onPress: (callback) => {
+  //     NavigationService.navigate("OneClickPurchaseScreen", {
+  //       callback,
+  //     });
+  //   },
+  //   itemActions: {
+  //     setDefault: (item) => {},
+  //     doEdit: (item) => {},
+  //     doDelete: (showRemoveSheet) => {},
+  //   },
+  // },
   {
     title: "My Addresses",
     icon: images.userUAddressImage,

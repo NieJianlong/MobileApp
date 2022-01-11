@@ -89,7 +89,20 @@ export default function Index(props) {
   const [getStoneIds, { data: storeIds }] = useLazyQuery(
     aQM.OnlineStoreByGeoCoordinates,
     {
-      variables: { ...location },
+      variables: {
+        ...location,
+        pageable: {
+          page: 0,
+          size: 100,
+          sort: "NAME",
+          sortDirection: "ASCENDING",
+        },
+      },
+      context: {
+        headers: {
+          isPrivate: true,
+        },
+      },
     }
   );
 
@@ -190,8 +203,10 @@ export default function Index(props) {
           <ProductList
             listType="All"
             filterParams={{
-              stores: storeIds?.onlineStoreByGeoCoordinates
-                ? storeIds.onlineStoreByGeoCoordinates.map((item) => item.id)
+              stores: storeIds?.onlineStoreByGeoCoordinates.content
+                ? storeIds.onlineStoreByGeoCoordinates.content.map(
+                    (item) => item.id
+                  )
                 : [],
               textToSearch,
             }}
@@ -208,8 +223,10 @@ export default function Index(props) {
           <ProductList
             listType="Announcements"
             filterParams={{
-              stores: storeIds?.onlineStoreByGeoCoordinates
-                ? storeIds.onlineStoreByGeoCoordinates.map((item) => item.id)
+              stores: storeIds?.onlineStoreByGeoCoordinates.content
+                ? storeIds.onlineStoreByGeoCoordinates.content.map(
+                    (item) => item.id
+                  )
                 : [],
               textToSearch,
             }}
@@ -237,8 +254,10 @@ export default function Index(props) {
               }
               tabLabel={category.name}
               filterParams={{
-                stores: storeIds?.onlineStoreByGeoCoordinates
-                  ? storeIds.onlineStoreByGeoCoordinates.map((item) => item.id)
+                stores: storeIds?.onlineStoreByGeoCoordinates.content
+                  ? storeIds.onlineStoreByGeoCoordinates.content.map(
+                      (item) => item.id
+                    )
                   : [],
                 category: category.name,
                 textToSearch,

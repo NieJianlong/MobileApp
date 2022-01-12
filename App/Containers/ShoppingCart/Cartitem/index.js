@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Text, View, TouchableOpacity, Image, TextInput } from "react-native";
 import { s, ScaledSheet } from "react-native-size-matters";
 import { Fonts, Colors, ApplicationStyles } from "../../../Themes";
@@ -29,6 +29,10 @@ function Index(props) {
     onPress,
   } = props;
   const [quantity, setQuantity] = useState(props.product.quantity);
+
+  useEffect(() => {
+    setQuantity(props.product.quantity);
+  }, [props.product.quantity]);
 
   return (
     <TouchableOpacity

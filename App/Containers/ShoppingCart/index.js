@@ -41,7 +41,6 @@ function ShoppingCart(props) {
       .filtered("quantity > 0")
       .filtered("isDraft == false")
   );
-
   // const mydatas = realm.objects("ShoppingCart");
   const [paidDuringDelivery, setPaidDuringDeliver] = useState(false);
   const sheetContext = useContext(AlertContext);
@@ -293,7 +292,7 @@ function ShoppingCart(props) {
               let itemAvailble = true;
               if (availbleList) {
                 const i = availbleList.isListingAvailable[index];
-                itemAvailble = i.isAvailable;
+                itemAvailble = i?.isAvailable || false;
               }
               return <CartItem product={item} availble={itemAvailble} />;
             }}

@@ -13,12 +13,8 @@ export default function RelatedProducts({ productId }) {
   //alert(productId);
   const { data, error } = useQuery(GET_RELATED_PRODYCTS, {
     variables: { productId },
-    onCompleted: (res) => {
-      debugger;
-    },
-    onError: (res) => {
-      debugger;
-    },
+    onCompleted: (res) => {},
+    onError: (res) => {},
   });
   return (
     <InView

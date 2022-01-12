@@ -46,12 +46,15 @@ export default function DetailFooter({ product, currentVariant }) {
   }, [dispatch]);
   const toggleAddToCartSheet = useCallback(() => {
     const shoppingCartId = nanoid();
+    const tasks = realm.objects("ShoppingCart");
     if (!currentVariant.defaultVariant) {
       currentVariant.defaultVariant = false;
     }
     realm.write(() => {
       if (cartInfo) {
-        cartInfo.quantity = quantity;
+        cartInfo.quantity =
+          tasks.find((task) => task.product.productId === product.productId)
+            .quantity + 1;
         cartInfo.isDraft = false;
       } else {
         realm.create("ShoppingCart", {
@@ -78,10 +81,6 @@ export default function DetailFooter({ product, currentVariant }) {
       });
       PubSub.publish("refresh-shoppingcart");
     });
-    // const tasks = realm.objects("ShoppingCart");
-    // console.log(
-    //   `The lists of tasks are: ${JSON.stringify(tasks.map((task) => task))}`
-    // );
 
     // dispatch({
     //   type: "changSheetState",

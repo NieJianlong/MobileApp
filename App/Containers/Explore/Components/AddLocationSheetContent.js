@@ -13,7 +13,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { MaterialTextInput, Button } from "../../../Components";
 import styles from "./styles";
 import colors from "../../../Themes/Colors";
-import { useMutation, useReactiveVar } from "@apollo/client";
+import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import {
   CREATE_ADDRESS,
   CREATE_ADDRESS_FOR_GUEST,
@@ -26,6 +26,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { t } from "react-native-tailwindcss";
 import { Controller, useForm } from "react-hook-form";
 import lodash from "lodash";
+import { GetStatesByCountryId } from "../gql/explore_queries";
 
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
@@ -33,14 +34,10 @@ const TouchableOpacity =
 function AddLocationSheetContent(props) {
   //123e4567-e89b-12d3-a456-556642440000
   // const [selectedState, setSelectedState] = useState();
-  // const { data } = useQuery(GetStatesByCountryId, {
-  //   variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
-  // });
-  // if (data) {
-  //   console.log("data====================================");
-  //   console.log(data);
-  //   console.log("====================================");
-  // }
+  const { data } = useQuery(GetStatesByCountryId, {
+    variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
+  });
+
   const userProfileVarReactive = useReactiveVar(userProfileVar);
   const isAuth = useMemo(
     () => userProfileVarReactive.isAuth,
@@ -87,12 +84,11 @@ function AddLocationSheetContent(props) {
   );
   const onSubmit = (data) => {
     dispatch({ type: "loading" });
-
     addAddress({
       variables: {
         request: {
           ...data,
-          country: "India",
+          country: "123e4567-e89b-12d3-a456-556642440000",
           referenceId: global.buyerId,
           addressType: "SHIPPING",
           defaultAddress: true,
@@ -101,36 +97,46 @@ function AddLocationSheetContent(props) {
     });
   };
   const [showInfo, setShowInfo] = useState(false);
-  const [items, setItems] = useState([
-    { label: "Andhra Pradesh", value: "Andhra Pradesh" },
-    { label: "Arunachal Pradesh", value: "Arunachal Pradesh" },
-    { label: "Assam", value: "Assam" },
-    { label: "Bihar", value: "Bihar" },
-    { label: "Chhattisgarh", value: "Chhattisgarh" },
-    { label: "Goa", value: "Goa" },
-    { label: "Gujarat", value: "Gujarat" },
-    { label: "Haryana", value: "Haryana" },
-    { label: "Himachal Pradesh", value: "Himachal Pradesh" },
-    { label: "Jharkhand", value: "Jharkhand" },
-    { label: "Karnataka", value: "Karnataka" },
-    { label: "Kerala", value: "Kerala" },
-    { label: "Madhya Pradesh", value: "Madhya Pradesh" },
-    { label: "Maharashtra", value: "Maharashtra" },
-    { label: "Manipur", value: "Manipur" },
-    { label: "Meghalaya", value: "Meghalaya" },
-    { label: "Mizoram", value: "Mizoram" },
-    { label: "Nagaland", value: "Nagaland" },
-    { label: "Odisha", value: "Odisha" },
-    { label: "Punjab", value: "Punjab" },
-    { label: "Rajasthan", value: "Rajasthan" },
-    { label: "Sikkim", value: "Sikkim" },
-    { label: "Tamil Nadu", value: "Tamil Nadu" },
-    { label: "Telangana", value: "Telangana" },
-    { label: "Tripura", value: "Tripura" },
-    { label: "Uttarakhand", value: "Uttarakhand" },
-    { label: "Uttar Pradesh", value: "Uttar Pradesh" },
-    { label: "West Bengal", value: "West Bengal" },
-  ]);
+  const items = useMemo(() => {
+    if (data) {
+      const allProvinces = data.getStatesByCountryId;
+      return allProvinces.map((item) => ({
+        label: item.stateName,
+        value: item.id,
+      }));
+    }
+    return [];
+  }, [data]);
+  // const [items, setItems] = useState([
+  //   { label: "Andhra Pradesh", value: "Andhra Pradesh" },
+  //   { label: "Arunachal Pradesh", value: "Arunachal Pradesh" },
+  //   { label: "Assam", value: "Assam" },
+  //   { label: "Bihar", value: "Bihar" },
+  //   { label: "Chhattisgarh", value: "Chhattisgarh" },
+  //   { label: "Goa", value: "Goa" },
+  //   { label: "Gujarat", value: "Gujarat" },
+  //   { label: "Haryana", value: "Haryana" },
+  //   { label: "Himachal Pradesh", value: "Himachal Pradesh" },
+  //   { label: "Jharkhand", value: "Jharkhand" },
+  //   { label: "Karnataka", value: "Karnataka" },
+  //   { label: "Kerala", value: "Kerala" },
+  //   { label: "Madhya Pradesh", value: "Madhya Pradesh" },
+  //   { label: "Maharashtra", value: "Maharashtra" },
+  //   { label: "Manipur", value: "Manipur" },
+  //   { label: "Meghalaya", value: "Meghalaya" },
+  //   { label: "Mizoram", value: "Mizoram" },
+  //   { label: "Nagaland", value: "Nagaland" },
+  //   { label: "Odisha", value: "Odisha" },
+  //   { label: "Punjab", value: "Punjab" },
+  //   { label: "Rajasthan", value: "Rajasthan" },
+  //   { label: "Sikkim", value: "Sikkim" },
+  //   { label: "Tamil Nadu", value: "Tamil Nadu" },
+  //   { label: "Telangana", value: "Telangana" },
+  //   { label: "Tripura", value: "Tripura" },
+  //   { label: "Uttarakhand", value: "Uttarakhand" },
+  //   { label: "Uttar Pradesh", value: "Uttar Pradesh" },
+  //   { label: "West Bengal", value: "West Bengal" },
+  // ]);
   const { dispatch } = useContext(AlertContext);
 
   const inputs = [
@@ -242,10 +248,7 @@ function AddLocationSheetContent(props) {
                               setOpen={setOpen}
                               items={items}
                               setValue={onChange}
-                              setItems={setItems}
-                              // onChangeValue={(item) =>
-                              //   console.log(item.label, item.value)
-                              // }
+                              onChangeValue={onChange}
                               placeholderStyle={[
                                 { color: colors.grey40, fontSize: 16 },
                               ]}

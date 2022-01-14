@@ -88,7 +88,7 @@ function AddLocationSheetContent(props) {
       variables: {
         request: {
           ...data,
-          country: "123e4567-e89b-12d3-a456-556642440000",
+          country: "India",
           referenceId: global.buyerId,
           addressType: "SHIPPING",
           defaultAddress: true,
@@ -102,7 +102,7 @@ function AddLocationSheetContent(props) {
       const allProvinces = data.getStatesByCountryId;
       return allProvinces.map((item) => ({
         label: item.stateName,
-        value: item.id,
+        value: item.stateName,
       }));
     }
     return [];

@@ -149,7 +149,7 @@ class Order extends Component {
 
   renderOrderItem = (item, index) => {
     let detail = "";
-    const statusText = item.latestStatus.replaceAll("_", " ");
+    const statusText = item.latestStatus?.replace("_", " ");
     detail =
       statusText.substring(0, 1) +
       statusText.substring(1, statusText.length).toLowerCase() +

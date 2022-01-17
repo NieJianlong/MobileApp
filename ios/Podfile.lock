@@ -79,6 +79,7 @@ PODS:
   - glog (0.3.5)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.1100)
+  - razorpay-pod (1.1.17)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -283,6 +284,9 @@ PODS:
     - React-Core
   - react-native-pager-view (5.4.9):
     - React-Core
+  - react-native-razorpay (2.2.8):
+    - razorpay-pod
+    - React
   - react-native-safe-area-context (3.3.2):
     - React-Core
   - react-native-video (5.2.0):
@@ -364,12 +368,12 @@ PODS:
     - React
   - RNGestureHandler (1.10.3):
     - React-Core
-  - RNImageCropPicker (0.35.3):
+  - RNImageCropPicker (0.36.4):
     - React-Core
     - React-RCTImage
-    - RNImageCropPicker/QBImagePickerController (= 0.35.3)
+    - RNImageCropPicker/QBImagePickerController (= 0.36.4)
     - TOCropViewController
-  - RNImageCropPicker/QBImagePickerController (0.35.3):
+  - RNImageCropPicker/QBImagePickerController (0.36.4):
     - React-Core
     - React-RCTImage
     - TOCropViewController
@@ -377,6 +381,8 @@ PODS:
     - React-Core
   - RNScreens (2.18.1):
     - React-Core
+  - RNSVG (12.1.1):
+    - React
   - TOCropViewController (2.6.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -427,6 +433,7 @@ DEPENDENCIES:
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
+  - react-native-razorpay (from `../node_modules/react-native-razorpay`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-video (from `../node_modules/react-native-video`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -448,6 +455,7 @@ DEPENDENCIES:
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -466,6 +474,7 @@ SPEC REPOS:
     - GCDWebServer
     - libevent
     - OpenSSL-Universal
+    - razorpay-pod
     - TOCropViewController
     - YogaKit
 
@@ -512,6 +521,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-get-random-values"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
+  react-native-razorpay:
+    :path: "../node_modules/react-native-razorpay"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-video:
@@ -554,6 +565,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -578,6 +591,7 @@ SPEC CHECKSUMS:
   glog: 5337263514dd6f09803962437687240c5dc39aa4
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
+  razorpay-pod: 570fa697c5c0d8e356f42d783bf37d9361334062
   RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
   RCTRequired: 4bf86c70714490bca4bf2696148638284622644b
   RCTTypeSafety: c475a7059eb77935fa53d2c17db299893f057d5d
@@ -593,6 +607,7 @@ SPEC CHECKSUMS:
   react-native-flipper: 169e8ba429b73ad637ce007337ce4b415e783799
   react-native-get-random-values: 2c4ff6b44cb71291dabe9a8ae87d3877dcf387da
   react-native-pager-view: 3ee7d4c7697fb3ef788346e834a60cca97ed8540
+  react-native-razorpay: 6796178680164b4716b9cbdacdda5da98781fb0a
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-video: a4c2635d0802f983594b7057e1bce8f442f0ad28
   React-perflogger: 93075d8931c32cd1fce8a98c15d2d5ccc4d891bd
@@ -611,13 +626,14 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNImageCropPicker: 08ba3a2e2f4f8833d606f01906c371e382c4dea9
+  RNImageCropPicker: 73891a709e6fd8a47d32104d942757971f220aee
   RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
+  RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   Yoga: e7dc4e71caba6472ff48ad7d234389b91dadc280
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: ff1e1479e897c820c78303f612a66b77806c7923
+PODFILE CHECKSUM: 20f2b8cbdd756af3a73e876a79a082517bea0ca9
 
 COCOAPODS: 1.11.2

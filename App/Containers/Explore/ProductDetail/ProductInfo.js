@@ -164,7 +164,7 @@ export default function ProductInfo({
 
           {product.highlightBullets &&
             JSON.parse(product.highlightBullets).map((bul, index) => (
-              <View style={styles.row}>
+              <View key={index} style={styles.row}>
                 <Text style={styles.txtDot}>•</Text>
                 <Text style={styles.txtRegular}>{bul}</Text>
               </View>

@@ -13,8 +13,15 @@ function MaterialTextInput(props) {
     value = "",
     keyboardType,
     onChangeText = () => {},
+    ...rest
   } = props;
   const [padding, setPadding] = useState(false);
+
+  useEffect(() => {
+    if (inputRef && inputRef.current) {
+      inputRef.current.setValue(value);
+    }
+  }, [value])
 
   return (
     <TextField
@@ -43,6 +50,7 @@ function MaterialTextInput(props) {
         { paddingBottom: padding || value ? 0 : vs(10) },
       ]}
       tintColor={colors.grey40}
+      {...rest}
     />
   );
 }

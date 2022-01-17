@@ -4,59 +4,686 @@ directive @specifiedBy(
   url: String!
 ) on SCALAR
 
-type Cart {
-  cartId: ID!
+"""types"""
+type Address {
+  id: ID!
+  referenceId: ID!
+  addressType: AddressType!
+  flat: String
+  block: String
+  building: String
+  houseNumber: String
+  streetAddress1: String
+  streetAddress2: String
+  streetAddress3: String
+  townCity: String
+  villageArea: String
+  district: String
+  provinceState: String
+  country: String
+  areaCode: String
+  landmark: String
+  pinCode: String
+  isDefault: Boolean
+}
+
+enum AddressType {
+  UNDEFINED
+  SHIPPING
+  BILLING
+  BUSINESS
+  PICK_UP
+  COLLECTION_POINT
+  RETURN
+}
+
+type Buyer {
+  id: ID!
+  userProfile: UserProfile!
+  guestBuyer: Boolean!
+  avatarUrl: String
+  languages: [String]
+  currencies: [String]
+  addresses: [Address]
+  orders: [Order]
+  oneClickPurchaseOn: Boolean
+  paymentOptions: [PaymentDetail]
+  wishList: [WishList]
+  preferredCategories: [ID]
+
+  """[Category]"""
+  preferredProducts: [ID]
+
+  """[Product]"""
+  preferredSellers: [ID]
+
+  """[Seller]"""
+  notifications: [Notification]
+  postedReviews: [Review]
+  shareInformation: [ShareInformation]
+}
+
+input CancelOrderItemRequest {
+  orderItemId: String!
+  reason: String
+  message: String
+}
+
+input CartInput {
   buyerId: ID!
-  deliveryAddress: ID!
-  subTotal: Float
-  totalDiscount: Float
-  totalSavingsFor: Float
-  cartItems: [CartItem]
+  shippingAddressId: ID
+  billingDetailsId: ID!
+  useSalamiWallet: Boolean!
+  cartItems: [CartItemInput]
 }
 
-type CartCheckoutResponse {
-  code: String!
-  success: Boolean!
-  message: String!
-  orderId: ID
-}
-
-type CartItem {
-  cartId: ID!
+input CartItemInput {
   listingId: ID!
-  productListing: ProductListing
   quantity: Int
-  shippingMethod: ShippingMehod
-  collectionPointAddress: ID
+  variantId: ID!
+}
+
+type Category {
+  id: ID!
+  name: String!
+  description: String!
+  parentCategoryId: ID
+  products: [Product]
+  sellers: [Seller]
+}
+
+"""
+Order Management
+  scalars
+"""
+scalar Date
+
+scalar DateTime
+
+enum DeliveryOption {
+  UNDEFINED
+  COURIER_DELIVERY
+  SELLER_DIRECT_DELIVERY
+  COLLECTION_POINT_PICKUP
+  SELLER_LOCATION_PICKUP
+}
+
+input FilterParams {
+  listingId: String
+  sellerId: String
+
+  """required for filter type SELLER_AND_..."""
+  buyerId: String
+}
+
+enum FilterType {
+  UNDEFINED
+  SELLER_LAST_7_DAYS
+  SELLER_LAST_15_DAYS
+  SELLER_LAST_30_DAYS
+  SELLER_ORDER_RETURN_EVENT
+  SELLER_ORDER_ITEM_STATUS
+  SELLER_LISTING
+}
+
+type Invoice {
+  id: ID!
+  order: Order!
+  invoiceNumber: String!
+  invoiceDate: Date!
+  billingAddress: Address!
+  invoiceItems: [InvoiceItem]!
+  totalAmount: Float!
+  totalServiceFees: Float!
+  totalShippingFees: Float!
+  totalTaxes: Float!
+  totalInvoice: Float!
+}
+
+type InvoiceItem {
+  id: ID!
+  sku: String!
+  seller_sku: String!
+  quantity: Int!
+  description: String!
+  currency: String!
+  unitPrice: Float!
+  totalQtyPrice: Float!
+  taxPercentage: Float!
+  shippingFees: Float!
+  serviceFees: Float!
+}
+
+"""mutations"""
+type Mutation {
+  """buyer: create order"""
+  createOrderFromCart(cart: CartInput!): Order
+
+  """buyer: cancel order item"""
+  cancelOrderItem(request: CancelOrderItemRequest): Boolean
+
+  """seller: cancel by listing"""
+  cancelOrderItemByListingId(listingId: ID!): Boolean
+
+  """seller: mark order item as DELIVERED"""
+  markOrderItemAsDelivered(request: OrderItemDeliveredRequest!): Boolean
+
+  """buyer: submit order return"""
+  submitOrderReturnRequest(request: OrderReturnRequest!): OrderReturnResponse
+
+  """seller: approve or reject order return"""
+  approveOrRejectOrderReturnRequest(request: OrderReturnEventRequest!): Boolean
+
+  """seller: mark order return as SELLER_RECEIVED"""
+  markOrderReturnAsReceived(request: OrderReturnReceivedRequest!): Boolean
+}
+
+type Notification {
+  id: ID!
+  buyer: Buyer!
+  notificationText: String
+  notificationStatus: NotificationStatus
+}
+
+enum NotificationStatus {
+  UNDEFINED
+  READ
+  UNREAD
+}
+
+enum OnlineStoreType {
+  UNDEFINED
+  MAIN_ONLINE_STORE
+  ANNOUNCEMENT_ONLINE_STORE
+}
+
+type Order {
+  id: ID!
+  buyerId: ID!
+  orderNumber: String!
+  orderItems: [OrderItem]!
+  subTotal: Float
+  discount: Float
+  serviceFees: Float
+  shippingFees: Float
+  taxes: Float
+  promotionalDiscountCode: String
+  totalSavings: Float
+  orderTotal: Float
+  paymentDetail: PaymentDetail
+  invoices: [Invoice]
+  shippingDetail: ShippingDetail
+  orderPaymentResult: OrderPaymentResult
+}
+
+type OrderItem {
+  orderItemId: ID!
+  order: Order!
+  listingId: ID!
+  quantity: Int
+  createdAt: DateTime
+  updatedAt: DateTime
   sellerId: ID
-  productId: ID
+  variantId: ID
+  product: Product
   itemPrice: Float
   discount: Float
-  variantId: ID
 }
 
-type Mutation {
-  createCart(buyerId: ID!, deliveryAddress: ID!): Cart
-  addItem(cartId: ID!, listingId: ID!, variantId: ID!, quantity: Int!, shippingMethod: ShippingMehod!): Cart
-  clearCart(cartId: ID!): Cart
-  cartCheckout(cartId: ID!, homeDelivery: Boolean!): CartCheckoutResponse
+input OrderItemDeliveredRequest {
+  orderItemId: String!
+  buyerId: String!
 }
 
-type ProductListing {
-  listingId: ID!
+enum OrderItemHistoryEventType {
+  WAITING_FOR_PAYMENT
+  PAID
+  WAITING_FOR_SHIPMENT
+  COURIER_DELIVERY
+  SELLER_DELIVERY
+  DELIVERED
+  SELLER_COLLECTION_POINT
+  COLLECTED
+  BUYER_RETURNED
+  REFUND_REQUEST
+  REFUND_COMPLETE
+  REPLACEMENT_REQUEST
+  REPLACEMENT_COMPLETE
+  CANCELED_BY_BUYER
+  CANCELED_BY_SELLER
+}
+
+type OrderItemView {
+  userName: String
+  deliveryAddress: String
+  billingAddress: String
+  paymentMethod: String
+  cardNumber: String
+  deliveryDate: String
+  mainImage: String
+  variantImage: String
+  longName: String
+  shortName: String
+  quantity: Int
+  sellerName: String
+  sellerAddress: String
+  itemPrice: Float
+  discount: Float
+  orderDatetime: String
+  orderSubTotal: Float
+  orderServiceFee: Float
+  orderDeliveryPrice: Float
+  orderTaxes: Float
+  orderTotalSavings: Float
+  orderTotal: Float
+  orderId: ID
+  asin: String
+  sku: String
+  retailPrice: Float
+  shippingDate: String
+  deliveryStatus: String
+  invoiceNumber: String
+  onlineStoreName: String
+  itemShippingMethod: String
+  itemCollectionPointAddress: String
+  shippingDetailsItemShippingMethod: String
+  shippingDetailsItemShippingAddressId: String
+  shippingDetailsOrderShippingMethod: String
+  shippingDetailsOrderShippingAddressId: String
+  productListingStatus: String
+  shippingOrderStatus: String
+  shippingItemStatus: String
+  shippingStatus: String
+  buyerId: ID
+  listingId: ID
+  sellerId: ID
+  orderItemId: ID
+  listingVariantId: ID
   productId: ID
-  maxQuantityPerCart: Int
-  collectionPointAddressId: ID
 }
 
-type Query {
-  getCart(cartId: ID!): Cart
-  getCartByBuyerAndDeliveryAddress(buyerId: ID!, deliveryAddress: ID!): Cart
+type OrderPaymentResult {
+  id: ID!
+  order: Order
+  paymentDetail: PaymentDetail
+  paymentDateTime: DateTime
+  paymentResult: String
+  paymentReferenceNumber: String
 }
 
-enum ShippingMehod {
+type OrderReturnAddress {
+  addressId: ID
+  streetAddress1: String
+  streetAddress2: String
+  townCity: String
+  country: String
+  provinceState: String
+  areaCode: String
+}
+
+type OrderReturnCollectionPoint {
+  collectionPointId: ID
+  streetAddress1: String
+  streetAddress2: String
+  townCity: String
+  country: String
+  provinceState: String
+  areaCode: String
+  openingHours: [String]
+  contactNumber: String
+  contactPerson: String
+}
+
+input OrderReturnEventRequest {
+  orderReturnId: ID!
+  event: ReturnEventType
+  notes: String
+}
+
+type OrderReturnEventResponse {
+  returnId: ID
+  eventDateTime: DateTime
+  eventType: ReturnEventType
+  notes: String
+}
+
+input OrderReturnReceivedRequest {
+  orderReturnId: ID!
+  buyerId: ID!
+}
+
+input OrderReturnRequest {
+  buyerId: ID!
+  orderItemId: ID!
+  quantity: Int!
+  returnOption: ReturnOption!
+  refundMethod: RefundMethod
+  message: String
+}
+
+type OrderReturnResponse {
+  orderReturnId: ID
+  orderItemNumber: String
+  deadline: Date
+  latestEventStatus: ReturnEventType
+  deliveryOption: DeliveryOption
+  returnLabel: String
+  returnAddress: OrderReturnAddress
+  collectionPoint: OrderReturnCollectionPoint
+  sellerLocationPickup: OrderReturnCollectionPoint
+  qrCodeAsBase64: String
+}
+
+type OrderReturnStatusResponse {
+  orderReturnId: ID
+  orderItemNumber: String
+  events: [OrderReturnEventResponse]
+}
+
+type OrdersByListingView {
+  listingId: String
+  listingImage: String
+  longName: String
+  shortName: String
+  retailPrice: Float
+  wholePrice: Float
+  totalOrders: Int
+  returnedOrders: Int
+  deliveredOrders: Int
+  productListingStatus: String
+}
+
+type OrderView {
+  orderId: ID
+  orderNumber: String
+  orderDatetime: String
+  deliveryAddress: String
+  billingAddress: String
+  subTotal: Float
+  serviceFees: Float
+  shippingFees: Float
+  totalSavings: Float
+  orderTotal: Float
+  orderItems: [SimpleOrderItemView]
+}
+
+type PaymentDetail {
+  id: ID!
+  buyerId: ID!
+  defaultPaymentType: Boolean!
+  paymentType: PaymentType!
+}
+
+"""enums"""
+enum PaymentType {
   UNDEFINED
-  DELIVERY_ADDRESS
-  COLLECTION_POINT
+  CREDIT_CARD
+  DEBIT_CARD
+  CASH_AT_DELIVERY
+  WIRE_TRANSFER
+  SALAMI_CREDIT
+  ESCROW
+  PAYPAL
+}
+
+type Product {
+  id: ID!
+  seller: Seller!
+  vendorSku: String!
+  sellerSku: String!
+  categories: [Category]
+  shortName: String!
+  longName: String
+  description: String
+  technicalDetails: String
+  returnPolicies: [ReturnPolicy]
+}
+
+"""queries"""
+type Query {
+  getOrderItems(searchOptions: SearchOptions): [OrderItemView]
+  getOrdersByListing(searchOptions: SearchOptions): [OrdersByListingView]
+
+  """
+  searchString might be empty, result is all buyer's orders ordered by date desc
+  or contains order number or contains something from product short name for full text search
+  """
+  getBuyerOrders(buyerId: ID!, searchString: String!): [OrderView]
+  trackOrderItem(orderItemId: ID!): TrackOrderItemResponse
+  getOrderReturn(orderReturnId: String!): OrderReturnResponse
+  getOrderReturnStatus(orderReturnId: String!): OrderReturnStatusResponse
+  orderItemViewById(orderItemId: ID!): OrderItemView
+}
+
+enum RefundMethod {
+  CREDIT_CARD
+  DEBIT_CARD
+  PAYPAL
+  SALAMI_CREDIT
+}
+
+enum ReturnEventType {
+  REGISTERED
+  WAITING_SELLER_APPROVAL
+  WAITING_BUYER_RETURN
+  SELLER_RECEIVED
+  SELLER_APPROVED
+  SELLER_DENIED
+  SELLER_FULFILLED
+  REPLACEMENT_COMPLETE
+  REFUND_COMPLETE
+  CLOSED
+}
+
+enum ReturnOption {
+  GET_REFUND
+  GET_REPLACEMENT
+}
+
+type ReturnPolicy {
+  id: ID!
+  name: String!
+  value: String!
+  description: String!
+}
+
+type Review {
+  id: ID!
+  product: Product
+  seller: Seller
+  buyer: Buyer!
+  title: String!
+  reviewText: String!
+  ratingVote: Int
+  helpfulCount: Int
+}
+
+input SearchOptions {
+  filter: FilterType
+
+  """no defaults"""
+  filterParams: FilterParams
+
+  """default new FilterParams()"""
+  sortBy: SortType
+
+  """default DATE"""
+  sortDirection: SortDirection
+
+  """default DESCENDING"""
+  pageNo: Int
+
+  """default 1"""
+  pageSize: Int
+}
+
+type Seller {
+  id: ID!
+  userProfile: UserProfile!
+  avatarUrl: String
+  businessName: String!
+  brandName: String
+  biography: String
+  govCompanyId: String
+  vstGSTNumber: String
+  addresses: [Address]
+  onlineStores: [Store]
+  productCategories: [Category]
+  products: [Product]
+  hotProducts: [Product]
+  reviews: [Review]
+  usersRating: Float
+}
+
+enum ShareChannel {
+  UNDEFINED
+  FACEBOOK
+  WHATSAPP
+  GOOGLE
+  TWITTER
+  PLAIN_LINK
+  QRCODE
+}
+
+type ShareInformation {
+  id: ID!
+  buyer: Buyer!
+  product: Product!
+  shareChannel: ShareChannel!
+  shareTitle: String!
+  shareMessage: String!
+  hashTags: [String]
+  productPageUrl: String
+  receiverEmail: String!
+  createdAt: DateTime!
+}
+
+type ShippingDetail {
+  id: ID!
+  orderId: ID!
+  shippingStatus: ShippingStatus!
+  shippingAddress: Address!
+  shippingDate: DateTime
+  carrier: String
+  carrierUrl: String
+  trackingNumber: String
+  expectedDeliveryDate: DateTime
+  deliveryDate: DateTime
+  shippingInstructions: String
+  failedDeliveryReason: String
+}
+
+type ShippingDetailsResponse {
+  shippingStatus: ShippingStatus
+  shippingDate: Date
+  carrier: String
+  carrierUrl: String
+  trackingNumber: String
+  expectedDeliveryDate: Date
+  shippingInstructions: String
+  deliveryDate: Date
+  failedDeliveryReason: String
+  events: [ShippingEventResponse]
+}
+
+type ShippingEventResponse {
+  eventType: String
+  eventDateTime: DateTime
+}
+
+enum ShippingStatus {
+  UNDEFINED
+  WAITING_FOR_SHIPPING
+  SHIPPED
+  ON_ROUTE
+  OUT_FOR_DELIVERY
+  DELIVERED
+  DELIVERY_FAILED
+}
+
+type SimpleOrderItemView {
+  orderItemId: ID
+  listingId: ID
+  quantity: Int
+  latestStatus: OrderItemHistoryEventType
+  sellerId: ID
+  variantId: ID
+  variantOptions: String
+  shortName: String
+  photo: String
+  itemPrice: Float
+  discount: Float
+}
+
+enum SortDirection {
+  UNDEFINED
+  ASCENDING
+  DESCENDING
+}
+
+enum SortType {
+  UNDEFINED
+  DATE
+}
+
+type Store {
+  id: ID!
+  name: String
+  description: String
+  city: String
+  provinceState: String
+  createdBy: ID
+  onlineStoreType: OnlineStoreType
+  area: String
+}
+
+type TrackOrderItemCollectionPoint {
+  collectionPointId: ID
+  streetAddress1: String
+  streetAddress2: String
+  townCity: String
+  country: String
+  provinceState: String
+  areaCode: String
+  openingHours: [String]
+  contactNumber: String
+  contactPerson: String
+}
+
+type TrackOrderItemResponse {
+  orderItemId: ID!
+  deliveryOption: DeliveryOption
+  latestEventStatus: OrderItemHistoryEventType
+  orderNumber: String
+  orderItemNumber: String
+  sellerBusinessName: String
+  dateDelivered: DateTime
+  shippingDetails: ShippingDetailsResponse
+  collectionPoint: TrackOrderItemCollectionPoint
+  sellerLocationPickup: TrackOrderItemCollectionPoint
+  sellerDirectDelivery: TrackOrderItemSellerDirectDelivery
+  qrCodeAsBase64: String
+}
+
+type TrackOrderItemSellerDirectDelivery {
+  announcementId: ID
+  deliveryDate: Date
+}
+
+type UserProfile {
+  id: ID!
+  userName: String!
+  firstName: String
+  lastName: String
+  email: String
+  phoneNumber: String
+  geoLocation: String
+}
+
+type WishList {
+  id: ID!
+  buyer: Buyer!
+  product: Product!
+  createdAt: DateTime!
 }
 

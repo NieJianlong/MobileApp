@@ -128,7 +128,7 @@ android {
     def buildConfig = rootProject.extensions.getByName("ext")
 
     ndkVersion rootProject.ext.ndkVersion
-    
+
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     compileOptions {
@@ -141,7 +141,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         compileSdkVersion rootProject.ext.compileSdkVersion
-        versionCode 1   
+        vectorDrawables.useSupportLibrary = true
+        versionCode 1
         versionName "1.0"
         multiDexEnabled true
     }
@@ -208,6 +209,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation project(':react-native-razorpay')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'

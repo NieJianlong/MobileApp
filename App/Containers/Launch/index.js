@@ -1,4 +1,4 @@
-import React, { Component, useCallback, useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { View, StatusBar, Image } from "react-native";
 import { userProfileVar } from "../../Apollo/cache";
 import { runTokenFlow } from "../../Apollo/jwt-request";
@@ -17,29 +17,56 @@ import jwt_decode from "jwt-decode";
 import { useLazyQuery } from "@apollo/client";
 import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import * as storage from "../../Apollo/local-storage";
+import AppConfig from "../../Config/AppConfig";
+import GetBillingDetail from "../../hooks/billingDetails";
+import { Page_CheckoutAuth } from "../../Navigation/const";
 
 export default function LaunchScreen() {
-  const [getBuyerId] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
+  const [getBuyerId, {data, called, error}] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
     variables: { userProfileId: global.userProfileId },
     context: {
       headers: {
         isPrivate: true,
       },
     },
-    onCompleted: (res) => {
-      //server often breakon，we should use a constant for testing
-      const {
-        buyerProfileByUserId: { buyerId },
-      } = res;
-      global.buyerId = buyerId;
-      NavigationService.navigate("MainScreen");
-    },
-    onError: (res) => {
-      //server often breakon，we should use a constant for testing
-      global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
-      NavigationService.navigate("MainScreen");
-    },
   });
+
+  useEffect(() => {    
+    if (error) {
+      global.buyerId = AppConfig.guestId;
+      NavigationService.navigate("MainScreen");
+    }
+
+    if (called && data) {
+      const {
+        buyerProfileByUserId,
+      } = data;
+
+      if (buyerProfileByUserId?.buyerId) {
+        userProfileVar({
+          userId: buyerProfileByUserId?.userId,
+          buyerId: buyerProfileByUserId?.buyerId,
+          userName: buyerProfileByUserId?.userName,
+          email: buyerProfileByUserId?.email,
+          phone: buyerProfileByUserId?.phoneNumber,
+          isAuth: true,
+        });
+
+        global.buyerId = buyerProfileByUserId?.buyerId;
+
+      } else {
+        global.buyerId = AppConfig.guestId;
+        NavigationService.navigate("MainScreen");
+      }
+    }
+
+  }, [data, called, error])
+
+  const { isBillingLoaded } = GetBillingDetail();
+
+  useEffect(() => {
+    if (isBillingLoaded) NavigationService.navigate(Page_CheckoutAuth);
+  }, [isBillingLoaded]);
 
   const autoSignIn = useCallback(async () => {
     //get username and possword from localStorage
@@ -58,11 +85,9 @@ export default function LaunchScreen() {
       if (access_token === "undefined") {
         console.log("no access token");
       }
-      userProfileVar({
-        email: username,
-        isAuth: true,
-      });
+
       let decoded = jwt_decode(access_token);
+      console.log({decoded})
       global.access_token = access_token;
       global.userProfileId = decoded.sub;
       getBuyerId();

@@ -11,10 +11,11 @@ import DeliverInfo from "./DeliverInfo";
 import NavigationService from "../../Navigation/NavigationService";
 import { useRoute } from "@react-navigation/native";
 import BigNumber from "bignumber.js";
-
+import { useCreateOrder } from "../../hooks/order";
 //orderStatus：1,completed
 function CheckoutResume(props) {
   const { params } = useRoute();
+  const { createOrderFromCart, order } = useCreateOrder();
   const { orderStatus, data } = params;
   const money = useMemo(() => {
     let currentBilling = 0;
@@ -111,7 +112,8 @@ function CheckoutResume(props) {
           >
             <Button
               onPress={() => {
-                NavigationService.navigate("CheckoutPaymentCompletedScreen");
+                createOrderFromCart();
+               // NavigationService.navigate("CheckoutPaymentCompletedScreen");
               }}
               text={"PROCEED"}
             />

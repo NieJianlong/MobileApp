@@ -75,7 +75,7 @@ export default function Index(props) {
       // for forseable future will need these values so backend can cope
 
       //setLocation({ latitude, longitude });
-      setLocation({ latitude: "17.38405", longitude: "78.45636" });
+      setLocation({ latitude: "13.083666332", longitude: "80.26865592" });
       // setIsReady(true);
     },
     onError: (res) => {

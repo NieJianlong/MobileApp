@@ -9,6 +9,7 @@ import { ApplicationStyles } from '../../Themes';
 import Header from './header';
 import Trackers from './trackers';
 import { useRoute } from '@react-navigation/core';
+import Qrcode from './qrcode';
 
 function TrackOrder(props) {
   const {
@@ -20,7 +21,7 @@ function TrackOrder(props) {
         flex: 1,
         backgroundColor: colors.background,
         position: 'absolute',
-        top: 0,
+        top: 30,
         left: 0,
         right: 0,
         bottom: 0,
@@ -63,9 +64,13 @@ function TrackOrder(props) {
                 backgroundColor: 'white',
                 borderRadius: s(16),
                 flex: 1,
+                display: "flex",
+                alignItems: "center",
+                width: "100%"
               }}
             >
               <Header />
+              <Qrcode value="order 123353656"/>
               <Trackers type={type} />
             </View>
           </View>

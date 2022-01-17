@@ -28,6 +28,7 @@ import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import { client } from "../../Apollo/apolloClient";
 import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
+import GetBillingDetail from "../../hooks/billingDetails";
 
 function LoginScreen(props) {
   // refs
@@ -38,6 +39,7 @@ function LoginScreen(props) {
   let [loginInput, setLoginInput] = useState("");
   let [psswd, setPsswd] = useState("");
   const { params } = useRoute();
+  const { isBillingLoaded } = GetBillingDetail();
 
   useEffect(() => {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
@@ -60,6 +62,10 @@ function LoginScreen(props) {
     };
   }, [params, props]);
 
+  useEffect(() => {
+    if (isBillingLoaded) NavigationService.navigate('MainScreen');
+  }, [isBillingLoaded]);
+
   const onSignIn = async () => {
     // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
     console.log("onSignIn" + `${loginInput}:::${psswd}`); // to-do remove
@@ -80,12 +86,6 @@ function LoginScreen(props) {
           .runTokenFlow(loginRequest)
           .then(function (res) {
             if (typeof res !== "undefined") {
-              console.log("login ok set auth");
-              userProfileVar({
-                email: loginRequest.username,
-                isAuth: true,
-              });
-
               let access_token = res.data.access_token;
               if (access_token === "undefined") {
                 console.log("no access token");
@@ -129,16 +129,26 @@ function LoginScreen(props) {
                         result.data
                       )}`
                     );
-                    if (result.data.buyerProfileByUserId.buyerId === null) {
+                    const { buyerProfileByUserId } = result.data
+                    if (buyerProfileByUserId.buyerId === null) {
                       console.log("found null GuestBuyer buyerId");
                     } else {
-                      global.buyerId = result.data.buyerProfileByUserId.buyerId;
+                      global.buyerId = buyerProfileByUserId.buyerId;
                       storage.setLocalStorageValue(
                         loginRequest.username,
-                        result.data.buyerProfileByUserId.buyerId
+                        buyerProfileByUserId.buyerId
                       );
-                      NavigationService.navigate("MainScreen");
+
+                      userProfileVar({
+                        userId: buyerProfileByUserId?.userId,
+                        buyerId: buyerProfileByUserId?.buyerId,
+                        userName: buyerProfileByUserId?.userName,
+                        email: buyerProfileByUserId?.email,
+                        phone: buyerProfileByUserId?.phoneNumber,
+                        isAuth: true,
+                      });
                     }
+
                   } else {
                     console.log("Login BUYER_PROFILE_BY_USERID server error");
                   }

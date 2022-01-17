@@ -42,7 +42,7 @@ function index(props) {
     },
     {
       title: "Total",
-      value: "$847,57",
+      value: subTotal,
       type: "bold",
     },
   ]);

@@ -8,6 +8,7 @@ function RightButton(props) {
   return (
     <TouchableOpacity
       onPress={() => {
+        if (disable) return;
         onPress();
       }}
     >

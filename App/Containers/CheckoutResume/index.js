@@ -12,6 +12,8 @@ import NavigationService from "../../Navigation/NavigationService";
 import { useRoute } from "@react-navigation/native";
 import BigNumber from "bignumber.js";
 import { useCreateOrder } from "../../hooks/order";
+import RazarPay from "../payments";
+import RazorpayCheckout from "react-native-razorpay";
 //orderStatus：1,completed
 function CheckoutResume(props) {
   const { params } = useRoute();
@@ -113,7 +115,32 @@ function CheckoutResume(props) {
             <Button
               onPress={() => {
                 createOrderFromCart();
-               // NavigationService.navigate("CheckoutPaymentCompletedScreen");
+                // RazarPay();
+                var options = {
+                  description: "Credits towords consultation",
+                  image: "https://i.imgur.com/3g7nmJC.png",
+                  currency: "INR",
+                  key: "rzp_test_owK1UREmxZCSL2",
+                  amount: "50000",
+                  name: "Acme Corp",
+                  id: "order_IKjwMWQ66vcQb1", //Replace this with an order_id created using Orders API.
+                  prefill: {
+                    email: "bluestar929@outlook.com",
+                    contact: "8616525825013",
+                    name: "Gaurav Kumar",
+                  },
+                  theme: { color: "#53a20e" },
+                };
+                RazorpayCheckout.open(options)
+                  .then((data) => {
+                    alert(`Success: ${data.razorpay_payment_id}`);
+                    console.log(`Success: ${data.razorpay_payment_id}`);
+                  })
+                  .catch((error) => {
+                    alert(`Error: ${error.code} | ${error.description}`);
+                  });
+
+                // NavigationService.navigate("CheckoutPaymentCompletedScreen");
               }}
               text={"PROCEED"}
             />

@@ -215,6 +215,17 @@ type ListingVariantView {
   options: [KeyValuePair]
 }
 
+
+input RazorpayOrderRequest {
+    orderNumber: String!
+    orderId: ID!
+    amount: Float!
+}
+
+type RazorpayOrderResponse {
+    razorpayOrderId: String
+}
+
 """MUTATIONS"""
 type Mutation {
   """stores"""
@@ -279,6 +290,9 @@ type Mutation {
   addShareInformation(productId: String, buyerId: String, shareTitle: String, targetEmailAddress: String, shareChannel: ShareChannelType, productPageUrl: String): ShareInformation
   incrementHelpfulCount(reviewId: String!): Int
   savePreferredCategories(buyerId: ID!, categories: [ID]): String
+  
+  """buyer: get razorpayment Id"""
+  razorpayCreateOrder(request: RazorpayOrderRequest!): RazorpayOrderResponse
 }
 
 enum OnlineStoreType {

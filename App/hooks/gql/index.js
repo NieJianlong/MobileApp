@@ -29,3 +29,11 @@ export const CreateOrderFromCart = gql`
     }
   }
 `;
+
+export const RAZOR_ORDER = gql`
+  mutation RazorpayCreateOrder($request: RazorpayOrderRequest!) {
+    razorpayCreateOrder(request: $request) {
+      razorpayOrderId
+    }
+  }
+`;

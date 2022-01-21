@@ -273,6 +273,7 @@ function OrderScreen() {
       },
     },
   });
+
   const orderItems = useMemo(() => {
     let finalItems = [];
     if (data) {

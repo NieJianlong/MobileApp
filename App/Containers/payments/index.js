@@ -1,12 +1,11 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import RazorpayCheckout from 'react-native-razorpay';
+import RazorpayCheckout from "react-native-razorpay";
 import styles from "./styles";
 
-
-function RazarPay() {
-  return  (
+const RazarPay = () => {
+  return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.buttonContainer}
@@ -25,7 +24,7 @@ function RazarPay() {
               name: "Gaurav Kumar",
             },
             theme: { color: "#53a20e" },
-          };;
+          };
           // RazorpayCheckout.open(options).then((data) => {
           //     alert(`Success: ${data.razorpay_payment_id}`);
           //     console.log(`Success: ${data.razorpay_payment_id}`);
@@ -38,6 +37,6 @@ function RazarPay() {
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 export default RazarPay;

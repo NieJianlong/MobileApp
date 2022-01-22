@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, StatusBar, Text } from "react-native";
+import React, { useRef, useState } from "react";
+import { View, StatusBar, Text, Animated } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { s } from "react-native-size-matters";
 import { AppBar } from "../../Components";

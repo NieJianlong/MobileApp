@@ -4,13 +4,11 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  Touchable,
 } from "react-native";
 import AppConfig from "../../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../../Themes/Fonts";
 import colors from "../../../Themes/Colors";
-import images from "../../../Themes/Images";
 import NavigationService from "../../../Navigation/NavigationService";
 import { Switch } from "../../../Components";
 
@@ -53,7 +51,7 @@ function index(props) {
             NavigationService.navigate("SelectCountryOrLanguageScreen", {
               ...item,
             });
-          }}
+      
         >
           <View
             style={{

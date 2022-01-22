@@ -1,0 +1,12 @@
+
+  query GetListings($searchOptions: SearchOptions) {
+    getListings(searchOptions: $searchOptions) {
+      content{
+          photo
+         }
+      pageNo
+      pageSize
+      totalPages
+      totalElements
+    }
+  }

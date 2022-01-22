@@ -2,11 +2,13 @@ overwrite: true
 schema: ["App/schemas/schemaPM.graphql", "App/schemas/schemaUM.graphql"]
 documents: "App/**/*.graphql"
 generates:
-  src/generated/graphql.tsx:
+  generated/graphql.ts:
     plugins:
       - "typescript"
       - "typescript-operations"
       - "typescript-react-apollo"
-  ./graphql.schema.json:
+  ./fragmentTypes.json:
     plugins:
-      - "introspection"
+      - fragment-matcher
+    config:
+      apolloClientVersion: 3

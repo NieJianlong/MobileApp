@@ -1,36 +1,36 @@
-import React, { useRef, useState } from 'react';
-import { View, StatusBar, Text, Animated } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { s } from 'react-native-size-matters';
-import { AppBar } from '../../Components';
-import styles from './styles';
-import colors from '../../Themes/Colors';
-import images from '../../Themes/Images';
-import AppConfig from '../../Config/AppConfig';
-import DynamicTabView from '../UserInfo/DynamicTabView';
-import CountryLanguage from './CountryLanguage';
-import Notifications from './Notifications';
-import Permissions from './Permissions';
+import React, { useState } from "react";
+import { View, StatusBar, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { s } from "react-native-size-matters";
+import { AppBar } from "../../Components";
+import styles from "./styles";
+import colors from "../../Themes/Colors";
+import images from "../../Themes/Images";
+import AppConfig from "../../Config/AppConfig";
+import DynamicTabView from "../UserInfo/DynamicTabView";
+import CountryLanguage from "./CountryLanguage";
+import Notifications from "./Notifications";
+import Permissions from "./Permissions";
 
 export const MenuConfig = [
   {
-    title: 'Country & Languageg',
+    title: "Country & Languageg",
     icon: images.userFlagImage,
     selectedIcon: images.userFlagImage,
     // screen: NoPurchase,
-    key: 'Country',
+    key: "Country",
   },
   {
-    title: 'Notifications',
+    title: "Notifications",
     icon: images.userNotiImage,
     selectedIcon: images.userNotiSImage,
-    key: 'Notifications',
+    key: "Notifications",
   },
   {
-    title: 'Permissions',
+    title: "Permissions",
     icon: images.userFilledImage,
     selectedIcon: images.userFilledSImage,
-    key: 'Permissions',
+    key: "Permissions",
   },
 ];
 
@@ -42,7 +42,7 @@ function Setting(props) {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar />
         <View style={{ padding: AppConfig.paddingHorizontal }}>
@@ -53,13 +53,13 @@ function Setting(props) {
           renderTab={(item, index) => {
             let cmp = <View />;
             switch (item.key) {
-              case 'Country':
+              case "Country":
                 cmp = <CountryLanguage />;
                 break;
-              case 'Notifications':
+              case "Notifications":
                 cmp = <Notifications />;
                 break;
-              case 'Permissions':
+              case "Permissions":
                 cmp = <Permissions />;
                 break;
 
@@ -73,12 +73,12 @@ function Setting(props) {
             height: s(100),
             backgroundColor: colors.background,
           }}
-          headerBackgroundColor={'transparent'}
-          highlightStyle={{ color: 'white' }}
-          noHighlightStyle={{ color: 'gray' }}
-          headerTextStyle={{ color: 'white' }}
+          headerBackgroundColor={"transparent"}
+          highlightStyle={{ color: "white" }}
+          noHighlightStyle={{ color: "gray" }}
+          headerTextStyle={{ color: "white" }}
           onChangeTab={(index) => {}}
-          headerUnderlayColor={'transparent'}
+          headerUnderlayColor={"transparent"}
         />
       </SafeAreaView>
     </View>

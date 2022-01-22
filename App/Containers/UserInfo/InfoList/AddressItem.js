@@ -191,7 +191,6 @@ const styles = ScaledSheet.create({
     fontFamily: Fonts.primary,
     color: colors.secondary00,
     fontWeight: "400",
-
     backgroundColor: "transparent",
     textAlign: "center",
   },

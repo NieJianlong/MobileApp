@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-
 import { Switch } from "../../../Components";
 import AppConfig from "../../../Config/AppConfig";
 import { View, ScrollView, SafeAreaView } from "react-native";
@@ -59,6 +58,7 @@ export default function BillingList({ dispatch }) {
       PubSub.unsubscribe(refresh);
     };
   });
+
   useEffect(() => {
     if (data?.billingDetailsByBuyerId.length > 0) {
       dispatch({

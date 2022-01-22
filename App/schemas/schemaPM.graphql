@@ -1,0 +1,1070 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Address {
+  addressType: String
+  areaCode: String
+  block: String
+  building: String
+  country: String
+  defaultAddress: Boolean
+  district: String
+  flat: String
+  floor: String
+  houseNumber: String
+  id: ID!
+  landMark: String
+  pinCode: String
+  provinceState: String
+  referenceId: String
+  streetAddress1: String
+  streetAddress2: String
+  townCity: String
+  villageArea: String
+}
+
+type Announcement {
+  announcementDatetime: DateTime
+  announcementText: String
+  id: ID!
+  referenceId: String
+  validityInterval: Int
+}
+
+type AnnouncementDTO {
+  announcementDatetime: DateTime
+  announcementText: String
+  deliveryDate: Date
+  infoIcon: String
+  minOrderRequired: Int
+  percentageOff: Float
+  productLongName: String
+  retailPrice: Float
+  sellerBusinessName: String
+  validityInterval: Int
+  wholeSalePrice: Float
+}
+
+type Buyer {
+  id: ID!
+}
+
+type Category {
+  description: String
+  id: ID!
+  name: String
+  parentCategory: Category
+}
+
+type CategoryView {
+  categoryId: ID
+  description: String
+  name: String
+}
+
+type Chat {
+  id: ID!
+}
+
+type CollectionPoint {
+  address: Address
+  collectionPointId: ID
+  microHubId: ID
+}
+
+type CollectionPointPickupDetailView {
+  areaCode: String
+  contactNumber: String
+  contactPerson: String
+  country: String
+  microHubId: ID
+  openingHours: [String]
+  provinceState: String
+  streetAddress1: String
+  streetAddress2: String
+  townCity: String
+}
+
+type CourierDeliveryDetailView {
+  courierDeliveryId: ID!
+  courierName: String
+  shippingFees: Float
+  shippingFeesTaxes: Float
+}
+
+type CourierDeliveryDetails {
+  courierDeliveryId: ID!
+  courierName: String
+  shippingFees: Float
+  shippingFeesTaxes: Float
+}
+
+type Images {
+  description: String
+  fullPath: String
+  id: ID!
+  imageName: String
+  imageType: ImageType
+  referenceId: String
+}
+
+type IsListingAvailableResponse {
+  isAvailable: Boolean
+  listingId: ID
+  reason: String
+  variantId: ID
+}
+
+type KeyValuePair {
+  key: String!
+  value: String!
+}
+
+type ListingVariantView {
+  defaultVariant: Boolean
+  fullPath: String
+  itemsAvailable: Int
+  itemsInStock: Int
+  itemsSold: Int
+  listingId: ID!
+  options: [KeyValuePair]
+  productId: ID
+  retailPrice: Float
+  variantId: ID
+  wholeSalePrice: Float
+}
+
+"MUTATIONS"
+type Mutation {
+  acceptProduct(productId: String!): Product
+  "todo: check if still required"
+  addAnnouncement(announcementDatetime: DateTime, announcementText: String, createdAt: DateTime, productId: String, updatedAt: DateTime, validityInterval: Int): Announcement!
+  "category mutations"
+  addParentCategory(description: String!, name: String!): Category!
+  "add review dto  - add review for a product"
+  addProductReview(description: String!, postedBy: String!, productId: String, ratingVote: Int!, sellerId: String, title: String!): ProductReviewView!
+  "add product to wish list - product"
+  addProductToWishlist(buyerId: String!, productId: String!): Wishlist!
+  "add review report"
+  addReportReview(description: String!, postedBy: String!, reason: String!, reporterType: ReporterType!, reviewId: String!, title: String!): ReportReviewView
+  "add request for product to be present in a specific online store"
+  addRequestForProduct(productId: String, requests: Int, storeId: String): ProductRequestCount
+  "add share information about a product"
+  addShareInformation(buyerId: String, productId: String, productPageUrl: String, shareChannel: ShareChannelType, shareTitle: String, targetEmailAddress: String): ShareInformation
+  addSubCategory(description: String!, name: String!, parentCategoryId: String!): Category!
+  cloneListing(listingIds: [String]!, startDate: DateTime): [ProductListing]
+  "options"
+  createOption(option: OptionInput): Option
+  createProduct(productCreateInput: ProductCreateInput!): Product!
+  createProductListings(input: ProductListingsInput): [ProductListing]
+  createRecurringListings(input: RecurringListingInput): [ProductListing]
+  "stores"
+  createStore(storeInput: StoreCreateInput!): Store
+  deleteOption(optionId: String!): Boolean
+  deleteProduct(productId: String!): Boolean
+  deleteProductFromWishlist(buyerId: String!, productId: String!): Int!
+  deleteProductListing(listingId: String!): Boolean
+  deleteStoreById(storeId: String!): Boolean
+  "admin product activation/deactivation"
+  disableProduct(productId: String!): Product
+  incrementHelpfulCount(reviewId: String!): Int
+  incrementSoldQuantity(input: VariantSoldQuantityInput): Boolean
+  reduceSoldQuantity(input: VariantSoldQuantityInput): Boolean
+  rejectProduct(productId: String!): Product
+  saveListingCollectionPoint(input: CollectionPointInput): CollectionPoint
+  saveListingCourierDeliveryDetails(input: CourierDeliveryDetailsInput): CourierDeliveryDetails
+  saveListingSellerDirectDelivery(input: SellerDirectDeliveryInput): SellerDirectDeliveryResponse
+  saveListingSellerLocation(input: SellerLocationInput): CollectionPoint
+  saveListingVariants(input: ProductListingVariantInput): [ProductListingVariant]
+  savePreferredCategories(buyerId: ID!, categories: [ID]): String
+  updateCategory(categoryId: String!, description: String!, name: String!): Category!
+  updateListingStatus(input: ListingStatusInput): ProductListing
+  updateProductGeneral(productInput: ProductUpdateStep1!): ProductStep1Response!
+  updateProductListing(input: ProductListingUpdateInput): ProductListing
+  updateStore(storeId: String!, storeInput: StoreInput!): Store
+}
+
+type Option {
+  description: String
+  name: String
+  optionId: ID!
+  values: [OptionValue]
+}
+
+type OptionValue {
+  value: String
+  valueId: ID!
+}
+
+type PolicyNameView {
+  name: String
+  values: [String]
+}
+
+type Price {
+  currency: String
+  id: ID!
+  retailPrice: Float
+  salePercentage: Float
+  taxPercentage: Float
+  totalQuantityPrice: Float
+  wholeSalePrice: Float
+}
+
+"TYPES"
+type Product {
+  description: String
+  id: ID!
+  longName: String
+  shortName: String
+}
+
+type ProductCategoryView {
+  categoryId: ID
+  description: String
+  name: String
+  productId: ID
+}
+
+type ProductListing {
+  announcement: Announcement
+  chat: Chat
+  chatMuteFlag: Boolean
+  closedDate: Date
+  deliveryDate: Date
+  id: ID!
+  maxQuantityPerCart: Int
+  minSoldQuantity: Int
+  numberOfItems: Int
+  openUntil: Date
+  product: Product
+  productListingStatus: ProductListingStatus
+  startDate: DateTime
+  store: Store
+}
+
+type ProductListingVariant {
+  itemsAvailable: Int
+  itemsSold: Int
+  price: Price
+  productId: ID!
+  productListing: ProductListing!
+  variantId: ID
+}
+
+type ProductListingView {
+  amountSaved: Float
+  announcementId: String
+  categories: [ProductCategoryView]
+  closedDate: String
+  collectionPointAddress: Address
+  collectionPointAddressId: String
+  createOn: String
+  deliveryDate: String
+  deliveryFee: Float
+  description: String
+  highlightBullets: String
+  images: [Images]
+  itemSold: Int
+  listingId: String
+  listingVariants: [ListingVariantView]
+  longName: String
+  maxQuantityPerCart: Int
+  minQuantityPerCart: Int
+  minSoldQuantity: Int
+  noOfItemsInStock: Int
+  noOfOrderedItems: Int
+  numberOfItemsAvailable: Int
+  numberOfReviews: Int
+  numberOfStars: Float
+  openUntil: String
+  percentOff: Int
+  photo: String
+  photoUrls: [String]
+  pickUpFromSeller: Boolean
+  productId: String
+  productListingType: String
+  progressBarValue: Int
+  qtyAvailable: Int
+  rating: Int
+  ratingDetail: RatingDetail
+  relatedProducts: String
+  retailPrice: Float
+  returnAddress: Address
+  returnAddressId: String
+  returnPolicies: [ProductReturnPolicyView]
+  reviews: [ReviewView]
+  salePercentage: Float
+  seller: SellerView
+  sellerId: String
+  shippingMethodsAvailable: String
+  shortName: String
+  status: String
+  storeId: String
+  storeName: String
+  technicalDetails: String
+  wholeSalePrice: Float
+}
+
+type ProductRequestCount {
+  createdAt: DateTime
+  product: Product
+  requestsCount: Int
+  store: Store
+  updatedAt: DateTime
+}
+
+type ProductReturnPolicyView {
+  description: String
+  id: ID
+  name: String
+  productId: ID
+  value: String
+}
+
+type ProductReviewView {
+  buyerName: String
+  description: String
+  id: ID!
+  ratingVote: Int
+  title: String
+}
+
+type ProductStep1Response {
+  productId: ID!
+}
+
+type ProductVariantView {
+  defaultVariant: Boolean
+  fullPath: String
+  itemsInStock: Int
+  options: [KeyValuePair]
+  productId: ID
+  retailPrice: Float
+  variantId: ID
+  wholeSalePrice: Float
+}
+
+type ProductView {
+  brand: String
+  categories: [ProductCategoryView]
+  currency: String
+  description: String
+  highlightBullets: String
+  images: [Images]
+  itemsInStock: Int
+  longName: String
+  numberOfReviews: Int
+  numberOfStars: Float
+  photo: String
+  priceId: String
+  productId: ID
+  productReturnPolicyViews: [ProductReturnPolicyView]
+  productStatus: String
+  productType: String
+  ratingDetail: RatingDetail
+  retailPrice: Float
+  returnAddress: String
+  returnLabel: Images
+  reviews: [ReviewView]
+  salePercentage: Float
+  sellerAddress: String
+  sellerId: ID
+  sellerSku: String
+  shortName: String
+  taxPercentage: Float
+  technicalDetails: String
+  totalNumberOfStars: Int
+  totalQuantityPrice: Float
+  variants: [ProductVariantView]
+  vendorSku: String
+  warrantyDetails: String
+  wholeSalePrice: Float
+}
+
+"QUERIES"
+type Query {
+  announcementsByListingId(productListingId: String): [AnnouncementDTO]
+  announcementsByOnlineStore(storeId: String): [Announcement]
+  findReviews(reviewSearchOptions: ReviewSearchOptions!): [ReviewResponse]
+  "categories"
+  getAllCategories: [CategoryView]!
+  getListings(searchOptions: SearchOptions): [ProductListingView]
+  "options"
+  getOptionReference: [Option]!
+  "return policies"
+  getPolicyNames: [PolicyNameView]!
+  getPreferredCategories(buyerId: ID!): [CategoryView]!
+  getProductByProductId(productId: String!): ProductView!
+  getProductReviewSummaryResponse(productId: ID!): ReviewSummaryResponse
+  getProducts(searchOptions: SearchOptions): [ProductView]
+  getRelatedProducts(productId: ID!): [ProductView]
+  getSellerListing(options: SellerFilterOptions!, productId: String): SellerListingResponse!
+  getSellerListingDetails(listingId: String!): SellerListingDetailView!
+  getSellerListingForAcceptOrReject(options: SellerFilterOptions!): SellerListingResponse!
+  getSellerListingGroupByProduct(options: SellerFilterOptions!): SellerListingGroupResponse!
+  getSellerProductDetails(productId: String!): SellerProductDetailView
+  getSellerReviewSummaryResponse(sellerId: ID!): ReviewSummaryResponse
+  getShareInformationByProductId(productId: String): [ShareInformation]
+  getStoreByName(name: String!): Store!
+  "stores"
+  getStores(pageable: StorePageable!): StoreResponse!
+  getStoresByCityOrProvince(pageable: StorePageable!, place: String!): StoreResponse!
+  isListingAvailable(listings: [IsListingAvailableInput]): [IsListingAvailableResponse]
+  isProductInWishlist(buyerId: String!, productId: String!): Boolean!
+  onlineStoreByGeoCoordinates(latitude: Float!, longitude: Float!, pageable: StorePageable!): StoreResponse!
+  store(id: ID!): Store!
+}
+
+type RatingDetail {
+  fiveStar: Int
+  fourStar: Int
+  oneStar: Int
+  sixAndMoreStar: Int
+  threeStar: Int
+  twoStar: Int
+  zeroStar: Int
+}
+
+type ReportReviewView {
+  description: String
+  postedById: String
+  reviewId: String
+  title: String
+}
+
+type ReviewResponse {
+  avatarUrl: String
+  buyerName: String
+  createdAt: String
+  description: String
+  productName: String
+  ratingVote: Int
+  sellerName: String
+  title: String
+}
+
+type ReviewSummaryResponse {
+  numberOfReviews: Int
+  numberOfStars: Float
+  photo: String
+  productLongName: String
+  productName: String
+  ratingDetail: RatingDetail
+  sellerName: String
+}
+
+type ReviewView {
+  description: String
+  helpfulCount: Int
+  id: ID
+  postedBy: ID
+  productId: ID
+  ratingVote: Int
+  sellerId: ID
+  title: String
+  userName: String
+}
+
+type SellerDirectDeliveryDetailView {
+  announcementId: ID!
+  deliveryDate: Date!
+}
+
+type SellerDirectDeliveryResponse {
+  announcementId: ID
+  deliveryDate: Date
+  referenceId: ID
+}
+
+type SellerListingDetailView {
+  chatId: String
+  chatMuteFlag: Boolean
+  collectionPoint: CollectionPointPickupDetailView
+  courierDelivery: CourierDeliveryDetailView
+  listingId: ID!
+  maxQuantityPerCart: Int
+  minQuantityPerCart: Int
+  minSoldQuantity: Int
+  numberOfItems: Int
+  openUntil: Date
+  pickupFromSeller: Boolean
+  product: SellerProductDetailView!
+  productListingStatus: ProductListingStatus!
+  productListingType: ProductListingType
+  sellerDirectDelivery: SellerDirectDeliveryDetailView
+  sellerLocation: SellerLocationPickupDetailView
+  startDate: DateTime
+  store: SellerListingStore
+  variants: [SellerListingVariant!]!
+}
+
+type SellerListingGroupResponse {
+  content: [SellerListingGroupView]
+  pageNo: Int!
+  pageSize: Int!
+  totalElements: Int!
+  totalPages: Int!
+}
+
+type SellerListingGroupView {
+  active: Int!
+  ended: Int!
+  productId: ID!
+  shortName: String
+  total: Int!
+}
+
+type SellerListingResponse {
+  content: [SellerListingView!]!
+  pageNo: Int!
+  pageSize: Int!
+  totalElements: Int!
+  totalPages: Int!
+}
+
+type SellerListingStore {
+  area: String
+  city: String
+  description: String
+  name: String
+  onlineStoreType: OnlineStoreType
+  provinceState: String
+  storeId: ID
+}
+
+type SellerListingVariant {
+  defaultVariant: Boolean!
+  itemsAvailable: Int!
+  itemsInStock: Int!
+  itemsSold: Int!
+  options: [KeyValuePair!]!
+  photoUrl: String
+  priceId: ID!
+  retailPrice: Float!
+  sellerSku: String
+  variantId: ID!
+  wholeSalePrice: Float!
+}
+
+type SellerListingView {
+  categories: [String]
+  closedDate: Date
+  daysLeft: Int
+  discountPercentage: Float
+  listingId: ID!
+  listingStatus: ProductListingStatus!
+  mainPhotoUrl: String
+  minSoldQuantity: Int
+  openUntil: Date
+  priceId: ID!
+  productId: ID!
+  retailPrice: Float
+  shortName: String!
+  startDate: DateTime
+  storeId: ID!
+  storeName: String
+  totalItemsAvailable: Int
+  totalItemsSold: Int
+  wholeSalePrice: Float
+}
+
+type SellerLocationPickupDetailView {
+  areaCode: String
+  collectionPointId: ID!
+  country: String
+  provinceState: String
+  streetAddress1: String
+  streetAddress2: String
+  townCity: String
+}
+
+type SellerProductDetailView {
+  brand: String
+  description: String
+  images: [SellerProductImage]
+  longName: String
+  mainPhotoUrl: String
+  price: SellerProductPrice
+  productId: ID
+  productStatus: ProductStatus
+  productType: ProductType
+  sellerSku: String
+  shortName: String
+  variants: [SellerProductVariant]
+  vendorName: String
+  vendorSku: String
+}
+
+type SellerProductImage {
+  description: String
+  imageName: String
+  imageType: String
+  photoUrl: String
+}
+
+type SellerProductPrice {
+  currency: String
+  priceId: ID
+  retailPrice: Float
+  salePercentage: Float
+  taxPercentage: Float
+  totalQuantityPrice: Float
+  wholeSalePrice: Float
+}
+
+type SellerProductVariant {
+  defaultVariant: Boolean
+  itemsInStock: Int
+  options: [KeyValuePair]
+  photoUrl: String
+  priceId: ID
+  retailPrice: Float
+  variantId: ID
+  wholeSalePrice: Float
+}
+
+type SellerView {
+  avatarUrl: String
+  brandName: String
+  description: String
+  id: ID
+  name: String
+  ratingCount: Float
+  usersRating: Float
+}
+
+type ShareInformation {
+  buyer: Buyer
+  createdAt: DateTime
+  id: ID!
+  product: Product
+  productPageUrl: String
+  shareChannel: ShareChannelType
+  shareTitle: String
+  targetEmailAddress: String
+  updatedAt: DateTime
+}
+
+type Store {
+  area: String
+  city: String
+  createdBy: ID
+  description: String
+  id: ID!
+  name: String
+  onlineStoreType: OnlineStoreType
+  provinceState: String
+}
+
+type StoreResponse {
+  content: [Store!]!
+  pageNo: Int!
+  pageSize: Int!
+  totalElements: Int!
+  totalPages: Int!
+}
+
+type Wishlist {
+  buyer: Buyer
+  id: ID!
+  product: Product
+}
+
+enum FilterType {
+  ACTIVE
+  ACTIVE_BY_STORES
+  ACTIVE_BY_STORES_AND_ANNOUNCEMENT
+  ACTIVE_BY_STORES_AND_CATEGORY
+  ACTIVE_BY_STORES_AND_FULL_TEXT_SEARCH
+  ACTIVE_BY_STORES_AND_SELLER
+  ACTIVE_BY_STORES_AND_WISH_LIST
+  ALL
+  BY_LISTING_ID
+  BY_PRODUCT_ID
+  BY_PRODUCT_IDS
+  BY_SELLER
+  BY_STORES_AND_SHARE_LIST
+  BY_STORE_ID
+  UNDEFINED
+}
+
+enum ImageType {
+  GIF
+  JPG
+  PNG
+  RAW
+  SWG
+  TIFF
+  UNDEFINED
+}
+
+enum OnlineStoreType {
+  ANNOUNCEMENT_ONLINE_STORE
+  MAIN_ONLINE_STORE
+  UNDEFINED
+}
+
+enum ProductListingStatus {
+  ACCEPTED
+  ACTIVE
+  CLOSED
+  DRAFT
+  HIDDEN
+  OPEN
+  REJECTED
+  RETIRED
+  SUCCESSFUL
+  SUSPENDED
+  UNDEFINED
+}
+
+"ENUMS"
+enum ProductListingType {
+  ANNOUNCEMENT_PRODUCT_LISTING
+  MAIN_PRODUCT_LISTING
+  RECURRING_PRODUCT_LISTING
+  UNDEFINED
+}
+
+enum ProductStatus {
+  ACTIVE
+  CLOSED
+  DELETED
+  DRAFT
+  HIDDEN
+  RETIRED
+  SUSPENDED
+  UNDEFINED
+}
+
+enum ProductType {
+  DONT_USE_ME_1
+  DONT_USE_ME_2
+  UNDEFINED
+}
+
+enum ReporterType {
+  BUYER
+  SELLER
+  UNDEFINED
+}
+
+enum ReviewFilterType {
+  BY_PRODUCT
+  BY_SELLER
+  UNDEFINED
+}
+
+enum SellerFilterType {
+  LISTING_STATUS
+  NONE
+  STORE
+  STORE_AND_LISTING_STATUS
+}
+
+enum ShareChannelType {
+  FACEBOOK
+  GOOGLE
+  PLAIN_LINK
+  QRCODE
+  TWITTER
+  UNDEFINED
+  WHATSAPP
+}
+
+enum SortDirection {
+  ASCENDING
+  DESCENDING
+  UNDEFINED
+}
+
+enum SortType {
+  DATE
+  PRICE
+  RATING
+  UNDEFINED
+}
+
+enum StoreSort {
+  CITY
+  CREATED
+  NAME
+}
+
+scalar Date
+
+"SCALARS"
+scalar DateTime
+
+scalar FileUpload
+
+input AddreessInput {
+  areaCode: String
+  country: String
+  provinceState: String
+  streetAddress1: String
+  streetAddress2: String
+  townCity: String
+}
+
+input CollectionPointInput {
+  listingId: ID
+  microHubId: ID!
+}
+
+input CourierDeliveryDetailsInput {
+  courierName: String!
+  listingId: String
+  shippingFees: Float
+  shippingFeesTaxes: Float
+}
+
+"INPUTS"
+input FilterParams {
+  buyerId: String
+  category: String
+  latitude: Float
+  listingId: String
+  longitude: Float
+  productId: String
+  sellerId: String
+  storeId: String
+  stores: [ID]
+  textToSearch: String
+}
+
+input IsListingAvailableInput {
+  listingId: ID!
+  "null if product has only one variant"
+  quantity: Int!
+  variantId: ID
+}
+
+input ListingStatusInput {
+  listingId: String!
+  status: ProductListingStatus!
+}
+
+input ListingVariantInput {
+  priceId: String!
+  quantity: Int!
+  variantId: String
+}
+
+input OptionInput {
+  description: String
+  name: String!
+  values: [String]!
+}
+
+input OptionValueInput {
+  name: String!
+  value: String!
+}
+
+input ProductCreateInput {
+  productDetailsInput: ProductDetailsInput!
+  productReturnPolicyInput: ProductReturnPolicyInput!
+  productStocksAndPricingInput: ProductStocksAndPricingInput!
+}
+
+input ProductDetailsInput {
+  brand: String
+  categoryId: String
+  description: String
+  highlightBullets: [String]
+  keywords: [String]
+  longName: String
+  productImages: [FileUpload]
+  productType: String
+  shortName: String!
+  technicalDetails: String
+  vendor: String
+}
+
+input ProductListingUpdateInput {
+  announcementId: String
+  chatId: String
+  chatMuteFlag: Boolean
+  listingId: String!
+  maxQuantityPerCart: Int
+  minQuantityPerCart: Int
+  minSoldQuantity: Int
+  numberOfItems: Int
+  openUntil: Date
+  pickupFromSeller: Boolean
+  productId: String!
+  startDate: DateTime
+  storeId: String
+}
+
+input ProductListingVariantInput {
+  listingId: String!
+  variants: [ListingVariantInput]!
+}
+
+input ProductListingsInput {
+  chatId: String
+  chatMuteFlag: Boolean
+  collectionPoint: CollectionPointInput
+  courierDeliveryDetails: CourierDeliveryDetailsInput
+  maxQuantityPerCart: Int
+  minQuantityPerCart: Int
+  minSoldQuantity: Int!
+  numberOfItems: Int
+  openUntil: Date!
+  pickupFromSeller: Boolean
+  productId: String!
+  productListingType: ProductListingType!
+  sellerDirectDelivery: SellerDirectDeliveryInput
+  sellerLocation: SellerLocationInput
+  startDate: DateTime!
+  storeIds: [String]!
+  variants: [ListingVariantInput]!
+}
+
+input ProductReturnPolicyInput {
+  addressInput: AddreessInput
+  returnLabelImage: FileUpload
+  returnPolicyInputs: [ReturnPolicyInput]!
+}
+
+input ProductStocksAndPricingInput {
+  currency: String!
+  itemsInStock: Int!
+  profit: Float
+  retailPrice: Float!
+  sellerSku: String
+  size: String
+  sizeUnit: String
+  variantInputs: [ProductVariantInput]
+  weight: Float
+  weightUnit: String
+  wholeSalePrice: Float!
+}
+
+input ProductUpdateStep1 {
+  brand: String
+  categories: [String]
+  description: String
+  highlightBullets: [String]
+  keywords: [String]
+  longName: String
+  productId: ID!
+  productStatus: ProductStatus!
+  shortName: String!
+  "id array"
+  vendor: String
+}
+
+input ProductVariantInput {
+  defaultVariant: Boolean!
+  itemsInStock: Int!
+  options: [OptionValueInput]
+  retailPrice: Float!
+  sellerSku: String
+  variantImage: FileUpload
+  wholeSalePrice: Float!
+}
+
+input RecurringListingInput {
+  durationInDays: Int!
+  listingId: String!
+  minSoldQuantity: Int!
+  numberOfRecurring: Int!
+  startDate: DateTime!
+  variants: [ListingVariantInput]!
+}
+
+input ReturnPolicyInput {
+  name: String!
+  value: String!
+}
+
+input ReviewSearchOptions {
+  filter: ReviewFilterType!
+  filterParams: FilterParams!
+  pageNo: Int!
+  pageSize: Int!
+  sortBy: SortType!
+  sortDirection: SortDirection!
+}
+
+input SearchOptions {
+  filter: FilterType
+  "default ALL"
+  filterParams: FilterParams
+  "default DESCENDING"
+  pageNo: Int
+  "default 1"
+  pageSize: Int
+  "default new FilterParams()"
+  sortBy: SortType
+  "default DATE"
+  sortDirection: SortDirection
+}
+
+input SellerDirectDeliveryInput {
+  deliveryDate: Date
+  listingId: String
+}
+
+input SellerFilterOptions {
+  filterType: SellerFilterType!
+  listingStatus: ProductListingStatus
+  pageOption: SellerPageOption!
+  storeIds: [ID]
+}
+
+input SellerLocationInput {
+  areaCode: String
+  country: String
+  isSameAsBusinessAddress: Boolean!
+  listingId: ID
+  provinceState: String
+  streetAddress1: String
+  streetAddress2: String
+  townCity: String
+}
+
+input SellerPageOption {
+  pageNumber: Int!
+  pageSize: Int!
+}
+
+input StoreCreateInput {
+  area: String!
+  city: String!
+  description: String
+  name: String!
+  onlineStoreType: OnlineStoreType!
+  provinceState: String
+}
+
+input StoreInput {
+  area: String
+  city: String
+  description: String
+  name: String
+  onlineStoreType: OnlineStoreType
+  provinceState: String
+}
+
+input StorePageable {
+  page: Int
+  sellerId: String
+  size: Int
+  sort: StoreSort
+  sortDirection: SortDirection
+}
+
+input VariantSoldQuantityInput {
+  listingId: String!
+  quantity: Int!
+  variantId: String!
+}

@@ -1,0 +1,1115 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type AddressResponse {
+    addressId: ID
+    addressType: AddressType
+    areaCode: String
+    block: String
+    building: String
+    country: String
+    createdAt: DateTime
+    defaultAddress: Boolean
+    district: String
+    flat: String
+    floor: String
+    houseNumber: String
+    landMark: String
+    pinCode: String
+    provinceState: String
+    referenceId: ID
+    streetAddress1: String
+    streetAddress2: String
+    streetAddress3: String
+    townCity: String
+    updatedAt: DateTime
+    villageArea: String
+}
+
+type BillingDetailsResponse {
+    billingAddress: AddressResponse
+    billingDetailsId: ID
+    buyerId: ID
+    companyName: String
+    createdAt: DateTime
+    email: String
+    firstName: String
+    lastName: String
+    phoneNumber: String
+    taxCode: String
+    updatedAt: DateTime
+}
+
+type BuyerProfileResponse {
+    applicationSettings: String
+    billingDetails: BillingDetailsResponse
+    bonusSalamiCredit: Float
+    bonusSalamiCreditExpire: DateTime
+    buyerId: ID
+    categoryPreferences: [String]
+    country: String
+    createdAt: DateTime
+    currencies: [String]
+    email: String
+    firstName: String
+    geoLocation: String
+    guestBuyer: Boolean
+    languages: [String]
+    lastName: String
+    notifications: [NotificationResponse]
+    oneClickPurchaseOn: Boolean
+    paymentOptions: [PaymentDetailResponse]
+    phoneNumber: String
+    preferences: [PreferenceResponse]
+    productPreferences: [String]
+    refundSalamiCredit: Float
+    selectedCountry: CountryResponse
+    selectedSupportedLanguage: SupportedLanguageResponse
+    sellerPreferences: [String]
+    shareInformations: [ShareInformationResponse]
+    updatedAt: DateTime
+    userId: ID
+    userName: String
+    userType: UserType
+    walletId: ID
+    wishLists: [WishListResponse]
+}
+
+type ChatMessageResponse {
+    chatId: ID
+    chatMessageId: ID
+    createdAt: DateTime
+    msgText: String
+    postedBy: String
+    updatedAt: DateTime
+}
+
+type ChatResponse {
+    buyerProfiles: [BuyerProfileResponse]
+    chatId: ID
+    chatOpenPeriodEndDate: DateTime
+    chatOpenPeriodStartDate: DateTime
+    chatStatus: ChatStatus
+    createdAt: DateTime
+    messages: [ChatMessageResponse]
+    muteFlagForCustomer: Boolean
+    productListingId: ID
+    productName: String
+    updatedAt: DateTime
+}
+
+type ChatSubscriberResponse {
+    buyerId: ID
+    chatId: ID
+    createdAt: DateTime
+    updatedAt: DateTime
+}
+
+type CoordinateResponse {
+    latitude: Float
+    longitude: Float
+}
+
+type CountryResponse {
+    countryName: String
+    id: ID
+}
+
+type CountryStateResponse {
+    countryId: ID
+    id: ID
+    stateName: String
+}
+
+type DeliveryAddressGeoCoordinateResponse {
+    addressId: ID!
+    coordinates: PointResponse
+    createdAt: DateTime
+    updatedAt: DateTime
+}
+
+type DeliveryAddressToOnlineStoreResponse {
+    addressId: ID!
+    createdAt: DateTime
+    storeId: ID!
+    updatedAt: DateTime
+}
+
+type DeliveryAddressesByOnlineStoresResponse {
+    addresses: [AddressResponse]
+}
+
+type ForgotPasswordStep1Response {
+    email: String
+    message: String
+    phoneNumber: String
+}
+
+type ForgotPasswordStep2Response {
+    actionToken: String
+    message: String
+}
+
+type ForgotPasswordStep3Response {
+    message: String
+}
+
+type GenericResponse {
+    message: String
+    status: Boolean
+}
+
+type Mutation {
+    acceptSellerRegistrationDocuments(sellerId: ID!): GenericResponse
+    addBonusSalamiCredit(amount: Float!, bonusSalamiCreditExpire: DateTime, buyerId: ID!): Float
+    addProductRefundToWallet(amount: Float!, buyerId: ID!, transactionReference: ID!): SalamiWalletTransactionResponse
+    addRefundSalamiCredit(buyerId: ID!, refundAmount: Float!): Float
+    changePassword(newPassword: String!, oldPassword: String!, userId: ID!): Boolean
+    createAddress(request: AddressRequestForCreate!): AddressResponse
+    createAddressForGuestBuyer(request: AddressRequestForCreate!): AddressResponse
+    createBillingDetails(request: BillingDetailsRequestForCreate!): BillingDetailsResponse
+    createBillingDetailsForGuestBuyer(request: BillingDetailsRequestForCreate!): BillingDetailsResponse
+    createChat(request: ChatRequestForCreate!): ChatResponse
+    createChatMessage(request: ChatMessageRequestForCreate!): ChatMessageResponse
+    createChatSubscriber(request: ChatSubscriberRequestForCreate!): ChatSubscriberResponse
+    createDeliveryAddressGeoCoordinate(request: DeliveryAddressGeoCoordinateRequestForCreate!): DeliveryAddressGeoCoordinateResponse
+    createDeliveryAddressToOnlineStore(request: DeliveryAddressToOnlineStoreRequestForCreate!): DeliveryAddressToOnlineStoreResponse
+    createGuestBuyer(request: BuyerProfileRequestForCreate!): BuyerProfileResponse
+    createNotification(request: NotificationRequestForCreate!): NotificationResponse
+    createPaymentDetail(request: PaymentDetailRequestForCreate!): PaymentDetailResponse
+    createPreference(request: PreferenceRequestForCreate!): PreferenceResponse
+    createSellerBillingDetails(request: SellerBillingDetailsRequestForCreate!): SellerBillingDetailsResponse
+    createSellerContact(request: SellerContactRequestForCreate!): SellerContactResponse
+    createSellerToOnlineStore(request: SellerToOnlineStoreRequestForCreate!): SellerToOnlineStoreResponse
+    createServiceOperator(request: ServiceOperatorProfileForCreate!): GenericResponse
+    createShareInformation(request: ShareInformationRequestForCreate!): ShareInformationResponse
+    createShippingDetail(request: ShippingDetailRequestForCreate!): ShippingDetailResponse
+    createWishList(request: WishListRequestForCreate!): WishListResponse
+    deleteAddress(addressId: ID!): Boolean
+    deleteAddressForGuestBuyer(addressId: ID!, guestBuyerId: ID!): Boolean
+    deleteBillingDetails(billingDetailsId: ID!): Boolean
+    deleteBillingDetailsForGuestBuyer(billingDetailsId: ID!, guestBuyer: ID): Boolean
+    deleteBuyerProfile(buyerId: ID!): Boolean
+    deleteChat(chatId: ID!): Boolean
+    deleteChatMessage(chatMessageId: ID!): Boolean
+    deleteChatSubscriber(buyerId: ID!, chatId: ID!): Boolean
+    deleteDeliveryAddressGeoCoordinate(id: ID!): Boolean
+    deleteDeliveryAddressToOnlineStore(addressId: ID!, storeId: ID!): Boolean
+    deleteNotification(notificationId: ID!): Boolean
+    deletePaymentDetail(paymentDetailId: ID!): Boolean
+    deletePreference(preferenceId: ID!): Boolean
+    deleteSellerBillingDetails(billingDetailsId: ID!): Boolean
+    deleteSellerContact(contactId: ID!): Boolean
+    deleteSellerProfile(sellerId: ID!): Boolean
+    deleteSellerToOnlineStore(sellerId: ID!, storeId: ID!): Boolean
+    deleteShareInformation(shareInformationId: ID!): Boolean
+    deleteShippingDetail(shippingId: ID!): Boolean
+    deleteWishList(wishListId: ID!): Boolean
+    forgotPasswordStep1SendNotificationEmail(email: String!): ForgotPasswordStep1Response
+    forgotPasswordStep1SendNotificationSms(sms: String!): ForgotPasswordStep1Response
+    forgotPasswordStep2VerifyTokenEmail(email: String!, tokenCode: String): ForgotPasswordStep2Response
+    forgotPasswordStep2VerifyTokenSms(sms: String!, tokenCode: String): ForgotPasswordStep2Response
+    forgotPasswordStep3ChangeByEmail(actionTokenValue: String!, confirmPassword: String!, newPassword: String!): ForgotPasswordStep3Response
+    forgotPasswordStep3ChangeBySms(actionTokenValue: String!, confirmPassword: String!, newPassword: String!): ForgotPasswordStep3Response
+    grantGiftPromotion(amount: Float!, buyerId: ID!, expiryDate: Date): SalamiWalletGiftTransactionResponse
+    rateSeller(buyerId: ID!, rating: Float!, sellerId: ID!): Boolean
+    reduceOrderAmountFromWallet(amount: Float!, transactionReference: ID!): ReduceWalletResponse
+    refillSalamiCredit(amount: Float!, transactionReference: ID!): SalamiWalletTransactionResponse
+    registerBuyer(request: BuyerProfileRequestForCreate!): BuyerProfileResponse
+    registerGuestBuyerToBuyer(request: BuyerProfileRequest!): BuyerProfileResponse
+    registerSeller(request: SellerProfileRequestForCreate!): SellerProfileResponse
+    rejectSellerValidation(rejectNote: String, rejectReason: RegistrationRejectedReason!, sellerId: ID!): GenericResponse
+    resendVerificationCodeInEmail(emailAddress: String!): ResendCodeResponse
+    resendVerificationCodeInSms(phoneNumber: String!): ResendCodeResponse
+    sellerBillingDetailsForSeller(sellerId: ID!): SellerBillingDetailsResponse
+    sellerContactForSeller(sellerId: ID!): [SellerContactResponse]
+    sendVerifyEmail(userId: ID!): Boolean
+    sendVerifySms(userId: ID!): Boolean
+    setCountryForUser(countryId: ID!, userId: ID!): CountryResponse
+    setEscrowAccountToSeller(escrowAccountId: ID!, sellerId: ID): SellerProfileResponse
+    setSupportedLanguageForUser(supportedLanguageId: ID!, userId: ID!): SupportedLanguageResponse
+    setWalletToBuyer(buyerId: ID!, walletId: ID!): BuyerProfileResponse
+    updateAddress(request: AddressRequest!): AddressResponse
+    updateAddressForGuestBuyer(request: AddressRequest!): AddressResponse
+    updateBillingDetails(request: BillingDetailsRequest!): BillingDetailsResponse
+    updateBillingDetailsForGuestBuyer(request: BillingDetailsRequest!): BillingDetailsResponse
+    updateBuyerProfile(request: BuyerProfileRequest!): BuyerProfileResponse
+    updateChat(request: ChatRequest!): ChatResponse
+    updateChatMessage(request: ChatMessageRequest!): ChatMessageResponse
+    updateChatSubscriber(request: ChatSubscriberRequest!): ChatSubscriberResponse
+    updateDeliveryAddressGeoCoordinate(request: DeliveryAddressGeoCoordinateRequest!): DeliveryAddressGeoCoordinateResponse
+    updateDeliveryAddressToOnlineStore(request: DeliveryAddressToOnlineStoreRequest!): DeliveryAddressToOnlineStoreResponse
+    updateNotification(request: NotificationRequest!): NotificationResponse
+    updatePaymentDetail(request: PaymentDetailRequest!): PaymentDetailResponse
+    updatePreference(request: PreferenceRequest!): PreferenceResponse
+    updateSellerBillingDetails(request: SellerBillingDetailsRequest!): SellerBillingDetailsResponse
+    updateSellerContact(request: SellerContactRequest!): SellerContactResponse
+    updateSellerProfile(request: SellerProfileRequest!): SellerProfileResponse
+    updateSellerToOnlineStore(request: SellerToOnlineStoreRequest!): SellerToOnlineStoreResponse
+    updateShareInformation(request: ShareInformationRequest!): ShareInformationResponse
+    updateShippingDetail(request: ShippingDetailRequest!): ShippingDetailResponse
+    updateWishList(request: WishListRequest!): WishListResponse
+    useRefundSalamiCredit(amount: Float!, buyerId: ID!): Float
+    validateCode(request: ValidateCodeRequest!): ValidateCodeResponse
+}
+
+type NotificationResponse {
+    buyerId: ID
+    createdAt: DateTime
+    dateTime: DateTime
+    notificationId: ID
+    notificationStatus: NotificationStatus
+    text: String
+    updatedAt: DateTime
+}
+
+type OneClickBuyResponse {
+    defaultAddress: AddressResponse
+    defaultPaymentMethod: PaymentDetailResponse
+}
+
+type PaymentDetailResponse {
+    buyerId: ID
+    createdAt: DateTime
+    isDefaultPaymentType: Boolean
+    paymentDetailId: ID
+    paymentType: PaymentType
+    updatedAt: DateTime
+}
+
+type PointResponse {
+    x: Float
+    y: Float
+}
+
+type PreferenceResponse {
+    createdAt: DateTime
+    preferenceId: ID
+    preferenceType: PreferenceType
+    profileId: ID
+    referenceId: ID
+    updatedAt: DateTime
+}
+
+type Query {
+    addressById(addressId: ID!): AddressResponse
+    addressByIdForGuestBuyer(addressId: ID!, guestBuyerId: ID!): AddressResponse
+    addresses: [AddressResponse]
+    billingDetails: [BillingDetailsResponse]
+    billingDetailsByBuyerId(buyerId: ID!): [BillingDetailsResponse]
+    billingDetailsByGuestBuyerId(guestBuyerId: ID!): [BillingDetailsResponse]
+    billingDetailsById(billingDetailsId: ID!): BillingDetailsResponse
+    buyerProfile(buyerId: ID!): BuyerProfileResponse
+    buyerProfileByUserId(userProfileId: ID!): BuyerProfileResponse
+    buyerProfiles: [BuyerProfileResponse]
+    chatById(chatId: ID!): ChatResponse
+    chatMessageById(chatMessageId: ID!): ChatMessageResponse
+    chatMessages: [ChatMessageResponse]
+    chatSubscriberById(buyerId: ID!, chatId: ID!): ChatSubscriberResponse
+    chatSubscribers: [ChatSubscriberResponse]
+    chats: [ChatResponse]
+    coordinatesForAddressRequest(address: AddressRequestToGetCoordinates!): CoordinateResponse
+    coordinatesForAddressRequestFromAddressId(addressId: ID!): CoordinateResponse
+    defaultPaymentDetailByBuyerId(buyerId: ID!): PaymentDetailResponse
+    deliveryAddressForBuyer(buyerId: ID!): AddressResponse
+    deliveryAddressForGuestBuyer(buyerId: ID!): AddressResponse
+    deliveryAddressGeoCoordinateById(addressId: ID!): DeliveryAddressGeoCoordinateResponse
+    deliveryAddressGeoCoordinates: [DeliveryAddressGeoCoordinateResponse]
+    deliveryAddressToOnlineStoreById(addressId: ID!, storeId: ID!): DeliveryAddressToOnlineStoreResponse
+    deliveryAddressToOnlineStores: [DeliveryAddressToOnlineStoreResponse]
+    deliveryAddressesByOnlineStores(storeIds: [ID]): DeliveryAddressesByOnlineStoresResponse
+    getBuyerAddressByType(addressType: AddressType, buyerId: ID!): [AddressResponse]
+    getBuyerAddressesById(buyerId: ID!): [AddressResponse]
+    getBuyerDefaultAddressByBuyerId(buyerId: ID!): AddressResponse
+    getBuyerSalamiWalletBalance: SalamiWalletResponse
+    getCountries: [CountryResponse]
+    getGuestBuyerAddressByType(addressType: AddressType, guestBuyerId: ID!): [AddressResponse]
+    getGuestBuyerAddressesById(buyerId: ID!): [AddressResponse]
+    getGuestBuyerDefaultAddressByBuyerId(buyerId: ID!): AddressResponse
+    getRefundSalamiCredit(buyerId: ID!): Float
+    getSellerAddressByType(addressType: AddressType, sellerId: ID!): [AddressResponse]
+    getSellerAddressesById(sellerId: ID!): [AddressResponse]
+    getSellerDefaultAddressBySellerId(sellerId: ID!): AddressResponse
+    getSellerDocumentKeys(sellerId: ID!): [SellerDocumentResponse]
+    getStatesByCountryId(countryId: ID!): [CountryStateResponse]
+    getSupportedLanguages: [SupportedLanguageResponse]
+    guestBuyerProfile(guestBuyerId: ID!): BuyerProfileResponse
+    notificationById(notificationId: ID!): NotificationResponse
+    notifications: [NotificationResponse]
+    oneClickBuy(buyerId: ID!): OneClickBuyResponse
+    onlineStoresForSeller(sellerId: ID!): [SellerToOnlineStoreResponse]
+    paymentDetailById(paymentDetailId: ID!): PaymentDetailResponse
+    paymentDetails: [PaymentDetailResponse]
+    paymentDetailsByBuyerId(buyerId: ID!): [PaymentDetailResponse]
+    preferenceById(preferenceId: ID!): PreferenceResponse
+    preferences: [PreferenceResponse]
+    sellerBillingDetails: [SellerBillingDetailsResponse]
+    sellerBillingDetailsById(billingDetailsId: ID!): SellerBillingDetailsResponse
+    sellerBillingDetailsForSeller(sellerId: ID!): SellerBillingDetailsResponse
+    sellerContactById(contactId: ID!): SellerContactResponse
+    sellerContacts: [SellerContactResponse]
+    sellerContactsBySeller(sellerId: ID!): [SellerContactResponse]
+    sellerProfile(sellerId: ID!): SellerProfileResponse
+    sellerProfileByUserId(userProfileId: ID!): SellerProfileResponse
+    sellerProfiles: [SellerProfileResponse]
+    sellerToOnlineStoreById(sellerId: ID!, storeId: ID!): SellerToOnlineStoreResponse
+    sellerToOnlineStores: [SellerToOnlineStoreResponse]
+    shareInformationById(shareInformationId: ID!): ShareInformationResponse
+    shareInformations: [ShareInformationResponse]
+    shippingDetailById(shippingId: ID!): ShippingDetailResponse
+    shippingDetails: [ShippingDetailResponse]
+    userHasVerifiedEmail(userId: ID!): Boolean
+    wishListById(wishListId: ID!): WishListResponse
+    wishLists: [WishListResponse]
+}
+
+type ReduceWalletResponse {
+    orderAmount: Float
+    remainingOrderAmount: Float
+    usedGiftAmount: Float
+    usedWalletAmount: Float
+}
+
+type ResendCodeResponse {
+    extraMessage: String
+    status: Boolean
+}
+
+type SalamiWalletGiftTransactionResponse {
+    giftExpiryDate: Date
+    giftParentTransactionId: ID
+    giftTransactionId: ID
+    transactionAmount: Float
+    transactionReference: ID
+    transactionTimestamp: DateTime
+    transactionType: WalletTransactionType
+    walletId: ID
+}
+
+type SalamiWalletResponse {
+    buyerId: ID
+    giftBalance: Float
+    walletBalance: Float
+    walletId: ID
+}
+
+type SalamiWalletTransactionResponse {
+    transactionAmount: Float
+    transactionId: ID
+    transactionReference: ID
+    transactionTimestamp: DateTime
+    transactionType: WalletTransactionType
+    walletId: ID
+}
+
+type SellerBillingDetailsResponse {
+    accountName: String
+    accountNumber: String
+    bankAddress: String
+    bankName: String
+    billingDetailsId: ID
+    createdAt: DateTime
+    domesticRoutingCode: String
+    ifscCode: String
+    internationalRoutingCode: String
+    sellerId: ID
+    updatedAt: DateTime
+}
+
+type SellerContactResponse {
+    contactEmail: String
+    contactId: ID
+    contactName: String
+    contactPhoneNumber: String
+    createdAt: DateTime
+    sellerId: ID
+    supportEmail: String
+    supportPhoneNumber: String
+    updatedAt: DateTime
+}
+
+type SellerDocumentResponse {
+    documentKey: String
+}
+
+type SellerProfileResponse {
+    avatarUrl: String
+    biography: String
+    brandName: String
+    businessName: String
+    businessType: BusinessType
+    commChamberRegNum: String
+    commChamberRegNumValidated: Boolean
+    createdAt: DateTime
+    email: String
+    escrowAccountId: ID
+    firstName: String
+    geoLocation: String
+    govCompanyId: String
+    lastName: String
+    manufacturerBrandOwner: Boolean
+    middleName: String
+    nationalIdNumber: String
+    nationalIdNumberValidated: Boolean
+    phoneNumber: String
+    productsUpcAvailable: Boolean
+    registeredTrademarksOwner: Boolean
+    registrationRejectedNotes: String
+    registrationRejectedReason: RegistrationRejectedReason
+    selectedCountry: CountryResponse
+    selectedSupportedLanguage: SupportedLanguageResponse
+    sellerBillingDetails: SellerBillingDetailsResponse
+    sellerContacts: [SellerContactResponse]
+    sellerId: ID
+    sellerName: String
+    sellerType: SellerType
+    sellerValidationStatus: SellerValidationStatus
+    shortName: String
+    storeName: String
+    storeShortName: String
+    taxNumber: String
+    taxNumberValidated: Boolean
+    updatedAt: DateTime
+    userId: ID
+    userName: String
+    userType: UserType
+    usersRating: String
+    validationStatusChangedBy: ID
+    vatCode: String
+    vatCodeValidated: Boolean
+    vstGstNumber: String
+}
+
+type SellerToOnlineStoreResponse {
+    createdAt: DateTime
+    sellerId: ID!
+    storeId: ID!
+    updatedAt: DateTime
+}
+
+type ShareInformationResponse {
+    buyerId: ID
+    createdAt: DateTime
+    hashtags: [String]
+    productId: ID
+    productPageUrl: String
+    shareChannel: ShareChannel
+    shareInformationId: ID
+    shareMessage: String
+    shareTitle: String
+    targetEmailAddress: String
+    updatedAt: DateTime
+}
+
+type ShippingDetailResponse {
+    carrier: String
+    carrierUrl: String
+    createdAt: DateTime
+    deliveryDate: DateTime
+    expectedDeliveryDate: DateTime
+    failedDeliveryReason: String
+    orderId: ID
+    orderItemId: ID
+    shippingAddressId: ID
+    shippingDate: DateTime
+    shippingId: ID
+    shippingInstructions: String
+    shippingMethod: ShippingMethod
+    shippingStatus: ShippingStatus
+    trackingNum: String
+    updatedAt: DateTime
+}
+
+type SupportedLanguageResponse {
+    id: ID
+    language: String
+}
+
+type ValidateCodeResponse {
+    extraMessage: String
+    status: Boolean
+}
+
+type WishListResponse {
+    addedDateTime: DateTime
+    createdAt: DateTime
+    productId: ID
+    profileId: ID
+    updatedAt: DateTime
+    wishListId: ID
+}
+
+enum AddressType {
+    BILLING
+    BUSINESS
+    COLLECTION_POINT
+    RETURN
+    SHIPPING
+    UNDEFINED
+}
+
+enum BusinessType {
+    BUSINESS_SELLER
+    INDIVIDUAL_SELLER
+    UNDEFINED
+}
+
+enum ChatStatus {
+    CLOSED
+    LOCKED
+    OPEN
+    SUSPENDED
+    UNDEFINED
+}
+
+enum NotificationStatus {
+    READ
+    UNDEFINED
+    UNREAD
+}
+
+enum PaymentType {
+    CASH_AT_DELIVERY
+    CREDIT_CARD
+    DEBIT_CARD
+    ESCROW
+    PAYPAL
+    SALAMI_CREDIT
+    UNDEFINED
+    WIRE_TRANSFER
+}
+
+enum PreferenceType {
+    CATEGORY
+    PRODUCT
+    SELLER
+    UNDEFINED
+}
+
+enum RegistrationRejectedReason {
+    FALSE_INFORMATION
+    NO_NATIONAL_ID_CARD_SUPPLIED
+    NO_TAX_NUMBER_CARD_SUPPLIED
+    OFFENSIVE_SHOP_OR_SELLER_NAME
+    UNDEFINED
+}
+
+enum SellerType {
+    ANNOUNCEMENT_SELLER
+    MAIN_SELLER
+    UNDEFINED
+}
+
+enum SellerValidationStatus {
+    ACCEPTED
+    DECLINED
+    PENDING
+    UNDEFINED
+}
+
+enum ShareChannel {
+    FACEBOOK
+    GOOGLE
+    PLAIN_LINK
+    QRCODE
+    TWITTER
+    UNDEFINED
+    WHATSAPP
+}
+
+enum ShippingMethod {
+    COLLECTION_POINT
+    DELIVERY_ADDRESS
+    UNDEFINED
+}
+
+enum ShippingStatus {
+    DELIVERED
+    DELIVERY_FAILED
+    ON_ROUTE
+    OUT_FOR_DELIVERY
+    SHIPPED
+    UNDEFINED
+    WAITING_FOR_SHIPPING
+}
+
+enum UserType {
+    ADMIN
+    BUYER
+    COMPANY_BUYER
+    GUEST_BUYER
+    SELLER
+    SOP1
+    SOP2
+    SOP3
+    SOP4
+    SOP5
+    SOP6
+    SOP7
+    UNDEFINED
+}
+
+enum ValidationType {
+    EMAIL
+    SMS
+}
+
+enum WalletTransactionType {
+    GIFT_PROMOTION_EXPIRED
+    GIFT_PROMOTION_GRANTED
+    GIFT_PROMOTION_USED
+    MONTHLY_AGGREGATE
+    PRODUCT_PURCHASE
+    PRODUCT_REFUND
+    SALAMI_CREDITS_REFILL
+    UNDEFINED
+}
+
+scalar Date
+
+scalar DateTime
+
+scalar FileUpload
+
+input AddressRequest {
+    addressId: ID!
+    addressType: AddressType
+    areaCode: String
+    block: String
+    building: String
+    country: String
+    defaultAddress: Boolean
+    district: String
+    flat: String
+    floor: String
+    houseNumber: String
+    landMark: String
+    pinCode: String
+    provinceState: String
+    referenceId: String!
+    streetAddress1: String
+    streetAddress2: String
+    streetAddress3: String
+    townCity: String
+    villageArea: String
+}
+
+input AddressRequestForCreate {
+    addressType: AddressType
+    areaCode: String
+    block: String
+    building: String
+    country: String
+    defaultAddress: Boolean
+    district: String
+    flat: String
+    floor: String
+    houseNumber: String
+    landMark: String
+    pinCode: String
+    provinceState: String
+    referenceId: String!
+    streetAddress1: String
+    streetAddress2: String
+    streetAddress3: String
+    townCity: String
+    villageArea: String
+}
+
+input AddressRequestToGetCoordinates {
+    cityTownVillage: String
+    countryID: ID!
+    flatHomeApartmentBuilding: String
+    pinCode: String
+    stateID: ID!
+    streetColonyName: String
+}
+
+input BillingDetailsRequest {
+    billingAddress: AddressRequest
+    billingDetailsId: ID!
+    buyerId: ID!
+    companyName: String
+    email: String
+    firstName: String
+    lastName: String
+    phoneNumber: String
+    taxCode: String
+}
+
+input BillingDetailsRequestForCreate {
+    billingAddress: AddressRequestForCreate!
+    buyerId: ID!
+    companyName: String
+    email: String
+    firstName: String
+    lastName: String
+    phoneNumber: String
+    taxCode: String
+}
+
+input BuyerProfileRequest {
+    applicationSettings: String
+    buyerId: ID!
+    categoryPreferences: [String]
+    country: String
+    currencies: [String]
+    email: String
+    firstName: String
+    geoLocation: String
+    languages: [String]
+    lastName: String
+    oneClickPurchaseOn: Boolean
+    phoneNumber: String
+    productPreferences: [String]
+    sellerPreferences: [String]
+}
+
+input BuyerProfileRequestForCreate {
+    country: String
+    currencies: [String]
+    email: String
+    firstName: String
+    geoLocation: String
+    languages: [String]
+    lastName: String
+    oneClickPurchaseOn: Boolean
+    password: String
+    phoneNumber: String
+}
+
+input ChatMessageRequest {
+    chatId: ID!
+    chatMessageId: ID!
+    msgText: String
+    postedBy: String
+}
+
+input ChatMessageRequestForCreate {
+    chatId: ID!
+    msgText: String
+    postedBy: String
+}
+
+input ChatRequest {
+    chatId: ID!
+    chatOpenPeriodEndDate: DateTime
+    chatOpenPeriodStartDate: DateTime
+    chatStatus: ChatStatus
+    muteFlagForCustomer: Boolean
+    productListingId: ID!
+    productName: String
+}
+
+input ChatRequestForCreate {
+    chatOpenPeriodEndDate: DateTime
+    chatOpenPeriodStartDate: DateTime
+    chatStatus: ChatStatus
+    muteFlagForCustomer: Boolean
+    productListingId: ID!
+    productName: String
+}
+
+input ChatSubscriberRequest {
+    buyerId: ID!
+    chatId: ID!
+}
+
+input ChatSubscriberRequestForCreate {
+    buyerId: ID!
+    chatId: ID!
+}
+
+input DeliveryAddressGeoCoordinateRequest {
+    addressId: ID!
+    coordinates: PointRequest
+}
+
+input DeliveryAddressGeoCoordinateRequestForCreate {
+    addressId: ID!
+    coordinates: PointRequestForCreate
+}
+
+input DeliveryAddressToOnlineStoreRequest {
+    addressId: ID!
+    storeId: ID!
+}
+
+input DeliveryAddressToOnlineStoreRequestForCreate {
+    addressId: ID!
+    storeId: ID!
+}
+
+input NotificationRequest {
+    buyerId: ID!
+    dateTime: DateTime
+    notificationId: ID!
+    notificationStatus: NotificationStatus
+    text: String
+}
+
+input NotificationRequestForCreate {
+    buyerId: ID!
+    dateTime: DateTime
+    notificationStatus: NotificationStatus
+    text: String
+}
+
+input PaymentDetailRequest {
+    buyerId: ID!
+    isDefaultPaymentType: Boolean
+    paymentDetailId: ID!
+    paymentType: PaymentType
+}
+
+input PaymentDetailRequestForCreate {
+    buyerId: ID!
+    isDefaultPaymentType: Boolean
+    paymentType: PaymentType
+}
+
+input PointRequest {
+    x: Float!
+    y: Float!
+}
+
+input PointRequestForCreate {
+    x: Float!
+    y: Float!
+}
+
+input PreferenceRequest {
+    preferenceId: ID!
+    preferenceType: PreferenceType
+    profileId: ID!
+    referenceId: ID!
+}
+
+input PreferenceRequestForCreate {
+    preferenceType: PreferenceType
+    profileId: ID!
+    referenceId: ID!
+}
+
+input SellerAddressRequestForCreate {
+    areaCode: String
+    country: String
+    provinceState: String
+    streetAddress1: String
+    streetAddress2: String
+    townCity: String
+}
+
+input SellerBillingDetailsRequest {
+    accountName: String
+    accountNumber: String
+    bankAddress: String
+    bankName: String
+    billingDetailsId: ID!
+    domesticRoutingCode: String
+    ifscCode: String
+    internationalRoutingCode: String
+    sellerId: ID!
+}
+
+input SellerBillingDetailsRequestForCreate {
+    accountName: String
+    accountNumber: String
+    bankAddress: String
+    bankName: String
+    domesticRoutingCode: String
+    ifscCode: String
+    internationalRoutingCode: String
+    sellerId: ID
+}
+
+input SellerContactRequest {
+    contactEmail: String
+    contactId: ID!
+    contactName: String
+    contactPhoneNumber: String
+    sellerId: ID!
+    supportEmail: String
+    supportPhoneNumber: String
+}
+
+input SellerContactRequestForCreate {
+    contactEmail: String
+    contactName: String
+    contactPhoneNumber: String
+    sellerId: ID
+    supportEmail: String
+    supportPhoneNumber: String
+}
+
+input SellerProfileRequest {
+    avatarUrl: String
+    biography: String
+    brandName: String
+    businessName: String
+    businessType: BusinessType
+    commChamberRegNum: String
+    commChamberRegNumValidated: Boolean
+    email: String
+    firstName: String
+    geoLocation: String
+    govCompanyId: String
+    lastName: String
+    manufacturerBrandOwner: Boolean
+    middleName: String
+    nationalIdNumber: String
+    nationalIdNumberValidated: Boolean
+    phoneNumber: String
+    productsUpcAvailable: Boolean
+    registeredTrademarksOwner: Boolean
+    sellerId: ID!
+    sellerName: String
+    sellerType: SellerType
+    shortName: String
+    storeName: String
+    storeShortName: String
+    taxNumber: String
+    taxNumberValidated: Boolean
+    vatCode: String
+    vatCodeValidated: Boolean
+    vstGstNumber: String
+}
+
+input SellerProfileRequestForCreate {
+    aadharCardDocument: FileUpload
+    avatarUrl: String
+    biography: String
+    brandName: String
+    businessName: String
+    businessType: BusinessType!
+    commChamberRegNum: String
+    commChamberRegNumValidated: Boolean
+    email: String
+    firstName: String
+    geoLocation: String
+    govCompanyId: String
+    gstinNumberDocument: FileUpload
+    lastName: String
+    manufacturerBrandOwner: Boolean!
+    middleName: String
+    nationalIdNumber: String
+    nationalIdNumberValidated: Boolean
+    panCardDocument: FileUpload
+    password: String!
+    phoneNumber: String
+    productsUpcAvailable: Boolean!
+    registeredTrademarksOwner: Boolean!
+    sellerAddress: SellerAddressRequestForCreate!
+    sellerBillingDetails: SellerBillingDetailsRequestForCreate
+    sellerContact: SellerContactRequestForCreate
+    sellerName: String
+    sellerType: SellerType
+    shortName: String
+    storeName: String
+    storeShortName: String
+    taxNumber: String
+    taxNumberValidated: Boolean
+    vatCode: String
+    vatCodeValidated: Boolean
+    vatNumberDocument: FileUpload
+    vstGstNumber: String
+}
+
+input SellerToOnlineStoreRequest {
+    sellerId: ID!
+    storeId: ID!
+}
+
+input SellerToOnlineStoreRequestForCreate {
+    sellerId: ID!
+    storeId: ID!
+}
+
+input ServiceOperatorProfileForCreate {
+    email: String!
+    firstName: String
+    lastName: String
+    password: String!
+    phoneNumber: String
+    roles: [String]!
+    username: String!
+}
+
+input ShareInformationRequest {
+    buyerId: ID!
+    hashtags: [String]
+    productId: ID!
+    productPageUrl: String
+    shareChannel: ShareChannel
+    shareInformationId: ID!
+    shareMessage: String
+    shareTitle: String
+    targetEmailAddress: String
+}
+
+input ShareInformationRequestForCreate {
+    buyerId: ID!
+    hashtags: [String]
+    productId: ID!
+    productPageUrl: String
+    shareChannel: ShareChannel
+    shareMessage: String
+    shareTitle: String
+    targetEmailAddress: String
+}
+
+input ShippingDetailRequest {
+    carrier: String
+    carrierUrl: String
+    deliveryDate: DateTime
+    expectedDeliveryDate: DateTime
+    failedDeliveryReason: String
+    orderId: ID!
+    orderItemId: ID!
+    shippingAddressId: ID!
+    shippingDate: DateTime
+    shippingId: ID!
+    shippingInstructions: String
+    shippingMethod: ShippingMethod
+    shippingStatus: ShippingStatus
+    trackingNum: String
+}
+
+input ShippingDetailRequestForCreate {
+    carrier: String
+    carrierUrl: String
+    deliveryDate: DateTime
+    expectedDeliveryDate: DateTime
+    failedDeliveryReason: String
+    orderId: ID!
+    orderItemId: ID!
+    shippingAddressId: ID!
+    shippingDate: DateTime
+    shippingInstructions: String
+    shippingMethod: ShippingMethod
+    shippingStatus: ShippingStatus
+    trackingNum: String
+}
+
+input ValidateCodeRequest {
+    tokenCode: String!
+    userId: ID!
+    validationType: ValidationType!
+}
+
+input WishListRequest {
+    addedDateTime: DateTime
+    productId: ID!
+    profileId: ID!
+    wishListId: ID!
+}
+
+input WishListRequestForCreate {
+    addedDateTime: DateTime
+    productId: ID!
+    profileId: ID!
+}

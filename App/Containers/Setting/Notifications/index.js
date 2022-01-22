@@ -1,35 +1,34 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   ScrollView,
   Text,
-  Image,
   TouchableOpacity,
   Touchable,
-} from 'react-native';
-import AppConfig from '../../../Config/AppConfig';
-import { vs, s, ScaledSheet } from 'react-native-size-matters';
-import fonts from '../../../Themes/Fonts';
-import colors from '../../../Themes/Colors';
-import images from '../../../Themes/Images';
-import NavigationService from '../../../Navigation/NavigationService';
-import { Switch } from '../../../Components';
+} from "react-native";
+import AppConfig from "../../../Config/AppConfig";
+import { vs, s, ScaledSheet } from "react-native-size-matters";
+import fonts from "../../../Themes/Fonts";
+import colors from "../../../Themes/Colors";
+import images from "../../../Themes/Images";
+import NavigationService from "../../../Navigation/NavigationService";
+import { Switch } from "../../../Components";
 
 const datas = [
   {
-    title: 'Activate all',
+    title: "Activate all",
     value: false,
-    key: 'Activate',
+    key: "Activate",
   },
   {
-    title: 'Notification',
+    title: "Notification",
     value: false,
-    key: 'ANotification',
+    key: "ANotification",
   },
   {
-    title: 'Notification',
+    title: "Notification",
     value: true,
-    key: 'Notification',
+    key: "Notification",
   },
 ];
 function index(props) {
@@ -40,7 +39,7 @@ function index(props) {
           style={{
             fontFamily: fonts.primary,
             color: colors.grey80,
-            fontWeight: '600',
+            fontWeight: "600",
             fontSize: s(16),
           }}
         >
@@ -51,7 +50,7 @@ function index(props) {
         <TouchableOpacity
           key={index}
           onPress={() => {
-            NavigationService.navigate('SelectCountryOrLanguageScreen', {
+            NavigationService.navigate("SelectCountryOrLanguageScreen", {
               ...item,
             });
           }}
@@ -59,19 +58,19 @@ function index(props) {
           <View
             style={{
               paddingHorizontal: AppConfig.paddingHorizontal,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              backgroundColor: 'white',
+              flexDirection: "row",
+              justifyContent: "space-between",
+              backgroundColor: "white",
               height: vs(46),
-              alignItems: 'center',
+              alignItems: "center",
             }}
           >
             <Text
-              style={[styles.title, { fontSize: s(14), fontWeight: 'normal' }]}
+              style={[styles.title, { fontSize: s(14), fontWeight: "normal" }]}
             >
               {item.title}
             </Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Switch onSwitch={() => {}}></Switch>
             </View>
           </View>
@@ -85,8 +84,8 @@ export default index;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,
-    fontSize: '16@s',
+    fontSize: "16@s",
     color: colors.black,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

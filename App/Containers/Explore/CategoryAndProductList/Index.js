@@ -203,18 +203,19 @@ export default function Index(props) {
           <ProductList
             listType="All"
             filterParams={{
-              stores: storeIds?.onlineStoreByGeoCoordinates.content
-                ? storeIds.onlineStoreByGeoCoordinates.content.map(
-                    (item) => item.id
-                  )
-                : [],
+              // stores: storeIds?.onlineStoreByGeoCoordinates.content
+              //   ? storeIds.onlineStoreByGeoCoordinates.content.map(
+              //       (item) => item.id
+              //     )
+              //   : [],
+              addressId: localCartVarReactive.deliverAddress,
               textToSearch,
             }}
             index={0}
             filter={
               textToSearch.length > 0
                 ? "ACTIVE_BY_STORES_AND_FULL_TEXT_SEARCH"
-                : "ACTIVE_BY_STORES"
+                : "BY_ADDRESS_ID"
             }
             tabLabel="All"
           />

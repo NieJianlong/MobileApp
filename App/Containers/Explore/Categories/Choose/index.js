@@ -127,7 +127,7 @@ export default function ChooseCategoriesScreen() {
     },
     context: {
       headers: {
-        isPrivate: false,
+        isPrivate: true,
       },
     },
   });

@@ -24,7 +24,7 @@ export default function EditCategoriesScreen() {
     },
     context: {
       headers: {
-        isPrivate: false,
+        isPrivate: true,
       },
     },
   });

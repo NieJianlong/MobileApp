@@ -40,95 +40,95 @@ export default function Index(props) {
    * call out for the product data until we have the location(co-ords)
    *
    */
-  const [location, setLocation] = useState({ latitude: "", longitude: "" });
-  console.log(
-    "localCartVarReactive.callBackAddress===================================="
-  );
-  console.log(localCartVarReactive.callBackAddress);
-  console.log("====================================");
+  // const [location, setLocation] = useState({ latitude: "", longitude: "" });
+  // console.log(
+  //   "localCartVarReactive.callBackAddress===================================="
+  // );
+  // console.log(localCartVarReactive.callBackAddress);
+  // console.log("====================================");
   /**
    * this will be the query we will run on load to get the adrress co-ords
    * for the delivery address
    * this will be complicated as there are many ways this can happen
    * ie no initial address, guest, registered ect ....
    */
-  const [runGeoQuery] = useLazyQuery(aQM.FIND_COORDINATES_FOR_ADDRESS_REQUEST, {
-    variables: { address: localCartVarReactive.callBackAddress }, // need to add some structure here  address:{vars...}
-    context: {
-      headers: {
-        isPrivate: false,
-      },
-    },
-    onCompleted: (res) => {
-      // data has shape below
-      // {"data":{"coordinatesForAddressRequest":{ latitude":51.50735,"longitude":-0.1277583}} }
-      // just guessing for now until we can test the query
-      // const {
-      //   coordinatesForAddressRequest: { latitude, longitude },
-      // } = res;
+  // const [runGeoQuery] = useLazyQuery(aQM.FIND_COORDINATES_FOR_ADDRESS_REQUEST, {
+  //   variables: { address: localCartVarReactive.callBackAddress }, // need to add some structure here  address:{vars...}
+  //   context: {
+  //     headers: {
+  //       isPrivate: false,
+  //     },
+  //   },
+  //   onCompleted: (res) => {
+  //     // data has shape below
+  //     // {"data":{"coordinatesForAddressRequest":{ latitude":51.50735,"longitude":-0.1277583}} }
+  //     // just guessing for now until we can test the query
+  //     // const {
+  //     //   coordinatesForAddressRequest: { latitude, longitude },
+  //     // } = res;
 
-      // console.log(
-      //   `Explore runGeoQuery debug lat long ${latitude}  ${longitude}`
-      // );
-      // put lattitude and longiue into state and pass thru as props
-      //location.push(latitude, longitude);
-      // for forseable future will need these values so backend can cope
+  //     // console.log(
+  //     //   `Explore runGeoQuery debug lat long ${latitude}  ${longitude}`
+  //     // );
+  //     // put lattitude and longiue into state and pass thru as props
+  //     //location.push(latitude, longitude);
+  //     // for forseable future will need these values so backend can cope
 
-      //setLocation({ latitude, longitude });
-      setLocation({ latitude: "17.38405", longitude: "78.45636" });
-      // setIsReady(true);
-    },
-    onError: (res) => {
-      setLocation({ latitude: "17.38405", longitude: "78.45636" });
-      console.log(`Explore runGeoQuery onError ${JSON.stringify(res)}`);
-      // setLocation({ latitude: 17.38405, longitude: 78.45636 });
-      // setIsReady(true);
-    },
-  });
+  //     //setLocation({ latitude, longitude });
+  //     setLocation({ latitude: "17.38405", longitude: "78.45636" });
+  //     // setIsReady(true);
+  //   },
+  //   onError: (res) => {
+  //     setLocation({ latitude: "17.38405", longitude: "78.45636" });
+  //     console.log(`Explore runGeoQuery onError ${JSON.stringify(res)}`);
+  //     // setLocation({ latitude: 17.38405, longitude: 78.45636 });
+  //     // setIsReady(true);
+  //   },
+  // });
 
-  const [getStoneIds, { data: storeIds }] = useLazyQuery(
-    aQM.OnlineStoreByGeoCoordinates,
-    {
-      variables: {
-        ...location,
-        pageable: {
-          page: 0,
-          size: 100,
-          sort: "NAME",
-          sortDirection: "ASCENDING",
-        },
-      },
-      context: {
-        headers: {
-          isPrivate: true,
-        },
-      },
-    }
-  );
+  // const [getStoneIds, { data: storeIds }] = useLazyQuery(
+  //   aQM.OnlineStoreByGeoCoordinates,
+  //   {
+  //     variables: {
+  //       ...location,
+  //       pageable: {
+  //         page: 0,
+  //         size: 100,
+  //         sort: "NAME",
+  //         sortDirection: "ASCENDING",
+  //       },
+  //     },
+  //     context: {
+  //       headers: {
+  //         isPrivate: true,
+  //       },
+  //     },
+  //   }
+  // );
 
-  useEffect(() => {
-    if (location.latitude) {
-      getStoneIds();
-    }
-  }, [getStoneIds, location]);
-  useEffect(() => {
-    console.log(
-      `Explore check for address in cart ${JSON.stringify(
-        localCartVarReactive
-      )}`
-    );
-    // weird I know testing for empty object, is more perfomant this way
-    if (JSON.stringify(localCartVarReactive.callBackAddress) === "{}") {
-      console.log("no address in cart");
-    } else {
-      console.log("run geoquery");
-      // will  run the get geo co-ordinates now
-      runGeoQuery(); // currently works on the backend
-      // for forseable future will need these values so backend can cope
-      // location.push(1.5, 1.5);
-      // setIsReady(true);
-    }
-  }, [localCartVarReactive, runGeoQuery]);
+  // useEffect(() => {
+  //   if (location.latitude) {
+  //     getStoneIds();
+  //   }
+  // }, [getStoneIds, location]);
+  // useEffect(() => {
+  //   console.log(
+  //     `Explore check for address in cart ${JSON.stringify(
+  //       localCartVarReactive
+  //     )}`
+  //   );
+  //   // weird I know testing for empty object, is more perfomant this way
+  //   if (JSON.stringify(localCartVarReactive.callBackAddress) === "{}") {
+  //     console.log("no address in cart");
+  //   } else {
+  //     console.log("run geoquery");
+  //     // will  run the get geo co-ordinates now
+  //     runGeoQuery(); // currently works on the backend
+  //     // for forseable future will need these values so backend can cope
+  //     // location.push(1.5, 1.5);
+  //     // setIsReady(true);
+  //   }
+  // }, [localCartVarReactive, runGeoQuery]);
   //get user's current favourite categories
   const { data: categories, refetch } = useQuery(aQM.GET_PREFERRED_CATEGORIES, {
     variables: {
@@ -166,7 +166,7 @@ export default function Index(props) {
                 }}
               />
               <AddressBar />
-              {location && categories?.getPreferredCategories && isAuth && (
+              {categories?.getPreferredCategories && isAuth && (
                 <View
                   style={{
                     backgroundColor: "white",
@@ -199,50 +199,46 @@ export default function Index(props) {
           <ExploreHeader searchText={props.textToSearch} {...props} />
         )}
       >
-        {location && (
-          <ProductList
-            listType="All"
-            filterParams={{
-              // stores: storeIds?.onlineStoreByGeoCoordinates.content
-              //   ? storeIds.onlineStoreByGeoCoordinates.content.map(
-              //       (item) => item.id
-              //     )
-              //   : [],
-              addressId: localCartVarReactive.deliverAddress,
-              textToSearch,
-            }}
-            index={0}
-            filter={
-              textToSearch.length > 0
-                ? "ACTIVE_BY_STORES_AND_FULL_TEXT_SEARCH"
-                : "BY_ADDRESS_ID"
-            }
-            tabLabel="All"
-          />
-        )}
-        {location && (
-          <ProductList
-            listType="Announcements"
-            filterParams={{
-              stores: storeIds?.onlineStoreByGeoCoordinates.content
-                ? storeIds.onlineStoreByGeoCoordinates.content.map(
-                    (item) => item.id
-                  )
-                : [],
-              textToSearch,
-            }}
-            index={1}
-            filter={
-              textToSearch.length > 0
-                ? "ACTIVE_BY_STORES_AND_FULL_TEXT_SEARCH"
-                : "ACTIVE_BY_STORES_AND_ANNOUNCEMENT"
-            }
-            tabLabel="Announcements"
-            isAnnouncement={true}
-          />
-        )}
-        {location &&
-          categories?.getPreferredCategories &&
+        <ProductList
+          listType="All"
+          filterParams={{
+            // stores: storeIds?.onlineStoreByGeoCoordinates.content
+            //   ? storeIds.onlineStoreByGeoCoordinates.content.map(
+            //       (item) => item.id
+            //     )
+            //   : [],
+            addressId: localCartVarReactive.deliverAddress,
+            textToSearch,
+          }}
+          index={0}
+          filter={
+            textToSearch.length > 0
+              ? "ACTIVE_BY_STORES_AND_FULL_TEXT_SEARCH"
+              : "BY_ADDRESS_ID"
+          }
+          tabLabel="All"
+        />
+
+        <ProductList
+          listType="Announcements"
+          filterParams={{
+            stores: storeIds?.onlineStoreByGeoCoordinates.content
+              ? storeIds.onlineStoreByGeoCoordinates.content.map(
+                  (item) => item.id
+                )
+              : [],
+            textToSearch,
+          }}
+          index={1}
+          filter={
+            textToSearch.length > 0
+              ? "ACTIVE_BY_STORES_AND_FULL_TEXT_SEARCH"
+              : "ACTIVE_BY_STORES_AND_ANNOUNCEMENT"
+          }
+          tabLabel="Announcements"
+          isAnnouncement={true}
+        />
+        {categories?.getPreferredCategories &&
           categories?.getPreferredCategories.map((category, index) => (
             <ProductList
               key={`${index}`}

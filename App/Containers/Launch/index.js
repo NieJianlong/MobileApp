@@ -45,9 +45,6 @@ export default function LaunchScreen() {
     //get username and possword from localStorage
     const username = await getLocalStorageValue(LOCAL_STORAGE_USER_NAME);
     const password = await getLocalStorageValue(LOCAL_STORAGE_USER_PASSWORD);
-    console.log("====================================");
-    console.log(username, password);
-    console.log("====================================");
     //NavigationService.navigate("MainScreen");
     //if username && password exits,we can login auto
     if (username && password) {
@@ -63,6 +60,9 @@ export default function LaunchScreen() {
         isAuth: true,
       });
       let decoded = jwt_decode(access_token);
+      console.log('decoded====================================');
+      console.log(decoded);
+      console.log('====================================');
       global.access_token = access_token;
       global.userProfileId = decoded.sub;
       getBuyerId();

@@ -105,6 +105,9 @@ function LoginScreen(props) {
               );
 
               let decoded = jwt_decode(access_token);
+              console.log('decoded====================================');
+              console.log(decoded);
+              console.log('====================================');
               global.userProfileId = decoded.sub;
               // this is wrong need request for buyerId from userId
               client

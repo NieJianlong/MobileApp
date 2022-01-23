@@ -20,7 +20,7 @@ import {
 import CheckBox from "../Components/CheckBox";
 import SearchBox from "../Components/SearchBox";
 import NavigationService from "../../../Navigation/NavigationService";
-import { Colors, Images } from "../../../Themes";
+import {  Images } from "../../../Themes";
 
 import styles from "./styles";
 import { GetBuyerOrders } from "../orderQuery.js/index";
@@ -155,9 +155,6 @@ class Order extends Component {
       statusText.substring(1, statusText.length).toLowerCase() +
       " at " +
       moment(item.orderDatetime).format("DD/MM/YYYY");
-    console.log("item====================================");
-    console.log(item);
-    console.log("====================================");
     return (
       <TouchableOpacity
         onPress={() => {

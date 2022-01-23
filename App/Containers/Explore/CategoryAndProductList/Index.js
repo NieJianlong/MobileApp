@@ -143,7 +143,7 @@ export default function Index(props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <CollapsibleHeaderTabView
+      {/* <CollapsibleHeaderTabView
         prerenderingSiblingsNumber={1}
         makeHeaderHeight={() => vs(50)}
         tabBarActiveTextColor={colors.primary}
@@ -222,11 +222,7 @@ export default function Index(props) {
         <ProductList
           listType="Announcements"
           filterParams={{
-            stores: storeIds?.onlineStoreByGeoCoordinates.content
-              ? storeIds.onlineStoreByGeoCoordinates.content.map(
-                  (item) => item.id
-                )
-              : [],
+            stores: [],
             textToSearch,
           }}
           index={1}
@@ -251,17 +247,13 @@ export default function Index(props) {
               }
               tabLabel={category.name}
               filterParams={{
-                stores: storeIds?.onlineStoreByGeoCoordinates.content
-                  ? storeIds.onlineStoreByGeoCoordinates.content.map(
-                      (item) => item.id
-                    )
-                  : [],
+                stores: [],
                 category: category.name,
                 textToSearch,
               }}
             />
           ))}
-      </CollapsibleHeaderTabView>
+      </CollapsibleHeaderTabView> */}
     </View>
   );
 }

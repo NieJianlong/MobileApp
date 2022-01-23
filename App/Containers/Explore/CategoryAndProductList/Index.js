@@ -136,7 +136,7 @@ export default function Index(props) {
     },
     context: {
       headers: {
-        isPrivate: false,
+        isPrivate: true,
       },
     },
   });

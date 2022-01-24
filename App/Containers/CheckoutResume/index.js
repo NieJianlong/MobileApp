@@ -123,7 +123,7 @@ function CheckoutResume(props) {
                   key: "rzp_test_owK1UREmxZCSL2",
                   amount: "50000",
                   name: "Acme Corp",
-                  id: "order_IKjwMWQ66vcQb1", //Replace this with an order_id created using Orders API.
+                  id: "order_InTPbMNsmgyvWw", //Replace this with an order_id created using Orders API.
                   prefill: {
                     email: "bluestar929@outlook.com",
                     contact: "8616525825013",

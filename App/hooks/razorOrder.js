@@ -14,7 +14,7 @@ export const useCreateRazorOrder = (orderNumber, orderId, amount) => {
         request: {
           orderNumber: "ORDER-17012022-101727620",
           orderId: "a8f0ae56-ded2-4b82-8a64-f46f67a03037",
-          amount: 90,
+          amount: 10,
         },
       },
       context: {

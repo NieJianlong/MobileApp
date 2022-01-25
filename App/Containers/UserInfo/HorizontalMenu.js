@@ -27,13 +27,13 @@ import { View } from "react-native";
  */
 function HorizontalMenu(props) {
   const MenuConfig = [
-    // {
-    //   title: "1 Click Purchasing",
-    //   icon: images.userPurchaseImage,
-    //   textTip: "You haven't added a default \n purchase preference yet",
-    //   selectedIcon: images.userPurchaseImage,
-    //   key: "Purchasing",
-    // },
+    {
+      title: "1 Click Purchasing",
+      icon: images.userPurchaseImage,
+      textTip: "You haven't added a default \n purchase preference yet",
+      selectedIcon: images.userPurchaseImage,
+      key: "Purchasing",
+    },
     {
       title: "My Addresses",
       icon: images.userUAddressImage,

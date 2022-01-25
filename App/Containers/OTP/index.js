@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   StatusBar,
   Text,
   TouchableOpacity,
-  ScrollView,
   TextInput,
   Keyboard,
 } from "react-native";
@@ -33,6 +32,10 @@ import colors from "../../Themes/Colors";
 import { AlertContext } from "../Root/GlobalContext";
 import CountDown from "react-native-countdown-component";
 import { t } from "react-native-tailwindcss";
+import {
+  useForgotPasswordStep1SendNotificationEmailMutation,
+  useResendVerificationCodeInEmailMutation,
+} from "../../../generated/graphql";
 
 function OTPScreen(props) {
   const { dispatch } = useContext(AlertContext);
@@ -54,6 +57,10 @@ function OTPScreen(props) {
   });
 
   const [resetPasswordStep2] = useMutation(ForgotPasswordStep2VerifyTokenEmail);
+  const [forgetPasswordResendCode] =
+    useForgotPasswordStep1SendNotificationEmailMutation();
+
+  const [resendCode] = useResendVerificationCodeInEmailMutation();
 
   let [keyboardHeight, setKeyboardHeight] = useState(0);
   let [allowToResendCode, setAllowToResendCode] = useState(false);
@@ -80,7 +87,7 @@ function OTPScreen(props) {
         payload: {
           visible: true,
           message:
-            "A confirmation email has been sent to your registered email address",
+            "A validation code has been sent to your registered email address",
           color: colors.success,
           title: "Congratulations on your successful registration",
         },
@@ -148,7 +155,7 @@ function OTPScreen(props) {
 
     setTimeout(() => {
       setAllowToResendCode(true);
-    }, 10000);
+    }, 3000);
 
     return () => {
       // Anything in here is fired on component unmount.
@@ -282,7 +289,56 @@ function OTPScreen(props) {
     return (
       <View>
         <TouchableOpacity
-          onPress={() => props.navigation.goBack()}
+          onPress={() => {
+            if (params.fromScreen === "ForgotPasswordScreen") {
+              forgetPasswordResendCode({
+                variables: { email: params?.phone ?? "" },
+                onCompleted: (res) => {
+                  dispatch({
+                    type: "changAlertState",
+                    payload: {
+                      visible: true,
+                      message: `A validation code has been sent to ${params?.phone}`,
+                      color: colors.success,
+                    },
+                  });
+                },
+                onError: () => {
+                  dispatch({
+                    type: "changAlertState",
+                    payload: {
+                      visible: true,
+                      message: "Resend validation code failed",
+                      color: colors.primary,
+                    },
+                  });
+                },
+              });
+            } else {
+              resendCode({
+                variables: { emailAddress: params?.phone },
+                onCompleted: (res) => {
+                  dispatch({
+                    type: "changAlertState",
+                    payload: {
+                      visible: true,
+                      message: `A validation code has been sent to ${params?.phone}`,
+                      color: colors.success,
+                    },
+                  });
+                },
+                onError: () => {
+                  dispatch({
+                    type: "changAlertState",
+                    payload: {
+                      visible: true,
+                      message: "Resend validation code failed",
+                      color: colors.primary,
+                    },
+                  });
+                },});
+            }
+          }}
           style={styles.btnResendCode}
         >
           <Text
@@ -291,10 +347,22 @@ function OTPScreen(props) {
               !allowToResendCode && { color: Colors.grey80 },
             ]}
           >
-            I DIDN{"'"}T RECEIVE A CODE
+            I DIDN{"'"}T RECEIVE A CODE,RESEND
           </Text>
         </TouchableOpacity>
-
+        {/* <Button
+          disabled={false}
+          onPress={() => {
+            if (params.fromScreen === "ForgotPasswordScreen") {
+              forgetPasswordResendCode({
+                variables: { email: params?.phone ?? "" },
+              });
+            } else {
+              resendCode({ variables: { emailAddress: params?.phone } });
+            }
+          }}
+          text={"RESEND"}
+        /> */}
         <Button
           disabled={
             field1 === "" ||

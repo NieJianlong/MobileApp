@@ -1,6 +1,5 @@
 import { ScaledSheet } from "react-native-size-matters";
 import { ApplicationStyles, Colors, Fonts } from "../../Themes";
-import { isIphoneX } from "react-native-iphone-x-helper";
 import AppConfig from "../../Config/AppConfig";
 
 export default ScaledSheet.create({

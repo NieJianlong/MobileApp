@@ -4,12 +4,12 @@ import { s, ScaledSheet, vs } from "react-native-size-matters";
 import { Fonts, Colors, ApplicationStyles, Images } from "../../../Themes";
 import AppConfig from "../../../Config/AppConfig";
 import NavigationService from "../../../Navigation/NavigationService";
-import { StarRating, Progress } from "../../../Components";
+import { StarRating } from "../../../Components";
 
 function ProductInfo(props) {
   useEffect(() => {});
 
-  const { size, product, onPress, onPressShare } = props;
+  const { size, product } = props;
 
   return (
     <TouchableOpacity

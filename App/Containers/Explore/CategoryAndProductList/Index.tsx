@@ -6,12 +6,16 @@ import { CollapsibleHeaderTabView } from "react-native-scrollable-tab-view-colla
 import { ScrollableTabBar } from "react-native-scrollable-tab-view";
 import colors from "../../../Themes/Colors";
 import fonts from "../../../Themes/Fonts";
-import { View, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  useWindowDimensions,
+} from "react-native";
 import NavigationService from "../../../Navigation/NavigationService";
 import { vs } from "react-native-size-matters";
-import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimensions";
 import { Images } from "../../../Themes";
-import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
+import {  useQuery, useReactiveVar } from "@apollo/client";
 import * as aQM from "../gql/explore_queries";
 import { localCartVar, userProfileVar } from "../../../Apollo/cache";
 import styles from "../styles";
@@ -143,7 +147,7 @@ export default function Index(props) {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* <CollapsibleHeaderTabView
+      <CollapsibleHeaderTabView
         prerenderingSiblingsNumber={1}
         makeHeaderHeight={() => vs(50)}
         tabBarActiveTextColor={colors.primary}
@@ -253,7 +257,7 @@ export default function Index(props) {
               }}
             />
           ))}
-      </CollapsibleHeaderTabView> */}
+      </CollapsibleHeaderTabView>
     </View>
   );
 }

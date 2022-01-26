@@ -66,7 +66,7 @@ export default function ProductList(props) {
     },
     context: {
       headers: {
-        isPrivate: false,
+        isPrivate: true,
       },
     },
     onError: (res) => {},
@@ -75,7 +75,7 @@ export default function ProductList(props) {
       // add missing fields for product review
       // update for name changes in data from server
       setNoMore(false);
-      setServerData(res.getListings);
+      setServerData(res.getListings.content);
     },
   });
 
@@ -124,7 +124,7 @@ export default function ProductList(props) {
         setIsRereshing(true);
         refetch &&
           refetch().then((res) => {
-            setServerData(res.data.getListings);
+            setServerData(res.data.getListings.content);
             setIsRereshing(false);
             setNoMore(false);
             setPage(0);

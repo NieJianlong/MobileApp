@@ -439,7 +439,7 @@ function OTPScreen(props) {
           {renderOTPInput()}
 
           <View style={{ flex: 1 }} />
-          {params.fromScreen !== "ForgotPasswordScreen" && (
+          {/* {params.fromScreen !== "ForgotPasswordScreen" && (
             <TouchableOpacity
               style={[
                 t.flexRow,
@@ -474,7 +474,7 @@ function OTPScreen(props) {
                 Resend the verification code
               </Text>
             </TouchableOpacity>
-          )}
+          )} */}
 
           {renderAction()}
         </View>

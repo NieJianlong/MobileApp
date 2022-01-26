@@ -82,10 +82,6 @@ type CategoryView {
   description: String
 }
 
-type Chat {
-  id: ID!
-}
-
 type CollectionPoint {
   collectionPointId: ID
   microHubId: ID
@@ -136,6 +132,14 @@ scalar Date
 """SCALARS"""
 scalar DateTime
 
+enum DeliveryOption {
+  UNDEFINED
+  COURIER_DELIVERY
+  SELLER_DIRECT_DELIVERY
+  COLLECTION_POINT_PICKUP
+  SELLER_LOCATION_PICKUP
+}
+
 scalar FileUpload
 
 """INPUTS"""
@@ -159,13 +163,12 @@ enum FilterType {
   BY_STORE_ID
   BY_SELLER
   ACTIVE_BY_STORES
-  ACTIVE_BY_STORES_AND_ANNOUNCEMENT
-  ACTIVE_BY_STORES_AND_CATEGORY
-  ACTIVE_BY_STORES_AND_SELLER
-  ACTIVE_BY_STORES_AND_WISH_LIST
-  ACTIVE_BY_STORES_AND_FULL_TEXT_SEARCH
-  BY_STORES_AND_SHARE_LIST
-  BY_ADDRESS_ID
+  ACTIVE_BY_ADDRESS_ID_AND_ANNOUNCEMENT
+  ACTIVE_BY_ADDRESS_ID_AND_CATEGORY
+  ACTIVE_BY_ADDRESS_ID_AND_SELLER
+  ACTIVE_BY_ADDRESS_ID_AND_WISH_LIST
+  ACTIVE_BY_ADDRESS_ID_AND_FULL_TEXT_SEARCH
+  ACTIVE_BY_ADDRESS_ID_AND_SHARE_LIST
 }
 
 type Images {
@@ -212,6 +215,11 @@ input ListingStatusInput {
   status: ProductListingStatus!
 }
 
+input ListingStoreInput {
+  storeId: String!
+  microHubId: String
+}
+
 input ListingVariantInput {
   variantId: String
   priceId: String!
@@ -245,19 +253,19 @@ type Mutation {
 
   """todo: check if still required"""
   addAnnouncement(productId: String, validityInterval: Int, announcementText: String, announcementDatetime: DateTime): Announcement!
-  createProductListings(input: ProductListingsInput): [ProductListing]
-  updateProductListing(input: ProductListingUpdateInput): ProductListing
-  saveListingVariants(input: ProductListingVariantInput): [ProductListingVariant]
-  saveListingCollectionPoint(input: CollectionPointInput): CollectionPoint
-  saveListingSellerLocation(input: SellerLocationInput): CollectionPoint
-  saveListingSellerDirectDelivery(input: SellerDirectDeliveryInput): SellerDirectDeliveryResponse
-  saveListingCourierDeliveryDetails(input: CourierDeliveryDetailsInput): CourierDeliveryDetails
-  updateListingStatus(input: ListingStatusInput): ProductListing
-  deleteProductListing(listingId: String!): Boolean
-  cloneListing(listingIds: [String]!, startDate: DateTime): [ProductListing]
-  createRecurringListings(input: RecurringListingInput): [ProductListing]
-  reduceSoldQuantity(input: VariantSoldQuantityInput): Boolean
-  incrementSoldQuantity(input: VariantSoldQuantityInput): Boolean
+  createProductListings(input: ProductListingsInput!): [ProductListing!]!
+  updateProductListing(input: ProductListingUpdateInput!): ProductListing!
+  saveListingVariants(input: ProductListingVariantInput!): [ProductListingVariant!]!
+  saveListingCollectionPoint(input: CollectionPointInput!): CollectionPoint!
+  saveListingSellerLocation(input: SellerLocationInput!): CollectionPoint!
+  saveListingSellerDirectDelivery(input: SellerDirectDeliveryInput!): SellerDirectDeliveryResponse!
+  saveListingCourierDeliveryDetails(input: CourierDeliveryDetailsInput!): CourierDeliveryDetails!
+  updateListingStatus(input: ListingStatusInput!): ProductListing!
+  deleteProductListing(listingId: String!): Boolean!
+  cloneListing(listingIds: [String!]!, startDate: DateTime): [ProductListing!]!
+  createRecurringListings(input: RecurringListingInput!): [ProductListing!]!
+  reduceSoldQuantity(input: VariantSoldQuantityInput!): Boolean!
+  incrementSoldQuantity(input: VariantSoldQuantityInput!): Boolean!
   createProduct(productCreateInput: ProductCreateInput!): Product!
   updateProductGeneral(productInput: ProductUpdateStep1!): ProductStep1Response!
   deleteProduct(productId: String!): Boolean
@@ -338,7 +346,7 @@ type Price {
 """TYPES"""
 type Product {
   id: ID!
-  shortName: String
+  shortName: String!
   longName: String
   description: String
 }
@@ -372,39 +380,28 @@ input ProductDetailsInput {
 
 type ProductListing {
   id: ID!
-  product: Product
-  store: Store
-  chat: Chat
+  product: Product!
+  store: Store!
   announcement: Announcement
-  chatMuteFlag: Boolean
-  numberOfItems: Int
-  maxQuantityPerCart: Int
   closedDate: Date
   deliveryDate: Date
-  productListingStatus: ProductListingStatus
-  minSoldQuantity: Int
-  openUntil: Date
-  startDate: DateTime
+  productListingStatus: ProductListingStatus!
+  minSoldQuantity: Int!
+  openUntil: Date!
+  startDate: DateTime!
 }
 
 input ProductListingsInput {
   productId: String!
-  storeIds: [String]!
+  stores: [ListingStoreInput!]!
   productListingType: ProductListingType!
   openUntil: Date!
   minSoldQuantity: Int!
   startDate: DateTime!
-  chatId: String
-  chatMuteFlag: Boolean
-  numberOfItems: Int
-  minQuantityPerCart: Int
-  maxQuantityPerCart: Int
-  pickupFromSeller: Boolean
   variants: [ListingVariantInput]!
-  collectionPoint: CollectionPointInput
+  deliveryOption: DeliveryOption!
   sellerLocation: SellerLocationInput
   courierDeliveryDetails: CourierDeliveryDetailsInput
-  sellerDirectDelivery: SellerDirectDeliveryInput
 }
 
 enum ProductListingStatus {
@@ -433,13 +430,6 @@ input ProductListingUpdateInput {
   listingId: String!
   productId: String!
   storeId: String
-  chatId: String
-  announcementId: String
-  chatMuteFlag: Boolean
-  numberOfItems: Int
-  minQuantityPerCart: Int
-  maxQuantityPerCart: Int
-  pickupFromSeller: Boolean
   openUntil: Date
   minSoldQuantity: Int
   startDate: DateTime
@@ -456,7 +446,7 @@ type ProductListingVariant {
 
 input ProductListingVariantInput {
   listingId: String!
-  variants: [ListingVariantInput]!
+  variants: [ListingVariantInput!]!
 }
 
 type ProductListingView {
@@ -674,7 +664,7 @@ input RecurringListingInput {
   minSoldQuantity: Int!
   durationInDays: Int!
   startDate: DateTime!
-  variants: [ListingVariantInput]!
+  variants: [ListingVariantInput!]!
 }
 
 enum ReporterType {
@@ -801,12 +791,6 @@ type SellerListingDetailView {
   openUntil: Date
   minSoldQuantity: Int
   startDate: DateTime
-  chatId: String
-  chatMuteFlag: Boolean
-  numberOfItems: Int
-  minQuantityPerCart: Int
-  maxQuantityPerCart: Int
-  pickupFromSeller: Boolean
   variants: [SellerListingVariant!]!
   collectionPoint: CollectionPointPickupDetailView
   sellerLocation: SellerLocationPickupDetailView
@@ -859,7 +843,7 @@ type SellerListingVariant {
   itemsInStock: Int!
   defaultVariant: Boolean!
   sellerSku: String
-  options: [KeyValuePair!]!
+  options: [KeyValuePair]
 }
 
 type SellerListingView {
@@ -1011,7 +995,7 @@ enum SortType {
 
 type Store {
   id: ID!
-  name: String
+  name: String!
   description: String
   city: String
   provinceState: String

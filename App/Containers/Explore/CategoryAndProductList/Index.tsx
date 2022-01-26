@@ -19,6 +19,7 @@ import {  useQuery, useReactiveVar } from "@apollo/client";
 import * as aQM from "../gql/explore_queries";
 import { localCartVar, userProfileVar } from "../../../Apollo/cache";
 import styles from "../styles";
+import { FilterType } from "../../../../generated/graphql";
 
 export default function Index(props) {
   const { textToSearch = "" } = props;
@@ -206,19 +207,15 @@ export default function Index(props) {
         <ProductList
           listType="All"
           filterParams={{
-            // stores: storeIds?.onlineStoreByGeoCoordinates.content
-            //   ? storeIds.onlineStoreByGeoCoordinates.content.map(
-            //       (item) => item.id
-            //     )
-            //   : [],
-            addressId: localCartVarReactive.deliverAddress,
-            textToSearch,
+            // will change in future
+            addressId: "2b46e963-c13b-48c1-9ea5-8073759c26c7", //localCartVarReactive.deliverAddress,
+            textToSearch: "iphone",
           }}
           index={0}
           filter={
             textToSearch.length > 0
-              ? "ACTIVE_BY_STORES_AND_FULL_TEXT_SEARCH"
-              : "BY_ADDRESS_ID"
+              ? FilterType.ActiveByAddressIdAndFullTextSearch
+              : FilterType.ActiveByAddressIdAndFullTextSearch
           }
           tabLabel="All"
         />
@@ -226,14 +223,15 @@ export default function Index(props) {
         <ProductList
           listType="Announcements"
           filterParams={{
-            stores: [],
+            // will change in future
+            addressId: "2b46e963-c13b-48c1-9ea5-8073759c26c7", //localCartVarReactive.deliverAddress,
             textToSearch,
           }}
           index={1}
           filter={
             textToSearch.length > 0
-              ? "ACTIVE_BY_STORES_AND_FULL_TEXT_SEARCH"
-              : "ACTIVE_BY_STORES_AND_ANNOUNCEMENT"
+              ? FilterType.ActiveByAddressIdAndFullTextSearch
+              : FilterType.ActiveByAddressIdAndAnnouncement
           }
           tabLabel="Announcements"
           isAnnouncement={true}
@@ -246,14 +244,14 @@ export default function Index(props) {
               index={index + 2}
               filter={
                 textToSearch.length > 0
-                  ? "ACTIVE_BY_STORES_AND_FULL_TEXT_SEARCH"
-                  : "ACTIVE_BY_STORES_AND_CATEGORY"
+                  ? FilterType.ActiveByAddressIdAndFullTextSearch
+                  : FilterType.ActiveByAddressIdAndCategory
               }
               tabLabel={category.name}
               filterParams={{
-                stores: [],
-                category: category.name,
+                addressId: "2b46e963-c13b-48c1-9ea5-8073759c26c7", //localCartVarReactive.deliverAddress,
                 textToSearch,
+                category: category.name,
               }}
             />
           ))}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Text, View, Image, TouchableOpacity, Platform } from "react-native";
 import { s, ScaledSheet, vs } from "react-native-size-matters";
 import NumberFormat from "react-number-format";
@@ -56,9 +56,7 @@ function ProductItem(props) {
           >
             <Image
               source={{
-                uri: product?.photoUrls?.length
-                  ? product?.photoUrls[0]
-                  : defultUrl,
+                uri: product.photo || defultUrl,
               }}
               style={styles.productImage}
             />

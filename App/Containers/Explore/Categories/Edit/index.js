@@ -38,6 +38,11 @@ export default function EditCategoriesScreen() {
   }, [selected]);
   const [savePrefered] = useMutation(SAVE_PREFERRED_CATEGORIES, {
     variables: { buyerId: global.buyerId, categories: selectedIds },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
     onCompleted: (res) => {
       dispatch({
         type: "changAlertState",

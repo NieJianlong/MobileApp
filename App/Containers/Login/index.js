@@ -28,6 +28,7 @@ import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import { client } from "../../Apollo/apolloClient";
 import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
+import { useResendVerificationCodeInEmailMutation } from "../../../generated/graphql";
 
 function LoginScreen(props) {
   // refs
@@ -38,6 +39,7 @@ function LoginScreen(props) {
   let [loginInput, setLoginInput] = useState("");
   let [psswd, setPsswd] = useState("");
   const { params } = useRoute();
+  const [resendCode] = useResendVerificationCodeInEmailMutation();
 
   useEffect(() => {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
@@ -87,6 +89,29 @@ function LoginScreen(props) {
               });
 
               let access_token = res.data.access_token;
+              let decoded = jwt_decode(access_token);
+                if (!decoded.email_verified) {
+                resendCode({
+                  variables: { emailAddress: decoded.email },
+                  onCompleted: () => {
+                    dispatch({
+                      type: "changLoading",
+                      payload: false,
+                    });
+                    NavigationService.navigate("OTPScreen", {
+                      fromScreen: "RegisterScreen",
+                      phone: decoded.email,
+                    });
+                  },
+                  onError: () => {
+                    dispatch({
+                      type: "changLoading",
+                      payload: false,
+                    });
+                  },
+                });
+                return;
+              }
               if (access_token === "undefined") {
                 console.log("no access token");
               }
@@ -104,10 +129,11 @@ function LoginScreen(props) {
                 psswd
               );
 
-              let decoded = jwt_decode(access_token);
-              console.log('decoded====================================');
+             
+            
+              console.log("decoded====================================");
               console.log(decoded);
-              console.log('====================================');
+              console.log("====================================");
               global.userProfileId = decoded.sub;
               // this is wrong need request for buyerId from userId
               client

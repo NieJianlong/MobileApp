@@ -8,7 +8,11 @@ import ShareOptionList from "../ShareOptionList";
 import * as aQM from "../../gql/explore_queries";
 import colors from "../../../../Themes/Colors";
 import { client } from "../../../../Apollo/apolloClient";
-import { useGetListingsQuery } from "../../../../../generated/graphql";
+import {
+  GetListingsDocument,
+  useGetListingsLazyQuery,
+  useGetListingsQuery,
+} from "../../../../../generated/graphql";
 const pageSize = 5;
 
 const sortOptions = [
@@ -60,6 +64,7 @@ export default function ProductList(props) {
     sortDirection: sortItem.sortDirection,
     pageSize,
   };
+
   const { loading, error, data, refetch, fetchMore } = useGetListingsQuery({
     variables: {
       searchOptions: searchOptions,
@@ -136,9 +141,12 @@ export default function ProductList(props) {
         if (noMore) {
           return;
         }
+        if (page + 1 >= data?.getListings?.totalPages) {
+          return;
+        }
         setLoadingMore(true);
         const moreData = await client.query({
-          query: aQM.GET_LISTINGS,
+          query: GetListingsDocument,
           variables: {
             searchOptions: { ...searchOptions, pageNo: page + 1 },
           },
@@ -148,7 +156,7 @@ export default function ProductList(props) {
             },
           },
         });
-        setServerData([...serverData, ...moreData.data.getListings]);
+        setServerData([...serverData, ...moreData.data.getListings.content]);
         setLoadingMore(false);
         if (moreData.data.getListings.length < pageSize) {
           setNoMore(true);

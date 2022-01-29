@@ -25,6 +25,11 @@ function Header({ selected }) {
     onCompleted: (res) => {
       NavigationService.goBack();
     },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
     onError: (res) => {},
   });
   return (

@@ -35,9 +35,10 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import ImagePicker from "react-native-image-crop-picker";
 import ActionSheet from "react-native-actionsheet";
 import { useRoute } from "@react-navigation/core";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { UPDATE_BUYER_PROFILE } from "../../Apollo/mutations/mutations_user";
 import { AlertContext } from "../Root/GlobalContext";
+import { FIND_BUYER_PROFILE } from "../../Apollo/queries/queries_user";
 
 /**
  * @description:User edit page
@@ -45,9 +46,24 @@ import { AlertContext } from "../Root/GlobalContext";
  * @return {*}
  */
 function UserEditProfile(props) {
-  const {
-    params: { firstName, lastName, email, phoneNumber },
-  } = useRoute();
+  const { loading, error, data:userProfile,refetch } = useQuery(FIND_BUYER_PROFILE, {
+    variables: { buyerId: global.buyerId },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    nextFetchPolicy: "no-cache",
+    onCompleted: (res) => {},
+    onError: (res) => {},
+  });
+  useEffect(() => {
+    refetch && refetch();
+  }, []);
+  const { firstName, lastName, email, phoneNumber } = userProfile?.buyerProfile;
+  // const {
+  //   params: { firstName, lastName, email, phoneNumber },
+  // } = useRoute();
   const { dispatch } = useContext(AlertContext);
 
   const [showBottom, setShowBottom] = useState(true);

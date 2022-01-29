@@ -26,6 +26,7 @@ import {
   FIND_BUYER_PROFILE,
   FIND_USER_PROFILE,
 } from "../../Apollo/queries/queries_user";
+import { useFocusEffect } from "@react-navigation/native";
 
 /**
  * @description:The user header component, which contains basic user information
@@ -66,16 +67,22 @@ function UserHeader(props) {
 }
 
 function UserInfo() {
-  const { loading, error, data } = useQuery(FIND_BUYER_PROFILE, {
+  const { loading, error, data,refetch } = useQuery(FIND_BUYER_PROFILE, {
     variables: { buyerId: global.buyerId },
     context: {
       headers: {
         isPrivate: true,
       },
     },
+    nextFetchPolicy: "network-only",
     onCompleted: (res) => {},
     onError: (res) => {},
   });
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch && refetch();
+    }, [refetch])
+  );
   return (
     <TouchableOpacity
       onPress={() => {

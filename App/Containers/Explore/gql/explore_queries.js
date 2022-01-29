@@ -60,127 +60,13 @@ export const GET_ALL_CATEGORIES = gql`
 export const GET_LISTINGS = gql`
   query GetListings($searchOptions: SearchOptions) {
     getListings(searchOptions: $searchOptions) {
-      productId
-      numberOfReviews
-      rating
-      closedDate
-      deliveryDate
-      productListingType
-      shippingMethodsAvailable
-      noOfOrderedItems
-      progressBarValue
-      noOfItemsInStock
-      numberOfItemsAvailable
-      minQuantityPerCart
-      maxQuantityPerCart
-      pickUpFromSeller
-      amountSaved
-      deliveryFee
-      shortName
-      longName
-      description
-      technicalDetails
-      announcementId
-      collectionPointAddressId
-      relatedProducts
-      sellerId
-      retailPrice
-      wholeSalePrice
-      percentOff
-      photo
-      photoUrls
-      highlightBullets
-      seller {
-        id
-        brandName
-        ratingCount
-        avatarUrl
-        usersRating
-        name
-        description
-        ratingCount
+      content {
+        ...ProductListingViewField
       }
-      images {
-        id
-        referenceId
-        imageName
-        imageType
-        description
-        fullPath
-      }
-      numberOfStars
-      openUntil
-      returnPolicies {
-        id
-        productId
-        name
-        description
-        value
-      }
-      listingVariants {
-        listingId
-        variantId
-        productId
-        defaultVariant
-        retailPrice
-        wholeSalePrice
-        fullPath
-        itemsInStock
-        options {
-          key
-          value
-        }
-      }
-      reviews {
-        id
-        productId
-        sellerId
-        title
-        description
-        ratingVote
-        helpfulCount
-        postedBy
-      }
-      listingId
-      storeId
-      status
-      #collectionPointAddress: Address
-      returnAddressId
-      #returnAddress: Address
-      ratingDetail {
-        zeroStar
-        oneStar
-        twoStar
-        threeStar
-        fourStar
-        fiveStar
-        sixAndMoreStar
-      }
-      #categories: [ProductCategoryView]
-
-      # productListingsOptionGroups {
-      #   optionsGroup {
-      #     groupId
-      #     optionValues {
-      #       value
-      #       defaultOptionValue
-      #     }
-      #   }
-      # }
-      # variants {
-      #   optionGroupId
-      #   initialItemsCount
-      #   itemsAvailable
-      #   itemsSold
-      #   optionsGroupPrice
-      #   optionsGroupDiscount
-      #   sku
-      #   defaultOptionGroup
-      #   options {
-      #     key
-      #     value
-      #   }
-      # }
+      pageNo
+      pageSize
+      totalPages
+      totalElements
     }
   }
 `;

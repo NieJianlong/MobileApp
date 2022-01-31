@@ -1,0 +1,33 @@
+ fragment SimpleOrderItemViewField on SimpleOrderItemView{
+  orderItemId
+  listingId
+  quantity
+  latestStatus
+  sellerId
+  variantId
+  variantOptions
+  shortName
+  photo
+  itemPrice
+  discount
+  } 
+fragment OrderViewField on OrderView{
+  orderId
+  orderNumber
+  orderDatetime
+  deliveryAddress
+  billingAddress
+  subTotal
+  serviceFees
+  shippingFees
+  totalSavings
+  orderTotal
+  orderItems{
+    ...SimpleOrderItemViewField  
+  }
+  }
+  query GetBuyerOrders($buyerId: ID!,$searchString:String!) {
+    getBuyerOrders(buyerId: $buyerId,searchString:$searchString) {
+     ...OrderViewField
+    }
+  }

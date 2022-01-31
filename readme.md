@@ -84,3 +84,5 @@ npx react-native run-android --port=5555
 get-graphql-schema https://dev-api.salamislicing.in/pm/graphql > ./App/schemas/schemaPM.graphql
 
 get-graphql-schema https://dev-api.salamislicing.in/um/graphql > ./App/schemas/schemaUM.graphql
+
+get-graphql-schema https://dev-api.salamislicing.in/om/graphql > ./App/schemas/schemaOM.graphql

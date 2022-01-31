@@ -7,17 +7,22 @@ import styles from "./styles";
 
 import ProductItem from "../Components/ProductItem";
 import { useQuery } from "@apollo/client";
-import { GET_RELATED_PRODYCTS } from "../../../Apollo/queries/queries_prodmang";
+import { useGetRelatedProductsQuery } from "../../../../generated/graphql";
 
 export default function RelatedProducts({ productId }) {
   //alert(productId);
-  const { data, error } = useQuery(GET_RELATED_PRODYCTS, {
+  const { data, error } = useGetRelatedProductsQuery({
     variables: { productId },
     onCompleted: (res) => {
       debugger;
     },
     onError: (res) => {
       debugger;
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
     },
   });
   return (

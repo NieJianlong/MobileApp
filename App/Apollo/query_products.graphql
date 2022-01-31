@@ -93,6 +93,77 @@ fragment RatingDetailField on RatingDetail{
   description
   ratingCount
  }
+ 
+ fragment SellerProductPriceField on SellerProductPrice{
+    priceId
+    currency
+    retailPrice
+    wholeSalePrice
+    salePercentage
+    totalQuantityPrice
+    taxPercentage
+ }
+
+fragment SellerProductImageField on SellerProductImage{
+  photoUrl
+  imageName
+  description
+  imageType
+}
+ fragment SellerReturnPolicyField on SellerReturnPolicy{
+  returnAddress
+  returnLabel{
+    ...SellerProductImageField
+  }
+  policies{
+    ...KeyValuePairField
+  }
+}
+fragment SellerProductVariantField on SellerProductVariant{
+  variantId
+  priceId
+  photoUrl
+  itemsInStock
+  defaultVariant
+  retailPrice
+  wholeSalePrice
+  options{
+    ...KeyValuePairField
+  }
+}
+# type SellerReturnPolicy {
+#   returnAddress: String
+#   returnLabel: SellerProductImage
+#   policies: [KeyValuePair]
+# }
+ fragment SellerProductDetailViewField on SellerProductDetailView{
+  productId
+  shortName
+  longName
+  description
+  mainPhotoUrl
+  vendorSku
+  sellerSku
+  brand
+  productType
+  productStatus
+  vendorName
+  price{
+    ...SellerProductPriceField
+  }
+  images{
+    ...SellerProductImageField
+  }
+  variants{
+    ...SellerProductVariantField
+  }
+  categoryList
+  itemsInStock
+  returnPolicy{
+    ...SellerReturnPolicyField
+  }
+ }
+
  fragment ProductListingViewField on ProductListingView{
   photo
   photoUrls
@@ -175,3 +246,10 @@ fragment RatingDetailField on RatingDetail{
       totalElements
     }
   }
+  query GetRelatedProducts($productId: ID!) {
+    getRelatedProducts(productId: $productId) {
+     ...SellerProductDetailViewField
+    }
+  }
+
+  

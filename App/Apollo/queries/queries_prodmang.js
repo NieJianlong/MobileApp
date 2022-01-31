@@ -142,34 +142,34 @@ export const PRODUCT_BY_ID = gql`
   }
 `;
 
-export const GET_RELATED_PRODYCTS = gql`
-  query GetRelatedProducts($productId: ID!) {
-    getRelatedProducts(productId: $productId) {
-      productId
-      sellerId
-      vendorSku
-      sellerSku
-      shortName
-      longName
-      description
-      brand
-      photo
-      itemsInStock
-      highlightBullets
-      technicalDetails
-      warrantyDetails
-      productType
-      productStatus
-      priceId
-      currency
-      retailPrice
-      wholeSalePrice
-      salePercentage
-      totalQuantityPrice
-      taxPercentage
-    }
-  }
-`;
+// export const GET_RELATED_PRODYCTS = gql`
+//   query GetRelatedProducts($productId: ID!) {
+//     getRelatedProducts(productId: $productId) {
+//       productId
+//       sellerId
+//       vendorSku
+//       sellerSku
+//       shortName
+//       longName
+//       description
+//       brand
+//       photo
+//       itemsInStock
+//       highlightBullets
+//       technicalDetails
+//       warrantyDetails
+//       productType
+//       productStatus
+//       priceId
+//       currency
+//       retailPrice
+//       wholeSalePrice
+//       salePercentage
+//       totalQuantityPrice
+//       taxPercentage
+//     }
+//   }
+// `;
 
 /**
  *  @Depreciated

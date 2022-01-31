@@ -20,12 +20,13 @@ import {
 import CheckBox from "../Components/CheckBox";
 import SearchBox from "../Components/SearchBox";
 import NavigationService from "../../../Navigation/NavigationService";
-import {  Images } from "../../../Themes";
+import { Images } from "../../../Themes";
 
 import styles from "./styles";
 import { GetBuyerOrders } from "../orderQuery.js/index";
 import { t } from "react-native-tailwindcss";
 import moment from "moment";
+import { useGetBuyerOrdersQuery } from "../../../../generated/graphql";
 
 class Order extends Component {
   fall = new Animated.Value(0);
@@ -262,14 +263,14 @@ class Order extends Component {
 }
 
 function OrderScreen() {
-  const { data } = useQuery(GetBuyerOrders, {
+  const { data } = useGetBuyerOrdersQuery({
     variables: { buyerId: global.buyerId, searchString: "" },
     context: {
       headers: {
         isPrivate: true,
       },
     },
-  });
+  }); 
   const orderItems = useMemo(() => {
     let finalItems = [];
     if (data) {
@@ -287,6 +288,14 @@ function OrderScreen() {
   }, [data]);
   return <Order orderItems={orderItems} />;
 }
+
+// function OrderScreen(props) {
+//   return (
+//     <div>
+      
+//     </div>
+//   );
+// }
 
 export default OrderScreen;
 // const orders = [

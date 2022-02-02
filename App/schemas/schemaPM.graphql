@@ -35,6 +35,26 @@ type Address {
   defaultAddress: Boolean
 }
 
+type AddressView {
+  addressId: ID!
+  flat: String
+  block: String
+  building: String
+  houseNumber: String
+  streetAddress1: String
+  streetAddress2: String
+  streetAddress3: String
+  townCity: String
+  villageArea: String
+  district: String
+  provinceState: String
+  country: String
+  areaCode: String
+  landmark: String
+  pinCode: String
+  addressFloor: String
+}
+
 type Announcement {
   id: ID!
   referenceId: String
@@ -157,7 +177,6 @@ input FilterParams {
 
 enum FilterType {
   UNDEFINED
-  ALL
   ACTIVE
   BY_LISTING_ID
   BY_STORE_ID
@@ -460,9 +479,7 @@ type ProductListingView {
   wholeSalePrice: Float
   salePercentage: Float
   percentOff: Int
-  deliveryFee: Float
   amountSaved: Float
-  pickUpFromSeller: Boolean
   openUntil: String
   noOfOrderedItems: Int
   noOfItemsInStock: Int
@@ -481,24 +498,27 @@ type ProductListingView {
   status: String
   rating: Int
   closedDate: String
-  deliveryDate: String
   productListingType: String
   progressBarValue: Int
   numberOfItemsAvailable: Int
-  minQuantityPerCart: Int
-  maxQuantityPerCart: Int
   qtyAvailable: Int
   minSoldQuantity: Int
   itemSold: Int
   createOn: String
   returnAddressId: String
-  returnAddress: Address
+  returnAddress: AddressView
   longName: String
   ratingDetail: RatingDetail
   announcementId: String
   sellerId: String
   categories: [ProductCategoryView]
   images: [Images]
+  deliveryOption: DeliveryOption
+  courierName: String
+  courierShippingFee: Float
+  courierShippingFeeTax: Float
+  announcementDeliveryDate: Date
+  pickupAddress: AddressView
 }
 
 input ProductPageable {
@@ -749,7 +769,7 @@ input SearchOptions {
   """default DESCENDING"""
   pageNo: Int
 
-  """default 1"""
+  """default 0"""
   pageSize: Int
 }
 
@@ -793,6 +813,7 @@ type SellerListingDetailView {
   minSoldQuantity: Int
   startDate: DateTime
   variants: [SellerListingVariant!]!
+  deliveryOption: DeliveryOption!
   collectionPoint: CollectionPointPickupDetailView
   sellerLocation: SellerLocationPickupDetailView
   courierDelivery: CourierDeliveryDetailView

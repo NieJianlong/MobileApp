@@ -361,6 +361,19 @@ type GenericResponse {
   message: String
 }
 
+input MicroHubForCreate {
+  serviceOperatorId: ID!
+  country: String
+  state: String
+  pinCode: String
+  cityTownVillage: String
+  streetColonyName: String
+  flatHomeApartmentBuilding: String
+  contactPerson: String
+  contactNumber: String
+  openingHours: [String]
+}
+
 type MicroHubResponse {
   microHubId: ID
   address: AddressResponse
@@ -377,6 +390,7 @@ type Mutation {
   createGuestBuyer(request: BuyerProfileRequestForCreate!): BuyerProfileResponse
   validateCode(request: ValidateCodeRequest!): ValidateCodeResponse
   createServiceOperator(request: ServiceOperatorProfileForCreate!): GenericResponse
+  createMicroHub(request: MicroHubForCreate!): GenericResponse
   addRefundSalamiCredit(buyerId: ID!, refundAmount: Float!): Float
   useRefundSalamiCredit(buyerId: ID!, amount: Float!): Float
   addBonusSalamiCredit(buyerId: ID!, amount: Float!, bonusSalamiCreditExpire: DateTime): Float

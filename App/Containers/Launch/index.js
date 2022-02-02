@@ -50,24 +50,28 @@ export default function LaunchScreen() {
     if (username && password) {
       //just for test
       //NavigationService.navigate("MainScreen");
-      const { data } = await runTokenFlow({ username, password });
-      let access_token = data.access_token;
-      if (access_token === "undefined") {
-        console.log("no access token");
-      }
-      userProfileVar({
-        email: username,
-        isAuth: true,
-      });
-      let decoded = jwt_decode(access_token);
-      console.log('decoded====================================');
-      console.log(decoded);
-      console.log('====================================');
-      global.access_token = access_token;
-      global.userProfileId = decoded.sub;
-      getBuyerId();
+      try {
+        const { data } = await runTokenFlow({ username, password });
+        let access_token = data.access_token;
+        if (access_token === "undefined") {
+          console.log("no access token");
+        }
+        userProfileVar({
+          email: username,
+          isAuth: true,
+        });
+        let decoded = jwt_decode(access_token);
+        console.log("decoded====================================");
+        console.log(decoded);
+        console.log("====================================");
+        global.access_token = access_token;
+        global.userProfileId = decoded.sub;
+        getBuyerId();
 
-      setLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY, access_token);
+        setLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY, access_token);
+      } catch (error) {
+        NavigationService.navigate("OnboardingScreen");
+      }
     } else {
       const result = await checkBuyerIdExists();
       if (result) {

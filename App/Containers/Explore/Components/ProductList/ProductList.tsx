@@ -5,12 +5,10 @@ import { HPageViewHoc } from "react-native-head-tab-view";
 import ExploreSortBar from "../ExploreSortBar";
 import { AlertContext } from "../../../Root/GlobalContext";
 import ShareOptionList from "../ShareOptionList";
-import * as aQM from "../../gql/explore_queries";
 import colors from "../../../../Themes/Colors";
 import { client } from "../../../../Apollo/apolloClient";
 import {
   GetListingsDocument,
-  useGetListingsLazyQuery,
   useGetListingsQuery,
 } from "../../../../../generated/graphql";
 const pageSize = 5;
@@ -32,6 +30,7 @@ const HFlatList = HPageViewHoc(FlatList);
 
 /*explore productlist component */
 export default function ProductList(props) {
+  const Container = props.isNeedTabbar ? HFlatList : FlatList;
   // if show it as row
   const { dispatch } = useContext(AlertContext);
   const [page, setPage] = useState(0);
@@ -103,7 +102,7 @@ export default function ProductList(props) {
     []
   );
   return (
-    <HFlatList
+    <Container
       index={index}
       keyboardShouldPersistTaps="always"
       ListHeaderComponent={

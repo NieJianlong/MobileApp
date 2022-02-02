@@ -37,7 +37,7 @@ export default function StoreInfo({ tabIndex, product }) {
               NavigationService.navigate("SellerStoreScreen", {
                 seller: product.seller,
                 storeId: product.storeId,
-                storeName: product.storeName
+                storeName: product.storeName,
               })
             }
           >

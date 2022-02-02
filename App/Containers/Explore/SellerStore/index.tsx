@@ -16,6 +16,8 @@ import { Images } from "../../../Themes";
 import { ScrollView } from "react-native-gesture-handler";
 import { FilterType, useGetListingsQuery } from "../../../../generated/graphql";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import ProductList from "../Components/ProductList/ProductList";
+import { t } from "react-native-tailwindcss";
 
 class SellerStoreComponent extends Component {
   fall = new Animated.Value(0);
@@ -141,17 +143,13 @@ class SellerStoreComponent extends Component {
         <StatusBar barStyle="dark-content" />
         <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
           {this.renderHeader()}
-
           {this.renderSortBar()}
-
           {this.renderBody()}
         </SafeAreaView>
-
         <BottomSheetBackground
           visible={this.state.showSortBySheet}
           controller={this.fall}
         />
-
         {this.renderSortBySheet()}
       </View>
     );
@@ -160,25 +158,54 @@ class SellerStoreComponent extends Component {
 
 function SellerStoreScreen(props) {
   const { params } = useRoute();
-  console.log('params====================================');
+  console.log("params====================================");
   console.log(params?.seller);
   console.log(params?.seller.id);
-  console.log('====================================');
+  console.log("====================================");
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
       title: params?.storeName,
     });
   }, [navigation, params?.storeName]);
-  useGetListingsQuery({
-    variables: {
-      searchOptions: {
-        filter: FilterType.ByStoreId,
-        filterParams: { storeId: params?.storeId },
-      },
-    },
-  });
-  return <SellerStoreComponent />;
+  // useGetListingsQuery({
+  //   variables: {
+  //     searchOptions: {
+  //       filter: FilterType.ByStoreId,
+  //       filterParams: { storeId: params?.storeId },
+  //     },
+  //   },
+  // });
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+      <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
+        <View style={styles.header}>
+          <AppBar
+            title={"Seller Name store"}
+            rightButton={() => (
+              <TouchableOpacity onPress={this.onPost}>
+                <Image source={Images.search} style={styles.icSearch} />
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+      </SafeAreaView>
+      <View style={[t.mT12]}>
+        <ProductList
+          listType="All"
+          isNeedTabbar={false}
+          filterParams={{
+            storeId: params?.storeId,
+          }}
+          index={0}
+          filter={FilterType.ByStoreId}
+          tabLabel="All"
+        />
+      </View>
+      {/*  */}
+    </View>
+  );
 }
 
 export default SellerStoreScreen;

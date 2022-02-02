@@ -334,6 +334,11 @@ type Query {
   getOrderReturn(orderReturnId: String!): OrderReturnResponse!
   getOrderReturnStatus(orderReturnId: String!): OrderReturnStatusResponse!
   getSellerOrderReturns(options: OrderReturnOptions!): SellerOrderReturnResponse!
+
+  """temporary for testing only - remove"""
+  getClientCredentialsToken: String!
+  isTokenValid(token: String): Boolean!
+  getAccessToken(clientId: String!, clientSecret: String!): String!
 }
 
 enum RefundMethod {

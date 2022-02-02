@@ -29,26 +29,24 @@ fragment RatingDetailField on RatingDetail{
   sixAndMoreStar
  }
 
- fragment AddressField on Address{
-  id
-  flat
-  floor
-  block
-  building
-  houseNumber
-  streetAddress1
-  streetAddress2
-  townCity
-  villageArea
-  district
-  provinceState
-  country
-  areaCode
-  landMark
-  pinCode
-  addressType
-  referenceId
-  defaultAddress
+ fragment AddressField on AddressView{
+    addressId
+    flat
+    block
+    building
+    houseNumber
+    streetAddress1
+    streetAddress2
+    streetAddress3
+    townCity
+    villageArea
+    district
+    provinceState
+    country
+    areaCode
+    landmark
+    pinCode
+    addressFloor
  }
  fragment ReviewViewField on ReviewView{
   id
@@ -132,7 +130,7 @@ fragment SellerProductVariantField on SellerProductVariant{
   }
 }
 # type SellerReturnPolicy {
-#   returnAddress: String
+#   returnAddress,
 #   returnLabel: SellerProductImage
 #   policies: [KeyValuePair]
 # }
@@ -174,9 +172,9 @@ fragment SellerProductVariantField on SellerProductVariant{
   wholeSalePrice
   salePercentage
   percentOff
-  deliveryFee
+  # deliveryFee
   amountSaved
-  pickUpFromSeller
+  # pickUpFromSeller
   openUntil
   noOfOrderedItems
   noOfItemsInStock
@@ -204,13 +202,13 @@ fragment SellerProductVariantField on SellerProductVariant{
   status
   rating
   closedDate
-  deliveryDate
+  # deliveryDate
   productListingType
   # shippingMethodsAvailable
   progressBarValue
   numberOfItemsAvailable
-  minQuantityPerCart
-  maxQuantityPerCart
+  # minQuantityPerCart
+  # maxQuantityPerCart
   qtyAvailable
   minSoldQuantity
   itemSold
@@ -231,7 +229,14 @@ fragment SellerProductVariantField on SellerProductVariant{
   sellerId
   categories{...ProductCategoryViewField}
   images{...ImagesField}
-
+  deliveryOption
+  courierName
+  courierShippingFee
+  courierShippingFeeTax
+  announcementDeliveryDate
+  pickupAddress{
+    ...AddressField
+  }
 }
    
 

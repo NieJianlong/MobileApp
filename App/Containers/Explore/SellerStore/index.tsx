@@ -1,42 +1,32 @@
-import React, { Component } from "react";;
-import {
-  View,
-  StatusBar,
-  Text,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  ImageBackground,
-} from "react-native";;
-import { SafeAreaView } from "react-native-safe-area-context";;
-import { s, vs } from "react-native-size-matters";;
-import Animated from "react-native-reanimated";;
-
-import styles from "./styles";;
+import React, { Component, useEffect } from "react";
+import { View, StatusBar, Text, Image, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { vs } from "react-native-size-matters";
+import Animated from "react-native-reanimated";
+import styles from "./styles";
 
 import {
   AppBar,
   BottomSheetBackground,
   BottomSheet,
-} from "../../../Components";;
-import ProductItem from "../Components/ProductItem";;
-import ShareOptionList from "../Components/ShareOptionList";;
-import CheckBox from "../Components/CheckBox";;
-import { Colors, Images } from "../../../Themes";;
-import NavigationService from "../../../Navigation/NavigationService";;
-import { ScrollView } from "react-native-gesture-handler";;
+} from "../../../Components";
+import ProductItem from "../Components/ProductItem";
+import CheckBox from "../Components/CheckBox";
+import { Images } from "../../../Themes";
+import { ScrollView } from "react-native-gesture-handler";
+import { FilterType, useGetListingsQuery } from "../../../../generated/graphql";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-class SellerStoreScreen extends Component {
+class SellerStoreComponent extends Component {
   fall = new Animated.Value(0);
-
   constructor(props) {
-    super(props);;
+    super(props);
     this.state = {
       showSortBySheet: false,
 
       showProductAsRows: true,
       sortOption: 1,
-    };;
+    };
   }
 
   componentDidMount() {}
@@ -44,11 +34,11 @@ class SellerStoreScreen extends Component {
   toggleSortBySheet = () => {
     this.setState({ showSortBySheet: !this.state.showSortBySheet }, () => {
       if (this.state.showSortBySheet) {
-        this.sortBySheet.snapTo(0);;
+        this.sortBySheet.snapTo(0);
       } else {
-        this.sortBySheet.snapTo(1);;
+        this.sortBySheet.snapTo(1);
       }
-    });;
+    });
   };
 
   renderHeader() {
@@ -63,7 +53,7 @@ class SellerStoreScreen extends Component {
           )}
         />
       </View>
-    );;
+    );
   }
 
   renderSortBar() {
@@ -78,7 +68,7 @@ class SellerStoreScreen extends Component {
 
         <TouchableOpacity
           onPress={() => {
-            this.setState({ showProductAsRows: !this.state.showProductAsRows });;
+            this.setState({ showProductAsRows: !this.state.showProductAsRows });
           }}
         >
           <Image
@@ -91,7 +81,7 @@ class SellerStoreScreen extends Component {
           />
         </TouchableOpacity>
       </View>
-    );;
+    );
   }
 
   renderProduct = (item, index) => {
@@ -102,7 +92,7 @@ class SellerStoreScreen extends Component {
         product={item}
         size={this.state.showProductAsRows ? "M" : "L"}
       />
-    );;
+    );
   };
 
   renderBody() {
@@ -112,14 +102,14 @@ class SellerStoreScreen extends Component {
           {products.map((item, index) => this.renderProduct(item, index))}
         </View>
       </ScrollView>
-    );;
+    );
   }
 
   renderSortBySheet() {
     return (
       <BottomSheet
         customRef={(ref) => {
-          this.sortBySheet = ref;;
+          this.sortBySheet = ref;
         }}
         onCloseEnd={() => this.setState({ showSortBySheet: false })}
         callbackNode={this.fall}
@@ -138,11 +128,11 @@ class SellerStoreScreen extends Component {
                   label={i}
                 />
               </View>
-            );;
+            );
           })}
         </View>
       </BottomSheet>
-    );;
+    );
   }
 
   render() {
@@ -164,8 +154,31 @@ class SellerStoreScreen extends Component {
 
         {this.renderSortBySheet()}
       </View>
-    );;
+    );
   }
+}
+
+function SellerStoreScreen(props) {
+  const { params } = useRoute();
+  console.log('params====================================');
+  console.log(params?.seller);
+  console.log(params?.seller.id);
+  console.log('====================================');
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      title: params?.storeName,
+    });
+  }, [navigation, params?.storeName]);
+  useGetListingsQuery({
+    variables: {
+      searchOptions: {
+        filter: FilterType.ByStoreId,
+        filterParams: { storeId: params?.storeId },
+      },
+    },
+  });
+  return <SellerStoreComponent />;
 }
 
 export default SellerStoreScreen;

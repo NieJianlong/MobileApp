@@ -162,12 +162,12 @@ function SellerStoreScreen(props) {
   console.log(params?.seller);
   console.log(params?.seller.id);
   console.log("====================================");
-  const navigation = useNavigation();
-  useEffect(() => {
-    navigation.setOptions({
-      title: params?.storeName,
-    });
-  }, [navigation, params?.storeName]);
+  // const navigation = useNavigation();
+  // useEffect(() => {
+  //   navigation.setOptions({
+  //     title: params?.storeName,
+  //   });
+  // }, [navigation, params?.storeName]);
   // useGetListingsQuery({
   //   variables: {
   //     searchOptions: {
@@ -182,12 +182,12 @@ function SellerStoreScreen(props) {
       <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
         <View style={styles.header}>
           <AppBar
-            title={"Seller Name store"}
-            rightButton={() => (
-              <TouchableOpacity onPress={this.onPost}>
-                <Image source={Images.search} style={styles.icSearch} />
-              </TouchableOpacity>
-            )}
+            title={params?.storeName}
+            // rightButton={() => (
+            //   <TouchableOpacity onPress={this.onPost}>
+            //     <Image source={Images.search} style={styles.icSearch} />
+            //   </TouchableOpacity>
+            // )}
           />
         </View>
       </SafeAreaView>
@@ -196,10 +196,11 @@ function SellerStoreScreen(props) {
           listType="All"
           isNeedTabbar={false}
           filterParams={{
-            storeId: params?.storeId,
+            // storeId: params?.storeId,
+            sellerId: params?.seller.id,
           }}
           index={0}
-          filter={FilterType.ByStoreId}
+          filter={FilterType.BySeller}
           tabLabel="All"
         />
       </View>

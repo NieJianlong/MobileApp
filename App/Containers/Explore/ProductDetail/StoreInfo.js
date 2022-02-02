@@ -35,7 +35,9 @@ export default function StoreInfo({ tabIndex, product }) {
           <TouchableOpacity
             onPress={() =>
               NavigationService.navigate("SellerStoreScreen", {
-                storeId: product.seller.id,
+                seller: product.seller,
+                storeId: product.storeId,
+                storeName: product.storeName
               })
             }
           >

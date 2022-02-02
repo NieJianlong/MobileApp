@@ -20,9 +20,6 @@ import ProductItem from "../../Explore/Components/ProductItem";
 
 function GroupInfoScreen(props) {
   const { params } = useRoute();
-  console.log("params====================================");
-  console.log(params);
-  console.log("====================================");
   const { loading, error, data, refetch, fetchMore } = useQuery(GET_LISTINGS, {
     variables: {
       searchOptions: {

@@ -31,7 +31,7 @@ export default function LaunchScreen() {
     },
   });
 
-  useEffect(() => {    
+  useEffect(() => {
     if (error) {
       global.buyerId = AppConfig.guestId;
       NavigationService.navigate("MainScreen");
@@ -72,9 +72,6 @@ export default function LaunchScreen() {
     //get username and possword from localStorage
     const username = await getLocalStorageValue(LOCAL_STORAGE_USER_NAME);
     const password = await getLocalStorageValue(LOCAL_STORAGE_USER_PASSWORD);
-    console.log("====================================");
-    console.log(username, password);
-    console.log("====================================");
     //NavigationService.navigate("MainScreen");
     //if username && password exits,we can login auto
     if (username && password) {
@@ -87,6 +84,9 @@ export default function LaunchScreen() {
       }
 
       let decoded = jwt_decode(access_token);
+      console.log('decoded====================================');
+      console.log(decoded);
+      console.log('====================================');
       console.log({decoded})
       global.access_token = access_token;
       global.userProfileId = decoded.sub;

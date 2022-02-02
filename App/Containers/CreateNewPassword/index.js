@@ -1,17 +1,10 @@
 import React, { Component, useCallback, useContext } from "react";
-import {
-  View,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  Keyboard,
-} from "react-native";
+import { View, StatusBar, Text, Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { isIphoneX } from "react-native-iphone-x-helper";
 import { vs } from "react-native-size-matters";
 
-import { AppBar, Button, TextInput, PasswordInput } from "../../Components";
+import { AppBar, Button, PasswordInput } from "../../Components";
 import { Colors } from "../../Themes";
 
 import styles from "./styles";
@@ -151,9 +144,6 @@ import NavigationService from "../../Navigation/NavigationService";
 // }
 function CreateNewPasswordScreen() {
   const { params } = useRoute();
-  console.log("params====================================");
-  console.log(params);
-  console.log("====================================");
   const navigation = useNavigation();
   const { dispatch } = useContext(AlertContext);
   const [createNewPsw] = useMutation(ForgotPasswordStep3ChangeByEmail);

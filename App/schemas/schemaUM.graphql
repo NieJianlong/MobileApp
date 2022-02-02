@@ -50,15 +50,12 @@ input AddressRequestForCreate {
 }
 
 input AddressRequestToGetCoordinates {
-  country: String
+  flatHomeApartmentBuilding: String
+  streetColonyName: String
+  cityTownVillage: String
   pinCode: String
-  provinceState: String
-  townCity: String
-  villageArea: String
-  houseNumber: String
-  flatNumber: String
-  landMark: String
-  streetAddress: String
+  stateID: ID!
+  countryID: ID!
 }
 
 type AddressResponse {
@@ -84,6 +81,7 @@ type AddressResponse {
   referenceId: ID
   createdAt: DateTime
   updatedAt: DateTime
+  coordinateResponse: CoordinateResponse
 }
 
 enum AddressType {
@@ -363,6 +361,14 @@ type GenericResponse {
   message: String
 }
 
+type MicroHubResponse {
+  microHubId: ID
+  address: AddressResponse
+  openingHours: [String]
+  contactPerson: String
+  contactNumber: String
+}
+
 type Mutation {
   registerGuestBuyerToBuyer(request: BuyerProfileRequest!): BuyerProfileResponse
   registerBuyer(request: BuyerProfileRequestForCreate!): BuyerProfileResponse
@@ -370,6 +376,7 @@ type Mutation {
   updateBuyerProfile(request: BuyerProfileRequest!): BuyerProfileResponse
   createGuestBuyer(request: BuyerProfileRequestForCreate!): BuyerProfileResponse
   validateCode(request: ValidateCodeRequest!): ValidateCodeResponse
+  createServiceOperator(request: ServiceOperatorProfileForCreate!): GenericResponse
   addRefundSalamiCredit(buyerId: ID!, refundAmount: Float!): Float
   useRefundSalamiCredit(buyerId: ID!, amount: Float!): Float
   addBonusSalamiCredit(buyerId: ID!, amount: Float!, bonusSalamiCreditExpire: DateTime): Float
@@ -580,17 +587,19 @@ type Query {
   sellerProfiles: [SellerProfileResponse]
   sellerProfile(sellerId: ID!): SellerProfileResponse
   sellerProfileByUserId(userProfileId: ID!): SellerProfileResponse
+  serviceOperatorProfileByUserId(userProfileId: ID!): ServiceOperatorResponse
   addresses: [AddressResponse]
   addressById(addressId: ID!): AddressResponse
   addressByIdForGuestBuyer(addressId: ID!, guestBuyerId: ID!): AddressResponse
   getSellerAddressesById(sellerId: ID!): [AddressResponse]
   getBuyerAddressesById(buyerId: ID!): [AddressResponse]
   getGuestBuyerAddressesById(buyerId: ID!): [AddressResponse]
-  coordinatesForAddress(address: String!): CoordinateResponse
   coordinatesForAddressRequest(address: AddressRequestToGetCoordinates!): CoordinateResponse
+  coordinatesForAddressRequestFromAddressId(addressId: ID!): CoordinateResponse
   getGuestBuyerAddressByType(guestBuyerId: ID!, addressType: AddressType): [AddressResponse]
   getBuyerAddressByType(buyerId: ID!, addressType: AddressType): [AddressResponse]
   getSellerAddressByType(sellerId: ID!, addressType: AddressType): [AddressResponse]
+  getMicroHubInformation: [MicroHubResponse]
   getSellerDefaultAddressBySellerId(sellerId: ID!): AddressResponse
   getBuyerDefaultAddressByBuyerId(buyerId: ID!): AddressResponse
   getGuestBuyerDefaultAddressByBuyerId(buyerId: ID!): AddressResponse
@@ -920,6 +929,21 @@ enum SellerValidationStatus {
   DECLINED
 }
 
+input ServiceOperatorProfileForCreate {
+  username: String!
+  firstName: String
+  lastName: String
+  email: String!
+  phoneNumber: String
+  password: String!
+  roles: [String]!
+}
+
+type ServiceOperatorResponse {
+  serviceOperatorId: ID
+  userProfileResponse: UserProfileResponse
+}
+
 enum ShareChannel {
   UNDEFINED
   FACEBOOK
@@ -1038,6 +1062,22 @@ enum ShippingStatus {
 type SupportedLanguageResponse {
   id: ID
   language: String
+}
+
+type UserProfileResponse {
+  userId: ID
+  userName: String
+  firstName: String
+  lastName: String
+  email: String
+  phoneNumber: String
+  userType: UserType
+  createdAt: DateTime
+  updatedAt: DateTime
+  middleName: String
+  geoLocation: String
+  selectedCountry: CountryResponse
+  selectedSupportedLanguage: SupportedLanguageResponse
 }
 
 enum UserType {

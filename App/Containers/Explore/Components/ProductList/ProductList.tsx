@@ -7,8 +7,8 @@ import { AlertContext } from "../../../Root/GlobalContext";
 import ShareOptionList from "../ShareOptionList";
 import * as aQM from "../../gql/explore_queries";
 import colors from "../../../../Themes/Colors";
-import { useQuery } from "@apollo/client";
 import { client } from "../../../../Apollo/apolloClient";
+import { useGetListingsQuery } from "../../../../../generated/graphql";
 const pageSize = 5;
 
 const sortOptions = [
@@ -60,28 +60,25 @@ export default function ProductList(props) {
     sortDirection: sortItem.sortDirection,
     pageSize,
   };
+  const { loading, error, data, refetch, fetchMore } = useGetListingsQuery({
+    variables: {
+      searchOptions: searchOptions,
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onError: (res) => {},
+    onCompleted: (res) => {
+      // map data from server for now
+      // add missing fields for product review
+      // update for name changes in data from server
+      setNoMore(false);
+      setServerData(res.getListings.content);
+    },
+  });
 
-  const { loading, error, data, refetch, fetchMore } = useQuery(
-    aQM.GET_LISTINGS,
-    {
-      variables: {
-        searchOptions: searchOptions,
-      },
-      context: {
-        headers: {
-          isPrivate: false,
-        },
-      },
-      onError: (res) => {},
-      onCompleted: (res) => {
-        // map data from server for now
-        // add missing fields for product review
-        // update for name changes in data from server
-        setNoMore(false);
-        setServerData(res.getListings);
-      },
-    }
-  );
   //Pull up the load layout
   const LoadMoreView = useMemo(
     () => (
@@ -127,7 +124,7 @@ export default function ProductList(props) {
         setIsRereshing(true);
         refetch &&
           refetch().then((res) => {
-            setServerData(res.data.getListings);
+            setServerData(res.data.getListings.content);
             setIsRereshing(false);
             setNoMore(false);
             setPage(0);

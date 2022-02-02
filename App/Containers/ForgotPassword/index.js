@@ -1,4 +1,4 @@
-import React, { Component, useCallback, useContext, useEffect } from "react";
+import React, { Component, useCallback, useContext } from "react";
 import { View, StatusBar, Text, Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { isIphoneX } from "react-native-iphone-x-helper";
@@ -12,6 +12,7 @@ import { useMutation } from "@apollo/client";
 import { ForgotPasswordStep1SendNotificationEmail } from "./forgot_mutation";
 import colors from "../../Themes/Colors";
 import { AlertContext } from "../Root/GlobalContext";
+import { useForgotPasswordStep1SendNotificationEmailMutation } from "../../../generated/graphql";
 
 class ForgotPassword extends Component {
   _isMounted = false;
@@ -143,9 +144,8 @@ class ForgotPassword extends Component {
 }
 
 function ForgotPasswordScreen() {
-  const [getValidateCode] = useMutation(
-    ForgotPasswordStep1SendNotificationEmail
-  );
+  const [getValidateCode] =
+    useForgotPasswordStep1SendNotificationEmailMutation();
   const { dispatch } = useContext(AlertContext);
   const getCode = useCallback(
     (email) => {

@@ -4,6 +4,15 @@ directive @specifiedBy(
   url: String!
 ) on SCALAR
 
+input AddreessInput {
+  streetAddress1: String
+  streetAddress2: String
+  townCity: String
+  country: String
+  provinceState: String
+  areaCode: String
+}
+
 type Address {
   id: ID!
   flat: String
@@ -52,6 +61,14 @@ type Buyer {
   id: ID!
 }
 
+type BuyerListingResponse {
+  content: [ProductListingView]!
+  pageNo: Int!
+  pageSize: Int!
+  totalPages: Int!
+  totalElements: Int!
+}
+
 type Category {
   id: ID!
   name: String
@@ -63,10 +80,6 @@ type CategoryView {
   categoryId: ID
   name: String
   description: String
-}
-
-type Chat {
-  id: ID!
 }
 
 type CollectionPoint {
@@ -119,10 +132,18 @@ scalar Date
 """SCALARS"""
 scalar DateTime
 
+enum DeliveryOption {
+  UNDEFINED
+  COURIER_DELIVERY
+  SELLER_DIRECT_DELIVERY
+  COLLECTION_POINT_PICKUP
+  SELLER_LOCATION_PICKUP
+}
+
+scalar FileUpload
+
 """INPUTS"""
 input FilterParams {
-  latitude: Float
-  longitude: Float
   category: String
   listingId: String
   storeId: String
@@ -131,6 +152,7 @@ input FilterParams {
   textToSearch: String
   productId: String
   stores: [ID]
+  addressId: String
 }
 
 enum FilterType {
@@ -141,14 +163,12 @@ enum FilterType {
   BY_STORE_ID
   BY_SELLER
   ACTIVE_BY_STORES
-  ACTIVE_BY_STORES_AND_ANNOUNCEMENT
-  ACTIVE_BY_STORES_AND_CATEGORY
-  ACTIVE_BY_STORES_AND_SELLER
-  ACTIVE_BY_STORES_AND_WISH_LIST
-  ACTIVE_BY_STORES_AND_FULL_TEXT_SEARCH
-  BY_STORES_AND_SHARE_LIST
-  BY_PRODUCT_ID
-  BY_PRODUCT_IDS
+  ACTIVE_BY_ADDRESS_ID_AND_ANNOUNCEMENT
+  ACTIVE_BY_ADDRESS_ID_AND_CATEGORY
+  ACTIVE_BY_ADDRESS_ID_AND_SELLER
+  ACTIVE_BY_ADDRESS_ID_AND_WISH_LIST
+  ACTIVE_BY_ADDRESS_ID_AND_FULL_TEXT_SEARCH
+  ACTIVE_BY_ADDRESS_ID_AND_SHARE_LIST
 }
 
 type Images {
@@ -195,6 +215,11 @@ input ListingStatusInput {
   status: ProductListingStatus!
 }
 
+input ListingStoreInput {
+  storeId: String!
+  microHubId: String
+}
+
 input ListingVariantInput {
   variantId: String
   priceId: String!
@@ -238,26 +263,22 @@ type Mutation {
   deleteOption(optionId: String!): Boolean
 
   """todo: check if still required"""
-  addAnnouncement(productId: String, validityInterval: Int, announcementText: String, announcementDatetime: DateTime, createdAt: DateTime, updatedAt: DateTime): Announcement!
-  createProductListings(input: ProductListingsInput): [ProductListing]
-  addProductListing(productListingInput: ProductListingInput): ProductListing
-  updateProductListing(input: ProductListingUpdateInput): ProductListing
-  saveListingVariants(input: ProductListingVariantInput): [ProductListingVariant]
-  saveListingCollectionPoint(input: CollectionPointInput): CollectionPoint
-  saveListingSellerLocation(input: SellerLocationInput): CollectionPoint
-  saveListingSellerDirectDelivery(input: SellerDirectDeliveryInput): SellerDirectDeliveryResponse
-  saveListingCourierDeliveryDetails(input: CourierDeliveryDetailsInput): CourierDeliveryDetails
-  updateListingStatus(input: ListingStatusInput): ProductListing
-  deleteProductListing(listingId: String!): Boolean
-  cloneListing(listingIds: [String]!, startDate: DateTime): [ProductListing]
-  createRecurringListings(input: RecurringListingInput): [ProductListing]
-  reduceSoldQuantity(input: VariantSoldQuantityInput): Boolean
-  incrementSoldQuantity(input: VariantSoldQuantityInput): Boolean
-  createProductGeneral(productInput: ProductInputStep1!): ProductStep1Response!
+  addAnnouncement(productId: String, validityInterval: Int, announcementText: String, announcementDatetime: DateTime): Announcement!
+  createProductListings(input: ProductListingsInput!): [ProductListing!]!
+  updateProductListing(input: ProductListingUpdateInput!): ProductListing!
+  saveListingVariants(input: ProductListingVariantInput!): [ProductListingVariant!]!
+  saveListingCollectionPoint(input: CollectionPointInput!): CollectionPoint!
+  saveListingSellerLocation(input: SellerLocationInput!): CollectionPoint!
+  saveListingSellerDirectDelivery(input: SellerDirectDeliveryInput!): SellerDirectDeliveryResponse!
+  saveListingCourierDeliveryDetails(input: CourierDeliveryDetailsInput!): CourierDeliveryDetails!
+  updateListingStatus(input: ListingStatusInput!): ProductListing!
+  deleteProductListing(listingId: String!): Boolean!
+  cloneListing(listingIds: [String!]!, startDate: DateTime): [ProductListing!]!
+  createRecurringListings(input: RecurringListingInput!): [ProductListing!]!
+  reduceSoldQuantity(input: VariantSoldQuantityInput!): Boolean!
+  incrementSoldQuantity(input: VariantSoldQuantityInput!): Boolean!
+  createProduct(productCreateInput: ProductCreateInput!): Product!
   updateProductGeneral(productInput: ProductUpdateStep1!): ProductStep1Response!
-  createProductStockAndPricing(productInput: ProductInputStep2!): Product!
-  createProductReturnPolicy(productInput: ProductInputStep3!): Product!
-  updateProductStatus(productStatusInput: ProductStatusInput): Product
   deleteProduct(productId: String!): Boolean
 
   """admin product activation/deactivation"""
@@ -265,13 +286,10 @@ type Mutation {
   rejectProduct(productId: String!): Product
   acceptProduct(productId: String!): Product
 
-  """
-  add Parent category should add a main category that can have sub-categories
-  """
-  addParentCategory(name: String, description: String): Category!
-
-  """add sub category - is a category that has a parent category"""
-  addSubCategory(name: String, description: String, parentCategoryId: String): Category!
+  """category mutations"""
+  addParentCategory(name: String!, description: String!): Category!
+  addSubCategory(name: String!, description: String!, parentCategoryId: String!): Category!
+  updateCategory(name: String!, description: String!, categoryId: String!): Category!
 
   """add product to wish list - product"""
   addProductToWishlist(productId: String!, buyerId: String!): Wishlist!
@@ -342,7 +360,7 @@ type Price {
 """TYPES"""
 type Product {
   id: ID!
-  shortName: String
+  shortName: String!
   longName: String
   description: String
 }
@@ -354,7 +372,13 @@ type ProductCategoryView {
   description: String
 }
 
-input ProductInputStep1 {
+input ProductCreateInput {
+  productDetailsInput: ProductDetailsInput!
+  productStocksAndPricingInput: ProductStocksAndPricingInput!
+  productReturnPolicyInput: ProductReturnPolicyInput!
+}
+
+input ProductDetailsInput {
   shortName: String!
   longName: String
   description: String
@@ -364,78 +388,34 @@ input ProductInputStep1 {
   technicalDetails: String
   keywords: [String]
   highlightBullets: [String]
-}
-
-input ProductInputStep2 {
-  productId: ID!
-  sellerSku: String
-  retailPrice: Float!
-  wholeSalePrice: Float!
-  profit: Float
-  currency: String!
-  weight: Float
-  weightUnit: String
-  size: String
-  sizeUnit: String
-  itemsInStock: Int!
-  variantInputs: [ProductVariantInput]
-}
-
-input ProductInputStep3 {
-  productId: ID!
-  returnPolicyInputs: [ReturnPolicyInput]!
+  productImages: [FileUpload]
+  productType: String
 }
 
 type ProductListing {
   id: ID!
-  product: Product
-  store: Store
-  chat: Chat
+  product: Product!
+  store: Store!
   announcement: Announcement
-  chatMuteFlag: Boolean
-  numberOfItems: Int
-  maxQuantityPerCart: Int
   closedDate: Date
   deliveryDate: Date
-  productListingStatus: ProductListingStatus
-  minSoldQuantity: Int
-  openUntil: Date
-  startDate: DateTime
-}
-
-input ProductListingInput {
-  productId: String!
-  storeId: String
-  chatId: String
-  chatMuteFlag: Boolean
-  numberOfItems: Int
-  minQuantityPerCart: Int
-  maxQuantityPerCart: Int
-  pickupFromSeller: Boolean
-  productListingType: ProductListingType
-  openUntil: Date
-  minSoldQuantity: Int
-  startDate: DateTime
+  productListingStatus: ProductListingStatus!
+  minSoldQuantity: Int!
+  openUntil: Date!
+  startDate: DateTime!
 }
 
 input ProductListingsInput {
   productId: String!
-  storeIds: [String]!
+  stores: [ListingStoreInput!]!
   productListingType: ProductListingType!
   openUntil: Date!
   minSoldQuantity: Int!
   startDate: DateTime!
-  chatId: String
-  chatMuteFlag: Boolean
-  numberOfItems: Int
-  minQuantityPerCart: Int
-  maxQuantityPerCart: Int
-  pickupFromSeller: Boolean
   variants: [ListingVariantInput]!
-  collectionPoint: CollectionPointInput
+  deliveryOption: DeliveryOption!
   sellerLocation: SellerLocationInput
   courierDeliveryDetails: CourierDeliveryDetailsInput
-  sellerDirectDelivery: SellerDirectDeliveryInput
 }
 
 enum ProductListingStatus {
@@ -464,13 +444,6 @@ input ProductListingUpdateInput {
   listingId: String!
   productId: String!
   storeId: String
-  chatId: String
-  announcementId: String
-  chatMuteFlag: Boolean
-  numberOfItems: Int
-  minQuantityPerCart: Int
-  maxQuantityPerCart: Int
-  pickupFromSeller: Boolean
   openUntil: Date
   minSoldQuantity: Int
   startDate: DateTime
@@ -487,7 +460,7 @@ type ProductListingVariant {
 
 input ProductListingVariantInput {
   listingId: String!
-  variants: [ListingVariantInput]!
+  variants: [ListingVariantInput!]!
 }
 
 type ProductListingView {
@@ -523,7 +496,6 @@ type ProductListingView {
   closedDate: String
   deliveryDate: String
   productListingType: String
-  shippingMethodsAvailable: String
   progressBarValue: Int
   numberOfItemsAvailable: Int
   minQuantityPerCart: Int
@@ -532,8 +504,6 @@ type ProductListingView {
   minSoldQuantity: Int
   itemSold: Int
   createOn: String
-  collectionPointAddressId: String
-  collectionPointAddress: Address
   returnAddressId: String
   returnAddress: Address
   longName: String
@@ -544,12 +514,35 @@ type ProductListingView {
   images: [Images]
 }
 
+input ProductPageable {
+  sellerId: String
+  searchText: String
+  page: Int
+  size: Int
+  sort: ProductSort
+  sortDirection: SortDirection
+}
+
 type ProductRequestCount {
   product: Product
   store: Store
   requestsCount: Int
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+type ProductResponse {
+  content: [SellerProductDetailView!]!
+  pageNo: Int!
+  pageSize: Int!
+  totalPages: Int!
+  totalElements: Int!
+}
+
+input ProductReturnPolicyInput {
+  returnPolicyInputs: [ReturnPolicyInput]!
+  addressInput: AddreessInput
+  returnLabelImage: FileUpload
 }
 
 type ProductReturnPolicyView {
@@ -568,6 +561,11 @@ type ProductReviewView {
   ratingVote: Int
 }
 
+enum ProductSort {
+  NAME
+  CREATED_DATE
+}
+
 enum ProductStatus {
   UNDEFINED
   DRAFT
@@ -579,13 +577,22 @@ enum ProductStatus {
   DELETED
 }
 
-input ProductStatusInput {
-  productId: ID!
-  productStatus: ProductStatus
-}
-
 type ProductStep1Response {
   productId: ID!
+}
+
+input ProductStocksAndPricingInput {
+  sellerSku: String
+  retailPrice: Float!
+  wholeSalePrice: Float!
+  profit: Float
+  currency: String!
+  weight: Float
+  weightUnit: String
+  size: String
+  sizeUnit: String
+  itemsInStock: Int!
+  variantInputs: [ProductVariantInput]
 }
 
 enum ProductType {
@@ -616,52 +623,7 @@ input ProductVariantInput {
   itemsInStock: Int!
   defaultVariant: Boolean!
   options: [OptionValueInput]
-}
-
-type ProductVariantView {
-  variantId: ID
-  productId: ID
-  retailPrice: Float
-  wholeSalePrice: Float
-  fullPath: String
-  itemsInStock: Int
-  defaultVariant: Boolean
-  options: [KeyValuePair]
-}
-
-type ProductView {
-  productId: ID
-  sellerId: ID
-  sellerAddress: String
-  vendorSku: String
-  sellerSku: String
-  shortName: String
-  longName: String
-  description: String
-  brand: String
-  photo: String
-  itemsInStock: Int
-  highlightBullets: String
-  technicalDetails: String
-  warrantyDetails: String
-  productType: String
-  productStatus: String
-  priceId: String
-  currency: String
-  retailPrice: Float
-  wholeSalePrice: Float
-  salePercentage: Float
-  totalQuantityPrice: Float
-  taxPercentage: Float
-  numberOfStars: Float
-  numberOfReviews: Int
-  totalNumberOfStars: Int
-  variants: [ProductVariantView]
-  productReturnPolicyViews: [ProductReturnPolicyView]
-  reviews: [ReviewView]
-  categories: [ProductCategoryView]
-  images: [Images]
-  ratingDetail: RatingDetail
+  variantImage: FileUpload
 }
 
 """QUERIES"""
@@ -682,19 +644,18 @@ type Query {
 
   """return policies"""
   getPolicyNames: [PolicyNameView]!
-  getListings(searchOptions: SearchOptions): [ProductListingView]
-  getListingNeedAcceptOrReject: [ProductListingView]
-  getSellerListingGroupByProduct(options: SellerFilterOptions): SellerListingGroupResponse
-  getSellerListing(productId: String, options: SellerFilterOptions): SellerListingResponse
-  getSellerListingDetails(listingId: String!): SellerListingDetailView
+  getListings(searchOptions: SearchOptions): BuyerListingResponse!
+  getSellerListing(productId: String, options: SellerFilterOptions!): SellerListingResponse!
+  getSellerListingDetails(listingId: String!): SellerListingDetailView!
+  getSellerListingGroupByProduct(options: SellerFilterOptions!): SellerListingGroupResponse!
+  getSellerListingForAcceptOrReject(options: SellerFilterOptions!): SellerListingResponse!
   isListingAvailable(listings: [IsListingAvailableInput]): [IsListingAvailableResponse]
   announcementsByListingId(productListingId: String): [AnnouncementDTO]
   announcementsByOnlineStore(storeId: String): [Announcement]
-  getProducts(searchOptions: SearchOptions): [ProductView]
-  getSellerProductDetails(productId: String!): SellerProductDetailView
-  getProductByProductId(productId: String!): ProductView!
+  getProducts(pageable: ProductPageable): ProductResponse!
+  getProductByProductId(productId: String!): SellerProductDetailView!
   getShareInformationByProductId(productId: String): [ShareInformation]
-  getRelatedProducts(productId: ID!): [ProductView]
+  getRelatedProducts(productId: ID!): [SellerProductDetailView]
   isProductInWishlist(productId: String!, buyerId: String!): Boolean!
   findReviews(reviewSearchOptions: ReviewSearchOptions!): [ReviewResponse]
   getProductReviewSummaryResponse(productId: ID!): ReviewSummaryResponse
@@ -717,7 +678,7 @@ input RecurringListingInput {
   minSoldQuantity: Int!
   durationInDays: Int!
   startDate: DateTime!
-  variants: [ListingVariantInput]!
+  variants: [ListingVariantInput!]!
 }
 
 enum ReporterType {
@@ -805,14 +766,9 @@ input SearchOptions {
   pageSize: Int
 }
 
-enum SellerDateFilter {
-  LAST_7_DAYS
-  LAST_30_DAYS
-}
-
 type SellerDirectDeliveryDetailView {
-  announcementId: ID
-  deliveryDate: Date
+  announcementId: ID!
+  deliveryDate: Date!
 }
 
 input SellerDirectDeliveryInput {
@@ -828,39 +784,28 @@ type SellerDirectDeliveryResponse {
 
 input SellerFilterOptions {
   filterType: SellerFilterType!
-  dateFilterValue: SellerDateFilter
-  productTypeFilterValue: ProductType
-  storeFilterValues: [String]
+  listingStatus: ProductListingStatus
+  storeIds: [ID]
   pageOption: SellerPageOption!
 }
 
 enum SellerFilterType {
   NONE
-  START_DATE
-  PRODUCT_TYPE
+  LISTING_STATUS
   STORE
-  START_DATE_AND_PRODUCT_TYPE
-  START_DATE_AND_STORE
-  PRODUCT_TYPE_AND_STORE
-  START_DATE_AND_PRODUCT_TYPE_AND_STORE
+  STORE_AND_LISTING_STATUS
 }
 
 type SellerListingDetailView {
-  listingId: ID
-  product: SellerProductDetailView
+  listingId: ID!
+  product: SellerProductDetailView!
   store: SellerListingStore
   productListingType: ProductListingType
-  productListingStatus: ProductListingStatus
+  productListingStatus: ProductListingStatus!
   openUntil: Date
   minSoldQuantity: Int
   startDate: DateTime
-  chatId: String
-  chatMuteFlag: Boolean
-  numberOfItems: Int
-  minQuantityPerCart: Int
-  maxQuantityPerCart: Int
-  pickupFromSeller: Boolean
-  variants: [SellerListingVariant]
+  variants: [SellerListingVariant!]!
   collectionPoint: CollectionPointPickupDetailView
   sellerLocation: SellerLocationPickupDetailView
   courierDelivery: CourierDeliveryDetailView
@@ -869,26 +814,26 @@ type SellerListingDetailView {
 
 type SellerListingGroupResponse {
   content: [SellerListingGroupView]
-  pageNo: Int
-  pageSize: Int
-  totalPages: Int
-  totalElements: Int
+  pageNo: Int!
+  pageSize: Int!
+  totalPages: Int!
+  totalElements: Int!
 }
 
 type SellerListingGroupView {
-  productId: ID
+  productId: ID!
   shortName: String
-  ended: Int
-  active: Int
-  total: Int
+  ended: Int!
+  active: Int!
+  total: Int!
 }
 
 type SellerListingResponse {
-  content: [SellerListingView]
-  pageNo: Int
-  pageSize: Int
-  totalPages: Int
-  totalElements: Int
+  content: [SellerListingView!]!
+  pageNo: Int!
+  pageSize: Int!
+  totalPages: Int!
+  totalElements: Int!
 }
 
 type SellerListingStore {
@@ -902,23 +847,24 @@ type SellerListingStore {
 }
 
 type SellerListingVariant {
-  variantId: ID
-  priceId: ID
-  itemsAvailable: Int
-  itemsSold: Int
-  retailPrice: Float
-  wholeSalePrice: Float
+  variantId: ID!
+  priceId: ID!
+  itemsAvailable: Int!
+  itemsSold: Int!
+  retailPrice: Float!
+  wholeSalePrice: Float!
   photoUrl: String
-  itemsInStock: Int
-  defaultVariant: Boolean
+  itemsInStock: Int!
+  defaultVariant: Boolean!
   sellerSku: String
   options: [KeyValuePair]
 }
 
 type SellerListingView {
-  listingId: ID
-  productId: ID
-  shortName: String
+  listingId: ID!
+  listingStatus: ProductListingStatus!
+  productId: ID!
+  shortName: String!
   mainPhotoUrl: String
   startDate: DateTime
   closedDate: Date
@@ -927,12 +873,12 @@ type SellerListingView {
   daysLeft: Int
   totalItemsAvailable: Int
   totalItemsSold: Int
-  storeId: ID
+  storeId: ID!
   storeName: String
-  priceId: ID
+  priceId: ID!
   wholeSalePrice: Float
   retailPrice: Float
-  salePercentage: Float
+  discountPercentage: Float
   categories: [String]
 }
 
@@ -948,7 +894,7 @@ input SellerLocationInput {
 }
 
 type SellerLocationPickupDetailView {
-  collectionPointId: ID
+  collectionPointId: ID!
   streetAddress1: String
   streetAddress2: String
   townCity: String
@@ -963,9 +909,9 @@ input SellerPageOption {
 }
 
 type SellerProductDetailView {
-  productId: ID
-  shortName: String
-  longName: String
+  productId: ID!
+  shortName: String!
+  longName: String!
   description: String
   mainPhotoUrl: String
   vendorSku: String
@@ -976,7 +922,10 @@ type SellerProductDetailView {
   vendorName: String
   price: SellerProductPrice
   images: [SellerProductImage]
-  variants: [SellerProductVariant]
+  variants: [SellerProductVariant!]!
+  categoryList: [String!]!
+  itemsInStock: Int!
+  returnPolicy: SellerReturnPolicy!
 }
 
 type SellerProductImage {
@@ -987,24 +936,30 @@ type SellerProductImage {
 }
 
 type SellerProductPrice {
-  priceId: ID
-  currency: String
-  retailPrice: Float
-  wholeSalePrice: Float
+  priceId: ID!
+  currency: String!
+  retailPrice: Float!
+  wholeSalePrice: Float!
   salePercentage: Float
   totalQuantityPrice: Float
   taxPercentage: Float
 }
 
 type SellerProductVariant {
-  variantId: ID
-  priceId: ID
-  photoUrl: String
-  itemsInStock: Int
-  defaultVariant: Boolean
-  retailPrice: Float
-  wholeSalePrice: Float
-  options: [KeyValuePair]
+  variantId: ID!
+  priceId: ID!
+  photoUrl: String!
+  itemsInStock: Int!
+  defaultVariant: Boolean!
+  retailPrice: Float!
+  wholeSalePrice: Float!
+  options: [KeyValuePair!]!
+}
+
+type SellerReturnPolicy {
+  returnAddress: String
+  returnLabel: SellerProductImage
+  policies: [KeyValuePair]
 }
 
 type SellerView {
@@ -1054,7 +1009,7 @@ enum SortType {
 
 type Store {
   id: ID!
-  name: String
+  name: String!
   description: String
   city: String
   provinceState: String

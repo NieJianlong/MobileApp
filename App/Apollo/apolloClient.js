@@ -9,6 +9,7 @@ import AppConfig from "../Config/AppConfig";
 // const baseUrl = "http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com";
 //const baseUrl = "http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com";
 const baseUrl = AppConfig.baseUrl;
+console.log("baseURL", baseUrl);
 /**
  * Keycloak              --> 8080
  * IAM                   --> 8081

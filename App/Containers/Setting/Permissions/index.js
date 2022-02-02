@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   ScrollView,
@@ -6,41 +6,41 @@ import {
   Image,
   TouchableOpacity,
   Touchable,
-} from 'react-native';
-import AppConfig from '../../../Config/AppConfig';
-import { vs, s, ScaledSheet } from 'react-native-size-matters';
-import fonts from '../../../Themes/Fonts';
-import colors from '../../../Themes/Colors';
-import images from '../../../Themes/Images';
-import NavigationService from '../../../Navigation/NavigationService';
-import { MaterialTextInput, Switch, TextInput } from '../../../Components';
+} from "react-native";
+import AppConfig from "../../../Config/AppConfig";
+import { vs, s, ScaledSheet } from "react-native-size-matters";
+import fonts from "../../../Themes/Fonts";
+import colors from "../../../Themes/Colors";
+import images from "../../../Themes/Images";
+import NavigationService from "../../../Navigation/NavigationService";
+import { MaterialTextInput, Switch, TextInput } from "../../../Components";
 
 const datas = [
   {
-    title: 'Activate all',
+    title: "Activate all",
     value: false,
-    key: 'Activate',
+    key: "Activate",
   },
   {
-    title: 'Show my picture',
+    title: "Show my picture",
     value: false,
-    key: 'ANotification',
+    key: "ANotification",
   },
   {
-    title: 'Display name for chat',
+    title: "Display name for chat",
     value: true,
-    key: 'Notification',
+    key: "Notification",
   },
 ];
 function index(props) {
-  const [value, setValue] = useState('J.M');
+  const [value, setValue] = useState("J.M");
   return (
     <ScrollView>
       {datas.map((item, index) => (
         <TouchableOpacity
           key={index}
           onPress={() => {
-            NavigationService.navigate('SelectCountryOrLanguageScreen', {
+            NavigationService.navigate("SelectCountryOrLanguageScreen", {
               ...item,
             });
           }}
@@ -48,20 +48,20 @@ function index(props) {
           <View
             style={{
               paddingHorizontal: AppConfig.paddingHorizontal,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              backgroundColor: 'white',
+              flexDirection: "row",
+              justifyContent: "space-between",
+              backgroundColor: "white",
               height: vs(46),
-              alignItems: 'center',
+              alignItems: "center",
             }}
           >
             <Text
-              style={[styles.title, { fontSize: s(14), fontWeight: 'normal' }]}
+              style={[styles.title, { fontSize: s(14), fontWeight: "normal" }]}
             >
               {item.title}
             </Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Switch onSwitch={() => {}}></Switch>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Switch onSwitch={() => {}} />
             </View>
           </View>
         </TouchableOpacity>
@@ -83,8 +83,8 @@ export default index;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,
-    fontSize: '16@s',
+    fontSize: "16@s",
     color: colors.black,
-    fontWeight: '400',
+    fontWeight: "400",
   },
 });

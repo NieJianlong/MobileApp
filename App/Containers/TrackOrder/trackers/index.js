@@ -2,7 +2,7 @@ import React from "react";
 import { View, Image, Text } from "react-native";
 import { ApplicationStyles } from "../../../Themes";
 import images from "../../../Themes/Images";
-import { vs, s, ScaledSheet } from "react-native-size-matters";
+import { vs, s } from "react-native-size-matters";
 import colors from "../../../Themes/Colors";
 
 const trackers = [

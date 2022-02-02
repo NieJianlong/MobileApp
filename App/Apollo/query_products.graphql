@@ -1,0 +1,177 @@
+  
+fragment KeyValuePairField on KeyValuePair{
+  key
+  value
+}
+fragment ImagesField on Images{
+  id
+  referenceId
+  imageName
+  imageType
+  description
+  fullPath
+ }
+
+fragment ProductCategoryViewField on ProductCategoryView{
+ categoryId
+  productId
+  name
+  description
+ }
+
+fragment RatingDetailField on RatingDetail{
+  zeroStar
+  oneStar
+  twoStar
+  threeStar
+  fourStar
+  fiveStar
+  sixAndMoreStar
+ }
+
+ fragment AddressField on Address{
+  id
+  flat
+  floor
+  block
+  building
+  houseNumber
+  streetAddress1
+  streetAddress2
+  townCity
+  villageArea
+  district
+  provinceState
+  country
+  areaCode
+  landMark
+  pinCode
+  addressType
+  referenceId
+  defaultAddress
+ }
+ fragment ReviewViewField on ReviewView{
+  id
+  productId
+  sellerId
+  title
+  description
+  ratingVote
+  helpfulCount
+  postedBy
+  userName
+ }
+ fragment ListingVariantViewField on ListingVariantView{
+ listingId
+  variantId
+  productId
+  defaultVariant
+  retailPrice
+  wholeSalePrice
+  fullPath
+  itemsInStock
+  itemsAvailable
+  itemsSold
+  options{...KeyValuePairField}
+
+ }
+ fragment ProductReturnPolicyViewField on ProductReturnPolicyView{
+  
+  id
+  productId
+  name
+  description
+  value
+
+ }
+ fragment SellerViewField on SellerView{
+  id
+  brandName
+  avatarUrl
+  usersRating
+  name
+  description
+  ratingCount
+ }
+ fragment ProductListingViewField on ProductListingView{
+  photo
+  photoUrls
+  shortName
+  numberOfStars
+  numberOfReviews
+  retailPrice
+  wholeSalePrice
+  salePercentage
+  percentOff
+  deliveryFee
+  amountSaved
+  pickUpFromSeller
+  openUntil
+  noOfOrderedItems
+  noOfItemsInStock
+  description
+  technicalDetails
+  highlightBullets
+  seller{
+    ...SellerViewField
+  }
+  returnPolicies{
+   ...ProductReturnPolicyViewField
+  }
+  listingVariants{
+    ...ListingVariantViewField
+  }
+  relatedProducts
+  reviews{
+  ...ReviewViewField
+}
+
+  listingId
+  productId
+  storeId
+  storeName
+  status
+  rating
+  closedDate
+  deliveryDate
+  productListingType
+  # shippingMethodsAvailable
+  progressBarValue
+  numberOfItemsAvailable
+  minQuantityPerCart
+  maxQuantityPerCart
+  qtyAvailable
+  minSoldQuantity
+  itemSold
+  createOn
+  # collectionPointAddressId
+  # collectionPointAddress{
+  #   ...AddressField
+  # }
+  returnAddressId
+  returnAddress{
+    ...AddressField
+  }
+  longName
+  ratingDetail{
+    ...RatingDetailField
+  }
+  announcementId
+  sellerId
+  categories{...ProductCategoryViewField}
+  images{...ImagesField}
+
+}
+   
+
+  query GetListings($searchOptions: SearchOptions) {
+    getListings(searchOptions: $searchOptions) {
+      content{
+          ...ProductListingViewField
+         }
+      pageNo
+      pageSize
+      totalPages
+      totalElements
+    }
+  }

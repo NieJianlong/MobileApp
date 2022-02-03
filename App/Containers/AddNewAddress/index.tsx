@@ -1,112 +1,131 @@
-import React, { useState, useContext, useMemo } from "react";
-import {
-  View,
-  StatusBar,
-  Text,
-  TouchableOpacity as RNTouchableOpacity,
-  Platform,
-  Image,
-} from "react-native";
+import React, { useState, useEffect, useContext, useMemo } from "react";
+import { View, StatusBar, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { MaterialTextInput, Button } from "../../../Components";
+import {
+  AppBar,
+  Switch,
+  RightButton,
+  MaterialTextInput,
+} from "../../Components";
 import styles from "./styles";
-import colors from "../../../Themes/Colors";
-import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
+import colors from "../../Themes/Colors";
+import { useRoute } from "@react-navigation/native";
+import { useMutation, useQuery } from "@apollo/client";
 import {
   CREATE_ADDRESS,
-  CREATE_ADDRESS_FOR_GUEST,
-} from "../../../Apollo/mutations/mutations_user";
-import { AlertContext } from "../../Root/GlobalContext";
-import PubSub from "pubsub-js";
-import { userProfileVar } from "../../../Apollo/cache";
-import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
-import DropDownPicker from "react-native-dropdown-picker";
-import { t } from "react-native-tailwindcss";
+  UPDATE_ADDRESS,
+} from "../../Apollo/mutations/mutations_user";
+import { AlertContext } from "../Root/GlobalContext";
 import { Controller, useForm } from "react-hook-form";
-import lodash from "lodash";
-import { GetStatesByCountryId } from "../gql/explore_queries";
+import DropDownPicker from "react-native-dropdown-picker";
+import lodash, { isEmpty } from "lodash";
+import { t } from "react-native-tailwindcss";
+import { GetStatesByCountryId } from "../Explore/gql/explore_queries";
+import NavigationService from "../../Navigation/NavigationService";
+import { AddressRequestForCreate } from "../../../generated/graphql";
 
-const TouchableOpacity =
-  Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
-
-function AddLocationSheetContent(props) {
-  //123e4567-e89b-12d3-a456-556642440000
-  // const [selectedState, setSelectedState] = useState();
-  const { data } = useQuery(GetStatesByCountryId, {
-    variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
-  });
-  const userProfileVarReactive = useReactiveVar(userProfileVar);
-  const isAuth = useMemo(
-    () => userProfileVarReactive.isAuth,
-    [userProfileVarReactive.isAuth]
-  );
-
+function AddNewAddress() {
+  const { dispatch } = useContext(AlertContext);
+  const { params } = useRoute();
+  const { currentAddress } = params;
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<AddressRequestForCreate>({
+    defaultValues: {
+      building: currentAddress.building,
+      streetAddress1: currentAddress.streetAddress1,
+      townCity: currentAddress.townCity,
+      pinCode: currentAddress.pinCode,
+      provinceState: currentAddress.provinceState,
+    },
+  });
+  const { data } = useQuery(GetStatesByCountryId, {
+    variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
+  });
+
   const [open, setOpen] = useState();
-  const [addAddress] = useMutation(
-    isAuth ? CREATE_ADDRESS : CREATE_ADDRESS_FOR_GUEST,
-    {
-      context: {
-        headers: {
-          isPrivate: isAuth,
-        },
-      },
-      onCompleted: (res) => {
-        PubSub.publish("refresh-address", "");
-        dispatch({
-          type: "changAlertState",
-          payload: {
-            visible: true,
-            message: "New address added.",
-            color: colors.success,
-            title: "Address Added",
-          },
-        });
-        dispatch({ type: "hideloading" });
-        dispatch({
-          type: "changSheetState",
-          payload: {
-            showSheet: false,
-          },
-        });
-      },
-      onError: (error) => {
-        dispatch({ type: "hideloading" });
-      },
-    }
+
+  const [asDefault, setAsDefault] = useState(
+    currentAddress?.defaultAddress || false
   );
+  const [updateAddress] = useMutation(UPDATE_ADDRESS, {
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: () => {
+      dispatch({ type: "hideloading" });
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "You have successfully changed your address.",
+          color: colors.secondary00,
+          title: "Address Changed",
+        },
+      });
+
+      NavigationService.goBack();
+    },
+    onError: () => {
+      dispatch({ type: "hideloading" });
+    },
+  });
+  const [addAddress] = useMutation(CREATE_ADDRESS, {
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: () => {
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "New address added.",
+          color: colors.success,
+          title: "Address Added",
+        },
+      });
+      dispatch({ type: "hideloading" });
+      NavigationService.goBack();
+    },
+    onError: () => {
+      dispatch({ type: "hideloading" });
+    },
+  });
   const onSubmit = (data) => {
     dispatch({ type: "loading" });
-    addAddress({
-      variables: {
-        request: {
-          ...data,
-          country: "India",
-          referenceId: global.buyerId,
-          addressType: "SHIPPING",
-          defaultAddress: true,
-        },
-      },
-    });
+    isEmpty(currentAddress)
+      ? addAddress({
+          variables: {
+            request: {
+              ...data,
+              country: "India",
+              referenceId: global.buyerId,
+              addressType: "SHIPPING",
+              defaultAddress: asDefault,
+            },
+          },
+        })
+      : updateAddress({
+          variables: {
+            request: {
+              ...data,
+              country: "India",
+              referenceId: global.buyerId,
+              addressType: "SHIPPING",
+              defaultAddress: asDefault,
+              addressId: currentAddress?.addressId,
+            },
+          },
+        });
   };
-  const [showInfo, setShowInfo] = useState(false);
-  const items = useMemo(() => {
-    if (data) {
-      const allProvinces = data.getStatesByCountryId;
-      return allProvinces.map((item) => ({
-        label: item.stateName,
-        value: item.stateName,
-      }));
-    }
-    return [];
-  }, [data]);
-  const { dispatch } = useContext(AlertContext);
   const inputs = [
     {
       placeholder: "Flat/Home No.,Apartment/Building Name*",
@@ -150,6 +169,16 @@ function AddLocationSheetContent(props) {
       name: "provinceState",
     },
   ];
+  const items = useMemo(() => {
+    if (data) {
+      const allProvinces = data.getStatesByCountryId;
+      return allProvinces.map((item) => ({
+        label: item.stateName,
+        value: item.stateName,
+      }));
+    }
+    return [];
+  }, [data]);
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
@@ -157,39 +186,20 @@ function AddLocationSheetContent(props) {
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        <View style={[t.itemsCenter, t.h16, t.mT4, t.flexCol]}>
-          {/* <Text style={[styles.txtSave, { color: "transparent" }]}>SAVE</Text> */}
-          <Text style={styles.popupTitle}>Add your delivery address</Text>
-          <TouchableOpacity
-            style={[t.flexRow, t.itemsCenter]}
-            onPress={() => {
-              setShowInfo(!showInfo);
-              setTimeout(() => {
-                setShowInfo(false);
-              }, 2000);
-            }}
-          >
-            <Text style={[{ color: colors.grey80, marginTop: 8 }]}>
-              Please separate your address with commas
-            </Text>
-            <Image
-              source={require("../../../Images/info.png")}
-              style={[t.mT2]}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <View style={[styles.bodyContainer]}>
-          <KeyboardAwareScrollView contentContainerStyle={[t.flex1]}>
+        <AppBar
+          rightButton={() => (
+            <RightButton title="SAVE" onPress={handleSubmit(onSubmit)} />
+          )}
+        />
+        <View style={styles.bodyContainer}>
+          <Text style={styles.heading2Bold}>{params.title}</Text>
+          <KeyboardAwareScrollView>
             <View
-              style={[
-                {
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                  justifyContent: "space-between",
-                },
-                t.flex1,
-              ]}
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "space-between",
+              }}
             >
               {inputs.map((item, index) => {
                 return (
@@ -269,17 +279,19 @@ function AddLocationSheetContent(props) {
               })}
             </View>
           </KeyboardAwareScrollView>
-          <Button text="CONFIRM ADDRESS" onPress={handleSubmit(onSubmit)} />
+          <View style={{ marginTop: 20 }}>
+            <Switch
+              onSwitch={(res) => {
+                setAsDefault(res);
+              }}
+              active={asDefault}
+              label="Set as default address"
+            />
+          </View>
         </View>
-        {showInfo && (
-          <Image
-            source={require("../../../Images/Infoalert.png")}
-            style={[t.wFull, t.absolute, t.mT20]}
-          />
-        )}
       </SafeAreaView>
     </View>
   );
 }
 
-export default AddLocationSheetContent;
+export default AddNewAddress;

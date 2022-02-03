@@ -4,6 +4,7 @@ mutation ResendVerificationCodeInEmail($emailAddress: String!) {
      extraMessage
     }
 }
+
 mutation ForgotPasswordStep1SendNotificationEmail($email: String!) {
     forgotPasswordStep1SendNotificationEmail(email: $email) {
       email

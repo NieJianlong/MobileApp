@@ -206,22 +206,24 @@ export default function Index(props) {
       >
         <ProductList
           listType="All"
+          isNeedTabbar={true}
           filterParams={{
             // will change in future
             addressId: "2b46e963-c13b-48c1-9ea5-8073759c26c7", //localCartVarReactive.deliverAddress,
-            textToSearch: "iphone",
+            textToSearch,
           }}
           index={0}
           filter={
             textToSearch.length > 0
               ? FilterType.ActiveByAddressIdAndFullTextSearch
-              : FilterType.ActiveByAddressIdAndFullTextSearch
+              : FilterType.ActiveByAddressId
           }
           tabLabel="All"
         />
 
         <ProductList
           listType="Announcements"
+          isNeedTabbar={true}
           filterParams={{
             // will change in future
             addressId: "2b46e963-c13b-48c1-9ea5-8073759c26c7", //localCartVarReactive.deliverAddress,
@@ -239,6 +241,7 @@ export default function Index(props) {
         {categories?.getPreferredCategories &&
           categories?.getPreferredCategories.map((category, index) => (
             <ProductList
+              isNeedTabbar={true}
               key={`${index}`}
               listType={category.name}
               index={index + 2}

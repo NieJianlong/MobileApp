@@ -152,7 +152,6 @@ function OTPScreen(props) {
   useEffect(() => {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
     Keyboard.addListener("keyboardWillHide", _keyboardWillHide);
-
     setTimeout(() => {
       setAllowToResendCode(true);
     }, 3000);

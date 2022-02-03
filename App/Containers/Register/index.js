@@ -292,7 +292,6 @@ function RegisterScreen(props) {
           <Text style={styles.heading4Regular}>
             Create an account to have access to the best promos in your area!
           </Text>
-
           <TextInput
             style={styles.textInput}
             ref={(r) => (nameInput = r)}

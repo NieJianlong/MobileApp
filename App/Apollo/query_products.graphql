@@ -29,26 +29,24 @@ fragment RatingDetailField on RatingDetail{
   sixAndMoreStar
  }
 
- fragment AddressField on Address{
-  id
-  flat
-  floor
-  block
-  building
-  houseNumber
-  streetAddress1
-  streetAddress2
-  townCity
-  villageArea
-  district
-  provinceState
-  country
-  areaCode
-  landMark
-  pinCode
-  addressType
-  referenceId
-  defaultAddress
+ fragment AddressField on AddressView{
+    addressId
+    flat
+    block
+    building
+    houseNumber
+    streetAddress1
+    streetAddress2
+    streetAddress3
+    townCity
+    villageArea
+    district
+    provinceState
+    country
+    areaCode
+    landmark
+    pinCode
+    addressFloor
  }
  fragment ReviewViewField on ReviewView{
   id
@@ -93,6 +91,77 @@ fragment RatingDetailField on RatingDetail{
   description
   ratingCount
  }
+ 
+ fragment SellerProductPriceField on SellerProductPrice{
+    priceId
+    currency
+    retailPrice
+    wholeSalePrice
+    salePercentage
+    totalQuantityPrice
+    taxPercentage
+ }
+
+fragment SellerProductImageField on SellerProductImage{
+  photoUrl
+  imageName
+  description
+  imageType
+}
+ fragment SellerReturnPolicyField on SellerReturnPolicy{
+  returnAddress
+  returnLabel{
+    ...SellerProductImageField
+  }
+  policies{
+    ...KeyValuePairField
+  }
+}
+fragment SellerProductVariantField on SellerProductVariant{
+  variantId
+  priceId
+  photoUrl
+  itemsInStock
+  defaultVariant
+  retailPrice
+  wholeSalePrice
+  options{
+    ...KeyValuePairField
+  }
+}
+# type SellerReturnPolicy {
+#   returnAddress,
+#   returnLabel: SellerProductImage
+#   policies: [KeyValuePair]
+# }
+ fragment SellerProductDetailViewField on SellerProductDetailView{
+  productId
+  shortName
+  longName
+  description
+  mainPhotoUrl
+  vendorSku
+  sellerSku
+  brand
+  productType
+  productStatus
+  vendorName
+  price{
+    ...SellerProductPriceField
+  }
+  images{
+    ...SellerProductImageField
+  }
+  variants{
+    ...SellerProductVariantField
+  }
+  categoryList
+  itemsInStock
+  returnPolicy{
+    ...SellerReturnPolicyField
+  }
+ }
+
  fragment ProductListingViewField on ProductListingView{
   photo
   photoUrls
@@ -103,9 +172,9 @@ fragment RatingDetailField on RatingDetail{
   wholeSalePrice
   salePercentage
   percentOff
-  deliveryFee
+  # deliveryFee
   amountSaved
-  pickUpFromSeller
+  # pickUpFromSeller
   openUntil
   noOfOrderedItems
   noOfItemsInStock
@@ -133,13 +202,13 @@ fragment RatingDetailField on RatingDetail{
   status
   rating
   closedDate
-  deliveryDate
+  # deliveryDate
   productListingType
   # shippingMethodsAvailable
   progressBarValue
   numberOfItemsAvailable
-  minQuantityPerCart
-  maxQuantityPerCart
+  # minQuantityPerCart
+  # maxQuantityPerCart
   qtyAvailable
   minSoldQuantity
   itemSold
@@ -160,7 +229,14 @@ fragment RatingDetailField on RatingDetail{
   sellerId
   categories{...ProductCategoryViewField}
   images{...ImagesField}
-
+  deliveryOption
+  courierName
+  courierShippingFee
+  courierShippingFeeTax
+  announcementDeliveryDate
+  pickupAddress{
+    ...AddressField
+  }
 }
    
 
@@ -175,3 +251,10 @@ fragment RatingDetailField on RatingDetail{
       totalElements
     }
   }
+  query GetRelatedProducts($productId: ID!) {
+    getRelatedProducts(productId: $productId) {
+     ...SellerProductDetailViewField
+    }
+  }
+
+  

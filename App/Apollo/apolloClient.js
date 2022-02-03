@@ -4,7 +4,6 @@ import globalCache from "./cache";
  * need fetch as we are not in a browser
  */
 import fetch from "cross-fetch";
-import { GET_RELATED_PRODYCTS } from "./queries/queries_prodmang";
 import AppConfig from "../Config/AppConfig";
 // const baseUrl = "http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com";
 //const baseUrl = "http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com";

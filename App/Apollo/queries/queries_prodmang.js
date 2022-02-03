@@ -43,76 +43,13 @@ import { gql } from "@apollo/client";
 export const GET_LISTINGS = gql`
   query GetListings($searchOptions: SearchOptions) {
     getListings(searchOptions: $searchOptions) {
-      productId
-      numberOfReviews
-      rating
-      closedDate
-      deliveryDate
-      productListingType
-      shippingMethodsAvailable
-      noOfOrderedItems
-      progressBarValue
-      noOfItemsInStock
-      numberOfItemsAvailable
-      minQuantityPerCart
-      maxQuantityPerCart
-      pickUpFromSeller
-      amountSaved
-      deliveryFee
-      shortName
-      longName
-      description
-      technicalDetails
-      announcementId
-      collectionPointAddressId
-      relatedProducts
-      sellerId
-      retailPrice
-      wholeSalePrice
-      percentOff
-      photo
-      photoUrls
-      highlightBullets
-      returnPolicies {
-        name
-        description
+      content {
+        ...ProductListingViewField
       }
-      seller {
-        id
-        brandName
-        ratingCount
-      }
-      images {
-        id
-        referenceId
-        imageName
-        imageType
-        description
-        fullPath
-      }
-      productListingsOptionGroups {
-        optionsGroup {
-          groupId
-          optionValues {
-            value
-            defaultOptionValue
-          }
-        }
-      }
-      variants {
-        optionGroupId
-        initialItemsCount
-        itemsAvailable
-        itemsSold
-        optionsGroupPrice
-        optionsGroupDiscount
-        sku
-        defaultOptionGroup
-        options {
-          key
-          value
-        }
-      }
+      pageNo
+      pageSize
+      totalPages
+      totalElements
     }
   }
 `;
@@ -205,34 +142,34 @@ export const PRODUCT_BY_ID = gql`
   }
 `;
 
-export const GET_RELATED_PRODYCTS = gql`
-  query GetRelatedProducts($productId: ID!) {
-    getRelatedProducts(productId: $productId) {
-      productId
-      sellerId
-      vendorSku
-      sellerSku
-      shortName
-      longName
-      description
-      brand
-      photo
-      itemsInStock
-      highlightBullets
-      technicalDetails
-      warrantyDetails
-      productType
-      productStatus
-      priceId
-      currency
-      retailPrice
-      wholeSalePrice
-      salePercentage
-      totalQuantityPrice
-      taxPercentage
-    }
-  }
-`;
+// export const GET_RELATED_PRODYCTS = gql`
+//   query GetRelatedProducts($productId: ID!) {
+//     getRelatedProducts(productId: $productId) {
+//       productId
+//       sellerId
+//       vendorSku
+//       sellerSku
+//       shortName
+//       longName
+//       description
+//       brand
+//       photo
+//       itemsInStock
+//       highlightBullets
+//       technicalDetails
+//       warrantyDetails
+//       productType
+//       productStatus
+//       priceId
+//       currency
+//       retailPrice
+//       wholeSalePrice
+//       salePercentage
+//       totalQuantityPrice
+//       taxPercentage
+//     }
+//   }
+// `;
 
 /**
  *  @Depreciated

@@ -25,6 +25,11 @@ function Header({ selected }) {
     onCompleted: (res) => {
       NavigationService.goBack();
     },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
     onError: (res) => {},
   });
   return (
@@ -78,7 +83,6 @@ class OldChooseCategoriesScreen extends Component {
           Choose which products interest you the most and we can offer you a
           more personalized offer
         </Text>
-
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.categoriesContainer}>
             {this.state.allCategories.map((item, index) => {

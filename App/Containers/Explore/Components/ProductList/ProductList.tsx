@@ -5,10 +5,12 @@ import { HPageViewHoc } from "react-native-head-tab-view";
 import ExploreSortBar from "../ExploreSortBar";
 import { AlertContext } from "../../../Root/GlobalContext";
 import ShareOptionList from "../ShareOptionList";
-import * as aQM from "../../gql/explore_queries";
 import colors from "../../../../Themes/Colors";
 import { client } from "../../../../Apollo/apolloClient";
-import { useGetListingsQuery } from "../../../../../generated/graphql";
+import {
+  GetListingsDocument,
+  useGetListingsQuery,
+} from "../../../../../generated/graphql";
 const pageSize = 5;
 
 const sortOptions = [
@@ -28,6 +30,7 @@ const HFlatList = HPageViewHoc(FlatList);
 
 /*explore productlist component */
 export default function ProductList(props) {
+  const Container = props.isNeedTabbar ? HFlatList : FlatList;
   // if show it as row
   const { dispatch } = useContext(AlertContext);
   const [page, setPage] = useState(0);
@@ -60,6 +63,7 @@ export default function ProductList(props) {
     sortDirection: sortItem.sortDirection,
     pageSize,
   };
+
   const { loading, error, data, refetch, fetchMore } = useGetListingsQuery({
     variables: {
       searchOptions: searchOptions,
@@ -98,7 +102,7 @@ export default function ProductList(props) {
     []
   );
   return (
-    <HFlatList
+    <Container
       index={index}
       keyboardShouldPersistTaps="always"
       ListHeaderComponent={
@@ -136,9 +140,12 @@ export default function ProductList(props) {
         if (noMore) {
           return;
         }
+        if (page + 1 >= data?.getListings?.totalPages) {
+          return;
+        }
         setLoadingMore(true);
         const moreData = await client.query({
-          query: aQM.GET_LISTINGS,
+          query: GetListingsDocument,
           variables: {
             searchOptions: { ...searchOptions, pageNo: page + 1 },
           },
@@ -148,7 +155,7 @@ export default function ProductList(props) {
             },
           },
         });
-        setServerData([...serverData, ...moreData.data.getListings]);
+        setServerData([...serverData, ...moreData.data.getListings.content]);
         setLoadingMore(false);
         if (moreData.data.getListings.length < pageSize) {
           setNoMore(true);

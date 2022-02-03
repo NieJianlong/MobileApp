@@ -10,10 +10,9 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "./styles";
 import { AppBar } from "../../../Components";
-import ProductInfo from "../Components/ProductInfo";
 import { Images } from "../../../Themes";
 import NavigationService from "../../../Navigation/NavigationService";
-import { useNavigation, useRoute } from "@react-navigation/core";
+import { useRoute } from "@react-navigation/core";
 import { useQuery } from "@apollo/client";
 import { GET_LISTINGS } from "../../Explore/gql/explore_queries";
 import ProductItem from "../../Explore/Components/ProductItem";
@@ -31,7 +30,7 @@ function GroupInfoScreen(props) {
     },
     context: {
       headers: {
-        isPrivate: false,
+        isPrivate: true,
       },
     },
     onError: (res) => {},
@@ -117,7 +116,6 @@ function GroupInfoScreen(props) {
             size={"M"}
             notShowBottom={true}
           />
-          {/* <ProductInfo product={data.getListings[0]} /> */}
           {renderActions()}
         </ScrollView>
       );
@@ -125,12 +123,6 @@ function GroupInfoScreen(props) {
     if (!data) {
       return null;
     }
-    // return data ? (
-    //   <ScrollView showsVerticalScrollIndicator={false} style={styles.body}>
-    //     <ProductInfo product={data.GetListings[0]} />
-    //     {renderActions()}
-    //   </ScrollView>
-    // ) : null;
   }
   return (
     <View style={styles.container}>

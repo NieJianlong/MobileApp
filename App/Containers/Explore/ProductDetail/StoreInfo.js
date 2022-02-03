@@ -33,7 +33,13 @@ export default function StoreInfo({ tabIndex, product }) {
           </View>
 
           <TouchableOpacity
-            onPress={() => NavigationService.navigate("SellerStoreScreen")}
+            onPress={() =>
+              NavigationService.navigate("SellerStoreScreen", {
+                seller: product.seller,
+                storeId: product.storeId,
+                storeName: product.storeName,
+              })
+            }
           >
             <Text style={[styles.heading5Bold, { color: Colors.secondary00 }]}>
               VISIT STORE

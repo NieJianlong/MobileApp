@@ -36,11 +36,11 @@ function AddNewAddress() {
     formState: { errors },
   } = useForm<AddressRequestForCreate>({
     defaultValues: {
-      building: currentAddress.building,
-      streetAddress1: currentAddress.streetAddress1,
-      townCity: currentAddress.townCity,
-      pinCode: currentAddress.pinCode,
-      provinceState: currentAddress.provinceState,
+      building: currentAddress?.building,
+      streetAddress1: currentAddress?.streetAddress1,
+      townCity: currentAddress?.townCity,
+      pinCode: currentAddress?.pinCode,
+      provinceState: currentAddress?.provinceState,
     },
   });
   const { data } = useQuery(GetStatesByCountryId, {

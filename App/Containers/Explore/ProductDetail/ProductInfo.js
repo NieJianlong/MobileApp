@@ -27,9 +27,9 @@ export default function ProductInfo({
       type: "changSheetState",
       payload: {
         showSheet: true,
-        height: 390,
+        height: 290,
         children: () => <PickupFromSellerSheetContent />,
-        sheetTitle: "Pick up from seller",
+        sheetTitle: "Pick up location",
       },
     });
   }, [dispatch]);
@@ -79,7 +79,7 @@ export default function ProductInfo({
               <NumberFormat
                 thousandSeparator={true}
                 prefix={"$"}
-                value={product.wholesalePrice}
+                value={product.wholeSalePrice}
                 displayType={"text"}
                 renderText={(text) => (
                   <Text style={styles.txtWholesalePrice}>{text}</Text>
@@ -110,7 +110,7 @@ export default function ProductInfo({
             {!product.hidePickUpFromSeller ? (
               <View style={[styles.row, { marginLeft: s(10) }]}>
                 <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
-                  Pick up from seller
+                  Pick up location
                 </Text>
                 <Switch
                   onSwitch={(t) => {

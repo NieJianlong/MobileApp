@@ -22,8 +22,7 @@ export default function PickupFromSellerSheetContent() {
   return (
     <View style={{ flex: 1, justifyContent: "flex-end" }}>
       <Text style={[styles.txtRegular, { textAlign: "center" }]}>
-        This is the seller's address where you have to{"\n"}go to pick up your
-        order
+        This is the address where you have to{"\n"}go to pick up your order
       </Text>
 
       <View style={styles.pickupLocationContainer}>

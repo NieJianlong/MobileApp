@@ -1,12 +1,5 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useContext,
-  useCallback,
-} from "react";
+import React, { useContext, useCallback } from "react";
 import { View, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { s, vs } from "react-native-size-matters";
 import { Button } from "../../../../Components";
 

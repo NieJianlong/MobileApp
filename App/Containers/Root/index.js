@@ -4,7 +4,6 @@ import {
   StatusBar,
   Animated,
   TouchableWithoutFeedback,
-  Text,
 } from "react-native";
 import { Alert, BottomSheet } from "../../Components";
 import AppNavigation from "../../Navigation/AppNavigation";

@@ -42,7 +42,6 @@ function SellerStoreScreen() {
           tabLabel="All"
         />
       </View>
-      {/*  */}
     </View>
   );
 }

@@ -8,7 +8,7 @@ import { Images } from "../../../../Themes";
 import { AlertContext } from "../../../Root/GlobalContext";
 import styles from "../styles";
 
-export default function PickupFromSellerSheetContent() {
+export default function PickupFromSellerSheetContent({ address, onCallback }) {
   const { dispatch } = useContext(AlertContext);
   const togglePickupFromSellerSheet = useCallback(() => {
     dispatch({
@@ -18,7 +18,8 @@ export default function PickupFromSellerSheetContent() {
         height: 0,
       },
     });
-  }, [dispatch]);
+    onCallback && onCallback();
+  }, [dispatch, onCallback]);
   return (
     <View style={{ flex: 1, justifyContent: "flex-end" }}>
       <Text style={[styles.txtRegular, { textAlign: "center" }]}>
@@ -28,8 +29,12 @@ export default function PickupFromSellerSheetContent() {
         <Image style={styles.pickupLocationIcon} source={Images.locationMed} />
 
         <View style={{ marginLeft: s(10) }}>
-          <Text style={styles.heading5Bold}>Seller Address 00</Text>
-          <Text style={styles.txtRegular}>Tamil Nadu 12345, Area 4</Text>
+          <Text style={styles.heading5Bold}>{address.streetAddress1}</Text>
+          <Text style={styles.txtRegular}>{`${address.houseNumber ?? ""}${
+            address.flat ?? ""
+          }${address.villageArea ?? ""}${address.townCity}${
+            address.provinceState ?? ""
+          }${address.country ?? ""} ${address.pinCode ?? ""}`}</Text>
         </View>
       </View>
 

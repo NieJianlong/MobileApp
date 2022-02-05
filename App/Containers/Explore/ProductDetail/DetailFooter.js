@@ -18,7 +18,7 @@ import { GET_LOCAL_CART } from "../../../Apollo/cache";
 import { nanoid } from "nanoid";
 import BigNumber from "bignumber.js";
 
-export default function DetailFooter({ product, currentVariant }) {
+export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { dispatch } = useContext(AlertContext);
   const { realm } = useRealm();
 

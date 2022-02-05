@@ -1,6 +1,6 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { View, Image, TouchableOpacity, Text } from "react-native";
-import { s, vs } from "react-native-size-matters";
+import { s, ScaledSheet, vs } from "react-native-size-matters";
 import InView from "react-native-component-inview";
 import NumberFormat from "react-number-format";
 import {
@@ -10,7 +10,7 @@ import {
   Progress,
 } from "../../../Components";
 
-import { Images, Colors } from "../../../Themes";
+import { Images, Colors, Fonts } from "../../../Themes";
 import styles from "./styles";
 import NavigationService from "../../../Navigation/NavigationService";
 import { AlertContext } from "../../Root/GlobalContext";
@@ -21,6 +21,8 @@ export default function ProductInfo({
   product,
   setTabIndex,
   scrollSectionIntoView,
+  pickUp,
+  onSetPickUp
 }) {
   const { dispatch } = useContext(AlertContext);
   const togglePickupFromSellerSheet = useCallback(() => {
@@ -29,11 +31,18 @@ export default function ProductInfo({
       payload: {
         showSheet: true,
         height: 290,
-        children: () => <PickupFromSellerSheetContent />,
+        children: () => (
+          <PickupFromSellerSheetContent
+            address={product.pickupAddress}
+            onCallback={() => {
+              onSetPickUp(true);
+            }}
+          />
+        ),
         sheetTitle: "Pick up location",
       },
     });
-  }, [dispatch]);
+  }, [dispatch, onSetPickUp, product.pickupAddress]);
 
   return (
     <InView
@@ -102,25 +111,41 @@ export default function ProductInfo({
           </View>
 
           <View style={[styles.row, { marginVertical: vs(10) }]}>
-            <Text style={styles.heading5Regular}>
-              Delivery fee:{" "}
-              <Text style={{ color: Colors.primary }}>
-                ${product.deliveryFee}
+            {product.deliveryOption === DeliveryOption.CourierDelivery && (
+              <Text style={styles.heading5Regular}>
+                Delivery fee:{" "}
+                <Text style={{ color: Colors.primary }}>
+                  ${product.courierShippingFee}
+                </Text>
               </Text>
-            </Text>
+            )}
             {product.deliveryOption === DeliveryOption.SellerLocationPickup ||
             DeliveryOption.CollectionPointPickup ? (
               <View style={[styles.row, { marginLeft: s(10) }]}>
                 <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
                   Pick up location
                 </Text>
-                <Switch
-                  onSwitch={(t) => {
-                    if (t) {
+                <TouchableOpacity
+                  onPress={() => {
+                    // setPickUp(!pickUp);
+                    if (!pickUp) {
                       togglePickupFromSellerSheet();
+                    } else {
+                      onSetPickUp(false);
+                      // setPickUp(false);
                     }
                   }}
-                />
+                >
+                  {pickUp ? (
+                    <View style={styles1.activeContainer}>
+                      <View style={styles1.activeCircle} />
+                    </View>
+                  ) : (
+                    <View style={styles1.inactiveContainer}>
+                      <View style={styles1.inactiveCircle} />
+                    </View>
+                  )}
+                </TouchableOpacity>
               </View>
             ) : (
               <View />
@@ -178,7 +203,7 @@ export default function ProductInfo({
                 Vero eos et accusamus et iusto odio dignissimos
               </Text>
             </View>jjjh
-            
+
             <View style={styles.row}>
               <Text style={styles.txtDot}>•</Text>
               <Text style={styles.txtRegular}>
@@ -197,3 +222,69 @@ export default function ProductInfo({
     </InView>
   );
 }
+const WIDTH = "44@s";
+const HEIGHT = "22@s";
+
+const styles1 = ScaledSheet.create({
+  activeContainer: {
+    width: WIDTH,
+    height: HEIGHT,
+    borderRadius: "15@s",
+    borderWidth: "2@s",
+    borderColor: Colors.primary,
+    backgroundColor: Colors.primary,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: "2@s",
+  },
+  activeCircle: {
+    width: "14@s",
+    height: "14@s",
+    borderRadius: "16@s",
+    backgroundColor: Colors.white,
+  },
+  inactiveContainer: {
+    width: WIDTH,
+    height: HEIGHT,
+    borderRadius: "15@s",
+    borderWidth: "2@s",
+    borderColor: Colors.grey40,
+    flexDirection: "row",
+    alignItems: "center",
+    padding: "2@s",
+  },
+  inactiveCircle: {
+    width: "14@s",
+    height: "14@s",
+    borderRadius: "16@s",
+    backgroundColor: Colors.grey40,
+  },
+  disabledContainer: {
+    width: "48@s",
+    height: "24@s",
+    borderRadius: "15@s",
+    borderWidth: "2@s",
+    borderColor: Colors.grey10,
+    backgroundColor: Colors.grey10,
+    flexDirection: "row",
+    alignItems: "center",
+    padding: "2@s",
+  },
+  disabledCircle: {
+    width: "16@s",
+    height: "16@s",
+    borderRadius: "16@s",
+    backgroundColor: Colors.white,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  label: {
+    fontFamily: Fonts.primary,
+    fontSize: "14@s",
+    color: Colors.black,
+    marginLeft: "8@s",
+  },
+});

@@ -15,6 +15,7 @@ import styles from "./styles";
 import NavigationService from "../../../Navigation/NavigationService";
 import { AlertContext } from "../../Root/GlobalContext";
 import PickupFromSellerSheetContent from "./SheetContent/PickupFromSellerSheetContent";
+import { DeliveryOption } from "../../../../generated/graphql";
 
 export default function ProductInfo({
   product,
@@ -107,7 +108,8 @@ export default function ProductInfo({
                 ${product.deliveryFee}
               </Text>
             </Text>
-            {!product.hidePickUpFromSeller ? (
+            {product.deliveryOption === DeliveryOption.SellerLocationPickup ||
+            DeliveryOption.CollectionPointPickup ? (
               <View style={[styles.row, { marginLeft: s(10) }]}>
                 <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
                   Pick up location

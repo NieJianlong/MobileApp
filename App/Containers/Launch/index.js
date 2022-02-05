@@ -61,9 +61,6 @@ export default function LaunchScreen() {
           isAuth: true,
         });
         let decoded = jwt_decode(access_token);
-        console.log("decoded====================================");
-        console.log(decoded);
-        console.log("====================================");
         global.access_token = access_token;
         global.userProfileId = decoded.sub;
         getBuyerId();

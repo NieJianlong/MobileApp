@@ -43,6 +43,19 @@ type BuyerDetailsResponse {
   phoneNumber: String
 }
 
+input BuyerOrderOption {
+  searchString: String
+  pageOption: PageOption!
+}
+
+type BuyerOrderResponse {
+  content: [OrderItemDetailResponse!]!
+  pageNo: Int!
+  pageSize: Int!
+  totalPages: Int!
+  totalElements: Int!
+}
+
 input CancelOrderItemRequest {
   orderItemId: String!
   reason: String
@@ -327,6 +340,7 @@ enum ProductListingStatus {
 type Query {
   """to be deprecated"""
   getBuyerOrders(buyerId: ID!, searchString: String!): [OrderView]
+  searchBuyerOrders(options: BuyerOrderOption!): BuyerOrderResponse!
   getSellerOrders(options: SellerOrderOption!): SellerOrderResponse!
   getSellerListingOrders(options: ListingOrderOptions!): SellerListingOrderResponse!
   getOrderItemDetails(orderItemId: ID!): OrderItemDetailResponse!
@@ -334,11 +348,6 @@ type Query {
   getOrderReturn(orderReturnId: String!): OrderReturnResponse!
   getOrderReturnStatus(orderReturnId: String!): OrderReturnStatusResponse!
   getSellerOrderReturns(options: OrderReturnOptions!): SellerOrderReturnResponse!
-
-  """temporary for testing only - remove"""
-  getClientCredentialsToken: String!
-  isTokenValid(token: String): Boolean!
-  getAccessToken(clientId: String!, clientSecret: String!): String!
 }
 
 enum RefundMethod {

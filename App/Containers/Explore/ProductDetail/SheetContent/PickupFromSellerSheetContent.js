@@ -29,12 +29,12 @@ export default function PickupFromSellerSheetContent({ address, onCallback }) {
         <Image style={styles.pickupLocationIcon} source={Images.locationMed} />
 
         <View style={{ marginLeft: s(10) }}>
-          <Text style={styles.heading5Bold}>{address.streetAddress1}</Text>
-          <Text style={styles.txtRegular}>{`${address.houseNumber ?? ""}${
-            address.flat ?? ""
-          }${address.villageArea ?? ""}${address.townCity}${
-            address.provinceState ?? ""
-          }${address.country ?? ""} ${address.pinCode ?? ""}`}</Text>
+          <Text style={styles.heading5Bold}>{address?.streetAddress1}</Text>
+          <Text style={styles.txtRegular}>{`${address?.houseNumber ?? ""}${
+            address?.flat ?? ""
+          }${address?.villageArea ?? ""}${address?.townCity}${
+            address?.provinceState ?? ""
+          }${address?.country ?? ""} ${address?.pinCode ?? ""}`}</Text>
         </View>
       </View>
 

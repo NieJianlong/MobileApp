@@ -1,6 +1,6 @@
 import React, { useContext, useCallback } from "react";
 import { View, Text } from "react-native";
-import { s, vs } from "react-native-size-matters";
+import { vs } from "react-native-size-matters";
 import { Button } from "../../../../Components";
 
 import { Colors } from "../../../../Themes";
@@ -29,9 +29,7 @@ export default function AddToCartSheetContent() {
       >
         There are now 2 items in your cart
       </Text>
-
       <Button onPress={toggleAddToCartSheet} text={"GO TO CHECKOUT"} />
-
       <View style={styles.btnRow}>
         <View style={styles.v5}>
           <Button

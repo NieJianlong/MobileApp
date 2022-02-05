@@ -17,6 +17,7 @@ import { useQuery } from "@apollo/client";
 import { GET_LOCAL_CART } from "../../../Apollo/cache";
 import { nanoid } from "nanoid";
 import BigNumber from "bignumber.js";
+import { DeliveryOption } from "../../../../generated/graphql";
 
 export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { dispatch } = useContext(AlertContext);
@@ -82,7 +83,11 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   };
 
   const toggleAddToCartSheet = () => {
-    if (pickUp) {
+    if (
+      pickUp ||
+      product.deliveryOption === DeliveryOption.CourierDelivery ||
+      product.deliveryOption === DeliveryOption.SellerDirectDelivery
+    ) {
       addToCart();
     } else {
       PubSub.publish("show-pick-up-sheet", addToCart);

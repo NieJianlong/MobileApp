@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { View, Image, TouchableOpacity, Text } from "react-native";
 import { s, ScaledSheet, vs } from "react-native-size-matters";
 import InView from "react-native-component-inview";
@@ -16,13 +16,14 @@ import NavigationService from "../../../Navigation/NavigationService";
 import { AlertContext } from "../../Root/GlobalContext";
 import PickupFromSellerSheetContent from "./SheetContent/PickupFromSellerSheetContent";
 import { DeliveryOption } from "../../../../generated/graphql";
+import PubSub from "pubsub-js";
 
 export default function ProductInfo({
   product,
   setTabIndex,
   scrollSectionIntoView,
   pickUp,
-  onSetPickUp
+  onSetPickUp,
 }) {
   const { dispatch } = useContext(AlertContext);
   const togglePickupFromSellerSheet = useCallback(() => {
@@ -43,7 +44,20 @@ export default function ProductInfo({
       },
     });
   }, [dispatch, onSetPickUp, product.pickupAddress]);
-
+  useEffect(() => {
+    let refresh = PubSub.subscribe("show-pick-up-sheet", (msg, callback) => {
+      togglePickupFromSellerSheet();
+      if (callback && pickUp) {
+        callback && callback();
+      }
+    });
+    return () => {
+      PubSub.unsubscribe(refresh);
+    };
+  }, [pickUp, togglePickupFromSellerSheet]);
+ console.log('product.deliveryOption====================================');
+ console.log(product.deliveryOption);
+ console.log('====================================');
   return (
     <InView
       onChange={(isVisible) => {
@@ -96,7 +110,6 @@ export default function ProductInfo({
                 )}
               />
             </View>
-
             <View style={styles.percentOffContainer}>
               <Text
                 style={[styles.heading6Bold, { color: Colors.secondary00 }]}
@@ -119,8 +132,9 @@ export default function ProductInfo({
                 </Text>
               </Text>
             )}
-            {product.deliveryOption === DeliveryOption.SellerLocationPickup ||
-            DeliveryOption.CollectionPointPickup ? (
+            {(product.deliveryOption === DeliveryOption.SellerLocationPickup ||
+              product.deliveryOption ===
+                DeliveryOption.CollectionPointPickup) && (
               <View style={[styles.row, { marginLeft: s(10) }]}>
                 <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
                   Pick up location
@@ -147,8 +161,6 @@ export default function ProductInfo({
                   )}
                 </TouchableOpacity>
               </View>
-            ) : (
-              <View />
             )}
           </View>
         </View>

@@ -29,7 +29,7 @@ function ProductDetail(props) {
   const [pickUp, setPickUp] = useState(
     !(
       product.deliveryOption === DeliveryOption.SellerLocationPickup ||
-      DeliveryOption.CollectionPointPickup
+      product.deliveryOption === DeliveryOption.CollectionPointPickup
     )
   );
   const onSetPickUp = (newValue) => {

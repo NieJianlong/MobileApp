@@ -44,7 +44,8 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       },
     });
   }, [dispatch]);
-  const toggleAddToCartSheet = useCallback(() => {
+
+  const addToCart = () => {
     const shoppingCartId = nanoid();
     if (!currentVariant.defaultVariant) {
       currentVariant.defaultVariant = false;
@@ -78,29 +79,15 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       });
       PubSub.publish("refresh-shoppingcart");
     });
-    // const tasks = realm.objects("ShoppingCart");
-    // console.log(
-    //   `The lists of tasks are: ${JSON.stringify(tasks.map((task) => task))}`
-    // );
+  };
 
-    // dispatch({
-    //   type: "changSheetState",
-    //   payload: {
-    //     showSheet: true,
-    //     height: 290,
-    //     children: () => <AddToCartSheetContent />,
-    //     sheetTitle: "Confirm your Order",
-    //   },
-    // });
-  }, [
-    currentVariant,
-    realm,
-    cartInfo,
-    dispatch,
-    quantity,
-    localCartVar.deliverAddress,
-    product,
-  ]);
+  const toggleAddToCartSheet = () => {
+    if (pickUp) {
+      addToCart();
+    } else {
+      PubSub.publish("show-pick-up-sheet", addToCart);
+    }
+  };
   return (
     <SafeAreaView style={styles.footerSafeArea} edges={["bottom"]}>
       <QuantitySelector

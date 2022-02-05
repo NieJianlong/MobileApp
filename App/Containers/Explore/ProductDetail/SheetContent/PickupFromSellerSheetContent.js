@@ -24,7 +24,6 @@ export default function PickupFromSellerSheetContent() {
       <Text style={[styles.txtRegular, { textAlign: "center" }]}>
         This is the address where you have to{"\n"}go to pick up your order
       </Text>
-
       <View style={styles.pickupLocationContainer}>
         <Image style={styles.pickupLocationIcon} source={Images.locationMed} />
 

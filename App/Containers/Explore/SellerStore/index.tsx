@@ -10,10 +10,6 @@ import { t } from "react-native-tailwindcss";
 
 function SellerStoreScreen() {
   const { params } = useRoute();
-  console.log("params====================================");
-  console.log(params?.seller);
-  console.log(params?.seller.id);
-  console.log("====================================");
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />

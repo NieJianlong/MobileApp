@@ -108,13 +108,11 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
             ADD TO CART
           </Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           onPress={toggleConfirmOrderSheet}
           style={styles.btnBuyNow}
         >
           <Text style={[styles.txtBold, { color: Colors.white }]}>BUY NOW</Text>
-
           <View style={styles.priceContainer}>
             <NumberFormat
               thousandSeparator={true}

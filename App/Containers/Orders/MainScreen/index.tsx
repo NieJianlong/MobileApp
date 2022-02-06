@@ -147,10 +147,10 @@ class Order extends Component {
 
   renderOrderItem = (item, index) => {
     let detail = "";
-    const statusText = item.latestStatus.replaceAll("_", " ");
+    const statusText = item?.latestEventStatus?.replaceAll("_", " ");
     detail =
-      statusText.substring(0, 1) +
-      statusText.substring(1, statusText.length).toLowerCase() +
+      statusText?.substring(0, 1) +
+      statusText?.substring(1, statusText.length).toLowerCase() +
       " at " +
       moment(item.orderDatetime).format("DD/MM/YYYY");
     return (
@@ -167,7 +167,7 @@ class Order extends Component {
       >
         <View style={styles.row}>
           <Image
-            source={{ uri: item.photo }}
+            source={{ uri: item.mainImagePath }}
             resizeMode="contain"
             style={styles.itemAvatar}
           />
@@ -215,7 +215,7 @@ class Order extends Component {
       return (
         <View style={styles.bodyContainer}>
           {this.props.orderItems.length > 0 ? (
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView sshowsVerticalScrollIndicator={false}>
               <View style={styles.v1}>
                 <Text style={styles.heading1Bold}>Orders</Text>
                 {this.renderFilter()}
@@ -277,7 +277,7 @@ function OrderScreen() {
     },
   });
 
-  return <Order orderItems={data?.searchBuyerOrders?.content} />;
+  return <Order orderItems={data?.searchBuyerOrders?.content ?? []} />;
 }
 
 export default OrderScreen;

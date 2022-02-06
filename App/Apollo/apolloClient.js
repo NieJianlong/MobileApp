@@ -72,6 +72,7 @@ const allAPIS = {
   ClearCart: CART_PORT,
 
   GetBuyerOrders: ORDER_PORT,
+  SearchBuyerOrders: ORDER_PORT,
 };
 
 const customFetch = (uri, options) => {

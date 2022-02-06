@@ -1,5 +1,4 @@
 import React, { Component, useMemo } from "react";
-import { useQuery } from "@apollo/client";
 import {
   View,
   StatusBar,
@@ -9,7 +8,7 @@ import {
   Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { s, vs } from "react-native-size-matters";
+import { vs } from "react-native-size-matters";
 import Animated from "react-native-reanimated";
 
 import {
@@ -21,12 +20,10 @@ import CheckBox from "../Components/CheckBox";
 import SearchBox from "../Components/SearchBox";
 import NavigationService from "../../../Navigation/NavigationService";
 import { Images } from "../../../Themes";
-
 import styles from "./styles";
-import { GetBuyerOrders } from "../orderQuery.js/index";
 import { t } from "react-native-tailwindcss";
 import moment from "moment";
-import { useGetBuyerOrdersQuery } from "../../../../generated/graphql";
+import { useSearchBuyerOrdersQuery } from "../../../../generated/graphql";
 
 class Order extends Component {
   fall = new Animated.Value(0);
@@ -263,98 +260,26 @@ class Order extends Component {
 }
 
 function OrderScreen() {
-  const { data } = useGetBuyerOrdersQuery({
-    variables: { buyerId: global.buyerId, searchString: "" },
+  const { data } = useSearchBuyerOrdersQuery({
+    variables: {
+      options: {
+        searchString: "",
+        pageOption: {
+          pageNumber: 0,
+          pageSize: 10,
+        },
+      },
+    },
     context: {
       headers: {
         isPrivate: true,
       },
     },
-  }); 
-  const orderItems = useMemo(() => {
-    let finalItems = [];
-    if (data) {
-      data.getBuyerOrders.map((item) => {
-        if (item.orderItems) {
-          item.orderItems.map((i) => {
-            finalItems.push({ ...item, ...i });
-          });
-        }
-      });
-      return finalItems;
-    } else {
-      return [];
-    }
-  }, [data]);
-  return <Order orderItems={orderItems} />;
+  });
+
+  return <Order orderItems={data?.searchBuyerOrders?.content} />;
 }
 
-// function OrderScreen(props) {
-//   return (
-//     <div>
-      
-//     </div>
-//   );
-// }
-
 export default OrderScreen;
-// const orders = [
-//   {
-//     isCompleted: false,
-//     isAnnoucement: true,
-//     name: "iPhone 11",
-//     picture:
-//       "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-//     lastMessage: {
-//       content: "Last Christmas",
-//       time: "2021-02-22",
-//       author: "Christie",
-//     },
-//     unreadCount: 4,
-//     type: "history",
-//   },
-//   {
-//     isCompleted: false,
-//     isAnnoucement: false,
-//     name: "iPhone 11",
-//     picture:
-//       "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-//     lastMessage: {
-//       content: "Last Christmas",
-//       time: "2020-09-12",
-//       author: "Christie",
-//     },
-//     unreadCount: 3,
-//     type: "incompleted",
-//   },
-//   {
-//     isCompleted: false,
-//     isAnnoucement: false,
-//     name: "iPhone 11",
-//     picture:
-//       "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-//     lastMessage: {
-//       content: "Last Christmas",
-//       time: "2019-09-12",
-//       author: "Christie",
-//     },
-//     unreadCount: 0,
-//     type: "reached",
-//   },
-//   {
-//     isCompleted: false,
-//     isAnnoucement: false,
-//     name: "iPhone 11",
-//     picture:
-//       "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-//     lastMessage: {
-//       content: "Last Christmas",
-//       time: "2019-09-12",
-//       author: "Christie",
-//     },
-//     unreadCount: 0,
-//     type: "received",
-//   },
-// ];
 
 const sortOptions = ["Not 100% slices product", "Completed"];

@@ -1,4 +1,4 @@
-import React, { Component, useMemo } from "react";
+import React, { Component } from "react";
 import {
   View,
   StatusBar,
@@ -10,7 +10,6 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import Animated from "react-native-reanimated";
-
 import {
   Button,
   BottomSheet,

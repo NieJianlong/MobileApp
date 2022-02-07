@@ -19,27 +19,51 @@ import ProductItem from "../../Explore/Components/ProductItem";
 
 function GroupInfoScreen(props) {
   const { params } = useRoute();
-  const { loading, error, data, refetch, fetchMore } = useQuery(GET_LISTINGS, {
-    variables: {
-      searchOptions: {
-        filter: "BY_LISTING_ID",
-        filterParams: {
-          listingId: params.item.listingId ?? "",
-        },
-      },
-    },
-    context: {
-      headers: {
-        isPrivate: true,
-      },
-    },
-    onError: (res) => {},
-  });
-  if (data) {
-    console.log("data====================================");
-    console.log(data);
-    console.log("====================================");
-  }
+  const data = params.item;
+  // const { loading, error, data, refetch, fetchMore } = useGetListingsQuery({
+  //   variables: {
+  //     searchOptions: {
+  //       filter: FilterType.ByListingId,
+  //       filterParams: {
+  //         listingId:params?.item?.listingId
+  //       },
+  //     },
+  //   },
+  //   context: {
+  //     headers: {
+  //       isPrivate: true,
+  //     },
+  //   },
+  //   onError: () => {},
+  //   onCompleted: (res) => {
+  //     // map data from server for now
+  //     // add missing fields for product review
+  //     // update for name changes in data from server
+  //     // setNoMore(false);
+  //     // setServerData(res.getListings.content);
+  //   },
+  // });
+  // const { loading, error, data, refetch, fetchMore } = useQuery(GET_LISTINGS, {
+  //   variables: {
+  //     searchOptions: {
+  //       filter: "BY_LISTING_ID",
+  //       filterParams: {
+  //         listingId: params.item.listingId ?? "",
+  //       },
+  //     },
+  //   },
+  //   context: {
+  //     headers: {
+  //       isPrivate: true,
+  //     },
+  //   },
+  //   onError: (res) => {},
+  // });
+  // if (data) {
+  //   console.log("data====================================");
+  //   console.log(data);
+  //   console.log("====================================");
+  // }
   function renderAction(icon, text, action) {
     return (
       <TouchableOpacity onPress={action} style={styles.actionContainer}>
@@ -107,7 +131,7 @@ function GroupInfoScreen(props) {
         <ScrollView showsVerticalScrollIndicator={false} style={styles.body}>
           <ProductItem
             isAnnouncement={false}
-            product={data.getListings[0]}
+            product={data}
             size={"M"}
             notShowBottom={true}
           />

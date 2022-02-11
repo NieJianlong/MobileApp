@@ -79,6 +79,7 @@ const allAPIS = {
 
   //Payment
   RazorpayCreateOrder: PAYMENT_PORT,
+  RazorpayVerifyPaymentSignature: PAYMENT_PORT,
 };
 
 const customFetch = (uri, options) => {

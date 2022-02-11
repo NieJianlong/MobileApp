@@ -1,23 +1,31 @@
 import React, { useState, useMemo } from "react";
-import { View, ScrollView, SafeAreaView, StatusBar } from "react-native";
+import { View, ScrollView, SafeAreaView, StatusBar, Image, Text, TouchableOpacity } from "react-native";
 import AppConfig from "../../Config/AppConfig";
-import { vs } from "react-native-size-matters";
+import { s, ScaledSheet, vs } from "react-native-size-matters";
 import colors from "../../Themes/Colors";
-import { AppBar, Button } from "../../Components";
+import { AppBar, Button, Switch } from "../../Components";
 import CartItem from "./Cartitem";
-import metrics from "../../Themes/Metrics";
 import BottomSummary from "./Summary";
 import DeliverInfo from "./DeliverInfo";
 import NavigationService from "../../Navigation/NavigationService";
 import { useRoute } from "@react-navigation/native";
 import BigNumber from "bignumber.js";
 import { useCreateOrder } from "../../hooks/order";
-import RazarPay from "../payments";
+import PaymentOptions from "./PaymentOptions";
 import RazorpayCheckout from "react-native-razorpay";
+import { useCreateRazorOrder } from "../../hooks/razorOrder";
+import { cartOrderVar, razorOrderPaymentVar } from "../../Apollo/cache";
+import { useRazorVerifyPayment } from "../../hooks/verifyPayment";
+import images from "../../Themes/Images";
+import { ApplicationStyles } from "../../Themes";
+
 //orderStatus：1,completed
 function CheckoutResume(props) {
   const { params } = useRoute();
   const { createOrderFromCart, order } = useCreateOrder();
+  const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
+  const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
+    useRazorVerifyPayment();
   const { orderStatus, data } = params;
   const money = useMemo(() => {
     let currentBilling = 0;
@@ -45,6 +53,60 @@ function CheckoutResume(props) {
     };
   }, [data]);
 
+  const proceedFurther = async () => {
+    await createOrderFromCart()
+      .then((res) => {
+        const order = res?.data?.createOrderFromCart;
+        if (res?.data) {
+          cartOrderVar({
+            orderNumber: order?.orderNumber,
+            orderId: order?.orderId,
+            amount: order?.subTotal,
+          });
+          razorpayCreateOrder().then((res) => {
+            if (res?.data) {
+              const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
+              var options = {
+                description: "Credits towords consultation",
+                image: "https://i.imgur.com/3g7nmJC.png",
+                currency: "INR",
+                key: "rzp_test_I8X2v4LgupMLv0",
+                amount: "50000",
+                name: "Acme Corp",
+                order_id: razorId, //Replace this with an order_id created using Orders API.
+                prefill: {
+                  email: "bluestar929@outlook.com",
+                  contact: "8616525825013",
+                  name: "Gaurav Kumar",
+                },
+                theme: { color: "#53a20e" },
+              };
+              RazorpayCheckout.open(options)
+                .then((data) => {
+                  razorOrderPaymentVar({
+                    razorpay_payment_id: data.razorpay_payment_id,
+                    razorpay_order_id: data.razorpay_order_id,
+                    razorpay_signature: data.razorpay_signature,
+                  });
+                  razorpayVerifyPaymentSignature();
+                  alert(`Success: ${data.razorpay_payment_id}`);
+
+                  NavigationService.navigate("CheckoutPaymentCompletedScreen");
+                })
+                .catch((error) => {
+                  alert(`Error: ${error.code} | ${error.description}`);
+                });
+            }
+          });
+        }
+        return res?.data;
+      })
+      .catch((e) => {
+        console.log("createOrderFromCart error");
+        return e;
+      });
+  };
+
   return (
     <View
       style={{
@@ -70,9 +132,28 @@ function CheckoutResume(props) {
             style={{
               paddingHorizontal: AppConfig.paddingHorizontal,
             }}
-            contentContainerStyle={{ paddingBottom: 60 }}
+            contentContainerStyle={{ paddingBottom: 110 }}
           >
             <DeliverInfo orderStatus={orderStatus} />
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginTop: 20,
+              }}
+            >
+              <Text style={ApplicationStyles.screen.heading4Bold}>
+                {orderStatus === 1
+                  ? "Order placed on Oct 24, 2020"
+                  : "Your order"}
+              </Text>
+              <TouchableOpacity>
+                <Image
+                  style={styles.editImage}
+                  source={images.userAddressEditImage}
+                />
+              </TouchableOpacity>
+            </View>
             <View>
               {data.map((item, index) => {
                 console.log("Itemm", item);
@@ -91,6 +172,64 @@ function CheckoutResume(props) {
               subTotal={money.total}
               saving={money.saving}
             />
+            <PaymentOptions />
+            {orderStatus != 1 && (
+              <View>
+                <View
+                  style={{
+                    marginTop: 30,
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Image
+                    style={{
+                      width: s(28),
+                      height: s(28),
+                      resizeMode: "contain",
+                      marginRight: s(10),
+                    }}
+                    source={images.shopcartInfoImage}
+                  />
+                  <View>
+                    <Text
+                      style={[
+                        ApplicationStyles.screen.txtRegular,
+                        { color: colors.grey80 },
+                      ]}
+                    >
+                      Remember that you will get your product once the
+                    </Text>
+                    <View style={{ flexDirection: "row" }}>
+                      <Text
+                        style={[
+                          ApplicationStyles.screen.txtRegular,
+                          { color: colors.grey80 },
+                        ]}
+                      >
+                        number of slices has been reached
+                      </Text>
+                      <TouchableOpacity>
+                        <Text
+                          style={[
+                            ApplicationStyles.screen.txtRegular,
+                            { color: colors.secondary00, paddingLeft: 6 },
+                          ]}
+                        >
+                          Learn more
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+                <View style={{ marginTop: 20 }}>
+                  <Switch
+                    onSwitch={() => {}}
+                    label="I accept Privacy Policy and Terms of use"
+                  />
+                </View>
+              </View>
+            )}
           </ScrollView>
         </View>
       </SafeAreaView>
@@ -113,34 +252,8 @@ function CheckoutResume(props) {
             }}
           >
             <Button
-              onPress={() => {
-                createOrderFromCart();
-                // RazarPay();
-                var options = {
-                  description: "Credits towords consultation",
-                  image: "https://i.imgur.com/3g7nmJC.png",
-                  currency: "INR",
-                  key: "rzp_test_owK1UREmxZCSL2",
-                  amount: "50000",
-                  name: "Acme Corp",
-                  id: "order_InTPbMNsmgyvWw", //Replace this with an order_id created using Orders API.
-                  prefill: {
-                    email: "bluestar929@outlook.com",
-                    contact: "8616525825013",
-                    name: "Gaurav Kumar",
-                  },
-                  theme: { color: "#53a20e" },
-                };
-                RazorpayCheckout.open(options)
-                  .then((data) => {
-                    alert(`Success: ${data.razorpay_payment_id}`);
-                    console.log(`Success: ${data.razorpay_payment_id}`);
-                  })
-                  .catch((error) => {
-                    alert(`Error: ${error.code} | ${error.description}`);
-                  });
-
-                // NavigationService.navigate("CheckoutPaymentCompletedScreen");
+              onPress={async () => {
+                await proceedFurther();
               }}
               text={"PROCEED"}
             />
@@ -150,5 +263,14 @@ function CheckoutResume(props) {
     </View>
   );
 }
+
+const styles = ScaledSheet.create({
+  editImage: {
+    width: "24@s",
+    height: "24@s",
+    marginLeft: "12@s",
+    resizeMode: "contain",
+  },
+});
 
 export default CheckoutResume;

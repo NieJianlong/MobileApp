@@ -7,13 +7,12 @@ import { Alert } from "react-native";
 export const useCreateOrder = () => {
   const userProfile = useReactiveVar(userProfileVar);
   const [order, setOrder] = useState(null);
-  debugger;
   console.log(
     "localCartVar().items",
-    localCartVar().items +
-      userProfile.buyerId +
-      localCartVar().deliverAddress +
-      userProfile.billingDetailsId
+    localCartVar().items,
+    userProfile.buyerId,
+    localCartVar().deliverAddress,
+    userProfile.billingDetailsId,
   );
   const [createOrderFromCart, { loading, error, data }] = useMutation(
     CreateOrderFromCart,
@@ -34,22 +33,23 @@ export const useCreateOrder = () => {
       },
       onCompleted: (res) => {
         console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
+        setOrder(res);
       },
       onError: (res) => {
         alert(JSON.stringify(res.message));
         console.log(`Explore useCreateOrder onError ${JSON.stringify(res)}`);
       },
-    }
+    },
   );
 
   useEffect(() => {
     if (loading) {
-      debugger;
+      // debugger;
       return;
     }
 
     if (error) {
-      debugger;
+      // debugger;
       console.log("error=====", error);
 
       console.log("error===============", error.response);

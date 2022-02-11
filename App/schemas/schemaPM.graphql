@@ -267,6 +267,21 @@ input RazorpayOrderRequest {
     amount: Float!
 }
 
+input RazorpayVerifyPaymentSignatureRequest {
+   razorpayPaymentId: String,
+   razorpayOrderId: String,
+   razorpaySignature: String
+}
+
+type RazorpayVerifyPaymentSignatureResponse {
+  valid: Boolean,
+  razorpayPaymentId: String,
+  razorpayOrderId: String,
+  razorpayPaymentStatus: Boolean,
+  razorpayOrderId: String,
+  razorpayOrderStatus: Boolean
+}
+
 type RazorpayOrderResponse {
     razorpayOrderId: String
 }
@@ -331,6 +346,7 @@ type Mutation {
   
   """buyer: get razorpayment Id"""
   razorpayCreateOrder(request: RazorpayOrderRequest!): RazorpayOrderResponse
+  razorpayVerifyPaymentSignature(request: RazorpayVerifyPaymentSignatureRequest!): RazorpayVerifyPaymentSignatureResponse
 }
 
 enum OnlineStoreType {

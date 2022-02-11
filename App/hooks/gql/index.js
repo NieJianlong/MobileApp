@@ -37,3 +37,29 @@ export const RAZOR_ORDER = gql`
     }
   }
 `;
+
+export const RAZOR_VERIFY = gql`
+  mutation RazorpayVerifyPaymentSignature(
+    $request: RazorpayVerifyPaymentSignatureRequest!
+  ) {
+    razorpayVerifyPaymentSignature(request: $request) {
+      valid
+      razorpayPaymentId
+      razorpayOrderId
+      razorpayPaymentStatus
+      razorpayOrderId
+      razorpayOrderStatus
+    }
+  }
+`;
+
+export const WALLET_BALANCE = gql`
+  query GetBuyerSalamiWalletBalance {
+    getBuyerSalamiWalletBalance {
+      walletId
+      buyerId
+      walletBalance
+      giftBalance
+    }
+  }
+`;

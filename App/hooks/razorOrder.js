@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import { useMutation, useReactiveVar } from "@apollo/client";
-import { localCartVar, userProfileVar } from "../Apollo/cache";
+import { cartOrderVar, userProfileVar } from "../Apollo/cache";
 import { RAZOR_ORDER } from "./gql";
-import { Alert } from "react-native";
 
-export const useCreateRazorOrder = (orderNumber, orderId, amount) => {
+export const useCreateRazorOrder = () => {
   const userProfile = useReactiveVar(userProfileVar);
+  const cartOrder = useReactiveVar(cartOrderVar);
   const [razorOrder, setRazorOrder] = useState(null);
   const [razorpayCreateOrder, { loading, error, data }] = useMutation(
     RAZOR_ORDER,
     {
       variables: {
         request: {
-          orderNumber: "ORDER-17012022-101727620",
-          orderId: "a8f0ae56-ded2-4b82-8a64-f46f67a03037",
-          amount: 10,
+          orderNumber: cartOrder.orderNumber, //"ORDER-17012022-101727620",
+          orderId: cartOrder.orderId, //"a8f0ae56-ded2-4b82-8a64-f46f67a03037",
+          amount: cartOrder.amount, //10,
         },
       },
       context: {

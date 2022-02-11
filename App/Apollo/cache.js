@@ -39,8 +39,22 @@ const localCart = {
   callBackAddress: {}, // when address query  calls back add here, use for store co-ordinates ect ..., use gql mapper for now
 };
 
+const cartOrder = {
+  orderNumber: "",
+  orderId: "",
+  amount: 0,
+};
+
+const razorOrderPayment = {
+  razorpay_payment_id: "",
+  razorpay_order_id: "",
+  razorpay_signature: "",
+};
+
 export const userProfileVar = makeVar(userProfile);
 export const localCartVar = makeVar(localCart);
+export const cartOrderVar = makeVar(cartOrder);
+export const razorOrderPaymentVar = makeVar(razorOrderPayment);
 
 export const GET_USER_PROFILE = gql`
   query getUserProfileVar {
@@ -66,6 +80,16 @@ export default new InMemoryCache({
         localCartVar: {
           read() {
             return localCartVar();
+          },
+        },
+        cartOrderVar: {
+          read() {
+            return cartOrderVar();
+          },
+        },
+        razorOrderPaymentVar: {
+          read() {
+            return razorOrderPaymentVar();
           },
         },
       },

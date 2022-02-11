@@ -25,13 +25,13 @@ function index(props) {
       subtitle1: 'County, City',
       type: 'delivery',
     },
-    {
-      icon: images.userUPayImage,
-      title: 'Payment',
-      subtitle: 'Salami Credit',
-      subtitle1: images.userLogoImage,
-      type: 'Payment',
-    },
+    // {
+    //   icon: images.userUPayImage,
+    //   title: 'Payment',
+    //   subtitle: 'Salami Credit',
+    //   subtitle1: images.userLogoImage,
+    //   type: 'Payment',
+    // },
   ]);
   return (
     <View>
@@ -86,24 +86,6 @@ function index(props) {
           </View>
         );
       })}
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          paddingHorizontal: AppConfig.paddingHorizontal,
-          marginTop: 20,
-        }}
-      >
-        <Text style={ApplicationStyles.screen.heading4Bold}>
-          {orderStatus === 1 ? 'Order placed on Oct 24, 2020' : 'Your order'}
-        </Text>
-        <TouchableOpacity>
-          <Image
-            style={styles.editImage}
-            source={images.userAddressEditImage}
-          />
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }

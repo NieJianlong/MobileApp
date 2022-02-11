@@ -14,10 +14,8 @@ export default function RelatedProducts({ productId }) {
   const { data, error } = useGetRelatedProductsQuery({
     variables: { productId },
     onCompleted: (res) => {
-      debugger;
     },
     onError: (res) => {
-      debugger;
     },
     context: {
       headers: {

@@ -169,63 +169,6 @@ function index(props) {
           </View>
         );
       })}
-      {orderStatus != 1 && (
-        <View>
-          <View
-            style={{
-              marginTop: 30,
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            <Image
-              style={{
-                width: s(28),
-                height: s(28),
-                resizeMode: "contain",
-                marginRight: s(10),
-              }}
-              source={images.shopcartInfoImage}
-            />
-            <View>
-              <Text
-                style={[
-                  ApplicationStyles.screen.txtRegular,
-                  { color: colors.grey80 },
-                ]}
-              >
-                Remember that you will get your product once the
-              </Text>
-              <View style={{ flexDirection: "row" }}>
-                <Text
-                  style={[
-                    ApplicationStyles.screen.txtRegular,
-                    { color: colors.grey80 },
-                  ]}
-                >
-                  number of slices has been reached
-                </Text>
-                <TouchableOpacity>
-                  <Text
-                    style={[
-                      ApplicationStyles.screen.txtRegular,
-                      { color: colors.secondary00, paddingLeft: 6 },
-                    ]}
-                  >
-                    Learn more
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-          <View style={{ marginTop: 20 }}>
-            <Switch
-              onSwitch={() => {}}
-              label="I accept Privacy Policy and Terms of use"
-            />
-          </View>
-        </View>
-      )}
     </View>
   );
 }

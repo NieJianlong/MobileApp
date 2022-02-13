@@ -62,7 +62,7 @@ import InSufficientSalamiCreditScreen from "../Containers/InSufficientSalamiCred
 import CheckoutPaymentCompletedScreen from "../Containers/CheckoutPaymentCompleted";
 import CheckoutPaymentCompletedGuestScreen from "../Containers/CheckoutPaymentCompletedGuest";
 import ChatScreen from "../Containers/Chat";
-import OrderGroupInfoScreen from "../Containers/OrderGroupInfo";
+// import OrderGroupInfoScreen from "../Containers/OrderGroupInfo";
 import TrackOrderScreen from "../Containers/TrackOrder";
 import CancelOrderScreen from "../Containers/CancelOrder";
 import AskForReplacementScreen from "../Containers/AskForReplacement";
@@ -258,10 +258,10 @@ function PrimaryNav() {
         component={CheckoutPaymentCompletedGuestScreen}
       />
       <Stack.Screen name={"ChatScreen"} component={ChatScreen} />
-      <Stack.Screen
+      {/* <Stack.Screen
         name={"OrderGroupInfoScreen"}
         component={OrderGroupInfoScreen}
-      />
+      /> */}
       <Stack.Screen name={"TrackOrderScreen"} component={TrackOrderScreen} />
       <Stack.Screen name={"CancelOrderScreen"} component={CancelOrderScreen} />
       <Stack.Screen

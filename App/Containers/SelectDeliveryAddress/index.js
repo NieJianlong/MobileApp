@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from "react";
 import { View, StatusBar, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { s } from "react-native-size-matters";
-import { AppBar, Button, RightButton } from "../../Components";
+import { AppBar, RightButton } from "../../Components";
 import styles from "./styles";
 import colors from "../../Themes/Colors";
 import AppConfig from "../../Config/AppConfig";

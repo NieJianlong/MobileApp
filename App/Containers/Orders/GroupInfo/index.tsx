@@ -13,13 +13,27 @@ import { AppBar } from "../../../Components";
 import { Images } from "../../../Themes";
 import NavigationService from "../../../Navigation/NavigationService";
 import { useRoute } from "@react-navigation/core";
-import { useQuery } from "@apollo/client";
-import { GET_LISTINGS } from "../../Explore/gql/explore_queries";
 import ProductItem from "../../Explore/Components/ProductItem";
+import {
+  FilterType,
+  ProductListingStatus,
+  useGetListingsQuery,
+} from "../../../../generated/graphql";
 
 function GroupInfoScreen(props) {
   const { params } = useRoute();
   const data = params.item;
+  const { data: product } = useGetListingsQuery({
+    variables: {
+      searchOptions: {
+        filter: FilterType.ByListingId,
+        filterParams: {
+          listingId: data.listingId,
+          productId: data.productId,
+        },
+      },
+    },
+  });
   // const { loading, error, data, refetch, fetchMore } = useGetListingsQuery({
   //   variables: {
   //     searchOptions: {
@@ -111,10 +125,11 @@ function GroupInfoScreen(props) {
             NavigationService.navigate("ReturnProductStep1Screen")
           )}
         {/* when order status is uncompleted,user can cancel the order */}
-        {params &&
-          params.type === "incompleted" &&
+        {data.listingStatus === ProductListingStatus.Active &&
           renderAction(Images.orderCancelImage, "Cancel order", () =>
-            NavigationService.navigate("CancelOrderScreen")
+            NavigationService.navigate("CancelOrderScreen", {
+              orderItemId: data.orderItemId,
+            })
           )}
         {params &&
           params.type === "returnstatus" &&
@@ -126,12 +141,15 @@ function GroupInfoScreen(props) {
   }
 
   function renderBody() {
+    if (!product) {
+      return null;
+    }
     if (data) {
       return (
         <ScrollView showsVerticalScrollIndicator={false} style={styles.body}>
           <ProductItem
             isAnnouncement={false}
-            product={data}
+            product={product?.getListings.content[0]}
             size={"M"}
             notShowBottom={true}
           />

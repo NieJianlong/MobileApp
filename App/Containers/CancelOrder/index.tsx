@@ -15,9 +15,13 @@ import colors from "../../Themes/Colors";
 import { AppBar, Selector } from "../../Components";
 import NavigationService from "../../Navigation/NavigationService";
 import { ApplicationStyles } from "../../Themes";
+import { useRoute } from "@react-navigation/native";
 
 function CancelOrder(props) {
   const [showPrefer, setShowPrefer] = useState(false);
+  const [reason, setReason] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
+  const {params} = useRoute();
   return (
     <View
       style={{
@@ -40,7 +44,12 @@ function CancelOrder(props) {
             return (
               <TouchableOpacity
                 onPress={() => {
-                  NavigationService.navigate("RefundScreen", { cancel: true });
+                  NavigationService.navigate("RefundScreen", {
+                    cancel: true,
+                    orderItemId:params.orderItemId,
+                    reason,
+                    message,
+                  });
                 }}
               >
                 <Text style={[ApplicationStyles.screen.heading5Bold]}>
@@ -79,16 +88,21 @@ function CancelOrder(props) {
             placeholder={"Problem reason goes here"}
             data={[
               "The product is damaged",
-              "The product is damaged",
-              "The product is damaged",
+              "Wrong product delivered",
+              "Manufacturing defects",
             ]}
-            onValueChange={(item) => {
+            onValueChange={(item: string) => {
               setShowPrefer(true);
+              setReason(item);
             }}
           />
           <RNTextInput
             multiline={true}
             placeholder="Message"
+            value={message}
+            onChangeText={(text) => {
+              setMessage(text);
+            }}
             style={styles.input}
           />
         </ScrollView>

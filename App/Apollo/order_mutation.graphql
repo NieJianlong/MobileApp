@@ -1,0 +1,3 @@
+mutation CancelOrderItem($request: CancelOrderItemRequest) {
+    cancelOrderItem(request: $request)
+}

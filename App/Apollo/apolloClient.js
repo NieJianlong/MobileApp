@@ -73,6 +73,7 @@ const allAPIS = {
 
   GetBuyerOrders: ORDER_PORT,
   SearchBuyerOrders: ORDER_PORT,
+  CancelOrderItem: ORDER_PORT,
 };
 
 const customFetch = (uri, options) => {

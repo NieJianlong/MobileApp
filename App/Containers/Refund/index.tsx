@@ -8,6 +8,11 @@ import { AppBar, Button } from "../../Components";
 import NavigationService from "../../Navigation/NavigationService";
 import CheckBox from "../AskForReplacement/CheckBox";
 import { useRoute } from "@react-navigation/native";
+import {
+  RefundMethod,
+  useCancelOrderItemMutation,
+} from "../../../generated/graphql";
+import lodash from "lodash";
 
 const countries = [
   {
@@ -26,6 +31,25 @@ function Refund(props) {
   const [selectValue, setSelectValue] = useState(countries[0]);
   const { params } = useRoute();
   const { cancel } = params;
+  console.log("====================================");
+  console.log();
+  console.log("====================================");
+  const [cancelOrder] = useCancelOrderItemMutation({
+    variables: {
+      request: {
+        ...lodash.omit(params, "cancel"),
+        refundMethod: RefundMethod.PaymentGateway,
+      },
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: () => {
+      NavigationService.navigate("CancelOrderCompletedScreen");
+    },
+  });
 
   return (
     <View
@@ -90,7 +114,7 @@ function Refund(props) {
           <Button
             onPress={() => {
               cancel
-                ? NavigationService.navigate("CancelOrderCompletedScreen")
+                ? cancelOrder()
                 : NavigationService.navigate("ReturnProductStep2Screen");
             }}
             color={colors.primary}

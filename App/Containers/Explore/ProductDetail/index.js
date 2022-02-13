@@ -26,6 +26,9 @@ function ProductDetail(props) {
   const {
     params: { product },
   } = useRoute();
+  console.log('params====================================');
+  console.log(product);
+  console.log('====================================');
   const [pickUp, setPickUp] = useState(
     !(
       product.deliveryOption === DeliveryOption.SellerLocationPickup ||

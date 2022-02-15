@@ -56,9 +56,15 @@ type BuyerOrderResponse {
   totalElements: Int!
 }
 
+enum CancellationReason {
+  MISTAKE_ORDER
+  NOT_ABLE_TO_WAIT_FOR_LISTING_COMPLETION
+  PRODUCT_NOT_REQUIRED
+}
+
 input CancelOrderItemRequest {
   orderItemId: String!
-  reason: String
+  reason: CancellationReason!
   message: String
   refundMethod: RefundMethod!
 }

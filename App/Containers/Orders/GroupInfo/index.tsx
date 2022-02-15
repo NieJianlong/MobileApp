@@ -97,33 +97,37 @@ function GroupInfoScreen(props) {
     return (
       <View>
         {renderAction(Images.packageMed, "Order details", () =>
-          NavigationService.navigate("OrderDetailScreen")
+          NavigationService.navigate("OrderDetailScreen", {
+            data,
+            product: product?.getListings?.content[0],
+          })
         )}
         {renderAction(Images.invoice, "Invoice", () =>
-          NavigationService.navigate("InvoiceScreen")
+          NavigationService.navigate("InvoiceScreen", {
+            data,
+            product: product?.getListings?.content[0],
+          })
         )}
         {renderAction(Images.star, "Write a review about the product", () =>
           NavigationService.navigate("RateOrderScreen", {
             onPost: () => {
               NavigationService.goBack();
             },
+            data,
+            product: product?.getListings?.content[0],
           })
         )}
         {renderAction(Images.user, "Evaluate the seller", () =>
           NavigationService.navigate("RateSellerScreen")
         )}
         {/* when order status is reached,user can track order */}
-        {params &&
-          params.type === "reached" &&
-          renderAction(Images.orderTrackImage, "Track order", () =>
-            NavigationService.navigate("TrackOrderScreen", { type: "track" })
-          )}
+        {renderAction(Images.orderTrackImage, "Track order", () =>
+          NavigationService.navigate("TrackOrderScreen", { type: "track" })
+        )}
         {/* when order status is received,user can return product */}
-        {params &&
-          params.type === "received" &&
-          renderAction(Images.orderReturnImage, "Return product", () =>
-            NavigationService.navigate("ReturnProductStep1Screen")
-          )}
+        {renderAction(Images.orderReturnImage, "Return product", () =>
+          NavigationService.navigate("ReturnProductStep1Screen")
+        )}
         {/* when order status is uncompleted,user can cancel the order */}
         {data.listingStatus === ProductListingStatus.Active &&
           renderAction(Images.orderCancelImage, "Cancel order", () =>
@@ -131,11 +135,9 @@ function GroupInfoScreen(props) {
               orderItemId: data.orderItemId,
             })
           )}
-        {params &&
-          params.type === "returnstatus" &&
-          renderAction(Images.orderTrackImage, "Return status", () =>
-            NavigationService.navigate("TrackOrderScreen", { type: "return" })
-          )}
+        {renderAction(Images.orderTrackImage, "Return status", () =>
+          NavigationService.navigate("TrackOrderScreen", { type: "return" })
+        )}
       </View>
     );
   }

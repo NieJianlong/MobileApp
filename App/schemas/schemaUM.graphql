@@ -662,6 +662,7 @@ type Query {
   sellerBillingDetailsById(billingDetailsId: ID!): SellerBillingDetailsResponse
   sellerBillingDetailsForSeller(sellerId: ID!): SellerBillingDetailsResponse
   getSellerDocumentKeys(sellerId: ID!): [SellerDocumentResponse]
+  getHowToVideoLink: GenericResponse
 }
 
 type ReduceWalletResponse {

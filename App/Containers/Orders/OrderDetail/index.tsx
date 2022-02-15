@@ -1,16 +1,17 @@
 import React, { Component } from "react";
-import { View, StatusBar, Text, ScrollView } from "react-native";
+import { View, StatusBar, Text, Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import styles from "./styles";
 import { AppBar } from "../../../Components";
+import { Images } from "../../../Themes";
 import { vs } from "react-native-size-matters";
 import { useRoute } from "@react-navigation/native";
-import moment from "moment";
 import { DeliveryOption } from "../../../../generated/graphql";
+import { t } from "react-native-tailwindcss";
 import { trimEnd } from "lodash";
+import moment from "moment";
 
-class Invoice extends Component {
+class OrderDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -21,23 +22,12 @@ class Invoice extends Component {
   renderHeader() {
     return (
       <View style={styles.header}>
-        <AppBar
-        // rightButton={() => (
-        //   <TouchableOpacity>
-        //     <Image
-        //       resizeMode={"contain"}
-        //       style={styles.icDownload}
-        //       source={Images.download}
-        //     />
-        //   </TouchableOpacity>
-        // )}
-        />
+        <AppBar title={this.props.data.orderNumber} />
       </View>
     );
   }
 
   renderDeliverTo() {
-    const order = this.props.data;
     const deliverAddress = this.props.data.deliveryAddress;
     const deliveryOption = this.props.data.deliveryOption;
     const collectionPoint = this.props.data.collectionPoint;
@@ -78,40 +68,48 @@ class Invoice extends Component {
     }
     return (
       <View style={styles.sectionContainer}>
-        <View>
-          <Text style={styles.txtOrder}>{order.orderNumber}</Text>
-          <View style={{ height: vs(10) }} />
-          <Text style={styles.txtName}>User Name</Text>
-          <Text style={styles.txtAddress}>{addressDetail}</Text>
+        <View style={styles.row}>
+          <Image source={Images.packageFilled} style={styles.icon} />
+          <Text style={styles.heading5Bold}>{title}</Text>
         </View>
-        <View style={styles.totalContainer}>
-          <Text style={styles.txtOrder}>TOTAL</Text>
-          <View style={{ height: vs(10) }} />
-          <Text style={styles.txtMoney}>${order.orderTotal}</Text>
-          <Text style={styles.txtAddress}>
-            {moment(order.orderDatetime).format("MMM DD,YYYY")}
-          </Text>
-        </View>
+        <Text style={styles.txtRegular}>{addressDetail}</Text>
       </View>
     );
   }
 
-  renderSellerInfo() {
+  renderBillingAddress() {
     return (
-      <View style={styles.sellerContainer}>
-        <Text style={styles.heading4Bold}>Sold by</Text>
-        <Text style={[styles.txtRegular, { marginVertical: vs(10) }]}>
-          Seller Name, Streetname 00/Apt 404 - 00000 County, City - Country
+      <View style={styles.sectionContainer}>
+        <View style={styles.row}>
+          <Image source={Images.packageFilled} style={styles.icon} />
+          <Text style={styles.heading5Bold}>Billing Address</Text>
+        </View>
+        <Text style={styles.txtRegular}>
+          Username, Streetname 00{"\n"}
+          County, City
         </Text>
       </View>
     );
   }
 
-  renderPrice() {
+  renderPayment() {
+    return (
+      <View style={styles.sectionContainer}>
+        <View style={styles.row}>
+          <Image source={Images.packageFilled} style={styles.icon} />
+          <Text style={styles.heading5Bold}>Payment</Text>
+        </View>
+
+        <Text style={styles.txtRegular}>MasterCard **** **** **** 5464</Text>
+      </View>
+    );
+  }
+
+  renderProductInfo() {
     const order = this.props.data;
-    const product = this.props.product;
     const picUrl = order.mainImagePath;
     const name = order.shortName;
+    const product = this.props.product;
     console.log("product====================================");
     console.log(product);
     console.log("====================================");
@@ -126,44 +124,64 @@ class Invoice extends Component {
 
     const price = order.itemPrice;
     return (
+      <View style={styles.productContainer}>
+        <Text style={styles.heading4Bold}>
+          Order placed on {moment(order.orderDatetime).format("MMM DD,YYYY")}
+        </Text>
+
+        <View style={styles.v1}>
+          <View style={styles.row}>
+            <Image
+              source={{
+                uri: picUrl,
+              }}
+              resizeMode="contain"
+              style={styles.productIcon}
+            />
+
+            <View style={[t.mL2]}>
+              <Text style={[styles.productName]}>{name}</Text>
+              <Text style={styles.productDetail}>{optionString}</Text>
+            </View>
+          </View>
+
+          <Text style={styles.txtPrice}>${price}</Text>
+        </View>
+      </View>
+    );
+  }
+
+  renderPrice() {
+    const order = this.props.data;
+    const product = this.props.product;
+    return (
       <View style={styles.priceContainer}>
         <Text style={[styles.heading4Bold, { marginBottom: vs(15) }]}>
-          Your order
+          Order summary
         </Text>
-        <View style={styles.v2}>
-          <View>
-            <View style={styles.row}>
-              <View style={styles.amountContainer}>
-                <Text style={styles.heading4Bold}>1</Text>
-              </View>
-              <Text style={styles.heading4Regular}>{name}</Text>
-            </View>
-            <Text style={styles.productOptionText}>
-             {optionString}
-            </Text>
-          </View>
-          <Text style={styles.txt1}>${order.orderSubTotal}</Text>
-        </View>
-        <View style={styles.line} />
-        <Text style={[styles.heading4Bold, { marginBottom: vs(15) }]}>
-          Total
-        </Text>
+
         <View style={styles.v2}>
           <Text style={styles.heading4Regular}>Subtotal</Text>
           <Text style={styles.heading4Regular}>${order.orderSubTotal}</Text>
         </View>
+
         <View style={styles.v2}>
           <Text style={styles.heading4Regular}>Service fee</Text>
           <Text style={styles.heading4Regular}>${order.orderServiceFees}</Text>
         </View>
+
         <View style={styles.v2}>
           <Text style={styles.heading4Regular}>Delivery</Text>
-          <Text style={styles.heading4Regular}>${product.courierShippingFee}</Text>
+          <Text style={styles.heading4Regular}>
+            ${product.courierShippingFee}
+          </Text>
         </View>
+
         <View style={styles.v2}>
           <Text style={styles.heading4Regular}>Total savings</Text>
           <Text style={styles.heading4Regular}>${order.totalSavings}</Text>
         </View>
+
         <View style={styles.v2}>
           <Text style={styles.heading4Bold}>Total</Text>
           <Text style={styles.heading4Bold}>${order.orderTotal}</Text>
@@ -176,7 +194,13 @@ class Invoice extends Component {
     return (
       <ScrollView showsVerticalScrollIndicator={false} style={styles.body}>
         {this.renderDeliverTo()}
-        {this.renderSellerInfo()}
+
+        {/* {this.renderBillingAddress()}
+
+        {this.renderPayment()} */}
+
+        {this.renderProductInfo()}
+
         {this.renderPrice()}
       </ScrollView>
     );
@@ -188,6 +212,7 @@ class Invoice extends Component {
         <StatusBar barStyle="dark-content" />
         <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
           {this.renderHeader()}
+
           {this.renderBody()}
         </SafeAreaView>
       </View>
@@ -195,9 +220,9 @@ class Invoice extends Component {
   }
 }
 
-function InvoiceScreen(props) {
+function OrderDetailScreen(props) {
   const { params } = useRoute();
-  return <Invoice data={params?.data} product={params.product} />;
+  return <OrderDetail data={params?.data} product={params.product} />;
 }
 
-export default InvoiceScreen;
+export default OrderDetailScreen;

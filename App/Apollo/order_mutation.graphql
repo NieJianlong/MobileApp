@@ -1,3 +1,6 @@
 mutation CancelOrderItem($request: CancelOrderItemRequest) {
     cancelOrderItem(request: $request)
 }
+mutation MarkOrderItemAsDelivered($request: OrderItemDeliveredRequest!) {
+    markOrderItemAsDelivered(request: $request)
+}

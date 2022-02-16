@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   StatusBar,
@@ -18,6 +18,7 @@ import {
   FilterType,
   ProductListingStatus,
   useGetListingsQuery,
+  useMarkOrderItemAsDeliveredMutation,
 } from "../../../../generated/graphql";
 
 function GroupInfoScreen(props) {
@@ -34,6 +35,22 @@ function GroupInfoScreen(props) {
       },
     },
   });
+  const [markOrderItem] = useMarkOrderItemAsDeliveredMutation();
+  useEffect(() => {
+    markOrderItem({
+      variables: {
+        request: {
+          buyerId: global.buyerId,
+          orderItemId: data.orderItemId,
+        },
+      },
+      context: {
+        headers: {
+          isPrivate: true,
+        },
+      },
+    });
+  }, [data, markOrderItem]);
   // const { loading, error, data, refetch, fetchMore } = useGetListingsQuery({
   //   variables: {
   //     searchOptions: {

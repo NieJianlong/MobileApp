@@ -64,6 +64,7 @@ const allAPIS = {
   DeleteProductFromWishlist: PRODUCT_PORT,
   IsProductInWishlist: PRODUCT_PORT,
   IsListingAvailable: PRODUCT_PORT,
+  AddProductReview: PRODUCT_PORT,
 
   // Cart
   CreateCart: CART_PORT,
@@ -75,10 +76,14 @@ const allAPIS = {
   SearchBuyerOrders: ORDER_PORT,
   CancelOrderItem: ORDER_PORT,
   MarkOrderItemAsDelivered: ORDER_PORT,
+  SubmitOrderReturnRequest: ORDER_PORT,
 };
 
 const customFetch = (uri, options) => {
   const { operationName } = JSON.parse(options.body);
+  console.log('operationName====================================');
+  console.log(operationName);
+  console.log('====================================');
   let newUri = `${uri}${allAPIS[operationName]}`;
   if (!allAPIS[operationName]) {
     //if we forget add api in allApis,there will be a mistake

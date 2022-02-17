@@ -31,14 +31,14 @@ function Refund(props) {
   const [selectValue, setSelectValue] = useState(countries[0]);
   const { params } = useRoute();
   const { cancel } = params;
-  console.log("====================================");
-  console.log();
-  console.log("====================================");
+  const [refundMethod, setRefundMethod] = useState<RefundMethod>(
+    RefundMethod.SalamiCredit
+  );
   const [cancelOrder] = useCancelOrderItemMutation({
     variables: {
       request: {
         ...lodash.omit(params, "cancel"),
-        refundMethod: RefundMethod.PaymentGateway,
+        refundMethod: refundMethod,
       },
     },
     context: {
@@ -69,38 +69,42 @@ function Refund(props) {
         edges={["top", "right", "left", "bottom"]}
       >
         <AppBar />
-
-        <FlatList
-          contentContainerStyle={{ paddingBottom: vs(44) }}
-          data={countries}
-          ListHeaderComponent={
-            <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-              <Text
-                style={{
-                  fontSize: s(24),
-                  fontFamily: fonts.primary,
-                  color: colors.black,
-                  fontWeight: "600",
-                }}
-              >
-                Where do you want to receive your refund?
-              </Text>
-            </View>
-          }
-          renderItem={({ item }, index) => {
-            return (
-              <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-                <View style={{ height: vs(12) }} />
-                <CheckBox
-                  defaultValue={selectValue == item}
-                  onSwitch={(t) => setSelectValue(item)}
-                  {...item}
-                />
-              </View>
-            );
-          }}
-          keyExtractor={(item, index) => `ass${index}`}
-        />
+        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+          <Text
+            style={{
+              fontSize: s(24),
+              fontFamily: fonts.primary,
+              color: colors.black,
+              fontWeight: "600",
+            }}
+          >
+            Where do you want to receive your refund?
+          </Text>
+        </View>
+        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+          <View style={{ height: vs(12) }} />
+          <CheckBox
+            defaultValue={refundMethod === RefundMethod.SalamiCredit}
+            onSwitch={(t) => {
+              setRefundMethod(RefundMethod.SalamiCredit);
+            }}
+            label="Salami Credit"
+            sublabel=""
+            extra="FASTER"
+          />
+        </View>
+        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+          <View style={{ height: vs(12) }} />
+          <CheckBox
+            defaultValue={refundMethod === RefundMethod.PaymentGateway}
+            onSwitch={(t) => {
+              setRefundMethod(RefundMethod.PaymentGateway);
+            }}
+            label="Mastercard **********6756"
+            sublabel=""
+            extra="FASTER"
+          />
+        </View>
       </SafeAreaView>
       <SafeAreaView
         style={{
@@ -115,7 +119,10 @@ function Refund(props) {
             onPress={() => {
               cancel
                 ? cancelOrder()
-                : NavigationService.navigate("ReturnProductStep2Screen");
+                : NavigationService.navigate("ReturnProductStep2Screen", {
+                    ...params,
+                    refundMethod,
+                  });
             }}
             color={colors.primary}
             text={cancel ? "CANCEL ORDER" : "CONTINUE"}

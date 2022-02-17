@@ -23,31 +23,56 @@ function StarRating(props) {
   if (ratingMode) {
     return (
       <View style={[styles.container, style]}>
-        <TouchableOpacity onPress={() => setUserRating(1)}>
+        <TouchableOpacity
+          onPress={() => {
+            setUserRating(1);
+            props?.onChange && props?.onChange(1);
+          }}
+        >
           <Image
             source={Images.starFilled}
             style={userRating >= 1 ? styles.filledBigStar : styles.emptyBigStar}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setUserRating(2)}>
+        <TouchableOpacity
+          onPress={() => {
+            setUserRating(2);
+            props?.onChange && props?.onChange(2);
+          }}
+        >
           <Image
             source={Images.starFilled}
             style={userRating >= 2 ? styles.filledBigStar : styles.emptyBigStar}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setUserRating(3)}>
+        <TouchableOpacity
+          onPress={() => {
+            setUserRating(3);
+            props?.onChange && props?.onChange(3);
+          }}
+        >
           <Image
             source={Images.starFilled}
             style={userRating >= 3 ? styles.filledBigStar : styles.emptyBigStar}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setUserRating(4)}>
+        <TouchableOpacity
+          onPress={() => {
+            setUserRating(4);
+            props?.onChange && props?.onChange(4);
+          }}
+        >
           <Image
             source={Images.starFilled}
             style={userRating >= 4 ? styles.filledBigStar : styles.emptyBigStar}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setUserRating(5)}>
+        <TouchableOpacity
+          onPress={() => {
+            setUserRating(5);
+            props?.onChange && props?.onChange(5);
+          }}
+        >
           <Image
             source={Images.starFilled}
             style={userRating >= 5 ? styles.filledBigStar : styles.emptyBigStar}
@@ -55,7 +80,7 @@ function StarRating(props) {
         </TouchableOpacity>
       </View>
     );
-  } else
+  } else {
     return (
       <View style={[styles.container, style]}>
         <Image
@@ -88,6 +113,7 @@ function StarRating(props) {
         )}
       </View>
     );
+  }
 }
 
 StarRating.propTypes = {};

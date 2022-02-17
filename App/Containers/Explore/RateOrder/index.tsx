@@ -14,21 +14,23 @@ import ImagePicker from "react-native-image-crop-picker";
 
 import styles from "./styles";
 
-import {
-  ProductSearchBox,
-  AppBar,
-  StarRating,
-  TextInput,
-} from "../../../Components";
+import { AppBar, StarRating, TextInput } from "../../../Components";
 import { Colors, Images } from "../../../Themes";
 import NavigationService from "../../../Navigation/NavigationService";
 import { s } from "react-native-size-matters";
+import {
+  MutationAddProductReviewArgs,
+  useAddProductReviewMutation,
+} from "../../../../generated/graphql";
+import { useRoute } from "@react-navigation/native";
+import { useForm, Controller } from "react-hook-form";
 
-class RateOrderScreen extends Component {
+class RateOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
       images: [],
+      stars: 0,
     };
   }
 
@@ -76,7 +78,9 @@ class RateOrderScreen extends Component {
         <AppBar
           title={"Rate Order"}
           rightButton={() => (
-            <TouchableOpacity onPress={this.onPost}>
+            <TouchableOpacity
+              onPress={() => this.props.onPost(this.state.stars)}
+            >
               <Text style={styles.txtSave}>POST</Text>
             </TouchableOpacity>
           )}
@@ -107,17 +111,49 @@ class RateOrderScreen extends Component {
       <View style={styles.body}>
         <View style={styles.center}>
           <Text style={styles.txtProductName}>iPhone 11</Text>
-          <StarRating ratingMode />
-        </View>
 
-        <TextInput
-          style={styles.reviewInput}
-          multiline
-          placeholder={"Write here your review"}
-          textAlignVertical={"top"}
+          <StarRating
+            ratingMode
+            onChange={(star) => {
+              this.setState({ stars: star });
+            }}
+          />
+        </View>
+        <Controller
+          control={this.props.control}
+          rules={{
+            required: true,
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={styles.reviewInput}
+              placeholder={"Write here title"}
+              textAlignVertical={"top"}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+          name="title"
+        />
+        <Controller
+          control={this.props.control}
+          rules={{
+            required: true,
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={styles.reviewInput}
+              multiline
+              placeholder={"Write here your review"}
+              textAlignVertical={"top"}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+          name="description"
         />
 
-        <View style={styles.center}>
+        {/* <View style={styles.center}>
           <Text style={styles.txt1}>Upload pictures to your review</Text>
         </View>
 
@@ -135,7 +171,7 @@ class RateOrderScreen extends Component {
           keyExtractor={(item, index) => index.toString()}
           renderItem={this.renderImageItem}
           showsHorizontalScrollIndicator={false}
-        />
+        /> */}
       </View>
     );
   }
@@ -167,6 +203,60 @@ class RateOrderScreen extends Component {
       </View>
     );
   }
+}
+
+function RateOrderScreen(props) {
+  const [addProductReview] = useAddProductReviewMutation();
+  const { params } = useRoute();
+  const {
+    register,
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<MutationAddProductReviewArgs>();
+  const onSubmit = (data) => {
+    addProductReview({
+      variables: {
+        input: {
+          ...data,
+          productId: params.product.productId,
+        },
+      },
+      context: {
+        headers: {
+          isPrivate: true,
+        },
+      },
+    });
+  };
+  return (
+    <RateOrder
+      data={params?.data}
+      product={params.product}
+      register={register}
+      control={control}
+      onPost={(stars) => {
+        // alert(stars);
+        handleSubmit((data) => {
+          addProductReview({
+            variables: {
+              input: {
+                ...data,
+                productId: params.product.productId,
+                ratingVote: stars,
+              },
+            },
+            context: {
+              headers: {
+                isPrivate: true,
+              },
+            },
+          });
+        })();
+      }}
+    />
+  );
 }
 
 export default RateOrderScreen;

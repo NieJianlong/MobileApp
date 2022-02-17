@@ -143,7 +143,7 @@ function GroupInfoScreen(props) {
         )}
         {/* when order status is received,user can return product */}
         {renderAction(Images.orderReturnImage, "Return product", () =>
-          NavigationService.navigate("ReturnProductStep1Screen")
+          NavigationService.navigate("ReturnProductStep1Screen", { data })
         )}
         {/* when order status is uncompleted,user can cancel the order */}
         {data.listingStatus === ProductListingStatus.Active &&

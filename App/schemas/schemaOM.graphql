@@ -309,20 +309,6 @@ type OrderReturnStatusResponse {
   events: [OrderReturnEventResponse]
 }
 
-type OrderView {
-  orderId: ID
-  orderNumber: String
-  orderDatetime: String
-  deliveryAddress: String
-  billingAddress: String
-  subTotal: Float
-  serviceFees: Float
-  shippingFees: Float
-  totalSavings: Float
-  orderTotal: Float
-  orderItems: [SimpleOrderItemView]
-}
-
 input PageOption {
   pageNumber: Int!
   pageSize: Int!
@@ -344,8 +330,6 @@ enum ProductListingStatus {
 
 """QUERIES"""
 type Query {
-  """to be deprecated"""
-  getBuyerOrders(buyerId: ID!, searchString: String!): [OrderView]
   searchBuyerOrders(options: BuyerOrderOption!): BuyerOrderResponse!
   getSellerOrders(options: SellerOrderOption!): SellerOrderResponse!
   getSellerListingOrders(options: ListingOrderOptions!): SellerListingOrderResponse!
@@ -490,20 +474,6 @@ enum ShippingStatus {
   OUT_FOR_DELIVERY
   DELIVERED
   DELIVERY_FAILED
-}
-
-type SimpleOrderItemView {
-  orderItemId: ID
-  listingId: ID
-  quantity: Int
-  latestStatus: OrderItemHistoryEventType
-  sellerId: ID
-  variantId: ID
-  variantOptions: String
-  shortName: String
-  photo: String
-  itemPrice: Float
-  discount: Float
 }
 
 type TrackOrderItemResponse {

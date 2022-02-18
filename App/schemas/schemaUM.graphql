@@ -475,6 +475,8 @@ type Mutation {
   sellerBillingDetailsForSeller(sellerId: ID!): SellerBillingDetailsResponse
   acceptSellerRegistrationDocuments(sellerId: ID!): GenericResponse
   rejectSellerValidation(sellerId: ID!, rejectReason: RegistrationRejectedReason!, rejectNote: String): GenericResponse
+  sendOTPCodeForBuyer(buyerId: ID!): GenericResponse
+  validateOTPCodeForBuyer(request: ValidateCodeRequest!): ValidateCodeResponse
 }
 
 input NotificationRequest {
@@ -650,6 +652,7 @@ type Query {
   shippingDetails: [ShippingDetailResponse]
   shippingDetailById(shippingId: ID!): ShippingDetailResponse
   userHasVerifiedEmail(userId: ID!): Boolean
+  buyerHasVerifiedPhoneNumber(userId: ID!): Boolean
   deliveryAddressForBuyer(buyerId: ID!): AddressResponse
   deliveryAddressForGuestBuyer(buyerId: ID!): AddressResponse
   getCountries: [CountryResponse]

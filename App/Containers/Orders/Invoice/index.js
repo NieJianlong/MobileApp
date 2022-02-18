@@ -40,8 +40,8 @@ class Invoice extends Component {
     const order = this.props.data;
     const deliverAddress = this.props.data.deliveryAddress;
     const deliveryOption = this.props.data.deliveryOption;
-    const collectionPoint = this.props.data.collectionPoint;
-    const sellerLocation = this.props.data.sellerLocation;
+    const pickupAddress = this.props.data.pickupAddress;
+    // const sellerLocation = this.props.data.sellerLocation;
     let addressDetail = "";
     let title = "Delivered to";
     switch (deliveryOption) {
@@ -53,11 +53,12 @@ class Invoice extends Component {
         }${deliverAddress.country} ${deliverAddress.pinCode}`;
         break;
       case DeliveryOption.CollectionPointPickup:
-        addressDetail = `${collectionPoint.streetAddress1 ?? ""}${
-          collectionPoint.streetAddress2 ?? ""
-        }${collectionPoint.townCity ?? ""}${collectionPoint.provinceState}${
-          deliverAddress.country
-        } ${deliverAddress.areaCode}`;
+        title = "Pick up location";
+        addressDetail = `${pickupAddress.streetAddress1 ?? ""}${
+          pickupAddress.streetAddress2 ?? ""
+        }${pickupAddress.townCity ?? ""}${pickupAddress.provinceState}${
+          pickupAddress.country
+        } ${pickupAddress.areaCode}`;
         break;
       case DeliveryOption.SellerDirectDelivery:
         addressDetail = `${deliverAddress.houseNumber ?? ""}${
@@ -67,11 +68,12 @@ class Invoice extends Component {
         }${deliverAddress.country} ${deliverAddress.pinCode}`;
         break;
       case DeliveryOption.SellerLocationPickup:
-        addressDetail = `${sellerLocation.streetAddress1 ?? ""}${
-          sellerLocation.streetAddress2 ?? ""
-        }${sellerLocation.townCity ?? ""}${sellerLocation.provinceState}${
-          sellerLocation.country
-        } ${sellerLocation.areaCode}`;
+        title = "Pick up location";
+        addressDetail = `${pickupAddress.streetAddress1 ?? ""}${
+          pickupAddress.streetAddress2 ?? ""
+        }${pickupAddress.townCity ?? ""}${pickupAddress.provinceState}${
+          pickupAddress.country
+        } ${pickupAddress.areaCode}`;
         break;
       default:
         break;
@@ -138,9 +140,7 @@ class Invoice extends Component {
               </View>
               <Text style={styles.heading4Regular}>{name}</Text>
             </View>
-            <Text style={styles.productOptionText}>
-             {optionString}
-            </Text>
+            <Text style={styles.productOptionText}>{optionString}</Text>
           </View>
           <Text style={styles.txt1}>${order.orderSubTotal}</Text>
         </View>
@@ -158,7 +158,9 @@ class Invoice extends Component {
         </View>
         <View style={styles.v2}>
           <Text style={styles.heading4Regular}>Delivery</Text>
-          <Text style={styles.heading4Regular}>${product.courierShippingFee}</Text>
+          <Text style={styles.heading4Regular}>
+            ${product.courierShippingFee ?? 0}
+          </Text>
         </View>
         <View style={styles.v2}>
           <Text style={styles.heading4Regular}>Total savings</Text>

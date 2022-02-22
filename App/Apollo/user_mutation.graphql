@@ -4,7 +4,9 @@ mutation ResendVerificationCodeInEmail($emailAddress: String!) {
     extraMessage
   }
 }
-
+mutation DeleteBuyerProfile($buyerId: ID!) {
+  deleteBuyerProfile(buyerId: $buyerId)
+}
 mutation ForgotPasswordStep1SendNotificationEmail($email: String!) {
   forgotPasswordStep1SendNotificationEmail(email: $email) {
     email

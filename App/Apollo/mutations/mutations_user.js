@@ -70,11 +70,11 @@ export const UPDATE_USER_PROFILE = gql`
   }
 `;
 
-export const DELETE_BUYER_PROFILE = gql`
-  mutation DeleteBuyerProfile($userProfileId: ID!) {
-    deleteBuyerProfile(userProfileId: $userProfileId)
-  }
-`;
+// export const DELETE_BUYER_PROFILE = gql`
+//   mutation DeleteBuyerProfile($userProfileId: ID!) {
+//     deleteBuyerProfile(userProfileId: $userProfileId)
+//   }
+// `;
 
 export const UPDATE_BUYER_PROFILE = gql`
   mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {

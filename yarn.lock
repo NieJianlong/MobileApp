@@ -8386,6 +8386,11 @@ react-native-countdown-component@^2.7.1:
     prop-types "^15.5.8"
     sprintf-js "^1.1.1"
 
+react-native-device-info@^8.4.9:
+  version "8.4.9"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-8.4.9.tgz#3089ea0bf9c9a28327d3ba683469a32b093172dd"
+  integrity sha512-EEdeoaBhaLTOZmCy5xtfepVAfvodteiDHoIxBPUgnNe5p0JLv90BLKtVytbJhlllWScUO48+2u9S7M6WNYsXDQ==
+
 react-native-draggable-flatlist@^2.6.2:
   version "2.6.2"
   resolved "https://registry.npmjs.org/react-native-draggable-flatlist/-/react-native-draggable-flatlist-2.6.2.tgz"

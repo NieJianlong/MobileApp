@@ -1,14 +1,20 @@
 mutation ResendVerificationCodeInEmail($emailAddress: String!) {
-    resendVerificationCodeInEmail(emailAddress: $emailAddress) {
-     status
-     extraMessage
-    }
+  resendVerificationCodeInEmail(emailAddress: $emailAddress) {
+    status
+    extraMessage
+  }
 }
 
 mutation ForgotPasswordStep1SendNotificationEmail($email: String!) {
-    forgotPasswordStep1SendNotificationEmail(email: $email) {
-      email
-      phoneNumber
-      message
-    }
+  forgotPasswordStep1SendNotificationEmail(email: $email) {
+    email
+    phoneNumber
+    message
   }
+}
+mutation RegisterBuyer($request: BuyerProfileRequestForCreate!) {
+  registerBuyer(request: $request) {
+    buyerId
+    userId
+  }
+}

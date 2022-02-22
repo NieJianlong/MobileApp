@@ -243,16 +243,6 @@ type OrderResponse {
   paymentDetails: OrderPaymentDetailsResponse
 }
 
-type OrderReturnAddress {
-  addressId: ID
-  streetAddress1: String
-  streetAddress2: String
-  townCity: String
-  country: String
-  provinceState: String
-  areaCode: String
-}
-
 input OrderReturnEventRequest {
   orderReturnId: ID!
   event: ReturnEventType
@@ -290,6 +280,7 @@ input OrderReturnRequest {
   returnOption: ReturnOption!
   refundMethod: RefundMethod
   message: String
+  returnReasonPolicyId: ID
 }
 
 type OrderReturnResponse {
@@ -298,7 +289,7 @@ type OrderReturnResponse {
   latestEventStatus: ReturnEventType!
   deliveryOption: DeliveryOption!
   returnLabel: String
-  returnAddress: OrderReturnAddress
+  returnAddress: AddressResponse
   collectionPoint: CollectionPointPickupResponse
   sellerLocation: SellerLocationPickupResponse
   qrCodeAsBase64: String

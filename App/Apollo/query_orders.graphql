@@ -20,7 +20,7 @@ fragment AddressOrderFiled on AddressResponse {
   addressFloor
 }
 
-fragment OrderItemDetailField on OrderItemDetailResponse{
+fragment OrderItemDetailField on OrderItemDetailResponse {
   orderId
   orderNumber
   orderDatetime
@@ -53,47 +53,47 @@ fragment OrderItemDetailField on OrderItemDetailResponse{
   deliveryOption
   deliveryDate
   shippingDate
-  deliveryAddress{
+  deliveryAddress {
     ...AddressOrderFiled
   }
-  pickupAddress{
+  pickupAddress {
     ...AddressOrderFiled
   }
-  buyer{
-   buyerId
-   firstName
-   lastName
-   phoneNumber
+  buyer {
+    buyerId
+    firstName
+    lastName
+    phoneNumber
   }
-  shippingDetails{
-   shippingStatus
-   shippingDate
-   carrier
-   carrierUrl
-   trackingNumber
-   expectedDeliveryDate
-   shippingInstructions
-   deliveryDate
-   failedDeliveryReason
-   events{
-    eventType
-    eventDateTime
+  shippingDetails {
+    shippingStatus
+    shippingDate
+    carrier
+    carrierUrl
+    trackingNumber
+    expectedDeliveryDate
+    shippingInstructions
+    deliveryDate
+    failedDeliveryReason
+    events {
+      eventType
+      eventDateTime
+    }
   }
-}
-  collectionPoint{
-  collectionPointId
-  microHubId
-  streetAddress1
-  streetAddress2
-  townCity
-  country
-  provinceState
-  areaCode
-  openingHours
-  contactNumber
-  contactPerson
-}
-  sellerLocation{
+  collectionPoint {
+    collectionPointId
+    microHubId
+    streetAddress1
+    streetAddress2
+    townCity
+    country
+    provinceState
+    areaCode
+    openingHours
+    contactNumber
+    contactPerson
+  }
+  sellerLocation {
     collectionPointId
     streetAddress1
     streetAddress2
@@ -101,55 +101,55 @@ fragment OrderItemDetailField on OrderItemDetailResponse{
     country
     provinceState
     areaCode
-}
-  sellerDirectDelivery{
+  }
+  sellerDirectDelivery {
     announcementId
     deliveryDate
- }
+  }
 }
- 
-fragment SimpleOrderItemViewField on SimpleOrderItemView{
-  orderItemId
-  listingId
-  quantity
-  latestStatus
-  sellerId
-  variantId
-  variantOptions
-  shortName
-  photo
-  itemPrice
-  discount
-  } 
-fragment OrderViewField on OrderView{
-  orderId
-  orderNumber
-  orderDatetime
-  deliveryAddress
-  billingAddress
-  subTotal
-  serviceFees
-  shippingFees
-  totalSavings
-  orderTotal
-  orderItems{
-    ...SimpleOrderItemViewField  
-  }
-  }
-  query GetBuyerOrders($buyerId:ID!,$searchString:String!) {
-    getBuyerOrders(buyerId: $buyerId,searchString:$searchString) {
-     ...OrderViewField
-    }
-  }
 
- query SearchBuyerOrders($options: BuyerOrderOption!){
-     searchBuyerOrders(options: $options){
-       content{
-         ...OrderItemDetailField
-       }
-       pageNo
-       pageSize
-       totalPages
-       totalElements
-     }
- }
+# fragment SimpleOrderItemViewField on SimpleOrderItemView {
+#   orderItemId
+#   listingId
+#   quantity
+#   latestStatus
+#   sellerId
+#   variantId
+#   variantOptions
+#   shortName
+#   photo
+#   itemPrice
+#   discount
+# }
+# fragment OrderViewField on OrderView {
+#   orderId
+#   orderNumber
+#   orderDatetime
+#   deliveryAddress
+#   billingAddress
+#   subTotal
+#   serviceFees
+#   shippingFees
+#   totalSavings
+#   orderTotal
+#   orderItems {
+#     ...SimpleOrderItemViewField
+#   }
+# }
+# query GetBuyerOrders($buyerId:ID!,$searchString:String!) {
+#   getBuyerOrders(buyerId: $buyerId,searchString:$searchString) {
+#    ...OrderViewField
+#   }
+# }
+
+query SearchBuyerOrders($options: BuyerOrderOption!) {
+  searchBuyerOrders(options: $options) {
+    content {
+      ...OrderItemDetailField
+    }
+    pageNo
+    pageSize
+    totalPages
+    totalElements
+  }
+}

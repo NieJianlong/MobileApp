@@ -265,6 +265,7 @@ type Mutation {
 
   """options"""
   createOption(option: OptionInput): Option
+  addOptionValue(optionId: ID!, value: String!): Option
   deleteOption(optionId: String!): Boolean
 
   """categories"""
@@ -309,7 +310,7 @@ enum OnlineStoreType {
 
 type Option {
   optionId: ID!
-  name: String
+  name: String!
   description: String
   values: [OptionValue]
 }
@@ -317,17 +318,17 @@ type Option {
 input OptionInput {
   name: String!
   description: String
-  values: [String]!
+  values: [String!]!
 }
 
 type OptionValue {
   valueId: ID!
-  value: String
+  value: String!
 }
 
 input OptionValueInput {
-  name: String!
-  value: String!
+  optionId: ID!
+  optionValueId: ID!
 }
 
 type PolicyNameView {
@@ -520,6 +521,12 @@ type ProductResponse {
   totalElements: Int!
 }
 
+type ProductReturnPolicy {
+  returnPolicyId: ID!
+  name: String!
+  value: String!
+}
+
 input ProductReturnPolicyInput {
   returnPolicyInputs: [ReturnPolicyInput]!
   addressInput: AddressInput
@@ -536,7 +543,7 @@ type ProductReturnPolicyView {
 
 input ProductReviewInput {
   productId: ID!
-  title: String
+  title: String!
   description: String
   ratingVote: Int!
 }
@@ -620,7 +627,7 @@ type Query {
   getPreferredCategories(buyerId: ID!): [CategoryView]!
 
   """options"""
-  getOptionReference: [Option]!
+  getOptionReference: [Option!]!
 
   """return policies"""
   getPolicyNames: [PolicyNameView]!
@@ -958,7 +965,7 @@ type SellerProductVariant {
 type SellerReturnPolicy {
   returnAddress: String
   returnLabel: SellerProductImage
-  policies: [KeyValuePair]
+  policies: [ProductReturnPolicy]
 }
 
 input SellerReviewInput {

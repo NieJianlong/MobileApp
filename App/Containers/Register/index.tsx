@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { View, StatusBar, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  Platform,
+  ScrollView,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 //import { vs } from 'react-native-size-matters'
 
@@ -12,8 +19,6 @@ import {
   Alert,
 } from "../../Components";
 
-// validation and auth api
-import * as validator from "../../Validation";
 import * as jwt from "../../Apollo/jwt-request";
 import * as storage from "../../Apollo/local-storage";
 /** userProfileVar is the variable for the cache to get set  userProfile attributes */
@@ -22,13 +27,20 @@ import { userProfileVar } from "../../Apollo/cache";
 import { Colors } from "../../Themes";
 import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
-import { REGISTER_BUYER } from "../../Apollo/mutations/mutations_user";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
 import jwt_decode from "jwt-decode";
 import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
-import { SendVerifyEmail } from "./gql/register_mutations";
+import DeviceInfo from "react-native-device-info";
+import { Controller, useForm } from "react-hook-form";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import {
+  BuyerProfileRequestForCreate,
+  useRegisterBuyerMutation,
+} from "../../../generated/graphql";
+import { t } from "react-native-tailwindcss";
+import { startsWith, trimEnd, trimStart } from "lodash";
 
 function RegisterScreen(props) {
   const { dispatch } = useContext(AlertContext);
@@ -37,23 +49,37 @@ function RegisterScreen(props) {
     lastNameInput,
     emailInput,
     passwordInput = null;
+  const {
+    control,
+    handleSubmit,
+    getValues,
+    setValue,
+    formState: { errors },
+  } = useForm<BuyerProfileRequestForCreate>();
+
   // validation
   let [validationDisplay, setValidationDisplay] = useState("");
   let [showValidationAlert, setShowValidationAlert] = useState(false);
   let [validationMessage, setValidationMessage] = useState("");
-  // local state
-  let [name, setName] = useState("");
-  let [lastName, setLastName] = useState("");
-  // registerInput  is indeterminate value that can be a phone or email
-  let [registerInput, setRegisterInput] = useState("");
-  let [psswd, setPsswd] = useState("");
   // because of the way the switch component is set up this is the opposite of what you would expect
   let [termsAccepted, setTermsAccepted] = useState(true);
   useEffect(() => {
+    // let phoneNumber = "+918247278755";
+    // setValue("phoneNumber", trimStart(phoneNumber, "+91"));
+    if (Platform.OS === "android") {
+      DeviceInfo.getPhoneNumber().then((phoneNumber) => {
+        if (phoneNumber.startsWith("+91")) {
+          setValue("phoneNumber", trimEnd(phoneNumber, "+91"));
+        }
+        // alert(phoneNumber);
+        // Android: null return: no permission, empty string: unprogrammed or empty SIM1, e.g. "+15555215558": normal return value
+      });
+    }
+
     return () => {
       // Anything in here is fired on component unmount.
     };
-  }, []);
+  }, [setValue]);
   const [getBuyerId] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
     variables: { userProfileId: global.userProfileId },
     context: {
@@ -89,18 +115,11 @@ function RegisterScreen(props) {
       NavigationService.navigate("MainScreen");
     },
   });
-  let BuyerProfileRequestForCreate = {
-    // userName: registerInput,
-    firstName: name,
-    lastName: lastName,
-    email: registerInput,
-    password: psswd,
-    // phoneNumber: "",
-  };
+
   const autoSignIn = useCallback(async () => {
     //get username and possword from localStorage
-    const username = registerInput;
-    const password = psswd;
+    const username = "+91" + getValues("phoneNumber");
+    const password = getValues("password");
 
     //if username && password exits,we can login auto
     if (username && password) {
@@ -115,9 +134,9 @@ function RegisterScreen(props) {
         isAuth: true,
       });
       let decoded = jwt_decode(access_token);
-      console.log('====================================');
+      console.log("====================================");
       console.log();
-      console.log('====================================');
+      console.log("====================================");
       global.access_token = access_token;
       global.userProfileId = decoded.sub;
 
@@ -127,7 +146,10 @@ function RegisterScreen(props) {
       );
       global.access_token = access_token;
       storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_NAME, username);
-      storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_PASSWORD, psswd);
+      storage.setLocalStorageValue(
+        storage.LOCAL_STORAGE_USER_PASSWORD,
+        password
+      );
       getBuyerId();
 
       storage.setLocalStorageValue(
@@ -135,7 +157,7 @@ function RegisterScreen(props) {
         access_token
       );
     }
-  }, [getBuyerId, psswd, registerInput]);
+  }, [getBuyerId, getValues]);
   //when app open,when can do auto login
   useEffect(() => {
     autoSignIn();
@@ -146,9 +168,7 @@ function RegisterScreen(props) {
    * collect state variable and run the mutation
    * on call back update local storage
    */
-  const [sendVerifyEmail] = useMutation(SendVerifyEmail);
-  const [registerBuyer, { data }] = useMutation(REGISTER_BUYER, {
-    variables: { request: BuyerProfileRequestForCreate },
+  const [registerBuyer, { data }] = useRegisterBuyerMutation({
     onError: (error) => {
       dispatch({
         type: "changLoading",
@@ -180,9 +200,9 @@ function RegisterScreen(props) {
           // });
           NavigationService.navigate("OTPScreen", {
             fromScreen: "RegisterScreen",
-            phone: registerInput,
+            phone: "+91" + getValues("phoneNumber"),
             userId: result.registerBuyer.userId,
-            password: psswd,
+            password: getValues("password"),
           });
 
           // NavigationService.navigate("");
@@ -200,52 +220,12 @@ function RegisterScreen(props) {
       }
     },
   });
-
-  /**
-   * currently we are only using email @see VK
-   * onRegister runs the runRegisterBuyer after much validation
-   */
-  const onRegister = async () => {
-    // first decide are we an email or a phone
-    let registerUserValidation = { name, lastName, registerInput, psswd };
-    setValidationDisplay("");
-    console.log(`${name}::${lastName}::${registerInput}::${psswd}`);
-    // here registerInput can be email not phone
-    let reporter = validator.registerValidator(registerUserValidation);
-    console.log(`validation state ${JSON.stringify(reporter)}`);
-    // first validate for missing values
-    if (reporter.hasMissing) {
-      setValidationDisplay(`${reporter.missingVal} is required`);
-    } else {
-      // now check is valid password
-      if (!reporter.validPassword) {
-        setValidationDisplay(
-          "Password requires 1 uppercase, 1 number and min 8 characters"
-        );
-        return;
-      }
-      // now check is valid email or phone
-      if (reporter.validPhoneOrEmail) {
-        console.log(`setTermsAccepted=${termsAccepted}`);
-        if (termsAccepted) {
-          setValidationDisplay("Please accept terms and privacy policy");
-          return;
-        }
-        // for now use email only
-        if (reporter.isEmail) {
-          dispatch({
-            type: "changLoading",
-            payload: true,
-          });
-          registerBuyer();
-        } else {
-          // must be phone
-          setValidationDisplay(" please use email not phone");
-        }
-      } else {
-        setValidationDisplay(" phone or email is invalid");
-      }
-    } // end else => no missing fields block
+  const onSubmit = (data: BuyerProfileRequestForCreate) => {
+    registerBuyer({
+      variables: {
+        request: { ...data, phoneNumber: "+91" + getValues("phoneNumber") },
+      },
+    });
   };
 
   const toggleResetValidationAlert = () => {
@@ -276,50 +256,142 @@ function RegisterScreen(props) {
         edges={["top", "right", "left", "bottom"]}
       >
         <AppBar showLogo onPressBack={() => props.navigation.goBack()} />
-        <View style={styles.bodyContainer}>
+        <KeyboardAwareScrollView style={styles.bodyContainer}>
           <Text style={styles.heading2Bold}>Register</Text>
           <Text style={styles.heading4Regular}>
             Create an account to have access to the best promos in your area!
           </Text>
-          <TextInput
-            style={styles.textInput}
-            ref={(r) => (nameInput = r)}
-            placeholder={"Type your first name"}
-            onSubmitEditing={() => lastNameInput.getInnerRef().focus()}
-            returnKeyType={"next"}
-            onChangeText={(text) => setName(text)}
-            value={name}
+          <Controller
+            control={control}
+            rules={{
+              required: "Field is required.",
+            }}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={[t.mT4]}
+                ref={(r) => (nameInput = r)}
+                placeholder={"Type your first name"}
+                onSubmitEditing={() => lastNameInput.getInnerRef().focus()}
+                returnKeyType={"next"}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="firstName"
+          />
+          {errors.firstName && (
+            <Text style={[t.textRed900, t.mT1, t.mL4]}>
+              {errors.firstName.message}
+            </Text>
+          )}
+
+          <Controller
+            control={control}
+            rules={{
+              required: "Field is required.",
+            }}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={[t.mT4]}
+                placeholder={"Type your last name"}
+                ref={(r) => (lastNameInput = r)}
+                onSubmitEditing={() => emailInput.getInnerRef().focus()}
+                returnKeyType={"next"}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="lastName"
+          />
+          {errors.lastName && (
+            <Text style={[t.textRed900, t.mT1, t.mL4]}>
+              {errors.lastName.message}
+            </Text>
+          )}
+
+          <Controller
+            control={control}
+            rules={{
+              required: "Field is required.",
+              pattern: {
+                value:
+                  /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
+                message: "invalid email address",
+              },
+            }}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={[t.mT4]}
+                placeholder={"Type your email"}
+                ref={(r) => (emailInput = r)}
+                onSubmitEditing={() => passwordInput.getInnerRef().focus()}
+                returnKeyType={"next"}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="email"
           />
 
-          <TextInput
-            style={styles.textInput}
-            placeholder={"Type your last name"}
-            ref={(r) => (lastNameInput = r)}
-            onSubmitEditing={() => emailInput.getInnerRef().focus()}
-            returnKeyType={"next"}
-            onChangeText={(text) => setLastName(text)}
-            value={lastName}
-          />
-          <TextInput
-            style={styles.textInput}
-            placeholder={"Type your email or phone number"}
-            ref={(r) => (emailInput = r)}
-            onSubmitEditing={() => passwordInput.getInnerRef().focus()}
-            returnKeyType={"next"}
-            onChangeText={(text) => setRegisterInput(text)}
-            value={registerInput}
+          {errors.email && (
+            <Text style={[t.textRed900, t.mT1, t.mL4]}>
+              {errors.email.message}
+            </Text>
+          )}
+
+          <Controller
+            control={control}
+            rules={{
+              required: "Field is required.",
+              pattern: {
+                value: /^[6-9]\d{9}$/,
+                message: "invalid phone number",
+              },
+            }}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={[t.mT4]}
+                placeholder={"Type your phone number"}
+                ref={(r) => (emailInput = r)}
+                onSubmitEditing={() => passwordInput.getInnerRef().focus()}
+                returnKeyType={"next"}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="phoneNumber"
           />
 
-          <PasswordInput
-            style={styles.textInput}
-            placeholder={"Enter your password"}
-            ref={(r) => (passwordInput = r)}
-            //onSubmitEditing={onRegister}
-            defaultValue={""}
-            returnKeyType={"done"}
-            onChangeText={(text) => setPsswd(text)}
-            value={psswd}
+          {errors.phoneNumber && (
+            <Text style={[t.textRed900, t.mT1, t.mL4]}>
+              {errors.phoneNumber.message}
+            </Text>
+          )}
+          <Controller
+            control={control}
+            rules={{
+              required: "Field is required.",
+            }}
+            render={({ field: { onChange, value } }) => (
+              <PasswordInput
+                style={[t.mT4]}
+                placeholder={"Enter your password"}
+                ref={(r) => (passwordInput = r)}
+                //onSubmitEditing={onRegister}
+                defaultValue={""}
+                returnKeyType={"done"}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="password"
           />
+          {errors.password && (
+            <Text style={[t.textRed900, t.mT1, t.mL4]}>
+              {errors.password.message}
+            </Text>
+          )}
+
           <View style={styles.switch}>
             <Switch
               onSwitch={() => {
@@ -343,11 +415,7 @@ function RegisterScreen(props) {
           <View style={{ flex: 1 }} />
           <Text style={styles.txtValidate}>{validationDisplay} </Text>
 
-          <Button
-            onPress={onRegister}
-            // onPress={onDebug}
-            text={"REGISTER"}
-          />
+          <Button onPress={handleSubmit(onSubmit)} text={"REGISTER"} />
 
           <TouchableOpacity
             onPress={() => props.navigation.goBack()}
@@ -355,7 +423,7 @@ function RegisterScreen(props) {
           >
             <Text style={styles.txtAction}>SIGN IN</Text>
           </TouchableOpacity>
-        </View>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
       {renderValidationAlert()}
     </View>

@@ -157,8 +157,8 @@ input BuyerProfileRequestForCreate {
   password: String
   firstName: String
   lastName: String
-  email: String
-  phoneNumber: String
+  email: String!
+  phoneNumber: String!
   oneClickPurchaseOn: Boolean
   geoLocation: String
   country: String
@@ -361,19 +361,6 @@ type GenericResponse {
   message: String
 }
 
-input MicroHubForCreate {
-  serviceOperatorId: ID!
-  country: String
-  state: String
-  pinCode: String
-  cityTownVillage: String
-  streetColonyName: String
-  flatHomeApartmentBuilding: String
-  contactPerson: String
-  contactNumber: String
-  openingHours: [String]
-}
-
 type MicroHubResponse {
   microHubId: ID
   address: AddressResponse
@@ -387,10 +374,9 @@ type Mutation {
   registerBuyer(request: BuyerProfileRequestForCreate!): BuyerProfileResponse
   deleteBuyerProfile(buyerId: ID!): Boolean
   updateBuyerProfile(request: BuyerProfileRequest!): BuyerProfileResponse
-  createGuestBuyer(request: BuyerProfileRequestForCreate!): BuyerProfileResponse
+  createGuestBuyer: BuyerProfileResponse
   validateCode(request: ValidateCodeRequest!): ValidateCodeResponse
   createServiceOperator(request: ServiceOperatorProfileForCreate!): GenericResponse
-  createMicroHub(request: MicroHubForCreate!): GenericResponse
   addRefundSalamiCredit(buyerId: ID!, refundAmount: Float!): Float
   useRefundSalamiCredit(buyerId: ID!, amount: Float!): Float
   addBonusSalamiCredit(buyerId: ID!, amount: Float!, bonusSalamiCreditExpire: DateTime): Float
@@ -833,7 +819,7 @@ input SellerProfileRequestForCreate {
   password: String!
   firstName: String
   lastName: String
-  email: String
+  email: String!
   phoneNumber: String
   businessName: String
   geoLocation: String

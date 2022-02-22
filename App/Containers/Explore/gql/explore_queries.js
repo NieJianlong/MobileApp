@@ -2,7 +2,6 @@ import { gql } from "@apollo/client";
 
 /**
  * public api's
- * registerBuyer, createGuestBuyer
  * registerSeller
  * createAddress, updateAddress, deleteAddress
  * getGuestBuyerDefaultAddressByBuyerId,getGuestBuyerAddressesById

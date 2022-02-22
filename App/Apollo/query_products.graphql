@@ -1,25 +1,29 @@
-  
-fragment KeyValuePairField on KeyValuePair{
+fragment KeyValuePairField on KeyValuePair {
   key
   value
 }
-fragment ImagesField on Images{
+fragment ProductReturnPolicyField on ProductReturnPolicy {
+  returnPolicyId
+  name
+  value
+}
+fragment ImagesField on Images {
   id
   referenceId
   imageName
   imageType
   description
   fullPath
- }
+}
 
-fragment ProductCategoryViewField on ProductCategoryView{
- categoryId
+fragment ProductCategoryViewField on ProductCategoryView {
+  categoryId
   productId
   name
   description
- }
+}
 
-fragment RatingDetailField on RatingDetail{
+fragment RatingDetailField on RatingDetail {
   zeroStar
   oneStar
   twoStar
@@ -27,28 +31,28 @@ fragment RatingDetailField on RatingDetail{
   fourStar
   fiveStar
   sixAndMoreStar
- }
+}
 
- fragment AddressField on AddressView{
-    addressId
-    flat
-    block
-    building
-    houseNumber
-    streetAddress1
-    streetAddress2
-    streetAddress3
-    townCity
-    villageArea
-    district
-    provinceState
-    country
-    areaCode
-    landmark
-    pinCode
-    addressFloor
- }
- fragment ReviewViewField on ReviewView{
+fragment AddressField on AddressView {
+  addressId
+  flat
+  block
+  building
+  houseNumber
+  streetAddress1
+  streetAddress2
+  streetAddress3
+  townCity
+  villageArea
+  district
+  provinceState
+  country
+  areaCode
+  landmark
+  pinCode
+  addressFloor
+}
+fragment ReviewViewField on ReviewView {
   id
   productId
   sellerId
@@ -58,9 +62,9 @@ fragment RatingDetailField on RatingDetail{
   helpfulCount
   postedBy
   userName
- }
- fragment ListingVariantViewField on ListingVariantView{
- listingId
+}
+fragment ListingVariantViewField on ListingVariantView {
+  listingId
   variantId
   productId
   defaultVariant
@@ -70,19 +74,18 @@ fragment RatingDetailField on RatingDetail{
   itemsInStock
   itemsAvailable
   itemsSold
-  options{...KeyValuePairField}
-
- }
- fragment ProductReturnPolicyViewField on ProductReturnPolicyView{
-  
+  options {
+    ...KeyValuePairField
+  }
+}
+fragment ProductReturnPolicyViewField on ProductReturnPolicyView {
   id
   productId
   name
   description
   value
-
- }
- fragment SellerViewField on SellerView{
+}
+fragment SellerViewField on SellerView {
   id
   brandName
   avatarUrl
@@ -90,34 +93,34 @@ fragment RatingDetailField on RatingDetail{
   name
   description
   ratingCount
- }
- 
- fragment SellerProductPriceField on SellerProductPrice{
-    priceId
-    currency
-    retailPrice
-    wholeSalePrice
-    salePercentage
-    totalQuantityPrice
-    taxPercentage
- }
+}
 
-fragment SellerProductImageField on SellerProductImage{
+fragment SellerProductPriceField on SellerProductPrice {
+  priceId
+  currency
+  retailPrice
+  wholeSalePrice
+  salePercentage
+  totalQuantityPrice
+  taxPercentage
+}
+
+fragment SellerProductImageField on SellerProductImage {
   photoUrl
   imageName
   description
   imageType
 }
- fragment SellerReturnPolicyField on SellerReturnPolicy{
+fragment SellerReturnPolicyField on SellerReturnPolicy {
   returnAddress
-  returnLabel{
+  returnLabel {
     ...SellerProductImageField
   }
-  policies{
-    ...KeyValuePairField
+  policies {
+    ...ProductReturnPolicyField
   }
 }
-fragment SellerProductVariantField on SellerProductVariant{
+fragment SellerProductVariantField on SellerProductVariant {
   variantId
   priceId
   photoUrl
@@ -125,7 +128,7 @@ fragment SellerProductVariantField on SellerProductVariant{
   defaultVariant
   retailPrice
   wholeSalePrice
-  options{
+  options {
     ...KeyValuePairField
   }
 }
@@ -134,7 +137,7 @@ fragment SellerProductVariantField on SellerProductVariant{
 #   returnLabel: SellerProductImage
 #   policies: [KeyValuePair]
 # }
- fragment SellerProductDetailViewField on SellerProductDetailView{
+fragment SellerProductDetailViewField on SellerProductDetailView {
   productId
   shortName
   longName
@@ -146,23 +149,23 @@ fragment SellerProductVariantField on SellerProductVariant{
   productType
   productStatus
   vendorName
-  price{
+  price {
     ...SellerProductPriceField
   }
-  images{
+  images {
     ...SellerProductImageField
   }
-  variants{
+  variants {
     ...SellerProductVariantField
   }
   categoryList
   itemsInStock
-  returnPolicy{
+  returnPolicy {
     ...SellerReturnPolicyField
   }
- }
+}
 
- fragment ProductListingViewField on ProductListingView{
+fragment ProductListingViewField on ProductListingView {
   photo
   photoUrls
   shortName
@@ -181,19 +184,19 @@ fragment SellerProductVariantField on SellerProductVariant{
   description
   technicalDetails
   highlightBullets
-  seller{
+  seller {
     ...SellerViewField
   }
-  returnPolicies{
-   ...ProductReturnPolicyViewField
+  returnPolicies {
+    ...ProductReturnPolicyViewField
   }
-  listingVariants{
+  listingVariants {
     ...ListingVariantViewField
   }
   relatedProducts
-  reviews{
-  ...ReviewViewField
-}
+  reviews {
+    ...ReviewViewField
+  }
 
   listingId
   productId
@@ -218,43 +221,44 @@ fragment SellerProductVariantField on SellerProductVariant{
   #   ...AddressField
   # }
   returnAddressId
-  returnAddress{
+  returnAddress {
     ...AddressField
   }
   longName
-  ratingDetail{
+  ratingDetail {
     ...RatingDetailField
   }
   announcementId
   sellerId
-  categories{...ProductCategoryViewField}
-  images{...ImagesField}
+  categories {
+    ...ProductCategoryViewField
+  }
+  images {
+    ...ImagesField
+  }
   deliveryOption
   courierName
   courierShippingFee
   courierShippingFeeTax
   announcementDeliveryDate
-  pickupAddress{
+  pickupAddress {
     ...AddressField
   }
 }
-   
 
-  query GetListings($searchOptions: SearchOptions) {
-    getListings(searchOptions: $searchOptions) {
-      content{
-          ...ProductListingViewField
-         }
-      pageNo
-      pageSize
-      totalPages
-      totalElements
+query GetListings($searchOptions: SearchOptions) {
+  getListings(searchOptions: $searchOptions) {
+    content {
+      ...ProductListingViewField
     }
+    pageNo
+    pageSize
+    totalPages
+    totalElements
   }
-  query GetRelatedProducts($productId: ID!) {
-    getRelatedProducts(productId: $productId) {
-     ...SellerProductDetailViewField
-    }
+}
+query GetRelatedProducts($productId: ID!) {
+  getRelatedProducts(productId: $productId) {
+    ...SellerProductDetailViewField
   }
-
-  
+}

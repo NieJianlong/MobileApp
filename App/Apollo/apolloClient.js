@@ -81,15 +81,17 @@ const allAPIS = {
 
 const customFetch = (uri, options) => {
   const { operationName } = JSON.parse(options.body);
-  console.log('operationName====================================');
-  console.log(operationName);
-  console.log('====================================');
+
   let newUri = `${uri}${allAPIS[operationName]}`;
   if (!allAPIS[operationName]) {
     //if we forget add api in allApis,there will be a mistake
     newUri = `${uri}${USER_PORT}`;
   }
-
+  console.log("operationName====================================");
+  console.log(operationName);
+  console.log(newUri);
+  console.log(options);
+  console.log("====================================");
   return fetch(newUri, options);
 };
 

@@ -5,7 +5,6 @@ import {
   Text,
   TouchableOpacity,
   Platform,
-  ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 //import { vs } from 'react-native-size-matters'
@@ -62,7 +61,7 @@ function RegisterScreen(props) {
   let [showValidationAlert, setShowValidationAlert] = useState(false);
   let [validationMessage, setValidationMessage] = useState("");
   // because of the way the switch component is set up this is the opposite of what you would expect
-  let [termsAccepted, setTermsAccepted] = useState(true);
+  let [termsAccepted, setTermsAccepted] = useState(false);
   useEffect(() => {
     // let phoneNumber = "+918247278755";
     // setValue("phoneNumber", trimStart(phoneNumber, "+91"));
@@ -170,6 +169,12 @@ function RegisterScreen(props) {
    */
   const [registerBuyer, { data }] = useRegisterBuyerMutation({
     onError: (error) => {
+      // alert("sdf");
+      NavigationService.navigate("OTPScreen", {
+        fromScreen: "RegisterScreen",
+        phone: "+91" + getValues("phoneNumber"),
+        password: getValues("password"),
+      });
       dispatch({
         type: "changLoading",
         payload: false,
@@ -187,8 +192,10 @@ function RegisterScreen(props) {
     onCompleted: (result) => {
       if (typeof result.registerBuyer !== "undefined") {
         let buyerId = result.registerBuyer.buyerId;
+
         console.log(`registerBuyer buyerId=${buyerId}`);
         if (buyerId) {
+          global.buyerId = buyerId;
           storage.setLocalStorageValue(registerInput, buyerId);
           dispatch({
             type: "changLoading",

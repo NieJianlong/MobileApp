@@ -39,6 +39,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { UPDATE_BUYER_PROFILE } from "../../Apollo/mutations/mutations_user";
 import { AlertContext } from "../Root/GlobalContext";
 import { FIND_BUYER_PROFILE } from "../../Apollo/queries/queries_user";
+import { useDeleteBuyerProfileMutation } from "../../../generated/graphql";
 
 /**
  * @description:User edit page
@@ -46,7 +47,12 @@ import { FIND_BUYER_PROFILE } from "../../Apollo/queries/queries_user";
  * @return {*}
  */
 function UserEditProfile(props) {
-  const { loading, error, data:userProfile,refetch } = useQuery(FIND_BUYER_PROFILE, {
+  const {
+    loading,
+    error,
+    data: userProfile,
+    refetch,
+  } = useQuery(FIND_BUYER_PROFILE, {
     variables: { buyerId: global.buyerId },
     context: {
       headers: {
@@ -56,6 +62,17 @@ function UserEditProfile(props) {
     nextFetchPolicy: "no-cache",
     onCompleted: (res) => {},
     onError: (res) => {},
+  });
+  const [deleteBuyer] = useDeleteBuyerProfileMutation({
+    variables: { buyerId: global.buyerId },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: () => {
+      NavigationService.navigate("DeleteAccountMessageScreen");
+    },
   });
   useEffect(() => {
     refetch && refetch();
@@ -213,7 +230,7 @@ function UserEditProfile(props) {
         <SafeAreaView style={styles.bottom}>
           <TouchableOpacity
             onPress={() => {
-              NavigationService.navigate("DeleteAccountMessageScreen");
+              deleteBuyer();
             }}
           >
             <Text

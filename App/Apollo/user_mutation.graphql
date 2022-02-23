@@ -7,6 +7,21 @@ mutation ResendVerificationCodeInEmail($emailAddress: String!) {
 mutation DeleteBuyerProfile($buyerId: ID!) {
   deleteBuyerProfile(buyerId: $buyerId)
 }
+
+mutation SendOTPCodeForBuyer($buyerId: ID!) {
+  sendOTPCodeForBuyer(buyerId: $buyerId) {
+    status
+    message
+  }
+}
+
+mutation ValidateOTPCodeForBuyer($request: ValidateCodeRequest!) {
+  validateOTPCodeForBuyer(request: $request) {
+    status
+    extraMessage
+  }
+}
+
 mutation ForgotPasswordStep1SendNotificationEmail($email: String!) {
   forgotPasswordStep1SendNotificationEmail(email: $email) {
     email

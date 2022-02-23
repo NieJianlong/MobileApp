@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import {
   View,
   StatusBar,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Keyboard,
+  Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { isIphoneX } from "react-native-iphone-x-helper";
@@ -35,7 +36,12 @@ import { t } from "react-native-tailwindcss";
 import {
   useForgotPasswordStep1SendNotificationEmailMutation,
   useResendVerificationCodeInEmailMutation,
+  useSendOtpCodeForBuyerMutation,
+  useValidateOtpCodeForBuyerMutation,
+  ValidationType,
 } from "../../../generated/graphql";
+import RNOtpVerify from "react-native-otp-verify";
+import { isEmpty, split } from "lodash";
 
 function OTPScreen(props) {
   const { dispatch } = useContext(AlertContext);
@@ -45,7 +51,17 @@ function OTPScreen(props) {
     field3Input,
     field4Input,
     field5Input = null;
-  const [validate] = useMutation(ValidateCode, {
+  // const [validate] = useMutation(ValidateCode, {
+  //   onCompleted: (res) => {
+  //     // alert("验证成功");
+  //     autoSignIn();
+  //   },
+  //   onError: (error) => {
+  //     // autoSignIn();
+  //     alert("Validation fails");
+  //   },
+  // });
+  const [validate] = useValidateOtpCodeForBuyerMutation({
     onCompleted: (res) => {
       // alert("验证成功");
       autoSignIn();
@@ -60,7 +76,8 @@ function OTPScreen(props) {
   const [forgetPasswordResendCode] =
     useForgotPasswordStep1SendNotificationEmailMutation();
 
-  const [resendCode] = useResendVerificationCodeInEmailMutation();
+  // const [resendCode] = useResendVerificationCodeInEmailMutation();
+  const [resendCode] = useSendOtpCodeForBuyerMutation();
 
   let [keyboardHeight, setKeyboardHeight] = useState(0);
   let [allowToResendCode, setAllowToResendCode] = useState(false);
@@ -70,6 +87,9 @@ function OTPScreen(props) {
   let [field3, setField3] = useState("");
   let [field4, setField4] = useState("");
   let [field5, setField5] = useState("");
+  const otpCode = useMemo(() => {
+    return field1.concat(field2).concat(field3).concat(field4).concat(field5);
+  }, [field1, field2, field3, field4, field5]);
   const [getBuyerId] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
     variables: { userProfileId: global.userProfileId },
     context: {
@@ -172,17 +192,23 @@ function OTPScreen(props) {
   };
 
   const onValidate = async () => {
-    const otpCode = field1
-      .concat(field2)
-      .concat(field3)
-      .concat(field4)
-      .concat(field5);
+    // email
+    // validate({
+    //   variables: {
+    //     request: {
+    //       userId: params.userId,
+    //       //userId: "6c374229-71ea-44b7-8915-366cbe3198ff",
+    //       validationType: "EMAIL",
+    //       tokenCode: otpCode,
+    //     },
+    //   },
+    // });
     validate({
       variables: {
         request: {
           userId: params.userId,
           //userId: "6c374229-71ea-44b7-8915-366cbe3198ff",
-          validationType: "EMAIL",
+          validationType: ValidationType.Sms,
           tokenCode: otpCode,
         },
       },
@@ -203,6 +229,38 @@ function OTPScreen(props) {
     //   });
   };
 
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      RNOtpVerify.getHash().then(console.log).catch(console.log);
+      RNOtpVerify.getOtp()
+        .then((p) =>
+          RNOtpVerify.addListener((message) => {
+            // alert(message);
+            if (!isEmpty(message)) {
+              try {
+                const otp = /(\d{5})/g.exec(message)[1];
+                console.log("====================================");
+                console.log(split(otp));
+                console.log("====================================");
+                // alert(otp);
+                setField1(otp.substring(0, 1));
+                setField2(otp.substring(1, 2));
+                setField3(otp.substring(2, 3));
+                setField4(otp.substring(3, 4));
+                setField5(otp.substring(4, 5));
+                setAllowToResendCode(true);
+                RNOtpVerify.removeListener();
+                Keyboard.dismiss();
+              } catch (error) {}
+            }
+          })
+        )
+        .catch((p) => console.log(p));
+    }
+    return () => {
+      RNOtpVerify.removeListener();
+    };
+  }, []);
   const renderOTPInput = () => {
     return (
       <View style={styles.otpContainer}>
@@ -314,8 +372,32 @@ function OTPScreen(props) {
                 },
               });
             } else {
+              // resend email
+              // resendCode({
+              //   variables: { emailAddress: params?.phone },
+              //   onCompleted: (res) => {
+              //     dispatch({
+              //       type: "changAlertState",
+              //       payload: {
+              //         visible: true,
+              //         message: `A validation code has been sent to ${params?.phone}`,
+              //         color: colors.success,
+              //       },
+              //     });
+              //   },
+              //   onError: () => {
+              //     dispatch({
+              //       type: "changAlertState",
+              //       payload: {
+              //         visible: true,
+              //         message: "Resend validation code failed",
+              //         color: colors.primary,
+              //       },
+              //     });
+              //   },
+              // });
               resendCode({
-                variables: { emailAddress: params?.phone },
+                variables: { buyerId: global.buyerId },
                 onCompleted: (res) => {
                   dispatch({
                     type: "changAlertState",
@@ -335,7 +417,8 @@ function OTPScreen(props) {
                       color: colors.primary,
                     },
                   });
-                },});
+                },
+              });
             }
           }}
           style={styles.btnResendCode}
@@ -363,20 +446,9 @@ function OTPScreen(props) {
           text={"RESEND"}
         /> */}
         <Button
-          disabled={
-            field1 === "" ||
-            field2 === "" ||
-            field3 === "" ||
-            field4 === "" ||
-            field5 === ""
-          }
+          // disabled={!allowToResendCode}
           onPress={() => {
             if (params.fromScreen === "ForgotPasswordScreen") {
-              const otpCode = field1
-                .concat(field2)
-                .concat(field3)
-                .concat(field4)
-                .concat(field5);
               resetPasswordStep2({
                 variables: { email: params.phone, tokenCode: otpCode },
                 onCompleted: (res) => {

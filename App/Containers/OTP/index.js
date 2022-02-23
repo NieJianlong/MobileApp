@@ -502,9 +502,9 @@ function OTPScreen(props) {
         />
 
         <View style={styles.bodyContainer}>
-          <Text style={styles.heading2Bold}>{"Validate your email"}</Text>
+          <Text style={styles.heading2Bold}>{"Validate your phone no"}</Text>
           <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
-            Please enter the code number sent to your email [{params.phone}]
+            Please enter the code number sent to your phone no [{params.phone}]
           </Text>
 
           {renderOTPInput()}

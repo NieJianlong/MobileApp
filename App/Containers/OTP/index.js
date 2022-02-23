@@ -231,7 +231,14 @@ function OTPScreen(props) {
 
   useEffect(() => {
     if (Platform.OS === "android") {
-      RNOtpVerify.getHash().then(console.log).catch(console.log);
+      RNOtpVerify.getHash()
+        .then((hash) => {
+          console.log("hash====================================");
+          console.log(hash);
+          console.log("====================================");
+          // alert(hash);
+        })
+        .catch(console.log);
       RNOtpVerify.getOtp()
         .then((p) =>
           RNOtpVerify.addListener((message) => {

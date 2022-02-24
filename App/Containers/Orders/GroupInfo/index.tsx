@@ -135,7 +135,15 @@ function GroupInfoScreen(props) {
           })
         )}
         {renderAction(Images.user, "Evaluate the seller", () =>
-          NavigationService.navigate("RateSellerScreen")
+          // NavigationService.navigate("RateSellerScreen")
+          NavigationService.navigate("RateOrderScreen", {
+            onPost: () => {
+              NavigationService.goBack();
+            },
+            data,
+            title: "Evaluate the seller",
+            product: product?.getListings?.content[0],
+          })
         )}
         {/* when order status is reached,user can track order */}
         {renderAction(Images.orderTrackImage, "Track order", () =>

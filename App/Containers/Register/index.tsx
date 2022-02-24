@@ -170,11 +170,11 @@ function RegisterScreen(props) {
   const [registerBuyer, { data }] = useRegisterBuyerMutation({
     onError: (error) => {
       // alert("sdf");
-      NavigationService.navigate("OTPScreen", {
-        fromScreen: "RegisterScreen",
-        phone: "+91" + getValues("phoneNumber"),
-        password: getValues("password"),
-      });
+      // NavigationService.navigate("OTPScreen", {
+      //   fromScreen: "RegisterScreen",
+      //   phone: "+91" + getValues("phoneNumber"),
+      //   password: getValues("password"),
+      // });
       dispatch({
         type: "changLoading",
         payload: false,

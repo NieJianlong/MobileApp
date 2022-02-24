@@ -1,11 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import {
   View,
   StatusBar,
   Text,
   Image,
   TouchableOpacity,
-  FlatList,
   ImageBackground,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -15,15 +14,18 @@ import ImagePicker from "react-native-image-crop-picker";
 import styles from "./styles";
 
 import { AppBar, StarRating, TextInput } from "../../../Components";
-import { Colors, Images } from "../../../Themes";
+import { Images } from "../../../Themes";
 import NavigationService from "../../../Navigation/NavigationService";
 import { s } from "react-native-size-matters";
 import {
   MutationAddProductReviewArgs,
   useAddProductReviewMutation,
+  useAddSellerReviewMutation,
 } from "../../../../generated/graphql";
 import { useRoute } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
+import colors from "../../../Themes/Colors";
+import { AlertContext } from "../../Root/GlobalContext";
 
 class RateOrder extends Component {
   constructor(props) {
@@ -76,7 +78,7 @@ class RateOrder extends Component {
     return (
       <View style={styles.header}>
         <AppBar
-          title={"Rate Order"}
+          title={this.props.title}
           rightButton={() => (
             <TouchableOpacity
               onPress={() => this.props.onPost(this.state.stars)}
@@ -205,8 +207,36 @@ class RateOrder extends Component {
   }
 }
 
-function RateOrderScreen(props) {
-  const [addProductReview] = useAddProductReviewMutation();
+function RateOrderScreen() {
+  const { dispatch } = useContext(AlertContext);
+  const [addProductReview] = useAddProductReviewMutation({
+    onCompleted: () => {
+      NavigationService.goBack();
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "",
+          color: colors.success,
+          title: "Review about the prodcut Success",
+        },
+      });
+    },
+  });
+  const [addSellerReview] = useAddSellerReviewMutation({
+    onCompleted: () => {
+      NavigationService.goBack();
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "",
+          color: colors.success,
+          title: "Review about the seller Success",
+        },
+      });
+    },
+  });
   const { params } = useRoute();
   const {
     register,
@@ -215,30 +245,48 @@ function RateOrderScreen(props) {
     watch,
     formState: { errors },
   } = useForm<MutationAddProductReviewArgs>();
-  const onSubmit = (data) => {
-    addProductReview({
-      variables: {
-        input: {
-          ...data,
-          productId: params.product.productId,
-        },
-      },
-      context: {
-        headers: {
-          isPrivate: true,
-        },
-      },
-    });
-  };
+  // const onSubmit = (data) => {
+  //   addProductReview({
+  //     variables: {
+  //       input: {
+  //         ...data,
+  //         productId: params.product.productId,
+  //       },
+  //     },
+  //     context: {
+  //       headers: {
+  //         isPrivate: true,
+  //       },
+  //     },
+  //   });
+  // };
   return (
     <RateOrder
       data={params?.data}
       product={params.product}
       register={register}
+      title={params.title ?? "Rate Order"}
       control={control}
       onPost={(stars) => {
         // alert(stars);
         handleSubmit((data) => {
+          if (params.title) {
+            addSellerReview({
+              variables: {
+                input: {
+                  ...data,
+                  sellerId: params.data.sellerId,
+                  ratingVote: stars,
+                },
+              },
+              context: {
+                headers: {
+                  isPrivate: true,
+                },
+              },
+            });
+            return;
+          }
           addProductReview({
             variables: {
               input: {

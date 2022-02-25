@@ -25,7 +25,6 @@ const userProfile = {
  * for the checkout we will need the products productListing id and the variants (vr,va)
  * items[k].prodListingId and items[k].variants  for(let v of items[k].variants)
  * we also need the (guest) buyer id for the (guest) buyer checkout input
- *
  * syntax so updates occur across diferent screens
  * const localCartVarReactive = useReactiveVar(localCartVar);
  *
@@ -37,6 +36,13 @@ const localCart = {
   buyerId: "", // can be the guest buyer id
   deliverAddress: "", // update this on lookUpDefault address, when an address is updated. cart should be cleared
   callBackAddress: {}, // when address query  calls back add here, use for store co-ordinates ect ..., use gql mapper for now
+};
+
+const localBuyNow = {
+  items: [],
+  buyerId: "",
+  deliverAddress: "",
+  callBackAddress: {},
 };
 
 const cartOrder = {
@@ -55,6 +61,7 @@ export const userProfileVar = makeVar(userProfile);
 export const localCartVar = makeVar(localCart);
 export const cartOrderVar = makeVar(cartOrder);
 export const razorOrderPaymentVar = makeVar(razorOrderPayment);
+export const localBuyNowVar = makeVar(localBuyNow);
 
 export const GET_USER_PROFILE = gql`
   query getUserProfileVar {
@@ -65,6 +72,11 @@ export const GET_USER_PROFILE = gql`
 export const GET_LOCAL_CART = gql`
   query getLocalCartVar {
     localCartVar @client
+  }
+`;
+export const GET_BUY_NOW_CART = gql`
+  query getLocalCartVar {
+    localBuyNowVar @client
   }
 `;
 
@@ -80,6 +92,11 @@ export default new InMemoryCache({
         localCartVar: {
           read() {
             return localCartVar();
+          },
+        },
+        localBuyNowVar: {
+          read() {
+            return localBuyNowVar();
           },
         },
         cartOrderVar: {
@@ -98,7 +115,5 @@ export default new InMemoryCache({
 });
 
 export const runRefreshCron = async (tokenData) => {
-  setInterval(() => {
- 
-  }, 5 * 1000); // 5 secs
+  setInterval(() => {}, 5 * 1000); // 5 secs
 };

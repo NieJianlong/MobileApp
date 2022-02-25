@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { View, Image, TouchableOpacity, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -13,19 +19,50 @@ import "react-native-get-random-values";
 import useRealm from "../../../hooks/useRealm";
 import colors from "../../../Themes/Colors";
 import PubSub from "pubsub-js";
-import { useQuery } from "@apollo/client";
-import { GET_LOCAL_CART } from "../../../Apollo/cache";
+import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
+import {
+  cartOrderVar,
+  GET_LOCAL_CART,
+  localBuyNowVar,
+  localCartVar,
+  razorOrderPaymentVar,
+  userProfileVar,
+} from "../../../Apollo/cache";
 import { nanoid } from "nanoid";
 import BigNumber from "bignumber.js";
+import { CreateOrderFromCart, WALLET_BALANCE } from "../../../hooks/gql";
+import NavigationService from "../../../Navigation/NavigationService";
+import InSufficientSalamiCreditScreen from "../../InSufficientSalamiCredit/index";
+import { useCreateOrder } from "../../../hooks/order";
+import RazorpayCheckout from "react-native-razorpay";
+import { useRazorVerifyPayment } from "../../../hooks/verifyPayment";
+import { useCreateRazorOrder } from "../../../hooks/razorOrder";
 
 export default function DetailFooter({ product, currentVariant }) {
+  console.log("Token", global.access_token)
   const { dispatch } = useContext(AlertContext);
   const { realm } = useRealm();
 
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
-
+  const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
+    useRazorVerifyPayment();
+  const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
+  const userProfile = useReactiveVar(userProfileVar);
+  const { data } = useQuery(WALLET_BALANCE, {
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+      onCompleted: (res) => {
+        console.log("Completed", res);
+      },
+      onError: (err) => {},
+    },
+  });
+  // console.log("Product ================", product);
+  // console.log("finaldata", data);
   const info = realm
     .objects("ShoppingCart")
     .filtered("product.productId == $0", product.productId)
@@ -33,17 +70,211 @@ export default function DetailFooter({ product, currentVariant }) {
     .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
   const [cartInfo, setCartInfo] = useState(info);
   const [quantity, setQuantity] = useState(info?.quantity || 1);
-  const toggleConfirmOrderSheet = useCallback(() => {
+  //const { createOrderFromCart, order } = useCreateOrder();
+  const [createOrderFromCart, { loading, error, data: dataaa }] =
+    useMutation(CreateOrderFromCart);
+
+  let walletBalance = parseFloat(
+    BigNumber(
+      data?.getBuyerSalamiWalletBalance?.walletBalance +
+        data?.getBuyerSalamiWalletBalance?.giftBalance
+    ).toFixed(2)
+  );
+  console.log("walletBalance", walletBalance);
+  //const walletBalance = parseFloat(BigNumber(0.5).toFixed(2));
+
+  const orderCreate = (type) => {
+    console.log("type", type);
     dispatch({
-      type: "changSheetState",
-      payload: {
-        showSheet: true,
-        height: 310,
-        children: () => <ConfirmOrderSheetContent />,
-        sheetTitle: "Confirm your Order",
+      type: "changLoading",
+      payload: true,
+    });
+    createOrderFromCart({
+      variables: {
+        cart: {
+          buyerId: userProfile.buyerId,
+          shippingAddressId: localCartVar.deliverAddress,
+          billingDetailsId: userProfile.billingDetailsId,
+          useSalamiWallet: true,
+          cartItems:
+            localBuyNowVar().items.length > 0
+              ? localBuyNowVar().items
+              : localCartVar.items,
+        },
+      },
+      context: {
+        headers: {
+          isPrivate: true,
+        },
+      },
+      onCompleted: (res) => {
+        debugger
+        console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
+        dispatch({
+          type: "changLoading",
+          payload: false,
+        });
+        if (type === "sufficient") {
+          debugger;
+          if (res?.createOrderFromCart?.orderId) {
+            debugger;
+            localBuyNowVar({
+              items: [],
+            });
+            NavigationService.navigate("OrderPlacedScreen", {
+              items: product,
+              from: "Buynow",
+            });
+          }
+        } else if (type === "zero") {
+          debugger
+          const order = res?.createOrderFromCart;
+          if (res?.createOrderFromCart?.orderId) {
+            cartOrderVar({
+              orderNumber: order?.orderNumber,
+              orderId: order?.orderId,
+              amount: order?.subTotal,
+            });
+            razorpayCreateOrder().then((res) => {
+              if (res?.data) {
+                const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
+                var options = {
+                  description: "Credits towords consultation",
+                  image: "https://i.imgur.com/3g7nmJC.png",
+                  currency: "INR",
+                  key: "rzp_test_I8X2v4LgupMLv0",
+                  name: "Acme Corp",
+                  order_id: razorId, //Replace this with an order_id created using Orders API.
+                  prefill: {
+                    email: userProfile?.email,
+                    contact: userProfile?.phoneNumber,
+                    name: userProfile?.firstName + userProfile.lastName,
+                  },
+                  theme: { color: "#53a20e" },
+                };
+                RazorpayCheckout.open(options)
+                  .then((data) => {
+                    razorOrderPaymentVar({
+                      razorpay_payment_id: data.razorpay_payment_id,
+                      razorpay_order_id: data.razorpay_order_id,
+                      razorpay_signature: data.razorpay_signature,
+                    });
+                    razorpayVerifyPaymentSignature();
+                    alert(`Success: ${data.razorpay_payment_id}`);
+
+                    NavigationService.navigate("OrderPlacedScreen", {
+                      items: product,
+                      from: "Buynow",
+                    });
+                  })
+                  .catch((error) => {
+                    alert(`Error: ${error.code} | ${error.description}`);
+                  });
+              }
+            });
+          }
+          return res?.createOrderFromCart;
+        } else if (type === "InSufficient") {
+          NavigationService.navigate("InSufficientSalamiCreditScreen", {
+            walletBalance: walletBalance,
+            productPrice: BigNumber(quantity * product.wholeSalePrice).toFixed(
+              2
+            ),
+            product: product,
+          });
+        }
+      },
+      onError: (res) => {
+        debugger
+        dispatch({
+          type: "changLoading",
+          payload: false,
+        });
+        alert(JSON.stringify(res.message));
+        console.log(`Explore useCreateOrder onError ${JSON.stringify(res)}`);
       },
     });
-  }, [dispatch]);
+  };
+
+  const toggleConfirmOrderSheet = () => {
+    if (data !== undefined && !isNaN(walletBalance)) {
+      localBuyNowVar({
+        items: [],
+      });
+      if (
+        walletBalance >=
+        parseFloat(BigNumber(quantity * product.wholeSalePrice).toFixed(2))
+      ) {
+        const productBuyNow = {
+          listingId: product.listingId,
+          quantity,
+          variantId: currentVariant.variantId,
+        };
+        localBuyNowVar({
+          items: [productBuyNow],
+        });
+
+        if (localBuyNowVar().items.length > 0) {
+          orderCreate("sufficient");
+          // await createOrderFromCart()
+          //   .then((res) => {
+          //     if (res?.data) {
+          //       debugger;
+          //       // console.log("Response in createOrderBuyNow", res);
+          //       localBuyNowVar({
+          //         items: [],
+          //       });
+          //       NavigationService.navigate("OrderPlacedScreen", {
+          //         items: product,
+          //         from: "Buynow",
+          //       });
+          //     }
+          //   })
+          //   .catch((err) => {
+          //     console.log("Error in createOrderBuyNow", err);
+          //     alert(`Error: ${err.code} | ${err.description}`);
+          //   });
+        }
+
+        // NavigationService.navigate("OrderPlacedScreen");
+      } else if (walletBalance === 0 || walletBalance < 0) {
+        // dispatch({
+        //   type: "changSheetState",
+        //   payload: {
+        //     showSheet: true,
+        //     height: 310,
+        //     children: () => <ConfirmOrderSheetContent />,
+        //     sheetTitle: "Confirm your Order",
+        //   },
+        // });
+        const productBuyNow = {
+          listingId: product.listingId,
+          quantity,
+          variantId: currentVariant.variantId,
+        };
+        localBuyNowVar({
+          items: [productBuyNow],
+        });
+        if (localBuyNowVar().items.length > 0) {
+          orderCreate("zero");
+        }
+      } else {
+        const productBuyNow = {
+          listingId: product.listingId,
+          quantity,
+          variantId: currentVariant.variantId,
+        };
+        localBuyNowVar({
+          items: [productBuyNow],
+        });
+        if (localBuyNowVar().items.length > 0) {
+          orderCreate("InSufficient");
+        }
+      }
+    } else {
+      console.log(data !== undefined, !isNaN(walletBalance));
+    }
+  };
   const toggleAddToCartSheet = useCallback(() => {
     const shoppingCartId = nanoid();
     const tasks = realm.objects("ShoppingCart");

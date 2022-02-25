@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from "react";
 import {
   View,
   ScrollView,
@@ -8,25 +8,50 @@ import {
   SafeAreaView,
   StatusBar,
   FlatList,
-} from 'react-native';
-import AppConfig from '../../Config/AppConfig';
-import { vs, s, ScaledSheet } from 'react-native-size-matters';
-import fonts from '../../Themes/Fonts';
-import colors from '../../Themes/Colors';
-import { AppBar } from '../../Components';
-import NavigationService from '../../Navigation/NavigationService';
-import images from '../../Themes/Images';
-import { ApplicationStyles } from '../../Themes';
-import metrics from '../../Themes/Metrics';
+} from "react-native";
+import AppConfig from "../../Config/AppConfig";
+import { vs, s, ScaledSheet } from "react-native-size-matters";
+import fonts from "../../Themes/Fonts";
+import colors from "../../Themes/Colors";
+import { AppBar, Button } from "../../Components";
+import NavigationService from "../../Navigation/NavigationService";
+import images from "../../Themes/Images";
+import { ApplicationStyles } from "../../Themes";
+import metrics from "../../Themes/Metrics";
+import {
+  cartOrderVar,
+  GET_LOCAL_CART,
+  localBuyNowVar,
+  razorOrderPaymentVar,
+  userProfileVar,
+} from "../../Apollo/cache";
+import RazorpayCheckout from "react-native-razorpay";
+import { useCreateOrder } from "../../hooks/order";
+import { useCreateRazorOrder } from "../../hooks/razorOrder";
+import { useRazorVerifyPayment } from "../../hooks/verifyPayment";
+import { useQuery, useReactiveVar } from "@apollo/client";
+import BigNumber from "bignumber.js";
+import { AlertContext } from "../Root/GlobalContext";
 
 function InSufficientSalamiCredit(props) {
+  const params = props?.route?.params;
+  const { createOrderFromCart, order } = useCreateOrder();
+  const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
+  const userProfile = useReactiveVar(userProfileVar);
+  console.log("userProfile", userProfile);
+  const {
+    data: { localCartVar },
+  } = useQuery(GET_LOCAL_CART);
+  const { dispatch } = useContext(AlertContext);
+  const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
+    useRazorVerifyPayment();
   const payments = [
     {
       image: images.userPayMethod2Image,
       onPress: () => {
-        NavigationService.navigate('AddCreditScreen', {
+        NavigationService.navigate("AddCreditScreen", {
           callback: () => {
-            NavigationService.navigate('CheckoutResumeScreen', {
+            NavigationService.navigate("CheckoutResumeScreen", {
               orderStatus: 0,
             });
             // Nav.goBack();
@@ -57,7 +82,7 @@ function InSufficientSalamiCredit(props) {
       style={{
         flex: 1,
         backgroundColor: colors.background,
-        position: 'absolute',
+        position: "absolute",
         top: 0,
         left: 0,
         right: 0,
@@ -67,7 +92,7 @@ function InSufficientSalamiCredit(props) {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar />
         <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
@@ -76,123 +101,280 @@ function InSufficientSalamiCredit(props) {
               fontSize: s(24),
               fontFamily: fonts.primary,
               color: colors.black,
-              fontWeight: '600',
+              fontWeight: "600",
             }}
           >
-            Your credit is not enough
+            Pay rest of the amount
           </Text>
-          <FlatList
-            data={payments}
-            showsVerticalScrollIndicator={false}
-            style={{ height: metrics.screenHeight - 200 }}
-            ListHeaderComponent={() => {
-              return (
+          <View>
+            <View style={[styles.item, { height: vs(64) }]}>
+              <View>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Text style={styles.itemTitle}>Salami Credit</Text>
+                </View>
                 <View>
-                  <View style={[styles.item, { height: vs(64) }]}>
-                    <View>
-                      <View
-                        style={{ flexDirection: 'row', alignItems: 'center' }}
-                      >
-                        <Text style={styles.itemTitle}>Salami Credit</Text>
-                      </View>
-                      <View>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Text style={styles.itemSubTitle}>$20.00</Text>
-                        </View>
-                      </View>
-                    </View>
-
-                    <TouchableOpacity>
-                      <Text
-                        style={[
-                          ApplicationStyles.screen.subtitle,
-                          { color: colors.grey60 },
-                        ]}
-                      >
-                        DESELECT
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      marginTop: 20,
+                      flexDirection: "row",
+                      alignItems: "center",
                     }}
                   >
-                    <Text style={styles.title}>Add a payment method</Text>
-                    <View
-                      style={{ flexDirection: 'row', alignItems: 'center' }}
-                    >
-                      <Text style={ApplicationStyles.screen.heading2Bold}>
-                        $19.99
-                      </Text>
-                      <Text
-                        style={[
-                          ApplicationStyles.screen.subtitle,
-                          { marginTop: 10, color: colors.grey60 },
-                        ]}
-                      >
-                        left
-                      </Text>
-                    </View>
-                  </View>
-                  <View>
-                    <Text
-                      style={[
-                        ApplicationStyles.screen.subtitle,
-                        { marginTop: 10, color: colors.grey80, fontSize: 16 },
-                      ]}
-                    >
-                      You don’t have enough salami credit, select a payment
-                      method to pay the remaining amount
+                    <Text style={styles.itemSubTitle}>
+                      {"$ " + `${params.walletBalance}`}
                     </Text>
                   </View>
                 </View>
-              );
-            }}
-            renderItem={({ item }) => {
-              return (
-                <View
-                  style={{
-                    maxHeight: 110,
-                  }}
+              </View>
+
+              <TouchableOpacity>
+                <Text
+                  style={[
+                    ApplicationStyles.screen.subtitle,
+                    { color: colors.grey60 },
+                  ]}
                 >
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (item.onPress) {
-                        item.onPress();
-                      } else {
-                        NavigationService.navigate('AddCreditScreen', {
-                          callback: () => {
-                            NavigationService.navigate('CheckoutResumeScreen', {
-                              orderStatus: 0,
-                            });
-                            // Nav.goBack();
-                          },
-                        });
-                      }
-                    }}
-                  >
-                    <Image
-                      source={item.image}
-                      style={{
-                        width: '100%',
-                        //   marginTop:'10@vs',
-                        resizeMode: 'contain',
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-              );
+                  DESELECT
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: 20,
+              }}
+            >
+              <Text style={styles.title}>Add a payment</Text>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={ApplicationStyles.screen.heading2Bold}>
+                  {"$ " + `${params.productPrice - params.walletBalance}`}
+                </Text>
+                <Text
+                  style={[
+                    ApplicationStyles.screen.subtitle,
+                    { marginTop: 10, color: colors.grey60 },
+                  ]}
+                >
+                  left
+                </Text>
+              </View>
+            </View>
+          </View>
+          {/*<FlatList*/}
+          {/*  data={payments}*/}
+          {/*  showsVerticalScrollIndicator={false}*/}
+          {/*  style={{ height: metrics.screenHeight - 200 }}*/}
+          {/*  ListHeaderComponent={() => {*/}
+          {/*    return (*/}
+          {/*      <View>*/}
+          {/*        <View style={[styles.item, { height: vs(64) }]}>*/}
+          {/*          <View>*/}
+          {/*            <View*/}
+          {/*              style={{ flexDirection: 'row', alignItems: 'center' }}*/}
+          {/*            >*/}
+          {/*              <Text style={styles.itemTitle}>Salami Credit</Text>*/}
+          {/*            </View>*/}
+          {/*            <View>*/}
+          {/*              <View*/}
+          {/*                style={{*/}
+          {/*                  flexDirection: 'row',*/}
+          {/*                  alignItems: 'center',*/}
+          {/*                }}*/}
+          {/*              >*/}
+          {/*                <Text style={styles.itemSubTitle}>*/}
+          {/*                  {`$ ` + `${params.walletBalance}`}*/}
+          {/*                </Text>*/}
+          {/*              </View>*/}
+          {/*            </View>*/}
+          {/*          </View>*/}
+
+          {/*          <TouchableOpacity>*/}
+          {/*            <Text*/}
+          {/*              style={[*/}
+          {/*                ApplicationStyles.screen.subtitle,*/}
+          {/*                { color: colors.grey60 },*/}
+          {/*              ]}*/}
+          {/*            >*/}
+          {/*              DESELECT*/}
+          {/*            </Text>*/}
+          {/*          </TouchableOpacity>*/}
+          {/*        </View>*/}
+          {/*        <View*/}
+          {/*          style={{*/}
+          {/*            flexDirection: 'row',*/}
+          {/*            justifyContent: 'space-between',*/}
+          {/*            alignItems: 'center',*/}
+          {/*            marginTop: 20,*/}
+          {/*          }}*/}
+          {/*        >*/}
+          {/*          <Text style={styles.title}>Add a payment</Text>*/}
+          {/*          <View*/}
+          {/*            style={{ flexDirection: 'row', alignItems: 'center' }}*/}
+          {/*          >*/}
+          {/*            <Text style={ApplicationStyles.screen.heading2Bold}>*/}
+          {/*              {`$ ` + `${params.productPrice - params.walletBalance}`}*/}
+          {/*            </Text>*/}
+          {/*            <Text*/}
+          {/*              style={[*/}
+          {/*                ApplicationStyles.screen.subtitle,*/}
+          {/*                { marginTop: 10, color: colors.grey60 },*/}
+          {/*              ]}*/}
+          {/*            >*/}
+          {/*              left*/}
+          {/*            </Text>*/}
+          {/*          </View>*/}
+          {/*        </View>*/}
+          {/*      </View>*/}
+          {/*    );*/}
+          {/*  }}*/}
+          {/*  renderItem={({ item }) => {*/}
+          {/*    return (*/}
+          {/*      <View*/}
+          {/*        style={{*/}
+          {/*          maxHeight: 110,*/}
+          {/*        }}*/}
+          {/*      >*/}
+          {/*        <TouchableOpacity*/}
+          {/*          onPress={() => {*/}
+          {/*            if (item.onPress) {*/}
+          {/*              item.onPress();*/}
+          {/*            } else {*/}
+          {/*              NavigationService.navigate('AddCreditScreen', {*/}
+          {/*                callback: () => {*/}
+          {/*                  NavigationService.navigate('CheckoutResumeScreen', {*/}
+          {/*                    orderStatus: 0,*/}
+          {/*                  });*/}
+          {/*                  // Nav.goBack();*/}
+          {/*                },*/}
+          {/*              });*/}
+          {/*            }*/}
+          {/*          }}*/}
+          {/*        >*/}
+          {/*          <Image*/}
+          {/*            source={item.image}*/}
+          {/*            style={{*/}
+          {/*              width: '100%',*/}
+          {/*              //   marginTop:'10@vs',*/}
+          {/*              resizeMode: 'contain',*/}
+          {/*            }}*/}
+          {/*          />*/}
+          {/*        </TouchableOpacity>*/}
+          {/*      </View>*/}
+          {/*    );*/}
+          {/*  }}*/}
+          {/*/>*/}
+          <View
+            style={{
+              height: vs(80),
+              width: "100%",
+              paddingHorizontal: AppConfig.paddingHorizontal,
+              paddingTop: vs(15),
             }}
-          ></FlatList>
+          >
+            <Button
+              onPress={() => {
+                dispatch({
+                  type: "changLoading",
+                  payload: true,
+                });
+                createOrderFromCart({
+                  variables: {
+                    cart: {
+                      buyerId: userProfile.buyerId,
+                      shippingAddressId: localCartVar.deliverAddress,
+                      billingDetailsId: userProfile.billingDetailsId,
+                      useSalamiWallet: true,
+                      cartItems:
+                        localBuyNowVar().items.length > 0
+                          ? localBuyNowVar().items
+                          : localCartVar.items,
+                    },
+                  },
+                  context: {
+                    headers: {
+                      isPrivate: true,
+                    },
+                  },
+                  onCompleted: (res) => {
+                    debugger;
+                    console.log(
+                      `Explore useCreateOrder res ${JSON.stringify(res)}`
+                    );                    dispatch({
+
+                      type: "changLoading",
+                      payload: false,
+                    });
+
+                    debugger;
+                    const order = res?.createOrderFromCart;
+                    if (res?.createOrderFromCart?.orderId) {
+                      cartOrderVar({
+                        orderNumber: order?.orderNumber,
+                        orderId: order?.orderId,
+                        amount: order?.subTotal,
+                      });
+                      razorpayCreateOrder().then((res) => {
+                        if (res?.data) {
+                          const razorId =
+                            res?.data?.razorpayCreateOrder?.razorpayOrderId;
+                          var options = {
+                            description: "Credits towords consultation",
+                            image: "https://i.imgur.com/3g7nmJC.png",
+                            currency: "INR",
+                            key: "rzp_test_I8X2v4LgupMLv0",
+                            name: "Acme Corp",
+                            order_id: razorId, //Replace this with an order_id created using Orders API.
+                            prefill: {
+                              email: userProfile?.email,
+                              contact: userProfile?.phoneNumber,
+                              name:
+                                userProfile?.firstName + userProfile.lastName,
+                            },
+                            theme: { color: "#53a20e" },
+                          };
+                          RazorpayCheckout.open(options)
+                            .then((data) => {
+                              razorOrderPaymentVar({
+                                razorpay_payment_id: data.razorpay_payment_id,
+                                razorpay_order_id: data.razorpay_order_id,
+                                razorpay_signature: data.razorpay_signature,
+                              });
+                              razorpayVerifyPaymentSignature();
+                              alert(`Success: ${data.razorpay_payment_id}`);
+
+                              NavigationService.navigate("OrderPlacedScreen", {
+                                items: params.product,
+                                from: "Buynow",
+                              });
+                              //
+                            })
+                            .catch((error) => {
+                              alert(
+                                `Error: ${error.code} | ${error.description}`
+                              );
+                            });
+                        }
+                      });
+                    }
+                    return res?.createOrderFromCart;
+                  },
+                  onError: (res) => {
+                    debugger;
+                    dispatch({
+                      type: "changLoading",
+                      payload: false,
+                    });
+                    alert(JSON.stringify(res.message));
+                    console.log(
+                      `Explore useCreateOrder onError ${JSON.stringify(res)}`
+                    );
+                  },
+                });
+              }}
+              text={"Pay"}
+            />
+          </View>
         </View>
       </SafeAreaView>
     </View>
@@ -203,48 +385,48 @@ export default InSufficientSalamiCredit;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,
-    fontSize: '16@s',
+    fontSize: "16@s",
     color: colors.black,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   item: {
-    marginTop: '15@vs',
+    marginTop: "15@vs",
     backgroundColor: colors.white,
-    borderRadius: '16@s',
-    height: '122@vs',
+    borderRadius: "16@s",
+    height: "122@vs",
     paddingHorizontal: AppConfig.paddingHorizontal,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
     borderWidth: 2,
-    borderColor: '#409AEF',
+    borderColor: "#409AEF",
   },
   itemTitle: {
-    fontSize: '14@s',
+    fontSize: "14@s",
     fontFamily: fonts.primary,
     color: colors.black,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   itemSubTitle: {
-    fontSize: '14@s',
+    fontSize: "14@s",
     fontFamily: fonts.primary,
     color: colors.grey80,
   },
   paytypeIcon: {
-    width: '26@s',
-    height: '26@s',
-    resizeMode: 'contain',
+    width: "26@s",
+    height: "26@s",
+    resizeMode: "contain",
   },
   icon: {
-    width: '20@s',
-    height: '20@s',
-    marginLeft: '12@s',
-    resizeMode: 'contain',
+    width: "20@s",
+    height: "20@s",
+    marginLeft: "12@s",
+    resizeMode: "contain",
   },
   editImage: {
-    width: '24@s',
-    height: '24@s',
-    marginLeft: '12@s',
-    resizeMode: 'contain',
+    width: "24@s",
+    height: "24@s",
+    marginLeft: "12@s",
+    resizeMode: "contain",
   },
 });

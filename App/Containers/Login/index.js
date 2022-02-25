@@ -129,8 +129,7 @@ function LoginScreen(props) {
                 psswd
               );
 
-             
-            
+
               console.log("decoded====================================");
               console.log(decoded);
               console.log("====================================");
@@ -168,6 +167,10 @@ function LoginScreen(props) {
                         buyerProfileByUserId.buyerId
                       );
 
+                      storage.setLocalStorageValue(
+                        storage.LOCAL_STORAGE_USER_PROFILE,
+                        JSON.stringify(buyerProfileByUserId),
+                      );
                       userProfileVar({
                         userId: buyerProfileByUserId?.userId,
                         buyerId: buyerProfileByUserId?.buyerId,

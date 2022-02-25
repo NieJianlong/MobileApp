@@ -221,7 +221,7 @@ export default function ProductCarousel({ product }) {
           style={styles.photoNumberContainer}
         >
           <Text style={styles.photoNumberTxt}>
-            {photoIndex + 1}/{product.photoUrls.length}
+            {photoIndex + 1}/{product?.photoUrls?.length}
           </Text>
         </TouchableOpacity>
       </View>

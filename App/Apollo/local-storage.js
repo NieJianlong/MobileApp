@@ -6,6 +6,7 @@ export const REGISTER_BUYER_ID_KEY = "@local_storage_register_id_key";
 
 export const LOCAL_STORAGE_USER_NAME = "@local_storage_user_name";
 export const LOCAL_STORAGE_USER_PASSWORD = "@local_storage_user_password";
+export const LOCAL_STORAGE_USER_PROFILE = "@local_storage_user_profile";
 
 export const LOCAL_SEARCH_ITEM = "@local_storage_search_items";
 

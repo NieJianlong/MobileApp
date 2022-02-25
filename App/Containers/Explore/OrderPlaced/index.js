@@ -61,13 +61,14 @@ function OrderPlaced(props) {
             <Image
               style={styles.productImage}
               source={{
-                uri:
-                  "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
+                uri: props?.route?.params?.items?.photo,
               }}
             />
 
             <View>
-              <Text style={styles.heading5Bold}>iPhone 11</Text>
+              <Text style={styles.heading5Bold}>
+                {props?.route?.params?.items?.longName}
+              </Text>
               <Text style={styles.heading6Regular}>User name</Text>
             </View>
           </View>

@@ -21,14 +21,6 @@ import { gql } from "@apollo/client";
  *
  *  enum AddressType { SHIPPING, BILLING, BUSINESS, RETURN, COLLECTION_POINT,UNDEFINED }
  */
-export const REGISTER_BUYER = gql`
-  mutation RegisterBuyer($request: BuyerProfileRequestForCreate!) {
-    registerBuyer(request: $request) {
-      buyerId
-      userId
-    }
-  }
-`;
 
 /**
  * @mutation createGuestBuyer

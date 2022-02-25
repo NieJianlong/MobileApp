@@ -2,9 +2,8 @@ import React, { useContext, useCallback } from "react";
 import { View, StatusBar, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { s } from "react-native-size-matters";
-import { AppBar, Button, RightButton } from "../../Components";
+import { AppBar, RightButton } from "../../Components";
 import styles from "./styles";
-import NavigationService from "../../Navigation/NavigationService";
 import colors from "../../Themes/Colors";
 import AppConfig from "../../Config/AppConfig";
 import { AlertContext } from "../Root/GlobalContext";
@@ -16,10 +15,7 @@ import {
 import { StackActions } from "@react-navigation/native";
 import Addresses from "../UserInfo/InfoList/Addresses";
 import { useQuery } from "@apollo/client";
-import {
-  FIND_BUYER_ADDRESS_BY_ID,
-  FIND_BUYER_ADDRESS_BY_ID_AND_TPYE,
-} from "../../Apollo/queries/queries_user";
+import { FIND_BUYER_ADDRESS_BY_ID_AND_TPYE } from "../../Apollo/queries/queries_user";
 /**
  * @description: The user selects the shipping address page
  * @param {*} props

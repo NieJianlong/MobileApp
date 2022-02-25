@@ -1,0 +1,60 @@
+mutation CancelOrderItem($request: CancelOrderItemRequest) {
+    cancelOrderItem(request: $request)
+}
+mutation MarkOrderItemAsDelivered($request: OrderItemDeliveredRequest!) {
+    markOrderItemAsDelivered(request: $request)
+}
+
+mutation SubmitOrderReturnRequest($request: OrderReturnRequest!) {
+  submitOrderReturnRequest(request: $request){
+    orderReturnId
+    deadline
+    latestEventStatus
+    deliveryOption
+    returnLabel
+    returnAddress {
+        addressId
+        streetAddress1
+        streetAddress2
+        townCity
+        country
+        provinceState
+        areaCode
+    }
+    collectionPoint {
+        collectionPointId
+        microHubId
+        # address{
+        #     id
+        #     flat
+        #     floor
+        #     block
+        #     building
+        #     houseNumber
+        #     streetAddress1
+        #     streetAddress2
+        #     townCity
+        #     villageArea
+        #     district
+        #     provinceState
+        #     country
+        #     areaCode
+        #     landMark
+        #     pinCode
+        #     addressType
+        #     referenceId
+        #     defaultAddress
+        # }
+    }
+    sellerLocation{
+         collectionPointId
+         streetAddress1
+         streetAddress2
+         townCity
+         country
+         provinceState
+         areaCode
+    }
+    qrCodeAsBase64
+ }
+}

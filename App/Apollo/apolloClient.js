@@ -8,7 +8,6 @@ import AppConfig from "../Config/AppConfig";
 // const baseUrl = "http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com";
 //const baseUrl = "http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com";
 const baseUrl = AppConfig.baseUrl;
-console.log("baseURL", baseUrl);
 /**
  * Keycloak              --> 8080
  * IAM                   --> 8081
@@ -66,6 +65,7 @@ const allAPIS = {
   DeleteProductFromWishlist: PRODUCT_PORT,
   IsProductInWishlist: PRODUCT_PORT,
   IsListingAvailable: PRODUCT_PORT,
+  AddProductReview: PRODUCT_PORT,
 
   // Cart
   CreateCart: CART_PORT,
@@ -73,8 +73,11 @@ const allAPIS = {
   CartCheckout: CART_PORT,
   ClearCart: CART_PORT,
 
-  // Order
   GetBuyerOrders: ORDER_PORT,
+  SearchBuyerOrders: ORDER_PORT,
+  CancelOrderItem: ORDER_PORT,
+  MarkOrderItemAsDelivered: ORDER_PORT,
+  SubmitOrderReturnRequest: ORDER_PORT,
   CreateOrderFromCart: ORDER_PORT,
 
   //Payment
@@ -89,7 +92,11 @@ const customFetch = (uri, options) => {
     //if we forget add api in allApis,there will be a mistake
     newUri = `${uri}${USER_PORT}`;
   }
-
+  console.log("operationName====================================");
+  console.log(operationName);
+  console.log(newUri);
+  console.log(options);
+  console.log("====================================");
   return fetch(newUri, options);
 };
 const httpLink = new HttpLink({ uri: baseUrl, fetch: customFetch });

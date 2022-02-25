@@ -70,56 +70,12 @@ export const UPDATE_USER_PROFILE = gql`
   }
 `;
 
-/**
- *  @mutation registerBuyer
- *  schema
- *  registerBuyer(request: BuyerProfileRequestForCreate!) : BuyerProfileResponse
- *
- *  BuyerProfileRequestForCreate{ password:String userName:String firstName:String lastName:String
- *  email:String phoneNumber:String userType: UserType oneClickPurchaseOn:Boolean guestBuyer:Boolean!
- *  geoLocation: String areaRegion:String languages:[String] currencies:[String]}
- *
- *  BuyerProfileResponse{userId:ID buyerId:ID userName:String firstName:String lastName:String
- *  email:String phoneNumber:String userType: UserType createdAt:DateTime updatedAt:DateTime
- *  oneClickPurchaseOn:Boolean guestBuyer:Boolean geoLocation: String areaRegion:String
- *  languages:[String] currencies:[String] applicationSettings: String
- *  paymentOptions:[PaymentDetailResponse] notifications:[NotificationResponse]
- *  preferences:[PreferenceResponse] wishLists:[WishListResponse]
- *  shareInformations:[ShareInformationResponse] categoryPreferences:[String]
- *  productPreferences:[String] sellerPreferences:[String] billingDetails:BillingDetailsResponse
- *  refundSalamiCredit:Float bonusSalamiCredit:Float bonusSalamiCreditExpire:DateTime }
- *
- *  enum AddressType { SHIPPING, BILLING, BUSINESS, RETURN, COLLECTION_POINT,UNDEFINED }
- */
-export const REGISTER_BUYER = gql`
-  mutation RegisterBuyer($request: BuyerProfileRequestForCreate!) {
-    registerBuyer(request: $request) {
-      buyerId
-      userId
-    }
-  }
-`;
+// export const DELETE_BUYER_PROFILE = gql`
+//   mutation DeleteBuyerProfile($userProfileId: ID!) {
+//     deleteBuyerProfile(userProfileId: $userProfileId)
+//   }
+// `;
 
-/**
- * @mutation deleteBuyerProfile
- * schema  see @mutation registerBuyer
- *
- */
-export const DELETE_BUYER_PROFILE = gql`
-  mutation DeleteBuyerProfile($userProfileId: ID!) {
-    deleteBuyerProfile(userProfileId: $userProfileId)
-  }
-`;
-
-/**
- * @mutation updateBuyerProfile
- * schema  see @mutation registerBuyer
- * BuyerProfileRequest{userId:ID buyerId:ID! userName:String firstName:String lastName:String email:String
- * phoneNumber:String userType: UserType oneClickPurchaseOn:Boolean guestBuyer:Boolean! geoLocation: String
- * areaRegion:String languages:[String] currencies:[String] applicationSettings: String
- * categoryPreferences:[String] productPreferences:[String] sellerPreferences:[String] }
- *
- */
 export const UPDATE_BUYER_PROFILE = gql`
   mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
     updateBuyerProfile(request: $request) {
@@ -128,11 +84,6 @@ export const UPDATE_BUYER_PROFILE = gql`
   }
 `;
 
-/**
- * @mutation createGuestBuyer
- * schema  see @mutation registerBuyer
- *
- */
 export const CREATE_GUEST_BUYER = gql`
   mutation CreateGuestBuyer($request: BuyerProfileRequestForCreate!) {
     createGuestBuyer(request: $request) {

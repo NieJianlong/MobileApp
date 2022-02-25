@@ -1,35 +1,60 @@
-import React, { useState } from 'react';
-import { View, Text, SafeAreaView, StatusBar, FlatList } from 'react-native';
-import AppConfig from '../../Config/AppConfig';
-import { vs, s, ScaledSheet } from 'react-native-size-matters';
-import fonts from '../../Themes/Fonts';
-import colors from '../../Themes/Colors';
-import { AppBar, Button } from '../../Components';
-import NavigationService from '../../Navigation/NavigationService';
-import CheckBox from '../AskForReplacement/CheckBox';
-import Summary from './Summary';
+import React, { useState } from "react";
+import { View, Text, SafeAreaView, StatusBar, FlatList } from "react-native";
+import AppConfig from "../../Config/AppConfig";
+import { vs, s, ScaledSheet } from "react-native-size-matters";
+import fonts from "../../Themes/Fonts";
+import colors from "../../Themes/Colors";
+import { AppBar, Button } from "../../Components";
+import NavigationService from "../../Navigation/NavigationService";
+import CheckBox from "../AskForReplacement/CheckBox";
+import Summary from "./Summary";
+import {
+  RefundMethod,
+  ReturnOption,
+  useSubmitOrderReturnRequestMutation,
+} from "../../../generated/graphql";
+import { useRoute } from "@react-navigation/native";
 
 const countries = [
   {
-    label: 'Shipping method',
-    sublabel: 'Need to print label',
-    extra: 'FREE',
+    label: "Shipping method",
+    sublabel: "Need to print label",
+    extra: "FREE",
   },
   {
-    label: 'Shipping method',
-    sublabel: 'Need to print label',
-    extra: '$3.00',
+    label: "Shipping method",
+    sublabel: "Need to print label",
+    extra: "$3.00",
   },
 ];
 
 function ReturnProductStep2(props) {
   const [selectValue, setSelectValue] = useState(countries[0]);
+  const { params } = useRoute();
+  console.log("params====================================");
+  console.log(params);
+  console.log("====================================");
+  const [submitOrderReturnRequest] = useSubmitOrderReturnRequestMutation();
+  const submit = () => {
+    submitOrderReturnRequest({
+      variables: {
+        request: {
+          buyerId: global.buyerId,
+          orderItemId: params.data.orderItemId,
+          quantity: params.data.quantity,
+          returnOption: params.returnOption,
+          refundMethod: params.refundMethod,
+          message: params.message,
+        },
+      },
+    });
+  };
   return (
     <View
       style={{
         flex: 1,
         backgroundColor: colors.background,
-        position: 'absolute',
+        position: "absolute",
         top: 0,
         left: 0,
         right: 0,
@@ -39,7 +64,7 @@ function ReturnProductStep2(props) {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar />
 
@@ -53,7 +78,7 @@ function ReturnProductStep2(props) {
                   fontSize: s(24),
                   fontFamily: fonts.primary,
                   color: colors.black,
-                  fontWeight: '600',
+                  fontWeight: "600",
                 }}
               >
                 Select a shipping method
@@ -77,7 +102,7 @@ function ReturnProductStep2(props) {
       </SafeAreaView>
       <SafeAreaView
         style={{
-          position: 'absolute',
+          position: "absolute",
           bottom: 0,
           left: 0,
           right: 0,
@@ -87,7 +112,8 @@ function ReturnProductStep2(props) {
         <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <Button
             onPress={() => {
-              NavigationService.navigate('ReturnProductStep3Screen');
+              submit();
+              // NavigationService.navigate("ReturnProductStep3Screen");
             }}
             color={colors.primary}
             text="CONFIRM THE RETURN"
@@ -102,8 +128,8 @@ export default ReturnProductStep2;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,
-    fontSize: '16@s',
+    fontSize: "16@s",
     color: colors.black,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

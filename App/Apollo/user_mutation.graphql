@@ -1,14 +1,37 @@
 mutation ResendVerificationCodeInEmail($emailAddress: String!) {
-    resendVerificationCodeInEmail(emailAddress: $emailAddress) {
-     status
-     extraMessage
-    }
+  resendVerificationCodeInEmail(emailAddress: $emailAddress) {
+    status
+    extraMessage
+  }
+}
+mutation DeleteBuyerProfile($buyerId: ID!) {
+  deleteBuyerProfile(buyerId: $buyerId)
+}
+
+mutation SendOTPCodeForBuyer($buyerId: ID!) {
+  sendOTPCodeForBuyer(buyerId: $buyerId) {
+    status
+    message
+  }
+}
+
+mutation ValidateOTPCodeForBuyer($request: ValidateCodeRequest!) {
+  validateOTPCodeForBuyer(request: $request) {
+    status
+    extraMessage
+  }
 }
 
 mutation ForgotPasswordStep1SendNotificationEmail($email: String!) {
-    forgotPasswordStep1SendNotificationEmail(email: $email) {
-      email
-      phoneNumber
-      message
-    }
+  forgotPasswordStep1SendNotificationEmail(email: $email) {
+    email
+    phoneNumber
+    message
   }
+}
+mutation RegisterBuyer($request: BuyerProfileRequestForCreate!) {
+  registerBuyer(request: $request) {
+    buyerId
+    userId
+  }
+}

@@ -15,12 +15,6 @@ jest.mock("@react-native-community/async-storage", () =>
 
 /** tests for the onboarding endpoints */
 
-/**
- * public endpoints
- * registerUser registerBuyer, createGuestBuyer registerSeller createAddress, updateAddress, deleteAddress
- * getGuestBuyerDefaultAddressByBuyerId, getGuestBuyerAddressesById
- */
-
 //+++++++++++++++++ create a guest buyer +++++++++++++++++++
 // update numbers so no xxx exists errors
 // yarn jest -t "test guest buyer"

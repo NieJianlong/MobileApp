@@ -4,15 +4,6 @@ directive @specifiedBy(
   url: String!
 ) on SCALAR
 
-input AddreessInput {
-  streetAddress1: String
-  streetAddress2: String
-  townCity: String
-  country: String
-  provinceState: String
-  areaCode: String
-}
-
 type Address {
   id: ID!
   flat: String
@@ -35,6 +26,15 @@ type Address {
   defaultAddress: Boolean
 }
 
+input AddressInput {
+  streetAddress1: String
+  streetAddress2: String
+  townCity: String
+  country: String
+  provinceState: String
+  areaCode: String
+}
+
 type AddressView {
   addressId: ID!
   flat: String
@@ -55,26 +55,22 @@ type AddressView {
   addressFloor: String
 }
 
+type AddReviewResponse {
+  reviewId: ID!
+  productId: ID
+  sellerId: ID
+  postedBy: ID!
+  title: String
+  description: String
+  ratingVote: Int!
+}
+
 type Announcement {
   id: ID!
   referenceId: String
   validityInterval: Int
   announcementText: String
   announcementDatetime: DateTime
-}
-
-type AnnouncementDTO {
-  announcementText: String
-  validityInterval: Int
-  announcementDatetime: DateTime
-  productLongName: String
-  sellerBusinessName: String
-  retailPrice: Float
-  wholeSalePrice: Float
-  percentageOff: Float
-  deliveryDate: Date
-  minOrderRequired: Int
-  infoIcon: String
 }
 
 type Buyer {
@@ -295,10 +291,14 @@ type Mutation {
 
   """options"""
   createOption(option: OptionInput): Option
+  addOptionValue(optionId: ID!, value: String!): Option
   deleteOption(optionId: String!): Boolean
 
-  """todo: check if still required"""
-  addAnnouncement(productId: String, validityInterval: Int, announcementText: String, announcementDatetime: DateTime): Announcement!
+  """categories"""
+  addParentCategory(name: String!, description: String!): Category!
+  addSubCategory(name: String!, description: String!, parentCategoryId: String!): Category!
+  updateCategory(name: String!, description: String!, categoryId: String!): Category!
+  savePreferredCategories(buyerId: ID!, categories: [ID]): String
   createProductListings(input: ProductListingsInput!): [ProductListing!]!
   updateProductListing(input: ProductListingUpdateInput!): ProductListing!
   saveListingVariants(input: ProductListingVariantInput!): [ProductListingVariant!]!
@@ -315,39 +315,24 @@ type Mutation {
   createProduct(productCreateInput: ProductCreateInput!): Product!
   updateProductGeneral(productInput: ProductUpdateStep1!): ProductStep1Response!
   deleteProduct(productId: String!): Boolean
-
-  """admin product activation/deactivation"""
   disableProduct(productId: String!): Product
   rejectProduct(productId: String!): Product
   acceptProduct(productId: String!): Product
-
-  """category mutations"""
-  addParentCategory(name: String!, description: String!): Category!
-  addSubCategory(name: String!, description: String!, parentCategoryId: String!): Category!
-  updateCategory(name: String!, description: String!, categoryId: String!): Category!
-
-  """add product to wish list - product"""
   addProductToWishlist(productId: String!, buyerId: String!): Wishlist!
   deleteProductFromWishlist(productId: String!, buyerId: String!): Int!
-
-  """add review dto  - add review for a product"""
-  addProductReview(productId: String, title: String!, description: String!, ratingVote: Int!, sellerId: String, postedBy: String!): ProductReviewView!
-
-  """add review report"""
-  addReportReview(reviewId: String!, title: String!, description: String!, reason: String!, reporterType: ReporterType!, postedBy: String!): ReportReviewView
-
-  """add request for product to be present in a specific online store"""
-  addRequestForProduct(productId: String, storeId: String, requests: Int): ProductRequestCount
-
-  """add share information about a product"""
-  addShareInformation(productId: String, buyerId: String, shareTitle: String, targetEmailAddress: String, shareChannel: ShareChannelType, productPageUrl: String): ShareInformation
+  addRequestForProduct(input: RequestForProductInput!): RequestForProductResponse!
+  addShareInformation(input: ShareInformationInput!): ShareInformation!
+  addProductReview(input: ProductReviewInput!): AddReviewResponse!
+  addSellerReview(input: SellerReviewInput!): AddReviewResponse!
   incrementHelpfulCount(reviewId: String!): Int
   savePreferredCategories(buyerId: ID!, categories: [ID]): String
-  
+  addReportReview(input: ReportReviewInput!): ReportReviewResponse!
+
   """buyer: get razorpayment Id"""
   razorpayCreateOrder(request: RazorpayOrderRequest!): RazorpayOrderResponse
   razorpayVerifyPaymentSignature(request: RazorpayVerifyPaymentSignatureRequest!): RazorpayVerifyPaymentSignatureResponse
 }
+
 
 enum OnlineStoreType {
   UNDEFINED
@@ -357,7 +342,7 @@ enum OnlineStoreType {
 
 type Option {
   optionId: ID!
-  name: String
+  name: String!
   description: String
   values: [OptionValue]
 }
@@ -365,17 +350,17 @@ type Option {
 input OptionInput {
   name: String!
   description: String
-  values: [String]!
+  values: [String!]!
 }
 
 type OptionValue {
   valueId: ID!
-  value: String
+  value: String!
 }
 
 input OptionValueInput {
-  name: String!
-  value: String!
+  optionId: ID!
+  optionValueId: ID!
 }
 
 type PolicyNameView {
@@ -560,14 +545,6 @@ input ProductPageable {
   sortDirection: SortDirection
 }
 
-type ProductRequestCount {
-  product: Product
-  store: Store
-  requestsCount: Int
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
 type ProductResponse {
   content: [SellerProductDetailView!]!
   pageNo: Int!
@@ -576,9 +553,15 @@ type ProductResponse {
   totalElements: Int!
 }
 
+type ProductReturnPolicy {
+  returnPolicyId: ID!
+  name: String!
+  value: String!
+}
+
 input ProductReturnPolicyInput {
   returnPolicyInputs: [ReturnPolicyInput]!
-  addressInput: AddreessInput
+  addressInput: AddressInput
   returnLabelImage: FileUpload
 }
 
@@ -590,12 +573,11 @@ type ProductReturnPolicyView {
   value: String
 }
 
-type ProductReviewView {
-  id: ID!
-  buyerName: String
-  title: String
+input ProductReviewInput {
+  productId: ID!
+  title: String!
   description: String
-  ratingVote: Int
+  ratingVote: Int!
 }
 
 enum ProductSort {
@@ -677,7 +659,7 @@ type Query {
   getPreferredCategories(buyerId: ID!): [CategoryView]!
 
   """options"""
-  getOptionReference: [Option]!
+  getOptionReference: [Option!]!
 
   """return policies"""
   getPolicyNames: [PolicyNameView]!
@@ -687,8 +669,6 @@ type Query {
   getSellerListingGroupByProduct(options: SellerFilterOptions!): SellerListingGroupResponse!
   getSellerListingForAcceptOrReject(options: SellerFilterOptions!): SellerListingResponse!
   isListingAvailable(listings: [IsListingAvailableInput]): [IsListingAvailableResponse]
-  announcementsByListingId(productListingId: String): [AnnouncementDTO]
-  announcementsByOnlineStore(storeId: String): [Announcement]
   getProducts(pageable: ProductPageable): ProductResponse!
   getProductByProductId(productId: String!): SellerProductDetailView!
   getShareInformationByProductId(productId: String): [ShareInformation]
@@ -718,17 +698,37 @@ input RecurringListingInput {
   variants: [ListingVariantInput!]!
 }
 
-enum ReporterType {
-  UNDEFINED
-  BUYER
-  SELLER
-}
-
-type ReportReviewView {
-  reviewId: String
+input ReportReviewInput {
+  reviewId: ID!
   title: String
   description: String
-  postedById: String
+  reportReason: ReportReviewReason!
+}
+
+enum ReportReviewReason {
+  INAPPROPRIATE
+  IRRELEVANT
+  MISLEADING
+}
+
+type ReportReviewResponse {
+  reviewId: ID!
+  title: String
+  description: String
+  postedBy: ID!
+  reportReason: ReportReviewReason!
+}
+
+input RequestForProductInput {
+  productId: ID!
+  storeId: ID!
+  requestCount: Int!
+}
+
+type RequestForProductResponse {
+  productId: ID!
+  storeId: ID!
+  requestsCount: Int
 }
 
 input ReturnPolicyInput {
@@ -997,7 +997,14 @@ type SellerProductVariant {
 type SellerReturnPolicy {
   returnAddress: String
   returnLabel: SellerProductImage
-  policies: [KeyValuePair]
+  policies: [ProductReturnPolicy]
+}
+
+input SellerReviewInput {
+  sellerId: ID!
+  title: String
+  description: String
+  ratingVote: Int!
 }
 
 type SellerView {
@@ -1025,11 +1032,18 @@ type ShareInformation {
   product: Product
   buyer: Buyer
   createdAt: DateTime
-  updatedAt: DateTime
   targetEmailAddress: String
   shareChannel: ShareChannelType
   productPageUrl: String
   shareTitle: String
+}
+
+input ShareInformationInput {
+  productId: ID!
+  shareTitle: String
+  targetEmailAddress: String
+  shareChannel: ShareChannelType!
+  productPageUrl: String
 }
 
 enum SortDirection {

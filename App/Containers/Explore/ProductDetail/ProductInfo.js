@@ -1,6 +1,6 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { View, Image, TouchableOpacity, Text } from "react-native";
-import { s, vs } from "react-native-size-matters";
+import { s, ScaledSheet, vs } from "react-native-size-matters";
 import InView from "react-native-component-inview";
 import NumberFormat from "react-number-format";
 import {
@@ -10,16 +10,20 @@ import {
   Progress,
 } from "../../../Components";
 
-import { Images, Colors } from "../../../Themes";
+import { Images, Colors, Fonts } from "../../../Themes";
 import styles from "./styles";
 import NavigationService from "../../../Navigation/NavigationService";
 import { AlertContext } from "../../Root/GlobalContext";
 import PickupFromSellerSheetContent from "./SheetContent/PickupFromSellerSheetContent";
+import { DeliveryOption } from "../../../../generated/graphql";
+import PubSub from "pubsub-js";
 
 export default function ProductInfo({
   product,
   setTabIndex,
   scrollSectionIntoView,
+  pickUp,
+  onSetPickUp,
 }) {
   const { dispatch } = useContext(AlertContext);
   const togglePickupFromSellerSheet = useCallback(() => {
@@ -27,13 +31,33 @@ export default function ProductInfo({
       type: "changSheetState",
       payload: {
         showSheet: true,
-        height: 390,
-        children: () => <PickupFromSellerSheetContent />,
-        sheetTitle: "Pick up from seller",
+        height: 290,
+        children: () => (
+          <PickupFromSellerSheetContent
+            address={product.pickupAddress}
+            onCallback={() => {
+              onSetPickUp(true);
+            }}
+          />
+        ),
+        sheetTitle: "Pick up location",
       },
     });
-  }, [dispatch]);
-
+  }, [dispatch, onSetPickUp, product.pickupAddress]);
+  useEffect(() => {
+    let refresh = PubSub.subscribe("show-pick-up-sheet", (msg, callback) => {
+      togglePickupFromSellerSheet();
+      if (callback && pickUp) {
+        callback && callback();
+      }
+    });
+    return () => {
+      PubSub.unsubscribe(refresh);
+    };
+  }, [pickUp, togglePickupFromSellerSheet]);
+ console.log('product.deliveryOption====================================');
+ console.log(product.deliveryOption);
+ console.log('====================================');
   return (
     <InView
       onChange={(isVisible) => {
@@ -79,14 +103,13 @@ export default function ProductInfo({
               <NumberFormat
                 thousandSeparator={true}
                 prefix={"$"}
-                value={product.wholesalePrice}
+                value={product.wholeSalePrice}
                 displayType={"text"}
                 renderText={(text) => (
                   <Text style={styles.txtWholesalePrice}>{text}</Text>
                 )}
               />
             </View>
-
             <View style={styles.percentOffContainer}>
               <Text
                 style={[styles.heading6Bold, { color: Colors.secondary00 }]}
@@ -101,27 +124,43 @@ export default function ProductInfo({
           </View>
 
           <View style={[styles.row, { marginVertical: vs(10) }]}>
-            <Text style={styles.heading5Regular}>
-              Delivery fee:{" "}
-              <Text style={{ color: Colors.primary }}>
-                ${product.deliveryFee}
+            {product.deliveryOption === DeliveryOption.CourierDelivery && (
+              <Text style={styles.heading5Regular}>
+                Delivery fee:{" "}
+                <Text style={{ color: Colors.primary }}>
+                  ${product.courierShippingFee}
+                </Text>
               </Text>
-            </Text>
-            {!product.hidePickUpFromSeller ? (
+            )}
+            {(product.deliveryOption === DeliveryOption.SellerLocationPickup ||
+              product.deliveryOption ===
+                DeliveryOption.CollectionPointPickup) && (
               <View style={[styles.row, { marginLeft: s(10) }]}>
                 <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
-                  Pick up from seller
+                  Pick up location
                 </Text>
-                <Switch
-                  onSwitch={(t) => {
-                    if (t) {
+                <TouchableOpacity
+                  onPress={() => {
+                    // setPickUp(!pickUp);
+                    if (!pickUp) {
                       togglePickupFromSellerSheet();
+                    } else {
+                      onSetPickUp(false);
+                      // setPickUp(false);
                     }
                   }}
-                />
+                >
+                  {pickUp ? (
+                    <View style={styles1.activeContainer}>
+                      <View style={styles1.activeCircle} />
+                    </View>
+                  ) : (
+                    <View style={styles1.inactiveContainer}>
+                      <View style={styles1.inactiveCircle} />
+                    </View>
+                  )}
+                </TouchableOpacity>
               </View>
-            ) : (
-              <View />
             )}
           </View>
         </View>
@@ -176,7 +215,7 @@ export default function ProductInfo({
                 Vero eos et accusamus et iusto odio dignissimos
               </Text>
             </View>jjjh
-            
+
             <View style={styles.row}>
               <Text style={styles.txtDot}>•</Text>
               <Text style={styles.txtRegular}>
@@ -195,3 +234,69 @@ export default function ProductInfo({
     </InView>
   );
 }
+const WIDTH = "44@s";
+const HEIGHT = "22@s";
+
+const styles1 = ScaledSheet.create({
+  activeContainer: {
+    width: WIDTH,
+    height: HEIGHT,
+    borderRadius: "15@s",
+    borderWidth: "2@s",
+    borderColor: Colors.primary,
+    backgroundColor: Colors.primary,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: "2@s",
+  },
+  activeCircle: {
+    width: "14@s",
+    height: "14@s",
+    borderRadius: "16@s",
+    backgroundColor: Colors.white,
+  },
+  inactiveContainer: {
+    width: WIDTH,
+    height: HEIGHT,
+    borderRadius: "15@s",
+    borderWidth: "2@s",
+    borderColor: Colors.grey40,
+    flexDirection: "row",
+    alignItems: "center",
+    padding: "2@s",
+  },
+  inactiveCircle: {
+    width: "14@s",
+    height: "14@s",
+    borderRadius: "16@s",
+    backgroundColor: Colors.grey40,
+  },
+  disabledContainer: {
+    width: "48@s",
+    height: "24@s",
+    borderRadius: "15@s",
+    borderWidth: "2@s",
+    borderColor: Colors.grey10,
+    backgroundColor: Colors.grey10,
+    flexDirection: "row",
+    alignItems: "center",
+    padding: "2@s",
+  },
+  disabledCircle: {
+    width: "16@s",
+    height: "16@s",
+    borderRadius: "16@s",
+    backgroundColor: Colors.white,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  label: {
+    fontFamily: Fonts.primary,
+    fontSize: "14@s",
+    color: Colors.black,
+    marginLeft: "8@s",
+  },
+});

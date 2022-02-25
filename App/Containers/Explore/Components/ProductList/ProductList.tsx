@@ -73,7 +73,7 @@ export default function ProductList(props) {
         isPrivate: true,
       },
     },
-    onError: (res) => {},
+    onError: () => {},
     onCompleted: (res) => {
       // map data from server for now
       // add missing fields for product review

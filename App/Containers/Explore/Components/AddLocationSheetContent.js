@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useMemo } from "react";
+import React, { useState, useContext, useMemo } from "react";
 import {
   View,
   StatusBar,
@@ -37,7 +37,6 @@ export const AddLocationSheetContent = (props) => {
   const { data } = useQuery(GetStatesByCountryId, {
     variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
   });
-
   const userProfileVarReactive = useReactiveVar(userProfileVar);
   const isAuth = useMemo(
     () => userProfileVarReactive.isAuth,
@@ -107,38 +106,7 @@ export const AddLocationSheetContent = (props) => {
     }
     return [];
   }, [data]);
-  // const [items, setItems] = useState([
-  //   { label: "Andhra Pradesh", value: "Andhra Pradesh" },
-  //   { label: "Arunachal Pradesh", value: "Arunachal Pradesh" },
-  //   { label: "Assam", value: "Assam" },
-  //   { label: "Bihar", value: "Bihar" },
-  //   { label: "Chhattisgarh", value: "Chhattisgarh" },
-  //   { label: "Goa", value: "Goa" },
-  //   { label: "Gujarat", value: "Gujarat" },
-  //   { label: "Haryana", value: "Haryana" },
-  //   { label: "Himachal Pradesh", value: "Himachal Pradesh" },
-  //   { label: "Jharkhand", value: "Jharkhand" },
-  //   { label: "Karnataka", value: "Karnataka" },
-  //   { label: "Kerala", value: "Kerala" },
-  //   { label: "Madhya Pradesh", value: "Madhya Pradesh" },
-  //   { label: "Maharashtra", value: "Maharashtra" },
-  //   { label: "Manipur", value: "Manipur" },
-  //   { label: "Meghalaya", value: "Meghalaya" },
-  //   { label: "Mizoram", value: "Mizoram" },
-  //   { label: "Nagaland", value: "Nagaland" },
-  //   { label: "Odisha", value: "Odisha" },
-  //   { label: "Punjab", value: "Punjab" },
-  //   { label: "Rajasthan", value: "Rajasthan" },
-  //   { label: "Sikkim", value: "Sikkim" },
-  //   { label: "Tamil Nadu", value: "Tamil Nadu" },
-  //   { label: "Telangana", value: "Telangana" },
-  //   { label: "Tripura", value: "Tripura" },
-  //   { label: "Uttarakhand", value: "Uttarakhand" },
-  //   { label: "Uttar Pradesh", value: "Uttar Pradesh" },
-  //   { label: "West Bengal", value: "West Bengal" },
-  // ]);
   const { dispatch } = useContext(AlertContext);
-
   const inputs = [
     {
       placeholder: "Flat/Home No.,Apartment/Building Name*",

@@ -16,16 +16,28 @@ import ProductInfo from "./ProductInfo";
 import { useRoute } from "@react-navigation/native";
 import HeaderTabs from "./HeaderTabs";
 import metrics from "../../../Themes/Metrics";
+import { DeliveryOption } from "../../../../generated/graphql";
 
 const Sections = range(0, 4);
 // Wrap the original ScrollView
 const CustomScrollView = wrapScrollView(ScrollView);
 
 function ProductDetail(props) {
-  const { dispatch } = useContext(AlertContext);
   const {
     params: { product },
   } = useRoute();
+  console.log('params====================================');
+  console.log(product);
+  console.log('====================================');
+  const [pickUp, setPickUp] = useState(
+    !(
+      product.deliveryOption === DeliveryOption.SellerLocationPickup ||
+      product.deliveryOption === DeliveryOption.CollectionPointPickup
+    )
+  );
+  const onSetPickUp = (newValue) => {
+    setPickUp(newValue);
+  };
   const [currentVariant, setCurrentVariant] = useState(
     product?.listingVariants?.length > 0
       ? product?.listingVariants?.find(
@@ -107,6 +119,8 @@ function ProductDetail(props) {
               product={product}
               setTabIndex={setTabIndex}
               scrollSectionIntoView={scrollSectionIntoView}
+              pickUp={pickUp}
+              onSetPickUp={onSetPickUp}
             />
             {product.listingVariants && (
               <ProductVariants
@@ -143,7 +157,11 @@ function ProductDetail(props) {
         )}
 
         {showFooter && (
-          <DetailFooter product={product} currentVariant={currentVariant} />
+          <DetailFooter
+            product={product}
+            currentVariant={currentVariant}
+            pickUp={pickUp}
+          />
         )}
       </SafeAreaView>
     </View>

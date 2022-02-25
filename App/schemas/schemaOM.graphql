@@ -43,9 +43,28 @@ type BuyerDetailsResponse {
   phoneNumber: String
 }
 
+input BuyerOrderOption {
+  searchString: String
+  pageOption: PageOption!
+}
+
+type BuyerOrderResponse {
+  content: [OrderItemDetailResponse!]!
+  pageNo: Int!
+  pageSize: Int!
+  totalPages: Int!
+  totalElements: Int!
+}
+
+enum CancellationReason {
+  MISTAKE_ORDER
+  NOT_ABLE_TO_WAIT_FOR_LISTING_COMPLETION
+  PRODUCT_NOT_REQUIRED
+}
+
 input CancelOrderItemRequest {
   orderItemId: String!
-  reason: String
+  reason: CancellationReason!
   message: String
   refundMethod: RefundMethod!
 }
@@ -224,16 +243,6 @@ type OrderResponse {
   paymentDetails: OrderPaymentDetailsResponse
 }
 
-type OrderReturnAddress {
-  addressId: ID
-  streetAddress1: String
-  streetAddress2: String
-  townCity: String
-  country: String
-  provinceState: String
-  areaCode: String
-}
-
 input OrderReturnEventRequest {
   orderReturnId: ID!
   event: ReturnEventType
@@ -271,6 +280,7 @@ input OrderReturnRequest {
   returnOption: ReturnOption!
   refundMethod: RefundMethod
   message: String
+  returnReasonPolicyId: ID
 }
 
 type OrderReturnResponse {
@@ -279,7 +289,7 @@ type OrderReturnResponse {
   latestEventStatus: ReturnEventType!
   deliveryOption: DeliveryOption!
   returnLabel: String
-  returnAddress: OrderReturnAddress
+  returnAddress: AddressResponse
   collectionPoint: CollectionPointPickupResponse
   sellerLocation: SellerLocationPickupResponse
   qrCodeAsBase64: String
@@ -288,20 +298,6 @@ type OrderReturnResponse {
 type OrderReturnStatusResponse {
   orderReturnId: ID!
   events: [OrderReturnEventResponse]
-}
-
-type OrderView {
-  orderId: ID
-  orderNumber: String
-  orderDatetime: String
-  deliveryAddress: String
-  billingAddress: String
-  subTotal: Float
-  serviceFees: Float
-  shippingFees: Float
-  totalSavings: Float
-  orderTotal: Float
-  orderItems: [SimpleOrderItemView]
 }
 
 input PageOption {
@@ -325,8 +321,7 @@ enum ProductListingStatus {
 
 """QUERIES"""
 type Query {
-  """to be deprecated"""
-  getBuyerOrders(buyerId: ID!, searchString: String!): [OrderView]
+  searchBuyerOrders(options: BuyerOrderOption!): BuyerOrderResponse!
   getSellerOrders(options: SellerOrderOption!): SellerOrderResponse!
   getSellerListingOrders(options: ListingOrderOptions!): SellerListingOrderResponse!
   getOrderItemDetails(orderItemId: ID!): OrderItemDetailResponse!
@@ -334,11 +329,6 @@ type Query {
   getOrderReturn(orderReturnId: String!): OrderReturnResponse!
   getOrderReturnStatus(orderReturnId: String!): OrderReturnStatusResponse!
   getSellerOrderReturns(options: OrderReturnOptions!): SellerOrderReturnResponse!
-
-  """temporary for testing only - remove"""
-  getClientCredentialsToken: String!
-  isTokenValid(token: String): Boolean!
-  getAccessToken(clientId: String!, clientSecret: String!): String!
 }
 
 enum RefundMethod {
@@ -475,20 +465,6 @@ enum ShippingStatus {
   OUT_FOR_DELIVERY
   DELIVERED
   DELIVERY_FAILED
-}
-
-type SimpleOrderItemView {
-  orderItemId: ID
-  listingId: ID
-  quantity: Int
-  latestStatus: OrderItemHistoryEventType
-  sellerId: ID
-  variantId: ID
-  variantOptions: String
-  shortName: String
-  photo: String
-  itemPrice: Float
-  discount: Float
 }
 
 type TrackOrderItemResponse {

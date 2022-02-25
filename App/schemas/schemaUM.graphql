@@ -157,8 +157,8 @@ input BuyerProfileRequestForCreate {
   password: String
   firstName: String
   lastName: String
-  email: String
-  phoneNumber: String
+  email: String!
+  phoneNumber: String!
   oneClickPurchaseOn: Boolean
   geoLocation: String
   country: String
@@ -361,19 +361,6 @@ type GenericResponse {
   message: String
 }
 
-input MicroHubForCreate {
-  serviceOperatorId: ID!
-  country: String
-  state: String
-  pinCode: String
-  cityTownVillage: String
-  streetColonyName: String
-  flatHomeApartmentBuilding: String
-  contactPerson: String
-  contactNumber: String
-  openingHours: [String]
-}
-
 type MicroHubResponse {
   microHubId: ID
   address: AddressResponse
@@ -387,10 +374,9 @@ type Mutation {
   registerBuyer(request: BuyerProfileRequestForCreate!): BuyerProfileResponse
   deleteBuyerProfile(buyerId: ID!): Boolean
   updateBuyerProfile(request: BuyerProfileRequest!): BuyerProfileResponse
-  createGuestBuyer(request: BuyerProfileRequestForCreate!): BuyerProfileResponse
+  createGuestBuyer: BuyerProfileResponse
   validateCode(request: ValidateCodeRequest!): ValidateCodeResponse
   createServiceOperator(request: ServiceOperatorProfileForCreate!): GenericResponse
-  createMicroHub(request: MicroHubForCreate!): GenericResponse
   addRefundSalamiCredit(buyerId: ID!, refundAmount: Float!): Float
   useRefundSalamiCredit(buyerId: ID!, amount: Float!): Float
   addBonusSalamiCredit(buyerId: ID!, amount: Float!, bonusSalamiCreditExpire: DateTime): Float
@@ -475,6 +461,8 @@ type Mutation {
   sellerBillingDetailsForSeller(sellerId: ID!): SellerBillingDetailsResponse
   acceptSellerRegistrationDocuments(sellerId: ID!): GenericResponse
   rejectSellerValidation(sellerId: ID!, rejectReason: RegistrationRejectedReason!, rejectNote: String): GenericResponse
+  sendOTPCodeForBuyer(buyerId: ID!): GenericResponse
+  validateOTPCodeForBuyer(request: ValidateCodeRequest!): ValidateCodeResponse
 }
 
 input NotificationRequest {
@@ -650,6 +638,7 @@ type Query {
   shippingDetails: [ShippingDetailResponse]
   shippingDetailById(shippingId: ID!): ShippingDetailResponse
   userHasVerifiedEmail(userId: ID!): Boolean
+  buyerHasVerifiedPhoneNumber(userId: ID!): Boolean
   deliveryAddressForBuyer(buyerId: ID!): AddressResponse
   deliveryAddressForGuestBuyer(buyerId: ID!): AddressResponse
   getCountries: [CountryResponse]
@@ -662,6 +651,7 @@ type Query {
   sellerBillingDetailsById(billingDetailsId: ID!): SellerBillingDetailsResponse
   sellerBillingDetailsForSeller(sellerId: ID!): SellerBillingDetailsResponse
   getSellerDocumentKeys(sellerId: ID!): [SellerDocumentResponse]
+  getHowToVideoLink: GenericResponse
 }
 
 type ReduceWalletResponse {
@@ -829,7 +819,7 @@ input SellerProfileRequestForCreate {
   password: String!
   firstName: String
   lastName: String
-  email: String
+  email: String!
   phoneNumber: String
   businessName: String
   geoLocation: String

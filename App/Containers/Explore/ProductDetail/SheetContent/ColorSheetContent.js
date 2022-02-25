@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { s, vs } from "react-native-size-matters";
+import { vs } from "react-native-size-matters";
 
 import ColorOptionItem from "../../Components/ColorOptionItem";
 

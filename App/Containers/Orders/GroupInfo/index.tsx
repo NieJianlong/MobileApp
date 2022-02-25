@@ -17,6 +17,7 @@ import ProductItem from "../../Explore/Components/ProductItem";
 import {
   DeliveryOption,
   FilterType,
+  OrderItemHistoryEventType,
   ProductListingStatus,
   useGetListingsQuery,
   useMarkOrderItemAsDeliveredMutation,
@@ -151,13 +152,14 @@ function GroupInfoScreen(props) {
           NavigationService.navigate("TrackOrderScreen", { type: "track" })
         )}
         {/* when order status is received,user can return product */}
-        {renderAction(Images.orderReturnImage, "Return product", () => {
-          if (data.deliveryOption === DeliveryOption.SellerLocationPickup) {
-            NavigationService.navigate("ReturnsUnavailable", { data });
-            return;
-          }
-          NavigationService.navigate("ReturnProductStep1Screen", { data });
-        })}
+        {data.latestEventStatus === OrderItemHistoryEventType.Delivered &&
+          renderAction(Images.orderReturnImage, "Return product", () => {
+            if (data.deliveryOption === DeliveryOption.SellerDirectDelivery) {
+              NavigationService.navigate("ReturnsUnavailable", { data });
+              return;
+            }
+            NavigationService.navigate("ReturnProductStep1Screen", { data });
+          })}
         {/* when order status is uncompleted,user can cancel the order */}
         {data.listingStatus === ProductListingStatus.Active &&
           renderAction(Images.orderCancelImage, "Cancel order", () =>

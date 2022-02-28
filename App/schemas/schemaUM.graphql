@@ -376,7 +376,6 @@ type Mutation {
   updateBuyerProfile(request: BuyerProfileRequest!): BuyerProfileResponse
   createGuestBuyer: BuyerProfileResponse
   validateCode(request: ValidateCodeRequest!): ValidateCodeResponse
-  createServiceOperator(request: ServiceOperatorProfileForCreate!): GenericResponse
   addRefundSalamiCredit(buyerId: ID!, refundAmount: Float!): Float
   useRefundSalamiCredit(buyerId: ID!, amount: Float!): Float
   addBonusSalamiCredit(buyerId: ID!, amount: Float!, bonusSalamiCreditExpire: DateTime): Float
@@ -930,17 +929,7 @@ enum SellerValidationStatus {
   UNDEFINED
   PENDING
   ACCEPTED
-  DECLINED
-}
-
-input ServiceOperatorProfileForCreate {
-  username: String!
-  firstName: String
-  lastName: String
-  email: String!
-  phoneNumber: String
-  password: String!
-  roles: [String]!
+  REJECTED
 }
 
 type ServiceOperatorResponse {

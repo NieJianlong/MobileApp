@@ -158,7 +158,10 @@ function GroupInfoScreen(props) {
               NavigationService.navigate("ReturnsUnavailable", { data });
               return;
             }
-            NavigationService.navigate("ReturnProductStep1Screen", { data });
+            NavigationService.navigate("ReturnProductStep1Screen", {
+              data,
+              product: product?.getListings?.content[0],
+            });
           })}
         {/* when order status is uncompleted,user can cancel the order */}
         {data.listingStatus === ProductListingStatus.Active &&

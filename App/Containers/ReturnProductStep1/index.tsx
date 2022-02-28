@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   View,
   ScrollView,
@@ -12,7 +12,7 @@ import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
 import colors from "../../Themes/Colors";
-import { AppBar } from "../../Components";
+import { AppBar, Selector } from "../../Components";
 import NavigationService from "../../Navigation/NavigationService";
 
 import { ApplicationStyles } from "../../Themes";
@@ -20,11 +20,23 @@ import { ReturnOption } from "../../../generated/graphql";
 import CheckBox from "../Explore/Components/CheckBox";
 import { t } from "react-native-tailwindcss";
 import { useRoute } from "@react-navigation/native";
+import { isEmpty } from "lodash";
 
 function ReturnProductStep1() {
   const { params } = useRoute();
   const [prefer, setPrefer] = useState<ReturnOption>(ReturnOption.GetRefund);
   const [message, setMessage] = useState<string>("");
+  console.log("params====================================");
+  console.log();
+
+  const returnPolicies = useMemo(
+    () =>
+      params.product.returnPolicies?.filter(
+        (item) => item.name === "allowed_return_reason"
+      ) ?? [],
+    [params.product]
+  );
+  const [returnReasonPolicyId, setReturnReasonPolicyId] = useState<string>("");
   return (
     <View
       style={{
@@ -46,11 +58,13 @@ function ReturnProductStep1() {
           rightButton={() => {
             return (
               <TouchableOpacity
+                disabled={isEmpty(returnReasonPolicyId)}
                 onPress={() => {
                   if (prefer == ReturnOption.GetRefund) {
                     NavigationService.navigate("RefundScreen", {
                       cancel: false,
                       message,
+                      returnReasonPolicyId,
                       returnOption: ReturnOption.GetRefund,
                       ...params,
                     });
@@ -59,7 +73,13 @@ function ReturnProductStep1() {
                   }
                 }}
               >
-                <Text style={[ApplicationStyles.screen.heading5Bold]}>
+                <Text
+                  style={[
+                    isEmpty(returnReasonPolicyId)
+                      ? t.textGray600
+                      : t.textPrimary,
+                  ]}
+                >
                   NEXT
                 </Text>
               </TouchableOpacity>
@@ -81,18 +101,19 @@ function ReturnProductStep1() {
         <ScrollView
           style={[{ paddingHorizontal: AppConfig.paddingHorizontal }, t.hFull]}
         >
-          {/* <Selector
+          <Selector
             style={{ marginTop: vs(15), marginBottom: vs(10) }}
-            placeholder={'Problem reason goes here'}
-            data={[
-              'The product is damaged',
-              'The product is damaged',
-              'The product is damaged',
-            ]}
+            placeholder={"Problem reason goes here"}
+            data={returnPolicies.map((item) => item.value)}
             onValueChange={(item) => {
-              setShowPrefer(true);
+              const currentItem = returnPolicies.find((i) => i.value === item);
+              setReturnReasonPolicyId(currentItem.id);
+              console.log("currentItem====================================");
+              console.log(currentItem);
+              console.log("====================================");
+              // setShowPrefer(true);
             }}
-          /> */}
+          />
           <RNTextInput
             multiline={true}
             placeholder="Message"

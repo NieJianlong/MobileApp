@@ -74,6 +74,8 @@ import CancelOrderCompletedScreen from "../Containers/CancelOrderCompleted";
 import ReportGroupScreen from "../Containers/ReportGroup";
 import TabBar from "./TabBar";
 import ReturnsUnavailable from "../Containers/ReturnsUnavailable/ReturnsUnavailable";
+import ReturnInformation from "../Containers/Orders/ReturnInformation";
+// import ReturnInformation from "../..";
 
 const Stack = createStackNavigator();
 
@@ -124,6 +126,7 @@ function PrimaryNav() {
         name={"ProductDetailScreen"}
         component={ProductDetailScreen}
       />
+      <Stack.Screen name={"ReturnInformation"} component={ReturnInformation} />
       <Stack.Screen
         name={"ProductGalleryScreen"}
         component={ProductGalleryScreen}

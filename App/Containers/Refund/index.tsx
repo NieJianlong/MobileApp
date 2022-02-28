@@ -56,7 +56,19 @@ function Refund(props) {
   const [submitOrderReturnRequest] = useSubmitOrderReturnRequestMutation({
     onCompleted: (res) => {
       if (params.data.deliveryOption === DeliveryOption.CourierDelivery) {
+        NavigationService.navigate("ReturnInformation");
       }
+      if (
+        params.data.deliveryOption === DeliveryOption.CollectionPointPickup ||
+        params.data.deliveryOption === DeliveryOption.SellerLocationPickup
+      ) {
+        NavigationService.navigate("ReturnInformation");
+      }
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
     },
   });
   const submit = () => {
@@ -69,6 +81,7 @@ function Refund(props) {
           returnOption: params.returnOption,
           refundMethod: refundMethod,
           message: params.message,
+          returnReasonPolicyId: params.returnReasonPolicyId,
         },
       },
     });

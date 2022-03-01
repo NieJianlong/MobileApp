@@ -160,7 +160,7 @@ query TrackOrderItem($orderItemId: ID!) {
     deliveryOption
     latestEventStatus
     orderNumber
-    sellerBusinessName
+    # sellerBusinessName
     dateDelivered
     shippingDetails {
       shippingStatus
@@ -202,7 +202,6 @@ query TrackOrderItem($orderItemId: ID!) {
 
     sellerDirectDelivery {
       announcementId
-      referenceId
       deliveryDate
     }
     qrCodeAsBase64

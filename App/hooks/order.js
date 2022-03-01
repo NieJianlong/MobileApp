@@ -13,7 +13,6 @@ export const useCreateOrder = () => {
     }
 
     if (error) {
-      debugger
       console.log("error=====", error);
       alert(error);
       console.log("error===============", error.response);
@@ -21,7 +20,6 @@ export const useCreateOrder = () => {
     }
 
     if (data) {
-      debugger
       console.log("createOrder data ==>", data);
       setOrder(data);
     }

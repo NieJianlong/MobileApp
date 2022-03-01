@@ -77,6 +77,7 @@ function ShoppingCart(props) {
       };
     });
   }, [mydatas]);
+  console.log("isAvailableList", isAvailableList);
   const [queryAvailble, { data: availbleList }] = useLazyQuery(
     IsListingAvailable,
     {
@@ -93,13 +94,25 @@ function ShoppingCart(props) {
    * to make the code more readable
    */
   const onProceed = () => {
+    const itemArray = [] ;
+    mydatas.map((item, index) => {
+      let itemAvailble = true;
+      if (availbleList) {
+        const i = availbleList.isListingAvailable[index];
+        itemAvailble = i?.isAvailable;
+      }
+      if(itemAvailble) {
+        itemArray.push({
+          listingId: item.product.listingId,
+          variantId: item.variantId,
+          quantity: item.quantity,
+        })
+      }
+    })
+    console.log("itemArray", itemArray);
     localCartVar({
       ...localCart,
-      items: mydatas.map((item) => ({
-        listingId: item.product.listingId,
-        variantId: item.variantId,
-        quantity: item.quantity,
-      })),
+      items: itemArray,
     });
 
     // if (userProfile?.isAuth && global.buyerId !== AppConfig.guestId) {
@@ -123,6 +136,7 @@ function ShoppingCart(props) {
       NavigationService.navigate("CheckoutResumeScreen", {
         orderStatus: 0,
         data: mydatas,
+        availbleList: availbleList
       });
     }
   };
@@ -312,7 +326,7 @@ function ShoppingCart(props) {
               return mydatas.length > 0 ? (
                 <View style={{ backgroundColor: "white" }}>
                   <AddressBar />
-                  <CartSummary />
+                  <CartSummary availbleList={availbleList}/>
                 </View>
               ) : null;
             }}

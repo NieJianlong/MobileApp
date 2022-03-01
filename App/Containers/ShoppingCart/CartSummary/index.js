@@ -49,13 +49,21 @@ function CartSummary(props) {
     let currentBilling = 0;
     let originalBilling = 0;
     for (let index = 0; index < mydatas.length; index++) {
+      let itemAvailble = true;
+      if (props.availbleList) {
+        const i = props.availbleList.isListingAvailable[index];
+        itemAvailble = i?.isAvailable;
+      }
       const element = mydatas[index];
       if (element.variant) {
-        originalBilling =
-          originalBilling + element.variant.retailPrice * element.quantity;
-        currentBilling =
-          currentBilling + element.variant.wholeSalePrice * element.quantity;
+        if(itemAvailble) {
+          originalBilling =
+            originalBilling + element.variant.retailPrice * element.quantity;
+          currentBilling =
+            currentBilling + element.variant.wholeSalePrice * element.quantity;
+        }
       } else {
+        if(itemAvailble)
         originalBilling =
           originalBilling + element.product.retailPrice * element.quantity;
         currentBilling =

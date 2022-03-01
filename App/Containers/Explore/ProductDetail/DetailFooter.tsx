@@ -19,7 +19,7 @@ import "react-native-get-random-values";
 import useRealm from "../../../hooks/useRealm";
 import colors from "../../../Themes/Colors";
 import PubSub from "pubsub-js";
-import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
+import { useMutation, useQuery, useReactiveVar, useLazyQuery } from "@apollo/client";
 import {
   cartOrderVar,
   GET_LOCAL_CART,
@@ -38,6 +38,7 @@ import RazorpayCheckout from "react-native-razorpay";
 import { useRazorVerifyPayment } from "../../../hooks/verifyPayment";
 import { useCreateRazorOrder } from "../../../hooks/razorOrder";
 import { DeliveryOption } from "../../../../generated/graphql";
+import { IsListingAvailable } from "../../Explore/gql/explore_queries";
 
 export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { dispatch } = useContext(AlertContext);
@@ -61,8 +62,13 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       onError: (err) => {},
     },
   });
-  // console.log("Product ================", product);
-  // console.log("finaldata", data);
+  console.log("product.numberOfItemsAvailable", product.numberOfItemsAvailable);
+  console.log("product", product);
+  console.log("currentVariant", currentVariant);
+  console.log("itemsSold", currentVariant.itemsSold);
+  console.log("itemsSold", currentVariant.itemsAvailable);
+  console.log("comparison", currentVariant.itemsSold === currentVariant.itemsAvailable)
+
   const info = realm
     .objects("ShoppingCart")
     .filtered("product.productId == $0", product.productId)
@@ -70,9 +76,9 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
   const [cartInfo, setCartInfo] = useState(info);
   const [quantity, setQuantity] = useState(info?.quantity || 1);
-  //const { createOrderFromCart, order } = useCreateOrder();
-  const [createOrderFromCart, { loading, error, data: dataaa }] =
-    useMutation(CreateOrderFromCart);
+  const { createOrderFromCart, order } = useCreateOrder();
+  // const [createOrderFromCart, { loading, error, data: dataaa }] =
+  //   useMutation(CreateOrderFromCart);
 
   let walletBalance = parseFloat(
     BigNumber(
@@ -108,16 +114,13 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
         },
       },
       onCompleted: (res) => {
-        debugger;
         console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
         dispatch({
           type: "changLoading",
           payload: false,
         });
         if (type === "sufficient") {
-          debugger;
           if (res?.createOrderFromCart?.orderId) {
-            debugger;
             localBuyNowVar({
               items: [],
             });
@@ -127,7 +130,6 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
             });
           }
         } else if (type === "zero") {
-          debugger;
           const order = res?.createOrderFromCart;
           if (res?.createOrderFromCart?.orderId) {
             cartOrderVar({
@@ -185,7 +187,6 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
         }
       },
       onError: (res) => {
-        debugger;
         dispatch({
           type: "changLoading",
           payload: false,
@@ -395,7 +396,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       <View style={{ height: vs(15) }} />
 
       <View style={styles.rowSpaceBetween}>
-        <TouchableOpacity style={styles.row} onPress={toggleAddToCartSheet}>
+        <TouchableOpacity style={styles.row} onPress={toggleAddToCartSheet} disabled={currentVariant.itemsSold === currentVariant.itemsAvailable}>
           <Image source={Images.cartMed} style={styles.icCart} />
           <Text style={[styles.txtBold, { color: Colors.primary }]}>
             ADD TO CART
@@ -405,8 +406,14 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
         <TouchableOpacity
           onPress={toggleConfirmOrderSheet}
           style={styles.btnBuyNow}
+          disabled={currentVariant.itemsSold === currentVariant.itemsAvailable}
         >
-          <Text style={[styles.txtBold, { color: Colors.white }]}>BUY NOW</Text>
+          <Text style={[styles.txtBold, { color: Colors.white }]}>
+            {
+              currentVariant.itemsSold === currentVariant.itemsAvailable ? 'you missed product 100/100 sold..' : 'BUY NOW'
+            }
+
+          </Text>
 
           <View style={styles.priceContainer}>
             <NumberFormat

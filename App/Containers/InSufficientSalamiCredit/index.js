@@ -297,7 +297,6 @@ function InSufficientSalamiCredit(props) {
                     },
                   },
                   onCompleted: (res) => {
-                    debugger;
                     console.log(
                       `Explore useCreateOrder res ${JSON.stringify(res)}`
                     );                    dispatch({
@@ -306,7 +305,6 @@ function InSufficientSalamiCredit(props) {
                       payload: false,
                     });
 
-                    debugger;
                     const order = res?.createOrderFromCart;
                     if (res?.createOrderFromCart?.orderId) {
                       cartOrderVar({
@@ -360,7 +358,6 @@ function InSufficientSalamiCredit(props) {
                     return res?.createOrderFromCart;
                   },
                   onError: (res) => {
-                    debugger;
                     dispatch({
                       type: "changLoading",
                       payload: false,

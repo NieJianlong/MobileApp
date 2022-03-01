@@ -18,6 +18,7 @@ import { Colors, Images } from "../../../Themes";
 import NavigationService from "../../../Navigation/NavigationService";
 
 function OrderPlaced(props) {
+  console.log("props?.route?.params?.items =====", props?.route?.params?.items);
   const renderHeader = () => {
     return (
       <View style={styles.header}>
@@ -57,22 +58,43 @@ function OrderPlaced(props) {
         <Text style={styles.txt3}>Inform your group</Text>
 
         <View style={styles.informContainer}>
-          <View style={styles.row}>
+          {
+            props?.route?.params?.from !== "checkout" ? (
+            <View style={styles.row}>
             <Image
-              style={styles.productImage}
-              source={{
-                uri: props?.route?.params?.items?.photo,
-              }}
+            style={styles.productImage}
+            source={{
+            uri: props?.route?.params?.items?.photo,
+          }}
             />
 
             <View>
-              <Text style={styles.heading5Bold}>
-                {props?.route?.params?.items?.longName}
-              </Text>
-              <Text style={styles.heading6Regular}>User name</Text>
+            <Text style={styles.heading5Bold}>
+          {props?.route?.params?.items?.longName}
+            </Text>
+            <Text style={styles.heading6Regular}>User name</Text>
             </View>
-          </View>
+            </View>
+            ):
+            props?.route?.params?.items?.map((item, index) => {
+              return (<View style={styles.row}>
+                  <Image
+                    style={styles.productImage}
+                    source={{
+                      uri: item?.photo,
+                    }}
+                  />
 
+                  <View>
+                    <Text style={styles.heading5Bold}>
+                      {item?.longName}
+                    </Text>
+                    <Text style={styles.heading6Regular}>User name</Text>
+                  </View>
+                </View>
+              )
+            })
+          }
           {renderChatOptions()}
         </View>
 

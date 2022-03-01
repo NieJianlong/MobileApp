@@ -28,6 +28,7 @@ function Index(props) {
     availble,
     onPress,
   } = props;
+  props.availble = true;
   const [quantity, setQuantity] = useState(props.product.quantity);
 
   useEffect(() => {

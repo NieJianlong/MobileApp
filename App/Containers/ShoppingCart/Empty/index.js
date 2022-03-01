@@ -15,30 +15,7 @@ function index(props) {
           needButton
           btnMsg="EXPLORE"
           onPress={() => {
-            // NavigationService.navigate("ExploreScreen");
-            var options = {
-              description: "Credits towords consultation",
-              image: "https://i.imgur.com/3g7nmJC.png",
-              currency: "INR",
-              key: "rzp_test_owK1UREmxZCSL2",
-              amount: "8000",
-              name: "Acme Corp",
-              //order_id: "ORDER-17012022-101727620", //Replace this with an order_id created using Orders API.
-              prefill: {
-                email: "bluestar929@outlook.com",
-                contact: "8616525825013",
-                name: "Gaurav Kumar",
-              },
-              theme: { color: "#53a20e" },
-            };
-            RazorpayCheckout.open(options)
-              .then((data) => {
-                alert(`Success: ${data.razorpay_payment_id}`);
-                console.log(`Success: ${data.razorpay_payment_id}`);
-              })
-              .catch((error) => {
-                alert(`Error: ${error.code} | ${error.description}`);
-              });
+            NavigationService.navigate("ExploreScreen");
           }}
         />
       </View>

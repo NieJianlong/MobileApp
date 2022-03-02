@@ -68,7 +68,10 @@ function RegisterScreen(props) {
     if (Platform.OS === "android") {
       DeviceInfo.getPhoneNumber().then((phoneNumber) => {
         if (phoneNumber.startsWith("+91")) {
-          setValue("phoneNumber", trimEnd(phoneNumber, "+91"));
+          setValue("phoneNumber", trimStart(phoneNumber, "+91"));
+        }
+        if (phoneNumber.startsWith("+86")) {
+          setValue("phoneNumber", trimStart(phoneNumber, "+86"));
         }
         // alert(phoneNumber);
         // Android: null return: no permission, empty string: unprogrammed or empty SIM1, e.g. "+15555215558": normal return value

@@ -153,3 +153,57 @@ query SearchBuyerOrders($options: BuyerOrderOption!) {
     totalElements
   }
 }
+
+query TrackOrderItem($orderItemId: ID!) {
+  trackOrderItem(orderItemId: $orderItemId) {
+    orderItemId
+    deliveryOption
+    latestEventStatus
+    orderNumber
+    # sellerBusinessName
+    dateDelivered
+    shippingDetails {
+      shippingStatus
+      shippingDate
+      carrier
+      carrierUrl
+      trackingNumber
+      expectedDeliveryDate
+      shippingInstructions
+      deliveryDate
+      failedDeliveryReason
+      events {
+        eventType
+        eventDateTime
+      }
+    }
+    collectionPoint {
+      collectionPointId
+      microHubId
+      streetAddress1
+      streetAddress2
+      townCity
+      country
+      provinceState
+      areaCode
+      openingHours
+      contactNumber
+      contactPerson
+    }
+    sellerLocation {
+      collectionPointId
+      streetAddress1
+      streetAddress2
+      townCity
+      country
+      provinceState
+      areaCode
+    }
+
+    sellerDirectDelivery {
+      announcementId
+      deliveryDate
+    }
+    qrCodeAsBase64
+  }
+}

@@ -9,8 +9,10 @@ import NavigationService from "../../Navigation/NavigationService";
 import CheckBox from "../AskForReplacement/CheckBox";
 import { useRoute } from "@react-navigation/native";
 import {
+  DeliveryOption,
   RefundMethod,
   useCancelOrderItemMutation,
+  useSubmitOrderReturnRequestMutation,
 } from "../../../generated/graphql";
 import lodash from "lodash";
 
@@ -34,6 +36,7 @@ function Refund(props) {
   const [refundMethod, setRefundMethod] = useState<RefundMethod>(
     RefundMethod.SalamiCredit
   );
+
   const [cancelOrder] = useCancelOrderItemMutation({
     variables: {
       request: {
@@ -50,7 +53,43 @@ function Refund(props) {
       NavigationService.navigate("CancelOrderCompletedScreen");
     },
   });
-
+  const [submitOrderReturnRequest] = useSubmitOrderReturnRequestMutation({
+    onCompleted: (res) => {
+      if (params.data.deliveryOption === DeliveryOption.CourierDelivery) {
+        NavigationService.navigate("ReturnInformation");
+      }
+      if (
+        params.data.deliveryOption === DeliveryOption.CollectionPointPickup ||
+        params.data.deliveryOption === DeliveryOption.SellerLocationPickup
+      ) {
+        NavigationService.navigate("ReturnInformation");
+      }
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+  });
+  const submit = () => {
+    submitOrderReturnRequest({
+      variables: {
+        request: {
+          buyerId: global.buyerId,
+          orderItemId: params.data.orderItemId,
+          quantity: params.data.quantity,
+          returnOption: params.returnOption,
+          refundMethod: refundMethod,
+          message: params.message,
+          returnReasonPolicyId: params.returnReasonPolicyId,
+        },
+      },
+    });
+  };
+  // NavigationService.navigate("ReturnProductStep2Screen", {
+  //   ...params,
+  //   refundMethod,
+  // })
   return (
     <View
       style={{
@@ -117,12 +156,7 @@ function Refund(props) {
         <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <Button
             onPress={() => {
-              cancel
-                ? cancelOrder()
-                : NavigationService.navigate("ReturnProductStep2Screen", {
-                    ...params,
-                    refundMethod,
-                  });
+              cancel ? cancelOrder() : submit();
             }}
             color={colors.primary}
             text={cancel ? "CANCEL ORDER" : "CONTINUE"}

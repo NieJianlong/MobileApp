@@ -157,6 +157,7 @@ type OrderItemDetailResponse {
   orderSubTotal: Float!
   orderDiscount: Float!
   orderServiceFees: Float!
+  orderShippingFees: Float!
   totalSavings: Float!
   orderTotal: Float!
   buyerId: ID!

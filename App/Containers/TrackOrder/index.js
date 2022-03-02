@@ -1,20 +1,31 @@
-import React from 'react';
-import { View, ScrollView, Text, SafeAreaView, StatusBar } from 'react-native';
-import AppConfig from '../../Config/AppConfig';
-import { vs, s, ScaledSheet } from 'react-native-size-matters';
-import fonts from '../../Themes/Fonts';
-import colors from '../../Themes/Colors';
-import { AppBar } from '../../Components';
-import { ApplicationStyles } from '../../Themes';
-import Header from './header';
-import Trackers from './trackers';
-import { useRoute } from '@react-navigation/core';
+import React from "react";
+import { View, ScrollView, Text, SafeAreaView, StatusBar } from "react-native";
+import AppConfig from "../../Config/AppConfig";
+import { vs, s, ScaledSheet } from "react-native-size-matters";
+import fonts from "../../Themes/Fonts";
+import colors from "../../Themes/Colors";
+import { AppBar } from "../../Components";
+import { ApplicationStyles } from "../../Themes";
+import Header from "./header";
+import Trackers from "./trackers";
+import { useRoute } from "@react-navigation/core";
+import { useTrackOrderItemQuery } from "../../../generated/graphql";
 import Qrcode from './qrcode';
 
 function TrackOrder(props) {
   const {
-    params: { type },
+    params: { type, data },
   } = useRoute();
+  const { data: trackData, loading } = useTrackOrderItemQuery({
+    variables: {
+      orderItemId: data.orderItemId,
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+  });
   return (
     <View
       style={{
@@ -30,25 +41,25 @@ function TrackOrder(props) {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar
-          title={type === 'track' ? 'Track Order' : 'Order return status'}
+          title={type === "track" ? "Track Order" : "Order return status"}
         />
         <ScrollView contentContainerStyle={{ paddingBottom: vs(64) }}>
           <View
             style={{
-              alignItems: 'center',
+              alignItems: "center",
               height: vs(100),
-              justifyContent: 'center',
+              justifyContent: "center",
             }}
           >
             <Text
               style={[ApplicationStyles.screen.txtRegular, { fontSize: s(14) }]}
             >
-              {`Estimated ${type === 'track' ? 'delivery' : 'return'} date`}
+              {`Estimated ${type === "track" ? "delivery" : "return"} date`}
             </Text>
-            <View style={{ height: 10, width: '100%' }} />
+            <View style={{ height: 10, width: "100%" }} />
             <Text
               style={[
                 ApplicationStyles.screen.heading2Bold,
@@ -61,7 +72,7 @@ function TrackOrder(props) {
           <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
             <View
               style={{
-                backgroundColor: 'white',
+                backgroundColor: "white",
                 borderRadius: s(16),
                 flex: 1,
                 display: "flex",
@@ -84,8 +95,8 @@ export default TrackOrder;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,
-    fontSize: '16@s',
+    fontSize: "16@s",
     color: colors.black,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

@@ -651,6 +651,7 @@ type Query {
   getStores(pageable: StorePageable!): StoreResponse!
   store(id: ID!): Store!
   getStoreByName(name: String!): Store!
+  searchStoreByName(nameSearchString: String!, searchType: SearchStringType!, pageable: StorePageable!): StoreResponse!
   onlineStoreByGeoCoordinates(latitude: Float!, longitude: Float!, pageable: StorePageable!): StoreResponse!
   getStoresByCityOrProvince(place: String!, pageable: StorePageable!): StoreResponse!
 
@@ -801,6 +802,10 @@ input SearchOptions {
 
   """default 0"""
   pageSize: Int
+}
+
+enum SearchStringType {
+  STARTS_WITH
 }
 
 type SellerDirectDeliveryDetailView {

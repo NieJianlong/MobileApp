@@ -15,7 +15,9 @@ import NavigationService from "../../../Navigation/NavigationService";
 import { useRoute } from "@react-navigation/core";
 import ProductItem from "../../Explore/Components/ProductItem";
 import {
+  DeliveryOption,
   FilterType,
+  OrderItemHistoryEventType,
   ProductListingStatus,
   useGetListingsQuery,
   useMarkOrderItemAsDeliveredMutation,
@@ -135,16 +137,36 @@ function GroupInfoScreen(props) {
           })
         )}
         {renderAction(Images.user, "Evaluate the seller", () =>
-          NavigationService.navigate("RateSellerScreen")
+          // NavigationService.navigate("RateSellerScreen")
+          NavigationService.navigate("RateOrderScreen", {
+            onPost: () => {
+              NavigationService.goBack();
+            },
+            data,
+            title: "Evaluate the seller",
+            product: product?.getListings?.content[0],
+          })
         )}
         {/* when order status is reached,user can track order */}
-        {renderAction(Images.orderTrackImage, "Track order", () =>
-          NavigationService.navigate("TrackOrderScreen", { type: "track" })
-        )}
+        {data.latestEventStatus === OrderItemHistoryEventType.Paid &&
+          renderAction(Images.orderTrackImage, "Track order", () =>
+            NavigationService.navigate("TrackOrderScreen", {
+              type: "track",
+              data,
+            })
+          )}
         {/* when order status is received,user can return product */}
-        {renderAction(Images.orderReturnImage, "Return product", () =>
-          NavigationService.navigate("ReturnProductStep1Screen", { data })
-        )}
+        {data.latestEventStatus === OrderItemHistoryEventType.Delivered &&
+          renderAction(Images.orderReturnImage, "Return product", () => {
+            if (data.deliveryOption === DeliveryOption.SellerDirectDelivery) {
+              NavigationService.navigate("ReturnsUnavailable", { data });
+              return;
+            }
+            NavigationService.navigate("ReturnProductStep1Screen", {
+              data,
+              product: product?.getListings?.content[0],
+            });
+          })}
         {/* when order status is uncompleted,user can cancel the order */}
         {data.listingStatus === ProductListingStatus.Active &&
           renderAction(Images.orderCancelImage, "Cancel order", () =>
@@ -152,9 +174,12 @@ function GroupInfoScreen(props) {
               orderItemId: data.orderItemId,
             })
           )}
-        {renderAction(Images.orderTrackImage, "Return status", () =>
-          NavigationService.navigate("TrackOrderScreen", { type: "return" })
-        )}
+        {(data.latestEventStatus ===
+          OrderItemHistoryEventType.ReplacementRequest ||
+          data.latestEventStatus === OrderItemHistoryEventType.RefundRequest) &&
+          renderAction(Images.orderTrackImage, "Return status", () =>
+            NavigationService.navigate("TrackOrderScreen", { type: "return" })
+          )}
       </View>
     );
   }

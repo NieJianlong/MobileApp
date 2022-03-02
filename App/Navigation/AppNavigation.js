@@ -53,6 +53,7 @@ import CustomerSupportScreen from "../Containers/CustomerSupport";
 import FeedbackScreen from "../Containers/Feedback";
 import ShoppingCartScreen from "../Containers/ShoppingCart";
 import EditShoppingCartScreen from "../Containers/EditShoppingCart";
+import CheckoutNoAuthScreen from "../Containers/CheckoutNoAuth";
 import CheckoutAuthScreen from "../Containers/CheckoutAuth";
 import CheckOutPersonalDetailsScreen from "../Containers/CheckOutPersonalDetails";
 import CheckoutBillingDetailsScreen from "../Containers/CheckoutBillingDetails";
@@ -77,7 +78,9 @@ import PaymentScreen from '../Containers/payments';
 import { Page_BillingDetails, Page_CheckoutAuth, Page_CheckoutGuestOrderDetail } from "./const";
 import CheckoutGuestOrderDetail from "../Containers/CheckoutGuestOrderDetail";
 import BillingDetails from "../Containers/BillingDetails";
-
+import ReturnsUnavailable from "../Containers/ReturnsUnavailable/ReturnsUnavailable";
+import ReturnInformation from "../Containers/Orders/ReturnInformation";
+// import ReturnInformation from "../..";
 const Stack = createStackNavigator();
 
 const Tab = createBottomTabNavigator();
@@ -127,11 +130,16 @@ function PrimaryNav() {
         name={"ProductDetailScreen"}
         component={ProductDetailScreen}
       />
+      <Stack.Screen name={"ReturnInformation"} component={ReturnInformation} />
       <Stack.Screen
         name={"ProductGalleryScreen"}
         component={ProductGalleryScreen}
       />
       <Stack.Screen name={"ProductInfoScreen"} component={ProductInfoScreen} />
+      <Stack.Screen
+        name={"ReturnsUnavailable"}
+        component={ReturnsUnavailable}
+      />
       <Stack.Screen
         name={"ProductSearchScreen"}
         component={ProductSearchScreen}

@@ -7,6 +7,8 @@ import {
   Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import SmsRetriever from 'react-native-sms-retriever';
+
 //import { vs } from 'react-native-size-matters'
 
 import {
@@ -66,13 +68,18 @@ function RegisterScreen(props) {
     // let phoneNumber = "+918247278755";
     // setValue("phoneNumber", trimStart(phoneNumber, "+91"));
     if (Platform.OS === "android") {
-      DeviceInfo.getPhoneNumber().then((phoneNumber) => {
-        if (phoneNumber.startsWith("+91")) {
-          setValue("phoneNumber", trimEnd(phoneNumber, "+91"));
-        }
-        // alert(phoneNumber);
-        // Android: null return: no permission, empty string: unprogrammed or empty SIM1, e.g. "+15555215558": normal return value
-      });
+      try {
+        SmsRetriever.requestPhoneNumber().then((resph) => {
+          console.log("SmsRetriever==request===PhoneNumber", resph)
+          if (resph.startsWith("+91")) {
+            setValue("phoneNumber", trimEnd(resph, "+91"));
+          }
+        }).catch((err) => {
+          console.log("SmsRetriever error", err);
+        });
+      } catch (error) {
+        console.log(JSON.stringify(error));
+      }
     }
 
     return () => {

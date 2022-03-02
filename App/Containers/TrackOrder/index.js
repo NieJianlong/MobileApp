@@ -1,5 +1,12 @@
 import React from "react";
-import { View, ScrollView, Text, SafeAreaView, StatusBar } from "react-native";
+import {
+  View,
+  ScrollView,
+  Text,
+  Image,
+  SafeAreaView,
+  StatusBar,
+} from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
@@ -15,6 +22,7 @@ import {
   useTrackOrderItemQuery,
 } from "../../../generated/graphql";
 import Qrcode from "./Qrcode/index";
+import { t } from "react-native-tailwindcss";
 
 function TrackOrder(props) {
   const {
@@ -92,6 +100,73 @@ function TrackOrder(props) {
               <Footer />
             </View>
           </View>
+          {data.deliveryOption === DeliveryOption.SellerDirectDelivery && (
+            <View style={[t.p4]}>
+              <Text style={[t.fontBold, t.textGray800]}>
+                Please note returns are not allowed for this item
+              </Text>
+              <View style={[t.flexRow, t.itemsCenter, t.mT4]}>
+                <View style={[t.w2, t.h2, t.roundedFull, t.bgGray600, t.mR2]} />
+                <Text>
+                  Upon delivery, there is the chance to inspect the item and
+                  either accept or reject it
+                </Text>
+              </View>
+              <View style={[t.flexRow, t.itemsCenter, t.mT4]}>
+                <View style={[t.w2, t.h2, t.roundedFull, t.bgGray600, t.mR2]} />
+                <Text style={[t.textGray600, t.fontBold]}>
+                  Please check the item carefully before accepting the delivery
+                  to make sure you are happy with your purchase
+                </Text>
+              </View>
+            </View>
+          )}
+          {(data.deliveryOption === DeliveryOption.CollectionPointPickup ||
+            data.deliveryOption === DeliveryOption.SellerLocationPickup) && (
+            <View style={[t.p4]}>
+              <View style={[t.bgWhite, t.roundedLg, t.p3]}>
+                <View style={[t.flexRow, t.itemsCenter]}>
+                  <Image
+                    style={[t.w4, t.h4]}
+                    source={require("../../Images/user.png")}
+                  />
+                  <Text style={[t.fontBold, t.mL2]}>Contact Person</Text>
+                </View>
+
+                <Text style={[t.textGray500, t.mT2]}>John Smith</Text>
+              </View>
+              <View style={[t.bgWhite, t.roundedLg, t.p3, t.mT4]}>
+                <View style={[t.flexRow, t.itemsCenter]}>
+                  <Image
+                    style={[t.w6, t.h6]}
+                    source={require("../../Images/usercenter/ubiling.png")}
+                  />
+                  <Text style={[t.fontBold, t.mL1]}>Seller Location</Text>
+                </View>
+                <Text style={[t.textGray500, t.mT2]}>{`${
+                  data?.pickupAddress?.houseNumber ?? ""
+                }${data?.pickupAddress?.flat ?? ""}${
+                  data?.pickupAddress?.villageArea ?? ""
+                }${data?.pickupAddress?.townCity}${
+                  data?.pickupAddress?.provinceState
+                }${data?.pickupAddress?.country} ${
+                  data?.pickupAddress?.pinCode ?? ""
+                }`}</Text>
+              </View>
+
+              <View style={[t.bgWhite, t.roundedLg, t.p3, t.mT4]}>
+                <View style={[t.flexRow, t.itemsCenter]}>
+                  <Image
+                    style={[t.w4, t.h4]}
+                    source={require("../../Images/time2.png")}
+                  />
+                  <Text style={[t.fontBold, t.mL2]}>Opening Times</Text>
+                </View>
+
+                <Text style={[t.textGray500, t.mT2]}>Mon-Fri 9:00-17:00</Text>
+              </View>
+            </View>
+          )}
         </ScrollView>
       </SafeAreaView>
     </View>

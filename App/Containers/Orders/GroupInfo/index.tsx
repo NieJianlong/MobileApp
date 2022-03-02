@@ -181,7 +181,10 @@ function GroupInfoScreen(props) {
           OrderItemHistoryEventType.ReplacementRequest ||
           data.latestEventStatus === OrderItemHistoryEventType.RefundRequest) &&
           renderAction(Images.orderTrackImage, "Return status", () =>
-            NavigationService.navigate("TrackOrderScreen", { type: "return" })
+            NavigationService.navigate("TrackOrderScreen", {
+              type: "return",
+              data,
+            })
           )}
       </View>
     );

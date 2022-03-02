@@ -78,6 +78,7 @@ const allAPIS = {
   CancelOrderItem: ORDER_PORT,
   MarkOrderItemAsDelivered: ORDER_PORT,
   SubmitOrderReturnRequest: ORDER_PORT,
+  TrackOrderItem: ORDER_PORT,
 };
 
 const customFetch = (uri, options) => {

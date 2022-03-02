@@ -148,9 +148,16 @@ function GroupInfoScreen(props) {
           })
         )}
         {/* when order status is reached,user can track order */}
-        {renderAction(Images.orderTrackImage, "Track order", () =>
-          NavigationService.navigate("TrackOrderScreen", { type: "track" })
-        )}
+        {data.latestEventStatus === OrderItemHistoryEventType.Paid &&
+          renderAction(Images.orderTrackImage, "Track order", () => {
+            // if (data.deliveryOption === DeliveryOption.CourierDelivery) {
+            NavigationService.navigate("TrackOrderScreen", {
+              type: "track",
+              data,
+            });
+            // } else {
+            // }
+          })}
         {/* when order status is received,user can return product */}
         {data.latestEventStatus === OrderItemHistoryEventType.Delivered &&
           renderAction(Images.orderReturnImage, "Return product", () => {
@@ -170,9 +177,12 @@ function GroupInfoScreen(props) {
               orderItemId: data.orderItemId,
             })
           )}
-        {renderAction(Images.orderTrackImage, "Return status", () =>
-          NavigationService.navigate("TrackOrderScreen", { type: "return" })
-        )}
+        {(data.latestEventStatus ===
+          OrderItemHistoryEventType.ReplacementRequest ||
+          data.latestEventStatus === OrderItemHistoryEventType.RefundRequest) &&
+          renderAction(Images.orderTrackImage, "Return status", () =>
+            NavigationService.navigate("TrackOrderScreen", { type: "return" })
+          )}
       </View>
     );
   }

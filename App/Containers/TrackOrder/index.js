@@ -7,6 +7,7 @@ import colors from "../../Themes/Colors";
 import { AppBar } from "../../Components";
 import { ApplicationStyles } from "../../Themes";
 import Header from "./header";
+import Footer from "./footer";
 import Trackers from "./trackers";
 import { useRoute } from "@react-navigation/core";
 import {
@@ -67,7 +68,7 @@ function TrackOrder(props) {
                 { fontSize: s(32), paddingTop: 10 },
               ]}
             >
-              22 Oct 2020
+              22 Oct 2022
             </Text>
           </View>
           <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
@@ -78,7 +79,7 @@ function TrackOrder(props) {
                 flex: 1,
               }}
             >
-              <Header />
+              <Header orderNumber={data.orderNumber} />
               {data.deliveryOption === DeliveryOption.CourierDelivery && (
                 <Trackers type={type} />
               )}
@@ -88,6 +89,7 @@ function TrackOrder(props) {
                   DeliveryOption.SellerLocationPickup) && (
                 <Qrcode uri={trackData?.trackOrderItem.qrCodeAsBase64} />
               )}
+              <Footer />
             </View>
           </View>
         </ScrollView>

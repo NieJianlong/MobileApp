@@ -4,8 +4,11 @@ import { vs, s, ScaledSheet } from "react-native-size-matters";
 import colors from "../../../Themes/Colors";
 import AppConfig from "../../../Config/AppConfig";
 import { ApplicationStyles } from "../../../Themes";
+interface HeaderProps {
+  orderNumber: string;
+}
 
-function index(props) {
+function Header({ orderNumber }: HeaderProps) {
   return (
     <View
       style={{
@@ -19,15 +22,15 @@ function index(props) {
       }}
     >
       <View style={{ flexDirection: "row" }}>
-        <Text
+        {/* <Text
           style={[ApplicationStyles.screen.txtRegular, { fontSize: s(16) }]}
         >
           Order
-        </Text>
+        </Text> */}
         <Text
-          style={[ApplicationStyles.screen.heading3Bold, { fontSize: s(18) }]}
+          style={[ApplicationStyles.screen.heading4Bold, { fontSize: s(16) }]}
         >
-          #4849988
+          {orderNumber}
         </Text>
       </View>
       <Text
@@ -42,4 +45,4 @@ function index(props) {
   );
 }
 
-export default index;
+export default Header;

@@ -7,7 +7,7 @@ import {
   Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import SmsRetriever from 'react-native-sms-retriever';
+import SmsRetriever from "react-native-sms-retriever";
 
 //import { vs } from 'react-native-size-matters'
 
@@ -41,7 +41,7 @@ import {
   useRegisterBuyerMutation,
 } from "../../../generated/graphql";
 import { t } from "react-native-tailwindcss";
-import { startsWith, trimEnd, trimStart } from "lodash";
+import { trimStart } from "lodash";
 
 function RegisterScreen(props) {
   const { dispatch } = useContext(AlertContext);
@@ -69,14 +69,19 @@ function RegisterScreen(props) {
     // setValue("phoneNumber", trimStart(phoneNumber, "+91"));
     if (Platform.OS === "android") {
       try {
-        SmsRetriever.requestPhoneNumber().then((resph) => {
-          console.log("SmsRetriever==request===PhoneNumber", resph)
-          if (resph.startsWith("+91")) {
-            setValue("phoneNumber", trimEnd(resph, "+91"));
-          }
-        }).catch((err) => {
-          console.log("SmsRetriever error", err);
-        });
+        SmsRetriever.requestPhoneNumber()
+          .then((resph) => {
+            console.log("SmsRetriever==request===PhoneNumber", resph);
+            if (resph.startsWith("+91")) {
+              setValue("phoneNumber", trimStart(resph, "+91"));
+            }
+            if (resph.startsWith("+86")) {
+              setValue("phoneNumber", trimStart(resph, "+86"));
+            }
+          })
+          .catch((err) => {
+            console.log("SmsRetriever error", err);
+          });
       } catch (error) {
         console.log(JSON.stringify(error));
       }

@@ -287,7 +287,7 @@ type Mutation {
   reduceSoldQuantity(input: VariantSoldQuantityInput!): Boolean!
   incrementSoldQuantity(input: VariantSoldQuantityInput!): Boolean!
   createProduct(productCreateInput: ProductCreateInput!): Product!
-  updateProductGeneral(productInput: ProductUpdateStep1!): ProductStep1Response!
+  updateProductDetails(productId: ID!, input: ProductDetailsInput!): Product!
   deleteProduct(productId: String!): Boolean
   disableProduct(productId: String!): Product
   rejectProduct(productId: String!): Product
@@ -352,6 +352,11 @@ type Product {
   shortName: String!
   longName: String
   description: String
+  brand: String
+  vendorName: String
+  highlightBullets: [String]
+  keywords: [String]
+  productType: ProductType
 }
 
 type ProductCategoryView {
@@ -369,12 +374,11 @@ input ProductCreateInput {
 
 input ProductDetailsInput {
   shortName: String!
-  longName: String
+  longName: String!
   description: String
-  categoryId: String
+  categoryId: String!
   vendor: String
   brand: String
-  technicalDetails: String
   keywords: [String]
   highlightBullets: [String]
   productImages: [FileUpload]
@@ -564,10 +568,6 @@ enum ProductStatus {
   DELETED
 }
 
-type ProductStep1Response {
-  productId: ID!
-}
-
 input ProductStocksAndPricingInput {
   sellerSku: String
   retailPrice: Float!
@@ -588,21 +588,6 @@ enum ProductType {
   DONT_USE_ME_2
 }
 
-input ProductUpdateStep1 {
-  productId: ID!
-  productStatus: ProductStatus!
-  shortName: String!
-  longName: String
-  description: String
-  categories: [String]
-
-  """id array"""
-  vendor: String
-  brand: String
-  keywords: [String]
-  highlightBullets: [String]
-}
-
 input ProductVariantInput {
   sellerSku: String
   retailPrice: Float!
@@ -617,7 +602,6 @@ input ProductVariantInput {
 type Query {
   """stores"""
   getStores(pageable: StorePageable!): StoreResponse!
-  store(id: ID!): Store!
   getStoreByName(name: String!): Store!
   searchStoreByName(nameSearchString: String!, searchType: SearchStringType!, pageable: StorePageable!): StoreResponse!
   onlineStoreByGeoCoordinates(latitude: Float!, longitude: Float!, pageable: StorePageable!): StoreResponse!
@@ -928,6 +912,8 @@ type SellerProductDetailView {
   vendorSku: String
   sellerSku: String
   brand: String
+  highlightBullets: [String]
+  keywords: [String]
   productType: ProductType
   productStatus: ProductStatus
   vendorName: String
@@ -954,6 +940,8 @@ type SellerProductPrice {
   salePercentage: Float
   totalQuantityPrice: Float
   taxPercentage: Float
+  profit: Float!
+  savePercentage: Float!
 }
 
 type SellerProductVariant {
@@ -964,6 +952,9 @@ type SellerProductVariant {
   defaultVariant: Boolean!
   retailPrice: Float!
   wholeSalePrice: Float!
+  profit: Float!
+  savePercentage: Float!
+  sellerSku: String
   options: [KeyValuePair!]!
 }
 

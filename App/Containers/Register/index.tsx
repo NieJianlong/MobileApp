@@ -203,7 +203,7 @@ function RegisterScreen(props) {
         console.log(`registerBuyer buyerId=${buyerId}`);
         if (buyerId) {
           global.buyerId = buyerId;
-          storage.setLocalStorageValue(registerInput, buyerId);
+          storage.setLocalStorageValue(getValues("phoneNumber"), buyerId);
           dispatch({
             type: "changLoading",
             payload: false,

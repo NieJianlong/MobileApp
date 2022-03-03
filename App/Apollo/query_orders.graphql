@@ -154,6 +154,17 @@ query SearchBuyerOrders($options: BuyerOrderOption!) {
     totalElements
   }
 }
+query GetOrderReturnStatus($orderReturnId: String!) {
+  getOrderReturnStatus(orderReturnId: $orderReturnId) {
+    orderReturnId
+    events {
+      returnId
+      eventDateTime
+      eventType
+      notes
+    }
+  }
+}
 
 query TrackOrderItem($orderItemId: ID!) {
   trackOrderItem(orderItemId: $orderItemId) {

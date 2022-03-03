@@ -25,6 +25,7 @@ fragment OrderItemDetailField on OrderItemDetailResponse {
   orderNumber
   orderDatetime
   orderSubTotal
+  orderReturnId
   orderDiscount
   orderServiceFees
   totalSavings
@@ -160,7 +161,7 @@ query TrackOrderItem($orderItemId: ID!) {
     deliveryOption
     latestEventStatus
     orderNumber
-    sellerBusinessName
+    # sellerBusinessName
     dateDelivered
     shippingDetails {
       shippingStatus
@@ -189,6 +190,7 @@ query TrackOrderItem($orderItemId: ID!) {
       openingHours
       contactNumber
       contactPerson
+      collectionDate
     }
     sellerLocation {
       collectionPointId
@@ -198,11 +200,11 @@ query TrackOrderItem($orderItemId: ID!) {
       country
       provinceState
       areaCode
+      collectionDate
     }
 
     sellerDirectDelivery {
       announcementId
-      referenceId
       deliveryDate
     }
     qrCodeAsBase64

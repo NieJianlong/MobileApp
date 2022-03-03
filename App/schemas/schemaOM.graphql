@@ -95,6 +95,7 @@ type CollectionPointPickupResponse {
   openingHours: [String]
   contactNumber: String
   contactPerson: String
+  collectionDate: Date
 }
 
 """SCALARS"""
@@ -186,6 +187,7 @@ type OrderItemDetailResponse {
   shippingDate: Date
   deliveryAddress: AddressResponse
   pickupAddress: AddressResponse
+  orderReturnId: ID
 
   """returned only for query: getOrderItemDetails"""
   buyer: BuyerDetailsResponse
@@ -394,6 +396,7 @@ type SellerLocationPickupResponse {
   country: String
   provinceState: String
   areaCode: String
+  collectionDate: Date
 }
 
 enum SellerOrderFilterType {

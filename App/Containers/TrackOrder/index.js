@@ -3,9 +3,9 @@ import {
   View,
   ScrollView,
   Text,
-  Image,
   SafeAreaView,
   StatusBar,
+  Image,
 } from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
@@ -23,13 +23,17 @@ import {
 } from "../../../generated/graphql";
 import Qrcode from "./Qrcode/index";
 import { t } from "react-native-tailwindcss";
+import moment from "moment";
 
 function TrackOrder(props) {
   const {
     params: { type, data },
   } = useRoute();
-  const { data: trackData } = useTrackOrderItemQuery({
-    variables: { orderItemId: data.orderItemId },
+
+  const { data: trackData, loading } = useTrackOrderItemQuery({
+    variables: {
+      orderItemId: data.orderItemId,
+    },
     context: {
       headers: {
         isPrivate: true,
@@ -70,14 +74,31 @@ function TrackOrder(props) {
               {`Estimated ${type === "track" ? "delivery" : "return"} date`}
             </Text>
             <View style={{ height: 10, width: "100%" }} />
-            <Text
-              style={[
-                ApplicationStyles.screen.heading2Bold,
-                { fontSize: s(32), paddingTop: 10 },
-              ]}
-            >
-              22 Oct 2022
-            </Text>
+
+            {data.deliveryOption === DeliveryOption.CollectionPointPickup && (
+              <Text
+                style={[
+                  ApplicationStyles.screen.heading2Bold,
+                  { fontSize: s(32), paddingTop: 10 },
+                ]}
+              >
+                {moment(
+                  trackData?.trackOrderItem.collectionPoint.collectionDate ?? ""
+                ).format("DD MMM YYYY")}
+              </Text>
+            )}
+            {data.deliveryOption === DeliveryOption.SellerLocationPickup && (
+              <Text
+                style={[
+                  ApplicationStyles.screen.heading2Bold,
+                  { fontSize: s(32), paddingTop: 10 },
+                ]}
+              >
+                {moment(
+                  trackData?.trackOrderItem.sellerLocation.collectionDate ?? ""
+                ).format("DD MMM YYYY")}
+              </Text>
+            )}
           </View>
           <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
             <View

@@ -67,6 +67,7 @@
     "react-native-scrollable-tab-view": "^1.0.0",
     "react-native-scrollable-tab-view-collapsible-header": "^0.0.5",
     "react-native-size-matters": "^0.3.1",
+    "react-native-sms-retriever": "^1.1.1",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-star-rating": "^1.1.0",
     "react-native-tailwindcss": "^1.1.11",

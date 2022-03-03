@@ -332,11 +332,11 @@ function RegisterScreen(props) {
             control={control}
             rules={{
               required: "Field is required.",
-              pattern: {
-                value:
-                  /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
-                message: "invalid email address",
-              },
+              // pattern: {
+              //   value:
+              //     /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
+              //   message: "invalid email address",
+              // },
             }}
             render={({ field: { onChange, value } }) => (
               <TextInput

@@ -28,7 +28,6 @@ function Index(props) {
     availble,
     onPress,
   } = props;
-  props.availble = true;
   const [quantity, setQuantity] = useState(props.product.quantity);
 
   useEffect(() => {
@@ -172,12 +171,13 @@ function Index(props) {
             style={styles.removebtn}
             disabled={!availble}
             onPress={() => {
+              console.log("props.product=============", props.product);
               realm.write(() => {
                 // Delete the task from the realm.
                 realm.delete(props.product);
                 // Discard the reference.
                 PubSub.publish("refresh-shoppingcart");
-                props.product = null;
+               // props.product = null;
               });
               Alert.dispatch({
                 type: "changAlertState",

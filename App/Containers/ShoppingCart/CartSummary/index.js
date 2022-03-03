@@ -72,6 +72,7 @@ function CartSummary(props) {
     }
     const total = new BigNumber(currentBilling).toFixed(2);
     const saving = new BigNumber(originalBilling - currentBilling).toFixed(2);
+    props.subtotal(total);
     return {
       total: total,
       saving: saving,
@@ -97,7 +98,7 @@ function CartSummary(props) {
           You save
         </Text>
         <Text style={[styles.heading4Regular, { fontSize: s(14) }]}>
-          ${money.saving} ({money.percent + ""}%)
+          ${money.saving} ({(!isNaN(money.percent))? money.percent + "" : ""}%)
         </Text>
       </View>
     </View>

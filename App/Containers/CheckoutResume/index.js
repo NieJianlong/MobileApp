@@ -21,6 +21,8 @@ import { ApplicationStyles } from "../../Themes";
 import { useQuery, useReactiveVar } from "@apollo/client";
 import { CreateOrderFromCart, WALLET_BALANCE } from "../../hooks/gql";
 import { AlertContext } from "../Root/GlobalContext";
+import PubSub from "pubsub-js";
+import useRealm from "../../hooks/useRealm";
 //orderStatus：1,completed
 function CheckoutResume(props) {
   const { params } = useRoute();
@@ -29,6 +31,8 @@ function CheckoutResume(props) {
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
+
+  const { realm } = useRealm();
   const userProfile = useReactiveVar(userProfileVar);
   const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
     useRazorVerifyPayment();
@@ -78,6 +82,13 @@ function CheckoutResume(props) {
   });
   console.log("dataWalletdataWalletdataWalletdataWallet", dataWallet)
   const { dispatch } = useContext(AlertContext);
+  const [mydatas, setMydatas] = useState(
+    realm
+      .objects("ShoppingCart")
+      .filtered("addressId == $0", localCartVar.deliverAddress)
+      .filtered("quantity > 0")
+      .filtered("isDraft == false")
+  );
   const walletBalance =
    BigNumber(
       dataWallet?.getBuyerSalamiWalletBalance?.walletBalance +
@@ -87,8 +98,48 @@ function CheckoutResume(props) {
 
 
   const proceedFurther = (type) => {
+    console.log("localCartVar.items", localCartVar.items);
+    console.log("localCartVar======mydatas", mydatas.length);
+
+    // let person = realm.objectForPrimaryKey('person', personId);
+    // let carsOfPerson = person.cars;
+    //
+    // var i = carsOfPerson.length - 1;
+    // while(i >= 0) {
+    //   if(carsOfPerson[i].model == "Honda") {
+    //     carsOfPerson.splice(i, 1);
+    //   }
+    //   i--;
+    // }
+     let a = mydatas.length - 1;
+    while(a >= 0) {
+      if(mydatas[a]) {
+        console.log("itemsAvaiedlable", mydatas[a].variant.itemsAvailable)
+        console.log("itemsInStock", mydatas[a].variant.itemsSold)
+        if(mydatas[a].variant.itemsAvailable === mydatas[a].variant.itemsSold){
+          console.log("IN if condition")
+        }else {
+          console.log("IN else condition")
+        }
+      }
+      a--;
+    }
+
+    localCartCache({
+      items: [],
+    });
+    realm.write(() => {
+      // Delete the task from the realm.
+      realm.delete(localCartVar.items);
+      // Discard the reference.
+      PubSub.publish("refresh-shoppingcart");
+      // props.product = null;
+    });
+    return;
     console.log("type", type);
     console.log("localCartVar", localCartVar);
+
+    return;
     dispatch({
       type: "changLoading",
       payload: true,
@@ -117,8 +168,15 @@ function CheckoutResume(props) {
         if (type === "sufficient") {
           if (res?.createOrderFromCart?.orderId) {
             let items = localCartVar.items;
-            localCart({
+            localCartCache({
               items: [],
+            });
+            realm.write(() => {
+              // Delete the task from the realm.
+              realm.delete(localCartVar.items);
+              // Discard the reference.
+              PubSub.publish("refresh-shoppingcart");
+              // props.product = null;
             });
             NavigationService.navigate("OrderPlacedScreen", {
               items: items,
@@ -165,6 +223,13 @@ function CheckoutResume(props) {
                     localCartCache({
                       items: [],
                     })
+                    realm.write(() => {
+                      // Delete the task from the realm.
+                      realm.delete(localCartVar.items);
+                      // Discard the reference.
+                      PubSub.publish("refresh-shoppingcart");
+                      // props.product = null;
+                    });
                     debugger
                     NavigationService.navigate("OrderPlacedScreen", {
                       items: items,

@@ -31,6 +31,7 @@ import { Action_Type, Billing_Type } from "../AddBillingDetails/const";
 export const CartContext = React.createContext({});
 
 function ShoppingCart(props) {
+  console.log("props ShoppingCart", props);
   const { realm } = useRealm();
   const localCart = localCartVar();
   const userProfile = useReactiveVar(userProfileVar);
@@ -43,6 +44,7 @@ function ShoppingCart(props) {
   );
   // const mydatas = realm.objects("ShoppingCart");
   const [paidDuringDelivery, setPaidDuringDeliver] = useState(false);
+  const [total, setTotal] = useState(0);
   const sheetContext = useContext(AlertContext);
   useEffect(() => {
     setMydatas(
@@ -140,6 +142,13 @@ function ShoppingCart(props) {
       });
     }
   };
+
+  const subTotal = (subtotal) => {
+    setTotal(parseInt(subtotal));
+
+    console.log("total",total);
+    console.log("total===0", total === 0);
+  };
   return (
     <CartContext.Provider>
       <View style={styles.container}>
@@ -166,7 +175,10 @@ function ShoppingCart(props) {
                   height: 80,
                 }}
               >
-                <Button onPress={onProceed} text="PROCEED TO CHECKOUT" />
+                <Button
+                  disabledColor={'grey'}
+                  disabled={total === 0}
+                  onPress={onProceed} text="PROCEED TO CHECKOUT" />
               </View>
             )}
             renderSectionFooter={() => (
@@ -326,7 +338,7 @@ function ShoppingCart(props) {
               return mydatas.length > 0 ? (
                 <View style={{ backgroundColor: "white" }}>
                   <AddressBar />
-                  <CartSummary availbleList={availbleList}/>
+                  <CartSummary availbleList={availbleList} subtotal={subTotal}/>
                 </View>
               ) : null;
             }}

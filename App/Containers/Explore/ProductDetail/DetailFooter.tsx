@@ -396,7 +396,9 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       <View style={{ height: vs(15) }} />
 
       <View style={styles.rowSpaceBetween}>
-        <TouchableOpacity style={styles.row} onPress={toggleAddToCartSheet} disabled={currentVariant.itemsSold === currentVariant.itemsAvailable}>
+        <TouchableOpacity style={styles.row} onPress={toggleAddToCartSheet}
+                          //disabled={currentVariant.itemsSold === currentVariant.itemsAvailable}
+        >
           <Image source={Images.cartMed} style={styles.icCart} />
           <Text style={[styles.txtBold, { color: Colors.primary }]}>
             ADD TO CART

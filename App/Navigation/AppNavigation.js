@@ -53,7 +53,6 @@ import CustomerSupportScreen from "../Containers/CustomerSupport";
 import FeedbackScreen from "../Containers/Feedback";
 import ShoppingCartScreen from "../Containers/ShoppingCart";
 import EditShoppingCartScreen from "../Containers/EditShoppingCart";
-import CheckoutNoAuthScreen from "../Containers/CheckoutNoAuth";
 import CheckoutAuthScreen from "../Containers/CheckoutAuth";
 import CheckOutPersonalDetailsScreen from "../Containers/CheckOutPersonalDetails";
 import CheckoutBillingDetailsScreen from "../Containers/CheckoutBillingDetails";

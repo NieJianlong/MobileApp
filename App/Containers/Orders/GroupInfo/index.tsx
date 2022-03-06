@@ -149,6 +149,8 @@ function GroupInfoScreen(props) {
         )}
         {/* when order status is reached,user can track order */}
         {data.latestEventStatus === OrderItemHistoryEventType.Paid &&
+          (data.listingStatus === ProductListingStatus.Accepted ||
+            data.listingStatus === ProductListingStatus.Successful) &&
           renderAction(Images.orderTrackImage, "Track order", () => {
             // if (data.deliveryOption === DeliveryOption.CourierDelivery) {
             NavigationService.navigate("TrackOrderScreen", {

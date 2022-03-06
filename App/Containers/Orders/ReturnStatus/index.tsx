@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, ScrollView, Text, SafeAreaView, StatusBar } from "react-native";
 import AppConfig from "../../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
@@ -9,6 +9,9 @@ import { ApplicationStyles } from "../../../Themes";
 import Header from "./header";
 import { useRoute } from "@react-navigation/core";
 import { useGetOrderReturnStatusQuery } from "../../../../generated/graphql";
+import Trackers, { ITrackItemProps } from "../../TrackOrder/trackers";
+import moment from "moment";
+import { capitalize } from "lodash";
 
 function ReturnStatus(props) {
   const {
@@ -25,6 +28,21 @@ function ReturnStatus(props) {
       },
     },
   });
+  const events: ITrackItemProps[] = useMemo(() => {
+    if (trackData) {
+      const eventsArray: ITrackItemProps[] = [];
+      trackData.getOrderReturnStatus.events?.map((item, index) => {
+        eventsArray.push({
+          title: capitalize(item?.eventType.replaceAll("_", " ")),
+          subtitle: moment(item?.eventDateTime).format("DD MMM, YYYY h:mm a"),
+          status: 0,
+          hasline: index !== trackData?.getOrderReturnStatus.events?.length - 1,
+        });
+      });
+      return eventsArray;
+    }
+    return [];
+  }, [trackData]);
   return (
     <View
       style={{
@@ -69,6 +87,7 @@ function ReturnStatus(props) {
               }}
             >
               <Header orderNumber={data.orderNumber} />
+              <Trackers events={events} />
             </View>
           </View>
         </ScrollView>

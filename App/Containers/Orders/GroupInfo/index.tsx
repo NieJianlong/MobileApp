@@ -174,9 +174,13 @@ function GroupInfoScreen(props) {
           })}
         {/* when order status is uncompleted,user can cancel the order */}
         {data.listingStatus === ProductListingStatus.Active &&
+          data.latestEventStatus !==
+            OrderItemHistoryEventType.CanceledByBuyer &&
           renderAction(Images.orderCancelImage, "Cancel order", () =>
             NavigationService.navigate("CancelOrderScreen", {
               orderItemId: data.orderItemId,
+              data,
+              product: product?.getListings?.content[0],
             })
           )}
         {(data.latestEventStatus ===

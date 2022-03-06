@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   View,
   ScrollView,
@@ -16,12 +16,24 @@ import { AppBar, Selector } from "../../Components";
 import NavigationService from "../../Navigation/NavigationService";
 import { ApplicationStyles } from "../../Themes";
 import { useRoute } from "@react-navigation/native";
+import { CancellationReason } from "../../../generated/graphql";
 
 function CancelOrder(props) {
   const [showPrefer, setShowPrefer] = useState(false);
   const [reason, setReason] = useState<string>("");
   const [message, setMessage] = useState<string>("");
-  const {params} = useRoute();
+  const { params } = useRoute();
+  const reasonParams = useMemo(() => {
+    if (reason === "Mistake order") {
+      return CancellationReason.MistakeOrder;
+    }
+    if (reason === "Not able to wait for listing completion") {
+      return CancellationReason.NotAbleToWaitForListingCompletion;
+    }
+    if (reason === "Product not required") {
+      return CancellationReason.ProductNotRequired;
+    }
+  }, [reason]);
   return (
     <View
       style={{
@@ -46,8 +58,8 @@ function CancelOrder(props) {
                 onPress={() => {
                   NavigationService.navigate("RefundScreen", {
                     cancel: true,
-                    orderItemId:params.orderItemId,
-                    reason,
+                    orderItemId: params.orderItemId,
+                    reason: reasonParams,
                     message,
                   });
                 }}
@@ -87,9 +99,9 @@ function CancelOrder(props) {
             style={{ marginTop: vs(15), marginBottom: vs(10) }}
             placeholder={"Problem reason goes here"}
             data={[
-              "The product is damaged",
-              "Wrong product delivered",
-              "Manufacturing defects",
+              "Mistake order",
+              "Not able to wait for listing completion",
+              "Product not required",
             ]}
             onValueChange={(item: string) => {
               setShowPrefer(true);

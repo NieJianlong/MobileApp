@@ -32,7 +32,7 @@ function OrderPlaced(props) {
 
         <TouchableOpacity
           onPress={() => {
-            NavigationService.goBack();
+            NavigationService.navigate('PackageScreen');
           }}
         >
           <Image source={Images.crossMedium} style={styles.icSearch} />
@@ -78,8 +78,8 @@ function OrderPlaced(props) {
             ):
             props?.route?.params?.items?.map((item, index) => {
               return (<View style={styles.row}>
-                  <Image
-                    style={styles.productImage}
+                  <Image                    style={styles.productImage}
+
                     source={{
                       uri: item?.photo,
                     }}

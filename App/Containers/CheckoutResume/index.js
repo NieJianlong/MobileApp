@@ -95,55 +95,48 @@ function CheckoutResume(props) {
       dataWallet?.getBuyerSalamiWalletBalance?.giftBalance
     ).toFixed(2);
   console.log("walletBalance ===========", walletBalance);
-
-
-  const proceedFurther = (type) => {
-    console.log("localCartVar.items", localCartVar.items);
-    console.log("localCartVar======mydatas", mydatas.length);
-
-    // let person = realm.objectForPrimaryKey('person', personId);
-    // let carsOfPerson = person.cars;
-    //
-    // var i = carsOfPerson.length - 1;
-    // while(i >= 0) {
-    //   if(carsOfPerson[i].model == "Honda") {
-    //     carsOfPerson.splice(i, 1);
-    //   }
-    //   i--;
-    // }
-     let a = mydatas.length - 1;
-    while(a >= 0) {
-      if(mydatas[a]) {
-        console.log("itemsAvaiedlable", mydatas[a].variant.itemsAvailable)
-        console.log("itemsInStock", mydatas[a].variant.itemsSold)
-        if(mydatas[a].variant.itemsAvailable === mydatas[a].variant.itemsSold){
+  const clearData = () => {
+    let index = mydatas.length - 1;
+    while(index >= 0) {
+      if(mydatas[index]) {
+        if(mydatas[index].variant.itemsAvailable !== mydatas[index].variant.itemsSold){
+          realm.write(() => {
+            realm.delete(mydatas[index]);
+            PubSub.publish("refresh-shoppingcart");
+          })
           console.log("IN if condition")
         }else {
           console.log("IN else condition")
         }
       }
-      a--;
+      index--;
     }
 
     localCartCache({
       items: [],
     });
-    realm.write(() => {
-      // Delete the task from the realm.
-      realm.delete(localCartVar.items);
-      // Discard the reference.
-      PubSub.publish("refresh-shoppingcart");
-      // props.product = null;
-    });
-    return;
-    console.log("type", type);
-    console.log("localCartVar", localCartVar);
+  };
 
-    return;
+  const proceedFurther = (type) => {
     dispatch({
       type: "changLoading",
       payload: true,
     });
+    console.log("localCartVar.items", localCartVar.items);
+    console.log("localCartVar======mydatas", mydatas);
+     const finalItems =  localCartVar.items.map((item) => {
+     const productItem = mydatas.find((dataItem) => item.variantId === dataItem.variantId);
+     console.log("product======", productItem);
+     return {
+       photo: productItem.product.photo,
+       longName: productItem.product.longName
+     }
+   });
+   console.log("proceedFurther=====FinalItems", finalItems);
+
+    console.log("type", type);
+    console.log("localCartVar", localCartVar);
+
     createOrderFromCart({
       variables: {
         cart: {
@@ -167,24 +160,13 @@ function CheckoutResume(props) {
         });
         if (type === "sufficient") {
           if (res?.createOrderFromCart?.orderId) {
-            let items = localCartVar.items;
-            localCartCache({
-              items: [],
-            });
-            realm.write(() => {
-              // Delete the task from the realm.
-              realm.delete(localCartVar.items);
-              // Discard the reference.
-              PubSub.publish("refresh-shoppingcart");
-              // props.product = null;
-            });
+            clearData();
             NavigationService.navigate("OrderPlacedScreen", {
-              items: items,
+              items: finalItems,
               from: "checkout",
             });
           }
         } else if (type === "zero") {
-          debugger
           const order = res?.createOrderFromCart;
           if (res?.createOrderFromCart?.orderId) {
             cartOrderVar({
@@ -218,21 +200,11 @@ function CheckoutResume(props) {
                       razorpay_signature: data.razorpay_signature,
                     });
                     razorpayVerifyPaymentSignature();
-                    alert(`Success: ${data.razorpay_payment_id}`);
-                    let items = localCartVar.items;
-                    localCartCache({
-                      items: [],
-                    })
-                    realm.write(() => {
-                      // Delete the task from the realm.
-                      realm.delete(localCartVar.items);
-                      // Discard the reference.
-                      PubSub.publish("refresh-shoppingcart");
-                      // props.product = null;
-                    });
-                    debugger
+                   //alert(`Success: ${data.razorpay_payment_id}`);
+                    alert("Order Created Successfully")
+                    clearData();
                     NavigationService.navigate("OrderPlacedScreen", {
-                      items: items,
+                      items: finalItems,
                       from: "checkout",
                     });
                   })
@@ -248,7 +220,7 @@ function CheckoutResume(props) {
           NavigationService.navigate("InSufficientSalamiCreditScreen", {
             walletBalance: walletBalance,
             productPrice:  parseFloat(money.total).toFixed(2),
-            product: localCartVar.items,
+            product: finalItems
           });
         }
       },

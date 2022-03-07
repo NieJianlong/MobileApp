@@ -41,6 +41,7 @@ import { DeliveryOption } from "../../../../generated/graphql";
 import { IsListingAvailable } from "../../Explore/gql/explore_queries";
 
 export default function DetailFooter({ product, currentVariant, pickUp }) {
+  console.log("global.access_token", global.access_token);
   const { dispatch } = useContext(AlertContext);
   const { realm } = useRealm();
 

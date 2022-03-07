@@ -35,17 +35,26 @@ function ShoppingCart(props) {
   const { realm } = useRealm();
   const localCart = localCartVar();
   const userProfile = useReactiveVar(userProfileVar);
-  const [mydatas, setMydatas] = useState(
-    realm
-      .objects("ShoppingCart")
-      .filtered("addressId == $0", localCart.deliverAddress)
-      .filtered("quantity > 0")
-      .filtered("isDraft == false")
-  );
+  const query = realm
+    .objects("ShoppingCart")
+    .filtered("addressId == $0", localCart.deliverAddress)
+    .filtered("quantity > 0")
+    .filtered("isDraft == false");
+  const [mydatas, setMydatas] = useState(query);
+  console.log("mydatas=======", mydatas);
   // const mydatas = realm.objects("ShoppingCart");
   const [paidDuringDelivery, setPaidDuringDeliver] = useState(false);
   const [total, setTotal] = useState(0);
   const sheetContext = useContext(AlertContext);
+  useEffect(() => {
+     props.navigation.addListener('focus', () => {
+       const mydatas = query;
+       console.log("mydatas", mydatas);
+       console.log("localCartlocalCart", localCart.items)
+       setMydatas(mydatas);
+    });
+  }, [props.navigate]);
+
   useEffect(() => {
     setMydatas(
       realm

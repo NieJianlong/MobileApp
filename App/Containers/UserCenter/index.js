@@ -72,11 +72,11 @@ const buttons = [
     backgroundColor: colors.grey80,
     onPress: () => {},
   },
-  {
-    text: "CREATE A SELLER PROFILE",
-    backgroundColor: colors.grey80,
-    onPress: () => {},
-  },
+  // {
+  //   text: "CREATE A SELLER PROFILE",
+  //   backgroundColor: colors.grey80,
+  //   onPress: () => {},
+  // },
 ];
 /**
  * @description: User Center Screen

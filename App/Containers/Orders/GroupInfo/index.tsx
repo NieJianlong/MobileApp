@@ -149,12 +149,17 @@ function GroupInfoScreen(props) {
         )}
         {/* when order status is reached,user can track order */}
         {data.latestEventStatus === OrderItemHistoryEventType.Paid &&
-          renderAction(Images.orderTrackImage, "Track order", () =>
+          (data.listingStatus === ProductListingStatus.Accepted ||
+            data.listingStatus === ProductListingStatus.Successful) &&
+          renderAction(Images.orderTrackImage, "Track order", () => {
+            // if (data.deliveryOption === DeliveryOption.CourierDelivery) {
             NavigationService.navigate("TrackOrderScreen", {
               type: "track",
               data,
-            })
-          )}
+            });
+            // } else {
+            // }
+          })}
         {/* when order status is received,user can return product */}
         {data.latestEventStatus === OrderItemHistoryEventType.Delivered &&
           renderAction(Images.orderReturnImage, "Return product", () => {
@@ -169,16 +174,23 @@ function GroupInfoScreen(props) {
           })}
         {/* when order status is uncompleted,user can cancel the order */}
         {data.listingStatus === ProductListingStatus.Active &&
+          data.latestEventStatus !==
+            OrderItemHistoryEventType.CanceledByBuyer &&
           renderAction(Images.orderCancelImage, "Cancel order", () =>
             NavigationService.navigate("CancelOrderScreen", {
               orderItemId: data.orderItemId,
+              data,
+              product: product?.getListings?.content[0],
             })
           )}
         {(data.latestEventStatus ===
           OrderItemHistoryEventType.ReplacementRequest ||
           data.latestEventStatus === OrderItemHistoryEventType.RefundRequest) &&
           renderAction(Images.orderTrackImage, "Return status", () =>
-            NavigationService.navigate("TrackOrderScreen", { type: "return" })
+            NavigationService.navigate("ReturnStatus", {
+              type: "return",
+              data,
+            })
           )}
       </View>
     );

@@ -1,19 +1,48 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, ScrollView, Text, SafeAreaView, StatusBar } from "react-native";
-import AppConfig from "../../Config/AppConfig";
+import AppConfig from "../../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
-import fonts from "../../Themes/Fonts";
-import colors from "../../Themes/Colors";
-import { AppBar } from "../../Components";
-import { ApplicationStyles } from "../../Themes";
-import Header from "../TrackOrder/header";
-
+import fonts from "../../../Themes/Fonts";
+import colors from "../../../Themes/Colors";
+import { AppBar } from "../../../Components";
+import { ApplicationStyles } from "../../../Themes";
+import Header from "./header";
 import { useRoute } from "@react-navigation/core";
+import { useGetOrderReturnStatusQuery } from "../../../../generated/graphql";
+import Trackers, { ITrackItemProps } from "../../TrackOrder/trackers";
+import moment from "moment";
+import { capitalize } from "lodash";
 
-function index(props) {
+function ReturnStatus(props) {
   const {
-    params: { type },
+    params: { type, data },
   } = useRoute();
+
+  const { data: trackData, loading } = useGetOrderReturnStatusQuery({
+    variables: {
+      orderReturnId: data.orderReturnId,
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+  });
+  const events: ITrackItemProps[] = useMemo(() => {
+    if (trackData) {
+      const eventsArray: ITrackItemProps[] = [];
+      trackData.getOrderReturnStatus.events?.map((item, index) => {
+        eventsArray.push({
+          title: capitalize(item?.eventType.replaceAll("_", " ")),
+          subtitle: moment(item?.eventDateTime).format("DD MMM, YYYY h:mm a"),
+          status: 0,
+          hasline: index !== trackData?.getOrderReturnStatus.events?.length - 1,
+        });
+      });
+      return eventsArray;
+    }
+    return [];
+  }, [trackData]);
   return (
     <View
       style={{
@@ -48,14 +77,6 @@ function index(props) {
               {`Estimated ${type === "track" ? "delivery" : "return"} date`}
             </Text>
             <View style={{ height: 10, width: "100%" }} />
-            <Text
-              style={[
-                ApplicationStyles.screen.heading2Bold,
-                { fontSize: s(32), paddingTop: 10 },
-              ]}
-            >
-              22 Oct 2020
-            </Text>
           </View>
           <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
             <View
@@ -65,8 +86,8 @@ function index(props) {
                 flex: 1,
               }}
             >
-              <Header />
-              {/* <Trackers type={type} /> */}
+              <Header orderNumber={data.orderNumber} />
+              <Trackers events={events} />
             </View>
           </View>
         </ScrollView>
@@ -75,7 +96,7 @@ function index(props) {
   );
 }
 
-export default index;
+export default ReturnStatus;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,

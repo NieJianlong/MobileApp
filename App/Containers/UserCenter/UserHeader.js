@@ -67,7 +67,7 @@ function UserHeader(props) {
 }
 
 function UserInfo() {
-  const { loading, error, data,refetch } = useQuery(FIND_BUYER_PROFILE, {
+  const { loading, error, data, refetch } = useQuery(FIND_BUYER_PROFILE, {
     variables: { buyerId: global.buyerId },
     context: {
       headers: {
@@ -90,7 +90,7 @@ function UserInfo() {
       }}
     >
       <View style={styles.userinfo}>
-        <UserAvatar uri={images.userDefaultAvatar}></UserAvatar>
+        {/* <UserAvatar uri={images.userDefaultAvatar}></UserAvatar> */}
         <View style={styles.textinfo}>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}

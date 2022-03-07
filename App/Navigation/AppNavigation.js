@@ -79,6 +79,7 @@ import CheckoutGuestOrderDetail from "../Containers/CheckoutGuestOrderDetail";
 import BillingDetails from "../Containers/BillingDetails";
 import ReturnsUnavailable from "../Containers/ReturnsUnavailable/ReturnsUnavailable";
 import ReturnInformation from "../Containers/Orders/ReturnInformation";
+import ReturnStatus from "../Containers/Orders/ReturnStatus/index";
 // import ReturnInformation from "../..";
 const Stack = createStackNavigator();
 
@@ -123,12 +124,14 @@ function PrimaryNav() {
         component={LaunchScreen}
         screenOptions={{ gesturesEnabled: false }}
       />
+
       <Stack.Screen name={"MainScreen"} component={TabNav} />
       <Stack.Screen name={"OnboardingScreen"} component={OnboardingScreen} />
       <Stack.Screen
         name={"ProductDetailScreen"}
         component={ProductDetailScreen}
       />
+      <Stack.Screen name={"ReturnStatus"} component={ReturnStatus} />
       <Stack.Screen name={"ReturnInformation"} component={ReturnInformation} />
       <Stack.Screen
         name={"ProductGalleryScreen"}

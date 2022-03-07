@@ -58,17 +58,29 @@ const returnStatus = [
     hasline: false,
   },
 ];
-function index(props) {
-  const { type } = props;
-  const items = type === "track" ? trackers : returnStatus;
+
+export interface ITrackItemProps {
+  title: string;
+  subtitle: string;
+  status: number;
+  hasline: boolean;
+}
+interface ITrackOrderProps {
+  events: ITrackItemProps[];
+}
+function index({ events }: ITrackOrderProps) {
+  // const { type } = props;
+  // const items = type === "track" ? trackers : returnStatus;
+  if (!events) {
+    return <View />;
+  }
   return (
     <View style={{ paddingTop: vs(15), paddingBottom: vs(15) }}>
-      {items.map((item, index) => {
+      {events.map((item, index) => {
         let nextItem;
-        if (index < items.length - 1) {
-          nextItem = items[index + 1];
+        if (index < events.length - 1) {
+          nextItem = events[index + 1];
         }
-
         return (
           <View key={`jiangshan${index}`} style={{ flexDirection: "row" }}>
             <View>

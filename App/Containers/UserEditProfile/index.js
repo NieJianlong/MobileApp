@@ -198,10 +198,10 @@ function UserEditProfile(props) {
       </SafeAreaView>
       <KeyboardAwareScrollView>
         <View style={styles.contentContainer}>
-          <UserAvatar
+          {/* <UserAvatar
             uri={newAvatar ? { uri: newAvatar.path } : images.userDefaultAvatar}
-          />
-          <TouchableOpacity onPress={showSheet}>
+          /> */}
+          {/* <TouchableOpacity onPress={showSheet}>
             <Image
               style={{
                 width: s(30),
@@ -211,7 +211,7 @@ function UserEditProfile(props) {
               }}
               source={images.userUploadImage}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <View style={styles.contentContainer}>
           {inputs.map((item, index) => {

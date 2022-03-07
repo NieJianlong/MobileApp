@@ -25,6 +25,7 @@ fragment OrderItemDetailField on OrderItemDetailResponse {
   orderNumber
   orderDatetime
   orderSubTotal
+  orderReturnId
   orderDiscount
   orderServiceFees
   totalSavings
@@ -153,6 +154,17 @@ query SearchBuyerOrders($options: BuyerOrderOption!) {
     totalElements
   }
 }
+query GetOrderReturnStatus($orderReturnId: String!) {
+  getOrderReturnStatus(orderReturnId: $orderReturnId) {
+    orderReturnId
+    events {
+      returnId
+      eventDateTime
+      eventType
+      notes
+    }
+  }
+}
 
 query TrackOrderItem($orderItemId: ID!) {
   trackOrderItem(orderItemId: $orderItemId) {
@@ -189,6 +201,7 @@ query TrackOrderItem($orderItemId: ID!) {
       openingHours
       contactNumber
       contactPerson
+      collectionDate
     }
     sellerLocation {
       collectionPointId
@@ -198,6 +211,7 @@ query TrackOrderItem($orderItemId: ID!) {
       country
       provinceState
       areaCode
+      collectionDate
     }
 
     sellerDirectDelivery {

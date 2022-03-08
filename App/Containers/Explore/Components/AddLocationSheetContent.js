@@ -180,10 +180,12 @@ export const AddLocationSheetContent = (props) => {
         </View>
 
         <View style={[styles.bodyContainer]}>
-          <KeyboardAwareScrollView contentContainerStyle={[t.flex1]}>
+          <KeyboardAwareScrollView
+            contentContainerStyle={[t.flex1]}
             enableOnAndroid={true}
             extraHeight={90}
-            extraScrollHeight={90}>
+            extraScrollHeight={90}
+            >
             <View
               style={[
                 {

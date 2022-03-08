@@ -55,7 +55,7 @@ function AddBillingDetails(props) {
   const [taxid, setTaxid] = useState("");
   const [isEmpty, setIsEmpty] = useState(true);
   const [useDefaultAddress, setUseDefaultAddress] = useState(true);
-
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   useEffect(() => {
     const keyboardShow = (e) => {
       setKeyboardHeight(e.endCoordinates.height);
@@ -88,9 +88,9 @@ function AddBillingDetails(props) {
       setCompany(billingDetail.companyName);
       setTaxid(billingDetail.taxCode);
     }
-    
+
   }, [billingDetail])
-  
+
   useEffect(() => {
     if (
       firstName.length === 0 ||

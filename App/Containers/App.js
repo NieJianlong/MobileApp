@@ -11,8 +11,8 @@ import { View } from "react-native";
 
 const App = () => (
   <ApolloProvider client={client}>
-    {/* <RootContainer /> */}
-    <View />
+    <RootContainer />
+    {/* <View /> */}
   </ApolloProvider>
 );
 

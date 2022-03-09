@@ -26,9 +26,9 @@ function ProductDetail(props) {
   const {
     params: { product },
   } = useRoute();
-  console.log('params====================================');
+  console.log("params====================================");
   console.log(product);
-  console.log('====================================');
+  console.log("====================================");
   const [pickUp, setPickUp] = useState(
     !(
       product.deliveryOption === DeliveryOption.SellerLocationPickup ||
@@ -133,9 +133,9 @@ function ProductDetail(props) {
             )}
             {/* need to add ProductVariants components */}
           </ScrollIntoView>
-          <ScrollIntoView key={"section1"} ref={sectionsRefs[1]}>
+          {/* <ScrollIntoView key={"section1"} ref={sectionsRefs[1]}>
             <RelatedProducts productId={product.productId} />
-          </ScrollIntoView>
+          </ScrollIntoView> */}
           <ScrollIntoView key={"section2"} ref={sectionsRefs[2]}>
             <StoreInfo tabIndex={tabIndex} product={product} />
           </ScrollIntoView>

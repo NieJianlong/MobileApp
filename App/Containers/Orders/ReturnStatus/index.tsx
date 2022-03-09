@@ -76,6 +76,13 @@ function ReturnStatus(props) {
             >
               {`Estimated ${type === "track" ? "delivery" : "return"} date`}
             </Text>
+            <Text
+              style={[ApplicationStyles.screen.txtRegular, { fontSize: s(14) }]}
+            >
+              {moment(trackData?.getOrderReturnStatus.deadline).format(
+                "DD MMM yyyy"
+              )}
+            </Text>
             <View style={{ height: 10, width: "100%" }} />
           </View>
           <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>

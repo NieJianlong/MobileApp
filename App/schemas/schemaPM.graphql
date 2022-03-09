@@ -314,7 +314,7 @@ type Mutation {
   incrementSoldQuantity(input: VariantSoldQuantityInput!): Boolean!
   createProduct(productCreateInput: ProductCreateInput!): Product!
   updateProductDetails(productId: ID!, input: ProductDetailsInput!): Product!
-  deleteProduct(productId: String!): Boolean
+  deleteProduct(productId: ID!): Boolean
   disableProduct(productId: String!): Product
   rejectProduct(productId: String!): Product
   acceptProduct(productId: String!): Product
@@ -618,6 +618,12 @@ enum ProductType {
   UNDEFINED
   DONT_USE_ME_1
   DONT_USE_ME_2
+}
+
+enum ProductValidationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
 
 input ProductVariantInput {
@@ -948,6 +954,7 @@ type SellerProductDetailView {
   keywords: [String]
   productType: ProductType
   productStatus: ProductStatus
+  validationStatus: ProductValidationStatus
   vendorName: String
   price: SellerProductPrice
   images: [SellerProductImage]

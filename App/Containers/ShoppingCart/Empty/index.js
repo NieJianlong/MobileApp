@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import NavigationService from "../../../Navigation/NavigationService";
 import TextTip from "../../../Components/EmptyReminder";
-
+import RazorpayCheckout from "react-native-razorpay";
 function index(props) {
   const subTip =
     "Check if there are any products on your wish list and snatch them up before they’re gone!\n \n You can also explore new products \n";

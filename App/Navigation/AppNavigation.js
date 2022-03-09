@@ -53,7 +53,7 @@ import CustomerSupportScreen from "../Containers/CustomerSupport";
 import FeedbackScreen from "../Containers/Feedback";
 import ShoppingCartScreen from "../Containers/ShoppingCart";
 import EditShoppingCartScreen from "../Containers/EditShoppingCart";
-import CheckoutNoAuthScreen from "../Containers/CheckoutNoAuth";
+import CheckoutAuthScreen from "../Containers/CheckoutAuth";
 import CheckOutPersonalDetailsScreen from "../Containers/CheckOutPersonalDetails";
 import CheckoutBillingDetailsScreen from "../Containers/CheckoutBillingDetails";
 import AddCheckoutPaymentMethodScreen from "../Containers/AddCheckoutPaymentMethod";
@@ -73,11 +73,13 @@ import RefundScreen from "../Containers/Refund";
 import CancelOrderCompletedScreen from "../Containers/CancelOrderCompleted";
 import ReportGroupScreen from "../Containers/ReportGroup";
 import TabBar from "./TabBar";
+import { Page_BillingDetails, Page_CheckoutAuth, Page_CheckoutGuestOrderDetail } from "./const";
+import CheckoutGuestOrderDetail from "../Containers/CheckoutGuestOrderDetail";
+import BillingDetails from "../Containers/BillingDetails";
 import ReturnsUnavailable from "../Containers/ReturnsUnavailable/ReturnsUnavailable";
 import ReturnInformation from "../Containers/Orders/ReturnInformation";
 import ReturnStatus from "../Containers/Orders/ReturnStatus/index";
 // import ReturnInformation from "../..";
-
 const Stack = createStackNavigator();
 
 const Tab = createBottomTabNavigator();
@@ -237,8 +239,8 @@ function PrimaryNav() {
         component={EditShoppingCartScreen}
       />
       <Stack.Screen
-        name={"CheckoutNoAuthScreen"}
-        component={CheckoutNoAuthScreen}
+        name={Page_CheckoutAuth}
+        component={CheckoutAuthScreen}
       />
       <Stack.Screen
         name={"CheckOutPersonalDetailsScreen"}
@@ -297,6 +299,8 @@ function PrimaryNav() {
         component={CancelOrderCompletedScreen}
       />
       <Stack.Screen name={"ReportGroupScreen"} component={ReportGroupScreen} />
+      <Stack.Screen name={Page_CheckoutGuestOrderDetail} component={CheckoutGuestOrderDetail} />
+      <Stack.Screen name={Page_BillingDetails} component={BillingDetails} />
     </Stack.Navigator>
   );
 }

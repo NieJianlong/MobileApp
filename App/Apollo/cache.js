@@ -6,12 +6,16 @@ import { InMemoryCache } from "@apollo/client";
  * on user login
  */
 const userProfile = {
+  userId: "",
+  buyerId: "",
+  userName: "",
   email: "",
   isAuth: false,
-  phone: 0,
+  phone: "",
   addressId: "",
   addressLine1: "",
   addressLine2: "",
+  billingDetailsId: "",
 };
 
 /**
@@ -21,7 +25,6 @@ const userProfile = {
  * for the checkout we will need the products productListing id and the variants (vr,va)
  * items[k].prodListingId and items[k].variants  for(let v of items[k].variants)
  * we also need the (guest) buyer id for the (guest) buyer checkout input
- *
  * syntax so updates occur across diferent screens
  * const localCartVarReactive = useReactiveVar(localCartVar);
  *
@@ -35,8 +38,30 @@ const localCart = {
   callBackAddress: {}, // when address query  calls back add here, use for store co-ordinates ect ..., use gql mapper for now
 };
 
+const localBuyNow = {
+  items: [],
+  buyerId: "",
+  deliverAddress: "",
+  callBackAddress: {},
+};
+
+const cartOrder = {
+  orderNumber: "",
+  orderId: "",
+  amount: 0,
+};
+
+const razorOrderPayment = {
+  razorpay_payment_id: "",
+  razorpay_order_id: "",
+  razorpay_signature: "",
+};
+
 export const userProfileVar = makeVar(userProfile);
 export const localCartVar = makeVar(localCart);
+export const cartOrderVar = makeVar(cartOrder);
+export const razorOrderPaymentVar = makeVar(razorOrderPayment);
+export const localBuyNowVar = makeVar(localBuyNow);
 
 export const GET_USER_PROFILE = gql`
   query getUserProfileVar {
@@ -47,6 +72,11 @@ export const GET_USER_PROFILE = gql`
 export const GET_LOCAL_CART = gql`
   query getLocalCartVar {
     localCartVar @client
+  }
+`;
+export const GET_BUY_NOW_CART = gql`
+  query getLocalCartVar {
+    localBuyNowVar @client
   }
 `;
 
@@ -64,13 +94,26 @@ export default new InMemoryCache({
             return localCartVar();
           },
         },
+        localBuyNowVar: {
+          read() {
+            return localBuyNowVar();
+          },
+        },
+        cartOrderVar: {
+          read() {
+            return cartOrderVar();
+          },
+        },
+        razorOrderPaymentVar: {
+          read() {
+            return razorOrderPaymentVar();
+          },
+        },
       },
     },
   },
 });
 
 export const runRefreshCron = async (tokenData) => {
-  setInterval(() => {
- 
-  }, 5 * 1000); // 5 secs
+  setInterval(() => {}, 5 * 1000); // 5 secs
 };

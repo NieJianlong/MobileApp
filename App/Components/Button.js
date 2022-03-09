@@ -24,13 +24,14 @@ class Button extends Component {
       disabledColor,
       prefixIcon,
     } = this.props;
+    console.log("disabled", disabled);
 
     return (
       <TouchableOpacity
         disabled={disabled}
         style={[
           styles.container,
-          { backgroundColor: backgroundColor },
+          { backgroundColor: disabled ? 'grey': backgroundColor },
           disabled && { opacity: 0.25 },
         ]}
         onPress={onPress}

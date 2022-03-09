@@ -19,6 +19,7 @@ function Header({ orderNumber }: HeaderProps) {
         alignItems: "center",
         borderBottomColor: "#E6E6E6",
         borderBottomWidth: 0.5,
+        width: "100%"
       }}
     >
       <View style={{ flexDirection: "row" }}>

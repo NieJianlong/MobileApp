@@ -256,6 +256,32 @@ type ListingVariantView {
   options: [KeyValuePair]
 }
 
+
+input RazorpayOrderRequest {
+    orderNumber: String!
+    orderId: ID!
+    amount: Float!
+}
+
+input RazorpayVerifyPaymentSignatureRequest {
+   razorpayPaymentId: String,
+   razorpayOrderId: String,
+   razorpaySignature: String
+}
+
+type RazorpayVerifyPaymentSignatureResponse {
+  valid: Boolean,
+  razorpayPaymentId: String,
+  razorpayOrderId: String,
+  razorpayPaymentStatus: Boolean,
+  razorpayOrderId: String,
+  razorpayOrderStatus: Boolean
+}
+
+type RazorpayOrderResponse {
+    razorpayOrderId: String
+}
+
 """MUTATIONS"""
 type Mutation {
   """stores"""
@@ -299,8 +325,14 @@ type Mutation {
   addProductReview(input: ProductReviewInput!): AddReviewResponse!
   addSellerReview(input: SellerReviewInput!): AddReviewResponse!
   incrementHelpfulCount(reviewId: String!): Int
+  savePreferredCategories(buyerId: ID!, categories: [ID]): String
   addReportReview(input: ReportReviewInput!): ReportReviewResponse!
+
+  """buyer: get razorpayment Id"""
+  razorpayCreateOrder(request: RazorpayOrderRequest!): RazorpayOrderResponse
+  razorpayVerifyPaymentSignature(request: RazorpayVerifyPaymentSignatureRequest!): RazorpayVerifyPaymentSignatureResponse
 }
+
 
 enum OnlineStoreType {
   UNDEFINED

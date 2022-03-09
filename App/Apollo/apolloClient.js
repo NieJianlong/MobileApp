@@ -27,6 +27,7 @@ const USER_PORT = "um/graphql";
 const PRODUCT_PORT = "pm/graphql";
 const CART_PORT = ":8084/graphql";
 const ORDER_PORT = "om/graphql";
+const PAYMENT_PORT = "pay/graphql";
 //we should add all apis here,
 const allAPIS = {
   //public api
@@ -80,11 +81,15 @@ const allAPIS = {
   SubmitOrderReturnRequest: ORDER_PORT,
   TrackOrderItem: ORDER_PORT,
   GetOrderReturnStatus: ORDER_PORT,
+  CreateOrderFromCart: ORDER_PORT,
+
+  //Payment
+  RazorpayCreateOrder: PAYMENT_PORT,
+  RazorpayVerifyPaymentSignature: PAYMENT_PORT,
 };
 
 const customFetch = (uri, options) => {
   const { operationName } = JSON.parse(options.body);
-
   let newUri = `${uri}${allAPIS[operationName]}`;
   if (!allAPIS[operationName]) {
     //if we forget add api in allApis,there will be a mistake
@@ -97,7 +102,6 @@ const customFetch = (uri, options) => {
   console.log("====================================");
   return fetch(newUri, options);
 };
-
 const httpLink = new HttpLink({ uri: baseUrl, fetch: customFetch });
 const publicHeaders = {
   "Content-Type": "application/json",

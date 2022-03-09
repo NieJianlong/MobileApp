@@ -8,13 +8,18 @@ import { StarRating } from "../../../Components";
 import images from "../../../Themes/Images";
 import colors from "../../../Themes/Colors";
 import fonts from "../../../Themes/Fonts";
+import BigNumber from "bignumber.js";
 // import { CartContext } from '../index';
 // import { AlertContext } from '../../Root/GlobalContext';
 
 function index(props) {
   // const { dispatch } = useContext(CartContext);
   // const Alert = useContext(AlertContext);
-  const { product, onPress } = props;
+  const {
+    product: { product, variant },
+    onPress,
+  } = props;
+  console.log("product.shortName", product.picture);
 
   return (
     <TouchableOpacity
@@ -27,12 +32,13 @@ function index(props) {
           { maxWidth: "66%", justifyContent: "space-between" },
         ]}
       >
-        <Image source={{ uri: product.picture }} style={styles.productImage} />
+        <Image
+          source={{ uri: product.photoUrls ? product.photoUrls[0] : defultUrl }} style={styles.productImage} />
         <View
           style={[styles.v2, { maxWidth: "90%", justifyContent: "center" }]}
         >
           <View>
-            <Text style={[styles.heading5Bold]}>{product.longName}</Text>
+            <Text style={[styles.heading5Bold]}>{product.shortName}</Text>
             <Text
               style={[
                 styles.heading4Bold,
@@ -45,7 +51,10 @@ function index(props) {
         </View>
         <View>
           <Text style={styles.txtWholesalePrice}>
-            ${product.wholesalePrice}
+            $
+            {BigNumber(
+              variant ? variant.wholeSalePrice : product.wholeSalePrice
+            ).toFixed(2) + ""}
           </Text>
         </View>
       </View>

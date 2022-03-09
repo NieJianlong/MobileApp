@@ -7,6 +7,7 @@ import {
   LOCAL_STORAGE_TOKEN_KEY,
   LOCAL_STORAGE_USER_NAME,
   LOCAL_STORAGE_USER_PASSWORD,
+  LOCAL_STORAGE_USER_PROFILE,
   setLocalStorageValue,
 } from "../../Apollo/local-storage";
 import NavigationService from "../../Navigation/NavigationService";
@@ -17,6 +18,7 @@ import jwt_decode from "jwt-decode";
 import { useLazyQuery } from "@apollo/client";
 import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import * as storage from "../../Apollo/local-storage";
+import GetBillingDetail from "../../hooks/billingDetails";
 
 export default function LaunchScreen() {
   const [getBuyerId] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
@@ -45,6 +47,7 @@ export default function LaunchScreen() {
     //get username and possword from localStorage
     const username = await getLocalStorageValue(LOCAL_STORAGE_USER_NAME);
     const password = await getLocalStorageValue(LOCAL_STORAGE_USER_PASSWORD);
+    const userData = await getLocalStorageValue(LOCAL_STORAGE_USER_PROFILE);
     //NavigationService.navigate("MainScreen");
     //if username && password exits,we can login auto
     if (username && password) {
@@ -57,7 +60,7 @@ export default function LaunchScreen() {
           console.log("no access token");
         }
         userProfileVar({
-          email: username,
+          ...JSON.parse(userData),
           isAuth: true,
         });
         let decoded = jwt_decode(access_token);

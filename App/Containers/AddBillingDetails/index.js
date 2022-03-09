@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { View, StatusBar, Text, Keyboard } from "react-native";
+import { View, StatusBar, Text, Keyboard, TouchableOpacity, Image } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs, s } from "react-native-size-matters";
@@ -15,39 +15,47 @@ import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
 import colors from "../../Themes/Colors";
 import { useRoute } from "@react-navigation/native";
-import { useMutation } from "@apollo/client";
+import { useMutation, useReactiveVar, useLazyQuery } from "@apollo/client";
 import {
   CREATE_BILLING_DETAILS,
   DELETE_BILLING_DETAILS,
   UPDATE_BILLING_DETAILS,
 } from "../../Apollo/mutations/mutations_user";
+
 import { AlertContext } from "../Root/GlobalContext";
 import * as validator from "../../Validation";
 import AppConfig from "../../Config/AppConfig";
 import PubSub from "pubsub-js";
+import { userProfileVar } from "../../Apollo/cache";
+import { Action_Type, Billing_Type } from "./const";
+import GetBillingDetail from "../../hooks/billingDetails";
+import images from "../../Themes/Images";
 
 function AddBillingDetails(props) {
   const {
-    params: { title, billingDetails = {} },
+    params: { title, billingType = Billing_Type.BILLING, actionType = Action_Type.SAVE },
   } = useRoute();
+  const userProfile = useReactiveVar(userProfileVar);
+
+  const { billingDetail } = GetBillingDetail();
+
   const { dispatch } = useContext(AlertContext);
-  const [firstName, setFirstName] = useState(billingDetails.firstName || "");
-  const [lastName, setLastName] = useState(billingDetails.lastName || "");
-  const [email, setEmail] = useState(billingDetails.email || "");
-  const [phoneNum, setPhoneNum] = useState(billingDetails.phoneNumber || "");
-  const [streetName, setStreetName] = useState(
-    billingDetails.villageArea || ""
-  );
-  const [streetNum, setStreetNum] = useState(billingDetails.houseNumber || "");
-  const [door, setDoor] = useState(billingDetails.flat || "");
-  const [city, setCity] = useState(billingDetails.townCity || "");
-  const [mstate, setMstate] = useState(billingDetails.provinceState || "");
-  const [postcode, setPostCode] = useState(billingDetails.pinCode || "");
-  const [country, setCountry] = useState(billingDetails.country || "");
-  const [company, setCompany] = useState(billingDetails.companyName || "");
-  const [taxid, setTaxid] = useState(billingDetails.taxCode || "");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNum, setPhoneNum] = useState("");
+  const [streetName, setStreetName] = useState("");
+  const [streetNum, setStreetNum] = useState("");
+  const [door, setDoor] = useState("");
+  const [city, setCity] = useState("");
+  const [mstate, setMstate] = useState("");
+  const [postcode, setPostCode] = useState("");
+  const [country, setCountry] = useState("");
+  const [company, setCompany] = useState("");
+  const [taxid, setTaxid] = useState("");
+  const [isEmpty, setIsEmpty] = useState(true);
+  const [useDefaultAddress, setUseDefaultAddress] = useState(true);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const [disable, setDisable] = useState(true);
   useEffect(() => {
     const keyboardShow = (e) => {
       setKeyboardHeight(e.endCoordinates.height);
@@ -57,11 +65,32 @@ function AddBillingDetails(props) {
     };
     Keyboard.addListener("keyboardWillShow", keyboardShow);
     Keyboard.addListener("keyboardWillHide", keyboardHide);
+
     return () => {
       Keyboard.removeListener("keyboardWillShow", keyboardShow);
       Keyboard.removeListener("keyboardWillHide", keyboardHide);
     };
   }, []);
+
+  useEffect(() => {
+    if (billingDetail) {
+      setFirstName(billingDetail.firstName);
+      setLastName(billingDetail.lastName);
+      setPhoneNum(billingDetail.phoneNumber);
+      setEmail(billingDetail.email);
+      setStreetName(billingDetail.billingAddress.villageArea);
+      setStreetNum(billingDetail.billingAddress.streetAddress1);
+      setDoor(billingDetail.billingAddress.flat);
+      setCity(billingDetail.billingAddress.townCity);
+      setMstate(billingDetail.billingAddress.provinceState);
+      setPostCode(billingDetail.billingAddress.pinCode);
+      setCountry(billingDetail.billingAddress.country);
+      setCompany(billingDetail.companyName);
+      setTaxid(billingDetail.taxCode);
+    }
+
+  }, [billingDetail])
+
   useEffect(() => {
     if (
       firstName.length === 0 ||
@@ -78,9 +107,9 @@ function AddBillingDetails(props) {
       company.length === 0 ||
       taxid.length === 0
     ) {
-      setDisable(true);
+      setIsEmpty(true);
     } else {
-      setDisable(false);
+      setIsEmpty(false);
     }
   }, [
     firstName,
@@ -97,6 +126,7 @@ function AddBillingDetails(props) {
     email,
     phoneNum,
   ]);
+
   const inputs = [
     {
       placeholder: "First Name*",
@@ -218,56 +248,41 @@ function AddBillingDetails(props) {
     },
   ];
 
-  const [showBottom, setShowBottom] = useState(true);
-  useEffect(() => {
-    const keyboardShow = (e) => {
-      setShowBottom(false);
-    };
-    const keyboardHide = (e) => {
-      setShowBottom(true);
-    };
-    Keyboard.addListener("keyboardDidShow", keyboardShow);
-    Keyboard.addListener("keyboardDidHide", keyboardHide);
-    return () => {
-      Keyboard.removeListener("keyboardDisShow", keyboardShow);
-      Keyboard.removeListener("keyboardDidHide", keyboardHide);
-    };
-  }, []);
   const billingAddress = {
     pinCode: postcode,
-    addressType: disable ? "BILLING" : "SHIPPING",
+    addressType: billingType,
     provinceState: mstate,
     townCity: city,
     flat: door,
     villageArea: streetName,
     houseNumber: streetNum,
     country,
-    referenceId: global.buyerId,
-    defaultAddress: disable,
-    streetAddress1: "billing",
+    referenceId: userProfile.buyerId,
+    defaultAddress: useDefaultAddress,
+    streetAddress1: streetNum,
   };
   const request = {
-    buyerId: global.buyerId,
+    buyerId: userProfile.buyerId,
     firstName: firstName,
     lastName: lastName,
     companyName: company,
     email: email,
     phoneNumber: phoneNum,
-    billingAddress: billingDetails.billingDetailsId
-      ? { addressId: billingDetails.addressId, ...billingAddress }
+    billingAddress: billingDetail?.billingDetailsId
+      ? { addressId: billingDetail?.billingDetailsId, ...billingAddress }
       : billingAddress,
     taxCode: taxid,
   };
 
   const [addBilling] = useMutation(
-    billingDetails.billingDetailsId
+    billingDetail?.billingDetailsId
       ? UPDATE_BILLING_DETAILS
       : CREATE_BILLING_DETAILS,
     {
       variables: {
-        request: billingDetails.billingDetailsId
+        request: billingDetail?.billingDetailsId
           ? {
-              billingDetailsId: billingDetails.billingDetailsId,
+              billingDetailsId: billingDetail?.billingDetailsId,
               ...request,
             }
           : request,
@@ -284,14 +299,22 @@ function AddBillingDetails(props) {
           type: "changAlertState",
           payload: {
             visible: true,
-            message: billingDetails.billingDetailsId
+            message: billingDetail?.billingDetailsId
               ? "Billing details updated"
               : "Billing details Added",
             color: colors.success,
             title: "Success",
           },
         });
-        NavigationService.goBack();
+
+        switch (actionType) {
+          case Billing_Type.BILLING:
+
+            break;
+
+          default:
+            NavigationService.goBack();
+        }
       },
       onError: (res) => {
         dispatch({ type: "hideloading" });
@@ -301,7 +324,7 @@ function AddBillingDetails(props) {
 
   const [deleteBilling] = useMutation(DELETE_BILLING_DETAILS, {
     variables: {
-      billingDetailsId: billingDetails.billingDetailsId,
+      billingDetailsId: billingDetail?.billingDetailsId,
     },
     context: {
       headers: {
@@ -328,7 +351,7 @@ function AddBillingDetails(props) {
   });
 
   const onAddBilling = useCallback(() => {
-    if (disable) {
+    if (isEmpty && !useDefaultAddress ) {
       dispatch({
         type: "changAlertState",
         payload: {
@@ -338,6 +361,7 @@ function AddBillingDetails(props) {
           title: "Make sure you have entered the correct information",
         },
       });
+
     } else {
       if (!validator.isValidEmail(email)) {
         dispatch({
@@ -364,7 +388,8 @@ function AddBillingDetails(props) {
         addBilling();
       }
     }
-  }, [addBilling, disable, dispatch, email, phoneNum]);
+  }, [addBilling, isEmpty, dispatch, email, phoneNum]);
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
@@ -376,8 +401,8 @@ function AddBillingDetails(props) {
           rightButton={() => {
             return (
               <RightButton
-                title="SAVE"
-                disable={disable}
+                title={actionType}
+                disable={isEmpty && !useDefaultAddress}
                 onPress={() => {
                   onAddBilling();
                 }}
@@ -387,15 +412,26 @@ function AddBillingDetails(props) {
         />
         <KeyboardAwareScrollView>
           <View style={styles.bodyContainer}>
-            <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
+            <Text style={[styles.heading2Bold, { fontSize: s(20) }]}>
               {title}
             </Text>
             <View style={{ marginTop: 20 }}>
               <Switch
-                onSwitch={() => {}}
+                onSwitch={(b) => setUseDefaultAddress(b)}
                 label="Use the same info as default delivery address"
               />
             </View>
+            <TouchableOpacity
+              onPress={() => {}}
+            >
+              <View style={styles.saveAddress}>
+                <View style={styles.addressIcon}>
+                  <Image source={images.addressIcon} />
+                </View>
+                <Text style={styles.saveAddressText}>Use a saved address</Text>
+              </View>
+            </TouchableOpacity>
+
             <View
               style={{
                 flexDirection: "row",
@@ -428,7 +464,7 @@ function AddBillingDetails(props) {
             </View>
           </View>
         </KeyboardAwareScrollView>
-        {billingDetails.billingDetailsId && (
+        {billingDetail?.billingDetailsId && billingType !== Billing_Type.BILLING && (
           <View
             style={{
               position: "absolute",

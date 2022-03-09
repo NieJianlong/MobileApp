@@ -5,14 +5,14 @@ import LocationSearchBox from './LocationSearchBox';
 import PasswordInput from './PasswordInput';
 import TextInput from './TextInput';
 import AppBar from './AppBar';
-import Switch from './Switch';
+import Switch from './Switch';import DescriptionText from './DescriptionText';
 import Alert from './Alert';
 import RadiusButton from './RadiusButton';
 import MaterialTextInput from './MaterialTextInput';
 import StarRating from './StarRating';
 import Picker from './Picker';
 import QuantitySelector from './QuantitySelector';
-import DescriptionText from './DescriptionText';
+
 import Progress from './Progress';
 import BottomSheetBackground from './BottomSheetBackground';
 import SegmentedControl from './SegmentedControl';

@@ -49,13 +49,21 @@ function CartSummary(props) {
     let currentBilling = 0;
     let originalBilling = 0;
     for (let index = 0; index < mydatas.length; index++) {
+      let itemAvailble = true;
+      if (props.availbleList) {
+        const i = props.availbleList.isListingAvailable[index];
+        itemAvailble = i?.isAvailable;
+      }
       const element = mydatas[index];
       if (element.variant) {
-        originalBilling =
-          originalBilling + element.variant.retailPrice * element.quantity;
-        currentBilling =
-          currentBilling + element.variant.wholeSalePrice * element.quantity;
+        if(itemAvailble) {
+          originalBilling =
+            originalBilling + element.variant.retailPrice * element.quantity;
+          currentBilling =
+            currentBilling + element.variant.wholeSalePrice * element.quantity;
+        }
       } else {
+        if(itemAvailble)
         originalBilling =
           originalBilling + element.product.retailPrice * element.quantity;
         currentBilling =
@@ -64,6 +72,7 @@ function CartSummary(props) {
     }
     const total = new BigNumber(currentBilling).toFixed(2);
     const saving = new BigNumber(originalBilling - currentBilling).toFixed(2);
+    props.subtotal(total);
     return {
       total: total,
       saving: saving,
@@ -89,7 +98,7 @@ function CartSummary(props) {
           You save
         </Text>
         <Text style={[styles.heading4Regular, { fontSize: s(14) }]}>
-          ${money.saving} ({money.percent + ""}%)
+          ${money.saving} ({(!isNaN(money.percent))? money.percent + "" : ""}%)
         </Text>
       </View>
     </View>

@@ -10,11 +10,15 @@ const LOGIN_ENDPOINT = `${AppConfig.baseUrl}iam/api/sso/authentication/login`;
 
 // Axios automatically serialize object to JSON
 export const runTokenFlow = async (loginRequest) => {
+  console.log("login....", loginRequest, LOGIN_ENDPOINT);
   let ret = await axios
     .post(LOGIN_ENDPOINT, loginRequest, {
       headers: { "Content-Type": "application/json", accept: "*/*" },
     })
-    .then((ret) => ret)
+    .then((ret) => {
+      console.log('endpoint called')
+      return ret
+    })
     .catch((err) => {
       console.log(`${err}`);
       // to do error conditions

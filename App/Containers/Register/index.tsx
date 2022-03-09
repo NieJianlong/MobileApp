@@ -115,9 +115,19 @@ function RegisterScreen(props) {
       });
       //server often breakon，we should use a constant for testing
       const {
-        buyerProfileByUserId: { buyerId },
+        buyerProfileByUserId,
       } = res;
-      global.buyerId = buyerId;
+
+      userProfileVar({
+        userId: buyerProfileByUserId?.userId,
+        buyerId: buyerProfileByUserId?.buyerId,
+        userName: buyerProfileByUserId?.userName,
+        email: buyerProfileByUserId?.email,
+        phone: buyerProfileByUserId?.phoneNumber,
+        isAuth: true,
+      });
+
+      global.buyerId = buyerProfileByUserId.buyerId;
       NavigationService.navigate("MainScreen");
     },
     onError: (res) => {
@@ -131,6 +141,8 @@ function RegisterScreen(props) {
     //get username and possword from localStorage
     const username = "+91" + getValues("phoneNumber");
     const password = getValues("password");
+
+    console.log('hello ========================>');
 
     //if username && password exits,we can login auto
     if (username && password) {

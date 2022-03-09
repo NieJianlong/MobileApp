@@ -193,7 +193,7 @@ function Wishlist(props) {
                 <TouchableOpacity
                   onPress={() => {
                     setSelectedCategory(index);
-                    this._carousel.snapToItem(index);
+                    this?._carousel?.snapToItem(index);
                     scrollToIndex(index);
                   }}
                   style={[

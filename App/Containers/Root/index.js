@@ -123,7 +123,12 @@ function RootContainer() {
           initialSnap={0}
           title={sheetTitle || null}
         >
-          {children()}
+          {children?
+            typeof children === 'function' ? children()
+            : typeof children === 'object' ? children
+            : <Text></Text>
+            : <Text></Text>
+          }
         </BottomSheet>
       )}
       {visible && (

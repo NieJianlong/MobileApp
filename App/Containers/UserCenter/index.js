@@ -19,7 +19,7 @@ import UserHeader from "./UserHeader";
 import images from "../../Themes/Images";
 import NavigationService from "../../Navigation/NavigationService";
 import { userProfileVar } from "../../Apollo/cache";
-
+import { useCreateRazorOrder } from "../../hooks/razorOrder";
 const salamiItem = [
   {
     title: "Salami Credit",
@@ -85,6 +85,7 @@ const buttons = [
  */
 function UserCenter(props) {
   const [serviceItems, setServiceItems] = useState([]);
+  const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
   // const { loading, error, data } = useQuery(BUYER_PROFILES, {
   //   context: { headers: { isPrivate: true } },
   //   onCompleted: (res) => {
@@ -128,8 +129,13 @@ function UserCenter(props) {
       </View>
       <View style={styles.buttonContainer}>
         {buttons.map((item, i) => (
-          <View key={`button` + i} style={{ marginTop: 15 }}>
-            <Button {...item} />
+          <View key={"button" + i} style={{ marginTop: 15 }}>
+            <Button
+              {...item}
+              onPress={() => {
+                razorpayCreateOrder();
+              }}
+            />
           </View>
         ))}
       </View>

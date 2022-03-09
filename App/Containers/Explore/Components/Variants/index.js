@@ -92,6 +92,7 @@ class AccordionView extends React.Component {
             // }
             return (
               <SizeItem
+                key={index}
                 item={item}
                 currentVariant={this.props.currentVariant}
                 onChangeVariant={this.props.onChangeVariant}

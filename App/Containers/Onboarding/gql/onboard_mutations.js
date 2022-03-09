@@ -27,10 +27,12 @@ import { gql } from "@apollo/client";
  * schema  see @mutation registerBuyer
  *
  */
+
 export const CREATE_GUEST_BUYER = gql`
-  mutation CreateGuestBuyer($request: BuyerProfileRequestForCreate!) {
-    createGuestBuyer(request: $request) {
-      buyerId
+    mutation CreateGuestBuyer {
+        createGuestBuyer{
+            buyerId
+        }
     }
-  }
 `;
+

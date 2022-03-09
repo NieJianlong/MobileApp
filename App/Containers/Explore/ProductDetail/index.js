@@ -39,9 +39,10 @@ function ProductDetail(props) {
     setPickUp(newValue);
   };
   const [currentVariant, setCurrentVariant] = useState(
-    product.listingVariants.length > 0
-      ? product.listingVariants.find((item) => item.defaultVariant === true) ??
-          null
+    product?.listingVariants?.length > 0
+      ? product?.listingVariants?.find(
+          (item) => item.defaultVariant === true
+        ) ?? null
       : null
   );
   //control whether to show the hearder (display and navigation to sections)
@@ -68,8 +69,8 @@ function ProductDetail(props) {
   };
 
   //handle when scrolling
+  let threshold = metrics.screenHeight / 4;
   const handleScroll = (event) => {
-    let threshold = metrics.screenHeight / 4;
     let y = event.nativeEvent.contentOffset.y;
     //control when to show footer and header
     if (y > threshold && !showHeaderTabs) {
@@ -95,6 +96,7 @@ function ProductDetail(props) {
 
   //handle when users stop scrolling, show footer
   const handleScrollEnd = (event) => {
+    console.log("handleScrollEnd");
     setShowFooter(true);
   };
 

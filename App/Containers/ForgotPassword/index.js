@@ -15,6 +15,8 @@ import { AlertContext } from "../Root/GlobalContext";
 import { useForgotPasswordStep1SendNotificationEmailMutation } from "../../../generated/graphql";
 
 class ForgotPassword extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -26,9 +28,16 @@ class ForgotPassword extends Component {
     Keyboard.addListener("keyboardWillHide", this._keyboardWillHide);
   }
 
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
   componentWillUnmount() {
-    Keyboard.removeListener("keyboardWillShow", this._keyboardWillShow);
-    Keyboard.removeListener("keyboardWillHide", this._keyboardWillHide);
+    if (this._isMounted) {
+      this._isMounted = false;
+      Keyboard.removeListener("keyboardWillShow", this._keyboardWillShow);
+      Keyboard.removeListener("keyboardWillHide", this._keyboardWillHide);
+    }
   }
 
   _keyboardWillShow = (e) => {

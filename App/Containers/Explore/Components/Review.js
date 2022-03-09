@@ -6,11 +6,11 @@ import { StarRating } from "../../../Components";
 
 const getMax = (ratingDetail) => {
   return Math.max(
-    ratingDetail.oneStar,
-    ratingDetail.twoStar,
-    ratingDetail.threeStar,
-    ratingDetail.fourStar,
-    ratingDetail.fiveStar
+    ratingDetail?.oneStar,
+    ratingDetail?.twoStar,
+    ratingDetail?.threeStar,
+    ratingDetail?.fourStar,
+    ratingDetail?.fiveStar
   );
 };
 

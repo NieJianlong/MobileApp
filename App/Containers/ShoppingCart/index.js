@@ -23,33 +23,43 @@ import { AlertContext } from "../Root/GlobalContext";
 import TextTip from "../../Components/EmptyReminder";
 import PubSub from "pubsub-js";
 import useRealm from "../../hooks/useRealm";
-import { useLazyQuery, useQuery } from "@apollo/client";
-import { GET_LOCAL_CART } from "../../Apollo/cache";
+import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
+import { localCartVar, userProfileVar } from "../../Apollo/cache";
 import { IsListingAvailable } from "../Explore/gql/explore_queries";
+import { Action_Type, Billing_Type } from "../AddBillingDetails/const";
 
 export const CartContext = React.createContext({});
 
 function ShoppingCart(props) {
+  console.log("props ShoppingCart", props);
   const { realm } = useRealm();
-  const {
-    data: { localCartVar },
-  } = useQuery(GET_LOCAL_CART);
-  const [mydatas, setMydatas] = useState(
-    realm
-      .objects("ShoppingCart")
-      .filtered("addressId == $0", localCartVar.deliverAddress)
-      .filtered("quantity > 0")
-      .filtered("isDraft == false")
-  );
-
+  const localCart = localCartVar();
+  const userProfile = useReactiveVar(userProfileVar);
+  const query = realm
+    .objects("ShoppingCart")
+    .filtered("addressId == $0", localCart.deliverAddress)
+    .filtered("quantity > 0")
+    .filtered("isDraft == false");
+  const [mydatas, setMydatas] = useState(query);
+  console.log("mydatas=======", mydatas);
   // const mydatas = realm.objects("ShoppingCart");
   const [paidDuringDelivery, setPaidDuringDeliver] = useState(false);
+  const [total, setTotal] = useState(0);
   const sheetContext = useContext(AlertContext);
+  useEffect(() => {
+     props.navigation.addListener('focus', () => {
+       const mydatas = query;
+       console.log("mydatas", mydatas);
+       console.log("localCartlocalCart", localCart.items)
+       setMydatas(mydatas);
+    });
+  }, [props.navigate]);
+
   useEffect(() => {
     setMydatas(
       realm
         .objects("ShoppingCart")
-        .filtered("addressId == $0", localCartVar.deliverAddress)
+        .filtered("addressId == $0", localCart.deliverAddress)
         .filtered("quantity > 0")
         .filtered("isDraft == false")
     );
@@ -57,15 +67,17 @@ function ShoppingCart(props) {
       setMydatas(
         realm
           .objects("ShoppingCart")
-          .filtered("addressId == $0", localCartVar.deliverAddress)
+          .filtered("addressId == $0", localCart.deliverAddress)
           .filtered("quantity > 0")
           .filtered("isDraft == false")
       );
     });
     return () => {
-      PubSub.unsubscribe(refresh);
+      if (refresh) {
+        PubSub.unsubscribe(refresh);
+      }
     };
-  }, [localCartVar.deliverAddress, realm]);
+  }, [localCart.deliverAddress, realm]);
 
   const isAvailableList = useMemo(() => {
     return mydatas?.map((item) => {
@@ -76,6 +88,7 @@ function ShoppingCart(props) {
       };
     });
   }, [mydatas]);
+  console.log("isAvailableList", isAvailableList);
   const [queryAvailble, { data: availbleList }] = useLazyQuery(
     IsListingAvailable,
     {
@@ -91,6 +104,60 @@ function ShoppingCart(props) {
   /** nasavge thnks we should put the blocks of view code below into functions
    * to make the code more readable
    */
+  const onProceed = () => {
+    const itemArray = [] ;
+    mydatas.map((item, index) => {
+      let itemAvailble = true;
+      if (availbleList) {
+        const i = availbleList.isListingAvailable[index];
+        itemAvailble = i?.isAvailable;
+      }
+      if(itemAvailble) {
+        itemArray.push({
+          listingId: item.product.listingId,
+          variantId: item.variantId,
+          quantity: item.quantity,
+        })
+      }
+    })
+    console.log("itemArray", itemArray);
+    localCartVar({
+      ...localCart,
+      items: itemArray,
+    });
+
+    // if (userProfile?.isAuth && global.buyerId !== AppConfig.guestId) {
+    //   if (userProfile.phone) {
+    //   } else {
+    //   }
+    //
+    //   const params = {
+    //     title: "Please enter your billing details",
+    //
+    //     actionButtonText: Action_Type.NEXT,
+    //     actionType: Billing_Type.BILLING,
+    //   };
+    //   NavigationService.navigate("AddBillingDetailsScreen", params);
+    // } else {
+    //   NavigationService.navigate("CheckoutNoAuthScreen");
+    // }
+    if (global.access_token === "") {
+      NavigationService.navigate("CheckoutNoAuthScreen");
+    } else {
+      NavigationService.navigate("CheckoutResumeScreen", {
+        orderStatus: 0,
+        data: mydatas,
+        availbleList: availbleList
+      });
+    }
+  };
+
+  const subTotal = (subtotal) => {
+    setTotal(parseInt(subtotal));
+
+    console.log("total",total);
+    console.log("total===0", total === 0);
+  };
   return (
     <CartContext.Provider>
       <View style={styles.container}>
@@ -118,11 +185,9 @@ function ShoppingCart(props) {
                 }}
               >
                 <Button
-                  onPress={() => {
-                    NavigationService.navigate("CheckoutNoAuthScreen");
-                  }}
-                  text="PROCEED TO CHECKOUT"
-                />
+                  disabledColor={'grey'}
+                  disabled={total === 0}
+                  onPress={onProceed} text="PROCEED TO CHECKOUT" />
               </View>
             )}
             renderSectionFooter={() => (
@@ -219,7 +284,11 @@ function ShoppingCart(props) {
                         </Text>
                       </TouchableOpacity>
                     </View>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                       // NavigationService.navigate("PaymentScreen")
+                      }}
+                    >
                       <Text
                         style={[
                           styles.txtRegular,
@@ -278,7 +347,7 @@ function ShoppingCart(props) {
               return mydatas.length > 0 ? (
                 <View style={{ backgroundColor: "white" }}>
                   <AddressBar />
-                  <CartSummary />
+                  <CartSummary availbleList={availbleList} subtotal={subTotal}/>
                 </View>
               ) : null;
             }}
@@ -286,9 +355,11 @@ function ShoppingCart(props) {
               let itemAvailble = true;
               if (availbleList) {
                 const i = availbleList.isListingAvailable[index];
-                itemAvailble = i.isAvailable;
+                itemAvailble = i?.isAvailable;
               }
-              return <CartItem product={item} availble={itemAvailble} />;
+              return (
+                <CartItem key={index} product={item} availble={itemAvailble} />
+              );
             }}
             keyExtractor={(item, index) => `lll${index}`}
           />

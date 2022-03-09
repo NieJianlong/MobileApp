@@ -27,6 +27,7 @@ import { t } from "react-native-tailwindcss";
 import { Controller, useForm } from "react-hook-form";
 import lodash from "lodash";
 import { GetStatesByCountryId } from "../gql/explore_queries";
+import NavigationService from "../../../Navigation/NavigationService";
 
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
@@ -92,6 +93,13 @@ export const AddLocationSheetContent = (props) => {
           addressType: "SHIPPING",
           defaultAddress: true,
         },
+      },
+      onCompleted: (res) => {
+        !isAuth && NavigationService.navigate("ExploreScreen");
+        console.log(res);
+      },
+      onError: (res) => {
+        console.log(res);
       },
     });
   };
@@ -254,6 +262,7 @@ export const AddLocationSheetContent = (props) => {
                 );
               })}
             </View>
+            <Button text="CONFIRM ADDRESS" onPress={handleSubmit(onSubmit)} />
           </KeyboardAwareScrollView>
           {isAuth && (
             <View style={{ marginTop: 20 }}>

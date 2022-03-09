@@ -116,10 +116,6 @@ function StarRating(props) {
   }
 }
 
-StarRating.propTypes = {};
-
-StarRating.defaultProps = {};
-
 const BIG_STAR_SIZE = s(38);
 const SMALL_STAR_SIZE = s(14);
 

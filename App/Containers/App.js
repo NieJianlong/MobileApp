@@ -7,10 +7,12 @@ import RootContainer from "./Root";
 import { ApolloProvider } from "@apollo/client";
 /** pubClient is gql client for public api and is also the global cache */
 import { client } from "../Apollo/apolloClient";
+import { View } from "react-native";
 
 const App = () => (
   <ApolloProvider client={client}>
-    <RootContainer />
+    {/* <RootContainer /> */}
+    <View />
   </ApolloProvider>
 );
 

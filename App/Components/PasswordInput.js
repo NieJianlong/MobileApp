@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Text, View, Image, TouchableOpacity, TextInput } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
-import PropTypes from "prop-types";
 
 import { Fonts, Colors, Images } from "../Themes";
 
@@ -64,10 +63,6 @@ class PasswordInput extends Component {
     );
   }
 }
-
-PasswordInput.propTypes = {};
-
-PasswordInput.defaultProps = {};
 
 const styles = ScaledSheet.create({
   container: {

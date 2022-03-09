@@ -12,7 +12,7 @@ import Highlighter from "./Highlighter";
 import Button from "./Button";
 import { Fonts, Colors, Images, ApplicationStyles } from "../Themes";
 import NavigationService from "../Navigation/NavigationService";
-import AppConfig    from "../Config/AppConfig";
+import AppConfig from "../Config/AppConfig";
 import * as storage from "../Apollo/local-storage";
 
 const { width, height } = Dimensions.get("window");
@@ -150,10 +150,6 @@ class ProductSearchBox extends Component {
     );
   }
 }
-
-ProductSearchBox.propTypes = {};
-
-ProductSearchBox.defaultProps = {};
 
 const styles = ScaledSheet.create({
   container: {

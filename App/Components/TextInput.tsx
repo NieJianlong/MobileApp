@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Text, View, Image, TouchableOpacity, TextInput } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
-import PropTypes from "prop-types";
 
 import { Fonts, Colors, Images } from "../Themes";
 import colors from "../Themes/Colors";
@@ -69,10 +68,6 @@ class CustomTextInput extends Component {
     );
   }
 }
-
-CustomTextInput.propTypes = {};
-
-CustomTextInput.defaultProps = {};
 
 const styles = ScaledSheet.create({
   title: {

@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, Image, TouchableOpacity } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
-import PropTypes from "prop-types";
 
 import { Fonts, Colors, Images, ApplicationStyles } from "../Themes";
-import colors from "../Themes/Colors";
-import fonts from "../Themes/Fonts";
 
 const Picker = (props) => {
   const { style, showError, title, value, onPress } = props;
@@ -31,10 +28,6 @@ const Picker = (props) => {
     </TouchableOpacity>
   );
 };
-
-Picker.propTypes = {};
-
-Picker.defaultProps = {};
 
 const styles = ScaledSheet.create({
   container: {

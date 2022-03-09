@@ -15,7 +15,7 @@ const TouchableOpacity =
 //selector component, or picker to select from a list
 function Selector(props) {
   const [active, setActive] = useState(false);
-console.log({active})
+  console.log({ active });
   const [value, setValue] = useState(props.value || "");
 
   const { style, showError, title, data, placeholder } = props;
@@ -63,10 +63,6 @@ console.log({active})
     </View>
   );
 }
-
-Selector.propTypes = {};
-
-Selector.defaultProps = {};
 
 const styles = ScaledSheet.create({
   container: {

@@ -36,8 +36,7 @@ function ColorOptionItem(props) {
             borderRadius={50}
             style={styles.image}
             source={{
-              uri:
-                "https://www.color-blindness.com/color-name-hue-tool/js/images/map-red-min.png",
+              uri: "https://www.color-blindness.com/color-name-hue-tool/js/images/map-red-min.png",
             }}
           />
 
@@ -66,8 +65,7 @@ function ColorOptionItem(props) {
             borderRadius={50}
             style={styles.image}
             source={{
-              uri:
-                "https://www.color-blindness.com/color-name-hue-tool/js/images/map-red-min.png",
+              uri: "https://www.color-blindness.com/color-name-hue-tool/js/images/map-red-min.png",
             }}
           />
 
@@ -93,10 +91,6 @@ function ColorOptionItem(props) {
     );
   }
 }
-
-ColorOptionItem.propTypes = {};
-
-ColorOptionItem.defaultProps = {};
 
 const styles = ScaledSheet.create({
   container: {

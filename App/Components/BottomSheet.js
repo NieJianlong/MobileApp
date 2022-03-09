@@ -56,10 +56,6 @@ class BottomSheet extends Component {
   }
 }
 
-BottomSheet.propTypes = {};
-
-BottomSheet.defaultProps = {};
-
 const styles = ScaledSheet.create({
   container: {
     paddingHorizontal: "15@s",

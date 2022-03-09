@@ -25,10 +25,6 @@ function DescriptionText(props) {
   );
 }
 
-DescriptionText.propTypes = {};
-
-DescriptionText.defaultProps = {};
-
 const WIDTH = "44@s";
 const HEIGHT = "22@s";
 

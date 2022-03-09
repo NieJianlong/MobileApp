@@ -29,6 +29,14 @@ mutation ForgotPasswordStep1SendNotificationEmail($email: String!) {
     message
   }
 }
+
+# resendVerificationCodeInSms(phoneNumber: String!): ResendCodeResponse
+mutation ResendVerificationCodeInSms($phoneNumber: String!) {
+  resendVerificationCodeInSms(phoneNumber: $phoneNumber) {
+    status
+    extraMessage
+  }
+}
 mutation RegisterBuyer($request: BuyerProfileRequestForCreate!) {
   registerBuyer(request: $request) {
     buyerId

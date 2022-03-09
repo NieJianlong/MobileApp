@@ -53,10 +53,6 @@ function CheckBox(props) {
   }
 }
 
-CheckBox.propTypes = {};
-
-CheckBox.defaultProps = {};
-
 const styles = ScaledSheet.create({
   container: {
     height: "46@vs",

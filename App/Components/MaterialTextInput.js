@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ScaledSheet, vs } from "react-native-size-matters";
 import { TextField, OutlinedTextField } from "react-native-material-textfield";
-import PropTypes from "prop-types";
 
 import { Fonts, Colors, Images } from "../Themes";
 import colors from "../Themes/Colors";
@@ -21,7 +20,7 @@ function MaterialTextInput(props) {
     if (inputRef && inputRef.current) {
       inputRef.current.setValue(value);
     }
-  }, [value])
+  }, [value]);
 
   return (
     <TextField
@@ -54,10 +53,6 @@ function MaterialTextInput(props) {
     />
   );
 }
-
-MaterialTextInput.propTypes = {};
-
-MaterialTextInput.defaultProps = {};
 
 const styles = ScaledSheet.create({
   container: {

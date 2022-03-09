@@ -1,4 +1,3 @@
-import { max } from "lodash";
 import React, { useState } from "react";
 import { Text, View, TouchableOpacity, Image } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
@@ -56,10 +55,6 @@ function QuantitySelector(props) {
     </View>
   );
 }
-
-QuantitySelector.propTypes = {};
-
-QuantitySelector.defaultProps = {};
 
 const styles = ScaledSheet.create({
   row: {

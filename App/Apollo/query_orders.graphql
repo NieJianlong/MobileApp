@@ -156,6 +156,7 @@ query SearchBuyerOrders($options: BuyerOrderOption!) {
 }
 query GetOrderReturnStatus($orderReturnId: String!) {
   getOrderReturnStatus(orderReturnId: $orderReturnId) {
+    deadline
     orderReturnId
     events {
       returnId

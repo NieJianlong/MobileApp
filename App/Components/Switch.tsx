@@ -50,10 +50,6 @@ function Switch(props) {
   }
 }
 
-Switch.propTypes = {};
-
-Switch.defaultProps = {};
-
 const WIDTH = "44@s";
 const HEIGHT = "22@s";
 

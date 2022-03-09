@@ -36,6 +36,7 @@ import { t } from "react-native-tailwindcss";
 import {
   useForgotPasswordStep1SendNotificationEmailMutation,
   useResendVerificationCodeInEmailMutation,
+  useResendVerificationCodeInSmsMutation,
   useSendOtpCodeForBuyerMutation,
   useValidateOtpCodeForBuyerMutation,
   ValidationType,
@@ -51,17 +52,7 @@ function OTPScreen(props) {
     field3Input,
     field4Input,
     field5Input = null;
-  // const [validate] = useMutation(ValidateCode, {
-  //   onCompleted: (res) => {
-  //     // alert("验证成功");
-  //     autoSignIn();
-  //   },
-  //   onError: (error) => {
-  //     // autoSignIn();
-  //     alert("Validation fails");
-  //   },
-  // });
-  const [validate] = useValidateOtpCodeForBuyerMutation({
+  const [validate] = useMutation(ValidateCode, {
     onCompleted: (res) => {
       // alert("验证成功");
       autoSignIn();
@@ -71,14 +62,25 @@ function OTPScreen(props) {
       alert("Validation fails");
     },
   });
+  // const [validate] = useValidateOtpCodeForBuyerMutation({
+  //   onCompleted: (res) => {
+  //     // alert("验证成功");
+  //     autoSignIn();
+  //   },
+  //   onError: (error) => {
+  //     // autoSignIn();
+  //     alert("Validation fails");
+  //   },
+  // });
 
   const [resetPasswordStep2] = useMutation(ForgotPasswordStep2VerifyTokenEmail);
   const [forgetPasswordResendCode] =
     useForgotPasswordStep1SendNotificationEmailMutation();
 
   // const [resendCode] = useResendVerificationCodeInEmailMutation();
-  const [resendCode] = useSendOtpCodeForBuyerMutation();
+  // const [resendCode] = useSendOtpCodeForBuyerMutation();
 
+  const [resendCode] = useResendVerificationCodeInSmsMutation();
   let [keyboardHeight, setKeyboardHeight] = useState(0);
   let [allowToResendCode, setAllowToResendCode] = useState(false);
   let [onFocus, setOnFocus] = useState(1);
@@ -404,7 +406,7 @@ function OTPScreen(props) {
               //   },
               // });
               resendCode({
-                variables: { buyerId: global.buyerId },
+                variables: { phoneNumber: params.phone },
                 onCompleted: (res) => {
                   dispatch({
                     type: "changAlertState",

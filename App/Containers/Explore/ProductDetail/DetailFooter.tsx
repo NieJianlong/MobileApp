@@ -19,7 +19,12 @@ import "react-native-get-random-values";
 import useRealm from "../../../hooks/useRealm";
 import colors from "../../../Themes/Colors";
 import PubSub from "pubsub-js";
-import { useMutation, useQuery, useReactiveVar, useLazyQuery } from "@apollo/client";
+import {
+  useMutation,
+  useQuery,
+  useReactiveVar,
+  useLazyQuery,
+} from "@apollo/client";
 import {
   cartOrderVar,
   GET_LOCAL_CART,
@@ -42,6 +47,9 @@ import { IsListingAvailable } from "../../Explore/gql/explore_queries";
 
 export default function DetailFooter({ product, currentVariant, pickUp }) {
   console.log("global.access_token", global.access_token);
+  console.log("currentVariant====================================");
+  console.log(currentVariant);
+  console.log("====================================");
   const { dispatch } = useContext(AlertContext);
   const { realm } = useRealm();
 
@@ -68,7 +76,10 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   console.log("currentVariant", currentVariant);
   console.log("itemsSold", currentVariant.itemsSold);
   console.log("itemsSold", currentVariant.itemsAvailable);
-  console.log("comparison", currentVariant.itemsSold === currentVariant.itemsAvailable)
+  console.log(
+    "comparison",
+    currentVariant.itemsSold === currentVariant.itemsAvailable
+  );
 
   const info = realm
     .objects("ShoppingCart")
@@ -82,7 +93,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   //   useMutation(CreateOrderFromCart);
 
   let walletBalance = parseFloat(
-    BigNumber(
+    new BigNumber(
       data?.getBuyerSalamiWalletBalance?.walletBalance +
         data?.getBuyerSalamiWalletBalance?.giftBalance
     ).toFixed(2)
@@ -99,7 +110,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     createOrderFromCart({
       variables: {
         cart: {
-          buyerId: userProfile.buyerId,
+          buyerId: global.buyerId,
           shippingAddressId: localCartVar.deliverAddress,
           billingDetailsId: userProfile.billingDetailsId,
           useSalamiWallet: true,
@@ -180,9 +191,9 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
         } else if (type === "InSufficient") {
           NavigationService.navigate("InSufficientSalamiCreditScreen", {
             walletBalance: walletBalance,
-            productPrice: BigNumber(quantity * product.wholeSalePrice).toFixed(
-              2
-            ),
+            productPrice: new BigNumber(
+              quantity * product.wholeSalePrice
+            ).toFixed(2),
             product: product,
           });
         }
@@ -241,7 +252,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       });
       if (
         walletBalance >=
-        parseFloat(BigNumber(quantity * product.wholeSalePrice).toFixed(2))
+        parseFloat(new BigNumber(quantity * product.wholeSalePrice).toFixed(2))
       ) {
         const productBuyNow = {
           listingId: product.listingId,
@@ -370,7 +381,6 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   //   product,
   // ]);
 
-
   const toggleAddToCartSheet = () => {
     if (
       pickUp ||
@@ -397,8 +407,10 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       <View style={{ height: vs(15) }} />
 
       <View style={styles.rowSpaceBetween}>
-        <TouchableOpacity style={styles.row} onPress={toggleAddToCartSheet}
-                          //disabled={currentVariant.itemsSold === currentVariant.itemsAvailable}
+        <TouchableOpacity
+          style={styles.row}
+          onPress={toggleAddToCartSheet}
+          //disabled={currentVariant.itemsSold === currentVariant.itemsAvailable}
         >
           <Image source={Images.cartMed} style={styles.icCart} />
           <Text style={[styles.txtBold, { color: Colors.primary }]}>
@@ -412,19 +424,18 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
           disabled={currentVariant.itemsSold === currentVariant.itemsAvailable}
         >
           <Text style={[styles.txtBold, { color: Colors.white }]}>
-            {
-              currentVariant.itemsSold === currentVariant.itemsAvailable ? 'you missed product 100/100 sold..' : 'BUY NOW'
-            }
-
+            {currentVariant.itemsSold === currentVariant.itemsAvailable
+              ? "you missed product 100/100 sold.."
+              : "BUY NOW"}
           </Text>
 
           <View style={styles.priceContainer}>
             <NumberFormat
               thousandSeparator={true}
               prefix={"$"}
-              value={`${BigNumber(quantity * product.wholeSalePrice).toFixed(
-                2
-              )}`}
+              value={`${new BigNumber(
+                quantity * product.wholeSalePrice
+              ).toFixed(2)}`}
               displayType={"text"}
               renderText={(text) => (
                 <Text style={[styles.txtRegular, { color: Colors.white }]}>

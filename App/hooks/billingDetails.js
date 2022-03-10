@@ -17,7 +17,7 @@ const GetBillingDetail = () => {
     BILLING_DETAIL_BY_BUYERID,
     {
       variables: {
-        buyerId: userProfile.buyerId,
+        buyerId: global.buyerId,
       },
       context: {
         headers: {
@@ -28,10 +28,10 @@ const GetBillingDetail = () => {
   );
 
   useEffect(() => {
-    if (userProfile.buyerId) {
+    if (global.buyerId) {
       getBillingAddress();
     }
-  }, [userProfile.buyerId]);
+  }, [global.buyerId]);
 
   useEffect(() => {
     if (loading) {

@@ -281,7 +281,7 @@ function InSufficientSalamiCredit(props) {
                 createOrderFromCart({
                   variables: {
                     cart: {
-                      buyerId: userProfile.buyerId,
+                      buyerId: global.buyerId,
                       shippingAddressId: localCartVar.deliverAddress,
                       billingDetailsId: userProfile.billingDetailsId,
                       useSalamiWallet: true,
@@ -299,8 +299,8 @@ function InSufficientSalamiCredit(props) {
                   onCompleted: (res) => {
                     console.log(
                       `Explore useCreateOrder res ${JSON.stringify(res)}`
-                    );                    dispatch({
-
+                    );
+                    dispatch({
                       type: "changLoading",
                       payload: false,
                     });

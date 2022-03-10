@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useContext, useState } from "react";
 import { View, Image, TouchableOpacity, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -14,7 +8,6 @@ import { QuantitySelector } from "../../../Components";
 import { Images, Colors } from "../../../Themes";
 import styles from "./styles";
 import { AlertContext } from "../../Root/GlobalContext";
-import ConfirmOrderSheetContent from "./SheetContent/ConfirmOrderSheetContent";
 import "react-native-get-random-values";
 import useRealm from "../../../hooks/useRealm";
 import colors from "../../../Themes/Colors";
@@ -110,7 +103,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     createOrderFromCart({
       variables: {
         cart: {
-          buyerId: global.buyerId,
+          buyerId: userProfile.buyerId,
           shippingAddressId: localCartVar.deliverAddress,
           billingDetailsId: userProfile.billingDetailsId,
           useSalamiWallet: true,

@@ -281,7 +281,7 @@ function InSufficientSalamiCredit(props) {
                 createOrderFromCart({
                   variables: {
                     cart: {
-                      buyerId: global.buyerId,
+                      buyerId: userProfile.buyerId,
                       shippingAddressId: localCartVar.deliverAddress,
                       billingDetailsId: userProfile.billingDetailsId,
                       useSalamiWallet: true,

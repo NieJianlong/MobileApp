@@ -36,6 +36,11 @@ function GroupInfoScreen(props) {
         },
       },
     },
+    context: {
+      headers: {
+        isPrivate: global.access_token ? true : false,
+      },
+    },
   });
   const [markOrderItem] = useMarkOrderItemAsDeliveredMutation();
   useEffect(() => {

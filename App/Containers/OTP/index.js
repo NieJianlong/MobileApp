@@ -119,12 +119,12 @@ function OTPScreen(props) {
         buyerProfileByUserId: { buyerId },
       } = res;
       global.buyerId = buyerId;
-      NavigationService.navigate("MainScreen");
+      // NavigationService.navigate("MainScreen");
     },
     onError: (res) => {
       //server often breakon，we should use a constant for testing
       global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
-      NavigationService.navigate("MainScreen");
+      // NavigationService.navigate("MainScreen");
     },
   });
   const autoSignIn = async () => {

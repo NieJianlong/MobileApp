@@ -414,10 +414,12 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
         <TouchableOpacity
           onPress={toggleConfirmOrderSheet}
           style={styles.btnBuyNow}
-          disabled={currentVariant.itemsSold === currentVariant.itemsAvailable}
+          disabled={
+            currentVariant.itemsSold === currentVariant.noOfItemsInStock
+          }
         >
           <Text style={[styles.txtBold, { color: Colors.white }]}>
-            {currentVariant.itemsSold === currentVariant.itemsAvailable
+            {currentVariant.itemsSold === currentVariant.noOfItemsInStock
               ? "you missed product 100/100 sold.."
               : "BUY NOW"}
           </Text>

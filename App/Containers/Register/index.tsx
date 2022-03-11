@@ -114,9 +114,7 @@ function RegisterScreen(props) {
         },
       });
       //server often breakon，we should use a constant for testing
-      const {
-        buyerProfileByUserId,
-      } = res;
+      const { buyerProfileByUserId } = res;
 
       userProfileVar({
         userId: buyerProfileByUserId?.userId,
@@ -142,7 +140,7 @@ function RegisterScreen(props) {
     const username = "+91" + getValues("phoneNumber");
     const password = getValues("password");
 
-    console.log('hello ========================>');
+    console.log("hello ========================>");
 
     //if username && password exits,we can login auto
     if (username && password) {

@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { MaterialTextInput, Button } from "../../../Components";
+import { MaterialTextInput, Button, Switch } from "../../../Components";
 import styles from "./styles";
 import colors from "../../../Themes/Colors";
 import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
@@ -43,6 +43,7 @@ export const AddLocationSheetContent = (props) => {
     [userProfileVarReactive.isAuth]
   );
 
+  const [asDefault, setAsDefault] = useState(false);
   const {
     control,
     handleSubmit,
@@ -185,7 +186,7 @@ export const AddLocationSheetContent = (props) => {
             enableOnAndroid={true}
             extraHeight={90}
             extraScrollHeight={90}
-            >
+          >
             <View
               style={[
                 {
@@ -257,14 +258,14 @@ export const AddLocationSheetContent = (props) => {
           </KeyboardAwareScrollView>
           {isAuth && (
             <View style={{ marginTop: 20 }}>
-              <Switch
+              {/* <Switch
                 onSwitch={(res) => {
                   console.log(res);
                   setAsDefault(res);
                 }}
                 active={asDefault}
                 label="Set as default address"
-              />
+              /> */}
 
               <Button text="CONFIRM ADDRESS" onPress={handleSubmit(onSubmit)} />
 

@@ -64,6 +64,9 @@ export default function LaunchScreen() {
         let decoded = jwt_decode(access_token);
         global.access_token = access_token;
         global.userProfileId = decoded.sub;
+        console.log("decoded====================================");
+        console.log(JSON.stringify(decoded));
+        console.log("====================================");
         getBuyerId();
 
         setLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY, access_token);

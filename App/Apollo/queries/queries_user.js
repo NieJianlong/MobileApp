@@ -419,6 +419,7 @@ export const FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
       addressId
       villageArea
       provinceState
+      defaultAddress
     }
   }
 `;

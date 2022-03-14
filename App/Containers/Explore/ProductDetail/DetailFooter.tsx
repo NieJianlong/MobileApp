@@ -44,9 +44,11 @@ import { useRazorVerifyPayment } from "../../../hooks/verifyPayment";
 import { useCreateRazorOrder } from "../../../hooks/razorOrder";
 import { DeliveryOption } from "../../../../generated/graphql";
 import { IsListingAvailable } from "../../Explore/gql/explore_queries";
+import {
+  FIND_BUYER_ADDRESS_BY_ID
+} from "../../../Apollo/queries/queries_user";
 
 export default function DetailFooter({ product, currentVariant, pickUp }) {
-  console.log("global.access_token", global.access_token);
   const { dispatch } = useContext(AlertContext);
   const { realm } = useRealm();
   console.log("userProfile.billingDetailsId,", global?.billingDetailsId);
@@ -68,15 +70,31 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       onError: (err) => {},
     },
   });
-  console.log("product.numberOfItemsAvailable", product.numberOfItemsAvailable);
-  console.log("product", product);
-  console.log("currentVariant", currentVariant);
-  console.log("itemsSold", currentVariant.itemsSold);
-  console.log("itemsSold", currentVariant.itemsAvailable);
-  console.log(
-    "comparison",
-    currentVariant.itemsSold === currentVariant.itemsAvailable
-  );
+  const {
+    loading,
+    error,
+    data: addressdata,
+    refetch,
+  } = useQuery(FIND_BUYER_ADDRESS_BY_ID, {
+    variables: {
+      buyerId: global.buyerId,
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+  });
+  console.log("addressdata==========addressdata", addressdata);
+  // console.log("product.numberOfItemsAvailable", product.numberOfItemsAvailable);
+  // console.log("product", product);
+  // console.log("currentVariant", currentVariant);
+  // console.log("itemsSold", currentVariant.itemsSold);
+  // console.log("itemsSold", currentVariant.itemsAvailable);
+  // console.log(
+  //   "comparison",
+  //   currentVariant.itemsSold === currentVariant.itemsAvailable
+  // );
 
   const info = realm
     .objects("ShoppingCart")

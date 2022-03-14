@@ -57,7 +57,7 @@ const PaymentOptions = () => {
             <View style={styles.infoTextView}>
               <Text style={styles.title}>{displayData.subtitle}</Text>
               <Text style={styles.itemSubTitle}>
-                {parseInt(data?.getBuyerSalamiWalletBalance?.walletBalance)}
+                {data?.getBuyerSalamiWalletBalance?.walletBalance.toFixed(2)}
               </Text>
             </View>
             <View style={{ justifyContent: "center" }}>

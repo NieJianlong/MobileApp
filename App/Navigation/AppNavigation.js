@@ -73,7 +73,11 @@ import RefundScreen from "../Containers/Refund";
 import CancelOrderCompletedScreen from "../Containers/CancelOrderCompleted";
 import ReportGroupScreen from "../Containers/ReportGroup";
 import TabBar from "./TabBar";
-import { Page_BillingDetails, Page_CheckoutAuth, Page_CheckoutGuestOrderDetail } from "./const";
+import {
+  Page_BillingDetails,
+  Page_CheckoutAuth,
+  Page_CheckoutGuestOrderDetail,
+} from "./const";
 import CheckoutGuestOrderDetail from "../Containers/CheckoutGuestOrderDetail";
 import BillingDetails from "../Containers/BillingDetails";
 import ReturnsUnavailable from "../Containers/ReturnsUnavailable/ReturnsUnavailable";
@@ -238,10 +242,7 @@ function PrimaryNav() {
         name={"EditShoppingCartScreen"}
         component={EditShoppingCartScreen}
       />
-      <Stack.Screen
-        name={Page_CheckoutAuth}
-        component={CheckoutAuthScreen}
-      />
+      <Stack.Screen name={Page_CheckoutAuth} component={CheckoutAuthScreen} />
       <Stack.Screen
         name={"CheckOutPersonalDetailsScreen"}
         component={CheckOutPersonalDetailsScreen}
@@ -299,7 +300,10 @@ function PrimaryNav() {
         component={CancelOrderCompletedScreen}
       />
       <Stack.Screen name={"ReportGroupScreen"} component={ReportGroupScreen} />
-      <Stack.Screen name={Page_CheckoutGuestOrderDetail} component={CheckoutGuestOrderDetail} />
+      <Stack.Screen
+        name={Page_CheckoutGuestOrderDetail}
+        component={CheckoutGuestOrderDetail}
+      />
       <Stack.Screen name={Page_BillingDetails} component={BillingDetails} />
     </Stack.Navigator>
   );

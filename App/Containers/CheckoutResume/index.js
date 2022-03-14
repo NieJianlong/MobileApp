@@ -1,5 +1,13 @@
 import React, { useState, useMemo, useContext } from "react";
-import { View, ScrollView, SafeAreaView, StatusBar, Image, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  ScrollView,
+  SafeAreaView,
+  StatusBar,
+  Image,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { s, ScaledSheet, vs } from "react-native-size-matters";
 import colors from "../../Themes/Colors";
@@ -14,7 +22,14 @@ import { useCreateOrder } from "../../hooks/order";
 import PaymentOptions from "./PaymentOptions";
 import RazorpayCheckout from "react-native-razorpay";
 import { useCreateRazorOrder } from "../../hooks/razorOrder";
-import { cartOrderVar, GET_LOCAL_CART, localBuyNowVar, razorOrderPaymentVar, userProfileVar, localCartVar as localCartCache} from "../../Apollo/cache";
+import {
+  cartOrderVar,
+  GET_LOCAL_CART,
+  localBuyNowVar,
+  razorOrderPaymentVar,
+  userProfileVar,
+  localCartVar as localCartCache,
+} from "../../Apollo/cache";
 import { useRazorVerifyPayment } from "../../hooks/verifyPayment";
 import images from "../../Themes/Images";
 import { ApplicationStyles } from "../../Themes";
@@ -36,6 +51,7 @@ function CheckoutResume(props) {
   const userProfile = useReactiveVar(userProfileVar);
   const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
     useRazorVerifyPayment();
+  const { on, setOn } = useState(false);
   const { orderStatus, data, availbleList } = params;
   const money = useMemo(() => {
     let currentBilling = 0;
@@ -47,7 +63,7 @@ function CheckoutResume(props) {
         const i = availbleList.isListingAvailable[index];
         itemAvailble = i?.isAvailable;
       }
-      if(itemAvailble) {
+      if (itemAvailble) {
         if (element.variant) {
           originalBilling =
             originalBilling + element.variant.retailPrice * element.quantity;
@@ -69,7 +85,7 @@ function CheckoutResume(props) {
       percent: BigNumber(saving).dividedBy(total).multipliedBy(100).toFixed(2),
     };
   }, [data]);
-  const { data: dataWallet} = useQuery(WALLET_BALANCE, {
+  const { data: dataWallet } = useQuery(WALLET_BALANCE, {
     context: {
       headers: {
         isPrivate: true,
@@ -80,7 +96,7 @@ function CheckoutResume(props) {
       onError: (err) => {},
     },
   });
-  console.log("dataWalletdataWalletdataWalletdataWallet", dataWallet)
+  console.log("dataWalletdataWalletdataWalletdataWallet", dataWallet);
   const { dispatch } = useContext(AlertContext);
   const [mydatas, setMydatas] = useState(
     realm
@@ -89,24 +105,26 @@ function CheckoutResume(props) {
       .filtered("quantity > 0")
       .filtered("isDraft == false")
   );
-  const walletBalance =
-   BigNumber(
-      dataWallet?.getBuyerSalamiWalletBalance?.walletBalance +
+  const walletBalance = BigNumber(
+    dataWallet?.getBuyerSalamiWalletBalance?.walletBalance +
       dataWallet?.getBuyerSalamiWalletBalance?.giftBalance
-    ).toFixed(2);
+  ).toFixed(2);
   console.log("walletBalance ===========", walletBalance);
   const clearData = () => {
     let index = mydatas.length - 1;
-    while(index >= 0) {
-      if(mydatas[index]) {
-        if(mydatas[index].variant.itemsAvailable !== mydatas[index].variant.itemsSold){
+    while (index >= 0) {
+      if (mydatas[index]) {
+        if (
+          mydatas[index].variant.itemsAvailable !==
+          mydatas[index].variant.itemsSold
+        ) {
           realm.write(() => {
             realm.delete(mydatas[index]);
             PubSub.publish("refresh-shoppingcart");
-          })
-          console.log("IN if condition")
-        }else {
-          console.log("IN else condition")
+          });
+          console.log("IN if condition");
+        } else {
+          console.log("IN else condition");
         }
       }
       index--;
@@ -118,24 +136,31 @@ function CheckoutResume(props) {
   };
 
   const proceedFurther = (type) => {
+    if (!on) {
+      alert("Please accept privacy and policy");
+      return;
+    }
     dispatch({
       type: "changLoading",
       payload: true,
     });
     console.log("localCartVar.items", localCartVar.items);
     console.log("localCartVar======mydatas", mydatas);
-     const finalItems =  localCartVar.items.map((item) => {
-     const productItem = mydatas.find((dataItem) => item.variantId === dataItem.variantId);
-     console.log("product======", productItem);
-     return {
-       photo: productItem.product.photo,
-       longName: productItem.product.longName
-     }
-   });
-   console.log("proceedFurther=====FinalItems", finalItems);
+    const finalItems = localCartVar.items.map((item) => {
+      const productItem = mydatas.find(
+        (dataItem) => item.variantId === dataItem.variantId
+      );
+      console.log("product======", productItem);
+      return {
+        photo: productItem.product.photo,
+        longName: productItem.product.longName,
+      };
+    });
+    console.log("proceedFurther=====FinalItems", finalItems);
 
     console.log("type", type);
     console.log("localCartVar", localCartVar);
+    console.log("userProfile.billingDetailsId,", userProfile.billingDetailsId);
 
     createOrderFromCart({
       variables: {
@@ -144,7 +169,7 @@ function CheckoutResume(props) {
           shippingAddressId: localCartVar.deliverAddress,
           billingDetailsId: userProfile.billingDetailsId,
           useSalamiWallet: true,
-          cartItems: localCartVar.items
+          cartItems: localCartVar.items,
         },
       },
       context: {
@@ -193,15 +218,15 @@ function CheckoutResume(props) {
                 };
                 RazorpayCheckout.open(options)
                   .then((data) => {
-                    debugger
+                    debugger;
                     razorOrderPaymentVar({
                       razorpay_payment_id: data.razorpay_payment_id,
                       razorpay_order_id: data.razorpay_order_id,
                       razorpay_signature: data.razorpay_signature,
                     });
                     razorpayVerifyPaymentSignature();
-                   //alert(`Success: ${data.razorpay_payment_id}`);
-                    alert("Order Created Successfully")
+                    //alert(`Success: ${data.razorpay_payment_id}`);
+                    alert("Order Created Successfully");
                     clearData();
                     NavigationService.navigate("OrderPlacedScreen", {
                       items: finalItems,
@@ -209,7 +234,7 @@ function CheckoutResume(props) {
                     });
                   })
                   .catch((error) => {
-                    debugger
+                    debugger;
                     alert(`Error: ${error.code} | ${error.description}`);
                   });
               }
@@ -219,8 +244,8 @@ function CheckoutResume(props) {
         } else if (type === "InSufficient") {
           NavigationService.navigate("InSufficientSalamiCreditScreen", {
             walletBalance: walletBalance,
-            productPrice:  parseFloat(money.total).toFixed(2),
-            product: finalItems
+            productPrice: parseFloat(money.total).toFixed(2),
+            product: finalItems,
           });
         }
       },
@@ -274,7 +299,11 @@ function CheckoutResume(props) {
                   ? "Order placed on Oct 24, 2020"
                   : "Your order"}
               </Text>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  NavigationService.goBack();
+                }}
+              >
                 <Image
                   style={styles.editImage}
                   source={images.userAddressEditImage}
@@ -289,14 +318,15 @@ function CheckoutResume(props) {
                   itemAvailble = i?.isAvailable;
                 }
                 console.log("Itemm", item);
-                if(itemAvailble)
-                return (
-                  <CartItem
-                    key={index.toString()}
-                    product={item}
-                    availble={itemAvailble}
-                  />
-                );
+                if (itemAvailble) {
+                  return (
+                    <CartItem
+                      key={index.toString()}
+                      product={item}
+                      availble={itemAvailble}
+                    />
+                  );
+                }
               })}
             </View>
 
@@ -357,7 +387,9 @@ function CheckoutResume(props) {
                 </View>
                 <View style={{ marginTop: 20 }}>
                   <Switch
-                    onSwitch={() => {}}
+                    onSwitch={() => {
+                      setOn(!on);
+                    }}
                     label="I accept Privacy Policy and Terms of use"
                   />
                 </View>
@@ -387,15 +419,12 @@ function CheckoutResume(props) {
             <Button
               onPress={() => {
                 if (!isNaN(walletBalance)) {
-                  if (
-                    walletBalance >=
-                    parseFloat(money.total).toFixed(2)
-                  ) {
-                    proceedFurther("sufficient")
+                  if (walletBalance >= parseFloat(money.total).toFixed(2)) {
+                    proceedFurther("sufficient");
                   } else if (walletBalance === 0 || walletBalance < 0) {
-                    proceedFurther("zero")
+                    proceedFurther("zero");
                   } else {
-                    proceedFurther("InSufficient")
+                    proceedFurther("InSufficient");
                   }
                 }
               }}

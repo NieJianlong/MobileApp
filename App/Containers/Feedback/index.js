@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 import {
   View,
   TouchableOpacity,
@@ -7,17 +7,17 @@ import {
   SafeAreaView,
   StatusBar,
   TextInput as RNTextInput,
-} from 'react-native';
-import AppConfig from '../../Config/AppConfig';
-import { vs, s, ScaledSheet } from 'react-native-size-matters';
-import fonts from '../../Themes/Fonts';
-import colors from '../../Themes/Colors';
-import { AppBar, TextInput, Button, RightButton } from '../../Components';
-import NavigationService from '../../Navigation/NavigationService';
-import { AlertContext } from '../Root/GlobalContext';
-import { ApplicationStyles, Images } from '../../Themes';
-import TextTip from '../../Components/EmptyReminder';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+} from "react-native";
+import AppConfig from "../../Config/AppConfig";
+import { vs, s, ScaledSheet } from "react-native-size-matters";
+import fonts from "../../Themes/Fonts";
+import colors from "../../Themes/Colors";
+import { AppBar, TextInput, Button, RightButton } from "../../Components";
+import NavigationService from "../../Navigation/NavigationService";
+import { AlertContext } from "../Root/GlobalContext";
+import { ApplicationStyles, Images } from "../../Themes";
+import TextTip from "../../Components/EmptyReminder";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const images = [Images.userLoveImage, Images.userMedImage, Images.userSadImage];
 
@@ -28,7 +28,7 @@ function Feedback(props) {
       style={{
         flex: 1,
         backgroundColor: colors.background,
-        position: 'absolute',
+        position: "absolute",
         top: 0,
         left: 0,
         right: 0,
@@ -38,7 +38,7 @@ function Feedback(props) {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar
           rightButton={() => (
@@ -58,7 +58,7 @@ function Feedback(props) {
                 // });
 
                 dispatch({
-                  type: 'changSheetState',
+                  type: "changSheetState",
                   payload: {
                     showSheet: true,
                     height: 380,
@@ -67,7 +67,7 @@ function Feedback(props) {
                         <View
                           style={{
                             flex: 1,
-                            alignItems: 'center',
+                            alignItems: "center",
                           }}
                         >
                           <Image
@@ -75,7 +75,7 @@ function Feedback(props) {
                               marginTop: 20,
                               height: s(113),
                               width: s(113),
-                              resizeMode: 'contain',
+                              resizeMode: "contain",
                             }}
                             source={Images.userFacebookImage}
                           />
@@ -92,7 +92,7 @@ function Feedback(props) {
                               btnMsg="SURE!"
                               onPress={() => {
                                 dispatch({
-                                  type: 'changSheetState',
+                                  type: "changSheetState",
                                   payload: {
                                     showSheet: false,
                                   },
@@ -103,9 +103,9 @@ function Feedback(props) {
                               backgroundColor="transparent"
                               textColor={colors.grey80}
                               onPress={() => {
-                                NavigationService.navigate('');
+                                NavigationService.navigate("");
                               }}
-                              text={'NOT NOW'}
+                              text={"NOT NOW"}
                             />
                           </View>
                         </View>
@@ -124,7 +124,7 @@ function Feedback(props) {
                 fontSize: s(24),
                 fontFamily: fonts.primary,
                 color: colors.black,
-                fontWeight: 'bold',
+                fontWeight: "bold",
               }}
             >
               Help us to improve
@@ -134,7 +134,7 @@ function Feedback(props) {
                 fontSize: s(16),
                 fontFamily: fonts.primary,
                 color: colors.grey80,
-                fontWeight: 'normal',
+                fontWeight: "normal",
                 marginVertical: vs(12),
               }}
             >
@@ -144,8 +144,8 @@ function Feedback(props) {
             </Text>
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around',
+                flexDirection: "row",
+                justifyContent: "space-around",
                 marginVertical: vs(12),
               }}
             >
@@ -156,7 +156,7 @@ function Feedback(props) {
                       style={{
                         width: s(80),
                         height: s(80),
-                        resizeMode: 'contain',
+                        resizeMode: "contain",
                       }}
                       source={item}
                     ></Image>
@@ -179,12 +179,12 @@ function Feedback(props) {
                 borderRadius: s(20),
                 borderWidth: 1,
                 borderColor: colors.grey20,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexDirection: 'row',
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexDirection: "row",
                 padding: s(14),
                 paddingVertical: s(20),
-                textAlignVertical: 'top',
+                textAlignVertical: "top",
               }}
             />
           </View>
@@ -198,8 +198,8 @@ export default Feedback;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,
-    fontSize: '16@s',
+    fontSize: "16@s",
     color: colors.black,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

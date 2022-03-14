@@ -165,7 +165,7 @@ function CheckoutResume(props) {
     createOrderFromCart({
       variables: {
         cart: {
-          buyerId: userProfile.buyerId,
+          buyerId: global.buyerId,
           shippingAddressId: localCartVar.deliverAddress,
           billingDetailsId: userProfile.billingDetailsId,
           useSalamiWallet: true,
@@ -218,7 +218,6 @@ function CheckoutResume(props) {
                 };
                 RazorpayCheckout.open(options)
                   .then((data) => {
-                    debugger;
                     razorOrderPaymentVar({
                       razorpay_payment_id: data.razorpay_payment_id,
                       razorpay_order_id: data.razorpay_order_id,
@@ -234,7 +233,6 @@ function CheckoutResume(props) {
                     });
                   })
                   .catch((error) => {
-                    debugger;
                     alert(`Error: ${error.code} | ${error.description}`);
                   });
               }
@@ -318,7 +316,7 @@ function CheckoutResume(props) {
                   itemAvailble = i?.isAvailable;
                 }
                 console.log("Itemm", item);
-                if (itemAvailble) {
+                if (itemAvailble)
                   return (
                     <CartItem
                       key={index.toString()}
@@ -326,7 +324,6 @@ function CheckoutResume(props) {
                       availble={itemAvailble}
                     />
                   );
-                }
               })}
             </View>
 

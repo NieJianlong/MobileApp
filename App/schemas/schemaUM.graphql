@@ -462,6 +462,7 @@ type Mutation {
   rejectSellerValidation(sellerId: ID!, rejectReason: RegistrationRejectedReason!, rejectNote: String): GenericResponse
   sendOTPCodeForBuyer(buyerId: ID!): GenericResponse
   validateOTPCodeForBuyer(request: ValidateCodeRequest!): ValidateCodeResponse
+  createServiceOperator(request: ServiceOperatorProfileForCreate!): GenericResponse
 }
 
 input NotificationRequest {
@@ -930,6 +931,16 @@ enum SellerValidationStatus {
   PENDING
   ACCEPTED
   REJECTED
+}
+
+input ServiceOperatorProfileForCreate {
+  username: String!
+  firstName: String
+  lastName: String
+  email: String!
+  phoneNumber: String
+  password: String!
+  roles: [String]!
 }
 
 type ServiceOperatorResponse {

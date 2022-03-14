@@ -14,7 +14,6 @@ import { QuantitySelector } from "../../../Components";
 import { Images, Colors } from "../../../Themes";
 import styles from "./styles";
 import { AlertContext } from "../../Root/GlobalContext";
-import ConfirmOrderSheetContent from "./SheetContent/ConfirmOrderSheetContent";
 import "react-native-get-random-values";
 import useRealm from "../../../hooks/useRealm";
 import colors from "../../../Themes/Colors";
@@ -108,7 +107,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   //   useMutation(CreateOrderFromCart);
 
   let walletBalance = parseFloat(
-    BigNumber(
+    new BigNumber(
       data?.getBuyerSalamiWalletBalance?.walletBalance +
         data?.getBuyerSalamiWalletBalance?.giftBalance
     ).toFixed(2)
@@ -206,9 +205,9 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
         } else if (type === "InSufficient") {
           NavigationService.navigate("InSufficientSalamiCreditScreen", {
             walletBalance: walletBalance,
-            productPrice: BigNumber(quantity * product.wholeSalePrice).toFixed(
-              2
-            ),
+            productPrice: new BigNumber(
+              quantity * product.wholeSalePrice
+            ).toFixed(2),
             product: product,
           });
         }
@@ -441,10 +440,12 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
         <TouchableOpacity
           onPress={toggleConfirmOrderSheet}
           style={styles.btnBuyNow}
-          disabled={currentVariant.itemsSold === currentVariant.itemsAvailable}
+          disabled={
+            currentVariant.itemsSold === currentVariant.noOfItemsInStock
+          }
         >
           <Text style={[styles.txtBold, { color: Colors.white }]}>
-            {currentVariant.itemsSold === currentVariant.itemsAvailable
+            {currentVariant.itemsSold === currentVariant.noOfItemsInStock
               ? "you missed product 100/100 sold.."
               : "BUY NOW"}
           </Text>
@@ -453,9 +454,9 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
             <NumberFormat
               thousandSeparator={true}
               prefix={"$"}
-              value={`${BigNumber(quantity * product.wholeSalePrice).toFixed(
-                2
-              )}`}
+              value={`${new BigNumber(
+                quantity * product.wholeSalePrice
+              ).toFixed(2)}`}
               displayType={"text"}
               renderText={(text) => (
                 <Text style={[styles.txtRegular, { color: Colors.white }]}>

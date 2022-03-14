@@ -254,32 +254,7 @@ type ListingVariantView {
   itemsAvailable: Int
   itemsSold: Int
   options: [KeyValuePair]
-}
-
-
-input RazorpayOrderRequest {
-    orderNumber: String!
-    orderId: ID!
-    amount: Float!
-}
-
-input RazorpayVerifyPaymentSignatureRequest {
-   razorpayPaymentId: String,
-   razorpayOrderId: String,
-   razorpaySignature: String
-}
-
-type RazorpayVerifyPaymentSignatureResponse {
-  valid: Boolean,
-  razorpayPaymentId: String,
-  razorpayOrderId: String,
-  razorpayPaymentStatus: Boolean,
-  razorpayOrderId: String,
-  razorpayOrderStatus: Boolean
-}
-
-type RazorpayOrderResponse {
-    razorpayOrderId: String
+  isAvailable: Boolean
 }
 
 """MUTATIONS"""
@@ -313,11 +288,12 @@ type Mutation {
   reduceSoldQuantity(input: VariantSoldQuantityInput!): Boolean!
   incrementSoldQuantity(input: VariantSoldQuantityInput!): Boolean!
   createProduct(productCreateInput: ProductCreateInput!): Product!
-  updateProductDetails(productId: ID!, input: ProductDetailsInput!): Product!
+  updateProduct(input: ProductUpdateInput!): SellerProductDetailView!
+  updateProductPriceAndQuantity(input: ProductPriceAndQuantityUpdateInput!): SellerProductDetailView!
   deleteProduct(productId: ID!): Boolean
-  disableProduct(productId: String!): Product
-  rejectProduct(productId: String!): Product
-  acceptProduct(productId: String!): Product
+  disableProduct(productId: ID!): Product
+  rejectProduct(productId: ID!): Product
+  acceptProduct(productId: ID!): Product
   addProductToWishlist(productId: String!, buyerId: String!): Wishlist!
   deleteProductFromWishlist(productId: String!, buyerId: String!): Int!
   addRequestForProduct(input: RequestForProductInput!): RequestForProductResponse!
@@ -325,14 +301,8 @@ type Mutation {
   addProductReview(input: ProductReviewInput!): AddReviewResponse!
   addSellerReview(input: SellerReviewInput!): AddReviewResponse!
   incrementHelpfulCount(reviewId: String!): Int
-  savePreferredCategories(buyerId: ID!, categories: [ID]): String
   addReportReview(input: ReportReviewInput!): ReportReviewResponse!
-
-  """buyer: get razorpayment Id"""
-  razorpayCreateOrder(request: RazorpayOrderRequest!): RazorpayOrderResponse
-  razorpayVerifyPaymentSignature(request: RazorpayVerifyPaymentSignatureRequest!): RazorpayVerifyPaymentSignatureResponse
 }
-
 
 enum OnlineStoreType {
   UNDEFINED
@@ -413,7 +383,8 @@ input ProductDetailsInput {
   brand: String
   keywords: [String]
   highlightBullets: [String]
-  productImages: [FileUpload]
+  productImages: [FileUpload!]
+  deletedImageIds: [ID!]
   productType: String
 }
 
@@ -549,6 +520,15 @@ input ProductPageable {
   sortDirection: SortDirection
 }
 
+input ProductPriceAndQuantityUpdateInput {
+  productId: ID!
+  priceId: ID!
+  retailPrice: Float!
+  wholeSalePrice: Float!
+  itemsInStock: Int!
+  variants: [VariantPriceAndQuantityUpdateInput!]
+}
+
 type ProductResponse {
   content: [SellerProductDetailView!]!
   pageNo: Int!
@@ -620,6 +600,13 @@ enum ProductType {
   DONT_USE_ME_2
 }
 
+input ProductUpdateInput {
+  productId: ID!
+  productDetailsInput: ProductDetailsInput!
+  productStocksAndPricingInput: ProductStocksAndPricingInput!
+  productReturnPolicyInput: ProductReturnPolicyInput!
+}
+
 enum ProductValidationStatus {
   PENDING
   ACCEPTED
@@ -627,6 +614,7 @@ enum ProductValidationStatus {
 }
 
 input ProductVariantInput {
+  variantId: ID
   sellerSku: String
   retailPrice: Float!
   wholeSalePrice: Float!
@@ -856,6 +844,7 @@ type SellerListingGroupResponse {
 type SellerListingGroupView {
   productId: ID!
   shortName: String
+  mainImageUrl: String
   ended: Int!
   active: Int!
   total: Int!
@@ -1111,6 +1100,14 @@ enum StoreSort {
   NAME
   CREATED
   CITY
+}
+
+input VariantPriceAndQuantityUpdateInput {
+  variantId: ID!
+  priceId: ID!
+  retailPrice: Float!
+  wholeSalePrice: Float!
+  itemsInStock: Int!
 }
 
 input VariantSoldQuantityInput {

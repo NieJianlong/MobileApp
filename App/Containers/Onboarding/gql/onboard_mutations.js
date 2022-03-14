@@ -29,10 +29,9 @@ import { gql } from "@apollo/client";
  */
 
 export const CREATE_GUEST_BUYER = gql`
-    mutation CreateGuestBuyer {
-        createGuestBuyer{
-            buyerId
-        }
+  mutation CreateGuestBuyer {
+    createGuestBuyer {
+      buyerId
     }
+  }
 `;
-

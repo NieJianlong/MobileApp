@@ -32,7 +32,7 @@ import NavigationService from "../../../Navigation/NavigationService";
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
 
-export const AddLocationSheetContent = (props) => {
+function AddLocationSheetContent(props) {
   //123e4567-e89b-12d3-a456-556642440000
   // const [selectedState, setSelectedState] = useState();
   const { data } = useQuery(GetStatesByCountryId, {
@@ -188,12 +188,7 @@ export const AddLocationSheetContent = (props) => {
         </View>
 
         <View style={[styles.bodyContainer]}>
-          <KeyboardAwareScrollView
-            contentContainerStyle={[t.flex1]}
-            enableOnAndroid={true}
-            extraHeight={90}
-            extraScrollHeight={90}
-            >
+          <KeyboardAwareScrollView contentContainerStyle={[t.flex1]}>
             <View
               style={[
                 {
@@ -253,9 +248,28 @@ export const AddLocationSheetContent = (props) => {
                         )}
                       </View>
                     ) : (
-                      <MaterialTextInput
-                        style={{ marginTop: vs(18) }}
-                        {...item}
+                      <Controller
+                        control={control}
+                        rules={{
+                          required: true,
+                        }}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                          <View>
+                            <MaterialTextInput
+                              style={{ marginTop: vs(18) }}
+                              {...item}
+                              onChangeText={onChange}
+                              onBlur={onBlur}
+                              value={value}
+                            />
+                            {lodash.get(errors, item.name) && (
+                              <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
+                                This is required.
+                              </Text>
+                            )}
+                          </View>
+                        )}
+                        name={item.name}
                       />
                     )}
                   </View>
@@ -264,31 +278,17 @@ export const AddLocationSheetContent = (props) => {
             </View>
             <Button text="CONFIRM ADDRESS" onPress={handleSubmit(onSubmit)} />
           </KeyboardAwareScrollView>
-          {isAuth && (
-            <View style={{ marginTop: 20 }}>
-              <Switch
-                onSwitch={(res) => {
-                  console.log(res);
-                  setAsDefault(res);
-                }}
-                active={asDefault}
-                label="Set as default address"
-              />
-
-              <Button text="CONFIRM ADDRESS" onPress={handleSubmit(onSubmit)} />
-
-              {showInfo && (
-                <Image
-                  source={require("../../../Images/Infoalert.png")}
-                  style={[t.wFull, t.absolute, t.mT20]}
-                />
-              )}
-            </View>
-          )}
+          <Button text="CONFIRM ADDRESS" onPress={handleSubmit(onSubmit)} />
         </View>
+        {showInfo && (
+          <Image
+            source={require("../../../Images/Infoalert.png")}
+            style={[t.wFull, t.absolute, t.mT20]}
+          />
+        )}
       </SafeAreaView>
     </View>
   );
-};
+}
 
 export default AddLocationSheetContent;

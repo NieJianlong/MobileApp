@@ -22,6 +22,7 @@ import { AlertContext } from "../../Root/GlobalContext";
 import NavigationService from "../../../Navigation/NavigationService";
 import PubSub from "pubsub-js";
 import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
+import { omit } from "lodash";
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
 
@@ -54,13 +55,17 @@ export default function AddressItem({ item, refetch, isCheckout }) {
       dispatch({ type: "hideloading" });
     },
   });
+  console.log("item====================================");
+  console.log(item);
+  console.log("====================================");
   const [setAddressDefault] = useMutation(UPDATE_ADDRESS, {
     variables: {
       request: {
+        ...omit(item, ["__typename", "updatedAt", "createdAt"]),
         addressId: item.addressId,
         referenceId: item.referenceId,
         defaultAddress: true,
-        addressType: item.addressType
+        addressType: item.addressType,
       },
     },
     context: {

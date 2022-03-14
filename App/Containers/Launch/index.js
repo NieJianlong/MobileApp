@@ -48,11 +48,9 @@ export default function LaunchScreen() {
     const username = await getLocalStorageValue(LOCAL_STORAGE_USER_NAME);
     const password = await getLocalStorageValue(LOCAL_STORAGE_USER_PASSWORD);
     const userData = await getLocalStorageValue(LOCAL_STORAGE_USER_PROFILE);
-    //NavigationService.navigate("MainScreen");
     //if username && password exits,we can login auto
     if (username && password) {
       //just for test
-      //NavigationService.navigate("MainScreen");
       try {
         const { data } = await runTokenFlow({ username, password });
         let access_token = data.access_token;
@@ -66,6 +64,9 @@ export default function LaunchScreen() {
         let decoded = jwt_decode(access_token);
         global.access_token = access_token;
         global.userProfileId = decoded.sub;
+        console.log("decoded====================================");
+        console.log(JSON.stringify(decoded));
+        console.log("====================================");
         getBuyerId();
 
         setLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY, access_token);

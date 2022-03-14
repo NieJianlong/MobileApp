@@ -299,8 +299,8 @@ function InSufficientSalamiCredit(props) {
                   onCompleted: (res) => {
                     console.log(
                       `Explore useCreateOrder res ${JSON.stringify(res)}`
-                    );                    dispatch({
-
+                    );
+                    dispatch({
                       type: "changLoading",
                       payload: false,
                     });

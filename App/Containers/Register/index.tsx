@@ -114,9 +114,7 @@ function RegisterScreen(props) {
         },
       });
       //server often breakon，we should use a constant for testing
-      const {
-        buyerProfileByUserId,
-      } = res;
+      const { buyerProfileByUserId } = res;
 
       userProfileVar({
         userId: buyerProfileByUserId?.userId,
@@ -133,7 +131,7 @@ function RegisterScreen(props) {
     onError: (res) => {
       //server often breakon，we should use a constant for testing
       global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
-      NavigationService.navigate("MainScreen");
+      // NavigationService.navigate("MainScreen");
     },
   });
 
@@ -142,7 +140,7 @@ function RegisterScreen(props) {
     const username = "+91" + getValues("phoneNumber");
     const password = getValues("password");
 
-    console.log('hello ========================>');
+    console.log("hello ========================>");
 
     //if username && password exits,we can login auto
     if (username && password) {

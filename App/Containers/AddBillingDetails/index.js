@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { View, StatusBar, Text, Keyboard, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  StatusBar,
+  Text,
+  Keyboard,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs, s } from "react-native-size-matters";
@@ -33,7 +40,11 @@ import images from "../../Themes/Images";
 
 function AddBillingDetails(props) {
   const {
-    params: { title, billingType = Billing_Type.BILLING, actionType = Action_Type.SAVE },
+    params: {
+      title,
+      billingType = Billing_Type.BILLING,
+      actionType = Action_Type.SAVE,
+    },
   } = useRoute();
   const userProfile = useReactiveVar(userProfileVar);
 
@@ -88,8 +99,7 @@ function AddBillingDetails(props) {
       setCompany(billingDetail.companyName);
       setTaxid(billingDetail.taxCode);
     }
-
-  }, [billingDetail])
+  }, [billingDetail]);
 
   useEffect(() => {
     if (
@@ -257,12 +267,12 @@ function AddBillingDetails(props) {
     villageArea: streetName,
     houseNumber: streetNum,
     country,
-    referenceId: userProfile.buyerId,
+    referenceId: global.buyerId,
     defaultAddress: useDefaultAddress,
     streetAddress1: streetNum,
   };
   const request = {
-    buyerId: userProfile.buyerId,
+    buyerId: global.buyerId,
     firstName: firstName,
     lastName: lastName,
     companyName: company,
@@ -309,7 +319,6 @@ function AddBillingDetails(props) {
 
         switch (actionType) {
           case Billing_Type.BILLING:
-
             break;
 
           default:
@@ -351,7 +360,7 @@ function AddBillingDetails(props) {
   });
 
   const onAddBilling = useCallback(() => {
-    if (isEmpty && !useDefaultAddress ) {
+    if (isEmpty && !useDefaultAddress) {
       dispatch({
         type: "changAlertState",
         payload: {
@@ -361,7 +370,6 @@ function AddBillingDetails(props) {
           title: "Make sure you have entered the correct information",
         },
       });
-
     } else {
       if (!validator.isValidEmail(email)) {
         dispatch({
@@ -421,9 +429,7 @@ function AddBillingDetails(props) {
                 label="Use the same info as default delivery address"
               />
             </View>
-            <TouchableOpacity
-              onPress={() => {}}
-            >
+            <TouchableOpacity onPress={() => {}}>
               <View style={styles.saveAddress}>
                 <View style={styles.addressIcon}>
                   <Image source={images.addressIcon} />
@@ -464,28 +470,29 @@ function AddBillingDetails(props) {
             </View>
           </View>
         </KeyboardAwareScrollView>
-        {billingDetail?.billingDetailsId && billingType !== Billing_Type.BILLING && (
-          <View
-            style={{
-              position: "absolute",
-              bottom: 10,
-              right: 0,
-              backgroundColor: colors.background,
-              left: 0,
-              paddingHorizontal: AppConfig.paddingHorizontal,
-            }}
-          >
-            <Button
-              onPress={() => {
-                dispatch({ type: "loading" });
-                deleteBilling();
+        {billingDetail?.billingDetailsId &&
+          billingType !== Billing_Type.BILLING && (
+            <View
+              style={{
+                position: "absolute",
+                bottom: 10,
+                right: 0,
+                backgroundColor: colors.background,
+                left: 0,
+                paddingHorizontal: AppConfig.paddingHorizontal,
               }}
-              textColor={colors.grey80}
-              text="REMOVE BILLING DETAILS"
-              backgroundColor="transparent"
-            />
-          </View>
-        )}
+            >
+              <Button
+                onPress={() => {
+                  dispatch({ type: "loading" });
+                  deleteBilling();
+                }}
+                textColor={colors.grey80}
+                text="REMOVE BILLING DETAILS"
+                backgroundColor="transparent"
+              />
+            </View>
+          )}
       </SafeAreaView>
     </View>
   );

@@ -64,9 +64,9 @@ function LoginScreen(props) {
     };
   }, [params, props]);
 
-  useEffect(() => {
-    if (isBillingLoaded) NavigationService.navigate('MainScreen');
-  }, [isBillingLoaded]);
+  // useEffect(() => {
+  //   if (isBillingLoaded) NavigationService.navigate("MainScreen");
+  // }, [isBillingLoaded]);
 
   const onSignIn = async () => {
     // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
@@ -90,7 +90,7 @@ function LoginScreen(props) {
             if (typeof res !== "undefined") {
               let access_token = res.data.access_token;
               let decoded = jwt_decode(access_token);
-                if (!decoded.email_verified) {
+              if (!decoded.email_verified) {
                 resendCode({
                   variables: { emailAddress: decoded.email },
                   onCompleted: () => {
@@ -129,7 +129,6 @@ function LoginScreen(props) {
                 psswd
               );
 
-
               console.log("decoded====================================");
               console.log(decoded);
               console.log("====================================");
@@ -157,7 +156,7 @@ function LoginScreen(props) {
                         result.data
                       )}`
                     );
-                    const { buyerProfileByUserId } = result.data
+                    const { buyerProfileByUserId } = result.data;
                     if (buyerProfileByUserId.buyerId === null) {
                       console.log("found null GuestBuyer buyerId");
                     } else {
@@ -169,7 +168,7 @@ function LoginScreen(props) {
 
                       storage.setLocalStorageValue(
                         storage.LOCAL_STORAGE_USER_PROFILE,
-                        JSON.stringify(buyerProfileByUserId),
+                        JSON.stringify(buyerProfileByUserId)
                       );
                       userProfileVar({
                         userId: buyerProfileByUserId?.userId,
@@ -180,7 +179,6 @@ function LoginScreen(props) {
                         isAuth: true,
                       });
                     }
-
                   } else {
                     console.log("Login BUYER_PROFILE_BY_USERID server error");
                   }

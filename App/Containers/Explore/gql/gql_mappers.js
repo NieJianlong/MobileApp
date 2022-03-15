@@ -128,12 +128,12 @@ export const mapProductListingDTO = (data) => {
  */
 export const mapGQLAddressToDelivery = (data) => {
   let address = "";
-  if (data.provinceState) {
+  if (data?.provinceState) {
     address = data.provinceState;
-  } else if (data.townCity) {
+  } else if (data?.townCity) {
     address = address + " " + data.townCity;
   }
-  if (data.pinCode) {
+  if (data?.pinCode) {
     address = address + " " + data.pinCode;
   }
 
@@ -143,19 +143,19 @@ export const mapGQLAddressToDelivery = (data) => {
 export const mapGQLAddressToLine2 = (data) => {
   let address = "";
 
-  if (data.villageArea) {
+  if (data?.villageArea) {
     address = address + " " + data.villageArea;
   }
 
-  if (data.houseNumber) {
+  if (data?.houseNumber) {
     address = address + " " + data.houseNumber;
   }
 
-  if (data.flat) {
+  if (data?.flat) {
     address = address + " " + data.flat;
   }
 
-  if (data.landMark) {
+  if (data?.landMark) {
     address = address + " " + data.landMark;
   }
 
@@ -178,14 +178,15 @@ export const mapGQLAddressToLine2 = (data) => {
  *
  */
 export const mapGQLAddressResponseToCache = (data) => {
+
   let addressForCache = {
-    pinCode: data.pinCode,
-    provinceState: data.provinceState,
-    townCity: data.townCity,
-    flatNumber: data.flat, // another pointless change of variabe names on the backend
-    villageArea: data.villageArea,
-    houseNumber: data.houseNumber,
-    landMark: data.landMark,
+    pinCode: data?.pinCode,
+    provinceState: data?.provinceState,
+    townCity: data?.townCity,
+    flatNumber: data?.flat, // another pointless change of variabe names on the backend
+    villageArea: data?.villageArea,
+    houseNumber: data?.houseNumber,
+    landMark: data?.landMark,
   };
 
   return addressForCache;

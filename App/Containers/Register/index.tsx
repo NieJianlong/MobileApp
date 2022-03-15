@@ -126,12 +126,10 @@ function RegisterScreen(props) {
       });
 
       global.buyerId = buyerProfileByUserId.buyerId;
-      NavigationService.navigate("MainScreen");
     },
     onError: (res) => {
       //server often breakon，we should use a constant for testing
       global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
-      // NavigationService.navigate("MainScreen");
     },
   });
 
@@ -191,12 +189,6 @@ function RegisterScreen(props) {
    */
   const [registerBuyer, { data }] = useRegisterBuyerMutation({
     onError: (error) => {
-      // alert("sdf");
-      // NavigationService.navigate("OTPScreen", {
-      //   fromScreen: "RegisterScreen",
-      //   phone: "+91" + getValues("phoneNumber"),
-      //   password: getValues("password"),
-      // });
       dispatch({
         type: "changLoading",
         payload: false,
@@ -238,9 +230,6 @@ function RegisterScreen(props) {
           // login here for private api jwt initial getDefaultBuyerAdress
           // autoSignIn();
         }
-
-        // NavigationService.navigate("MainScreen");
-        // NavigationService.navigate('OTPScreen', { fromScreen: 'RegisterScreen', phone: registerInput })
       } else {
         dispatch({
           type: "changLoading",

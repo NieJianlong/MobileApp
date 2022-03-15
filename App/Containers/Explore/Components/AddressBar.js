@@ -120,7 +120,7 @@ export default function AddressBar() {
           // callBackAddress used for gql query to get geo co-ords see useEffect Explore
           localCartVar({
             ...localCartVar(),
-            deliverAddress: resultJson.addressId,
+            deliverAddress: resultJson?.addressId,
             callBackAddress: gqlMappers.mapGQLAddressResponseToCache(
               resultJson
             ),

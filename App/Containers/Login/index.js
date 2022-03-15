@@ -65,7 +65,7 @@ function LoginScreen(props) {
   }, [params, props]);
 
   useEffect(() => {
-    if (isBillingLoaded) NavigationService.navigate('MainScreen');
+    if (isBillingLoaded) NavigationService.navigate("MainScreen");
   }, [isBillingLoaded]);
 
   const onSignIn = async () => {
@@ -90,28 +90,28 @@ function LoginScreen(props) {
             if (typeof res !== "undefined") {
               let access_token = res.data.access_token;
               let decoded = jwt_decode(access_token);
-                if (!decoded.email_verified) {
-                resendCode({
-                  variables: { emailAddress: decoded.email },
-                  onCompleted: () => {
-                    dispatch({
-                      type: "changLoading",
-                      payload: false,
-                    });
-                    NavigationService.navigate("OTPScreen", {
-                      fromScreen: "RegisterScreen",
-                      phone: decoded.email,
-                    });
-                  },
-                  onError: () => {
-                    dispatch({
-                      type: "changLoading",
-                      payload: false,
-                    });
-                  },
-                });
-                return;
-              }
+              // if (!decoded.email_verified) {
+              //   resendCode({
+              //     variables: { emailAddress: decoded.email },
+              //     onCompleted: () => {
+              //       dispatch({
+              //         type: "changLoading",
+              //         payload: false,
+              //       });
+              //       NavigationService.navigate("OTPScreen", {
+              //         fromScreen: "RegisterScreen",
+              //         phone: decoded.email,
+              //       });
+              //     },
+              //     onError: () => {
+              //       dispatch({
+              //         type: "changLoading",
+              //         payload: false,
+              //       });
+              //     },
+              //   });
+              //   return;
+              // }
               if (access_token === "undefined") {
                 console.log("no access token");
               }
@@ -128,7 +128,6 @@ function LoginScreen(props) {
                 storage.LOCAL_STORAGE_USER_PASSWORD,
                 psswd
               );
-
 
               console.log("decoded====================================");
               console.log(decoded);
@@ -157,7 +156,7 @@ function LoginScreen(props) {
                         result.data
                       )}`
                     );
-                    const { buyerProfileByUserId } = result.data
+                    const { buyerProfileByUserId } = result.data;
                     if (buyerProfileByUserId.buyerId === null) {
                       console.log("found null GuestBuyer buyerId");
                     } else {
@@ -169,7 +168,7 @@ function LoginScreen(props) {
 
                       storage.setLocalStorageValue(
                         storage.LOCAL_STORAGE_USER_PROFILE,
-                        JSON.stringify(buyerProfileByUserId),
+                        JSON.stringify(buyerProfileByUserId)
                       );
                       userProfileVar({
                         userId: buyerProfileByUserId?.userId,
@@ -180,7 +179,6 @@ function LoginScreen(props) {
                         isAuth: true,
                       });
                     }
-
                   } else {
                     console.log("Login BUYER_PROFILE_BY_USERID server error");
                   }

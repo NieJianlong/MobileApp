@@ -90,28 +90,28 @@ function LoginScreen(props) {
             if (typeof res !== "undefined") {
               let access_token = res.data.access_token;
               let decoded = jwt_decode(access_token);
-              // if (!decoded.email_verified) {
-              //   resendCode({
-              //     variables: { emailAddress: decoded.email },
-              //     onCompleted: () => {
-              //       dispatch({
-              //         type: "changLoading",
-              //         payload: false,
-              //       });
-              //       NavigationService.navigate("OTPScreen", {
-              //         fromScreen: "RegisterScreen",
-              //         phone: decoded.email,
-              //       });
-              //     },
-              //     onError: () => {
-              //       dispatch({
-              //         type: "changLoading",
-              //         payload: false,
-              //       });
-              //     },
-              //   });
-              //   return;
-              // }
+              if (!decoded.email_verified) {
+                resendCode({
+                  variables: { emailAddress: decoded.email },
+                  onCompleted: () => {
+                    dispatch({
+                      type: "changLoading",
+                      payload: false,
+                    });
+                    NavigationService.navigate("OTPScreen", {
+                      fromScreen: "RegisterScreen",
+                      phone: decoded.email,
+                    });
+                  },
+                  onError: () => {
+                    dispatch({
+                      type: "changLoading",
+                      payload: false,
+                    });
+                  },
+                });
+                return;
+              }
               if (access_token === "undefined") {
                 console.log("no access token");
               }

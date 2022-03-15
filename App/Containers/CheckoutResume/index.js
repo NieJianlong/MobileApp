@@ -316,7 +316,7 @@ function CheckoutResume(props) {
                   itemAvailble = i?.isAvailable;
                 }
                 console.log("Itemm", item);
-                if (itemAvailble)
+                if (itemAvailble) {
                   return (
                     <CartItem
                       key={index.toString()}
@@ -324,6 +324,7 @@ function CheckoutResume(props) {
                       availble={itemAvailble}
                     />
                   );
+                }
               })}
             </View>
 
@@ -332,7 +333,9 @@ function CheckoutResume(props) {
               subTotal={money.total}
               saving={money.saving}
             />
-            <PaymentOptions />
+            {global.access_token && global.access_token !== "" && (
+              <PaymentOptions />
+            )}
             {orderStatus != 1 && (
               <View>
                 <View
@@ -415,13 +418,17 @@ function CheckoutResume(props) {
           >
             <Button
               onPress={() => {
-                if (!isNaN(walletBalance)) {
-                  if (walletBalance >= parseFloat(money.total).toFixed(2)) {
-                    proceedFurther("sufficient");
-                  } else if (walletBalance === 0 || walletBalance < 0) {
-                    proceedFurther("zero");
-                  } else {
-                    proceedFurther("InSufficient");
+                if (!global.access_token || global.access_token === "") {
+                  proceedFurther("zero");
+                } else {
+                  if (!isNaN(walletBalance)) {
+                    if (walletBalance >= parseFloat(money.total).toFixed(2)) {
+                      proceedFurther("sufficient");
+                    } else if (walletBalance === 0 || walletBalance < 0) {
+                      proceedFurther("zero");
+                    } else {
+                      proceedFurther("InSufficient");
+                    }
                   }
                 }
               }}

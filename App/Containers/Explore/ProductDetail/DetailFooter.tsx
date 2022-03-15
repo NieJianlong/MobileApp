@@ -265,6 +265,8 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
           quantity,
           variantId: currentVariant.variantId,
         },
+        items: product,
+        from: "Buynow",
       });
       return;
     } else {

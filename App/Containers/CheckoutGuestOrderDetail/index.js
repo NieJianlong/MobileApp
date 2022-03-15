@@ -25,7 +25,7 @@ import {
   FIND_GUEST_ADDRESS_BY_ID_AND_TPYE,
   BILLING_DETAIL_BY_BUYERID,
 } from "../../Apollo/queries/queries_user";
-
+import RazorpayCheckout from "react-native-razorpay";
 import {
   CREATE_BILLING_DETAILS_FOR_GUEST_BUYER,
   UPDATE_BILLING_DETAILS_FOR_GUEST_BUYER,
@@ -35,6 +35,7 @@ import BigNumber from "bignumber.js";
 import { useCreateOrder } from "../../hooks/order";
 import { AlertContext } from "../Root/GlobalContext";
 import { useCreateRazorOrder } from "../../hooks/razorOrder";
+import { useRazorVerifyPayment } from "../../hooks/verifyPayment";
 
 function CheckoutGuestOrderDetail(props) {
   const userProfileVarReactive = useReactiveVar(userProfileVar);
@@ -46,6 +47,8 @@ function CheckoutGuestOrderDetail(props) {
   const [isSameAsDelivery, setIsSameAsDelivery] = useState(true);
   const { createOrderFromCart, order } = useCreateOrder();
   const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
+  const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
+    useRazorVerifyPayment();
   const { dispatch } = useContext(AlertContext);
   const isAuth = useMemo(
     () => userProfileVarReactive.isAuth,
@@ -159,98 +162,116 @@ function CheckoutGuestOrderDetail(props) {
     }
   );
   console.log("createBillingData", createBillingData);
+  //need to call updateORcreatebillingaddress here
   const onPressNext = () => {
-    const productBuyNow = {
-      listingId: props?.route?.params?.product?.listingId,
-      quantity: props?.route?.params?.product?.quantity,
-      variantId: props?.route?.params?.product?.variantId,
-    };
-    localBuyNowVar({
-      items: [productBuyNow],
-    });
-    console.log("props?.route?.params?.product", props?.route?.params?.product);
-    console.log("localCartVar.deliverAddress", localCartVar.deliverAddress);
-    // createUpdateBillingAddress();
-    createOrderFromCart({
-      variables: {
-        cart: {
-          buyerId: global.buyerId,
-          shippingAddressId: "0cce0bf6-28bb-4528-91f8-d56381b7e11c",
-          billingDetailsId: "0cce0bf6-28bb-4528-91f8-d56381b7e11c",
-          useSalamiWallet: false,
-          cartItems:
-            localBuyNowVar().items.length > 0
-              ? localBuyNowVar().items
-              : localCartVar().items,
+    console.log("props?.route?.params?.from", props?.route?.params?.from);
+    if (props?.route?.params?.from === "checkout") {
+      NavigationService.navigate("CheckoutResumeScreen", {
+        orderStatus: 0,
+        data: props?.route?.params?.items,
+        availbleList: props?.route?.params?.availbleList,
+      });
+    } else {
+      // NavigationService.navigate("OrderPlacedScreen", {
+      //   items: props?.route?.params?.items,
+      //   from: props?.route?.params?.from,
+      // });
+      // return;
+      const productBuyNow = {
+        listingId: props?.route?.params?.product?.listingId,
+        quantity: props?.route?.params?.product?.quantity,
+        variantId: props?.route?.params?.product?.variantId,
+      };
+      localBuyNowVar({
+        items: [productBuyNow],
+      });
+      console.log(
+        "props?.route?.params?.product",
+        props?.route?.params?.product
+      );
+      console.log("localCartVar.deliverAddress", localCartVar.deliverAddress);
+      // createUpdateBillingAddress();
+      createOrderFromCart({
+        variables: {
+          cart: {
+            buyerId: global.buyerId,
+            shippingAddressId: "0cce0bf6-28bb-4528-91f8-d56381b7e11c",
+            billingDetailsId: "0cce0bf6-28bb-4528-91f8-d56381b7e11c",
+            useSalamiWallet: false,
+            cartItems:
+              localBuyNowVar().items.length > 0
+                ? localBuyNowVar().items
+                : localCartVar().items,
+          },
         },
-      },
-      context: {
-        headers: {
-          isPrivate: isAuth,
+        context: {
+          headers: {
+            isPrivate: isAuth,
+          },
         },
-      },
-      onCompleted: (res) => {
-        console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
-        dispatch({
-          type: "changLoading",
-          payload: false,
-        });
-        const order = res?.createOrderFromCart;
-        if (res?.createOrderFromCart?.orderId) {
-          cartOrderVar({
-            orderNumber: order?.orderNumber,
-            orderId: order?.orderId,
-            amount: order?.subTotal,
+        onCompleted: (res) => {
+          console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
+          dispatch({
+            type: "changLoading",
+            payload: false,
           });
-          razorpayCreateOrder().then((res) => {
-            if (res?.data) {
-              const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
-              var options = {
-                description: "Credits towords consultation",
-                image: "https://i.imgur.com/3g7nmJC.png",
-                currency: "INR",
-                key: "rzp_test_I8X2v4LgupMLv0",
-                name: "Acme Corp",
-                order_id: razorId, //Replace this with an order_id created using Orders API.
-                prefill: {
-                  email: userProfile?.email,
-                  contact: userProfile?.phoneNumber,
-                  name: userProfile?.firstName + userProfile.lastName,
-                },
-                theme: { color: "#53a20e" },
-              };
-              RazorpayCheckout.open(options)
-                .then((data) => {
-                  razorOrderPaymentVar({
-                    razorpay_payment_id: data.razorpay_payment_id,
-                    razorpay_order_id: data.razorpay_order_id,
-                    razorpay_signature: data.razorpay_signature,
-                  });
-                  razorpayVerifyPaymentSignature();
-                  alert(`Success: ${data.razorpay_payment_id}`);
+          const order = res?.createOrderFromCart;
+          if (res?.createOrderFromCart?.orderId) {
+            cartOrderVar({
+              orderNumber: order?.orderNumber,
+              orderId: order?.orderId,
+              amount: order?.subTotal,
+            });
+            razorpayCreateOrder().then((res) => {
+              if (res?.data) {
+                const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
+                var options = {
+                  description: "Credits towords consultation",
+                  image: "https://i.imgur.com/3g7nmJC.png",
+                  currency: "INR",
+                  key: "rzp_test_I8X2v4LgupMLv0",
+                  name: "Acme Corp",
+                  order_id: razorId, //Replace this with an order_id created using Orders API.
+                  prefill: {
+                    email: email,
+                    contact: phno,
+                    name: fName + lName,
+                  },
+                  theme: { color: "#53a20e" },
+                };
+                RazorpayCheckout.open(options)
+                  .then((data) => {
+                    razorOrderPaymentVar({
+                      razorpay_payment_id: data.razorpay_payment_id,
+                      razorpay_order_id: data.razorpay_order_id,
+                      razorpay_signature: data.razorpay_signature,
+                    });
+                    razorpayVerifyPaymentSignature();
+                    alert(`Success: ${data.razorpay_payment_id}`);
 
-                  NavigationService.navigate("OrderPlacedScreen", {
-                    items: product,
-                    from: "Buynow",
+                    NavigationService.navigate("OrderPlacedScreen", {
+                      items: props?.route?.params?.product,
+                      from: "Buynow",
+                    });
+                  })
+                  .catch((error) => {
+                    alert(`Error: ${error.code} | ${error.description}`);
                   });
-                })
-                .catch((error) => {
-                  alert(`Error: ${error.code} | ${error.description}`);
-                });
-            }
+              }
+            });
+          }
+          return res?.createOrderFromCart;
+        },
+        onError: (res) => {
+          dispatch({
+            type: "changLoading",
+            payload: false,
           });
-        }
-        return res?.createOrderFromCart;
-      },
-      onError: (res) => {
-        dispatch({
-          type: "changLoading",
-          payload: false,
-        });
-        alert(JSON.stringify(res.message));
-        console.log(`Explore useCreateOrder onError ${JSON.stringify(res)}`);
-      },
-    });
+          alert(JSON.stringify(res.message));
+          console.log(`Explore useCreateOrder onError ${JSON.stringify(res)}`);
+        },
+      });
+    }
   };
 
   return (

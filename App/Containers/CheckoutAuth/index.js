@@ -56,6 +56,9 @@ function CheckoutAuth(props) {
           onPress={() => {
             NavigationService.navigate(Page_CheckoutGuestOrderDetail, {
               product: props?.route?.params?.product,
+              items: props?.route?.params?.items,
+              from: props?.route?.params?.from,
+              availbleList: props?.route?.params?.availbleList,
             });
           }}
         >

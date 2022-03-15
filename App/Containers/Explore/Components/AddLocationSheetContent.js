@@ -276,7 +276,6 @@ function AddLocationSheetContent(props) {
                 );
               })}
             </View>
-            <Button text="CONFIRM ADDRESS" onPress={handleSubmit(onSubmit)} />
           </KeyboardAwareScrollView>
           <Button text="CONFIRM ADDRESS" onPress={handleSubmit(onSubmit)} />
         </View>

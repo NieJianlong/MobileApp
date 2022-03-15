@@ -792,3 +792,54 @@ export const UPDATE_SELLER_TO_ONLINE_STORE = gql`
     }
   }
 `;
+
+/**
+ * @mutation createBillingDetailsForGuestBuyer
+ * schema  see @mutation createBillingDetailsForGuestBuyer
+ *
+ */
+
+export const CREATE_BILLING_DETAILS_FOR_GUEST_BUYER = gql`
+  mutation CreateBillingDetailsForGuestBuyer(
+    $request: BillingDetailsRequestForCreate!
+  ) {
+    createBillingDetailsForGuestBuyer(request: $request) {
+      billingDetailsId
+      buyerId
+      firstName
+      lastName
+      companyName
+      email
+      phoneNumber
+      billingAddress
+      taxCode
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * @mutation updateBillingDetailsForGuestBuyer
+ * schema  see @mutation updateBillingDetailsForGuestBuyer
+ *
+ */
+export const UPDATE_BILLING_DETAILS_FOR_GUEST_BUYER = gql`
+  mutation UpdateBillingDetailsForGuestBuyer(
+    $request: BillingDetailsRequestForCreate!
+  ) {
+    updateBillingDetailsForGuestBuyer(request: $request) {
+      billingDetailsId
+      buyerId
+      firstName
+      lastName
+      companyName
+      email
+      phoneNumber
+      billingAddress
+      taxCode
+      createdAt
+      updatedAt
+    }
+  }
+`;

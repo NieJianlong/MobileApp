@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMutation, useReactiveVar } from "@apollo/client";
 import { cartOrderVar, userProfileVar } from "../Apollo/cache";
 import { RAZOR_ORDER } from "./gql";
 
 export const useCreateRazorOrder = () => {
   const userProfile = useReactiveVar(userProfileVar);
+  const isAuth = useMemo(
+    () => userProfile.isAuth,
+    [userProfile.isAuth]
+  );
+
   const cartOrder = useReactiveVar(cartOrderVar);
   const [razorOrder, setRazorOrder] = useState(null);
   const [razorpayCreateOrder, { loading, error, data }] = useMutation(
@@ -19,7 +24,7 @@ export const useCreateRazorOrder = () => {
       },
       context: {
         headers: {
-          isPrivate: true,
+          isPrivate: isAuth,
         },
       },
       onCompleted: (res) => {

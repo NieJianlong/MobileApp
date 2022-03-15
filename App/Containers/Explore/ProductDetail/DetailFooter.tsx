@@ -43,9 +43,7 @@ import { useRazorVerifyPayment } from "../../../hooks/verifyPayment";
 import { useCreateRazorOrder } from "../../../hooks/razorOrder";
 import { DeliveryOption } from "../../../../generated/graphql";
 import { IsListingAvailable } from "../../Explore/gql/explore_queries";
-import {
-  FIND_BUYER_ADDRESS_BY_ID
-} from "../../../Apollo/queries/queries_user";
+import { FIND_BUYER_ADDRESS_BY_ID } from "../../../Apollo/queries/queries_user";
 
 export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { dispatch } = useContext(AlertContext);
@@ -261,7 +259,13 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
 
   const toggleConfirmOrderSheet = () => {
     if (!global.access_token) {
-      NavigationService.navigate("Page_CheckoutAuth");
+      NavigationService.navigate("Page_CheckoutAuth", {
+        product: {
+          listingId: product.listingId,
+          quantity,
+          variantId: currentVariant.variantId,
+        },
+      });
       return;
     } else {
       if (data !== undefined && !isNaN(walletBalance)) {

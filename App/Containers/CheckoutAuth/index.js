@@ -15,6 +15,7 @@ import {
 } from "../../Navigation/const";
 
 function CheckoutAuth(props) {
+  console.log("props?.route?.params?.product", props?.route?.params?.product);
   return (
     <BaseScreen {...props}>
       <AppBar />
@@ -53,7 +54,9 @@ function CheckoutAuth(props) {
 
         <TouchableOpacity
           onPress={() => {
-            NavigationService.navigate(Page_CheckoutGuestOrderDetail);
+            NavigationService.navigate(Page_CheckoutGuestOrderDetail, {
+              product: props?.route?.params?.product,
+            });
           }}
         >
           <View

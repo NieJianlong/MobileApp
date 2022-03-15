@@ -44,6 +44,9 @@ const styles = ScaledSheet.create({
         marginTop: s(24),
         justifyContent: "space-between",
     },
+    inputWrapper3: {
+        marginTop: s(24),
+    },
     inputName: {
         width: '48%'
     },

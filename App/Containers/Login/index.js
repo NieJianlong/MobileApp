@@ -64,9 +64,9 @@ function LoginScreen(props) {
     };
   }, [params, props]);
 
-  useEffect(() => {
-    if (isBillingLoaded) NavigationService.navigate("MainScreen");
-  }, [isBillingLoaded]);
+  // useEffect(() => {
+  //   if (isBillingLoaded) NavigationService.navigate("MainScreen");
+  // }, [isBillingLoaded]);
 
   const onSignIn = async () => {
     // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'

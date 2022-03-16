@@ -135,7 +135,7 @@ function RegisterScreen(props) {
 
   const autoSignIn = useCallback(async () => {
     //get username and possword from localStorage
-    const username = "+91" + getValues("phoneNumber");
+    const username = getValues("email");
     const password = getValues("password");
 
     console.log("hello ========================>");
@@ -222,6 +222,7 @@ function RegisterScreen(props) {
           NavigationService.navigate("OTPScreen", {
             fromScreen: "RegisterScreen",
             phone: "+91" + getValues("phoneNumber"),
+            email: getValues("email"),
             userId: result.registerBuyer.userId,
             password: getValues("password"),
           });

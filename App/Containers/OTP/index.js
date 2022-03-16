@@ -128,9 +128,9 @@ function OTPScreen(props) {
     },
   });
   const autoSignIn = async () => {
-    if (params.phone && params.password) {
+    if (params.email && params.password) {
       const { data } = await jwt.runTokenFlow({
-        username: params.phone,
+        username: params.email,
         password: params.password,
         //username: "vijay.msbi@gmail.com",
         //password: "123456789",
@@ -141,7 +141,7 @@ function OTPScreen(props) {
         console.log("no access token");
       }
       userProfileVar({
-        email: params.phone,
+        email: params.email,
         isAuth: true,
       });
       let decoded = jwt_decode(access_token);

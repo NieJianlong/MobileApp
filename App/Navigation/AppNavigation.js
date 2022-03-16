@@ -83,6 +83,7 @@ import BillingDetails from "../Containers/BillingDetails";
 import ReturnsUnavailable from "../Containers/ReturnsUnavailable/ReturnsUnavailable";
 import ReturnInformation from "../Containers/Orders/ReturnInformation";
 import ReturnStatus from "../Containers/Orders/ReturnStatus/index";
+import LearnMore from "../Containers/LearnMore/index";
 // import ReturnInformation from "../..";
 const Stack = createStackNavigator();
 
@@ -300,6 +301,7 @@ function PrimaryNav() {
         component={CancelOrderCompletedScreen}
       />
       <Stack.Screen name={"ReportGroupScreen"} component={ReportGroupScreen} />
+      <Stack.Screen name={"LearnMoreScreen"} component={LearnMore} />
       <Stack.Screen
         name={Page_CheckoutGuestOrderDetail}
         component={CheckoutGuestOrderDetail}

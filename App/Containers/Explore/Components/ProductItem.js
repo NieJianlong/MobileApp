@@ -7,6 +7,8 @@ import { Fonts, Colors, ApplicationStyles, Images } from "../../../Themes";
 import AppConfig from "../../../Config/AppConfig";
 import NavigationService from "../../../Navigation/NavigationService";
 import { StarRating, Progress } from "../../../Components";
+import { ProductListingStatus } from "../../../../generated/graphql";
+import { t } from "react-native-tailwindcss";
 
 const defultUrl =
   "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000";
@@ -22,7 +24,9 @@ function ProductItem(props) {
     goFirst,
     notShowBottom,
   } = props;
-
+  const isMissing =
+    product.status === ProductListingStatus.Accepted ||
+    product.status === ProductListingStatus.Successful;
   if (size === "M" || size == "L") {
     return (
       <TouchableOpacity
@@ -45,7 +49,13 @@ function ProductItem(props) {
             product: product,
           });
         }}
-        style={styles.productContainer}
+        disabled={isMissing}
+        style={[
+          styles.productContainer,
+          {
+            opacity: isMissing ? 0.5 : 1.0,
+          },
+        ]}
       >
         {size === "M" ? (
           <View
@@ -223,8 +233,8 @@ function ProductItem(props) {
                   </Text>
                 </View>
                 <Progress
-                  maximumValue={product.noOfItemsInStock}
-                  currentValue={product.noOfOrderedItems}
+                  maximumValue={isMissing ? "100" : product.noOfItemsInStock}
+                  currentValue={isMissing ? "100" : product.noOfOrderedItems}
                   barWidth={s(60)}
                   barHeight={vs(6)}
                 />

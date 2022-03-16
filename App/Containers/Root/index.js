@@ -55,18 +55,19 @@ function RootContainer() {
   const [
     {
       alert: { visible, message, color, onDismiss, title },
-      actionSheet: {
-        showSheet,
-        children,
-        height,
-        onCloseEnd,
-        sheetTitle,
-        enabledGestureInteraction,
-      },
+      actionSheet,
       loading: { spinner },
     },
     dispatch,
   ] = useReducer(reducer, initialState);
+  const {
+    showSheet,
+    children,
+    height,
+    onCloseEnd,
+    sheetTitle,
+    enabledGestureInteraction,
+  } = actionSheet;
   const sheetEl = useRef(null);
   const fall = new Animated.Value(0);
   useEffect(() => {
@@ -77,7 +78,7 @@ function RootContainer() {
     }
   }, [visible]);
   return (
-    <AlertContext.Provider value={{ dispatch }}>
+    <AlertContext.Provider value={{ dispatch, actionSheet }}>
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" />
         <Spinner
@@ -123,12 +124,17 @@ function RootContainer() {
           initialSnap={0}
           title={sheetTitle || null}
         >
-          {children?
-            typeof children === 'function' ? children()
-            : typeof children === 'object' ? children
-            : <Text></Text>
-            : <Text></Text>
-          }
+          {children ? (
+            typeof children === "function" ? (
+              children()
+            ) : typeof children === "object" ? (
+              children
+            ) : (
+              <Text></Text>
+            )
+          ) : (
+            <Text></Text>
+          )}
         </BottomSheet>
       )}
       {visible && (

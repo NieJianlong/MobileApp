@@ -1,9 +1,8 @@
-import React, { useContext, useCallback, useMemo } from "react";
-import { View, Image, Text, TouchableOpacity } from "react-native";
-import { vs, s } from "react-native-size-matters";
+import React, { useContext, useCallback, useMemo, useEffect } from "react";
+import { View } from "react-native";
+import { vs } from "react-native-size-matters";
 import { Button } from "../../../Components";
 import { Colors, Images } from "../../../Themes";
-import styles from "../styles";
 import { AlertContext } from "../../Root/GlobalContext";
 import AddLocationSheetContent from "./AddLocationSheetContent";
 import Addresses from "../../UserInfo/InfoList/Addresses";
@@ -13,28 +12,14 @@ import {
   FIND_GUEST_ADDRESS_BY_ID_AND_TPYE,
 } from "../../../Apollo/queries/queries_user";
 import { userProfileVar } from "../../../Apollo/cache";
-
-function AddressItem(address) {
-  return (
-    <View style={styles.pickupLocationContainer}>
-      <Image style={styles.pickupLocationIcon} source={Images.locationMed} />
-      <View style={{ marginLeft: s(10) }}>
-        <Text style={styles.heading5Bold}>Seller Address 00</Text>
-        <Text style={styles.txtRegular}>Tamil Nadu 12345, Area 4</Text>
-      </View>
-      <View style={{ flex: 1 }} />
-      <TouchableOpacity style={styles.btnEditAddress}>
-        <Image
-          style={styles.editAddressIcon}
-          source={Images.userAddressEditImage}
-        />
-      </TouchableOpacity>
-    </View>
-  );
-}
+import {
+  CURRENT_ADDRESS,
+  setLocalStorageValue,
+} from "../../../Apollo/local-storage";
+import PubSub from "pubsub-js";
 
 export default function AddressSheetContent(props) {
-  const { dispatch } = useContext(AlertContext);
+  const { dispatch, actionSheet } = useContext(AlertContext);
   const userProfileVarReactive = useReactiveVar(userProfileVar);
   const isAuth = useMemo(
     () => userProfileVarReactive.isAuth,
@@ -56,7 +41,11 @@ export default function AddressSheetContent(props) {
       },
     }
   );
-
+  useEffect(() => {
+    if (actionSheet.showSheet) {
+      refetch();
+    }
+  }, [actionSheet.showSheet, refetch]);
   const toggleAddressSheet = useCallback(() => {
     dispatch({
       type: "changSheetState",
@@ -88,6 +77,22 @@ export default function AddressSheetContent(props) {
           needempty={false}
           isCheckout={true}
           refetch={refetch}
+          onPress={(item) => {
+            setLocalStorageValue(CURRENT_ADDRESS, JSON.stringify(item)).then(
+              () => {
+                PubSub.publish("refresh-address", "");
+                dispatch({
+                  type: "changSheetState",
+                  payload: {
+                    showSheet: false,
+                    height: 600,
+                    children: () => <AddLocationSheetContent />,
+                    sheetTitle: "",
+                  },
+                });
+              }
+            );
+          }}
         />
       )}
     </View>

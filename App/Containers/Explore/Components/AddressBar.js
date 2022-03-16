@@ -19,6 +19,11 @@ import { localCartVar, userProfileVar } from "../../../Apollo/cache";
 import { useQuery, useReactiveVar } from "@apollo/client";
 import { useFocusEffect } from "@react-navigation/native";
 import PubSub from "pubsub-js";
+import {
+  CURRENT_ADDRESS,
+  getLocalStorageValue,
+} from "../../../Apollo/local-storage";
+import { isEmpty } from "lodash";
 
 export default function AddressBar() {
   const userProfileVarReactive = useReactiveVar(userProfileVar);
@@ -26,9 +31,10 @@ export default function AddressBar() {
   const [addrLine2, setAddrLine2] = useState("");
   const [error, setError] = useState("");
   const { dispatch } = useContext(AlertContext);
-  const isAuth = useMemo(() => userProfileVarReactive.isAuth, [
-    userProfileVarReactive.isAuth,
-  ]);
+  const isAuth = useMemo(
+    () => userProfileVarReactive.isAuth,
+    [userProfileVarReactive.isAuth]
+  );
 
   /**
    * we need to add comments for stuff like this
@@ -109,36 +115,51 @@ export default function AddressBar() {
           const resultJson = isAuth
             ? result.getBuyerDefaultAddressByBuyerId
             : result.getGuestBuyerDefaultAddressByBuyerId;
-          let aL1 = gqlMappers.mapGQLAddressToDelivery(resultJson);
-          let aL2 = gqlMappers.mapGQLAddressToLine2(resultJson);
-          if (aL1.length > 10) {
-            aL1 = aL1.substring(0, 17);
-          }
-          if (aL2.length > 10) {
-            aL2 = aL2.substring(0, 16);
-          }
-          // callBackAddress used for gql query to get geo co-ords see useEffect Explore
-          localCartVar({
-            ...localCartVar(),
-            deliverAddress: resultJson?.addressId,
-            callBackAddress: gqlMappers.mapGQLAddressResponseToCache(
-              resultJson
-            ),
+          // handleData(resultJson);
+          getLocalStorageValue(CURRENT_ADDRESS).then((res) => {
+            if (!isEmpty(res)) {
+              const resultkkk = JSON.parse(res);
+              handleData(resultkkk);
+            } else {
+              handleData(resultJson);
+            }
           });
-          setAddrLine1(aL1);
-          setAddrLine2(aL2);
-          if (aL1.length === 0) {
-            toggleAddressSheet();
-          }
         } else {
           toggleAddressSheet();
         }
       },
     }
   );
+  function handleData(resultJson) {
+    let aL1 = gqlMappers.mapGQLAddressToDelivery(resultJson);
+    let aL2 = gqlMappers.mapGQLAddressToLine2(resultJson);
+    if (aL1.length > 10) {
+      aL1 = aL1.substring(0, 17);
+    }
+    if (aL2.length > 10) {
+      aL2 = aL2.substring(0, 16);
+    }
+    // callBackAddress used for gql query to get geo co-ords see useEffect Explore
+    localCartVar({
+      ...localCartVar(),
+      deliverAddress: resultJson?.addressId,
+      callBackAddress: gqlMappers.mapGQLAddressResponseToCache(resultJson),
+    });
+    setAddrLine1(aL1);
+    setAddrLine2(aL2);
+    if (aL1.length === 0) {
+      toggleAddressSheet();
+    }
+  }
   useFocusEffect(
     React.useCallback(() => {
-      refetch();
+      // refetch();
+      getLocalStorageValue(CURRENT_ADDRESS).then((res) => {
+        if (!isEmpty(res)) {
+          const result = JSON.parse(res);
+          handleData(result);
+        }
+      });
       // if (addrLine1 === "" && !loading) {
       //   toggleAddressSheet();
       // }
@@ -146,10 +167,17 @@ export default function AddressBar() {
   );
   useEffect(() => {
     let refresh = PubSub.subscribe("refresh-address", () => {
-      refetch();
+      getLocalStorageValue(CURRENT_ADDRESS).then((res) => {
+        if (!isEmpty(res)) {
+          const result = JSON.parse(res);
+          handleData(result);
+        }
+      });
     });
     return () => {
-      if(refresh) PubSub.unsubscribe(refresh);
+      if (refresh) {
+        PubSub.unsubscribe(refresh);
+      }
     };
   });
   return (

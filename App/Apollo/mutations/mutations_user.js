@@ -194,6 +194,27 @@ export const CREATE_ADDRESS = gql`
   mutation CreateAddress($request: AddressRequestForCreate!) {
     createAddress(request: $request) {
       addressId
+      flat
+      floor
+      defaultAddress
+      block
+      building
+      houseNumber
+      streetAddress1
+      streetAddress2
+      streetAddress3
+      townCity
+      villageArea
+      district
+      provinceState
+      country
+      areaCode
+      landMark
+      pinCode
+      addressType
+      referenceId
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -201,6 +222,27 @@ export const CREATE_ADDRESS_FOR_GUEST = gql`
   mutation CreateAddressForGuestBuyer($request: AddressRequestForCreate!) {
     createAddressForGuestBuyer(request: $request) {
       addressId
+      flat
+      floor
+      defaultAddress
+      block
+      building
+      houseNumber
+      streetAddress1
+      streetAddress2
+      streetAddress3
+      townCity
+      villageArea
+      district
+      provinceState
+      country
+      areaCode
+      landMark
+      pinCode
+      addressType
+      referenceId
+      createdAt
+      updatedAt
     }
   }
 `;

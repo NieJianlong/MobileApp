@@ -26,7 +26,7 @@ import { omit } from "lodash";
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
 
-export default function AddressItem({ item, refetch, isCheckout }) {
+export default function AddressItem({ item, refetch, isCheckout, onPress }) {
   const { dispatch } = useContext(AlertContext);
   const [deleteAddress, { error, data }] = useMutation(DELETE_ADDRESS, {
     variables: { addressId: item.addressId },
@@ -92,7 +92,14 @@ export default function AddressItem({ item, refetch, isCheckout }) {
     },
   });
   return (
-    <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+    <TouchableOpacity
+      style={{ paddingHorizontal: AppConfig.paddingHorizontal }}
+      onPress={() => {
+        onPress
+          ? onPress(item)
+          : console.log("====================================");
+      }}
+    >
       <View style={[styles.item]}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Text style={styles.itemTitle}>{item.streetAddress1}</Text>
@@ -154,7 +161,7 @@ export default function AddressItem({ item, refetch, isCheckout }) {
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

@@ -168,7 +168,13 @@ export default function AddressBar() {
   useEffect(() => {
     let refresh = PubSub.subscribe("refresh-address", () => {
       getLocalStorageValue(CURRENT_ADDRESS).then((res) => {
+        console.log("it is here====================================");
+        console.log();
+        console.log("====================================");
         if (!isEmpty(res)) {
+          console.log("myaddress====================================");
+          console.log(res);
+          console.log("====================================");
           const result = JSON.parse(res);
           handleData(result);
         }

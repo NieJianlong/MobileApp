@@ -17,6 +17,7 @@ import { useRoute } from "@react-navigation/native";
 import HeaderTabs from "./HeaderTabs";
 import metrics from "../../../Themes/Metrics";
 import { DeliveryOption } from "../../../../generated/graphql";
+import ReturnPolicy from "./ReturnPolicy";
 
 const Sections = range(0, 4);
 // Wrap the original ScrollView
@@ -122,6 +123,7 @@ function ProductDetail(props) {
               pickUp={pickUp}
               onSetPickUp={onSetPickUp}
             />
+            <ReturnPolicy returnPolices={product.returnPolicies} />
             {product.listingVariants && (
               <ProductVariants
                 variants={product.listingVariants}

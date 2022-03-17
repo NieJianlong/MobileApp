@@ -7,7 +7,10 @@ import { Fonts, Colors, ApplicationStyles, Images } from "../../../Themes";
 import AppConfig from "../../../Config/AppConfig";
 import NavigationService from "../../../Navigation/NavigationService";
 import { StarRating, Progress } from "../../../Components";
-import { ProductListingStatus } from "../../../../generated/graphql";
+import {
+  DeliveryOption,
+  ProductListingStatus,
+} from "../../../../generated/graphql";
 import { t } from "react-native-tailwindcss";
 
 const defultUrl =
@@ -27,7 +30,7 @@ function ProductItem(props) {
   const isMissing =
     product.status === ProductListingStatus.Accepted ||
     product.status === ProductListingStatus.Successful;
-  if (size === "M" || size == "L") {
+  if (size === "M" || size === "L") {
     return (
       <TouchableOpacity
         onPressIn={({ nativeEvent }) => {
@@ -124,7 +127,6 @@ function ProductItem(props) {
               source={{ uri: product.photo ? product.photo : defultUrl }}
               style={styles.productImageBig}
             />
-
             <View style={styles.v2}>
               <View>
                 <Text style={styles.heading4Bold}>{product.shortName}</Text>
@@ -173,95 +175,53 @@ function ProductItem(props) {
             </View>
           </View>
         )}
-        {isAnnouncement ? (
-          <View style={styles.v4}>
-            <View style={styles.row}>
-              <View style={{ marginRight: s(15) }}>
-                <Text style={styles.txtOrderClose}>Delivery Date: </Text>
-                <Text style={styles.heading6Regular}>
-                  {product.deliveryDate}
+
+        <View>
+          {!notShowBottom ? (
+            <View style={styles.v4}>
+              <View>
+                <Text style={styles.txtOrderClose}>
+                  {product.deliveryOption ===
+                  DeliveryOption.SellerDirectDelivery
+                    ? "Delivery Date:"
+                    : "Order closes on:"}
                 </Text>
+                <Text style={styles.heading6Regular}>
+                  {product.deliveryOption ===
+                  DeliveryOption.SellerDirectDelivery
+                    ? product.announcementDeliveryDate
+                    : product.openUntil}
+                </Text>
+              </View>
+              <Progress
+                maximumValue={isMissing ? "100" : product.noOfItemsInStock}
+                currentValue={isMissing ? "100" : product.noOfOrderedItems}
+                barWidth={s(60)}
+                barHeight={vs(6)}
+              />
+              <View style={styles.row}>
+                <Image source={Images.stock} style={styles.icStock} />
+                <Text style={styles.txtOrderNumber}>
+                  {product.noOfOrderedItems}/{product.noOfItemsInStock}
+                </Text>
+                <TouchableOpacity>
+                  <Image source={Images.info2} style={styles.icInfo} />
+                </TouchableOpacity>
               </View>
 
               <View style={styles.row}>
-                {/* <Image source={Images.stock} style={styles.icStock} />
-                                            <Text style={styles.txtOrderNumber}>min {product.minOrder}</Text>
-                                            <View style={styles.v5}>
-                                                <Text style={styles.txtOrderNumber}>{product.inStock} units left</Text>
-                                            </View>
-                                            <TouchableOpacity>
-                                                <Image source={Images.info2} style={styles.icInfo} />
-                                            </TouchableOpacity> */}
-
-                <Progress
-                  maximumValue={product.noOfItemsInStock}
-                  currentValue={product.noOfOrderedItems}
-                  barWidth={s(60)}
-                  barHeight={vs(6)}
-                />
-                <View style={{ width: s(20) }} />
-                <View style={styles.row}>
-                  <Image source={Images.stock} style={styles.icStock} />
-                  <Text style={styles.txtOrderNumber}>
-                    {product.noOfOrderedItems}/{product.noOfItemsInStock}
-                  </Text>
-                  <TouchableOpacity>
-                    <Image source={Images.info2} style={styles.icInfo} />
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity>
+                  <Image source={Images.likeMed} style={styles.icShare} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={onPressShare}>
+                  <Image source={Images.share} style={styles.icShare} />
+                </TouchableOpacity>
               </View>
             </View>
-
-            <View style={styles.row}>
-              <TouchableOpacity>
-                <Image source={Images.likeMed} style={styles.icShare} />
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={onPressShare}>
-                <Image source={Images.share} style={styles.icShare} />
-              </TouchableOpacity>
-            </View>
-          </View>
-        ) : (
-          <View>
-            {!notShowBottom ? (
-              <View style={styles.v4}>
-                <View>
-                  <Text style={styles.txtOrderClose}>Order closes on:</Text>
-                  <Text style={styles.heading6Regular}>
-                    {product.closedDate}
-                  </Text>
-                </View>
-                <Progress
-                  maximumValue={isMissing ? "100" : product.noOfItemsInStock}
-                  currentValue={isMissing ? "100" : product.noOfOrderedItems}
-                  barWidth={s(60)}
-                  barHeight={vs(6)}
-                />
-                <View style={styles.row}>
-                  <Image source={Images.stock} style={styles.icStock} />
-                  <Text style={styles.txtOrderNumber}>
-                    {product.noOfOrderedItems}/{product.noOfItemsInStock}
-                  </Text>
-                  <TouchableOpacity>
-                    <Image source={Images.info2} style={styles.icInfo} />
-                  </TouchableOpacity>
-                </View>
-
-                <View style={styles.row}>
-                  <TouchableOpacity>
-                    <Image source={Images.likeMed} style={styles.icShare} />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={onPressShare}>
-                    <Image source={Images.share} style={styles.icShare} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ) : (
-              <View />
-            )}
-          </View>
-        )}
+          ) : (
+            <View />
+          )}
+        </View>
       </TouchableOpacity>
     );
   } else if (size === "S") {

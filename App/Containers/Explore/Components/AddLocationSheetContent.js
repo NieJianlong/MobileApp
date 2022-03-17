@@ -63,12 +63,11 @@ function AddLocationSheetContent(props) {
         },
       },
       onCompleted: (res) => {
-        console.log("结果====================================");
-        console.log(res.createAddress);
-        console.log("====================================");
         setLocalStorageValue(
           CURRENT_ADDRESS,
-          JSON.stringify(res.createAddress)
+          JSON.stringify(
+            isAuth ? res.createAddress : res.createAddressForGuestBuyer
+          )
         ).then(() => {
           PubSub.publish("refresh-address", "");
           PubSub.publish("refresh-address", "");

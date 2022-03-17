@@ -5,7 +5,7 @@ import { Fonts, Colors, Images, ApplicationStyles } from "../../../Themes";
 import { Button } from "../../../Components";
 import Share from "react-native-share";
 
-const url = "https://awesome.contents.com/";
+const url = "https://www.google.com/";
 const title = "Awesome Contents";
 const message = "Please check this out.";
 const icon = "data:<data_type>/<file_extension>;base64,<base64_data>";

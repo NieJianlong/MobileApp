@@ -210,9 +210,9 @@ function ProductItem(props) {
               </View>
 
               <View style={styles.row}>
-                <TouchableOpacity>
+                {/* <TouchableOpacity>
                   <Image source={Images.likeMed} style={styles.icShare} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity onPress={onPressShare}>
                   <Image source={Images.share} style={styles.icShare} />
                 </TouchableOpacity>

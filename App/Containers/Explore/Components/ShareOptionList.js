@@ -1,14 +1,80 @@
 import React, { Component } from "react";
-import { Text, View, Image, TouchableOpacity } from "react-native";
+import { Text, View, Image, TouchableOpacity, Platform } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
 import { Fonts, Colors, Images, ApplicationStyles } from "../../../Themes";
 import { Button } from "../../../Components";
+import Share from "react-native-share";
+
+const url = "https://awesome.contents.com/";
+const title = "Awesome Contents";
+const message = "Please check this out.";
+const icon = "data:<data_type>/<file_extension>;base64,<base64_data>";
+const options = Platform.select({
+  ios: {
+    activityItemSources: [
+      {
+        // For sharing url with custom title.
+        placeholderItem: { type: "url", content: url },
+        item: {
+          default: { type: "url", content: url },
+        },
+        subject: {
+          default: title,
+        },
+        linkMetadata: { originalUrl: url, url, title },
+      },
+      {
+        // For sharing text.
+        placeholderItem: { type: "text", content: message },
+        item: {
+          default: { type: "text", content: message },
+          message: null, // Specify no text to share via Messages app.
+        },
+        linkMetadata: {
+          // For showing app icon on share preview.
+          title: message,
+        },
+      },
+      {
+        // For using custom icon instead of default text icon at share preview when sharing with message.
+        placeholderItem: {
+          type: "url",
+          content: icon,
+        },
+        item: {
+          default: {
+            type: "text",
+            content: `${message} ${url}`,
+          },
+        },
+        linkMetadata: {
+          title: message,
+          icon: icon,
+        },
+      },
+    ],
+  },
+  default: {
+    title,
+    subject: title,
+    message: `${message} ${url}`,
+  },
+});
+
+const shareOptions = {
+  title: "Share via",
+  message: "some message",
+  url: "some share url",
+  social: Share.Social.WHATSAPP,
+  whatsAppNumber: "917801893289", // country code + phone number
+  filename: "test", // only for base64 file in Android
+};
 
 class ShareOptionList extends Component {
   render() {
     return (
       <View>
-        <TouchableOpacity style={styles.optionContainer}>
+        {/* <TouchableOpacity style={styles.optionContainer}>
           <View
             style={[styles.chatButton, { backgroundColor: Colors.facebook }]}
           >
@@ -16,9 +82,21 @@ class ShareOptionList extends Component {
           </View>
 
           <Text style={styles.text}>Facebook</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <TouchableOpacity style={styles.optionContainer}>
+        <TouchableOpacity
+          style={styles.optionContainer}
+          onPress={() => {
+            Share.open(options);
+            // Share.shareSingle(shareOptions)
+            //   .then((res) => {
+            //     console.log(res);
+            //   })
+            //   .catch((err) => {
+            //     err && console.log(err);
+            //   });
+          }}
+        >
           <View
             style={[styles.chatButton, { backgroundColor: Colors.whatsapp }]}
           >
@@ -28,15 +106,15 @@ class ShareOptionList extends Component {
           <Text style={styles.text}>Whatsapp</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.optionContainer}>
+        {/* <TouchableOpacity style={styles.optionContainer}>
           <View style={[styles.chatButton, { backgroundColor: Colors.google }]}>
             <Image source={Images.google} style={styles.chatIcon} />
           </View>
 
           <Text style={styles.text}>Google</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <TouchableOpacity style={styles.optionContainer}>
+        {/* <TouchableOpacity style={styles.optionContainer}>
           <View
             style={[styles.chatButton, { backgroundColor: Colors.twitter }]}
           >
@@ -44,17 +122,17 @@ class ShareOptionList extends Component {
           </View>
 
           <Text style={styles.text}>Twitter</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <TouchableOpacity style={styles.optionContainer}>
+        {/* <TouchableOpacity style={styles.optionContainer}>
           <View style={[styles.chatButton, { backgroundColor: Colors.grey80 }]}>
             <Image source={Images.link} style={styles.chatIcon} />
           </View>
 
           <Text style={styles.text}>Link</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={[
             styles.optionContainer,
             { borderBottomColor: Colors.background },
@@ -65,7 +143,7 @@ class ShareOptionList extends Component {
           </View>
 
           <Text style={styles.text}>QR Code</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <View style={styles.v1}>
           <View style={styles.line} />

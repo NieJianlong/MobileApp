@@ -385,6 +385,8 @@ export const FIND_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
       houseNumber
       flat
       landMark
+      building
+      streetAddress1
     }
   }
 `;

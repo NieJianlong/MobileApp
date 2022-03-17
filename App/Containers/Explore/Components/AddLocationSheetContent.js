@@ -28,6 +28,10 @@ import { Controller, useForm } from "react-hook-form";
 import lodash from "lodash";
 import { GetStatesByCountryId } from "../gql/explore_queries";
 import NavigationService from "../../../Navigation/NavigationService";
+import {
+  CURRENT_ADDRESS,
+  setLocalStorageValue,
+} from "../../../Apollo/local-storage";
 
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
@@ -59,22 +63,31 @@ function AddLocationSheetContent(props) {
         },
       },
       onCompleted: (res) => {
-        PubSub.publish("refresh-address", "");
-        dispatch({
-          type: "changAlertState",
-          payload: {
-            visible: true,
-            message: "New address added.",
-            color: colors.success,
-            title: "Address Added",
-          },
-        });
-        dispatch({ type: "hideloading" });
-        dispatch({
-          type: "changSheetState",
-          payload: {
-            showSheet: false,
-          },
+        console.log("结果====================================");
+        console.log(res.createAddress);
+        console.log("====================================");
+        setLocalStorageValue(
+          CURRENT_ADDRESS,
+          JSON.stringify(res.createAddress)
+        ).then(() => {
+          PubSub.publish("refresh-address", "");
+          PubSub.publish("refresh-address", "");
+          dispatch({
+            type: "changAlertState",
+            payload: {
+              visible: true,
+              message: "New address added.",
+              color: colors.success,
+              title: "Address Added",
+            },
+          });
+          dispatch({ type: "hideloading" });
+          dispatch({
+            type: "changSheetState",
+            payload: {
+              showSheet: false,
+            },
+          });
         });
       },
       onError: (error) => {

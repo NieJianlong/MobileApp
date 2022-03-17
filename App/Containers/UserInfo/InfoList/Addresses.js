@@ -17,6 +17,7 @@ export default function Addresses({
   refetch,
   isCheckout = false,
   needempty = true,
+  onPress,
 }) {
   const { width } = useWindowDimensions();
   return (
@@ -50,7 +51,12 @@ export default function Addresses({
       }
       renderItem={({ item }) => {
         return (
-          <AddressItem item={item} refetch={refetch} isCheckout={isCheckout} />
+          <AddressItem
+            item={item}
+            refetch={refetch}
+            isCheckout={isCheckout}
+            onPress={onPress}
+          />
         );
       }}
       keyExtractor={(item, index) => `listItem${index}`}

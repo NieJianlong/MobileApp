@@ -50,6 +50,7 @@ function CheckoutGuestOrderDetail(props) {
   const [billingAddress, setBillingAddress] = useState([]);
   const { createOrderFromCart, order } = useCreateOrder();
   const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
+  const localCart = localCartVar();
   const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
     useRazorVerifyPayment();
   const { dispatch } = useContext(AlertContext);
@@ -214,6 +215,17 @@ function CheckoutGuestOrderDetail(props) {
         alert(JSON.stringify(err));
       },
       onCompleted: (result) => {
+        console.log(
+          "result=========billingDetails",
+          result.createBillingDetailsForGuestBuyer
+        );
+        console.log("billingDetails", result.updateBillingDetailsForGuestBuyer);
+        localCartVar({
+          ...localCart,
+          billingAddressDetail: billingAddress?.billingDetailsId
+            ? result.updateBillingDetailsForGuestBuyer
+            : result.createBillingDetailsForGuestBuyer,
+        });
         debugger;
         console.log("props?.route?.params?.from", props?.route?.params?.from);
         if (props?.route?.params?.from === "checkout") {

@@ -111,7 +111,7 @@ function Wishlist(props) {
         customRef={shareSheet}
         onCloseEnd={() => setShowShareSheet(false)}
         callbackNode={fall}
-        snapPoints={[vs(580), 0]}
+        snapPoints={[vs(250), 0]}
         initialSnap={showShareSheet ? 0 : 1}
         title={"Share to"}
       >

@@ -50,6 +50,12 @@ function CheckoutResume(props) {
 
   const { realm } = useRealm();
   const userProfile = useReactiveVar(userProfileVar);
+  const userProfileVarReactive = useReactiveVar(userProfileVar);
+  const isAuth = useMemo(
+    () => userProfileVarReactive.isAuth,
+    [userProfileVarReactive.isAuth]
+  );
+
   const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
     useRazorVerifyPayment();
   const { orderStatus, data, availbleList } = params;
@@ -96,6 +102,7 @@ function CheckoutResume(props) {
       onError: (err) => {},
     },
   });
+  console.log("localCartVar", localCartVar);
   console.log("dataWalletdataWalletdataWalletdataWallet", dataWallet);
   const { dispatch } = useContext(AlertContext);
   const [mydatas, setMydatas] = useState(
@@ -145,6 +152,7 @@ function CheckoutResume(props) {
       payload: true,
     });
     console.log("localCartVar.items", localCartVar.items);
+    console.log("localCartVar", localCartVar);
     console.log("localCartVar======mydatas", mydatas);
     const finalItems = localCartVar.items.map((item) => {
       const productItem = mydatas.find(
@@ -161,20 +169,20 @@ function CheckoutResume(props) {
     console.log("type", type);
     console.log("localCartVar", localCartVar);
     console.log("userProfile.billingDetailsId,", userProfile.billingDetailsId);
-
+    console.log("global?.billingDetailsId", global?.billingDetailsId);
     createOrderFromCart({
       variables: {
         cart: {
           buyerId: global.buyerId,
           shippingAddressId: localCartVar.deliverAddress,
-          billingDetailsId: userProfile.billingDetailsId,
+          billingDetailsId: localCartVar?.billingAddressDetail?.billingDetailsId,
           useSalamiWallet: true,
           cartItems: localCartVar.items,
         },
       },
       context: {
         headers: {
-          isPrivate: true,
+          isPrivate: isAuth,
         },
       },
       onCompleted: (res) => {
@@ -284,7 +292,7 @@ function CheckoutResume(props) {
             }}
             contentContainerStyle={{ paddingBottom: 110 }}
           >
-            <DeliverInfo orderStatus={orderStatus} />
+            <DeliverInfo orderStatus={orderStatus} billingAddressDetail={localCartVar?.billingAddressDetail} />
             <View
               style={{
                 flexDirection: "row",

@@ -46,7 +46,7 @@ export default function ProductList(props) {
       type: "changSheetState",
       payload: {
         showSheet: true,
-        height: 580,
+        height: 250,
         children: () => (
           <View style={{ flex: 1, justifyContent: "flex-end" }}>
             <ShareOptionList />

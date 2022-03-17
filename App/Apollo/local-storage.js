@@ -9,6 +9,7 @@ export const LOCAL_STORAGE_USER_PASSWORD = "@local_storage_user_password";
 export const LOCAL_STORAGE_USER_PROFILE = "@local_storage_user_profile";
 
 export const LOCAL_SEARCH_ITEM = "@local_storage_search_items";
+export const CURRENT_ADDRESS = "@local_storage_current_address";
 
 export const setLocalStorageValue = async (key, val) => {
   // console.log(`setLocalStorageValue key:${key} val ${val}`)

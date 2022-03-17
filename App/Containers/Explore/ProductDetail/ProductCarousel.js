@@ -123,7 +123,7 @@ export default function ProductCarousel({ product }) {
       type: "changSheetState",
       payload: {
         showSheet: true,
-        height: 580,
+        height: 250,
         children: () => (
           <View style={{ flex: 1, justifyContent: "flex-end" }}>
             <ShareOptionList />

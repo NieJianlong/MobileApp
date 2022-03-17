@@ -90,30 +90,31 @@ function LoginScreen(props) {
             if (typeof res !== "undefined") {
               let access_token = res.data.access_token;
               let decoded = jwt_decode(access_token);
-              if (!decoded.email_verified) {
-                console.log("decoded", decoded);
-                resendCode({
-                  variables: { emailAddress: decoded.email },
-                  onCompleted: () => {
-                    dispatch({
-                      type: "changLoading",
-                      payload: false,
-                    });
-                    NavigationService.navigate("OTPScreen", {
-                      fromScreen: "RegisterScreen",
-                      phone: decoded.email,
-                    
-                    });
-                  },
-                  onError: () => {
-                    dispatch({
-                      type: "changLoading",
-                      payload: false,
-                    });
-                  },
-                });
-                return;
-              }
+              console.log("decoded====================================");
+              console.log(JSON.stringify(decoded));
+              console.log("====================================");
+              // if (!decoded.email_verified) {
+              //   resendCode({
+              //     variables: { emailAddress: decoded.email },
+              //     onCompleted: () => {
+              //       dispatch({
+              //         type: "changLoading",
+              //         payload: false,
+              //       });
+              //       NavigationService.navigate("OTPScreen", {
+              //         fromScreen: "RegisterScreen",
+              //         phone: decoded.email,
+              //       });
+              //     },
+              //     onError: () => {
+              //       dispatch({
+              //         type: "changLoading",
+              //         payload: false,
+              //       });
+              //     },
+              //   });
+              //   return;
+              // }
               if (access_token === "undefined") {
                 console.log("no access token");
               }
@@ -180,6 +181,7 @@ function LoginScreen(props) {
                         phone: buyerProfileByUserId?.phoneNumber,
                         isAuth: true,
                       });
+                      NavigationService.navigate("MainScreen");
                     }
                   } else {
                     console.log("Login BUYER_PROFILE_BY_USERID server error");

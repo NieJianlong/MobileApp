@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useMutation, useReactiveVar } from "@apollo/client";
-import { razorOrderPaymentVar } from "../Apollo/cache";
+import { razorOrderPaymentVar, userProfileVar } from "../Apollo/cache";
 import { RAZOR_VERIFY } from "./gql";
 
 export const useRazorVerifyPayment = () => {
+  const userProfile = useReactiveVar(userProfileVar);
+  const isAuth = useMemo(() => userProfile.isAuth, [userProfile.isAuth]);
   const razorOrderPayment = useReactiveVar(razorOrderPaymentVar);
   const [razorVerifyPayment, setRazorVerifyPayment] = useState(null);
   const [razorpayVerifyPaymentSignature, { loading, error, data }] =
@@ -17,7 +19,7 @@ export const useRazorVerifyPayment = () => {
       },
       context: {
         headers: {
-          isPrivate: true,
+          isPrivate: isAuth,
         },
       },
       onCompleted: (res) => {

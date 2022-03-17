@@ -811,7 +811,28 @@ export const CREATE_BILLING_DETAILS_FOR_GUEST_BUYER = gql`
       companyName
       email
       phoneNumber
-      billingAddress
+      billingAddress {
+        addressId
+        flat
+        floor
+        defaultAddress
+        block
+        building
+        houseNumber
+        streetAddress1
+        streetAddress2
+        streetAddress3
+        townCity
+        villageArea
+        district
+        provinceState
+        country
+        areaCode
+        landMark
+        pinCode
+        addressType
+        referenceId
+      }
       taxCode
       createdAt
       updatedAt
@@ -825,9 +846,7 @@ export const CREATE_BILLING_DETAILS_FOR_GUEST_BUYER = gql`
  *
  */
 export const UPDATE_BILLING_DETAILS_FOR_GUEST_BUYER = gql`
-  mutation UpdateBillingDetailsForGuestBuyer(
-    $request: BillingDetailsRequestForCreate!
-  ) {
+  mutation UpdateBillingDetailsForGuestBuyer($request: BillingDetailsRequest!) {
     updateBillingDetailsForGuestBuyer(request: $request) {
       billingDetailsId
       buyerId
@@ -836,7 +855,28 @@ export const UPDATE_BILLING_DETAILS_FOR_GUEST_BUYER = gql`
       companyName
       email
       phoneNumber
-      billingAddress
+      billingAddress {
+        addressId
+        flat
+        floor
+        defaultAddress
+        block
+        building
+        houseNumber
+        streetAddress1
+        streetAddress2
+        streetAddress3
+        townCity
+        villageArea
+        district
+        provinceState
+        country
+        areaCode
+        landMark
+        pinCode
+        addressType
+        referenceId
+      }
       taxCode
       createdAt
       updatedAt

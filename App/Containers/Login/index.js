@@ -91,6 +91,7 @@ function LoginScreen(props) {
               let access_token = res.data.access_token;
               let decoded = jwt_decode(access_token);
               if (!decoded.email_verified) {
+                console.log("decoded", decoded);
                 resendCode({
                   variables: { emailAddress: decoded.email },
                   onCompleted: () => {
@@ -101,6 +102,7 @@ function LoginScreen(props) {
                     NavigationService.navigate("OTPScreen", {
                       fromScreen: "RegisterScreen",
                       phone: decoded.email,
+                    
                     });
                   },
                   onError: () => {

@@ -41,6 +41,7 @@ import useRealm from "../../hooks/useRealm";
 //orderStatus：1,completed
 function CheckoutResume(props) {
   const { params } = useRoute();
+  const [on, setOnSwitch] = useState(false);
   const { createOrderFromCart, order } = useCreateOrder();
   const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
   const {
@@ -51,7 +52,6 @@ function CheckoutResume(props) {
   const userProfile = useReactiveVar(userProfileVar);
   const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
     useRazorVerifyPayment();
-  const { on, setOn } = useState(false);
   const { orderStatus, data, availbleList } = params;
   const money = useMemo(() => {
     let currentBilling = 0;
@@ -387,9 +387,8 @@ function CheckoutResume(props) {
                 </View>
                 <View style={{ marginTop: 20 }}>
                   <Switch
-                    onSwitch={() => {
-                      setOn(!on);
-                    }}
+                    onSwitch={(b) => setOnSwitch(b)}
+                    active={on}
                     label="I accept Privacy Policy and Terms of use"
                   />
                 </View>

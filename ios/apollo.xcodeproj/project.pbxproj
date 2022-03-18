@@ -17,11 +17,11 @@
 		6B3D435D118B43BAB08F133F /* TitilliumWeb-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A8DECA8510384A5F89DBA0A5 /* TitilliumWeb-SemiBold.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		90A91D1F50F94521B7CA5D55 /* TitilliumWeb-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D57B733DE9940F0B5697975 /* TitilliumWeb-Black.ttf */; };
+		97050B8714E1DCAEEC490421 /* libPods-apollo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AE3129491A528E299048679E /* libPods-apollo.a */; };
 		98302704ECFE4C4BA7AC8580 /* TitilliumWeb-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D418CCE0EE94B6A892D33FD /* TitilliumWeb-Italic.ttf */; };
 		A9BE04A937A64A9E844A3AFD /* TitilliumWeb-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5C76EB5051F84412A0397EBF /* TitilliumWeb-BoldItalic.ttf */; };
 		C2AACF35B837405AAB2673B3 /* TitilliumWeb-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A88DE07EACF4AB38DA3727E /* TitilliumWeb-ExtraLight.ttf */; };
 		CBE367E5B24B4867A4F2D4FA /* TitilliumWeb-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C3A4CA19602543FAA746200D /* TitilliumWeb-Light.ttf */; };
-		DAEAD7FAECF2CF0AA36C9DD2 /* libPods-apollo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F68EF6B71DC712FB81B92B29 /* libPods-apollo.a */; };
 		DF89754BEFA44C5FBA904AB4 /* TitilliumWeb-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE7E404C168D43E1A5F67AFE /* TitilliumWeb-Bold.ttf */; };
 		F47C0F92C98D4A0BB4C2D55A /* TitilliumWeb-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 652CA42BD9B74B569DADE703 /* TitilliumWeb-SemiBoldItalic.ttf */; };
 		FF168ED18E3444F396BF712E /* TitilliumWeb-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6FBD16ED715B45D1836820B3 /* TitilliumWeb-LightItalic.ttf */; };
@@ -29,21 +29,15 @@
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* apolloTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = apolloTests.m; sourceTree = "<group>"; };
 		0543511077AF4E38A7007238 /* TitilliumWeb-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TitilliumWeb-Regular.ttf"; path = "../assets/fonts/TitilliumWeb-Regular.ttf"; sourceTree = "<group>"; };
 		0D418CCE0EE94B6A892D33FD /* TitilliumWeb-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TitilliumWeb-Italic.ttf"; path = "../assets/fonts/TitilliumWeb-Italic.ttf"; sourceTree = "<group>"; };
-		0F0EF5652019DAF06F4FCD1B /* Pods-apollo-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apollo-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-apollo-tvOSTests/Pods-apollo-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		127691F02BEF6DD01FD2F358 /* Pods-apollo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apollo.debug.xcconfig"; path = "Target Support Files/Pods-apollo/Pods-apollo.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* apollo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = apollo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = apollo/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = apollo/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = apollo/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = apollo/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = apollo/main.m; sourceTree = "<group>"; };
-		2347E0EFD4E6F988713C45D5 /* Pods-apollo-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apollo-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-apollo-tvOSTests/Pods-apollo-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		27D21A852C349AFAD0BFC2D9 /* Pods-apollo-apolloTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apollo-apolloTests.debug.xcconfig"; path = "Target Support Files/Pods-apollo-apolloTests/Pods-apollo-apolloTests.debug.xcconfig"; sourceTree = "<group>"; };
-		4C1278CC2763E779ED3F94AF /* Pods-apollo-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apollo-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-apollo-tvOS/Pods-apollo-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		382C1643DAA52FF21928068C /* Pods-apollo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apollo.release.xcconfig"; path = "Target Support Files/Pods-apollo/Pods-apollo.release.xcconfig"; sourceTree = "<group>"; };
 		4D549A0D26A0282D00D0DAA7 /* apollo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "apollo-Bridging-Header.h"; sourceTree = "<group>"; };
 		4D549A0E26A0282D00D0DAA7 /* Blank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blank.swift; sourceTree = "<group>"; };
 		4D549A1026A028ED00D0DAA7 /* libswiftWebKit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftWebKit.tbd; path = usr/lib/swift/libswiftWebKit.tbd; sourceTree = SDKROOT; };
@@ -54,18 +48,13 @@
 		75BBF419F95C4E4983E8D9AC /* TitilliumWeb-ExtraLightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TitilliumWeb-ExtraLightItalic.ttf"; path = "../assets/fonts/TitilliumWeb-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
 		7A88DE07EACF4AB38DA3727E /* TitilliumWeb-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TitilliumWeb-ExtraLight.ttf"; path = "../assets/fonts/TitilliumWeb-ExtraLight.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = apollo/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		877B86B513383203CC6FFADA /* libPods-apollo-apolloTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-apollo-apolloTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		834B25B6BD9BB76C2EC13AA3 /* Pods-apollo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apollo.debug.xcconfig"; path = "Target Support Files/Pods-apollo/Pods-apollo.debug.xcconfig"; sourceTree = "<group>"; };
 		A8DECA8510384A5F89DBA0A5 /* TitilliumWeb-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TitilliumWeb-SemiBold.ttf"; path = "../assets/fonts/TitilliumWeb-SemiBold.ttf"; sourceTree = "<group>"; };
-		B59165EF1C7894AC1628A131 /* Pods-apollo-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apollo-tvOS.release.xcconfig"; path = "Target Support Files/Pods-apollo-tvOS/Pods-apollo-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		AE3129491A528E299048679E /* libPods-apollo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-apollo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3A4CA19602543FAA746200D /* TitilliumWeb-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TitilliumWeb-Light.ttf"; path = "../assets/fonts/TitilliumWeb-Light.ttf"; sourceTree = "<group>"; };
 		CE7E404C168D43E1A5F67AFE /* TitilliumWeb-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TitilliumWeb-Bold.ttf"; path = "../assets/fonts/TitilliumWeb-Bold.ttf"; sourceTree = "<group>"; };
-		DD5F5C5CA603DDC55426073F /* libPods-apollo-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-apollo-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		F524B74D395D5546ED8A29C7 /* Pods-apollo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apollo.release.xcconfig"; path = "Target Support Files/Pods-apollo/Pods-apollo.release.xcconfig"; sourceTree = "<group>"; };
-		F68EF6B71DC712FB81B92B29 /* libPods-apollo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-apollo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		FD58907F64128F4E47B16A73 /* Pods-apollo-apolloTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apollo-apolloTests.release.xcconfig"; path = "Target Support Files/Pods-apollo-apolloTests/Pods-apollo-apolloTests.release.xcconfig"; sourceTree = "<group>"; };
-		FD61791DDF543388321196E6 /* libPods-apollo-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-apollo-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,30 +63,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D549A1126A028ED00D0DAA7 /* libswiftWebKit.tbd in Frameworks */,
-				DAEAD7FAECF2CF0AA36C9DD2 /* libPods-apollo.a in Frameworks */,
+				97050B8714E1DCAEEC490421 /* libPods-apollo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* apolloTests */ = {
-			isa = PBXGroup;
-			children = (
-				00E356F21AD99517003FC87E /* apolloTests.m */,
-				00E356F01AD99517003FC87E /* Supporting Files */,
-			);
-			path = apolloTests;
-			sourceTree = "<group>";
-		};
-		00E356F01AD99517003FC87E /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				00E356F11AD99517003FC87E /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		13B07FAE1A68108700A75B9A /* apollo */ = {
 			isa = PBXGroup;
 			children = (
@@ -120,10 +92,7 @@
 				4D549A1026A028ED00D0DAA7 /* libswiftWebKit.tbd */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				F68EF6B71DC712FB81B92B29 /* libPods-apollo.a */,
-				877B86B513383203CC6FFADA /* libPods-apollo-apolloTests.a */,
-				DD5F5C5CA603DDC55426073F /* libPods-apollo-tvOS.a */,
-				FD61791DDF543388321196E6 /* libPods-apollo-tvOSTests.a */,
+				AE3129491A528E299048679E /* libPods-apollo.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -131,14 +100,8 @@
 		4D1B099D89632C9CFEDDB199 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				127691F02BEF6DD01FD2F358 /* Pods-apollo.debug.xcconfig */,
-				F524B74D395D5546ED8A29C7 /* Pods-apollo.release.xcconfig */,
-				27D21A852C349AFAD0BFC2D9 /* Pods-apollo-apolloTests.debug.xcconfig */,
-				FD58907F64128F4E47B16A73 /* Pods-apollo-apolloTests.release.xcconfig */,
-				4C1278CC2763E779ED3F94AF /* Pods-apollo-tvOS.debug.xcconfig */,
-				B59165EF1C7894AC1628A131 /* Pods-apollo-tvOS.release.xcconfig */,
-				0F0EF5652019DAF06F4FCD1B /* Pods-apollo-tvOSTests.debug.xcconfig */,
-				2347E0EFD4E6F988713C45D5 /* Pods-apollo-tvOSTests.release.xcconfig */,
+				834B25B6BD9BB76C2EC13AA3 /* Pods-apollo.debug.xcconfig */,
+				382C1643DAA52FF21928068C /* Pods-apollo.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -155,7 +118,6 @@
 			children = (
 				13B07FAE1A68108700A75B9A /* apollo */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* apolloTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				4D1B099D89632C9CFEDDB199 /* Pods */,
@@ -199,14 +161,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "apollo" */;
 			buildPhases = (
-				10B5A400187F92EE706550F6 /* [CP] Check Pods Manifest.lock */,
+				EC9D8BF2FEB5C77642E0DFF2 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				BC1C4F78F0D06A6560EF5240 /* [CP] Embed Pods Frameworks */,
-				9F2D8D738105E9C12435EA36 /* [CP] Copy Pods Resources */,
+				A37A2A6684BA6B267EA9740F /* [CP] Embed Pods Frameworks */,
+				E8A8A63F812DE9843FCC3A72 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -288,7 +250,51 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		10B5A400187F92EE706550F6 /* [CP] Check Pods Manifest.lock */ = {
+		A37A2A6684BA6B267EA9740F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-apollo/Pods-apollo-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Flipper-DoubleConversion/double-conversion.framework/double-conversion",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal/OpenSSL.framework/OpenSSL",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/razorpay-pod/Razorpay.framework/Razorpay",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/double-conversion.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Razorpay.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-apollo/Pods-apollo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E8A8A63F812DE9843FCC3A72 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-apollo/Pods-apollo-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController/TOCropViewControllerBundle.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TOCropViewControllerBundle.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-apollo/Pods-apollo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EC9D8BF2FEB5C77642E0DFF2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -308,50 +314,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9F2D8D738105E9C12435EA36 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-apollo/Pods-apollo-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController/TOCropViewControllerBundle.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TOCropViewControllerBundle.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-apollo/Pods-apollo-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BC1C4F78F0D06A6560EF5240 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-apollo/Pods-apollo-frameworks.sh",
-				"${PODS_ROOT}/razorpay-pod/Pod/Razorpay.framework",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Flipper-DoubleConversion/double-conversion.framework/double-conversion",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal/OpenSSL.framework/OpenSSL",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Razorpay.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/double-conversion.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-apollo/Pods-apollo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -391,7 +353,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 127691F02BEF6DD01FD2F358 /* Pods-apollo.debug.xcconfig */;
+			baseConfigurationReference = 834B25B6BD9BB76C2EC13AA3 /* Pods-apollo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -400,13 +362,14 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8H2U34A8WZ;
 				ENABLE_BITCODE = NO;
-				EXCLUDED_ARCHS = "arm64 armv7";
+				EXCLUDED_ARCHS = arm64;
 				INFOPLIST_FILE = apollo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -424,7 +387,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F524B74D395D5546ED8A29C7 /* Pods-apollo.release.xcconfig */;
+			baseConfigurationReference = 382C1643DAA52FF21928068C /* Pods-apollo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -432,13 +395,14 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VZB384Y7C9;
-				EXCLUDED_ARCHS = "arm64 armv7";
+				EXCLUDED_ARCHS = arm64;
 				INFOPLIST_FILE = apollo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

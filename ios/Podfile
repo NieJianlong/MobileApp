@@ -12,10 +12,10 @@ target 'apollo' do
   )
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
-  target 'apolloTests' do
-    inherit! :complete
-    # Pods for testing
-  end
+  # target 'apolloTests' do
+  #   inherit! :complete
+  #   # Pods for testing
+  # end
 
 
   # Enables Flipper.
@@ -34,11 +34,11 @@ target 'apollo' do
   end
 end
 
-target 'apollo-tvOS' do
+# target 'apollo-tvOS' do
   # Pods for apollo-tvOS
 
-  target 'apollo-tvOSTests' do
-    inherit! :search_paths
+  # target 'apollo-tvOSTests' do
+    # inherit! :search_paths
     # Pods for testing
-  end
-end
+ # end
+#end

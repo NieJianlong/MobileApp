@@ -586,7 +586,7 @@ type Query {
   buyerProfileByUserId(userProfileId: ID!): BuyerProfileResponse
   getRefundSalamiCredit(buyerId: ID!): Float
   getBuyerSalamiWalletBalance: SalamiWalletResponse
-  sellerProfiles: [SellerProfileResponse]
+  sellerProfilesPaginated(pageable: SellerProfilePageable): SellerProfileResponsePaginated!
   sellerProfile(sellerId: ID!): SellerProfileResponse
   sellerProfileByUserId(userProfileId: ID!): SellerProfileResponse
   serviceOperatorProfileByUserId(userProfileId: ID!): ServiceOperatorResponse
@@ -782,6 +782,12 @@ type SellerDocumentResponse {
   documentKey: String
 }
 
+input SellerProfilePageable {
+  sellerValidationStatus: SellerValidationStatus
+  page: Int
+  size: Int
+}
+
 input SellerProfileRequest {
   sellerId: ID!
   firstName: String
@@ -901,6 +907,14 @@ type SellerProfileResponse {
   registrationRejectedNotes: String
   registrationRejectedReason: RegistrationRejectedReason
   validationStatusChangedBy: ID
+}
+
+type SellerProfileResponsePaginated {
+  content: [SellerProfileResponse!]!
+  pageNo: Int!
+  pageSize: Int!
+  totalPages: Int!
+  totalElements: Int!
 }
 
 input SellerToOnlineStoreRequest {

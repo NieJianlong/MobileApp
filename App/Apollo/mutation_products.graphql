@@ -1,19 +1,27 @@
-
- 
 #  mutation AddReportReview($reviewId: String!, $title: String!, $description: String!, $reason: String!, $reporterType: ReporterType!, $postedBy: String!)  {
 #     addReportReview(reviewId: $reviewId, title: $title, description: $description, reason: $reason, reporterType: $reporterType, postedBy: $postedBy) {
 #   reviewId
 #     }
 #   }
 
-mutation AddProductReview($input: ProductReviewInput!)  {
-    addProductReview(input: $input) {
-     reviewId
-    }
+mutation AddProductReview($input: ProductReviewInput!) {
+  addProductReview(input: $input) {
+    reviewId
+  }
 }
 
-mutation AddSellerReview($input: SellerReviewInput!)  {
-    addSellerReview(input: $input) {
-     reviewId
-    }
+mutation AddSellerReview($input: SellerReviewInput!) {
+  addSellerReview(input: $input) {
+    reviewId
+  }
+}
+
+mutation AddListingToWishlist($listingId: ID!) {
+  addListingToWishlist(listingId: $listingId) {
+    id
+  }
+}
+
+mutation DeleteListingFromWishlist($listingId: ID!) {
+  deleteListingFromWishlist(listingId: $listingId)
 }

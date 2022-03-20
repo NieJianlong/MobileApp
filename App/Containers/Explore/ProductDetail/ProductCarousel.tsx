@@ -107,19 +107,19 @@ export default function ProductCarousel({ product }) {
     data?.isListingInWishlist ? deleteFromWishList() : addToWishList();
   }, [addToWishList, data?.isListingInWishlist, deleteFromWishList]);
   const toggleShareSheet = useCallback(() => {
-    dispatch({
-      type: "changSheetState",
-      payload: {
-        showSheet: true,
-        height: 250,
-        children: () => (
-          <View style={{ flex: 1, justifyContent: "flex-end" }}>
-            <ShareOptionList />
-          </View>
-        ),
-        sheetTitle: "Share to",
-      },
-    });
+    // dispatch({
+    //   type: "changSheetState",
+    //   payload: {
+    //     showSheet: true,
+    //     height: 250,
+    //     children: () => (
+    //       <View style={{ flex: 1, justifyContent: "flex-end" }}>
+    //         <ShareOptionList />
+    //       </View>
+    //     ),
+    //     sheetTitle: "Share to",
+    //   },
+    // });
   }, [dispatch]);
   /**
    * when we add an item to the cart we need to update the local cart

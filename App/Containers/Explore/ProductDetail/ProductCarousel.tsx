@@ -18,7 +18,7 @@ import { Images, Colors } from "../../../Themes";
 import styles from "./styles";
 import NavigationService from "../../../Navigation/NavigationService";
 import { AlertContext } from "../../Root/GlobalContext";
-import ShareOptionList from "../Components/ShareOptionList";
+import { shareOptions } from "../Components/ShareOptionList";
 import metrics from "../../../Themes/Metrics";
 import { useQuery } from "@apollo/client";
 
@@ -31,6 +31,7 @@ import {
   useDeleteListingFromWishlistMutation,
   useIsListingInWishlistQuery,
 } from "../../../../generated/graphql";
+import Share from "react-native-share";
 //render product images
 export default function ProductCarousel({ product }) {
   const { realm } = useRealm();
@@ -107,6 +108,7 @@ export default function ProductCarousel({ product }) {
     data?.isListingInWishlist ? deleteFromWishList() : addToWishList();
   }, [addToWishList, data?.isListingInWishlist, deleteFromWishList]);
   const toggleShareSheet = useCallback(() => {
+    Share.open(shareOptions);
     // dispatch({
     //   type: "changSheetState",
     //   payload: {

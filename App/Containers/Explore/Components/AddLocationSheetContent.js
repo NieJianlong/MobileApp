@@ -27,6 +27,7 @@ import { t } from "react-native-tailwindcss";
 import { Controller, useForm } from "react-hook-form";
 import lodash from "lodash";
 import { GetStatesByCountryId } from "../gql/explore_queries";
+import NavigationService from "../../../Navigation/NavigationService";
 import {
   CURRENT_ADDRESS,
   setLocalStorageValue,
@@ -104,6 +105,13 @@ function AddLocationSheetContent(props) {
           addressType: "SHIPPING",
           defaultAddress: true,
         },
+      },
+      onCompleted: (res) => {
+        !isAuth && NavigationService.navigate("ExploreScreen");
+        console.log(res);
+      },
+      onError: (res) => {
+        console.log(res);
       },
     });
   };

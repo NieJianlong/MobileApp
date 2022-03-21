@@ -834,3 +834,94 @@ export const UPDATE_SELLER_TO_ONLINE_STORE = gql`
     }
   }
 `;
+
+/**
+ * @mutation createBillingDetailsForGuestBuyer
+ * schema  see @mutation createBillingDetailsForGuestBuyer
+ *
+ */
+
+export const CREATE_BILLING_DETAILS_FOR_GUEST_BUYER = gql`
+  mutation CreateBillingDetailsForGuestBuyer(
+    $request: BillingDetailsRequestForCreate!
+  ) {
+    createBillingDetailsForGuestBuyer(request: $request) {
+      billingDetailsId
+      buyerId
+      firstName
+      lastName
+      companyName
+      email
+      phoneNumber
+      billingAddress {
+        addressId
+        flat
+        floor
+        defaultAddress
+        block
+        building
+        houseNumber
+        streetAddress1
+        streetAddress2
+        streetAddress3
+        townCity
+        villageArea
+        district
+        provinceState
+        country
+        areaCode
+        landMark
+        pinCode
+        addressType
+        referenceId
+      }
+      taxCode
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * @mutation updateBillingDetailsForGuestBuyer
+ * schema  see @mutation updateBillingDetailsForGuestBuyer
+ *
+ */
+export const UPDATE_BILLING_DETAILS_FOR_GUEST_BUYER = gql`
+  mutation UpdateBillingDetailsForGuestBuyer($request: BillingDetailsRequest!) {
+    updateBillingDetailsForGuestBuyer(request: $request) {
+      billingDetailsId
+      buyerId
+      firstName
+      lastName
+      companyName
+      email
+      phoneNumber
+      billingAddress {
+        addressId
+        flat
+        floor
+        defaultAddress
+        block
+        building
+        houseNumber
+        streetAddress1
+        streetAddress2
+        streetAddress3
+        townCity
+        villageArea
+        district
+        provinceState
+        country
+        areaCode
+        landMark
+        pinCode
+        addressType
+        referenceId
+      }
+      taxCode
+      createdAt
+      updatedAt
+    }
+  }
+`;

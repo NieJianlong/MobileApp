@@ -47,11 +47,11 @@ function ShoppingCart(props) {
   const [total, setTotal] = useState(0);
   const sheetContext = useContext(AlertContext);
   useEffect(() => {
-     props.navigation.addListener('focus', () => {
-       const mydatas = query;
-       console.log("mydatas", mydatas);
-       console.log("localCartlocalCart", localCart.items)
-       setMydatas(mydatas);
+    props.navigation.addListener("focus", () => {
+      const mydatas = query;
+      console.log("mydatas", mydatas);
+      console.log("localCartlocalCart", localCart.items);
+      setMydatas(mydatas);
     });
   }, [props.navigate]);
 
@@ -105,21 +105,22 @@ function ShoppingCart(props) {
    * to make the code more readable
    */
   const onProceed = () => {
-    const itemArray = [] ;
+    console.log("global.access_token", global.access_token);
+    const itemArray = [];
     mydatas.map((item, index) => {
       let itemAvailble = true;
       if (availbleList) {
         const i = availbleList.isListingAvailable[index];
         itemAvailble = i?.isAvailable;
       }
-      if(itemAvailble) {
+      if (itemAvailble) {
         itemArray.push({
           listingId: item.product.listingId,
           variantId: item.variantId,
           quantity: item.quantity,
-        })
+        });
       }
-    })
+    });
     console.log("itemArray", itemArray);
     localCartVar({
       ...localCart,
@@ -141,13 +142,17 @@ function ShoppingCart(props) {
     // } else {
     //   NavigationService.navigate("CheckoutNoAuthScreen");
     // }
-    if (global.access_token === "") {
-      NavigationService.navigate("CheckoutNoAuthScreen");
+    if (global.access_token === "" || !global.access_token) {
+      NavigationService.navigate("Page_CheckoutAuth", {
+        items: mydatas,
+        availbleList: availbleList,
+        from: "checkout",
+      });
     } else {
       NavigationService.navigate("CheckoutResumeScreen", {
         orderStatus: 0,
         data: mydatas,
-        availbleList: availbleList
+        availbleList: availbleList,
       });
     }
   };
@@ -155,7 +160,7 @@ function ShoppingCart(props) {
   const subTotal = (subtotal) => {
     setTotal(parseInt(subtotal));
 
-    console.log("total",total);
+    console.log("total", total);
     console.log("total===0", total === 0);
   };
   return (
@@ -185,9 +190,11 @@ function ShoppingCart(props) {
                 }}
               >
                 <Button
-                  disabledColor={'grey'}
+                  disabledColor={"grey"}
                   disabled={total === 0}
-                  onPress={onProceed} text="PROCEED TO CHECKOUT" />
+                  onPress={onProceed}
+                  text="PROCEED TO CHECKOUT"
+                />
               </View>
             )}
             renderSectionFooter={() => (
@@ -286,7 +293,7 @@ function ShoppingCart(props) {
                     </View>
                     <TouchableOpacity
                       onPress={() => {
-                       // NavigationService.navigate("PaymentScreen")
+                        // NavigationService.navigate("PaymentScreen")
                       }}
                     >
                       <Text
@@ -347,7 +354,10 @@ function ShoppingCart(props) {
               return mydatas.length > 0 ? (
                 <View style={{ backgroundColor: "white" }}>
                   <AddressBar />
-                  <CartSummary availbleList={availbleList} subtotal={subTotal}/>
+                  <CartSummary
+                    availbleList={availbleList}
+                    subtotal={subTotal}
+                  />
                 </View>
               ) : null;
             }}

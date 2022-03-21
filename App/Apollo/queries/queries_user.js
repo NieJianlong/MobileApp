@@ -421,6 +421,7 @@ export const FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
       addressId
       villageArea
       provinceState
+      defaultAddress
     }
   }
 `;
@@ -903,6 +904,60 @@ export const PAYMENT_METHODS_BY_ID = gql`
 export const BILLING_DETAIL_BY_BUYERID = gql`
   query BillingDetailsByBuyerId($buyerId: ID!) {
     billingDetailsByBuyerId(buyerId: $buyerId) {
+      billingDetailsId
+      firstName
+      lastName
+      companyName
+      email
+      phoneNumber
+      billingAddress {
+        addressId
+        villageArea
+        houseNumber
+
+        flat
+        floor
+        townCity
+        provinceState
+        pinCode
+        defaultAddress
+        block
+        building
+
+        streetAddress1
+        streetAddress2
+        streetAddress3
+
+        district
+
+        country
+        areaCode
+        landMark
+
+        addressType
+        referenceId
+        createdAt
+        updatedAt
+      }
+      taxCode
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+/**
+ *  @query  billingDetailsByBuyerId
+ *
+ * schema
+ * billingDetailsByBuyerId : [BillingDetailsResponse]
+ * PaymentDetailResponse{paymentDetailId:ID buyerId:ID paymentType:String isDefaultPaymentType:Boolean
+ * paymentTypeDetails:ID createdAt:DateTime updatedAt:DateTime }
+ *
+ */
+export const BILLING_DETAIL_BY_GUEST_BUYERID = gql`
+  query BillingDetailsByGuestBuyerId($guestBuyerId: ID!) {
+    billingDetailsByGuestBuyerId(guestBuyerId: $guestBuyerId) {
       billingDetailsId
       firstName
       lastName

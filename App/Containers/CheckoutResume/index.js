@@ -41,6 +41,7 @@ import useRealm from "../../hooks/useRealm";
 //orderStatus：1,completed
 function CheckoutResume(props) {
   const { params } = useRoute();
+  const [on, setOnSwitch] = useState(false);
   const { createOrderFromCart, order } = useCreateOrder();
   const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
   const {
@@ -49,6 +50,12 @@ function CheckoutResume(props) {
 
   const { realm } = useRealm();
   const userProfile = useReactiveVar(userProfileVar);
+  const userProfileVarReactive = useReactiveVar(userProfileVar);
+  const isAuth = useMemo(
+    () => userProfileVarReactive.isAuth,
+    [userProfileVarReactive.isAuth]
+  );
+
   const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
     useRazorVerifyPayment();
   const { orderStatus, data, availbleList } = params;
@@ -95,6 +102,7 @@ function CheckoutResume(props) {
       onError: (err) => {},
     },
   });
+  console.log("localCartVar", localCartVar);
   console.log("dataWalletdataWalletdataWalletdataWallet", dataWallet);
   const { dispatch } = useContext(AlertContext);
   const [mydatas, setMydatas] = useState(
@@ -135,11 +143,16 @@ function CheckoutResume(props) {
   };
 
   const proceedFurther = (type) => {
+    if (!on) {
+      alert("Please accept privacy and policy");
+      return;
+    }
     dispatch({
       type: "changLoading",
       payload: true,
     });
     console.log("localCartVar.items", localCartVar.items);
+    console.log("localCartVar", localCartVar);
     console.log("localCartVar======mydatas", mydatas);
     const finalItems = localCartVar.items.map((item) => {
       const productItem = mydatas.find(
@@ -155,20 +168,21 @@ function CheckoutResume(props) {
 
     console.log("type", type);
     console.log("localCartVar", localCartVar);
-
+    console.log("userProfile.billingDetailsId,", userProfile.billingDetailsId);
+    console.log("global?.billingDetailsId", global?.billingDetailsId);
     createOrderFromCart({
       variables: {
         cart: {
           buyerId: global.buyerId,
           shippingAddressId: localCartVar.deliverAddress,
-          billingDetailsId: userProfile.billingDetailsId,
+          billingDetailsId: localCartVar?.billingAddressDetail?.billingDetailsId,
           useSalamiWallet: true,
           cartItems: localCartVar.items,
         },
       },
       context: {
         headers: {
-          isPrivate: true,
+          isPrivate: isAuth,
         },
       },
       onCompleted: (res) => {
@@ -212,7 +226,6 @@ function CheckoutResume(props) {
                 };
                 RazorpayCheckout.open(options)
                   .then((data) => {
-                    debugger;
                     razorOrderPaymentVar({
                       razorpay_payment_id: data.razorpay_payment_id,
                       razorpay_order_id: data.razorpay_order_id,
@@ -228,7 +241,6 @@ function CheckoutResume(props) {
                     });
                   })
                   .catch((error) => {
-                    debugger;
                     alert(`Error: ${error.code} | ${error.description}`);
                   });
               }
@@ -280,7 +292,7 @@ function CheckoutResume(props) {
             }}
             contentContainerStyle={{ paddingBottom: 110 }}
           >
-            <DeliverInfo orderStatus={orderStatus} />
+            <DeliverInfo orderStatus={orderStatus} billingAddressDetail={localCartVar?.billingAddressDetail} />
             <View
               style={{
                 flexDirection: "row",
@@ -293,7 +305,11 @@ function CheckoutResume(props) {
                   ? "Order placed on Oct 24, 2020"
                   : "Your order"}
               </Text>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  NavigationService.goBack();
+                }}
+              >
                 <Image
                   style={styles.editImage}
                   source={images.userAddressEditImage}
@@ -308,7 +324,7 @@ function CheckoutResume(props) {
                   itemAvailble = i?.isAvailable;
                 }
                 console.log("Itemm", item);
-                if (itemAvailble)
+                if (itemAvailble) {
                   return (
                     <CartItem
                       key={index.toString()}
@@ -316,6 +332,7 @@ function CheckoutResume(props) {
                       availble={itemAvailble}
                     />
                   );
+                }
               })}
             </View>
 
@@ -324,7 +341,9 @@ function CheckoutResume(props) {
               subTotal={money.total}
               saving={money.saving}
             />
-            <PaymentOptions />
+            {global.access_token && global.access_token !== "" && (
+              <PaymentOptions />
+            )}
             {orderStatus != 1 && (
               <View>
                 <View
@@ -376,7 +395,8 @@ function CheckoutResume(props) {
                 </View>
                 <View style={{ marginTop: 20 }}>
                   <Switch
-                    onSwitch={() => {}}
+                    onSwitch={(b) => setOnSwitch(b)}
+                    active={on}
                     label="I accept Privacy Policy and Terms of use"
                   />
                 </View>
@@ -405,13 +425,17 @@ function CheckoutResume(props) {
           >
             <Button
               onPress={() => {
-                if (!isNaN(walletBalance)) {
-                  if (walletBalance >= parseFloat(money.total).toFixed(2)) {
-                    proceedFurther("sufficient");
-                  } else if (walletBalance === 0 || walletBalance < 0) {
-                    proceedFurther("zero");
-                  } else {
-                    proceedFurther("InSufficient");
+                if (!global.access_token || global.access_token === "") {
+                  proceedFurther("zero");
+                } else {
+                  if (!isNaN(walletBalance)) {
+                    if (walletBalance >= parseFloat(money.total).toFixed(2)) {
+                      proceedFurther("sufficient");
+                    } else if (walletBalance === 0 || walletBalance < 0) {
+                      proceedFurther("zero");
+                    } else {
+                      proceedFurther("InSufficient");
+                    }
                   }
                 }
               }}

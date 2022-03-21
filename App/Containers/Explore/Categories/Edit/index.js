@@ -24,7 +24,7 @@ export default function EditCategoriesScreen() {
     },
     context: {
       headers: {
-        isPrivate: true,
+        isPrivate: global.access_token ? true : false,
       },
     },
   });

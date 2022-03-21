@@ -70,7 +70,7 @@ export default function ProductList(props) {
     },
     context: {
       headers: {
-        isPrivate: true,
+        isPrivate: global.access_token ? true : false,
       },
     },
     onError: () => {},

@@ -1,4 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { View, Image, TouchableOpacity, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -37,15 +43,12 @@ import { useRazorVerifyPayment } from "../../../hooks/verifyPayment";
 import { useCreateRazorOrder } from "../../../hooks/razorOrder";
 import { DeliveryOption } from "../../../../generated/graphql";
 import { IsListingAvailable } from "../../Explore/gql/explore_queries";
+import { FIND_BUYER_ADDRESS_BY_ID } from "../../../Apollo/queries/queries_user";
 
 export default function DetailFooter({ product, currentVariant, pickUp }) {
-  console.log("global.access_token", global.access_token);
-  console.log("currentVariant====================================");
-  console.log(currentVariant);
-  console.log("====================================");
   const { dispatch } = useContext(AlertContext);
   const { realm } = useRealm();
-
+  console.log("userProfile.billingDetailsId,", global?.billingDetailsId);
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
@@ -64,15 +67,31 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       onError: (err) => {},
     },
   });
-  console.log("product.numberOfItemsAvailable", product.numberOfItemsAvailable);
-  console.log("product", product);
-  console.log("currentVariant", currentVariant);
-  console.log("itemsSold", currentVariant.itemsSold);
-  console.log("itemsSold", currentVariant.itemsAvailable);
-  console.log(
-    "comparison",
-    currentVariant.itemsSold === currentVariant.itemsAvailable
-  );
+  const {
+    loading,
+    error,
+    data: addressdata,
+    refetch,
+  } = useQuery(FIND_BUYER_ADDRESS_BY_ID, {
+    variables: {
+      buyerId: global.buyerId,
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+  });
+  console.log("addressdata==========addressdata", addressdata);
+  // console.log("product.numberOfItemsAvailable", product.numberOfItemsAvailable);
+  // console.log("product", product);
+  // console.log("currentVariant", currentVariant);
+  // console.log("itemsSold", currentVariant.itemsSold);
+  // console.log("itemsSold", currentVariant.itemsAvailable);
+  // console.log(
+  //   "comparison",
+  //   currentVariant.itemsSold === currentVariant.itemsAvailable
+  // );
 
   const info = realm
     .objects("ShoppingCart")
@@ -239,82 +258,95 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   };
 
   const toggleConfirmOrderSheet = () => {
-    if (data !== undefined && !isNaN(walletBalance)) {
-      localBuyNowVar({
-        items: [],
+    if (!global.access_token) {
+      NavigationService.navigate("Page_CheckoutAuth", {
+        product: {
+          listingId: product.listingId,
+          quantity,
+          variantId: currentVariant.variantId,
+        },
+        items: product,
+        from: "Buynow",
       });
-      if (
-        walletBalance >=
-        parseFloat(new BigNumber(quantity * product.wholeSalePrice).toFixed(2))
-      ) {
-        const productBuyNow = {
-          listingId: product.listingId,
-          quantity,
-          variantId: currentVariant.variantId,
-        };
+      return;
+    } else {
+      if (data !== undefined && !isNaN(walletBalance)) {
         localBuyNowVar({
-          items: [productBuyNow],
+          items: [],
         });
+        if (
+          walletBalance >=
+          parseFloat(BigNumber(quantity * product.wholeSalePrice).toFixed(2))
+        ) {
+          const productBuyNow = {
+            listingId: product.listingId,
+            quantity,
+            variantId: currentVariant.variantId,
+          };
+          localBuyNowVar({
+            items: [productBuyNow],
+          });
 
-        if (localBuyNowVar().items.length > 0) {
-          orderCreate("sufficient");
-          // await createOrderFromCart()
-          //   .then((res) => {
-          //     if (res?.data) {
-          //       debugger;
-          //       // console.log("Response in createOrderBuyNow", res);
-          //       localBuyNowVar({
-          //         items: [],
-          //       });
-          //       NavigationService.navigate("OrderPlacedScreen", {
-          //         items: product,
-          //         from: "Buynow",
-          //       });
-          //     }
-          //   })
-          //   .catch((err) => {
-          //     console.log("Error in createOrderBuyNow", err);
-          //     alert(`Error: ${err.code} | ${err.description}`);
-          //   });
-        }
+          if (localBuyNowVar().items.length > 0) {
+            orderCreate("sufficient");
+            // await createOrderFromCart()
+            //   .then((res) => {
+            //     if (res?.data) {
+            //       debugger;
+            //       // console.log("Response in createOrderBuyNow", res);
+            //       localBuyNowVar({
+            //         items: [],
+            //       });
+            //       NavigationService.navigate("OrderPlacedScreen", {
+            //         items: product,
+            //         from: "Buynow",
+            //       });
+            //     }
+            //   })
+            //   .catch((err) => {
+            //     console.log("Error in createOrderBuyNow", err);
+            //     alert(`Error: ${err.code} | ${err.description}`);
+            //   });
+          }
 
-        // NavigationService.navigate("OrderPlacedScreen");
-      } else if (walletBalance === 0 || walletBalance < 0) {
-        // dispatch({
-        //   type: "changSheetState",
-        //   payload: {
-        //     showSheet: true,
-        //     height: 310,
-        //     children: () => <ConfirmOrderSheetContent />,
-        //     sheetTitle: "Confirm your Order",
-        //   },
-        // });
-        const productBuyNow = {
-          listingId: product.listingId,
-          quantity,
-          variantId: currentVariant.variantId,
-        };
-        localBuyNowVar({
-          items: [productBuyNow],
-        });
-        if (localBuyNowVar().items.length > 0) {
-          orderCreate("zero");
+          // NavigationService.navigate("OrderPlacedScreen");
+        } else if (walletBalance === 0 || walletBalance < 0) {
+          // dispatch({
+          //   type: "changSheetState",
+          //   payload: {
+          //     showSheet: true,
+          //     height: 310,
+          //     children: () => <ConfirmOrderSheetContent />,
+          //     sheetTitle: "Confirm your Order",
+          //   },
+          // });
+          const productBuyNow = {
+            listingId: product.listingId,
+            quantity,
+            variantId: currentVariant.variantId,
+          };
+          localBuyNowVar({
+            items: [productBuyNow],
+          });
+          if (localBuyNowVar().items.length > 0) {
+            orderCreate("zero");
+          }
+        } else {
+          const productBuyNow = {
+            listingId: product.listingId,
+            quantity,
+            variantId: currentVariant.variantId,
+          };
+          localBuyNowVar({
+            items: [productBuyNow],
+          });
+          if (localBuyNowVar().items.length > 0) {
+            orderCreate("InSufficient");
+          }
         }
       } else {
-        const productBuyNow = {
-          listingId: product.listingId,
-          quantity,
-          variantId: currentVariant.variantId,
-        };
-        localBuyNowVar({
-          items: [productBuyNow],
-        });
-        if (localBuyNowVar().items.length > 0) {
-          orderCreate("InSufficient");
-        }
+        console.log(data !== undefined, !isNaN(walletBalance));
       }
-    } else {
-      console.log(data !== undefined, !isNaN(walletBalance));
     }
   };
   // const toggleAddToCartSheet = useCallback(() => {

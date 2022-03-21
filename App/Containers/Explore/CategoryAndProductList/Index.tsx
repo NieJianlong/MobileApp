@@ -141,7 +141,7 @@ export default function Index(props) {
     },
     context: {
       headers: {
-        isPrivate: true,
+        isPrivate: global.access_token ? true : false,
       },
     },
   });

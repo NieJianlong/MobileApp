@@ -71,6 +71,7 @@ const allAPIS = {
   AddSellerReview: PRODUCT_PORT,
   AddListingToWishlist: PRODUCT_PORT,
   DeleteListingFromWishlist: PRODUCT_PORT,
+  GetBuyerWishlistListing: PRODUCT_PORT,
 
   // Cart
   CreateCart: CART_PORT,

@@ -275,3 +275,15 @@ query GetRelatedProducts($productId: ID!) {
 query IsListingInWishlist($listingId: ID!) {
   isListingInWishlist(listingId: $listingId)
 }
+
+query GetBuyerWishlistListing($options: WishlistOption!) {
+  getBuyerWishlistListing(options: $options) {
+    content {
+      ...ProductListingViewField
+    }
+    pageNo
+    pageSize
+    totalPages
+    totalElements
+  }
+}

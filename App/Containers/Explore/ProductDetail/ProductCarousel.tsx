@@ -20,12 +20,12 @@ import NavigationService from "../../../Navigation/NavigationService";
 import { AlertContext } from "../../Root/GlobalContext";
 import { shareOptions } from "../Components/ShareOptionList";
 import metrics from "../../../Themes/Metrics";
-import { useQuery } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 
 import PubSub from "pubsub-js";
 import useRealm from "../../../hooks/useRealm";
 import { t } from "react-native-tailwindcss";
-import { GET_LOCAL_CART } from "../../../Apollo/cache";
+import { GET_LOCAL_CART, userProfileVar } from "../../../Apollo/cache";
 import {
   useAddListingToWishlistMutation,
   useDeleteListingFromWishlistMutation,
@@ -35,6 +35,7 @@ import Share from "react-native-share";
 //render product images
 export default function ProductCarousel({ product }) {
   const { realm } = useRealm();
+  const userProfileVarReactive = useReactiveVar(userProfileVar);
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
@@ -64,19 +65,20 @@ export default function ProductCarousel({ product }) {
   const { dispatch } = useContext(AlertContext);
   const { data, refetch } = useIsListingInWishlistQuery({
     variables: {
+      buyerId: global.buyerId,
       listingId: product.listingId,
     },
     context: {
       headers: {
-        isPrivate: true,
+        isPrivate: userProfileVarReactive.isAuth,
       },
     },
   });
   const [addToWishList] = useAddListingToWishlistMutation({
-    variables: { listingId: product.listingId },
+    variables: { buyerId: global.buyerId, listingId: product.listingId },
     context: {
       headers: {
-        isPrivate: true,
+        isPrivate: userProfileVarReactive.isAuth,
       },
     },
     onCompleted: (res) => {
@@ -85,10 +87,10 @@ export default function ProductCarousel({ product }) {
     onError: (res) => {},
   });
   const [deleteFromWishList] = useDeleteListingFromWishlistMutation({
-    variables: { listingId: product.listingId },
+    variables: { buyerId: global.buyerId, listingId: product.listingId },
     context: {
       headers: {
-        isPrivate: true,
+        isPrivate: userProfileVarReactive.isAuth,
       },
     },
     onCompleted: (res) => {

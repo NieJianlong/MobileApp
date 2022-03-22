@@ -272,8 +272,8 @@ query GetRelatedProducts($productId: ID!) {
     ...SellerProductDetailViewField
   }
 }
-query IsListingInWishlist($listingId: ID!) {
-  isListingInWishlist(listingId: $listingId)
+query IsListingInWishlist($buyerId: ID!, $listingId: ID!) {
+  isListingInWishlist(buyerId: $buyerId, listingId: $listingId)
 }
 
 query GetBuyerWishlistListing($options: WishlistOption!) {

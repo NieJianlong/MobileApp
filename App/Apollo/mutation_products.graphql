@@ -16,12 +16,12 @@ mutation AddSellerReview($input: SellerReviewInput!) {
   }
 }
 
-mutation AddListingToWishlist($listingId: ID!) {
-  addListingToWishlist(listingId: $listingId) {
+mutation AddListingToWishlist($buyerId: ID!, $listingId: ID!) {
+  addListingToWishlist(buyerId: $buyerId, listingId: $listingId) {
     id
   }
 }
 
-mutation DeleteListingFromWishlist($listingId: ID!) {
-  deleteListingFromWishlist(listingId: $listingId)
+mutation DeleteListingFromWishlist($buyerId: ID!, $listingId: ID!) {
+  deleteListingFromWishlist(buyerId: $buyerId, listingId: $listingId)
 }

@@ -18,20 +18,24 @@ import { t } from "react-native-tailwindcss";
 import { useFocusEffect } from "@react-navigation/native";
 import TextTip from "../../Components/EmptyReminder";
 import NavigationService from "../../Navigation/NavigationService";
+import { useReactiveVar } from "@apollo/client";
+import { userProfileVar } from "../../Apollo/cache";
 const subTip =
   "Check if there are any products on your wish list and snatch them up before they’re gone!\n \n You can also explore new products \n";
 
 function Wishlist(props) {
+  const userProfileVarReactive = useReactiveVar(userProfileVar);
   const { data, refetch } = useGetBuyerWishlistListingQuery({
     variables: {
       options: {
+        buyerId: global.buyerId,
         pageNumber: 0,
         pageSize: 1000,
       },
     },
     context: {
       headers: {
-        isPrivate: true,
+        isPrivate: userProfileVarReactive.isAuth,
       },
     },
   });

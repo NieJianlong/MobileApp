@@ -1,10 +1,6 @@
-"""
-Exposes a URL that specifies the behaviour of this scalar.
-"""
+"""Exposes a URL that specifies the behaviour of this scalar."""
 directive @specifiedBy(
-  """
-  The URL that specifies the behaviour of this scalar.
-  """
+  """The URL that specifies the behaviour of this scalar."""
   url: String!
 ) on SCALAR
 
@@ -149,9 +145,7 @@ type CourierDeliveryDetailView {
 
 scalar Date
 
-"""
-SCALARS
-"""
+"""SCALARS"""
 scalar DateTime
 
 enum DeliveryOption {
@@ -164,9 +158,7 @@ enum DeliveryOption {
 
 scalar FileUpload
 
-"""
-INPUTS
-"""
+"""INPUTS"""
 input FilterParams {
   category: String
   listingId: String
@@ -225,9 +217,7 @@ input IsListingAvailableInput {
   listingId: ID!
   variantId: ID
 
-  """
-  null if product has only one variant
-  """
+  """null if product has only one variant"""
   quantity: Int!
 }
 
@@ -274,79 +264,51 @@ type ListingVariantView {
   isAvailable: Boolean
 }
 
-"""
-MUTATIONS
-"""
+"""MUTATIONS"""
 type Mutation {
-  """
-  stores
-  """
+  """stores"""
   createStore(storeInput: StoreCreateInput!): Store
   updateStore(storeId: String!, storeInput: StoreInput!): Store
   deleteStoreById(storeId: String!): Boolean
 
-  """
-  options
-  """
+  """options"""
   createOption(option: OptionInput): Option
   addOptionValue(optionId: ID!, value: String!): Option
   deleteOption(optionId: String!): Boolean
 
-  """
-  categories
-  """
+  """categories"""
   addParentCategory(name: String!, description: String!): Category!
-  addSubCategory(
-    name: String!
-    description: String!
-    parentCategoryId: String!
-  ): Category!
-  updateCategory(
-    name: String!
-    description: String!
-    categoryId: String!
-  ): Category!
+  addSubCategory(name: String!, description: String!, parentCategoryId: String!): Category!
+  updateCategory(name: String!, description: String!, categoryId: String!): Category!
   savePreferredCategories(buyerId: ID!, categories: [ID]): String
   createProductListings(input: ProductListingsInput!): [ProductListing!]!
   updateProductListing(input: ProductListingUpdateInput!): ProductListing!
-  saveListingVariants(
-    input: ProductListingVariantInput!
-  ): [ProductListingVariant!]!
+  saveListingVariants(input: ProductListingVariantInput!): [ProductListingVariant!]!
   saveListingCollectionPoint(input: CollectionPointInput!): CollectionPoint!
   saveListingSellerLocation(input: SellerLocationInput!): CollectionPoint!
-  saveListingSellerDirectDelivery(
-    input: SellerDirectDeliveryInput!
-  ): SellerDirectDeliveryResponse!
-  saveListingCourierDeliveryDetails(
-    input: CourierDeliveryDetailsInput!
-  ): CourierDeliveryDetails!
+  saveListingSellerDirectDelivery(input: SellerDirectDeliveryInput!): SellerDirectDeliveryResponse!
+  saveListingCourierDeliveryDetails(input: CourierDeliveryDetailsInput!): CourierDeliveryDetails!
   updateListingStatus(input: ListingStatusInput!): ProductListing!
   deleteProductListing(listingId: String!): Boolean!
   cloneListing(listingIds: [String!]!, startDate: DateTime): [ProductListing!]!
   createRecurringListings(input: RecurringListingInput!): [ProductListing!]!
-  addListingToWishlist(listingId: ID!): Wishlist!
-  deleteListingFromWishlist(listingId: ID!): Boolean!
+  addListingToWishlist(buyerId: ID!, listingId: ID!): Wishlist!
+  deleteListingFromWishlist(buyerId: ID!, listingId: ID!): Boolean!
   reduceSoldQuantity(input: VariantSoldQuantityInput!): Boolean!
   incrementSoldQuantity(input: VariantSoldQuantityInput!): Boolean!
   createProduct(productCreateInput: ProductCreateInput!): Product!
   updateProduct(input: ProductUpdateInput!): SellerProductDetailView!
-  updateProductPriceAndQuantity(
-    input: ProductPriceAndQuantityUpdateInput!
-  ): SellerProductDetailView!
+  updateProductPriceAndQuantity(input: ProductPriceAndQuantityUpdateInput!): SellerProductDetailView!
   updateProductStatus(input: ProductStatusInput!): Product!
   deleteProduct(productId: ID!): Boolean!
   disableProduct(productId: ID!): Product!
   rejectProduct(productId: ID!): Product!
   acceptProduct(productId: ID!): Product!
 
-  """
-  todo for removal
-  """
+  """todo for removal"""
   addProductToWishlist(productId: String!, buyerId: String!): Wishlist!
   deleteProductFromWishlist(productId: String!, buyerId: String!): Int!
-  addRequestForProduct(
-    input: RequestForProductInput!
-  ): RequestForProductResponse!
+  addRequestForProduct(input: RequestForProductInput!): RequestForProductResponse!
   addShareInformation(input: ShareInformationInput!): ShareInformation!
   addProductReview(input: ProductReviewInput!): AddReviewResponse!
   addSellerReview(input: SellerReviewInput!): AddReviewResponse!
@@ -398,9 +360,7 @@ type Price {
   taxPercentage: Float
 }
 
-"""
-TYPES
-"""
+"""TYPES"""
 type Product {
   id: ID!
   shortName: String!
@@ -487,9 +447,7 @@ enum ProductListingStatus {
   RETIRED
 }
 
-"""
-ENUMS
-"""
+"""ENUMS"""
 enum ProductListingType {
   UNDEFINED
   MAIN_PRODUCT_LISTING
@@ -690,70 +648,38 @@ input ProductVariantInput {
   variantImage: FileUpload
 }
 
-"""
-QUERIES
-"""
+"""QUERIES"""
 type Query {
-  """
-  stores
-  """
+  """stores"""
   getStores(pageable: StorePageable!): StoreResponse!
   getStoreByName(name: String!): Store!
-  searchStoreByName(
-    nameSearchString: String!
-    searchType: SearchStringType!
-    pageable: StorePageable!
-  ): StoreResponse!
-  onlineStoreByGeoCoordinates(
-    latitude: Float!
-    longitude: Float!
-    pageable: StorePageable!
-  ): StoreResponse!
-  getStoresByCityOrProvince(
-    place: String!
-    pageable: StorePageable!
-  ): StoreResponse!
+  searchStoreByName(nameSearchString: String!, searchType: SearchStringType!, pageable: StorePageable!): StoreResponse!
+  onlineStoreByGeoCoordinates(latitude: Float!, longitude: Float!, pageable: StorePageable!): StoreResponse!
+  getStoresByCityOrProvince(place: String!, pageable: StorePageable!): StoreResponse!
 
-  """
-  categories
-  """
+  """categories"""
   getAllCategories: [CategoryView]!
   getPreferredCategories(buyerId: ID!): [CategoryView]!
 
-  """
-  options
-  """
+  """options"""
   getOptionReference: [Option!]!
 
-  """
-  return policies
-  """
+  """return policies"""
   getPolicyNames: [PolicyNameView]!
   getListings(searchOptions: SearchOptions): BuyerListingResponse!
-  getSellerListing(
-    productId: String
-    options: SellerFilterOptions!
-  ): SellerListingResponse!
+  getSellerListing(productId: String, options: SellerFilterOptions!): SellerListingResponse!
   getSellerListingDetails(listingId: String!): SellerListingDetailView!
-  getSellerListingGroupByProduct(
-    options: SellerFilterOptions!
-  ): SellerListingGroupResponse!
-  getSellerListingForAcceptOrReject(
-    options: SellerFilterOptions!
-  ): SellerListingResponse!
-  isListingAvailable(
-    listings: [IsListingAvailableInput!]!
-  ): [IsListingAvailableResponse!]!
+  getSellerListingGroupByProduct(options: SellerFilterOptions!): SellerListingGroupResponse!
+  getSellerListingForAcceptOrReject(options: SellerFilterOptions!): SellerListingResponse!
+  isListingAvailable(listings: [IsListingAvailableInput!]!): [IsListingAvailableResponse!]!
   getBuyerWishlistListing(options: WishlistOption!): BuyerListingResponse!
-  isListingInWishlist(listingId: ID!): Boolean!
+  isListingInWishlist(buyerId: ID!, listingId: ID!): Boolean!
   getProducts(pageable: ProductPageable): ProductResponse!
   getProductByProductId(productId: String!): SellerProductDetailView!
   getShareInformationByProductId(productId: String): [ShareInformation]
   getRelatedProducts(productId: ID!): [SellerProductDetailView]
 
-  """
-  todo for removal
-  """
+  """todo for removal"""
   isProductInWishlist(productId: String!, buyerId: String!): Boolean!
   findReviews(options: ReviewSearchOptions!): FindReviewResponse!
   getProductReviewSummaryResponse(productId: ID!): ReviewSummaryResponse!
@@ -867,29 +793,19 @@ type ReviewView {
 input SearchOptions {
   filter: FilterType
 
-  """
-  default ALL
-  """
+  """default ALL"""
   filterParams: FilterParams
 
-  """
-  default new FilterParams()
-  """
+  """default new FilterParams()"""
   sortBy: SortType
 
-  """
-  default DATE
-  """
+  """default DATE"""
   sortDirection: SortDirection
 
-  """
-  default DESCENDING
-  """
+  """default DESCENDING"""
   pageNo: Int
 
-  """
-  default 0
-  """
+  """default 0"""
   pageSize: Int
 }
 
@@ -1244,6 +1160,8 @@ type Wishlist {
 }
 
 input WishlistOption {
+  buyerId: ID!
   pageNumber: Int!
   pageSize: Int!
 }
+

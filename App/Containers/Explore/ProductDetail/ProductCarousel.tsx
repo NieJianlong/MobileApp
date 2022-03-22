@@ -14,28 +14,28 @@ import {
 } from "react-native";
 import { s } from "react-native-size-matters";
 import Carousel from "react-native-snap-carousel";
-
 import { Images, Colors } from "../../../Themes";
 import styles from "./styles";
 import NavigationService from "../../../Navigation/NavigationService";
 import { AlertContext } from "../../Root/GlobalContext";
-import ShareOptionList from "../Components/ShareOptionList";
+import { shareOptions } from "../Components/ShareOptionList";
 import metrics from "../../../Themes/Metrics";
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 
 import PubSub from "pubsub-js";
-
-import {
-  ADD_PRODUCT_TO_WISHLIST,
-  DELETE_PRODUCT_FROM_WISHLIST,
-} from "../../../Apollo/mutations/mutations_product";
-import { IS_PRODDCT_IN_WISHLIST } from "../../../Apollo/queries/queries_prodmang";
 import useRealm from "../../../hooks/useRealm";
 import { t } from "react-native-tailwindcss";
-import { GET_LOCAL_CART } from "../../../Apollo/cache";
+import { GET_LOCAL_CART, userProfileVar } from "../../../Apollo/cache";
+import {
+  useAddListingToWishlistMutation,
+  useDeleteListingFromWishlistMutation,
+  useIsListingInWishlistQuery,
+} from "../../../../generated/graphql";
+import Share from "react-native-share";
 //render product images
 export default function ProductCarousel({ product }) {
   const { realm } = useRealm();
+  const userProfileVarReactive = useReactiveVar(userProfileVar);
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
@@ -63,51 +63,42 @@ export default function ProductCarousel({ product }) {
   }, [localCartVar.deliverAddress, realm]);
   const _carousel = useRef();
   const { dispatch } = useContext(AlertContext);
-  const { data, refetch } = useQuery(IS_PRODDCT_IN_WISHLIST, {
+  const { data, refetch } = useIsListingInWishlistQuery({
     variables: {
-      productId: product.productId,
       buyerId: global.buyerId,
-      // billingDetailsId: billingDetails.billingDetailsId,
+      listingId: product.listingId,
     },
     context: {
       headers: {
-        isPrivate: true,
+        isPrivate: userProfileVarReactive.isAuth,
       },
     },
+  });
+  const [addToWishList] = useAddListingToWishlistMutation({
+    variables: { buyerId: global.buyerId, listingId: product.listingId },
+    context: {
+      headers: {
+        isPrivate: userProfileVarReactive.isAuth,
+      },
+    },
+    onCompleted: (res) => {
+      refetch();
+    },
+    onError: (res) => {},
+  });
+  const [deleteFromWishList] = useDeleteListingFromWishlistMutation({
+    variables: { buyerId: global.buyerId, listingId: product.listingId },
+    context: {
+      headers: {
+        isPrivate: userProfileVarReactive.isAuth,
+      },
+    },
+    onCompleted: (res) => {
+      refetch();
+    },
+    onError: (res) => {},
   });
 
-  const [addToWishList] = useMutation(ADD_PRODUCT_TO_WISHLIST, {
-    variables: {
-      productId: product.productId,
-      buyerId: global.buyerId,
-      // billingDetailsId: billingDetails.billingDetailsId,
-    },
-    context: {
-      headers: {
-        isPrivate: true,
-      },
-    },
-    onCompleted: (res) => {
-      refetch();
-    },
-    onError: (res) => {},
-  });
-  const [deleteFromWishList] = useMutation(DELETE_PRODUCT_FROM_WISHLIST, {
-    variables: {
-      productId: product.productId,
-      buyerId: global.buyerId,
-      // billingDetailsId: billingDetails.billingDetailsId,
-    },
-    context: {
-      headers: {
-        isPrivate: true,
-      },
-    },
-    onCompleted: (res) => {
-      refetch();
-    },
-    onError: (res) => {},
-  });
   //hold the index of the current product's photo
   const [photoIndex, setPhotoIndex] = useState(0);
 
@@ -116,22 +107,23 @@ export default function ProductCarousel({ product }) {
     setPhotoIndex(index);
   }, []);
   const onLikeProduct = useCallback(() => {
-    data?.isProductInWishlist ? deleteFromWishList() : addToWishList();
-  }, [addToWishList, data?.isProductInWishlist, deleteFromWishList]);
+    data?.isListingInWishlist ? deleteFromWishList() : addToWishList();
+  }, [addToWishList, data?.isListingInWishlist, deleteFromWishList]);
   const toggleShareSheet = useCallback(() => {
-    dispatch({
-      type: "changSheetState",
-      payload: {
-        showSheet: true,
-        height: 250,
-        children: () => (
-          <View style={{ flex: 1, justifyContent: "flex-end" }}>
-            <ShareOptionList />
-          </View>
-        ),
-        sheetTitle: "Share to",
-      },
-    });
+    Share.open(shareOptions);
+    // dispatch({
+    //   type: "changSheetState",
+    //   payload: {
+    //     showSheet: true,
+    //     height: 250,
+    //     children: () => (
+    //       <View style={{ flex: 1, justifyContent: "flex-end" }}>
+    //         <ShareOptionList />
+    //       </View>
+    //     ),
+    //     sheetTitle: "Share to",
+    //   },
+    // });
   }, [dispatch]);
   /**
    * when we add an item to the cart we need to update the local cart
@@ -196,10 +188,10 @@ export default function ProductCarousel({ product }) {
             <Image
               style={[
                 styles.btnRoundIcon,
-                data?.isProductInWishlist && { tintColor: Colors.primary },
+                data?.isListingInWishlist && { tintColor: Colors.primary },
               ]}
               source={
-                data?.isProductInWishlist ? Images.likeFilled : Images.likeMed
+                data?.isListingInWishlist ? Images.likeFilled : Images.likeMed
               }
             />
           </TouchableOpacity>

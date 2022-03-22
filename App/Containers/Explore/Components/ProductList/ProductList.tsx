@@ -4,13 +4,15 @@ import ProductItem from "../ProductItem";
 import { HPageViewHoc } from "react-native-head-tab-view";
 import ExploreSortBar from "../ExploreSortBar";
 import { AlertContext } from "../../../Root/GlobalContext";
-import ShareOptionList from "../ShareOptionList";
+import Share from "react-native-share";
+
 import colors from "../../../../Themes/Colors";
 import { client } from "../../../../Apollo/apolloClient";
 import {
   GetListingsDocument,
   useGetListingsQuery,
 } from "../../../../../generated/graphql";
+import { shareOptions } from "../ShareOptionList";
 const pageSize = 5;
 
 const sortOptions = [
@@ -42,20 +44,21 @@ export default function ProductList(props) {
   const [isRereshing, setIsRereshing] = useState(false);
   const [showProductAsRows, setShowProductAsRows] = useState(true);
   const toggleShareSheet = useCallback(() => {
-    dispatch({
-      type: "changSheetState",
-      payload: {
-        showSheet: true,
-        height: 250,
-        children: () => (
-          <View style={{ flex: 1, justifyContent: "flex-end" }}>
-            <ShareOptionList />
-          </View>
-        ),
-        sheetTitle: "Share to",
-      },
-    });
-  }, [dispatch]);
+    Share.open(shareOptions);
+    // dispatch({
+    //   type: "changSheetState",
+    //   payload: {
+    //     showSheet: true,
+    //     height: 250,
+    //     children: () => (
+    //       <View style={{ flex: 1, justifyContent: "flex-end" }}>
+    //         <ShareOptionList />
+    //       </View>
+    //     ),
+    //     sheetTitle: "Share to",
+    //   },
+    // });
+  }, []);
   let searchOptions = {
     filter: filter,
     filterParams: filterParams,

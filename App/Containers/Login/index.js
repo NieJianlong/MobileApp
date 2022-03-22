@@ -29,7 +29,7 @@ import { client } from "../../Apollo/apolloClient";
 import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
 import GetBillingDetail from "../../hooks/billingDetails";
-import { useResendVerificationCodeInEmailMutation } from "../../../generated/graphql";
+import { useResendVerificationCodeInSmsMutation } from "../../../generated/graphql";
 
 function LoginScreen(props) {
   // refs
@@ -41,7 +41,7 @@ function LoginScreen(props) {
   let [psswd, setPsswd] = useState("");
   const { params } = useRoute();
   const { isBillingLoaded } = GetBillingDetail();
-  const [resendCode] = useResendVerificationCodeInEmailMutation();
+  const [resendCode] = useResendVerificationCodeInSmsMutation();
 
   useEffect(() => {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
@@ -95,7 +95,7 @@ function LoginScreen(props) {
               console.log("====================================");
               // if (!decoded.email_verified) {
               //   resendCode({
-              //     variables: { emailAddress: decoded.email },
+              //     variables: { phoneNumber: decoded.email },
               //     onCompleted: () => {
               //       dispatch({
               //         type: "changLoading",

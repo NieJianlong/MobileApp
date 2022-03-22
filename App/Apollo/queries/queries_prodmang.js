@@ -304,8 +304,3 @@ export const ANNOUNCEMENT_BY_LISTING_ID = gql`
     }
   }
 `;
-export const IS_PRODDCT_IN_WISHLIST = gql`
-  query IsProductInWishlist($productId: String!, $buyerId: String!) {
-    isProductInWishlist(productId: $productId, buyerId: $buyerId)
-  }
-`;

@@ -12,7 +12,7 @@ const GetBillingDetail = () => {
   const userProfile = useReactiveVar(userProfileVar);
   const [isBillingLoaded, setIsBillingLoaded] = useState(false);
   const [billingDetail, setBillingDetail] = useState(null);
-
+  console.log("Here call");
   const [getBillingAddress, { loading, error, data }] = useLazyQuery(
     BILLING_DETAIL_BY_BUYERID,
     {
@@ -44,7 +44,7 @@ const GetBillingDetail = () => {
     }
 
     if (data) {
-      console.log("billingData", data);
+      console.log("billingData================Testtt", data);
       const billingDatas = data.billingDetailsByBuyerId;
 
       if ((billingDatas || []).length > 1) {
@@ -52,6 +52,7 @@ const GetBillingDetail = () => {
           ...userProfile,
           billingDetailsId: billingDatas[0].billingDetailsId,
         });
+
         getLocalStorageValue(LOCAL_STORAGE_USER_PROFILE).then(async (res) => {
           if (res) {
             const userData = JSON.parse(res);

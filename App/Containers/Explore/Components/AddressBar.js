@@ -117,6 +117,7 @@ export default function AddressBar() {
             : result.getGuestBuyerDefaultAddressByBuyerId;
           // handleData(resultJson);
           getLocalStorageValue(CURRENT_ADDRESS).then((res) => {
+            console.log("res========getLocalStorageValue", res);
             if (!isEmpty(res)) {
               const resultkkk = JSON.parse(res);
               handleData(resultkkk);

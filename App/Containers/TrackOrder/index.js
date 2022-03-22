@@ -87,6 +87,19 @@ function TrackOrder(props) {
                 ).format("DD MMM YYYY")}
               </Text>
             )}
+            {data.deliveryOption === DeliveryOption.SellerDirectDelivery && (
+              <Text
+                style={[
+                  ApplicationStyles.screen.heading2Bold,
+                  { fontSize: s(32), paddingTop: 10 },
+                ]}
+              >
+                {moment(
+                  trackData?.trackOrderItem.sellerDirectDelivery.deliveryDate ??
+                    ""
+                ).format("DD MMM YYYY")}
+              </Text>
+            )}
             {data.deliveryOption === DeliveryOption.SellerLocationPickup && (
               <Text
                 style={[

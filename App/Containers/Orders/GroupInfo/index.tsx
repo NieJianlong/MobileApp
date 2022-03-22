@@ -21,6 +21,7 @@ import {
   ProductListingStatus,
   useGetListingsQuery,
   useMarkOrderItemAsDeliveredMutation,
+  useUpdateListingStatusMutation,
 } from "../../../../generated/graphql";
 
 function GroupInfoScreen(props) {
@@ -57,7 +58,22 @@ function GroupInfoScreen(props) {
         },
       },
     });
+    updateListingStatus();
   }, [data, markOrderItem]);
+
+  const [updateListingStatus] = useUpdateListingStatusMutation({
+    variables: {
+      input: {
+        listingId: data.listingId,
+        status: ProductListingStatus.Accepted,
+      },
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+  });
   // const { loading, error, data, refetch, fetchMore } = useGetListingsQuery({
   //   variables: {
   //     searchOptions: {

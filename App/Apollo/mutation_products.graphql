@@ -25,3 +25,18 @@ mutation AddListingToWishlist($buyerId: ID!, $listingId: ID!) {
 mutation DeleteListingFromWishlist($buyerId: ID!, $listingId: ID!) {
   deleteListingFromWishlist(buyerId: $buyerId, listingId: $listingId)
 }
+
+mutation UpdateListingStatus($input: ListingStatusInput!) {
+  updateListingStatus(input: $input) {
+    id
+    # product: Product!
+    # store: Store!
+    # announcement: Announcement
+    # closedDate: Date
+    # deliveryDate: Date
+    # productListingStatus: ProductListingStatus!
+    # minSoldQuantity: Int!
+    # openUntil: Date!
+    # startDate: DateTime!
+  }
+}

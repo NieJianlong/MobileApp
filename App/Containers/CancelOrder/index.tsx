@@ -16,11 +16,15 @@ import { AppBar, Selector } from "../../Components";
 import NavigationService from "../../Navigation/NavigationService";
 import { ApplicationStyles } from "../../Themes";
 import { useRoute } from "@react-navigation/native";
-import { CancellationReason } from "../../../generated/graphql";
+import {
+  CancellationReason,
+  useCancelOrderItemMutation,
+} from "../../../generated/graphql";
+import { isEmpty } from "lodash";
 
 function CancelOrder(props) {
   const [showPrefer, setShowPrefer] = useState(false);
-  const [reason, setReason] = useState<string>("");
+  const [reason, setReason] = useState<string>("Mistake order");
   const [message, setMessage] = useState<string>("");
   const { params } = useRoute();
   const reasonParams = useMemo(() => {
@@ -34,6 +38,23 @@ function CancelOrder(props) {
       return CancellationReason.ProductNotRequired;
     }
   }, [reason]);
+  const [cancelOrder] = useCancelOrderItemMutation({
+    variables: {
+      request: {
+        orderItemId: params.orderItemId,
+        reason: reasonParams,
+        message,
+      },
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: () => {
+      NavigationService.navigate("CancelOrderCompletedScreen");
+    },
+  });
   return (
     <View
       style={{
@@ -55,13 +76,15 @@ function CancelOrder(props) {
           rightButton={() => {
             return (
               <TouchableOpacity
+                disabled={isEmpty(reason)}
                 onPress={() => {
-                  NavigationService.navigate("RefundScreen", {
-                    cancel: true,
-                    orderItemId: params.orderItemId,
-                    reason: reasonParams,
-                    message,
-                  });
+                  cancelOrder();
+                  // NavigationService.navigate("RefundScreen", {
+                  //   cancel: true,
+                  //   orderItemId: params.orderItemId,
+                  //   reason: reasonParams,
+                  //   message,
+                  // });
                 }}
               >
                 <Text style={[ApplicationStyles.screen.heading5Bold]}>
@@ -98,6 +121,7 @@ function CancelOrder(props) {
           <Selector
             style={{ marginTop: vs(15), marginBottom: vs(10) }}
             placeholder={"Problem reason goes here"}
+            value={"Mistake order"}
             data={[
               "Mistake order",
               "Not able to wait for listing completion",

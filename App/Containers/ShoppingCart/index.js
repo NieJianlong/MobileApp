@@ -49,7 +49,7 @@ function ShoppingCart(props) {
   useEffect(() => {
     props.navigation.addListener("focus", () => {
       const mydatas = query;
-      console.log("mydatas", mydatas);
+      console.log("mydatas00", mydatas);
       console.log("localCartlocalCart", localCart.items);
       setMydatas(mydatas);
     });

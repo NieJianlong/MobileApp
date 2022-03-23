@@ -141,10 +141,10 @@ const ProductVariants = ({ product, variants, onChange }) => {
   const info = useMemo(() => {
     return realm
       .objects("ShoppingCart")
-      .filtered("product.productId == $0", product.productId)
+      .filtered("product.listingId == $0", product.listingId)
       .filtered("addressId == $0", localCartVar.deliverAddress)
       .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
-  }, [currentVariant, localCartVar, product.productId, realm]);
+  }, [currentVariant, localCartVar, product.listingId, realm]);
   useEffect(() => {
     if (currentVariant) {
       realm.write(() => {
@@ -157,6 +157,7 @@ const ProductVariants = ({ product, variants, onChange }) => {
             isDraft: true,
             addressId: localCartVar.deliverAddress,
             productId: product.productId,
+            listingId: product.listingId,
             product,
             created: new Date(),
             updated: new Date(),

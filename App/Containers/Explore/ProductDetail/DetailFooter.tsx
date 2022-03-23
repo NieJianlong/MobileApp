@@ -95,7 +95,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
 
   const info = realm
     .objects("ShoppingCart")
-    .filtered("product.productId == $0", product.productId)
+    .filtered("product.listingId == $0", product.listingId)
     .filtered("addressId == $0", localCartVar.deliverAddress)
     .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
   const [cartInfo, setCartInfo] = useState(info);
@@ -239,6 +239,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
           isDraft: false,
           addressId: localCartVar.deliverAddress,
           productId: product.productId,
+          listingId: product.listingId,
           product,
           created: new Date(),
           updated: new Date(),

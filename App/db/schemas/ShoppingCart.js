@@ -3,6 +3,7 @@ export const ShoppingCart = {
   primaryKey: "id",
   properties: {
     id: "string",
+    listingId: { type: "string", default: "" },
     productId: { type: "string", default: "" },
     variantId: { type: "string", default: "" },
     quantity: "int",

@@ -3,7 +3,7 @@ export const ValidateCode = gql`
   mutation validateCode($request: ValidateCodeRequest!) {
     validateCode(request: $request) {
       status
-      extraMessage
+      message
     }
   }
 `;
@@ -31,6 +31,15 @@ export const ForgotPasswordStep3ChangeByEmail = gql`
       newPassword: $newPassword
       confirmPassword: $confirmPassword
     ) {
+      message
+    }
+  }
+`;
+
+export const SendOTPCode = gql`
+  mutation sendOTPCode($sendCodeRequest: SendCodeRequest!) {
+    sendOTPCode(sendCodeRequest: $sendCodeRequest) {
+      status
       message
     }
   }

@@ -62,6 +62,17 @@ function OTPScreen(props) {
       alert("Validation fails");
     },
   });
+
+  // const [validate] = useMutation(ValidateCode, {
+  //   onCompleted: (res) => {
+  //     // alert("验证成功");
+  //     autoSignIn();
+  //   },
+  //   onError: (error) => {
+  //     // autoSignIn();
+  //     alert("Validation fails");
+  //   },
+  // });
   // const [validate] = useValidateOtpCodeForBuyerMutation({
   //   onCompleted: (res) => {
   //     // alert("验证成功");
@@ -211,7 +222,7 @@ function OTPScreen(props) {
           userId: params.userId,
           //userId: "6c374229-71ea-44b7-8915-366cbe3198ff",
           validationType: ValidationType.Sms,
-          tokenCode: otpCode,
+          code: otpCode,
         },
       },
     });

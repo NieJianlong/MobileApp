@@ -461,6 +461,7 @@ type Mutation {
   acceptSellerRegistrationDocuments(sellerId: ID!): GenericResponse
   rejectSellerValidation(sellerId: ID!, rejectReason: RegistrationRejectedReason!, rejectNote: String): GenericResponse
   sendOTPCodeForBuyer(buyerId: ID!): GenericResponse
+  sendOTPCode(sendCodeRequest : SendCodeRequest!):SendCodeResponse
   validateOTPCodeForBuyer(request: ValidateCodeRequest!): ValidateCodeResponse
   createServiceOperator(request: ServiceOperatorProfileForCreate!): GenericResponse
 }
@@ -1101,19 +1102,30 @@ enum UserType {
 }
 
 input ValidateCodeRequest {
-  userId: ID!
+  userId:ID!
   validationType: ValidationType!
-  tokenCode: String!
+  code:String!
 }
 
 type ValidateCodeResponse {
   status: Boolean
-  extraMessage: String
+  message: String
 }
 
 enum ValidationType {
   SMS
   EMAIL
+}
+
+input SendCodeRequest {
+  userId:ID!
+  validationType: ValidationType!
+  destination:String!
+}
+
+type SendCodeResponse{
+  status: Boolean
+  message: String
 }
 
 enum WalletTransactionType {

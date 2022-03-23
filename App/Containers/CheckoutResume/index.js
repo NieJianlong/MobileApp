@@ -38,6 +38,7 @@ import { CreateOrderFromCart, WALLET_BALANCE } from "../../hooks/gql";
 import { AlertContext } from "../Root/GlobalContext";
 import PubSub from "pubsub-js";
 import useRealm from "../../hooks/useRealm";
+import AddBillingDetail from "../../hooks/addBillingDetails";
 //orderStatus：1,completed
 function CheckoutResume(props) {
   const { params } = useRoute();
@@ -47,15 +48,15 @@ function CheckoutResume(props) {
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
-
+  const { addbillingDetail, addBilling } = AddBillingDetail();
   const { realm } = useRealm();
+  console.log("callBackAddress", localCartVar.callBackAddress);
   const userProfile = useReactiveVar(userProfileVar);
   const userProfileVarReactive = useReactiveVar(userProfileVar);
   const isAuth = useMemo(
     () => userProfileVarReactive.isAuth,
     [userProfileVarReactive.isAuth]
   );
-
   const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
     useRazorVerifyPayment();
   const { orderStatus, data, availbleList } = params;
@@ -102,7 +103,6 @@ function CheckoutResume(props) {
       onError: (err) => {},
     },
   });
-  console.log("localCartVar", localCartVar);
   console.log("dataWalletdataWalletdataWalletdataWallet", dataWallet);
   const { dispatch } = useContext(AlertContext);
   const [mydatas, setMydatas] = useState(
@@ -151,119 +151,140 @@ function CheckoutResume(props) {
       type: "changLoading",
       payload: true,
     });
-    console.log("localCartVar.items", localCartVar.items);
-    console.log("localCartVar", localCartVar);
-    console.log("localCartVar======mydatas", mydatas);
     const finalItems = localCartVar.items.map((item) => {
       const productItem = mydatas.find(
         (dataItem) => item.variantId === dataItem.variantId
       );
-      console.log("product======", productItem);
       return {
         photo: productItem.product.photo,
         longName: productItem.product.longName,
       };
     });
-    console.log("proceedFurther=====FinalItems", finalItems);
-
-    console.log("type", type);
-    console.log("localCartVar", localCartVar);
-    console.log("userProfile.billingDetailsId,", userProfile.billingDetailsId);
-    console.log("global?.billingDetailsId", global?.billingDetailsId);
-    createOrderFromCart({
-      variables: {
-        cart: {
-          buyerId: global.buyerId,
-          shippingAddressId: localCartVar.deliverAddress,
-          billingDetailsId: localCartVar?.billingAddressDetail?.billingDetailsId,
-          useSalamiWallet: true,
-          cartItems: localCartVar.items,
-        },
-      },
-      context: {
-        headers: {
-          isPrivate: isAuth,
-        },
-      },
-      onCompleted: (res) => {
-        console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
-        dispatch({
-          type: "changLoading",
-          payload: false,
+    addBilling()
+      .then((res) => {
+        console.log("res=====", res);
+        localCartCache({
+          ...localCartVar,
+          billingAddressDetail: userProfile?.billingDetailsId
+            ? res?.data?.updateBillingDetails
+            : res?.data?.createBillingDetails,
         });
-        if (type === "sufficient") {
-          if (res?.createOrderFromCart?.orderId) {
-            clearData();
-            NavigationService.navigate("OrderPlacedScreen", {
-              items: finalItems,
-              from: "checkout",
+        userProfileVar({
+          ...userProfile,
+          billingDetailsId: userProfile?.billingDetailsId
+            ? res?.data?.updateBillingDetails?.billingDetailsId
+            : res?.data?.createBillingDetails?.billingDetailsId,
+        });
+        console.log(
+          "localCartVar?.billingAddressDetail?.billingDetailsId,===finalset",
+          localCartVar?.billingAddressDetail?.billingDetailsId
+        );
+        createOrderFromCart({
+          variables: {
+            cart: {
+              buyerId: global.buyerId,
+              shippingAddressId: localCartVar.deliverAddress,
+              billingDetailsId: isAuth
+                ? userProfile?.billingDetailsId
+                  ? res?.data?.updateBillingDetails?.billingDetailsId
+                  : res?.data?.createBillingDetails?.billingDetailsId
+                : localCartVar?.billingAddressDetail?.billingDetailsId,
+              useSalamiWallet: true,
+              cartItems: localCartVar.items,
+            },
+          },
+          context: {
+            headers: {
+              isPrivate: isAuth,
+            },
+          },
+          onCompleted: (res) => {
+            console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
+            dispatch({
+              type: "changLoading",
+              payload: false,
             });
-          }
-        } else if (type === "zero") {
-          const order = res?.createOrderFromCart;
-          if (res?.createOrderFromCart?.orderId) {
-            cartOrderVar({
-              orderNumber: order?.orderNumber,
-              orderId: order?.orderId,
-              amount: order?.subTotal,
-            });
-            razorpayCreateOrder().then((res) => {
-              if (res?.data) {
-                const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
-                var options = {
-                  description: "Credits towords consultation",
-                  image: "https://i.imgur.com/3g7nmJC.png",
-                  currency: "INR",
-                  key: "rzp_test_I8X2v4LgupMLv0",
-                  name: "Acme Corp",
-                  order_id: razorId, //Replace this with an order_id created using Orders API.
-                  prefill: {
-                    email: userProfile?.email,
-                    contact: userProfile?.phoneNumber,
-                    name: userProfile?.firstName + userProfile.lastName,
-                  },
-                  theme: { color: "#53a20e" },
-                };
-                RazorpayCheckout.open(options)
-                  .then((data) => {
-                    razorOrderPaymentVar({
-                      razorpay_payment_id: data.razorpay_payment_id,
-                      razorpay_order_id: data.razorpay_order_id,
-                      razorpay_signature: data.razorpay_signature,
-                    });
-                    razorpayVerifyPaymentSignature();
-                    //alert(`Success: ${data.razorpay_payment_id}`);
-                    alert("Order Created Successfully");
-                    clearData();
-                    NavigationService.navigate("OrderPlacedScreen", {
-                      items: finalItems,
-                      from: "checkout",
-                    });
-                  })
-                  .catch((error) => {
-                    alert(`Error: ${error.code} | ${error.description}`);
-                  });
+            if (type === "sufficient") {
+              if (res?.createOrderFromCart?.orderId) {
+                clearData();
+                NavigationService.navigate("OrderPlacedScreen", {
+                  items: finalItems,
+                  from: "checkout",
+                });
               }
+            } else if (type === "zero") {
+              const order = res?.createOrderFromCart;
+              if (res?.createOrderFromCart?.orderId) {
+                cartOrderVar({
+                  orderNumber: order?.orderNumber,
+                  orderId: order?.orderId,
+                  amount: order?.subTotal,
+                });
+                razorpayCreateOrder().then((res) => {
+                  if (res?.data) {
+                    const razorId =
+                      res?.data?.razorpayCreateOrder?.razorpayOrderId;
+                    var options = {
+                      description: "Credits towords consultation",
+                      image: "https://i.imgur.com/3g7nmJC.png",
+                      currency: "INR",
+                      key: "rzp_test_I8X2v4LgupMLv0",
+                      name: "Acme Corp",
+                      order_id: razorId, //Replace this with an order_id created using Orders API.
+                      prefill: {
+                        email: userProfile?.email,
+                        contact: userProfile?.phoneNumber,
+                        name: userProfile?.firstName + userProfile.lastName,
+                      },
+                      theme: { color: "#53a20e" },
+                    };
+                    RazorpayCheckout.open(options)
+                      .then((data) => {
+                        razorOrderPaymentVar({
+                          razorpay_payment_id: data.razorpay_payment_id,
+                          razorpay_order_id: data.razorpay_order_id,
+                          razorpay_signature: data.razorpay_signature,
+                        });
+                        razorpayVerifyPaymentSignature();
+                        //alert(`Success: ${data.razorpay_payment_id}`);
+                        alert("Order Created Successfully");
+                        clearData();
+                        NavigationService.navigate("OrderPlacedScreen", {
+                          items: finalItems,
+                          from: "checkout",
+                        });
+                      })
+                      .catch((error) => {
+                        alert(`Error: ${error.code} | ${error.description}`);
+                      });
+                  }
+                });
+              }
+              return res?.createOrderFromCart;
+            } else if (type === "InSufficient") {
+              NavigationService.navigate("InSufficientSalamiCreditScreen", {
+                walletBalance: walletBalance,
+                productPrice: parseFloat(money.total).toFixed(2),
+                product: finalItems,
+              });
+            }
+          },
+          onError: (res) => {
+            dispatch({
+              type: "changLoading",
+              payload: false,
             });
-          }
-          return res?.createOrderFromCart;
-        } else if (type === "InSufficient") {
-          NavigationService.navigate("InSufficientSalamiCreditScreen", {
-            walletBalance: walletBalance,
-            productPrice: parseFloat(money.total).toFixed(2),
-            product: finalItems,
-          });
-        }
-      },
-      onError: (res) => {
-        dispatch({
-          type: "changLoading",
-          payload: false,
+            alert(JSON.stringify(res.message));
+            console.log(
+              `Explore useCreateOrder onError ${JSON.stringify(res)}`
+            );
+          },
         });
-        alert(JSON.stringify(res.message));
-        console.log(`Explore useCreateOrder onError ${JSON.stringify(res)}`);
-      },
-    });
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+    return;
   };
   return (
     <View
@@ -292,7 +313,16 @@ function CheckoutResume(props) {
             }}
             contentContainerStyle={{ paddingBottom: 110 }}
           >
-            <DeliverInfo orderStatus={orderStatus} billingAddressDetail={localCartVar?.billingAddressDetail} />
+            <DeliverInfo
+              userProfile={userProfile}
+              orderStatus={orderStatus}
+              isAuth={isAuth}
+              billingAddressDetail={
+                isAuth
+                  ? localCartVar?.callBackAddress
+                  : localCartVar?.billingAddressDetail
+              }
+            />
             <View
               style={{
                 flexDirection: "row",
@@ -428,6 +458,12 @@ function CheckoutResume(props) {
                 if (!global.access_token || global.access_token === "") {
                   proceedFurther("zero");
                 } else {
+                  console.log("walletBalance", walletBalance);
+                  console.log("money.total", money.total);
+                  console.log(
+                    "walletBalance >= parseFloat(money.total).toFixed(2)",
+                    walletBalance >= parseFloat(money.total).toFixed(2)
+                  );
                   if (!isNaN(walletBalance)) {
                     if (walletBalance >= parseFloat(money.total).toFixed(2)) {
                       proceedFurther("sufficient");

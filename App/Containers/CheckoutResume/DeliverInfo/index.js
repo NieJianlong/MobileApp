@@ -9,18 +9,28 @@ import fonts from "../../../Themes/Fonts";
 import { ApplicationStyles } from "../../../Themes";
 
 function index(props) {
-  const { orderStatus } = props;
+  console.log("props======", props);
+  const { orderStatus, isAuth, billingAddressDetail, userProfile} = props;
   console.log("props.billinfDetail", props.billingAddressDetail);
+  const fname = isAuth
+    ? userProfile.firstName
+    : billingAddressDetail?.firstName;
+  const provinceState = isAuth
+    ? billingAddressDetail?.provinceState
+    : billingAddressDetail?.billingAddress?.provinceState;
+  const towncity = isAuth
+    ? billingAddressDetail?.townCity
+    : billingAddressDetail?.billingAddress?.townCity;
   const [datas, setDatas] = useState([
     {
       icon: images.userDeliverytoImage,
       title: "Deliver to:",
-      subtitle: `${props.billingAddressDetail.firstName}, ${
-        props.billingAddressDetail.billingAddress.streetAddress1 || ""
-      } ${props.billingAddressDetail.billingAddress.streetAddress2 || ""} ${
-        props.billingAddressDetail.billingAddress.streetAddress3 || ""
+      subtitle: `${fname}, ${towncity}, ${
+        props?.billingAddressDetail?.billingAddress?.streetAddress1 || ""
+      } ${props?.billingAddressDetail?.billingAddress?.streetAddress2 || ""} ${
+        props?.billingAddressDetail?.billingAddress?.streetAddress3 || ""
       }`,
-      subtitle1: `India, ${props.billingAddressDetail.billingAddress.provinceState}`,
+      subtitle1: `India, ${provinceState}`,
       type: "delivery",
     },
     // {

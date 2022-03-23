@@ -492,6 +492,36 @@ export const CREATE_BILLING_DETAILS = gql`
     createBillingDetails(request: $request) {
       billingDetailsId
       buyerId
+      firstName
+      lastName
+      companyName
+      email
+      phoneNumber
+      billingAddress {
+        addressId
+        flat
+        floor
+        defaultAddress
+        block
+        building
+        houseNumber
+        streetAddress1
+        streetAddress2
+        streetAddress3
+        townCity
+        villageArea
+        district
+        provinceState
+        country
+        areaCode
+        landMark
+        pinCode
+        addressType
+        referenceId
+      }
+      taxCode
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -516,6 +546,37 @@ export const UPDATE_BILLING_DETAILS = gql`
   mutation UpdateBillingDetails($request: BillingDetailsRequest!) {
     updateBillingDetails(request: $request) {
       billingDetailsId
+      buyerId
+      firstName
+      lastName
+      companyName
+      email
+      phoneNumber
+      billingAddress {
+        addressId
+        flat
+        floor
+        defaultAddress
+        block
+        building
+        houseNumber
+        streetAddress1
+        streetAddress2
+        streetAddress3
+        townCity
+        villageArea
+        district
+        provinceState
+        country
+        areaCode
+        landMark
+        pinCode
+        addressType
+        referenceId
+      }
+      taxCode
+      createdAt
+      updatedAt
     }
   }
 `;

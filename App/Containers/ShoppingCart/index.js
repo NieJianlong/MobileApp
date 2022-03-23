@@ -205,108 +205,108 @@ function ShoppingCart(props) {
                   height: 80,
                 }}
               >
-                {!paidDuringDelivery ? (
-                  <TouchableOpacity
-                    onPress={() => setPaidDuringDeliver(true)}
-                    style={{
-                      borderRadius: s(40),
-                      backgroundColor: colors.grey80,
-                      width: s(170),
-                      height: s(32),
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginTop: -15,
-                    }}
-                  >
-                    <Text
-                      style={[
-                        styles.heading5Bold,
-                        { color: "white", textAlign: "center" },
-                      ]}
-                    >
-                      PAY DURING DELIVERY
-                    </Text>
-                  </TouchableOpacity>
-                ) : (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <View style={{ flexDirection: "row" }}>
-                      <Text
-                        style={[
-                          styles.txtRegular,
-                          { fontSize: s(14), color: colors.black },
-                        ]}
-                      >
-                        Product paid during delivery.
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() => {
-                          sheetContext.dispatch({
-                            type: "changSheetState",
-                            payload: {
-                              showSheet: true,
-                              height: 300,
-                              children: () => {
-                                const data = {
-                                  textTip: "Paying during delivery",
-                                  subTextTip:
-                                    "This is an explanatory text about this feature, lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professo.",
-                                  needButton: true,
-                                  btnMsg: "OK",
-                                  onPress: () => {
-                                    sheetContext.dispatch({
-                                      type: "changSheetState",
-                                      payload: {
-                                        showSheet: false,
-                                      },
-                                    });
-                                  },
-                                };
-                                return (
-                                  <View
-                                    style={{
-                                      height: 320,
-                                      marginLeft: -AppConfig.paddingHorizontal,
-                                    }}
-                                  >
-                                    <TextTip {...data} />
-                                  </View>
-                                );
-                              },
-                            },
-                          });
-                        }}
-                      >
-                        <Text
-                          style={[
-                            styles.txtRegular,
-                            { color: colors.secondary00, paddingLeft: 6 },
-                          ]}
-                        >
-                          Details
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                    <TouchableOpacity
-                      onPress={() => {
-                        // NavigationService.navigate("PaymentScreen")
-                      }}
-                    >
-                      <Text
-                        style={[
-                          styles.txtRegular,
-                          { color: colors.secondary00, paddingLeft: 6 },
-                        ]}
-                      >
-                        PAY NOW
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
+                {/*{!paidDuringDelivery ? (*/}
+                {/*  <TouchableOpacity*/}
+                {/*    onPress={() => setPaidDuringDeliver(true)}*/}
+                {/*    style={{*/}
+                {/*      borderRadius: s(40),*/}
+                {/*      backgroundColor: colors.grey80,*/}
+                {/*      width: s(170),*/}
+                {/*      height: s(32),*/}
+                {/*      alignItems: "center",*/}
+                {/*      justifyContent: "center",*/}
+                {/*      marginTop: -15,*/}
+                {/*    }}*/}
+                {/*  >*/}
+                {/*    <Text*/}
+                {/*      style={[*/}
+                {/*        styles.heading5Bold,*/}
+                {/*        { color: "white", textAlign: "center" },*/}
+                {/*      ]}*/}
+                {/*    >*/}
+                {/*      PAY DURING DELIVERY*/}
+                {/*    </Text>*/}
+                {/*  </TouchableOpacity>*/}
+                {/*) : (*/}
+                {/*  <View*/}
+                {/*    style={{*/}
+                {/*      flexDirection: "row",*/}
+                {/*      justifyContent: "space-between",*/}
+                {/*    }}*/}
+                {/*  >*/}
+                {/*    <View style={{ flexDirection: "row" }}>*/}
+                {/*      <Text*/}
+                {/*        style={[*/}
+                {/*          styles.txtRegular,*/}
+                {/*          { fontSize: s(14), color: colors.black },*/}
+                {/*        ]}*/}
+                {/*      >*/}
+                {/*        Product paid during delivery.*/}
+                {/*      </Text>*/}
+                {/*      <TouchableOpacity*/}
+                {/*        onPress={() => {*/}
+                {/*          sheetContext.dispatch({*/}
+                {/*            type: "changSheetState",*/}
+                {/*            payload: {*/}
+                {/*              showSheet: true,*/}
+                {/*              height: 300,*/}
+                {/*              children: () => {*/}
+                {/*                const data = {*/}
+                {/*                  textTip: "Paying during delivery",*/}
+                {/*                  subTextTip:*/}
+                {/*                    "This is an explanatory text about this feature, lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professo.",*/}
+                {/*                  needButton: true,*/}
+                {/*                  btnMsg: "OK",*/}
+                {/*                  onPress: () => {*/}
+                {/*                    sheetContext.dispatch({*/}
+                {/*                      type: "changSheetState",*/}
+                {/*                      payload: {*/}
+                {/*                        showSheet: false,*/}
+                {/*                      },*/}
+                {/*                    });*/}
+                {/*                  },*/}
+                {/*                };*/}
+                {/*                return (*/}
+                {/*                  <View*/}
+                {/*                    style={{*/}
+                {/*                      height: 320,*/}
+                {/*                      marginLeft: -AppConfig.paddingHorizontal,*/}
+                {/*                    }}*/}
+                {/*                  >*/}
+                {/*                    <TextTip {...data} />*/}
+                {/*                  </View>*/}
+                {/*                );*/}
+                {/*              },*/}
+                {/*            },*/}
+                {/*          });*/}
+                {/*        }}*/}
+                {/*      >*/}
+                {/*        <Text*/}
+                {/*          style={[*/}
+                {/*            styles.txtRegular,*/}
+                {/*            { color: colors.secondary00, paddingLeft: 6 },*/}
+                {/*          ]}*/}
+                {/*        >*/}
+                {/*          Details*/}
+                {/*        </Text>*/}
+                {/*      </TouchableOpacity>*/}
+                {/*    </View>*/}
+                {/*    <TouchableOpacity*/}
+                {/*      onPress={() => {*/}
+                {/*        // NavigationService.navigate("PaymentScreen")*/}
+                {/*      }}*/}
+                {/*    >*/}
+                {/*      <Text*/}
+                {/*        style={[*/}
+                {/*          styles.txtRegular,*/}
+                {/*          { color: colors.secondary00, paddingLeft: 6 },*/}
+                {/*        ]}*/}
+                {/*      >*/}
+                {/*        PAY NOW*/}
+                {/*      </Text>*/}
+                {/*    </TouchableOpacity>*/}
+                {/*  </View>*/}
+                {/*)}*/}
                 <View
                   style={{
                     marginTop: 30,

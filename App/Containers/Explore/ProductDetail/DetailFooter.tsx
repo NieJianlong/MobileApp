@@ -446,7 +446,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
         <TouchableOpacity
           style={styles.row}
           onPress={toggleAddToCartSheet}
-          //disabled={currentVariant.itemsSold === currentVariant.itemsAvailable}
+          disabled={currentVariant.itemsSold === currentVariant.itemsAvailable}
         >
           <Image source={Images.cartMed} style={styles.icCart} />
           <Text style={[styles.txtBold, { color: Colors.primary }]}>
@@ -458,11 +458,11 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
           onPress={toggleConfirmOrderSheet}
           style={styles.btnBuyNow}
           disabled={
-            currentVariant.itemsSold === currentVariant.noOfItemsInStock
+            currentVariant.itemsSold === currentVariant.itemsAvailable
           }
         >
           <Text style={[styles.txtBold, { color: Colors.white }]}>
-            {currentVariant.itemsSold === currentVariant.noOfItemsInStock
+            {currentVariant.itemsSold === currentVariant.itemsAvailable
               ? "you missed product 100/100 sold.."
               : "BUY NOW"}
           </Text>

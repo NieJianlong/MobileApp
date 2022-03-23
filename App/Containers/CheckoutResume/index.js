@@ -163,6 +163,11 @@ function CheckoutResume(props) {
     addBilling()
       .then((res) => {
         console.log("res=====", res);
+        const billingDetailsId = isAuth
+          ? userProfile?.billingDetailsId
+            ? res?.data?.updateBillingDetails?.billingDetailsId
+            : res?.data?.createBillingDetails?.billingDetailsId
+          : localCartVar?.billingAddressDetail?.billingDetailsId;
         localCartCache({
           ...localCartVar,
           billingAddressDetail: userProfile?.billingDetailsId
@@ -175,20 +180,14 @@ function CheckoutResume(props) {
             ? res?.data?.updateBillingDetails?.billingDetailsId
             : res?.data?.createBillingDetails?.billingDetailsId,
         });
-        console.log(
-          "localCartVar?.billingAddressDetail?.billingDetailsId,===finalset",
-          localCartVar?.billingAddressDetail?.billingDetailsId
-        );
+
+        console.log("billingDetailsId pass", billingDetailsId);
         createOrderFromCart({
           variables: {
             cart: {
               buyerId: global.buyerId,
               shippingAddressId: localCartVar.deliverAddress,
-              billingDetailsId: isAuth
-                ? userProfile?.billingDetailsId
-                  ? res?.data?.updateBillingDetails?.billingDetailsId
-                  : res?.data?.createBillingDetails?.billingDetailsId
-                : localCartVar?.billingAddressDetail?.billingDetailsId,
+              billingDetailsId: billingDetailsId,
               useSalamiWallet: true,
               cartItems: localCartVar.items,
             },
@@ -255,6 +254,7 @@ function CheckoutResume(props) {
                         });
                       })
                       .catch((error) => {
+                        console.log("error in create order", error);
                         alert(`Error: ${error.code} | ${error.description}`);
                       });
                   }

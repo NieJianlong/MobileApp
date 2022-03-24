@@ -16,7 +16,7 @@ import images from "../../../Themes/Images";
 import { ApplicationStyles } from "../../../Themes";
 
 function index(props) {
-  const { orderStatus, subTotal, saving } = props;
+  const { orderStatus, subTotal, saving, deliveryFess } = props;
   const [promoCode, setPromoCode] = useState("");
   const [promoStatus, setPromoStatus] = useState("");
   const [summaries, setSummaries] = useState([
@@ -26,13 +26,8 @@ function index(props) {
       type: "normal",
     },
     {
-      title: "Service fee",
-      value: "$0",
-      type: "normal",
-    },
-    {
       title: "Delivery",
-      value: "$9,98",
+      value: `${deliveryFess}`,
       type: "normal",
     },
     {

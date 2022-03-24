@@ -59,5 +59,8 @@ export const ProductSchema = {
     ratingDetail: { type: "RatingDetail?", default: null },
     announcementId: { type: "string?", default: null },
     sellerId: { type: "string?", default: null },
+    deliveryOption: { type: "string?", default: null },
+    courierShippingFee: { type: "int?", default: null },
+    courierShippingFeeTax: { type: "int?", default: null },
   },
 };

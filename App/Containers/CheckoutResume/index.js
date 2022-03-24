@@ -63,6 +63,7 @@ function CheckoutResume(props) {
   const money = useMemo(() => {
     let currentBilling = 0;
     let originalBilling = 0;
+    let deliveryFess = 0;
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
       let itemAvailble = true;
@@ -71,6 +72,9 @@ function CheckoutResume(props) {
         itemAvailble = i?.isAvailable;
       }
       if (itemAvailble) {
+        if (element?.deliveryOption === "COURIER_DELIVERY") {
+          deliveryFess = element.courierShippingFee + deliveryFess;
+        }
         if (element.variant) {
           originalBilling =
             originalBilling + element.variant.retailPrice * element.quantity;
@@ -84,14 +88,15 @@ function CheckoutResume(props) {
         }
       }
     }
-    const total = new BigNumber(currentBilling).toFixed(2);
+    const total = new BigNumber(currentBilling + deliveryFess).toFixed(2);
     const saving = new BigNumber(originalBilling - currentBilling).toFixed(2);
     return {
       total: total,
       saving: saving,
       percent: BigNumber(saving).dividedBy(total).multipliedBy(100).toFixed(2),
+      deliveryFess: deliveryFess,
     };
-  }, [data]);
+  }, [data, availbleList]);
   const { data: dataWallet } = useQuery(WALLET_BALANCE, {
     context: {
       headers: {
@@ -112,6 +117,7 @@ function CheckoutResume(props) {
       .filtered("quantity > 0")
       .filtered("isDraft == false")
   );
+  console.log("mydatas=======", mydatas[0]);
   const walletBalance = BigNumber(
     dataWallet?.getBuyerSalamiWalletBalance?.walletBalance +
       dataWallet?.getBuyerSalamiWalletBalance?.giftBalance
@@ -370,6 +376,7 @@ function CheckoutResume(props) {
               orderStatus={orderStatus}
               subTotal={money.total}
               saving={money.saving}
+              deliveryFess={money.deliveryFess}
             />
             {global.access_token && global.access_token !== "" && (
               <PaymentOptions />

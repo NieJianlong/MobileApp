@@ -21,7 +21,7 @@ import {
   DeliveryOption,
   useTrackOrderItemQuery,
 } from "../../../generated/graphql";
-import Qrcode from "./qrcode/index";
+import Qrcode from "./Qrcode/index";
 import { t } from "react-native-tailwindcss";
 import moment from "moment";
 
@@ -84,6 +84,19 @@ function TrackOrder(props) {
               >
                 {moment(
                   trackData?.trackOrderItem.collectionPoint.collectionDate ?? ""
+                ).format("DD MMM YYYY")}
+              </Text>
+            )}
+            {data.deliveryOption === DeliveryOption.SellerDirectDelivery && (
+              <Text
+                style={[
+                  ApplicationStyles.screen.heading2Bold,
+                  { fontSize: s(32), paddingTop: 10 },
+                ]}
+              >
+                {moment(
+                  trackData?.trackOrderItem.sellerDirectDelivery.deliveryDate ??
+                    ""
                 ).format("DD MMM YYYY")}
               </Text>
             )}

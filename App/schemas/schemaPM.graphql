@@ -36,7 +36,7 @@ input AddressInput {
 }
 
 type AddressView {
-  addressId: ID!
+  addressId: ID
   flat: String
   block: String
   building: String
@@ -181,10 +181,17 @@ enum FilterType {
   ACTIVE_BY_ADDRESS_ID_AND_ANNOUNCEMENT
   ACTIVE_BY_ADDRESS_ID_AND_CATEGORY
   ACTIVE_BY_ADDRESS_ID_AND_SELLER
-  ACTIVE_BY_ADDRESS_ID_AND_WISH_LIST
   ACTIVE_BY_ADDRESS_ID_AND_FULL_TEXT_SEARCH
   ACTIVE_BY_ADDRESS_ID_AND_SHARE_LIST
   ACTIVE_BY_ADDRESS_ID
+}
+
+type FindReviewResponse {
+  content: [ReviewResponse!]!
+  pageNo: Int!
+  pageSize: Int!
+  totalPages: Int!
+  totalElements: Int!
 }
 
 type Images {
@@ -285,15 +292,20 @@ type Mutation {
   deleteProductListing(listingId: String!): Boolean!
   cloneListing(listingIds: [String!]!, startDate: DateTime): [ProductListing!]!
   createRecurringListings(input: RecurringListingInput!): [ProductListing!]!
+  addListingToWishlist(buyerId: ID!, listingId: ID!): Wishlist!
+  deleteListingFromWishlist(buyerId: ID!, listingId: ID!): Boolean!
   reduceSoldQuantity(input: VariantSoldQuantityInput!): Boolean!
   incrementSoldQuantity(input: VariantSoldQuantityInput!): Boolean!
   createProduct(productCreateInput: ProductCreateInput!): Product!
   updateProduct(input: ProductUpdateInput!): SellerProductDetailView!
   updateProductPriceAndQuantity(input: ProductPriceAndQuantityUpdateInput!): SellerProductDetailView!
-  deleteProduct(productId: ID!): Boolean
-  disableProduct(productId: ID!): Product
-  rejectProduct(productId: ID!): Product
-  acceptProduct(productId: ID!): Product
+  updateProductStatus(input: ProductStatusInput!): Product!
+  deleteProduct(productId: ID!): Boolean!
+  disableProduct(productId: ID!): Product!
+  rejectProduct(productId: ID!): Product!
+  acceptProduct(productId: ID!): Product!
+
+  """todo for removal"""
   addProductToWishlist(productId: String!, buyerId: String!): Wishlist!
   deleteProductFromWishlist(productId: String!, buyerId: String!): Int!
   addRequestForProduct(input: RequestForProductInput!): RequestForProductResponse!
@@ -359,6 +371,13 @@ type Product {
   highlightBullets: [String]
   keywords: [String]
   productType: ProductType
+  productStatus: ProductStatus!
+}
+
+type ProductCategoryResponse {
+  categoryId: ID!
+  name: String!
+  description: String
 }
 
 type ProductCategoryView {
@@ -580,6 +599,11 @@ enum ProductStatus {
   DELETED
 }
 
+input ProductStatusInput {
+  productId: ID!
+  productStatus: ProductStatus
+}
+
 input ProductStocksAndPricingInput {
   sellerSku: String
   retailPrice: Float!
@@ -647,15 +671,19 @@ type Query {
   getSellerListingDetails(listingId: String!): SellerListingDetailView!
   getSellerListingGroupByProduct(options: SellerFilterOptions!): SellerListingGroupResponse!
   getSellerListingForAcceptOrReject(options: SellerFilterOptions!): SellerListingResponse!
-  isListingAvailable(listings: [IsListingAvailableInput]): [IsListingAvailableResponse]
+  isListingAvailable(listings: [IsListingAvailableInput!]!): [IsListingAvailableResponse!]!
+  getBuyerWishlistListing(options: WishlistOption!): BuyerListingResponse!
+  isListingInWishlist(buyerId: ID!, listingId: ID!): Boolean!
   getProducts(pageable: ProductPageable): ProductResponse!
   getProductByProductId(productId: String!): SellerProductDetailView!
   getShareInformationByProductId(productId: String): [ShareInformation]
   getRelatedProducts(productId: ID!): [SellerProductDetailView]
+
+  """todo for removal"""
   isProductInWishlist(productId: String!, buyerId: String!): Boolean!
-  findReviews(reviewSearchOptions: ReviewSearchOptions!): [ReviewResponse]
-  getProductReviewSummaryResponse(productId: ID!): ReviewSummaryResponse
-  getSellerReviewSummaryResponse(sellerId: ID!): ReviewSummaryResponse
+  findReviews(options: ReviewSearchOptions!): FindReviewResponse!
+  getProductReviewSummaryResponse(productId: ID!): ReviewSummaryResponse!
+  getSellerReviewSummaryResponse(sellerId: ID!): ReviewSummaryResponse!
 }
 
 type RatingDetail {
@@ -716,7 +744,6 @@ input ReturnPolicyInput {
 }
 
 enum ReviewFilterType {
-  UNDEFINED
   BY_PRODUCT
   BY_SELLER
 }
@@ -948,12 +975,13 @@ type SellerProductDetailView {
   price: SellerProductPrice
   images: [SellerProductImage]
   variants: [SellerProductVariant!]!
-  categoryList: [String!]!
+  categories: [ProductCategoryResponse!]!
   itemsInStock: Int!
   returnPolicy: SellerReturnPolicy!
 }
 
 type SellerProductImage {
+  imageId: ID
   photoUrl: String
   imageName: String
   description: String
@@ -983,11 +1011,11 @@ type SellerProductVariant {
   profit: Float!
   savePercentage: Float!
   sellerSku: String
-  options: [KeyValuePair!]!
+  options: [VariantOptionResponse!]
 }
 
 type SellerReturnPolicy {
-  returnAddress: String
+  returnAddress: AddressView
   returnLabel: SellerProductImage
   policies: [ProductReturnPolicy]
 }
@@ -1102,6 +1130,13 @@ enum StoreSort {
   CITY
 }
 
+type VariantOptionResponse {
+  optionId: ID!
+  valueId: ID!
+  name: String!
+  value: String!
+}
+
 input VariantPriceAndQuantityUpdateInput {
   variantId: ID!
   priceId: ID!
@@ -1118,7 +1153,15 @@ input VariantSoldQuantityInput {
 
 type Wishlist {
   id: ID!
-  product: Product
-  buyer: Buyer
+  productId: ID!
+  listingId: ID!
+  profileId: ID!
+  addedDateTime: DateTime!
+}
+
+input WishlistOption {
+  buyerId: ID!
+  pageNumber: Int!
+  pageSize: Int!
 }
 

@@ -9,7 +9,7 @@ const url = "https://www.google.com/";
 const title = "Awesome Contents";
 const message = "Please check this out.";
 const icon = "data:<data_type>/<file_extension>;base64,<base64_data>";
-const options = Platform.select({
+export const shareOptions = Platform.select({
   ios: {
     activityItemSources: [
       {
@@ -61,14 +61,14 @@ const options = Platform.select({
   },
 });
 
-const shareOptions = {
-  title: "Share via",
-  message: "some message",
-  url: "some share url",
-  social: Share.Social.WHATSAPP,
-  whatsAppNumber: "917801893289", // country code + phone number
-  filename: "test", // only for base64 file in Android
-};
+// const shareOptions = {
+//   title: "Share via",
+//   message: "some message",
+//   url: "some share url",
+//   social: Share.Social.WHATSAPP,
+//   whatsAppNumber: "917801893289", // country code + phone number
+//   filename: "test", // only for base64 file in Android
+// };
 
 class ShareOptionList extends Component {
   render() {
@@ -87,7 +87,7 @@ class ShareOptionList extends Component {
         <TouchableOpacity
           style={styles.optionContainer}
           onPress={() => {
-            Share.open(options);
+            Share.open(shareOptions);
             // Share.shareSingle(shareOptions)
             //   .then((res) => {
             //     console.log(res);

@@ -20,6 +20,9 @@ import images from "../../Themes/Images";
 import NavigationService from "../../Navigation/NavigationService";
 import { userProfileVar } from "../../Apollo/cache";
 import { useCreateRazorOrder } from "../../hooks/razorOrder";
+import Share from "react-native-share";
+import { shareOptions } from "../Explore/Components/ShareOptionList";
+
 const salamiItem = [
   {
     title: "Salami Credit",
@@ -70,7 +73,9 @@ const buttons = [
   {
     text: "SHARE APP",
     backgroundColor: colors.grey80,
-    onPress: () => {},
+    onPress: () => {
+      Share.open(shareOptions);
+    },
   },
   // {
   //   text: "CREATE A SELLER PROFILE",
@@ -132,9 +137,9 @@ function UserCenter(props) {
           <View key={"button" + i} style={{ marginTop: 15 }}>
             <Button
               {...item}
-              onPress={() => {
-                razorpayCreateOrder();
-              }}
+              // onPress={() => {
+              //   razorpayCreateOrder();
+              // }}
             />
           </View>
         ))}

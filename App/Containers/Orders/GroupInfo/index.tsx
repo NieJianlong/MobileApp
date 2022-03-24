@@ -21,6 +21,7 @@ import {
   ProductListingStatus,
   useGetListingsQuery,
   useMarkOrderItemAsDeliveredMutation,
+  useUpdateListingStatusMutation,
 } from "../../../../generated/graphql";
 
 function GroupInfoScreen(props) {
@@ -57,7 +58,22 @@ function GroupInfoScreen(props) {
         },
       },
     });
+    updateListingStatus();
   }, [data, markOrderItem]);
+
+  const [updateListingStatus] = useUpdateListingStatusMutation({
+    variables: {
+      input: {
+        listingId: data.listingId,
+        status: ProductListingStatus.Accepted,
+      },
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+  });
   // const { loading, error, data, refetch, fetchMore } = useGetListingsQuery({
   //   variables: {
   //     searchOptions: {
@@ -153,7 +169,8 @@ function GroupInfoScreen(props) {
           })
         )}
         {/* when order status is reached,user can track order */}
-        {data.latestEventStatus === OrderItemHistoryEventType.Paid &&
+        {(data.latestEventStatus === OrderItemHistoryEventType.Paid ||
+          data.latestEventStatus === OrderItemHistoryEventType.Delivered) &&
           (data.listingStatus === ProductListingStatus.Accepted ||
             data.listingStatus === ProductListingStatus.Successful) &&
           renderAction(Images.orderTrackImage, "Track order", () => {

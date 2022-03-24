@@ -28,42 +28,42 @@ class OrderDetail extends Component {
   }
 
   renderDeliverTo() {
-    const deliverAddress = this.props.data.deliveryAddress;
-    const deliveryOption = this.props.data.deliveryOption;
-    const pickupAddress = this.props.data.pickupAddress;
+    const deliverAddress = this.props.data?.deliveryAddress;
+    const deliveryOption = this.props.data?.deliveryOption;
+    const pickupAddress = this.props.data?.pickupAddress;
     // const sellerLocation = this.props.data.sellerLocation;
     let addressDetail = "";
     let title = "Delivered to";
     switch (deliveryOption) {
       case DeliveryOption.CourierDelivery:
-        addressDetail = `${deliverAddress.houseNumber ?? ""}${
-          deliverAddress.flat ?? ""
-        }${deliverAddress.villageArea ?? ""}${deliverAddress.townCity}${
-          deliverAddress.provinceState
-        }${deliverAddress.country} ${deliverAddress.pinCode}`;
+        addressDetail = `${deliverAddress?.houseNumber ?? ""}${
+          deliverAddress?.flat ?? ""
+        }${deliverAddress?.villageArea ?? ""}${deliverAddress?.townCity}${
+          deliverAddress?.provinceState
+        }${deliverAddress?.country} ${deliverAddress?.pinCode}`;
         break;
       case DeliveryOption.CollectionPointPickup:
         title = "Pick up location";
-        addressDetail = `${pickupAddress.streetAddress1 ?? ""}${
-          pickupAddress.streetAddress2 ?? ""
-        }${pickupAddress.townCity ?? ""}${pickupAddress.provinceState}${
-          pickupAddress.country
-        } ${pickupAddress.areaCode}`;
+        addressDetail = `${pickupAddress?.streetAddress1 ?? ""}${
+          pickupAddress?.streetAddress2 ?? ""
+        }${pickupAddress?.townCity ?? ""}${pickupAddress?.provinceState}${
+          pickupAddress?.country
+        } ${pickupAddress?.areaCode}`;
         break;
       case DeliveryOption.SellerDirectDelivery:
-        addressDetail = `${deliverAddress.houseNumber ?? ""}${
-          deliverAddress.flat ?? ""
-        }${deliverAddress.villageArea ?? ""}${deliverAddress.townCity}${
-          deliverAddress.provinceState
-        }${deliverAddress.country} ${deliverAddress.pinCode}`;
+        addressDetail = `${deliverAddress?.houseNumber ?? ""}${
+          deliverAddress?.flat ?? ""
+        }${deliverAddress?.villageArea ?? ""}${deliverAddress?.townCity}${
+          deliverAddress?.provinceState
+        }${deliverAddress?.country} ${deliverAddress?.pinCode}`;
         break;
       case DeliveryOption.SellerLocationPickup:
         title = "Pick up location";
         addressDetail = `${pickupAddress.streetAddress1 ?? ""}${
-          pickupAddress.streetAddress2 ?? ""
-        }${pickupAddress.townCity ?? ""}${pickupAddress.provinceState}${
-          pickupAddress.country
-        } ${pickupAddress.areaCode}`;
+          pickupAddress?.streetAddress2 ?? ""
+        }${pickupAddress?.townCity ?? ""}${pickupAddress?.provinceState}${
+          pickupAddress?.country
+        } ${pickupAddress?.areaCode}`;
         break;
       default:
         break;

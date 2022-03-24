@@ -15,7 +15,7 @@ mutation SendOTPCodeForBuyer($buyerId: ID!) {
   }
 }
 
-mutation SendOTPCode($sendCodeRequest: ID!) {
+mutation SendOTPCode($sendCodeRequest: SendCodeRequest!) {
   sendOTPCode(sendCodeRequest: $sendCodeRequest) {
     status
     message

@@ -16,7 +16,11 @@ import { AppBar, Selector } from "../../Components";
 import NavigationService from "../../Navigation/NavigationService";
 
 import { ApplicationStyles } from "../../Themes";
-import { ReturnOption } from "../../../generated/graphql";
+import {
+  DeliveryOption,
+  ReturnOption,
+  useSubmitOrderReturnRequestMutation,
+} from "../../../generated/graphql";
 import CheckBox from "../Explore/Components/CheckBox";
 import { t } from "react-native-tailwindcss";
 import { useRoute } from "@react-navigation/native";
@@ -37,6 +41,42 @@ function ReturnProductStep1() {
     [params.product]
   );
   const [returnReasonPolicyId, setReturnReasonPolicyId] = useState<string>("");
+  const [submitOrderReturnRequest] = useSubmitOrderReturnRequestMutation({
+    onCompleted: (res) => {
+      if (params?.data?.deliveryOption === DeliveryOption.CourierDelivery) {
+        NavigationService.navigate("ReturnInformation");
+      }
+      if (
+        params?.data?.deliveryOption === DeliveryOption.CollectionPointPickup ||
+        params?.data?.deliveryOption === DeliveryOption.SellerLocationPickup
+      ) {
+        NavigationService.navigate("ReturnStatus", {
+          type: "return",
+          data: { ...params?.data, ...res.submitOrderReturnRequest },
+        });
+        // NavigationService.navigate("ReturnInformation");
+      }
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+  });
+  const submit = () => {
+    submitOrderReturnRequest({
+      variables: {
+        request: {
+          buyerId: global.buyerId,
+          orderItemId: params?.data?.orderItemId,
+          quantity: params?.data?.quantity,
+          returnOption: prefer,
+          message: message,
+          returnReasonPolicyId: returnReasonPolicyId,
+        },
+      },
+    });
+  };
   return (
     <View
       style={{
@@ -61,13 +101,7 @@ function ReturnProductStep1() {
                 disabled={isEmpty(returnReasonPolicyId)}
                 onPress={() => {
                   if (prefer == ReturnOption.GetRefund) {
-                    NavigationService.navigate("RefundScreen", {
-                      cancel: false,
-                      message,
-                      returnReasonPolicyId,
-                      returnOption: ReturnOption.GetRefund,
-                      ...params,
-                    });
+                    submit();
                   } else {
                     NavigationService.navigate("AskForReplacementScreen");
                   }

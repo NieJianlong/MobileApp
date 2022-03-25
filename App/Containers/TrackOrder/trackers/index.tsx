@@ -5,60 +5,6 @@ import images from "../../../Themes/Images";
 import { vs, s } from "react-native-size-matters";
 import colors from "../../../Themes/Colors";
 
-const trackers = [
-  {
-    title: "Your order has been registered",
-    subtitle: "20 Oct, 2020 3.30PM",
-    status: 0,
-    hasline: true,
-  },
-  {
-    title: "Order packed and ready for shipping",
-    subtitle: "20 Oct, 2020 8.30PM",
-    status: 0,
-    hasline: true,
-  },
-  {
-    title: "Order sent",
-    subtitle: "Order in transit",
-    status: 1,
-    hasline: true,
-  },
-  {
-    title: "Your order has been delivered",
-    subtitle: "Your order has been delivered succesfully",
-    status: 1,
-    hasline: false,
-  },
-];
-
-const returnStatus = [
-  {
-    title: "The product has been received by the seller",
-    subtitle: "20 Oct, 2020 3.30PM",
-    status: 0,
-    hasline: true,
-  },
-  {
-    title: "The product is being reviewed",
-    subtitle: "20 Oct, 2020 8.30PM",
-    status: 0,
-    hasline: true,
-  },
-  {
-    title: "Refund sent",
-    subtitle: "Order in transit",
-    status: 1,
-    hasline: true,
-  },
-  {
-    title: "The refund has been received by the buyer",
-    subtitle: "Your refund has been sent succesfully",
-    status: 1,
-    hasline: false,
-  },
-];
-
 export interface ITrackItemProps {
   title: string;
   subtitle: string;

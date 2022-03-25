@@ -1,20 +1,16 @@
 import React, { useState } from "react";
-import { View, Text, SafeAreaView, StatusBar, FlatList } from "react-native";
+import { View, Text, SafeAreaView, StatusBar } from "react-native";
 import AppConfig from "../../Config/AppConfig";
-import { vs, s, ScaledSheet } from "react-native-size-matters";
+import { s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
 import colors from "../../Themes/Colors";
 import { AppBar, Button } from "../../Components";
 import NavigationService from "../../Navigation/NavigationService";
-import CheckBox from "../AskForReplacement/CheckBox";
 import { useRoute } from "@react-navigation/native";
 import {
   DeliveryOption,
-  RefundMethod,
-  useCancelOrderItemMutation,
   useSubmitOrderReturnRequestMutation,
 } from "../../../generated/graphql";
-import lodash from "lodash";
 
 const countries = [
   {
@@ -30,37 +26,35 @@ const countries = [
 ];
 
 function Refund(props) {
-  const [selectValue, setSelectValue] = useState(countries[0]);
   const { params } = useRoute();
-  const { cancel } = params;
-  const [refundMethod, setRefundMethod] = useState<RefundMethod>(
-    RefundMethod.SalamiCredit
-  );
+  // const [refundMethod, setRefundMethod] = useState<RefundMethod>(
+  //   RefundMethod.SalamiCredit
+  // );
 
-  const [cancelOrder] = useCancelOrderItemMutation({
-    variables: {
-      request: {
-        ...lodash.omit(params, "cancel"),
-        refundMethod: refundMethod,
-      },
-    },
-    context: {
-      headers: {
-        isPrivate: true,
-      },
-    },
-    onCompleted: () => {
-      NavigationService.navigate("CancelOrderCompletedScreen");
-    },
-  });
+  // const [cancelOrder] = useCancelOrderItemMutation({
+  //   variables: {
+  //     request: {
+  //       ...lodash.omit(params, "cancel"),
+  //       refundMethod: refundMethod,
+  //     },
+  //   },
+  //   context: {
+  //     headers: {
+  //       isPrivate: true,
+  //     },
+  //   },
+  //   onCompleted: () => {
+  //     NavigationService.navigate("CancelOrderCompletedScreen");
+  //   },
+  // });
   const [submitOrderReturnRequest] = useSubmitOrderReturnRequestMutation({
     onCompleted: (res) => {
-      if (params.data.deliveryOption === DeliveryOption.CourierDelivery) {
+      if (params?.data?.deliveryOption === DeliveryOption.CourierDelivery) {
         NavigationService.navigate("ReturnInformation");
       }
       if (
-        params.data.deliveryOption === DeliveryOption.CollectionPointPickup ||
-        params.data.deliveryOption === DeliveryOption.SellerLocationPickup
+        params?.data?.deliveryOption === DeliveryOption.CollectionPointPickup ||
+        params?.data?.deliveryOption === DeliveryOption.SellerLocationPickup
       ) {
         NavigationService.navigate("ReturnInformation");
       }
@@ -76,12 +70,11 @@ function Refund(props) {
       variables: {
         request: {
           buyerId: global.buyerId,
-          orderItemId: params.data.orderItemId,
-          quantity: params.data.quantity,
-          returnOption: params.returnOption,
-          refundMethod: refundMethod,
-          message: params.message,
-          returnReasonPolicyId: params.returnReasonPolicyId,
+          orderItemId: params?.data?.orderItemId,
+          quantity: params?.data?.quantity,
+          returnOption: params?.returnOption,
+          message: params?.message,
+          returnReasonPolicyId: params?.returnReasonPolicyId,
         },
       },
     });
@@ -120,7 +113,7 @@ function Refund(props) {
             Where do you want to receive your refund?
           </Text>
         </View>
-        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+        {/* <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <View style={{ height: vs(12) }} />
           <CheckBox
             defaultValue={refundMethod === RefundMethod.SalamiCredit}
@@ -131,8 +124,8 @@ function Refund(props) {
             sublabel=""
             extra="FASTER"
           />
-        </View>
-        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+        </View> */}
+        {/* <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <View style={{ height: vs(12) }} />
           <CheckBox
             defaultValue={refundMethod === RefundMethod.PaymentGateway}
@@ -143,7 +136,7 @@ function Refund(props) {
             sublabel=""
             extra="FASTER"
           />
-        </View>
+        </View> */}
       </SafeAreaView>
       <SafeAreaView
         style={{
@@ -156,10 +149,10 @@ function Refund(props) {
         <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <Button
             onPress={() => {
-              cancel ? cancelOrder() : submit();
+              submit();
             }}
             color={colors.primary}
-            text={cancel ? "CANCEL ORDER" : "CONTINUE"}
+            text={"CONTINUE"}
           />
         </View>
       </SafeAreaView>

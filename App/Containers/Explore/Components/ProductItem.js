@@ -55,9 +55,9 @@ function ProductItem(props) {
         disabled={isMissing}
         style={[
           styles.productContainer,
-          {
-            opacity: isMissing ? 0.5 : 1.0,
-          },
+          // {
+          //   opacity: isMissing ? 0.5 : 1.0,
+          // },
         ]}
       >
         {size === "M" ? (

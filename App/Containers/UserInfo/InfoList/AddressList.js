@@ -7,6 +7,7 @@ import NavigationService from "../../../Navigation/NavigationService";
 import { useQuery } from "@apollo/client";
 import {
   FIND_BUYER_ADDRESS_BY_ID,
+  FIND_BUYER_ADDRESS_BY_ID_AND_TPYE,
 } from "../../../Apollo/queries/queries_user";
 import { useFocusEffect } from "@react-navigation/core";
 import Addresses from "./Addresses";

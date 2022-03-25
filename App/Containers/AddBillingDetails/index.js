@@ -103,19 +103,19 @@ function AddBillingDetails(props) {
 
   useEffect(() => {
     if (
-      firstName.length === 0 ||
-      lastName.length === 0 ||
-      email.length === 0 ||
-      phoneNum.length === 0 ||
-      streetName.length === 0 ||
-      streetNum.length === 0 ||
-      door.length === 0 ||
-      city.length === 0 ||
-      mstate.length === 0 ||
-      postcode.length === 0 ||
-      country.length === 0 ||
-      company.length === 0 ||
-      taxid.length === 0
+      firstName?.length === 0 ||
+      lastName?.length === 0 ||
+      email?.length === 0 ||
+      phoneNum?.length === 0 ||
+      streetName?.length === 0 ||
+      streetNum?.length === 0 ||
+      door?.length === 0 ||
+      city?.length === 0 ||
+      mstate?.length === 0 ||
+      postcode?.length === 0 ||
+      country?.length === 0 ||
+      company?.length === 0 ||
+      taxid?.length === 0
     ) {
       setIsEmpty(true);
     } else {
@@ -277,7 +277,7 @@ function AddBillingDetails(props) {
     lastName: lastName,
     companyName: company,
     email: email,
-    phoneNumber: phoneNum,
+    phoneNumber: !phoneNum?.startsWith("+91") ? "+91" + phoneNum : phoneNum,
     billingAddress: billingDetail?.billingDetailsId
       ? { addressId: billingDetail?.billingDetailsId, ...billingAddress }
       : billingAddress,

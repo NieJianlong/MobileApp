@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import { AlertContext } from "../Root/GlobalContext";
 
 function CustomerSupport(props) {
   const { dispatch } = useContext(AlertContext);
+  const [mstate, setMstate] = useState("AAA");
   return (
     <View
       style={{
@@ -70,7 +71,7 @@ function CustomerSupport(props) {
           <Selector
             style={{ marginVertical: vs(10) }}
             placeholder={"Problem reason goes here"}
-            // value={mstate}
+            value={mstate}
             data={["AAA", "BBB", "CCC"]}
             onValueChange={(text) => setMstate(text)}
           />

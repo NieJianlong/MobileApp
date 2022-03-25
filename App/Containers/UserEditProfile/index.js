@@ -116,7 +116,7 @@ function UserEditProfile(props) {
     firstName: newFirstName,
     lastName: newLastName,
     email: newEmail,
-    phoneNumber: newPhoneNumber,
+    phoneNumber: "+91" + newPhoneNumber,
   };
   const [updateProfile, { data }] = useMutation(UPDATE_BUYER_PROFILE, {
     variables: {
@@ -128,6 +128,7 @@ function UserEditProfile(props) {
       },
     },
     onCompleted: (res) => {
+      console.log("=====Res edit========", res);
       dispatch({ type: "hideloading" });
       if (res) {
         dispatch({
@@ -141,7 +142,8 @@ function UserEditProfile(props) {
         });
       }
     },
-    onError: (res) => {
+    onError: (err) => {
+      console.log("=====Res edit err========", err);
       dispatch({ type: "hideloading" });
     },
   });
@@ -184,6 +186,7 @@ function UserEditProfile(props) {
     <View style={styles.container}>
       <SafeAreaView>
         <AppBar
+          title={"Update your details"}
           rightButton={() => (
             <RightButton
               title="SAVE"
@@ -220,7 +223,7 @@ function UserEditProfile(props) {
                 key={index}
                 style={{ height: 80, justifyContent: "center" }}
               >
-                <MaterialTextInput {...item}></MaterialTextInput>
+                <MaterialTextInput {...item} />
               </View>
             );
           })}

@@ -98,12 +98,27 @@ function Feedback(props) {
                                   },
                                 });
                               }}
-                            ></TextTip>
+                            />
                             <Button
                               backgroundColor="transparent"
                               textColor={colors.grey80}
                               onPress={() => {
-                                NavigationService.navigate("");
+                                dispatch({
+                                  type: "changSheetState",
+                                  payload: {
+                                    showSheet: false,
+                                  },
+                                });
+                                dispatch({
+                                  type: "changAlertState",
+                                  payload: {
+                                    visible: true,
+                                    message:
+                                      "We'll study this and get back to you as soon as possible.",
+                                    color: colors.success,
+                                    title: "Message sent!",
+                                  },
+                                });
                               }}
                               text={"NOT NOW"}
                             />
@@ -159,7 +174,7 @@ function Feedback(props) {
                         resizeMode: "contain",
                       }}
                       source={item}
-                    ></Image>
+                    />
                   </TouchableOpacity>
                 );
               })}

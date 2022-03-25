@@ -19,6 +19,7 @@ import {
   PAYMENT_METHODS_BY_ID,
 } from "../../../Apollo/queries/queries_user";
 import { useFocusEffect } from "@react-navigation/core";
+import { t } from "react-native-tailwindcss";
 
 const items = [
   {
@@ -114,7 +115,7 @@ export default function OnePurchaseList({ dispatch, xIndex }) {
   }, [refreshData, xIndex]);
   return (
     <View style={{ flex: 1 }} onLayout={() => {}}>
-      {data?.oneClickBuy?.defaultAddress?.addressId &&
+      {/* {data?.oneClickBuy?.defaultAddress?.addressId &&
         data?.oneClickBuy?.defaultPaymentMethod?.paymentDetailId && (
           <View>
             <PaymentItem
@@ -140,8 +141,8 @@ export default function OnePurchaseList({ dispatch, xIndex }) {
               />
             </View>
           </View>
-        )}
-      {!data?.oneClickBuy?.defaultAddress?.addressId &&
+        )} */}
+      {/* {!data?.oneClickBuy?.defaultAddress?.addressId &&
         !data?.oneClickBuy?.defaultPaymentMethod?.paymentDetailId && (
           <TextTip
             textTip={tip}
@@ -152,8 +153,8 @@ export default function OnePurchaseList({ dispatch, xIndex }) {
               NavigationService.navigate("OneClickPurchaseScreen");
             }}
           />
-        )}
-      {data?.oneClickBuy?.defaultAddress?.addressId &&
+        )} */}
+      {/* {data?.oneClickBuy?.defaultAddress?.addressId &&
         !data?.oneClickBuy?.defaultPaymentMethod?.paymentDetailId && (
           <View>
             <AddressItem
@@ -169,8 +170,8 @@ export default function OnePurchaseList({ dispatch, xIndex }) {
               <Button onPress={() => {}} text="ADD DEFAULT PAYMENT METHOD" />
             </View>
           </View>
-        )}
-      {!data?.oneClickBuy?.defaultAddress?.addressId &&
+        )} */}
+      {/* {!data?.oneClickBuy?.defaultAddress?.addressId &&
         data?.oneClickBuy?.defaultPaymentMethod?.paymentDetailId && (
           <View>
             <PaymentItem
@@ -195,13 +196,16 @@ export default function OnePurchaseList({ dispatch, xIndex }) {
               />
             </View>
           </View>
-        )}
+        )} */}
 
-      <SafeAreaView style={styles.bottomlist}>
+      {/* <SafeAreaView style={styles.bottomlist}> */}
+      <View style={[t.mY8]}>
         {items.map((item, index) => {
           return <ListItem key={`listitem` + index} {...item} />;
         })}
-      </SafeAreaView>
+      </View>
+
+      {/* </SafeAreaView> */}
     </View>
   );
 }

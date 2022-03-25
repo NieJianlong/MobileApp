@@ -28,7 +28,7 @@ import { View } from "react-native";
 function HorizontalMenu(props) {
   const MenuConfig = [
     {
-      title: "1 Click Purchasing",
+      title: "Setting",
       icon: images.userPurchaseImage,
       textTip: "You haven't added a default \n purchase preference yet",
       selectedIcon: images.userPurchaseImage,

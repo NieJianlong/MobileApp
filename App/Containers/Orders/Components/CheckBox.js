@@ -9,7 +9,7 @@ function CheckBox(props) {
 
   useEffect(() => {
     setActive(props.defaultValue);
-  });
+  }, []);
 
   const { disabled, label, onSwitch } = props;
 

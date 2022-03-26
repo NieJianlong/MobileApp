@@ -102,6 +102,9 @@ fragment OrderItemDetailField on OrderItemDetailResponse {
     country
     provinceState
     areaCode
+    contactNumber
+    contactPerson
+    collectionDate
   }
   sellerDirectDelivery {
     announcementId

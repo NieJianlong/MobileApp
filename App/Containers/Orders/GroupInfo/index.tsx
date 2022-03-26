@@ -20,13 +20,30 @@ import {
   OrderItemHistoryEventType,
   ProductListingStatus,
   useGetListingsQuery,
+  useGetOrderItemDetailsQuery,
   useMarkOrderItemAsDeliveredMutation,
   useUpdateListingStatusMutation,
 } from "../../../../generated/graphql";
+import { useFocusEffect } from "@react-navigation/native";
 
 function GroupInfoScreen(props) {
   const { params } = useRoute();
   const data = params.item;
+  const { data: orderData, refetch } = useGetOrderItemDetailsQuery({
+    variables: {
+      orderItemId: data.orderItemId,
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+  });
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
   const { data: product } = useGetListingsQuery({
     variables: {
       searchOptions: {
@@ -138,13 +155,13 @@ function GroupInfoScreen(props) {
       <View>
         {renderAction(Images.packageMed, "Order details", () =>
           NavigationService.navigate("OrderDetailScreen", {
-            data,
+            data: orderData?.getOrderItemDetails,
             product: product?.getListings?.content[0],
           })
         )}
         {renderAction(Images.invoice, "Invoice", () =>
           NavigationService.navigate("InvoiceScreen", {
-            data,
+            data: orderData?.getOrderItemDetails,
             product: product?.getListings?.content[0],
           })
         )}
@@ -153,7 +170,7 @@ function GroupInfoScreen(props) {
             onPost: () => {
               NavigationService.goBack();
             },
-            data,
+            data: orderData?.getOrderItemDetails,
             product: product?.getListings?.content[0],
           })
         )}
@@ -163,55 +180,65 @@ function GroupInfoScreen(props) {
             onPost: () => {
               NavigationService.goBack();
             },
-            data,
+            data: orderData?.getOrderItemDetails,
             title: "Evaluate the seller",
             product: product?.getListings?.content[0],
           })
         )}
         {/* when order status is reached,user can track order */}
-        {(data.latestEventStatus === OrderItemHistoryEventType.Paid ||
-          data.latestEventStatus === OrderItemHistoryEventType.Delivered) &&
-          (data.listingStatus === ProductListingStatus.Accepted ||
-            data.listingStatus === ProductListingStatus.Successful) &&
+        {(orderData?.getOrderItemDetails.latestEventStatus ===
+          OrderItemHistoryEventType.Paid ||
+          orderData?.getOrderItemDetails.latestEventStatus ===
+            OrderItemHistoryEventType.Delivered) &&
+          (orderData?.getOrderItemDetails.listingStatus ===
+            ProductListingStatus.Accepted ||
+            orderData?.getOrderItemDetails.listingStatus ===
+              ProductListingStatus.Successful) &&
           renderAction(Images.orderTrackImage, "Track order", () => {
             // if (data.deliveryOption === DeliveryOption.CourierDelivery) {
             NavigationService.navigate("TrackOrderScreen", {
               type: "track",
-              data,
+              data: orderData?.getOrderItemDetails,
             });
             // } else {
             // }
           })}
         {/* when order status is received,user can return product */}
-        {data.latestEventStatus === OrderItemHistoryEventType.Delivered &&
+        {orderData?.getOrderItemDetails.latestEventStatus ===
+          OrderItemHistoryEventType.Delivered &&
           renderAction(Images.orderReturnImage, "Return product", () => {
-            if (data.deliveryOption === DeliveryOption.SellerDirectDelivery) {
+            if (
+              orderData?.getOrderItemDetails.deliveryOption ===
+              DeliveryOption.SellerDirectDelivery
+            ) {
               NavigationService.navigate("ReturnsUnavailable", { data });
               return;
             }
             NavigationService.navigate("ReturnProductStep1Screen", {
-              data,
+              data: orderData?.getOrderItemDetails,
               product: product?.getListings?.content[0],
             });
           })}
         {/* when order status is uncompleted,user can cancel the order */}
-        {data.listingStatus === ProductListingStatus.Active &&
-          data.latestEventStatus !==
+        {orderData?.getOrderItemDetails.listingStatus ===
+          ProductListingStatus.Active &&
+          orderData?.getOrderItemDetails.latestEventStatus !==
             OrderItemHistoryEventType.CanceledByBuyer &&
           renderAction(Images.orderCancelImage, "Cancel order", () =>
             NavigationService.navigate("CancelOrderScreen", {
               orderItemId: data.orderItemId,
-              data,
+              data: orderData?.getOrderItemDetails,
               product: product?.getListings?.content[0],
             })
           )}
-        {(data.latestEventStatus ===
+        {(orderData?.getOrderItemDetails.latestEventStatus ===
           OrderItemHistoryEventType.ReplacementRequest ||
-          data.latestEventStatus === OrderItemHistoryEventType.RefundRequest) &&
+          orderData?.getOrderItemDetails.latestEventStatus ===
+            OrderItemHistoryEventType.RefundRequest) &&
           renderAction(Images.orderTrackImage, "Return status", () =>
             NavigationService.navigate("ReturnStatus", {
               type: "return",
-              data,
+              data: orderData?.getOrderItemDetails,
             })
           )}
       </View>

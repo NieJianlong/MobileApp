@@ -166,6 +166,11 @@ query GetOrderReturnStatus($orderReturnId: String!) {
     }
   }
 }
+query GetOrderItemDetails($orderItemId: ID!) {
+  getOrderItemDetails(orderItemId: $orderItemId) {
+    ...OrderItemDetailField
+  }
+}
 
 query TrackOrderItem($orderItemId: ID!) {
   trackOrderItem(orderItemId: $orderItemId) {

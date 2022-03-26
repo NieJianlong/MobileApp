@@ -88,6 +88,7 @@ const allAPIS = {
   TrackOrderItem: ORDER_PORT,
   GetOrderReturnStatus: ORDER_PORT,
   CreateOrderFromCart: ORDER_PORT,
+  GetOrderItemDetails: ORDER_PORT,
 
   //Payment
   RazorpayCreateOrder: PAYMENT_PORT,

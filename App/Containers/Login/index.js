@@ -29,7 +29,7 @@ import { client } from "../../Apollo/apolloClient";
 import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
 import GetBillingDetail from "../../hooks/billingDetails";
-import { useResendVerificationCodeInSmsMutation } from "../../../generated/graphql";
+import { useSendOtpCodeMutation } from "../../../generated/graphql";
 
 function LoginScreen(props) {
   // refs
@@ -41,7 +41,7 @@ function LoginScreen(props) {
   let [psswd, setPsswd] = useState("");
   const { params } = useRoute();
   const { isBillingLoaded } = GetBillingDetail();
-  const [resendCode] = useResendVerificationCodeInSmsMutation();
+  const [resendCode] = useSendOtpCodeMutation();
 
   useEffect(() => {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);

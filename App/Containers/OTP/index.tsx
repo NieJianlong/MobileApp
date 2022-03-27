@@ -108,7 +108,7 @@ function OTPScreen(props) {
   const autoSignIn = async () => {
     if (params.email && params.password) {
       const { data } = await jwt.runTokenFlow({
-        username: params.email,
+        username: isValidEmail(params.phone) ? params.email : params.phone,
         password: params.password,
         //username: "vijay.msbi@gmail.com",
         //password: "123456789",
@@ -380,7 +380,7 @@ function OTPScreen(props) {
           onPress={() => {
             if (params.fromScreen === "ForgotPasswordScreen") {
               resetPasswordStep2({
-                variables: { email: params.phone, tokenCode: otpCode },
+                variables: { email: params.email, tokenCode: otpCode },
                 onCompleted: (res) => {
                   NavigationService.navigate("CreateNewPasswordScreen", {
                     actionTokenValue:

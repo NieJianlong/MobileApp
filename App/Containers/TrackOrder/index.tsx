@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  View,
-  ScrollView,
-  Text,
-  SafeAreaView,
-  StatusBar,
-  Image,
-} from "react-native";
+import { View, ScrollView, Text, SafeAreaView, StatusBar } from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
@@ -158,7 +151,11 @@ function TrackOrder(props) {
           )}
           {(data.deliveryOption === DeliveryOption.CollectionPointPickup ||
             data.deliveryOption === DeliveryOption.SellerLocationPickup) && (
-            <PickInfo />
+            <PickInfo
+              deliveryOption={data.deliveryOption}
+              sellerLocation={data.sellerLocation}
+              collectionPoint={data.collectionPoint}
+            />
           )}
         </ScrollView>
       </SafeAreaView>

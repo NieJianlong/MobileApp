@@ -1,3 +1,28 @@
+fragment CollectionPoint on CollectionPointPickupResponse {
+  collectionPointId
+  microHubId
+  streetAddress1
+  streetAddress2
+  townCity
+  country
+  provinceState
+  areaCode
+  openingHours
+  contactNumber
+  contactPerson
+}
+fragment SellerLocation on SellerLocationPickupResponse {
+  collectionPointId
+  streetAddress1
+  streetAddress2
+  townCity
+  country
+  provinceState
+  areaCode
+  contactNumber
+  contactPerson
+  collectionDate
+}
 fragment AddressOrderFiled on AddressResponse {
   addressId
   addressType
@@ -82,29 +107,10 @@ fragment OrderItemDetailField on OrderItemDetailResponse {
     }
   }
   collectionPoint {
-    collectionPointId
-    microHubId
-    streetAddress1
-    streetAddress2
-    townCity
-    country
-    provinceState
-    areaCode
-    openingHours
-    contactNumber
-    contactPerson
+    ...CollectionPoint
   }
   sellerLocation {
-    collectionPointId
-    streetAddress1
-    streetAddress2
-    townCity
-    country
-    provinceState
-    areaCode
-    contactNumber
-    contactPerson
-    collectionDate
+    ...SellerLocation
   }
   sellerDirectDelivery {
     announcementId
@@ -182,7 +188,7 @@ query TrackOrderItem($orderItemId: ID!) {
     latestEventStatus
     orderNumber
     # sellerBusinessName
-    sellerBusinessName
+
     dateDelivered
     events {
       eventId

@@ -8,9 +8,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SmsRetriever from "react-native-sms-retriever";
-
-//import { vs } from 'react-native-size-matters'
-
 import {
   TextInput,
   Button,
@@ -19,12 +16,9 @@ import {
   Switch,
   Alert,
 } from "../../Components";
-
 import * as jwt from "../../Apollo/jwt-request";
 import * as storage from "../../Apollo/local-storage";
-/** userProfileVar is the variable for the cache to get set  userProfile attributes */
 import { userProfileVar } from "../../Apollo/cache";
-
 import { Colors } from "../../Themes";
 import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
@@ -33,7 +27,6 @@ import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
 import jwt_decode from "jwt-decode";
 import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
-import DeviceInfo from "react-native-device-info";
 import { Controller, useForm } from "react-hook-form";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {

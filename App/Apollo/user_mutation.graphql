@@ -1,24 +1,24 @@
-mutation ResendVerificationCodeInEmail($emailAddress: String!) {
-  resendVerificationCodeInEmail(emailAddress: $emailAddress) {
-    status
-    extraMessage
-  }
-}
+# mutation ResendVerificationCodeInEmail($emailAddress: String!) {
+#   resendVerificationCodeInEmail(emailAddress: $emailAddress) {
+#     status
+#     extraMessage
+#   }
+# }
 mutation DeleteBuyerProfile($buyerId: ID!) {
   deleteBuyerProfile(buyerId: $buyerId)
 }
 
-mutation SendOTPCodeForBuyer($buyerId: ID!) {
-  sendOTPCodeForBuyer(buyerId: $buyerId) {
+mutation SendOTPCode($sendCodeRequest: SendCodeRequest!) {
+  sendOTPCode(sendCodeRequest: $sendCodeRequest) {
     status
     message
   }
 }
 
-mutation ValidateOTPCodeForBuyer($request: ValidateCodeRequest!) {
-  validateOTPCodeForBuyer(request: $request) {
+mutation ValidateCode($request: ValidateCodeRequest!) {
+  validateCode(request: $request) {
     status
-    extraMessage
+    message
   }
 }
 
@@ -31,12 +31,12 @@ mutation ForgotPasswordStep1SendNotificationEmail($email: String!) {
 }
 
 # resendVerificationCodeInSms(phoneNumber: String!): ResendCodeResponse
-mutation ResendVerificationCodeInSms($phoneNumber: String!) {
-  resendVerificationCodeInSms(phoneNumber: $phoneNumber) {
-    status
-    extraMessage
-  }
-}
+# mutation ResendVerificationCodeInSms($phoneNumber: String!) {
+#   resendVerificationCodeInSms(phoneNumber: $phoneNumber) {
+#     status
+#     extraMessage
+#   }
+# }
 mutation RegisterBuyer($request: BuyerProfileRequestForCreate!) {
   registerBuyer(request: $request) {
     buyerId

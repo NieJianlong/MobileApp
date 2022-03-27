@@ -182,7 +182,14 @@ query TrackOrderItem($orderItemId: ID!) {
     latestEventStatus
     orderNumber
     # sellerBusinessName
+    sellerBusinessName
     dateDelivered
+    events {
+      eventId
+      eventDateTime
+      eventType
+      notes
+    }
     shippingDetails {
       shippingStatus
       shippingDate
@@ -220,6 +227,8 @@ query TrackOrderItem($orderItemId: ID!) {
       country
       provinceState
       areaCode
+      contactNumber
+      contactPerson
       collectionDate
     }
 

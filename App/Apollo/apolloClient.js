@@ -51,6 +51,8 @@ const allAPIS = {
   UpdateAddress: USER_PORT,
   CoordinatesForAddressRequest: USER_PORT,
   UpdatePaymentDetail: USER_PORT,
+  SendOTPCode: USER_PORT,
+  ValidateCode: USER_PORT,
   //product
   // ActiveProductListingsByStoreId: PRODUCT_PORT,  @Depreciated leave here for now as backend may decise roll back
   OnlineStoreByGeoCoordinates: PRODUCT_PORT,

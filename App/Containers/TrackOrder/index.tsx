@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, ScrollView, Text, SafeAreaView, StatusBar } from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
@@ -8,7 +8,7 @@ import { AppBar } from "../../Components";
 import { ApplicationStyles } from "../../Themes";
 import Header from "./header";
 import Footer from "./footer";
-import Trackers from "./trackers";
+import Trackers, { ITrackItemProps } from "./trackers";
 import { useRoute } from "@react-navigation/core";
 import {
   DeliveryOption,
@@ -18,13 +18,19 @@ import Qrcode from "./Qrcode/index";
 import { t } from "react-native-tailwindcss";
 import moment from "moment";
 import PickInfo from "../../Components/PickInfo";
+import { useFocusEffect } from "@react-navigation/native";
+import { capitalize, isEmpty } from "lodash";
 
 function TrackOrder(props) {
   const {
     params: { type, data },
   } = useRoute();
 
-  const { data: trackData, loading } = useTrackOrderItemQuery({
+  const {
+    data: trackData,
+    loading,
+    refetch,
+  } = useTrackOrderItemQuery({
     variables: {
       orderItemId: data.orderItemId,
     },
@@ -34,6 +40,26 @@ function TrackOrder(props) {
       },
     },
   });
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
+  const events: ITrackItemProps[] = useMemo(() => {
+    if (trackData) {
+      const eventsArray: ITrackItemProps[] = [];
+      trackData.trackOrderItem.events?.map((item, index) => {
+        eventsArray.push({
+          title: capitalize(item?.eventType.replaceAll("_", " ")),
+          subtitle: moment(item?.eventDateTime).format("DD MMM, YYYY h:mm a"),
+          status: 0,
+          hasline: index !== trackData?.trackOrderItem?.events?.length - 1,
+        });
+      });
+      return eventsArray;
+    }
+    return [];
+  }, [trackData]);
   return (
     <View
       style={{
@@ -121,11 +147,13 @@ function TrackOrder(props) {
               )}
               {(data.deliveryOption === DeliveryOption.CollectionPointPickup ||
                 data.deliveryOption === DeliveryOption.SellerDirectDelivery ||
-                data.deliveryOption ===
-                  DeliveryOption.SellerLocationPickup) && (
-                <Qrcode uri={trackData?.trackOrderItem.qrCodeAsBase64} />
-              )}
-              <Footer />
+                data.deliveryOption === DeliveryOption.SellerLocationPickup) &&
+                (!isEmpty(trackData?.trackOrderItem.qrCodeAsBase64) ? (
+                  <Qrcode uri={trackData?.trackOrderItem.qrCodeAsBase64} />
+                ) : (
+                  <Trackers events={events} />
+                ))}
+              {!isEmpty(trackData?.trackOrderItem.qrCodeAsBase64) && <Footer />}
             </View>
           </View>
           {data.deliveryOption === DeliveryOption.SellerDirectDelivery && (
@@ -150,13 +178,14 @@ function TrackOrder(props) {
             </View>
           )}
           {(data.deliveryOption === DeliveryOption.CollectionPointPickup ||
-            data.deliveryOption === DeliveryOption.SellerLocationPickup) && (
-            <PickInfo
-              deliveryOption={data.deliveryOption}
-              sellerLocation={data.sellerLocation}
-              collectionPoint={data.collectionPoint}
-            />
-          )}
+            data.deliveryOption === DeliveryOption.SellerLocationPickup) &&
+            !isEmpty(trackData?.trackOrderItem.qrCodeAsBase64) && (
+              <PickInfo
+                deliveryOption={data.deliveryOption}
+                sellerLocation={data.sellerLocation}
+                collectionPoint={data.collectionPoint}
+              />
+            )}
         </ScrollView>
       </SafeAreaView>
     </View>

@@ -40,7 +40,6 @@ function PickInfo({
     sellerLocation?.country
   } ${sellerLocation?.areaCode ?? ""}`;
   const address = isPickFromSeller ? sellerAddress : collectAddress;
-  debugger;
   return (
     <View style={[t.p4]}>
       <View style={[t.bgWhite, t.roundedLg, t.p3]}>

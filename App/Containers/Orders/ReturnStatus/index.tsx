@@ -144,7 +144,11 @@ function ReturnStatus(props) {
               </View>
             </View>
             {lastEvent?.eventType === ReturnEventType.WaitingBuyerReturn && (
-              <PickInfo />
+              <PickInfo
+                deliveryOption={data.deliveryOption}
+                sellerLocation={data.sellerLocation}
+                collectionPoint={data.collectionPoint}
+              />
             )}
           </View>
         </ScrollView>

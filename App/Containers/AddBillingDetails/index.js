@@ -325,8 +325,16 @@ function AddBillingDetails(props) {
             NavigationService.goBack();
         }
       },
-      onError: (res) => {
+      onError: (err) => {
         dispatch({ type: "hideloading" });
+        dispatch({
+          type: "changAlertState",
+          payload: {
+            visible: true,
+            message: err?.message,
+            color: colors.error,
+          },
+        });
       },
     }
   );

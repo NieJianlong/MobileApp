@@ -22,6 +22,7 @@ import { userProfileVar } from "../../Apollo/cache";
 import { useCreateRazorOrder } from "../../hooks/razorOrder";
 import Share from "react-native-share";
 import { shareOptions } from "../Explore/Components/ShareOptionList";
+import { t } from "react-native-tailwindcss";
 
 const salamiItem = [
   {
@@ -47,20 +48,20 @@ const items = [
       NavigationService.navigate("SettingScreen");
     },
   },
-  {
-    title: "Support",
-    icon: images.userMediumImage,
-    onPress: () => {
-      NavigationService.navigate("CustomerSupportScreen");
-    },
-  },
-  {
-    title: "Feedback",
-    icon: images.userStarImage,
-    onPress: () => {
-      NavigationService.navigate("FeedbackScreen");
-    },
-  },
+  // {
+  //   title: "Support",
+  //   icon: images.userMediumImage,
+  //   onPress: () => {
+  //     NavigationService.navigate("CustomerSupportScreen");
+  //   },
+  // },
+  // {
+  //   title: "Feedback",
+  //   icon: images.userStarImage,
+  //   onPress: () => {
+  //     NavigationService.navigate("FeedbackScreen");
+  //   },
+  // },
   {
     title: "Legal",
     icon: images.userDocImage,
@@ -121,7 +122,7 @@ function UserCenter(props) {
       </View>
 
       {/* All the items usercenter */}
-      <View style={styles.itemContainer}>
+      <View style={[t.flexWrap, t.flexRow, t.justifyBetween, t.pX4]}>
         {/*hide salami credit when user not sign in*/}
         {serviceItems.map((item, i) => (
           <View key={i}>
@@ -133,7 +134,7 @@ function UserCenter(props) {
         )}
       </View>
       <View style={styles.buttonContainer}>
-        {buttons.map((item, i) => (
+        {/* {buttons.map((item, i) => (
           <View key={"button" + i} style={{ marginTop: 15 }}>
             <Button
               {...item}
@@ -142,7 +143,7 @@ function UserCenter(props) {
               // }}
             />
           </View>
-        ))}
+        ))} */}
       </View>
     </View>
   );

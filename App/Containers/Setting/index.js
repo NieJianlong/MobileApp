@@ -26,12 +26,12 @@ export const MenuConfig = [
     selectedIcon: images.userNotiSImage,
     key: "Notifications",
   },
-  {
-    title: "Permissions",
-    icon: images.userFilledImage,
-    selectedIcon: images.userFilledSImage,
-    key: "Permissions",
-  },
+  // {
+  //   title: "Permissions",
+  //   icon: images.userFilledImage,
+  //   selectedIcon: images.userFilledSImage,
+  //   key: "Permissions",
+  // },
 ];
 
 function Setting(props) {

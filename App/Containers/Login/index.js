@@ -29,7 +29,7 @@ import { client } from "../../Apollo/apolloClient";
 import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
 import GetBillingDetail from "../../hooks/billingDetails";
-import { useResendVerificationCodeInSmsMutation } from "../../../generated/graphql";
+import { useSendOtpCodeMutation } from "../../../generated/graphql";
 
 function LoginScreen(props) {
   // refs
@@ -41,7 +41,7 @@ function LoginScreen(props) {
   let [psswd, setPsswd] = useState("");
   const { params } = useRoute();
   const { isBillingLoaded } = GetBillingDetail();
-  const [resendCode] = useResendVerificationCodeInSmsMutation();
+  const [resendCode] = useSendOtpCodeMutation();
 
   useEffect(() => {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
@@ -74,9 +74,9 @@ function LoginScreen(props) {
     let ret = validator.loginDifferentiator(loginInput);
     if (ret.isValid) {
       // we are good so we can test for email or phone
-      if (ret.isEmail) {
+      if (ret.isEmail || ret.isPhone) {
         let loginRequest = {
-          username: loginInput,
+          username: ret.isPhone ? "+91" + loginInput : loginInput,
           password: psswd,
         };
         // console.log(profile.data.userProfileVar.email)// to-do remove
@@ -125,7 +125,7 @@ function LoginScreen(props) {
               global.access_token = access_token;
               storage.setLocalStorageValue(
                 storage.LOCAL_STORAGE_USER_NAME,
-                loginInput
+                ret.isPhone ? "+91" + loginInput : loginInput
               );
               storage.setLocalStorageValue(
                 storage.LOCAL_STORAGE_USER_PASSWORD,

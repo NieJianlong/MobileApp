@@ -122,7 +122,7 @@ function CheckoutResume(props) {
     dataWallet?.getBuyerSalamiWalletBalance?.walletBalance +
       dataWallet?.getBuyerSalamiWalletBalance?.giftBalance
   ).toFixed(2);
-  console.log("walletBalance ===========", walletBalance);
+  console.log("walletBalance =========== typeOGGGGG", typeof walletBalance);
   const clearData = () => {
     let index = mydatas.length - 1;
     while (index >= 0) {
@@ -465,7 +465,6 @@ function CheckoutResume(props) {
                 if (!global.access_token || global.access_token === "") {
                   proceedFurther("zero");
                 } else {
-                  console.log("walletBalance", walletBalance);
                   console.log("money.total", money.total);
                   console.log(
                     "walletBalance >= parseFloat(money.total).toFixed(2)",
@@ -474,7 +473,10 @@ function CheckoutResume(props) {
                   if (!isNaN(walletBalance)) {
                     if (walletBalance >= parseFloat(money.total).toFixed(2)) {
                       proceedFurther("sufficient");
-                    } else if (walletBalance === 0 || walletBalance < 0) {
+                    } else if (
+                      walletBalance === "0.00" ||
+                      walletBalance < "0"
+                    ) {
                       proceedFurther("zero");
                     } else {
                       proceedFurther("InSufficient");

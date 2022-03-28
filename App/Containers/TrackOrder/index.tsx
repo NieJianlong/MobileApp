@@ -1,12 +1,5 @@
-import React from "react";
-import {
-  View,
-  ScrollView,
-  Text,
-  SafeAreaView,
-  StatusBar,
-  Image,
-} from "react-native";
+import React, { useMemo } from "react";
+import { View, ScrollView, Text, SafeAreaView, StatusBar } from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
@@ -15,22 +8,29 @@ import { AppBar } from "../../Components";
 import { ApplicationStyles } from "../../Themes";
 import Header from "./header";
 import Footer from "./footer";
-import Trackers from "./trackers";
+import Trackers, { ITrackItemProps } from "./trackers";
 import { useRoute } from "@react-navigation/core";
 import {
   DeliveryOption,
   useTrackOrderItemQuery,
 } from "../../../generated/graphql";
-import Qrcode from "./Qrcode/index";
+import Qrcode from "./qrcode/index";
 import { t } from "react-native-tailwindcss";
 import moment from "moment";
+import PickInfo from "../../Components/PickInfo";
+import { useFocusEffect } from "@react-navigation/native";
+import { capitalize, isEmpty } from "lodash";
 
 function TrackOrder(props) {
   const {
     params: { type, data },
   } = useRoute();
 
-  const { data: trackData, loading } = useTrackOrderItemQuery({
+  const {
+    data: trackData,
+    loading,
+    refetch,
+  } = useTrackOrderItemQuery({
     variables: {
       orderItemId: data.orderItemId,
     },
@@ -40,6 +40,26 @@ function TrackOrder(props) {
       },
     },
   });
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
+  const events: ITrackItemProps[] = useMemo(() => {
+    if (trackData) {
+      const eventsArray: ITrackItemProps[] = [];
+      trackData.trackOrderItem.events?.map((item, index) => {
+        eventsArray.push({
+          title: capitalize(item?.eventType.replaceAll("_", " ")),
+          subtitle: moment(item?.eventDateTime).format("DD MMM, YYYY h:mm a"),
+          status: 0,
+          hasline: index !== trackData?.trackOrderItem?.events?.length - 1,
+        });
+      });
+      return eventsArray;
+    }
+    return [];
+  }, [trackData]);
   return (
     <View
       style={{
@@ -127,11 +147,13 @@ function TrackOrder(props) {
               )}
               {(data.deliveryOption === DeliveryOption.CollectionPointPickup ||
                 data.deliveryOption === DeliveryOption.SellerDirectDelivery ||
-                data.deliveryOption ===
-                  DeliveryOption.SellerLocationPickup) && (
-                <Qrcode uri={trackData?.trackOrderItem.qrCodeAsBase64} />
-              )}
-              <Footer />
+                data.deliveryOption === DeliveryOption.SellerLocationPickup) &&
+                (!isEmpty(trackData?.trackOrderItem.qrCodeAsBase64) ? (
+                  <Qrcode uri={trackData?.trackOrderItem.qrCodeAsBase64} />
+                ) : (
+                  <Trackers events={events} />
+                ))}
+              {!isEmpty(trackData?.trackOrderItem.qrCodeAsBase64) && <Footer />}
             </View>
           </View>
           {data.deliveryOption === DeliveryOption.SellerDirectDelivery && (
@@ -156,51 +178,14 @@ function TrackOrder(props) {
             </View>
           )}
           {(data.deliveryOption === DeliveryOption.CollectionPointPickup ||
-            data.deliveryOption === DeliveryOption.SellerLocationPickup) && (
-            <View style={[t.p4]}>
-              <View style={[t.bgWhite, t.roundedLg, t.p3]}>
-                <View style={[t.flexRow, t.itemsCenter]}>
-                  <Image
-                    style={[t.w4, t.h4]}
-                    source={require("../../Images/user.png")}
-                  />
-                  <Text style={[t.fontBold, t.mL2]}>Contact Person</Text>
-                </View>
-
-                <Text style={[t.textGray500, t.mT2]}>John Smith</Text>
-              </View>
-              <View style={[t.bgWhite, t.roundedLg, t.p3, t.mT4]}>
-                <View style={[t.flexRow, t.itemsCenter]}>
-                  <Image
-                    style={[t.w6, t.h6]}
-                    source={require("../../Images/usercenter/ubiling.png")}
-                  />
-                  <Text style={[t.fontBold, t.mL1]}>Seller Location</Text>
-                </View>
-                <Text style={[t.textGray500, t.mT2]}>{`${
-                  data?.pickupAddress?.houseNumber ?? ""
-                }${data?.pickupAddress?.flat ?? ""}${
-                  data?.pickupAddress?.villageArea ?? ""
-                }${data?.pickupAddress?.townCity}${
-                  data?.pickupAddress?.provinceState
-                }${data?.pickupAddress?.country} ${
-                  data?.pickupAddress?.pinCode ?? ""
-                }`}</Text>
-              </View>
-
-              <View style={[t.bgWhite, t.roundedLg, t.p3, t.mT4]}>
-                <View style={[t.flexRow, t.itemsCenter]}>
-                  <Image
-                    style={[t.w4, t.h4]}
-                    source={require("../../Images/time2.png")}
-                  />
-                  <Text style={[t.fontBold, t.mL2]}>Opening Times</Text>
-                </View>
-
-                <Text style={[t.textGray500, t.mT2]}>Mon-Fri 9:00-17:00</Text>
-              </View>
-            </View>
-          )}
+            data.deliveryOption === DeliveryOption.SellerLocationPickup) &&
+            !isEmpty(trackData?.trackOrderItem.qrCodeAsBase64) && (
+              <PickInfo
+                deliveryOption={data.deliveryOption}
+                sellerLocation={data.sellerLocation}
+                collectionPoint={data.collectionPoint}
+              />
+            )}
         </ScrollView>
       </SafeAreaView>
     </View>

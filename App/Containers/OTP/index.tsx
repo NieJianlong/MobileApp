@@ -10,49 +10,44 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { isIphoneX } from "react-native-iphone-x-helper";
-import { s, vs } from "react-native-size-matters";
+import { vs } from "react-native-size-matters";
 import { useRoute } from "@react-navigation/native";
-
 import { AppBar, Button } from "../../Components";
-import { Colors, Fonts } from "../../Themes";
-
+import { Colors } from "../../Themes";
 import styles from "./styles";
-
 import * as jwt from "../../Apollo/jwt-request";
 import NavigationService from "../../Navigation/NavigationService";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import {
-  ForgotPasswordStep2VerifyTokenEmail,
-  ValidateCode,
-} from "./gql/validate";
+import { ForgotPasswordStep2VerifyTokenEmail } from "./gql/validate";
 import { userProfileVar } from "../../Apollo/cache";
 import * as storage from "../../Apollo/local-storage";
 import jwt_decode from "jwt-decode";
 import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import colors from "../../Themes/Colors";
 import { AlertContext } from "../Root/GlobalContext";
-import CountDown from "react-native-countdown-component";
-import { t } from "react-native-tailwindcss";
 import {
   useForgotPasswordStep1SendNotificationEmailMutation,
-  useResendVerificationCodeInEmailMutation,
-  useResendVerificationCodeInSmsMutation,
-  useSendOtpCodeForBuyerMutation,
-  useValidateOtpCodeForBuyerMutation,
+  useSendOtpCodeMutation,
+  useValidateCodeMutation,
   ValidationType,
 } from "../../../generated/graphql";
 import RNOtpVerify from "react-native-otp-verify";
 import { isEmpty, split } from "lodash";
+import { isValidEmail } from "../../Validation";
 
 function OTPScreen(props) {
   const { dispatch } = useContext(AlertContext);
+  const { params } = useRoute();
+  const validationType = isValidEmail(params.phone)
+    ? ValidationType.Email
+    : ValidationType.Sms;
   // refs
   let field1Input,
     field2Input,
     field3Input,
     field4Input,
     field5Input = null;
-  const [validate] = useMutation(ValidateCode, {
+  const [validate] = useValidateCodeMutation({
     onCompleted: (res) => {
       // alert("验证成功");
       autoSignIn();
@@ -62,36 +57,10 @@ function OTPScreen(props) {
       alert("Validation fails");
     },
   });
-
-  // const [validate] = useMutation(ValidateCode, {
-  //   onCompleted: (res) => {
-  //     // alert("验证成功");
-  //     autoSignIn();
-  //   },
-  //   onError: (error) => {
-  //     // autoSignIn();
-  //     alert("Validation fails");
-  //   },
-  // });
-  // const [validate] = useValidateOtpCodeForBuyerMutation({
-  //   onCompleted: (res) => {
-  //     // alert("验证成功");
-  //     autoSignIn();
-  //   },
-  //   onError: (error) => {
-  //     // autoSignIn();
-  //     alert("Validation fails");
-  //   },
-  // });
-
   const [resetPasswordStep2] = useMutation(ForgotPasswordStep2VerifyTokenEmail);
   const [forgetPasswordResendCode] =
     useForgotPasswordStep1SendNotificationEmailMutation();
-
-  // const [resendCode] = useResendVerificationCodeInEmailMutation();
-  // const [resendCode] = useSendOtpCodeForBuyerMutation();
-
-  const [resendCode] = useResendVerificationCodeInSmsMutation();
+  const [resendCode] = useSendOtpCodeMutation();
   let [keyboardHeight, setKeyboardHeight] = useState(0);
   let [allowToResendCode, setAllowToResendCode] = useState(false);
   let [onFocus, setOnFocus] = useState(1);
@@ -133,15 +102,13 @@ function OTPScreen(props) {
       NavigationService.navigate("MainScreen");
     },
     onError: (res) => {
-      //server often breakon，we should use a constant for testing
-      global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
       NavigationService.navigate("MainScreen");
     },
   });
   const autoSignIn = async () => {
     if (params.email && params.password) {
       const { data } = await jwt.runTokenFlow({
-        username: params.email,
+        username: isValidEmail(params.phone) ? params.email : params.phone,
         password: params.password,
         //username: "vijay.msbi@gmail.com",
         //password: "123456789",
@@ -180,7 +147,6 @@ function OTPScreen(props) {
       );
     }
   };
-  const { params } = useRoute();
 
   useEffect(() => {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
@@ -205,41 +171,15 @@ function OTPScreen(props) {
   };
 
   const onValidate = async () => {
-    // email
-    // validate({
-    //   variables: {
-    //     request: {
-    //       userId: params.userId,
-    //       //userId: "6c374229-71ea-44b7-8915-366cbe3198ff",
-    //       validationType: "EMAIL",
-    //       tokenCode: otpCode,
-    //     },
-    //   },
-    // });
     validate({
       variables: {
         request: {
           userId: params.userId,
-          //userId: "6c374229-71ea-44b7-8915-366cbe3198ff",
-          validationType: ValidationType.Sms,
+          validationType: validationType,
           code: otpCode,
         },
       },
     });
-    // await jwt
-    //   .runMockOTPFlow(otpCode)
-    //   .then(function (res) {
-    //     if (res.validateOK === "OK") {
-    //       if (params.fromScreen === "ForgotPasswordScreen") {
-    //         NavigationService.navigate("CreateNewPasswordScreen");
-    //       } else {
-    //         NavigationService.navigate("ExploreScreen");
-    //       }
-    //     }
-    //   })
-    //   .catch(function (err) {
-    //     // here we will need to deal with a  status` code  and error and implement  logic
-    //   });
   };
 
   useEffect(() => {
@@ -262,7 +202,7 @@ function OTPScreen(props) {
                 console.log("====================================");
                 console.log(split(otp));
                 console.log("====================================");
-                // alert(otp);
+
                 setField1(otp.substring(0, 1));
                 setField2(otp.substring(1, 2));
                 setField3(otp.substring(2, 3));
@@ -392,32 +332,15 @@ function OTPScreen(props) {
                 },
               });
             } else {
-              // resend email
-              // resendCode({
-              //   variables: { emailAddress: params?.phone },
-              //   onCompleted: (res) => {
-              //     dispatch({
-              //       type: "changAlertState",
-              //       payload: {
-              //         visible: true,
-              //         message: `A validation code has been sent to ${params?.phone}`,
-              //         color: colors.success,
-              //       },
-              //     });
-              //   },
-              //   onError: () => {
-              //     dispatch({
-              //       type: "changAlertState",
-              //       payload: {
-              //         visible: true,
-              //         message: "Resend validation code failed",
-              //         color: colors.primary,
-              //       },
-              //     });
-              //   },
-              // });
               resendCode({
-                variables: { phoneNumber: params.phone },
+                variables: {
+                  sendCodeRequest: {
+                    userId: params.userId,
+                    validationType: isValidEmail(params.phone)
+                      ? ValidationType.Email
+                      : ValidationType.Sms,
+                  },
+                },
                 onCompleted: (res) => {
                   dispatch({
                     type: "changAlertState",
@@ -452,25 +375,12 @@ function OTPScreen(props) {
             I DIDN{"'"}T RECEIVE A CODE,RESEND
           </Text>
         </TouchableOpacity>
-        {/* <Button
-          disabled={false}
-          onPress={() => {
-            if (params.fromScreen === "ForgotPasswordScreen") {
-              forgetPasswordResendCode({
-                variables: { email: params?.phone ?? "" },
-              });
-            } else {
-              resendCode({ variables: { emailAddress: params?.phone } });
-            }
-          }}
-          text={"RESEND"}
-        /> */}
         <Button
           // disabled={!allowToResendCode}
           onPress={() => {
             if (params.fromScreen === "ForgotPasswordScreen") {
               resetPasswordStep2({
-                variables: { email: params.phone, tokenCode: otpCode },
+                variables: { email: params.email, tokenCode: otpCode },
                 onCompleted: (res) => {
                   NavigationService.navigate("CreateNewPasswordScreen", {
                     actionTokenValue:
@@ -526,47 +436,8 @@ function OTPScreen(props) {
           <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
             Please enter the code number sent to your phone no [{params.phone}]
           </Text>
-
           {renderOTPInput()}
-
           <View style={{ flex: 1 }} />
-          {/* {params.fromScreen !== "ForgotPasswordScreen" && (
-            <TouchableOpacity
-              style={[
-                t.flexRow,
-                t.bgPrimary,
-                t.justifyCenter,
-                t.itemsCenter,
-                {
-                  borderRadius: s(22),
-                },
-              ]}
-            >
-              <CountDown
-                until={60}
-                onFinish={() => alert("finished")}
-                onPress={() => alert("hello")}
-                timeToShow={["S"]}
-                size={20}
-                running={true}
-                digitStyle={{}}
-                digitTxtStyle={[t.textWhite]}
-                timeLabels={[""]}
-              />
-              <Text
-                style={[
-                  t.textWhite,
-                  {
-                    fontFamily: Fonts.semibold,
-                    fontSize: s(15),
-                  },
-                ]}
-              >
-                Resend the verification code
-              </Text>
-            </TouchableOpacity>
-          )} */}
-
           {renderAction()}
         </View>
       </SafeAreaView>

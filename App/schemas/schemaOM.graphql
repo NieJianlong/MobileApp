@@ -214,6 +214,13 @@ enum OrderItemHistoryEventType {
   CANCELED_BY_SELLER
 }
 
+type OrderItemHistoryResponse {
+  eventId: ID!
+  eventDateTime: DateTime!
+  eventType: OrderItemHistoryEventType!
+  notes: String
+}
+
 type OrderItemResponse {
   orderItemId: ID
   listingId: ID
@@ -428,6 +435,8 @@ type SellerOrderReturn {
   shortName: String
   longName: String
   mainImagePath: String
+  returnReason: String
+  returnRequest: ReturnEventType
   returnStatus: ReturnEventType
 }
 
@@ -475,6 +484,7 @@ type TrackOrderItemResponse {
   orderNumber: String!
   sellerBusinessName: String!
   dateDelivered: DateTime
+  events: [OrderItemHistoryResponse!]
   shippingDetails: ShippingDetailsResponse
   collectionPoint: CollectionPointPickupResponse
   sellerLocation: SellerLocationPickupResponse

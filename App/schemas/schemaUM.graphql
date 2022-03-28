@@ -375,7 +375,6 @@ type Mutation {
   deleteBuyerProfile(buyerId: ID!): Boolean
   updateBuyerProfile(request: BuyerProfileRequest!): BuyerProfileResponse
   createGuestBuyer: BuyerProfileResponse
-  validateCode(request: ValidateCodeRequest!): ValidateCodeResponse
   addRefundSalamiCredit(buyerId: ID!, refundAmount: Float!): Float
   useRefundSalamiCredit(buyerId: ID!, amount: Float!): Float
   addBonusSalamiCredit(buyerId: ID!, amount: Float!, bonusSalamiCreditExpire: DateTime): Float
@@ -394,10 +393,6 @@ type Mutation {
   registerSeller(request: SellerProfileRequestForCreate!): SellerProfileResponse
   deleteSellerProfile(sellerId: ID!): Boolean
   updateSellerProfile(request: SellerProfileRequest!): SellerProfileResponse
-  sendVerifyEmail(userId: ID!): Boolean
-  sendVerifySms(userId: ID!): Boolean
-  resendVerificationCodeInEmail(emailAddress: String!): ResendCodeResponse
-  resendVerificationCodeInSms(phoneNumber: String!): ResendCodeResponse
   createAddress(request: AddressRequestForCreate!): AddressResponse
   deleteAddress(addressId: ID!): Boolean
   updateAddress(request: AddressRequest!): AddressResponse
@@ -460,10 +455,8 @@ type Mutation {
   sellerBillingDetailsForSeller(sellerId: ID!): SellerBillingDetailsResponse
   acceptSellerRegistrationDocuments(sellerId: ID!): GenericResponse
   rejectSellerValidation(sellerId: ID!, rejectReason: RegistrationRejectedReason!, rejectNote: String): GenericResponse
-  sendOTPCodeForBuyer(buyerId: ID!): GenericResponse
-  sendOTPCode(sendCodeRequest : SendCodeRequest!):SendCodeResponse
-  validateOTPCodeForBuyer(request: ValidateCodeRequest!): ValidateCodeResponse
-  createServiceOperator(request: ServiceOperatorProfileForCreate!): GenericResponse
+  validateCode(request: ValidateCodeRequest!): ValidateCodeResponse
+  sendOTPCode(sendCodeRequest: SendCodeRequest!): SendCodeResponse
 }
 
 input NotificationRequest {
@@ -639,6 +632,7 @@ type Query {
   shippingDetails: [ShippingDetailResponse]
   shippingDetailById(shippingId: ID!): ShippingDetailResponse
   userHasVerifiedEmail(userId: ID!): Boolean
+  userHasVerifiedPhoneNumber(userId: ID!): Boolean
   buyerHasVerifiedPhoneNumber(userId: ID!): Boolean
   deliveryAddressForBuyer(buyerId: ID!): AddressResponse
   deliveryAddressForGuestBuyer(buyerId: ID!): AddressResponse
@@ -668,11 +662,6 @@ enum RegistrationRejectedReason {
   NO_TAX_NUMBER_CARD_SUPPLIED
   FALSE_INFORMATION
   OFFENSIVE_SHOP_OR_SELLER_NAME
-}
-
-type ResendCodeResponse {
-  status: Boolean
-  extraMessage: String
 }
 
 type SalamiWalletGiftTransactionResponse {
@@ -948,14 +937,14 @@ enum SellerValidationStatus {
   REJECTED
 }
 
-input ServiceOperatorProfileForCreate {
-  username: String!
-  firstName: String
-  lastName: String
-  email: String!
-  phoneNumber: String
-  password: String!
-  roles: [String]!
+input SendCodeRequest {
+  userId: ID!
+  validationType: ValidationType!
+}
+
+type SendCodeResponse {
+  status: Boolean
+  message: String
 }
 
 type ServiceOperatorResponse {
@@ -1116,9 +1105,9 @@ enum UserType {
 }
 
 input ValidateCodeRequest {
-  userId:ID!
+  userId: ID!
   validationType: ValidationType!
-  code:String!
+  code: String!
 }
 
 type ValidateCodeResponse {
@@ -1129,17 +1118,6 @@ type ValidateCodeResponse {
 enum ValidationType {
   SMS
   EMAIL
-}
-
-input SendCodeRequest {
-  userId:ID!
-  validationType: ValidationType!
-  destination:String!
-}
-
-type SendCodeResponse{
-  status: Boolean
-  message: String
 }
 
 enum WalletTransactionType {

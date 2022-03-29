@@ -148,7 +148,7 @@ function CheckoutResume(props) {
     });
   };
 
-  const proceedFurther = (type) => {
+  const proceedFurther = async (type) => {
     if (!on) {
       alert("Please accept privacy and policy");
       return;
@@ -166,130 +166,127 @@ function CheckoutResume(props) {
         longName: productItem.product.longName,
       };
     });
-    addBilling()
-      .then((res) => {
-        console.log("res=====", res);
-        const billingDetailsId = isAuth
-          ? userProfile?.billingDetailsId
-            ? res?.data?.updateBillingDetails?.billingDetailsId
-            : res?.data?.createBillingDetails?.billingDetailsId
-          : localCartVar?.billingAddressDetail?.billingDetailsId;
-        localCartCache({
-          ...localCartVar,
-          billingAddressDetail: userProfile?.billingDetailsId
-            ? res?.data?.updateBillingDetails
-            : res?.data?.createBillingDetails,
-        });
-        userProfileVar({
-          ...userProfile,
-          billingDetailsId: userProfile?.billingDetailsId
-            ? res?.data?.updateBillingDetails?.billingDetailsId
-            : res?.data?.createBillingDetails?.billingDetailsId,
-        });
-
-        console.log("billingDetailsId pass", billingDetailsId);
-        createOrderFromCart({
-          variables: {
-            cart: {
-              buyerId: global.buyerId,
-              shippingAddressId: localCartVar.deliverAddress,
-              billingDetailsId: billingDetailsId,
-              useSalamiWallet: true,
-              cartItems: localCartVar.items,
-            },
-          },
-          context: {
-            headers: {
-              isPrivate: isAuth,
-            },
-          },
-          onCompleted: (res) => {
-            console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
-            dispatch({
-              type: "changLoading",
-              payload: false,
-            });
-            if (type === "sufficient") {
-              if (res?.createOrderFromCart?.orderId) {
-                clearData();
-                NavigationService.navigate("OrderPlacedScreen", {
-                  items: finalItems,
-                  from: "checkout",
-                });
-              }
-            } else if (type === "zero") {
-              const order = res?.createOrderFromCart;
-              if (res?.createOrderFromCart?.orderId) {
-                cartOrderVar({
-                  orderNumber: order?.orderNumber,
-                  orderId: order?.orderId,
-                  amount: order?.subTotal,
-                });
-                razorpayCreateOrder().then((res) => {
-                  if (res?.data) {
-                    const razorId =
-                      res?.data?.razorpayCreateOrder?.razorpayOrderId;
-                    var options = {
-                      description: "Credits towords consultation",
-                      image: "https://i.imgur.com/3g7nmJC.png",
-                      currency: "INR",
-                      key: "rzp_test_I8X2v4LgupMLv0",
-                      name: "Acme Corp",
-                      order_id: razorId, //Replace this with an order_id created using Orders API.
-                      prefill: {
-                        email: userProfile?.email,
-                        contact: userProfile?.phoneNumber,
-                        name: userProfile?.firstName + userProfile.lastName,
-                      },
-                      theme: { color: "#53a20e" },
-                    };
-                    RazorpayCheckout.open(options)
-                      .then((data) => {
-                        razorOrderPaymentVar({
-                          razorpay_payment_id: data.razorpay_payment_id,
-                          razorpay_order_id: data.razorpay_order_id,
-                          razorpay_signature: data.razorpay_signature,
-                        });
-                        razorpayVerifyPaymentSignature();
-                        //alert(`Success: ${data.razorpay_payment_id}`);
-                        alert("Order Created Successfully");
-                        clearData();
-                        NavigationService.navigate("OrderPlacedScreen", {
-                          items: finalItems,
-                          from: "checkout",
-                        });
-                      })
-                      .catch((error) => {
-                        console.log("error in create order", error);
-                        alert(`Error: ${error.code} | ${error.description}`);
-                      });
-                  }
-                });
-              }
-              return res?.createOrderFromCart;
-            } else if (type === "InSufficient") {
-              NavigationService.navigate("InSufficientSalamiCreditScreen", {
-                walletBalance: walletBalance,
-                productPrice: parseFloat(money.total).toFixed(2),
-                product: finalItems,
-              });
-            }
-          },
-          onError: (res) => {
-            dispatch({
-              type: "changLoading",
-              payload: false,
-            });
-            alert(JSON.stringify(res.message));
-            console.log(
-              `Explore useCreateOrder onError ${JSON.stringify(res)}`
-            );
-          },
-        });
-      })
-      .catch((err) => {
-        alert(err.message);
+    const res = isAuth ? await addBilling() : "";
+    dispatch({
+      type: "changLoading",
+      payload: false,
+    });
+    console.log("res=====", res);
+    const billingDetailsId = isAuth
+      ? userProfile?.billingDetailsId
+        ? res?.data?.updateBillingDetails?.billingDetailsId
+        : res?.data?.createBillingDetails?.billingDetailsId
+      : localCartVar?.billingAddressDetail?.billingDetailsId;
+    if (isAuth) {
+      localCartCache({
+        ...localCartVar,
+        billingAddressDetail: userProfile?.billingDetailsId
+          ? res?.data?.updateBillingDetails
+          : res?.data?.createBillingDetails,
       });
+      userProfileVar({
+        ...userProfile,
+        billingDetailsId: userProfile?.billingDetailsId
+          ? res?.data?.updateBillingDetails?.billingDetailsId
+          : res?.data?.createBillingDetails?.billingDetailsId,
+      });
+    }
+    console.log("billingDetailsId pass", billingDetailsId);
+    createOrderFromCart({
+      variables: {
+        cart: {
+          buyerId: global.buyerId,
+          shippingAddressId: localCartVar.deliverAddress,
+          billingDetailsId: billingDetailsId,
+          useSalamiWallet: true,
+          cartItems: localCartVar.items,
+        },
+      },
+      context: {
+        headers: {
+          isPrivate: isAuth,
+        },
+      },
+      onCompleted: (res) => {
+        console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
+        dispatch({
+          type: "changLoading",
+          payload: false,
+        });
+        if (type === "sufficient") {
+          if (res?.createOrderFromCart?.orderId) {
+            clearData();
+            NavigationService.navigate("OrderPlacedScreen", {
+              items: finalItems,
+              from: "checkout",
+            });
+          }
+        } else if (type === "zero") {
+          const order = res?.createOrderFromCart;
+          if (res?.createOrderFromCart?.orderId) {
+            cartOrderVar({
+              orderNumber: order?.orderNumber,
+              orderId: order?.orderId,
+              amount: order?.subTotal,
+            });
+            razorpayCreateOrder().then((res) => {
+              if (res?.data) {
+                const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
+                var options = {
+                  description: "Credits towords consultation",
+                  image: "https://i.imgur.com/3g7nmJC.png",
+                  currency: "INR",
+                  key: "rzp_test_I8X2v4LgupMLv0",
+                  name: "Acme Corp",
+                  order_id: razorId, //Replace this with an order_id created using Orders API.
+                  prefill: {
+                    email: userProfile?.email || "",
+                    contact: userProfile?.phoneNumber || "",
+                    name: userProfile?.firstName + userProfile.lastName || "",
+                  },
+                  theme: { color: "#53a20e" },
+                };
+                RazorpayCheckout.open(options)
+                  .then((data) => {
+                    razorOrderPaymentVar({
+                      razorpay_payment_id: data.razorpay_payment_id,
+                      razorpay_order_id: data.razorpay_order_id,
+                      razorpay_signature: data.razorpay_signature,
+                    });
+                    razorpayVerifyPaymentSignature();
+                    //alert(`Success: ${data.razorpay_payment_id}`);
+                    alert("Order Created Successfully");
+                    clearData();
+                    NavigationService.navigate("OrderPlacedScreen", {
+                      items: finalItems,
+                      from: "checkout",
+                    });
+                  })
+                  .catch((error) => {
+                    console.log("error in RazorpayCheckout", error);
+                    alert(`Error: ${error.code} | ${error.description}`);
+                  });
+              }
+            });
+          }
+          return res?.createOrderFromCart;
+        } else if (type === "InSufficient") {
+          NavigationService.navigate("InSufficientSalamiCreditScreen", {
+            walletBalance: walletBalance,
+            productPrice: parseFloat(money.total).toFixed(2),
+            product: finalItems,
+          });
+        }
+      },
+      onError: (res) => {
+        dispatch({
+          type: "changLoading",
+          payload: false,
+        });
+        alert(JSON.stringify(res.message));
+        console.log(`Explore useCreateOrder onError ${JSON.stringify(res)}`);
+      },
+    });
     return;
   };
   return (

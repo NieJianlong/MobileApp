@@ -73,6 +73,9 @@ function UserEditProfile(props) {
     onCompleted: () => {
       NavigationService.navigate("DeleteAccountMessageScreen");
     },
+    onError: (err) => {
+      alert(err.message)
+    },
   });
   useEffect(() => {
     refetch && refetch();

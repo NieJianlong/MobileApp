@@ -212,14 +212,21 @@ function CheckoutGuestOrderDetail(props) {
           type: "changLoading",
           payload: false,
         });
-        alert(JSON.stringify(err));
+        alert(err?.message);
       },
       onCompleted: (result) => {
         console.log(
           "result=========billingDetails",
-          result.createBillingDetailsForGuestBuyer
+          result?.createBillingDetailsForGuestBuyer
         );
-        console.log("billingDetails", result.updateBillingDetailsForGuestBuyer);
+        console.log(
+          "billingDetails",
+          result?.updateBillingDetailsForGuestBuyer
+        );
+        dispatch({
+          type: "changLoading",
+          payload: false,
+        });
         localCartVar({
           ...localCart,
           billingAddressDetail: billingAddress?.billingDetailsId
@@ -254,13 +261,17 @@ function CheckoutGuestOrderDetail(props) {
             "localCartVar.deliverAddress",
             localCartVar.deliverAddress
           );
+          const billingDetailsId = result?.createBillingDetailsForGuestBuyer
+            ?.billingDetailsId
+            ? result?.createBillingDetailsForGuestBuyer?.billingDetailsId
+            : result.updateBillingDetailsForGuestBuyer?.billingDetailsId;
           // createUpdateBillingAddress();
           createOrderFromCart({
             variables: {
               cart: {
                 buyerId: global.buyerId,
-                shippingAddressId: "0cce0bf6-28bb-4528-91f8-d56381b7e11c",
-                billingDetailsId: "0cce0bf6-28bb-4528-91f8-d56381b7e11c",
+                shippingAddressId: localCartVar.deliverAddress,
+                billingDetailsId: billingDetailsId,
                 useSalamiWallet: false,
                 cartItems:
                   localBuyNowVar().items.length > 0
@@ -330,6 +341,14 @@ function CheckoutGuestOrderDetail(props) {
                 });
               }
               return res?.createOrderFromCart;
+            },
+            onError: (err) => {
+              console.log("Here createOrder", err);
+              dispatch({
+                type: "changLoading",
+                payload: false,
+              });
+              alert(err.message);
             },
           });
         }

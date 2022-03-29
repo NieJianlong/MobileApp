@@ -54,7 +54,7 @@ function index(props) {
       }}
     >
       <Text style={ApplicationStyles.screen.heading4Bold}>Order Summary</Text>
-      {orderStatus != 1 && (
+      {/* {orderStatus != 1 && (
         <View
           style={
             promoStatus == "success"
@@ -113,9 +113,9 @@ function index(props) {
             </TouchableOpacity>
           )}
         </View>
-      )}
+      )} */}
 
-      {promoStatus === "failure" && (
+      {/* {promoStatus === "failure" && (
         <Text
           style={
             (ApplicationStyles.screen.heading6Bold,
@@ -128,7 +128,7 @@ function index(props) {
         >
           Error Message
         </Text>
-      )}
+      )} */}
       {summaries.map((item, index) => {
         return (
           <View

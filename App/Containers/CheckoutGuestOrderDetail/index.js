@@ -442,7 +442,7 @@ function CheckoutGuestOrderDetail(props) {
           </Text>
           <View style={styles.deliveryDescriptionBox}>
             <Text style={styles.deliveryDescriptionText}>
-              {`${deliveryAddress?.flat || ""} , ${
+              {`${deliveryAddress?.flat + "," || ""}  ${
                 deliveryAddress?.houseNumber || ""
               }`}
             </Text>

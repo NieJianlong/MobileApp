@@ -76,9 +76,9 @@ const AddBillingDetail = () => {
         );
       },
       onError: (err) => {
+        console.log("error-======", err);
         alert(err.message);
         return err;
-        console.log("error-======", err);
       },
     }
   );

@@ -16,7 +16,7 @@ import images from "../../../Themes/Images";
 import { ApplicationStyles } from "../../../Themes";
 
 function index(props) {
-  const { orderStatus, subTotal, saving } = props;
+  const { orderStatus, subTotal, saving, deliveryFess } = props;
   const [promoCode, setPromoCode] = useState("");
   const [promoStatus, setPromoStatus] = useState("");
   const [summaries, setSummaries] = useState([
@@ -26,13 +26,8 @@ function index(props) {
       type: "normal",
     },
     {
-      title: "Service fee",
-      value: "$0",
-      type: "normal",
-    },
-    {
       title: "Delivery",
-      value: "$9,98",
+      value: `${deliveryFess}`,
       type: "normal",
     },
     {
@@ -59,7 +54,7 @@ function index(props) {
       }}
     >
       <Text style={ApplicationStyles.screen.heading4Bold}>Order Summary</Text>
-      {orderStatus != 1 && (
+      {/* {orderStatus != 1 && (
         <View
           style={
             promoStatus == "success"
@@ -118,9 +113,9 @@ function index(props) {
             </TouchableOpacity>
           )}
         </View>
-      )}
+      )} */}
 
-      {promoStatus === "failure" && (
+      {/* {promoStatus === "failure" && (
         <Text
           style={
             (ApplicationStyles.screen.heading6Bold,
@@ -133,7 +128,7 @@ function index(props) {
         >
           Error Message
         </Text>
-      )}
+      )} */}
       {summaries.map((item, index) => {
         return (
           <View

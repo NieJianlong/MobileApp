@@ -88,6 +88,7 @@ export default function AddressItem({ item, refetch, isCheckout, onPress }) {
       });
     },
     onError: (error) => {
+      console.log("Error UPDATE_ADDRESS", error);
       dispatch({ type: "hideloading" });
     },
   });

@@ -13,7 +13,7 @@ function ProductInfo(props) {
 
   return (
     <TouchableOpacity
-      onPress={() => NavigationService.navigate("ProductDetailScreen")}
+      onPress={() => NavigationService.navigate("ProductDetailScreen", { product })}
       style={styles.productContainer}
     >
       <View

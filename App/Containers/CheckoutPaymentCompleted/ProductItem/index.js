@@ -10,7 +10,7 @@ function ProductItem(props) {
   const { product, onPress } = props;
   return (
     <TouchableOpacity
-      onPress={() => NavigationService.navigate("ProductDetailScreen")}
+      onPress={() => NavigationService.navigate("ProductDetailScreen", { product })}
       style={styles.productContainer}
     >
       <View style={[styles.row]}>

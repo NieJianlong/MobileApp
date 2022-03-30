@@ -80,6 +80,10 @@ export const UPDATE_BUYER_PROFILE = gql`
   mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
     updateBuyerProfile(request: $request) {
       buyerId
+      firstName
+      lastName
+      email
+      phoneNumber
     }
   }
 `;

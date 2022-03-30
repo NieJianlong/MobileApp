@@ -34,16 +34,16 @@ class ProductSearchBox extends Component {
       results: [],
     };
   }
+ 
   componentDidMount() {
     const { onSetInput } = this.props;
     onSetInput && onSetInput(this.textInput);
   }
   getResults = (keyword) => {
-    return this.props.recentSearches.filter((i) =>
+    return this?.props?.recentSearches?.filter((i) =>
       i.toLowerCase().includes(keyword.toLowerCase())
     );
   };
-
   render() {
     const {
       disabled,
@@ -80,14 +80,15 @@ class ProductSearchBox extends Component {
             onSubmitEditing={({
               nativeEvent: { text, eventCount, target },
             }) => {
-              if (this.props.recentSearches.indexOf(text) < 0) {
+              if (this?.props?.recentSearches?.indexOf(text) < 0) {
                 this.props.recentSearches.push(text);
                 storage.setLocalStorageValue(
                   storage.LOCAL_SEARCH_ITEM,
                   JSON.stringify(this.props.recentSearches)
                 );
               }
-              const newArray = this.props.recentSearches.map((item) => item);
+              const newArray = this?.props?.recentSearches?.map((item) => item);
+              console.log("newArray", newArray);
               this.props.changeRecentSearches(newArray);
               onSelect(text);
             }}
@@ -110,7 +111,7 @@ class ProductSearchBox extends Component {
 
         {this.state.keyword !== "" && !disabled && (
           <View style={styles.listResultContainer}>
-            {this.state.results.map((item, index) => (
+            {this?.state?.results?.map((item, index) => (
               <TouchableOpacity
                 onPress={() => onSelect(item)}
                 key={index.toString()}

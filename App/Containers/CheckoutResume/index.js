@@ -63,6 +63,7 @@ function CheckoutResume(props) {
   const money = useMemo(() => {
     let currentBilling = 0;
     let originalBilling = 0;
+    let deliveryFess = 0;
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
       let itemAvailble = true;
@@ -71,6 +72,9 @@ function CheckoutResume(props) {
         itemAvailble = i?.isAvailable;
       }
       if (itemAvailble) {
+        if (element?.deliveryOption === "COURIER_DELIVERY") {
+          deliveryFess = element.courierShippingFee + deliveryFess;
+        }
         if (element.variant) {
           originalBilling =
             originalBilling + element.variant.retailPrice * element.quantity;
@@ -84,14 +88,15 @@ function CheckoutResume(props) {
         }
       }
     }
-    const total = new BigNumber(currentBilling).toFixed(2);
+    const total = new BigNumber(currentBilling + deliveryFess).toFixed(2);
     const saving = new BigNumber(originalBilling - currentBilling).toFixed(2);
     return {
       total: total,
       saving: saving,
       percent: BigNumber(saving).dividedBy(total).multipliedBy(100).toFixed(2),
+      deliveryFess: deliveryFess,
     };
-  }, [data]);
+  }, [data, availbleList]);
   const { data: dataWallet } = useQuery(WALLET_BALANCE, {
     context: {
       headers: {
@@ -112,11 +117,12 @@ function CheckoutResume(props) {
       .filtered("quantity > 0")
       .filtered("isDraft == false")
   );
+  console.log("mydatas=======", mydatas[0]);
   const walletBalance = BigNumber(
     dataWallet?.getBuyerSalamiWalletBalance?.walletBalance +
       dataWallet?.getBuyerSalamiWalletBalance?.giftBalance
   ).toFixed(2);
-  console.log("walletBalance ===========", walletBalance);
+  console.log("walletBalance =========== typeOGGGGG", typeof walletBalance);
   const clearData = () => {
     let index = mydatas.length - 1;
     while (index >= 0) {
@@ -142,7 +148,7 @@ function CheckoutResume(props) {
     });
   };
 
-  const proceedFurther = (type) => {
+  const proceedFurther = async (type) => {
     if (!on) {
       alert("Please accept privacy and policy");
       return;
@@ -160,130 +166,127 @@ function CheckoutResume(props) {
         longName: productItem.product.longName,
       };
     });
-    addBilling()
-      .then((res) => {
-        console.log("res=====", res);
-        const billingDetailsId = isAuth
-          ? userProfile?.billingDetailsId
-            ? res?.data?.updateBillingDetails?.billingDetailsId
-            : res?.data?.createBillingDetails?.billingDetailsId
-          : localCartVar?.billingAddressDetail?.billingDetailsId;
-        localCartCache({
-          ...localCartVar,
-          billingAddressDetail: userProfile?.billingDetailsId
-            ? res?.data?.updateBillingDetails
-            : res?.data?.createBillingDetails,
-        });
-        userProfileVar({
-          ...userProfile,
-          billingDetailsId: userProfile?.billingDetailsId
-            ? res?.data?.updateBillingDetails?.billingDetailsId
-            : res?.data?.createBillingDetails?.billingDetailsId,
-        });
-
-        console.log("billingDetailsId pass", billingDetailsId);
-        createOrderFromCart({
-          variables: {
-            cart: {
-              buyerId: global.buyerId,
-              shippingAddressId: localCartVar.deliverAddress,
-              billingDetailsId: billingDetailsId,
-              useSalamiWallet: true,
-              cartItems: localCartVar.items,
-            },
-          },
-          context: {
-            headers: {
-              isPrivate: isAuth,
-            },
-          },
-          onCompleted: (res) => {
-            console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
-            dispatch({
-              type: "changLoading",
-              payload: false,
-            });
-            if (type === "sufficient") {
-              if (res?.createOrderFromCart?.orderId) {
-                clearData();
-                NavigationService.navigate("OrderPlacedScreen", {
-                  items: finalItems,
-                  from: "checkout",
-                });
-              }
-            } else if (type === "zero") {
-              const order = res?.createOrderFromCart;
-              if (res?.createOrderFromCart?.orderId) {
-                cartOrderVar({
-                  orderNumber: order?.orderNumber,
-                  orderId: order?.orderId,
-                  amount: order?.subTotal,
-                });
-                razorpayCreateOrder().then((res) => {
-                  if (res?.data) {
-                    const razorId =
-                      res?.data?.razorpayCreateOrder?.razorpayOrderId;
-                    var options = {
-                      description: "Credits towords consultation",
-                      image: "https://i.imgur.com/3g7nmJC.png",
-                      currency: "INR",
-                      key: "rzp_test_I8X2v4LgupMLv0",
-                      name: "Acme Corp",
-                      order_id: razorId, //Replace this with an order_id created using Orders API.
-                      prefill: {
-                        email: userProfile?.email,
-                        contact: userProfile?.phoneNumber,
-                        name: userProfile?.firstName + userProfile.lastName,
-                      },
-                      theme: { color: "#53a20e" },
-                    };
-                    RazorpayCheckout.open(options)
-                      .then((data) => {
-                        razorOrderPaymentVar({
-                          razorpay_payment_id: data.razorpay_payment_id,
-                          razorpay_order_id: data.razorpay_order_id,
-                          razorpay_signature: data.razorpay_signature,
-                        });
-                        razorpayVerifyPaymentSignature();
-                        //alert(`Success: ${data.razorpay_payment_id}`);
-                        alert("Order Created Successfully");
-                        clearData();
-                        NavigationService.navigate("OrderPlacedScreen", {
-                          items: finalItems,
-                          from: "checkout",
-                        });
-                      })
-                      .catch((error) => {
-                        console.log("error in create order", error);
-                        alert(`Error: ${error.code} | ${error.description}`);
-                      });
-                  }
-                });
-              }
-              return res?.createOrderFromCart;
-            } else if (type === "InSufficient") {
-              NavigationService.navigate("InSufficientSalamiCreditScreen", {
-                walletBalance: walletBalance,
-                productPrice: parseFloat(money.total).toFixed(2),
-                product: finalItems,
-              });
-            }
-          },
-          onError: (res) => {
-            dispatch({
-              type: "changLoading",
-              payload: false,
-            });
-            alert(JSON.stringify(res.message));
-            console.log(
-              `Explore useCreateOrder onError ${JSON.stringify(res)}`
-            );
-          },
-        });
-      })
-      .catch((err) => {
-        alert(err.message);
+    const res = isAuth ? await addBilling() : "";
+    dispatch({
+      type: "changLoading",
+      payload: false,
+    });
+    console.log("res=====", res);
+    const billingDetailsId = isAuth
+      ? userProfile?.billingDetailsId
+        ? res?.data?.updateBillingDetails?.billingDetailsId
+        : res?.data?.createBillingDetails?.billingDetailsId
+      : localCartVar?.billingAddressDetail?.billingDetailsId;
+    if (isAuth) {
+      localCartCache({
+        ...localCartVar,
+        billingAddressDetail: userProfile?.billingDetailsId
+          ? res?.data?.updateBillingDetails
+          : res?.data?.createBillingDetails,
       });
+      userProfileVar({
+        ...userProfile,
+        billingDetailsId: userProfile?.billingDetailsId
+          ? res?.data?.updateBillingDetails?.billingDetailsId
+          : res?.data?.createBillingDetails?.billingDetailsId,
+      });
+    }
+    console.log("billingDetailsId pass", billingDetailsId);
+    createOrderFromCart({
+      variables: {
+        cart: {
+          buyerId: global.buyerId,
+          shippingAddressId: localCartVar.deliverAddress,
+          billingDetailsId: billingDetailsId,
+          useSalamiWallet: true,
+          cartItems: localCartVar.items,
+        },
+      },
+      context: {
+        headers: {
+          isPrivate: isAuth,
+        },
+      },
+      onCompleted: (res) => {
+        console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
+        dispatch({
+          type: "changLoading",
+          payload: false,
+        });
+        if (type === "sufficient") {
+          if (res?.createOrderFromCart?.orderId) {
+            clearData();
+            NavigationService.navigate("OrderPlacedScreen", {
+              items: finalItems,
+              from: "checkout",
+            });
+          }
+        } else if (type === "zero") {
+          const order = res?.createOrderFromCart;
+          if (res?.createOrderFromCart?.orderId) {
+            cartOrderVar({
+              orderNumber: order?.orderNumber,
+              orderId: order?.orderId,
+              amount: order?.subTotal,
+            });
+            razorpayCreateOrder().then((res) => {
+              if (res?.data) {
+                const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
+                var options = {
+                  description: "Credits towords consultation",
+                  image: "https://i.imgur.com/3g7nmJC.png",
+                  currency: "INR",
+                  key: "rzp_test_I8X2v4LgupMLv0",
+                  name: "Acme Corp",
+                  order_id: razorId, //Replace this with an order_id created using Orders API.
+                  prefill: {
+                    email: userProfile?.email || "",
+                    contact: userProfile?.phoneNumber || "",
+                    name: userProfile?.firstName + userProfile.lastName || "",
+                  },
+                  theme: { color: "#53a20e" },
+                };
+                RazorpayCheckout.open(options)
+                  .then((data) => {
+                    razorOrderPaymentVar({
+                      razorpay_payment_id: data.razorpay_payment_id,
+                      razorpay_order_id: data.razorpay_order_id,
+                      razorpay_signature: data.razorpay_signature,
+                    });
+                    razorpayVerifyPaymentSignature();
+                    //alert(`Success: ${data.razorpay_payment_id}`);
+                    alert("Order Created Successfully");
+                    clearData();
+                    NavigationService.navigate("OrderPlacedScreen", {
+                      items: finalItems,
+                      from: "checkout",
+                    });
+                  })
+                  .catch((error) => {
+                    console.log("error in RazorpayCheckout", error);
+                    alert(`Error: ${error.code} | ${error.description}`);
+                  });
+              }
+            });
+          }
+          return res?.createOrderFromCart;
+        } else if (type === "InSufficient") {
+          NavigationService.navigate("InSufficientSalamiCreditScreen", {
+            walletBalance: walletBalance,
+            productPrice: parseFloat(money.total).toFixed(2),
+            product: finalItems,
+          });
+        }
+      },
+      onError: (res) => {
+        dispatch({
+          type: "changLoading",
+          payload: false,
+        });
+        alert(JSON.stringify(res.message));
+        console.log(`Explore useCreateOrder onError ${JSON.stringify(res)}`);
+      },
+    });
     return;
   };
   return (
@@ -370,6 +373,7 @@ function CheckoutResume(props) {
               orderStatus={orderStatus}
               subTotal={money.total}
               saving={money.saving}
+              deliveryFess={money.deliveryFess}
             />
             {global.access_token && global.access_token !== "" && (
               <PaymentOptions />
@@ -458,7 +462,6 @@ function CheckoutResume(props) {
                 if (!global.access_token || global.access_token === "") {
                   proceedFurther("zero");
                 } else {
-                  console.log("walletBalance", walletBalance);
                   console.log("money.total", money.total);
                   console.log(
                     "walletBalance >= parseFloat(money.total).toFixed(2)",
@@ -467,7 +470,10 @@ function CheckoutResume(props) {
                   if (!isNaN(walletBalance)) {
                     if (walletBalance >= parseFloat(money.total).toFixed(2)) {
                       proceedFurther("sufficient");
-                    } else if (walletBalance === 0 || walletBalance < 0) {
+                    } else if (
+                      walletBalance === "0.00" ||
+                      walletBalance < "0"
+                    ) {
                       proceedFurther("zero");
                     } else {
                       proceedFurther("InSufficient");

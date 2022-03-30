@@ -23,6 +23,7 @@ import styles from "./styles";
 import { t } from "react-native-tailwindcss";
 import moment from "moment";
 import { useSearchBuyerOrdersQuery } from "../../../../generated/graphql";
+import { useFocusEffect } from "@react-navigation/native";
 
 class Order extends Component {
   fall = new Animated.Value(0);
@@ -259,7 +260,7 @@ class Order extends Component {
 }
 
 function OrderScreen() {
-  const { data } = useSearchBuyerOrdersQuery({
+  const { data, refetch } = useSearchBuyerOrdersQuery({
     variables: {
       options: {
         searchString: "",
@@ -275,6 +276,11 @@ function OrderScreen() {
       },
     },
   });
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
 
   return <Order orderItems={data?.searchBuyerOrders?.content ?? []} />;
 }

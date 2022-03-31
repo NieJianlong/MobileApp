@@ -41,16 +41,21 @@ import { fn } from "moment";
 
 function CheckoutGuestOrderDetail(props) {
   const userProfileVarReactive = useReactiveVar(userProfileVar);
+  const [billingAddress, setBillingAddress] = useState([]);
   const [email, setEmail] = useState(billingAddress?.email || null);
   const [fName, setFName] = useState(billingAddress?.firstName || null);
   const [lName, setLName] = useState(billingAddress?.lastName || null);
   const [phno, setPhno] = useState(billingAddress?.phoneNumber || null);
-  const [deliveryAddress, setDeliveryAddress] = useState(null);
+
   const [isSameAsDelivery, setIsSameAsDelivery] = useState(true);
-  const [billingAddress, setBillingAddress] = useState([]);
   const { createOrderFromCart, order } = useCreateOrder();
   const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
   const localCart = localCartVar();
+  const [deliveryAddress, setDeliveryAddress] = useState(
+    localCart.callBackAddress
+  );
+  console.log("localCart========deliverAddrtesss", localCart.deliverAddress);
+  console.log("localCart========callbackAddress", localCart.callBackAddress);
   const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
     useRazorVerifyPayment();
   const { dispatch } = useContext(AlertContext);
@@ -105,30 +110,30 @@ function CheckoutGuestOrderDetail(props) {
   console.log("global.buyerId", global.buyerId);
 
   //To get default delivery address
-  const { loading, refetch } = useQuery(
-    aQM.FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID,
-    {
-      variables: { buyerId: global.buyerId },
-      context: {
-        headers: {
-          isPrivate: isAuth,
-        },
-      },
-      onError: (err) => {
-        console.log("Error===========", err);
-      },
-      onCompleted: (result) => {
-        console.log(
-          "resultJson FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID",
-          result
-        );
-        if (result) {
-          const resultJson = result.getGuestBuyerDefaultAddressByBuyerId;
-          setDeliveryAddress(resultJson);
-        }
-      },
-    }
-  );
+  // const { loading, refetch } = useQuery(
+  //   aQM.FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID,
+  //   {
+  //     variables: { buyerId: global.buyerId },
+  //     context: {
+  //       headers: {
+  //         isPrivate: isAuth,
+  //       },
+  //     },
+  //     onError: (err) => {
+  //       console.log("Error===========", err);
+  //     },
+  //     onCompleted: (result) => {
+  //       console.log(
+  //         "resultJson FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID",
+  //         result
+  //       );
+  //       if (result) {
+  //         const resultJson = result.getGuestBuyerDefaultAddressByBuyerId;
+  //         setDeliveryAddress(resultJson);
+  //       }
+  //     },
+  //   }
+  // );
   console.log(
     "HERE VALUE getBillingData",
     getBillingData ? "create" : "update"
@@ -142,7 +147,7 @@ function CheckoutGuestOrderDetail(props) {
     email: email,
     phoneNumber: "+91" + phno,
     billingAddress: {
-      flat: deliveryAddress?.flat,
+      flat: deliveryAddress?.flatNumber,
       floor: deliveryAddress?.floor,
       defaultAddress: true,
       houseNumber: deliveryAddress?.houseNumber,
@@ -167,20 +172,20 @@ function CheckoutGuestOrderDetail(props) {
     phoneNumber: phno,
     billingAddress: {
       addressId: billingAddress?.billingAddress?.addressId,
-      flat: billingAddress.billingAddress?.flat,
-      floor: billingAddress.billingAddress?.floor,
+      flat: deliveryAddress?.flatNumber,
+      floor: deliveryAddress?.floor,
       defaultAddress: true,
-      houseNumber: billingAddress.billingAddress?.houseNumber,
-      villageArea: billingAddress.billingAddress?.villageArea,
+      houseNumber: deliveryAddress?.houseNumber,
+      villageArea: deliveryAddress?.villageArea,
       district: billingAddress.billingAddress?.district,
       provinceState: billingAddress.billingAddress?.provinceState,
       country: "India",
-      landMark: billingAddress.billingAddress?.landMark,
-      pinCode: billingAddress.billingAddress?.taxCode,
+      landMark: deliveryAddress?.landMark,
+      pinCode: deliveryAddress?.pinCode,
       addressType: billingAddress.billingAddress?.addressType,
-      referenceId: billingAddress.billingAddress?.referenceId,
+      referenceId: global.buyerId,
     },
-    taxCode: billingAddress.billingAddress?.taxCode,
+    taxCode: deliveryAddress?.pinCode,
   };
   console.log("billingAddress.length > 0", billingAddress.length > 0);
   console.log("billingAddress.length > 0", billingAddress);
@@ -442,7 +447,7 @@ function CheckoutGuestOrderDetail(props) {
           </Text>
           <View style={styles.deliveryDescriptionBox}>
             <Text style={styles.deliveryDescriptionText}>
-              {`${deliveryAddress?.flat + "," || ""}  ${
+              {`${deliveryAddress?.flatNumber + "," || ""}  ${
                 deliveryAddress?.houseNumber || ""
               }`}
             </Text>

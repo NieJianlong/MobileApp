@@ -14,7 +14,7 @@ import {
   DeliveryOption,
   useTrackOrderItemQuery,
 } from "../../../generated/graphql";
-import Qrcode from "./qrcode/index";
+import Qrcode from "./Qrcode/index";
 import { t } from "react-native-tailwindcss";
 import moment from "moment";
 import PickInfo from "../../Components/PickInfo";

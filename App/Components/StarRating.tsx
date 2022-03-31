@@ -103,7 +103,6 @@ function StarRating(props) {
           source={Images.starFilled}
           style={rating == 5 ? styles.filledStar : styles.emptyStar}
         />
-
         {fullMode ? (
           <Text style={styles.txtRatingCount}>
             {rating} ({ratingCount} Reviews)

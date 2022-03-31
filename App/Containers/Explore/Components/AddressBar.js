@@ -50,11 +50,11 @@ export default function AddressBar() {
         height: 380,
         children: () => <AddressSheetContent />,
         onCloseEnd: () => {},
-        // enabledGestureInteraction: addrLine1.length > 0,
+        enabledGestureInteraction: addrLine1.length > 0,
         sheetTitle: "Add your delivery address",
       },
     });
-  }, [dispatch]);
+  }, [addrLine1.length, dispatch]);
 
   const handleError = useCallback(() => {
     if (typeof error !== "undefined") {

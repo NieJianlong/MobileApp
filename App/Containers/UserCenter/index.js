@@ -26,7 +26,7 @@ import { t } from "react-native-tailwindcss";
 
 const salamiItem = [
   {
-    title: "Salami Credit",
+    title: "Salami Wallet",
     icon: images.userLogoImage,
     onPress: () => {
       NavigationService.navigate("SalamiCreditScreen");
@@ -48,25 +48,26 @@ const items = [
       NavigationService.navigate("SettingScreen");
     },
   },
-  // {
-  //   title: "Support",
-  //   icon: images.userMediumImage,
-  //   onPress: () => {
-  //     NavigationService.navigate("CustomerSupportScreen");
-  //   },
-  // },
-  // {
-  //   title: "Feedback",
-  //   icon: images.userStarImage,
-  //   onPress: () => {
-  //     NavigationService.navigate("FeedbackScreen");
-  //   },
-  // },
+  {
+    title: "Support",
+    icon: images.userMediumImage,
+    onPress: () => {
+      NavigationService.navigate("CustomerSupportScreen");
+    },
+  },
+
   {
     title: "Legal",
     icon: images.userDocImage,
     onPress: () => {
       NavigationService.navigate("CustomerSupportScreen");
+    },
+  },
+  {
+    title: "",
+    icon: null,
+    onPress: () => {
+      // NavigationService.navigate("FeedbackScreen");
     },
   },
 ];
@@ -125,7 +126,7 @@ function UserCenter(props) {
       <View style={[t.flexWrap, t.flexRow, t.justifyBetween, t.pX4]}>
         {/*hide salami credit when user not sign in*/}
         {serviceItems.map((item, i) => (
-          <View key={i}>
+          <View key={i} style={[i === 5 ? t.opacity0 : t.opacity100]}>
             <ItemBox {...item} />
           </View>
         ))}

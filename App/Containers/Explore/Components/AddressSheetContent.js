@@ -67,34 +67,33 @@ export default function AddressSheetContent(props) {
         text={"ADD ADDRESS"}
       />
       <View style={{ height: vs(20) }} />
-      {isAuth && data?.getBuyerAddressByType && (
-        <Addresses
-          data={
-            isAuth
-              ? data?.getBuyerAddressByType
-              : data?.getGuestBuyerAddressByType
-          }
-          needempty={false}
-          isCheckout={true}
-          refetch={refetch}
-          onPress={(item) => {
-            setLocalStorageValue(CURRENT_ADDRESS, JSON.stringify(item)).then(
-              () => {
-                PubSub.publish("refresh-address", "");
-                dispatch({
-                  type: "changSheetState",
-                  payload: {
-                    showSheet: false,
-                    height: 600,
-                    children: () => <AddLocationSheetContent />,
-                    sheetTitle: "",
-                  },
-                });
-              }
-            );
-          }}
-        />
-      )}
+
+      <Addresses
+        data={
+          isAuth
+            ? data?.getBuyerAddressByType
+            : data?.getGuestBuyerAddressByType
+        }
+        needempty={false}
+        isCheckout={true}
+        refetch={refetch}
+        onPress={(item) => {
+          setLocalStorageValue(CURRENT_ADDRESS, JSON.stringify(item)).then(
+            () => {
+              PubSub.publish("refresh-address", "");
+              dispatch({
+                type: "changSheetState",
+                payload: {
+                  showSheet: false,
+                  height: 600,
+                  children: () => <AddLocationSheetContent />,
+                  sheetTitle: "",
+                },
+              });
+            }
+          );
+        }}
+      />
     </View>
   );
 }

@@ -123,7 +123,10 @@ const images = {
   orderUnCheckImage: require("../Images/myorders/unchecked.png"),
   orderUnLineImage: require("../Images/myorders/unline.png"),
   orderCanceledImage: require("../Images/myorders/canceled.png"),
-  addressIcon: require('../Images/address.png'),
+  addressIcon: require("../Images/address.png"),
+  calender: require("../Images/calender.png"),
+  thumb: require("../Images/thumb.png"),
+  buyslice: require("../Images/buyslice.png"),
 };
 
 export default images;

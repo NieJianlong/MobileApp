@@ -11,6 +11,9 @@ import { AppBar, Button } from "../../Components";
 import styles from "./styles";
 import { s, ScaledSheet } from "react-native-size-matters";
 import { ApplicationStyles, Colors } from "../../Themes";
+import Explanatory from "./explanatory";
+import QuickGuide from "./quickguide";
+
 export default function LearnMore(props) {
   const [index, setIndex] = useState(1);
   console.log("index===1", index === 1);
@@ -60,6 +63,7 @@ export default function LearnMore(props) {
             </View>
           </TouchableOpacity>
         </View>
+        {index === 0 ? <Explanatory /> : <QuickGuide />}
       </SafeAreaView>
     </View>
   );

@@ -56,6 +56,11 @@ function OTPScreen(props) {
       // autoSignIn();
       alert("Validation fails");
     },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
   });
   const [resetPasswordStep2] = useMutation(ForgotPasswordStep2VerifyTokenEmail);
   const [forgetPasswordResendCode] =
@@ -341,6 +346,11 @@ function OTPScreen(props) {
                       : ValidationType.Sms,
                   },
                 },
+                context: {
+                  headers: {
+                    isPrivate: true,
+                  },
+                },
                 onCompleted: (res) => {
                   dispatch({
                     type: "changAlertState",
@@ -380,7 +390,7 @@ function OTPScreen(props) {
           onPress={() => {
             if (params.fromScreen === "ForgotPasswordScreen") {
               resetPasswordStep2({
-                variables: { email: params.email, tokenCode: otpCode },
+                variables: { email: params.phone, tokenCode: otpCode },
                 onCompleted: (res) => {
                   NavigationService.navigate("CreateNewPasswordScreen", {
                     actionTokenValue:

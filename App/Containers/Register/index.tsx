@@ -196,7 +196,7 @@ function RegisterScreen(props) {
         },
       });
     },
-    onCompleted: (result) => {
+    onCompleted: async (result) => {
       if (typeof result.registerBuyer !== "undefined") {
         let buyerId = result.registerBuyer.buyerId;
 
@@ -212,6 +212,12 @@ function RegisterScreen(props) {
           // sendVerifyEmail({
           //   variables: { userId: result.registerBuyer.userId },
           // });
+          const username = getValues("email");
+          const password = getValues("password");
+          const { data } = await jwt.runTokenFlow({ username, password });
+          let access_token = data.access_token;
+          global.access_token = access_token;
+
           NavigationService.navigate("OTPScreen", {
             fromScreen: "RegisterScreen",
             phone: "+91" + getValues("phoneNumber"),

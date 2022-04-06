@@ -367,6 +367,7 @@ function RegisterScreen(props) {
                 ref={(r) => (emailInput = r)}
                 onSubmitEditing={() => passwordInput.getInnerRef().focus()}
                 returnKeyType={"next"}
+                isPhoneNo={true}
                 onChangeText={onChange}
                 value={value}
               />

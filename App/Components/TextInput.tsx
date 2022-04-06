@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Text, View, Image, TouchableOpacity, TextInput } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
+import { t } from "react-native-tailwindcss";
 
 import { Fonts, Colors, Images } from "../Themes";
 import colors from "../Themes/Colors";
@@ -31,6 +32,7 @@ class CustomTextInput extends Component {
       onSubmitEditing,
       returnKeyType,
       textAlignVertical,
+      isPhoneNo,
     } = this.props;
 
     return (
@@ -43,8 +45,15 @@ class CustomTextInput extends Component {
             multiline && styles.multilineContainer,
           ]}
         >
-          <View style={{ flex: 1 }}>
+          <View style={[t.flex1, t.flexRow, t.itemsCenter]}>
             {hasTitle && <Text style={styles.title}>{title}</Text>}
+            {isPhoneNo && (
+              <View style={[t.mL1, t.flexRow, t.itemsCenter]}>
+                <Text>+91</Text>
+                <View style={[{ width: 1, height: 30 }, t.bgGray300, t.mL2]} />
+              </View>
+            )}
+
             <TextInput
               ref={(r) => (this.ref = r)}
               placeholder={placeholder}

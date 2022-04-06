@@ -165,6 +165,8 @@ type OrderItemDetailResponse {
   quantity: Int!
   itemPrice: Float!
   itemDiscount: Float!
+  taxPercentage: Float
+  inventoryLocation: String
   latestEventStatus: OrderItemHistoryEventType!
   paymentStatus: OrderItemHistoryEventType
   shortName: String!
@@ -228,6 +230,8 @@ type OrderItemResponse {
   sellerId: ID
   quantity: Int
   itemPrice: Float
+  taxPercentage: Float
+  inventoryLocation: String
 }
 
 type OrderPaymentDetailsResponse {

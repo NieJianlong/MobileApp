@@ -29,7 +29,10 @@ import { client } from "../../Apollo/apolloClient";
 import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
 import GetBillingDetail from "../../hooks/billingDetails";
-import { useSendOtpCodeMutation } from "../../../generated/graphql";
+import {
+  useSendOtpCodeMutation,
+  useUserHasVerifiedPhoneNumberLazyQuery,
+} from "../../../generated/graphql";
 
 function LoginScreen(props) {
   // refs
@@ -42,6 +45,7 @@ function LoginScreen(props) {
   const { params } = useRoute();
   const { isBillingLoaded } = GetBillingDetail();
   const [resendCode] = useSendOtpCodeMutation();
+  const [userHasVerifiedPhoneNumber] = useUserHasVerifiedPhoneNumberLazyQuery();
 
   useEffect(() => {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
@@ -86,13 +90,16 @@ function LoginScreen(props) {
         });
         await jwt
           .runTokenFlow(loginRequest)
-          .then(function (res) {
+          .then(async (res) => {
             if (typeof res !== "undefined") {
               let access_token = res.data.access_token;
               let decoded = jwt_decode(access_token);
               console.log("decoded====================================");
               console.log(JSON.stringify(decoded));
               console.log("====================================");
+              // await userHasVerifiedPhoneNumber({
+              //   variables: { userId: decoded.sub },
+              // });
               // if (!decoded.email_verified) {
               //   resendCode({
               //     variables: { phoneNumber: decoded.email },

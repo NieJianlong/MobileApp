@@ -606,11 +606,13 @@ input ProductStocksAndPricingInput {
   wholeSalePrice: Float!
   profit: Float
   currency: String!
+  taxPercentage: Float
   weight: Float
   weightUnit: String
   size: String
   sizeUnit: String
   itemsInStock: Int!
+  inventoryLocation: String
   variantInputs: [ProductVariantInput]
 }
 
@@ -970,6 +972,7 @@ type SellerProductDetailView {
   variants: [SellerProductVariant!]!
   categories: [ProductCategoryResponse!]!
   itemsInStock: Int!
+  inventoryLocation: String
   returnPolicy: SellerReturnPolicy!
 }
 

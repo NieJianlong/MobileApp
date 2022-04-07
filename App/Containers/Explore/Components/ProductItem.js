@@ -71,7 +71,7 @@ function ProductItem(props) {
               source={{
                 uri: product.photo || defultUrl,
               }}
-              style={styles.productImage}
+              style={[styles.productImage, t.mR2]}
             />
 
             <View style={styles.v2}>

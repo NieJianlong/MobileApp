@@ -48,6 +48,10 @@ function LoginScreen(props) {
   const [userHasVerifiedPhoneNumber] = useUserHasVerifiedPhoneNumberLazyQuery();
 
   useEffect(() => {
+    storage.setLocalStorageEmpty();
+  }, []);
+
+  useEffect(() => {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
     Keyboard.addListener("keyboardWillHide", _keyboardWillHide);
     /**

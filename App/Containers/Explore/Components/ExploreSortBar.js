@@ -58,6 +58,7 @@ export default function ExploreSortBar({ onChange, refresh, option }) {
       payload: {
         showSheet: true,
         height: 320,
+        enabledGestureInteraction: true,
         onCloseEnd: () => {
           refresh && refresh(currentOption);
         },
@@ -66,6 +67,12 @@ export default function ExploreSortBar({ onChange, refresh, option }) {
             option={currentOption}
             callback={(item) => {
               setCurrentOption(item);
+              dispatch({
+                type: "changSheetState",
+                payload: {
+                  showSheet: false,
+                },
+              });
             }}
           />
         ),

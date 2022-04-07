@@ -1,10 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useCallback } from "react";
 import {
   View,
   Text,
   SafeAreaView,
   StatusBar,
   TextInput as RNTextInput,
+  Linking,
+  TouchableOpacity,
 } from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
@@ -17,6 +19,7 @@ import { AlertContext } from "../Root/GlobalContext";
 function CustomerSupport(props) {
   const { dispatch } = useContext(AlertContext);
   const [mstate, setMstate] = useState("AAA");
+
   return (
     <View
       style={{
@@ -34,33 +37,31 @@ function CustomerSupport(props) {
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        <AppBar
-          rightButton={() => (
-            <RightButton
-              title="SUBMIT"
-              onPress={() => {
-                NavigationService.goBack();
-                dispatch({
-                  type: "changAlertState",
-                  payload: {
-                    visible: true,
-                    message:
-                      "We'll study this and get back to you as soon as possible.",
-                    color: colors.success,
-                    title: "Message sent!",
-                  },
-                });
-              }}
-            />
-          )}
-        />
+        <AppBar />
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <TouchableOpacity
+            onPress={() =>
+              Linking.openURL(
+                "mailto:somethingemail@gmail.com?subject=abcdefg&body=body"
+              )
+                .then((res) => {
+                  console.log("RESSSSSSSSSSSS OPEN ", res);
+                })
+                .catch((err) => {
+                  console.log("ERRRRRRRRRRR LINKING", err);
+                })
+            }
+          >
+            <Text>{"support mail: vk@gmail.com"}</Text>
+          </TouchableOpacity>
+        </View>
 
-        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+        {/* <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <Text
             style={{
               fontSize: s(24),
               fontFamily: fonts.primary,
-              color: colors.black,
+              color: colors.black, vablio
               fontWeight: "bold",
             }}
           >
@@ -95,7 +96,7 @@ function CustomerSupport(props) {
               paddingVertical: s(20),
             }}
           />
-        </View>
+        </View> */}
       </SafeAreaView>
     </View>
   );

@@ -23,6 +23,8 @@ const colors = {
   whatsapp: "#75CF6C",
   google: "#EA4335",
   twitter: "#00A2F9",
+  subbackground: "#F8F9FA",
+  red: "#BC3E33",
 };
 
 export default colors;

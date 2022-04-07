@@ -7,7 +7,7 @@ import AppConfig from "../Config/AppConfig";
 import { Images, Fonts, Colors, ApplicationStyles } from "../Themes";
 
 //alert component
-class Alert extends Component {
+class AlertComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,6 +27,10 @@ class Alert extends Component {
       duration: 2000,
       useNativeDriver: true,
     }).start();
+    setTimeout(() => {
+      this.props.onDismiss && this.props.onDismiss();
+      this.fadeOut();
+    }, 2000);
   };
 
   //fade out animation
@@ -82,7 +86,7 @@ class Alert extends Component {
 
                   <TouchableOpacity
                     onPress={() => {
-                      onDismiss();
+                      onDismiss && onDismiss();
                       this.fadeOut();
                     }}
                   >
@@ -97,6 +101,12 @@ class Alert extends Component {
     } else return null;
   }
 }
+
+function Alert(props) {
+  return <AlertComponent {...props} />;
+}
+
+export default Alert;
 
 const styles = ScaledSheet.create({
   container: {
@@ -152,4 +162,3 @@ const styles = ScaledSheet.create({
     marginBottom: "5@vs",
   },
 });
-export default Alert;

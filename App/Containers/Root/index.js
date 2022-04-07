@@ -11,6 +11,8 @@ import colors from "../../Themes/Colors";
 import { vs } from "react-native-size-matters";
 import { AlertContext } from "./GlobalContext";
 import Spinner from "react-native-loading-spinner-overlay";
+import useAlert from "../../hooks/useAlert";
+import useLoading from "../../hooks/useLoading";
 
 const initialState = {
   alert: {
@@ -70,6 +72,14 @@ function RootContainer() {
   } = actionSheet;
   const sheetEl = useRef(null);
   const fall = new Animated.Value(0);
+  const {
+    visible: alertShow,
+    message: alertMessage,
+    title: alertTitle,
+    color: alertColor,
+    onDismiss: alertDissmiss,
+  } = useAlert();
+  const { show } = useLoading();
   useEffect(() => {
     if (visible) {
       setTimeout(() => {
@@ -82,7 +92,7 @@ function RootContainer() {
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" />
         <Spinner
-          visible={spinner}
+          visible={spinner || show}
           textContent={"Loading..."}
           textStyle={{ color: "white" }}
         />
@@ -144,6 +154,15 @@ function RootContainer() {
           title={title}
           color={color}
           onDismiss={onDismiss}
+        />
+      )}
+      {alertShow && (
+        <Alert
+          visible={true}
+          message={alertMessage}
+          title={alertTitle}
+          color={alertColor}
+          onDismiss={alertDissmiss}
         />
       )}
     </AlertContext.Provider>

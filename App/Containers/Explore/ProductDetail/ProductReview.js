@@ -39,7 +39,7 @@ export default function ProductReview({ product, isPurchased, tabIndex }) {
       >
         <Text style={styles.heading3Bold}>Product Reviews</Text>
         <Review
-          rating={product.rating}
+          rating={product.numberOfStars}
           ratingCount={product.numberOfReviews}
           ratingDetail={product.ratingDetail}
         />
@@ -97,6 +97,7 @@ export default function ProductReview({ product, isPurchased, tabIndex }) {
                 onPress={() =>
                   NavigationService.navigate("ReportScreen", {
                     onSubmit: () => {},
+                    reviewId: comment.id,
                   })
                 }
                 style={{ marginLeft: s(20) }}

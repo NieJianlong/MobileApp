@@ -17,6 +17,7 @@ import PubSub from "pubsub-js";
 import { AlertContext } from "../../Root/GlobalContext";
 import useRealm from "../../../hooks/useRealm";
 import BigNumber from "bignumber.js";
+import { t } from "react-native-tailwindcss";
 const defultUrl =
   "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000";
 function Index(props) {
@@ -47,7 +48,7 @@ function Index(props) {
       >
         <Image
           source={{ uri: product.photoUrls ? product.photoUrls[0] : defultUrl }}
-          style={styles.productImage}
+          style={[styles.productImage, t.mR2]}
         />
         <View style={styles.v2}>
           <View>
@@ -177,7 +178,7 @@ function Index(props) {
                 realm.delete(props.product);
                 // Discard the reference.
                 PubSub.publish("refresh-shoppingcart");
-               // props.product = null;
+                // props.product = null;
               });
               Alert.dispatch({
                 type: "changAlertState",

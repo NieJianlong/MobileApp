@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import AddressBar from "../Components/AddressBar";
 import ExploreHeader from "../Components/ExploreHeader";
 import ProductList from "../Components/ProductList/ProductList";

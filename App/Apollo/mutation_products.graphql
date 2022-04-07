@@ -26,6 +26,16 @@ mutation DeleteListingFromWishlist($buyerId: ID!, $listingId: ID!) {
   deleteListingFromWishlist(buyerId: $buyerId, listingId: $listingId)
 }
 
+mutation IncrementHelpfulCount($reviewId: String!) {
+  incrementHelpfulCount(reviewId: $reviewId)
+}
+
+mutation AddReportReview($input: ReportReviewInput!) {
+  addReportReview(input: $input) {
+    reviewId
+  }
+}
+
 mutation UpdateListingStatus($input: ListingStatusInput!) {
   updateListingStatus(input: $input) {
     id

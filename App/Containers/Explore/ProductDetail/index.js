@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -7,8 +7,6 @@ import { range } from "lodash";
 import styles from "./styles";
 import ProductVariants from "../Components/Variants";
 import ProductCarousel from "./ProductCarousel";
-import { AlertContext } from "../../Root/GlobalContext";
-import RelatedProducts from "./RelatedProducts";
 import StoreInfo from "./StoreInfo";
 import DetailFooter from "./DetailFooter";
 import ProductReview from "./ProductReview";

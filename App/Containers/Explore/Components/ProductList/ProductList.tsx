@@ -10,22 +10,28 @@ import colors from "../../../../Themes/Colors";
 import { client } from "../../../../Apollo/apolloClient";
 import {
   GetListingsDocument,
+  SortDirection,
+  SortType,
   useGetListingsQuery,
 } from "../../../../../generated/graphql";
 import { shareOptions } from "../ShareOptionList";
 const pageSize = 5;
 
 const sortOptions = [
-  { title: "Last added", sortDirection: "DESCENDING", sortType: "DATE" },
+  {
+    title: "Last added",
+    sortDirection: SortDirection.Descending,
+    sortType: SortType.Date,
+  },
   {
     title: "Price: low to high",
-    sortDirection: "ASCENDING",
-    sortType: "PRICE",
+    sortDirection: SortDirection.Ascending,
+    sortType: SortType.Price,
   },
   {
     title: "Price: high to low",
-    sortDirection: "DESCENDING",
-    sortType: "PRICE",
+    sortDirection: SortDirection.Descending,
+    sortType: SortType.Price,
   },
 ];
 const HFlatList = HPageViewHoc(FlatList);

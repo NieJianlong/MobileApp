@@ -4,12 +4,7 @@ import { View, TouchableOpacity, Text } from "react-native";
 import BaseScreen from "../BaseScreen";
 import { AppBar, Button, Switch } from "../../Components";
 import { MaterialTextInput } from "../../Components";
-import {
-  useLazyQuery,
-  useMutation,
-  useQuery,
-  useReactiveVar,
-} from "@apollo/client";
+import { useLazyQuery, useMutation, useReactiveVar } from "@apollo/client";
 import {
   userProfileVar,
   localBuyNowVar,
@@ -18,14 +13,7 @@ import {
   razorOrderPaymentVar,
 } from "../../Apollo/cache";
 import styles from "./styles";
-import * as aQM from "../../Containers/Explore/gql/explore_queries";
-import * as gqlMappers from "../../Containers/Explore/gql/gql_mappers";
-import {
-  FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID,
-  FIND_GUEST_ADDRESS_BY_ID_AND_TPYE,
-  BILLING_DETAIL_BY_BUYERID,
-  BILLING_DETAIL_BY_GUEST_BUYERID,
-} from "../../Apollo/queries/queries_user";
+import { BILLING_DETAIL_BY_GUEST_BUYERID } from "../../Apollo/queries/queries_user";
 import RazorpayCheckout from "react-native-razorpay";
 import {
   CREATE_BILLING_DETAILS_FOR_GUEST_BUYER,

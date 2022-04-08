@@ -21,11 +21,15 @@ import {
   useCancelOrderItemMutation,
 } from "../../../generated/graphql";
 import { isEmpty } from "lodash";
+import useLoading from "../../hooks/useLoading";
+import useAlert from "../../hooks/useAlert";
 
 function CancelOrder(props) {
   const [showPrefer, setShowPrefer] = useState(false);
   const [reason, setReason] = useState<string>("Mistake order");
+  const { setLoading } = useLoading();
   const [message, setMessage] = useState<string>("");
+  const { setAlert } = useAlert();
   const { params } = useRoute();
   const reasonParams = useMemo(() => {
     if (reason === "Mistake order") {
@@ -52,7 +56,27 @@ function CancelOrder(props) {
       },
     },
     onCompleted: () => {
+      setLoading({ show: false });
+      setAlert({
+        color: colors.success,
+        title: "Cancel order success",
+        visible: true,
+        onDismiss: () => {
+          setAlert({ visible: false });
+        },
+      });
       NavigationService.navigate("CancelOrderCompletedScreen");
+    },
+    onError: () => {
+      setAlert({
+        color: colors.error,
+        title: "Cancel order failed",
+        visible: true,
+        onDismiss: () => {
+          setAlert({ visible: false });
+        },
+      });
+      setLoading({ show: false });
     },
   });
   return (
@@ -78,6 +102,7 @@ function CancelOrder(props) {
               <TouchableOpacity
                 disabled={isEmpty(reason)}
                 onPress={() => {
+                  setLoading({ show: true });
                   cancelOrder();
                   // NavigationService.navigate("RefundScreen", {
                   //   cancel: true,

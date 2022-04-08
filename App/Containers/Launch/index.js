@@ -18,7 +18,6 @@ import jwt_decode from "jwt-decode";
 import { useLazyQuery } from "@apollo/client";
 import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import * as storage from "../../Apollo/local-storage";
-import GetBillingDetail from "../../hooks/billingDetails";
 
 export default function LaunchScreen() {
   const [getBuyerId] = useLazyQuery(BUYER_PROFILE_BY_USERID, {

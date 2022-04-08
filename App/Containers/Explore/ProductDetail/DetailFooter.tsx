@@ -18,33 +18,24 @@ import "react-native-get-random-values";
 import useRealm from "../../../hooks/useRealm";
 import colors from "../../../Themes/Colors";
 import PubSub from "pubsub-js";
-import {
-  useMutation,
-  useQuery,
-  useReactiveVar,
-  useLazyQuery,
-} from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import {
   cartOrderVar,
   GET_LOCAL_CART,
   localBuyNowVar,
-  localCartVar,
   razorOrderPaymentVar,
   userProfileVar,
 } from "../../../Apollo/cache";
 import { nanoid } from "nanoid";
 import BigNumber from "bignumber.js";
-import { CreateOrderFromCart, WALLET_BALANCE } from "../../../hooks/gql";
+import { WALLET_BALANCE } from "../../../hooks/gql";
 import NavigationService from "../../../Navigation/NavigationService";
-import InSufficientSalamiCreditScreen from "../../InSufficientSalamiCredit/index";
 import { useCreateOrder } from "../../../hooks/order";
 import RazorpayCheckout from "react-native-razorpay";
 import { useRazorVerifyPayment } from "../../../hooks/verifyPayment";
 import { useCreateRazorOrder } from "../../../hooks/razorOrder";
 import { DeliveryOption } from "../../../../generated/graphql";
-import { IsListingAvailable } from "../../Explore/gql/explore_queries";
 import { FIND_BUYER_ADDRESS_BY_ID } from "../../../Apollo/queries/queries_user";
-import GetBillingDetail from "../../../hooks/billingDetails";
 import AddBillingDetail from "../../../hooks/addBillingDetails";
 import alert from "../../../Components/Alert";
 export default function DetailFooter({ product, currentVariant, pickUp }) {
@@ -458,9 +449,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
         <TouchableOpacity
           onPress={toggleConfirmOrderSheet}
           style={styles.btnBuyNow}
-          disabled={
-            currentVariant.itemsSold === currentVariant.itemsAvailable
-          }
+          disabled={currentVariant.itemsSold === currentVariant.itemsAvailable}
         >
           <Text style={[styles.txtBold, { color: Colors.white }]}>
             {currentVariant.itemsSold === currentVariant.itemsAvailable

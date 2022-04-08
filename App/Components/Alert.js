@@ -66,7 +66,7 @@ class AlertComponent extends Component {
 
                   <TouchableOpacity
                     onPress={() => {
-                      onDismiss();
+                      onDismiss && onDismiss();
                       this.fadeOut();
                     }}
                   >

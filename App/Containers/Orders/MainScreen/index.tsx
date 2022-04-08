@@ -94,7 +94,7 @@ class Order extends Component {
             style={styles.logo}
             resizeMode={"contain"}
           />
-          {this.props.orderItems.length > 0 ? (
+          {/* {this.props.orderItems.length > 0 ? (
             <TouchableOpacity
               onPress={() => {
                 this.setState({ isSearching: true });
@@ -104,7 +104,8 @@ class Order extends Component {
             </TouchableOpacity>
           ) : (
             <View style={styles.icSearch} />
-          )}
+          )} */}
+          <View style={styles.icSearch} />
         </View>
       );
     }

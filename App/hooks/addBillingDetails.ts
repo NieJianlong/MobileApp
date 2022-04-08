@@ -3,18 +3,15 @@ import { useMutation, useReactiveVar } from "@apollo/client";
 import { localCartVar, userProfileVar } from "../Apollo/cache";
 import {
   CREATE_BILLING_DETAILS,
-  DELETE_BILLING_DETAILS,
   UPDATE_BILLING_DETAILS,
 } from "../Apollo/mutations/mutations_user";
-import PubSub from "pubsub-js";
+import { AddressType } from "../../generated/graphql";
 
 const AddBillingDetail = () => {
   const userProfile = useReactiveVar(userProfileVar);
   const localCartVarReactive = useReactiveVar(localCartVar);
   const [isBillingLoaded, setIsBillingLoaded] = useState(false);
   const [addbillingDetail, setBillingDetail] = useState(null);
-  const localCart = localCartVar();
-  const setuserProfile = userProfileVar();
   const addressLocal = localCartVarReactive.callBackAddress;
   console.log("Here call========", localCartVarReactive.callBackAddress);
   console.log("userProfile=====", userProfile);
@@ -25,7 +22,7 @@ const AddBillingDetail = () => {
 
   const billingAddress = {
     pinCode: addressLocal?.pinCode,
-    addressType: "BILLING",
+    addressType: AddressType.Billing,
     provinceState: addressLocal?.provinceState,
     townCity: addressLocal?.townCity,
     flat: addressLocal?.flatNumber,
@@ -34,7 +31,7 @@ const AddBillingDetail = () => {
     country: "India",
     referenceId: global.buyerId,
     defaultAddress: true,
-    streetAddress1: "",
+    streetAddress1: addressLocal?.streetAddress1,
   };
   const request = {
     buyerId: global.buyerId,

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import {
   View,
   StatusBar,
@@ -24,6 +24,7 @@ import { t } from "react-native-tailwindcss";
 import moment from "moment";
 import { useSearchBuyerOrdersQuery } from "../../../../generated/graphql";
 import { useFocusEffect } from "@react-navigation/native";
+import useLoading from "../../../hooks/useLoading";
 
 class Order extends Component {
   fall = new Animated.Value(0);
@@ -261,7 +262,7 @@ class Order extends Component {
 }
 
 function OrderScreen() {
-  const { data, refetch } = useSearchBuyerOrdersQuery({
+  const { data, refetch, loading } = useSearchBuyerOrdersQuery({
     variables: {
       options: {
         searchString: "",
@@ -271,12 +272,17 @@ function OrderScreen() {
         },
       },
     },
+
     context: {
       headers: {
         isPrivate: true,
       },
     },
   });
+  const { setLoading } = useLoading();
+  useEffect(() => {
+    setLoading({ show: loading });
+  }, [loading, setLoading]);
   useFocusEffect(
     React.useCallback(() => {
       refetch();

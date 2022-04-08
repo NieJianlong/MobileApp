@@ -26,6 +26,8 @@ import { useRoute } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 import colors from "../../../Themes/Colors";
 import { AlertContext } from "../../Root/GlobalContext";
+import useAlert from "../../../hooks/useAlert";
+import useLoading from "../../../hooks/useLoading";
 
 class RateOrder extends Component {
   constructor(props) {
@@ -210,31 +212,62 @@ class RateOrder extends Component {
 function RateOrderScreen() {
   const { dispatch } = useContext(AlertContext);
   const [addProductReview] = useAddProductReviewMutation({
+    onError: () => {
+      setAlert({
+        color: colors.error,
+        title: "Review about the prodcut Failed",
+        visible: true,
+        onDismiss: () => {
+          setAlert({ visible: false });
+        },
+      });
+      setLoading({ show: false });
+    },
     onCompleted: () => {
       NavigationService.goBack();
-      dispatch({
-        type: "changAlertState",
-        payload: {
-          visible: true,
-          message: "",
-          color: colors.success,
-          title: "Review about the prodcut Success",
+      setLoading({ show: false });
+      setAlert({
+        color: colors.success,
+        title: "Review about the prodcut Success",
+        visible: true,
+        onDismiss: () => {
+          setAlert({ visible: false });
         },
       });
     },
   });
   const [addSellerReview] = useAddSellerReviewMutation({
-    onCompleted: () => {
-      NavigationService.goBack();
-      dispatch({
-        type: "changAlertState",
-        payload: {
-          visible: true,
-          message: "",
-          color: colors.success,
-          title: "Review about the seller Success",
+    onError: () => {
+      setAlert({
+        color: colors.error,
+        title: "Review about the seller Failed",
+        visible: true,
+        onDismiss: () => {
+          setAlert({ visible: false });
         },
       });
+      setLoading({ show: false });
+    },
+    onCompleted: () => {
+      setLoading({ show: false });
+      setAlert({
+        color: colors.success,
+        title: "Review about the seller Success",
+        visible: true,
+        onDismiss: () => {
+          setAlert({ visible: false });
+        },
+      });
+      NavigationService.goBack();
+      // dispatch({
+      //   type: "changAlertState",
+      //   payload: {
+      //     visible: true,
+      //     message: "",
+      //     color: colors.success,
+      //     title: "Review about the seller Success",
+      //   },
+      // });
     },
   });
   const { params } = useRoute();
@@ -245,6 +278,8 @@ function RateOrderScreen() {
     watch,
     formState: { errors },
   } = useForm<MutationAddProductReviewArgs>();
+  const { setAlert } = useAlert();
+  const { setLoading } = useLoading();
   // const onSubmit = (data) => {
   //   addProductReview({
   //     variables: {
@@ -270,6 +305,7 @@ function RateOrderScreen() {
       onPost={(stars) => {
         // alert(stars);
         handleSubmit((data) => {
+          setLoading({ show: true });
           if (params.title) {
             addSellerReview({
               variables: {
@@ -279,6 +315,7 @@ function RateOrderScreen() {
                   ratingVote: stars,
                 },
               },
+
               context: {
                 headers: {
                   isPrivate: true,

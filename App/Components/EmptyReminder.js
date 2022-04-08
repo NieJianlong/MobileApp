@@ -77,7 +77,7 @@ const styles = ScaledSheet.create({
   },
   signbtn: { marginTop: "20@vs" },
   headerContainer: {
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
     justifyContent: "space-around",
     alignItems: "center",
     paddingHorizontal: AppConfig.paddingHorizontal,

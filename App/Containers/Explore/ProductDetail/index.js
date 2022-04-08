@@ -148,13 +148,13 @@ function ProductDetail(props) {
           </ScrollIntoView>
         </CustomScrollView>
 
-        {showHeaderTabs && (
+        {/* {showHeaderTabs && (
           <HeaderTabs
             tabIndex={tabIndex}
             setTabIndex={setTabIndex}
             scrollSectionIntoView={scrollSectionIntoView}
           />
-        )}
+        )} */}
 
         {showFooter && (
           <DetailFooter

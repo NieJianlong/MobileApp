@@ -15,7 +15,10 @@ import styles from "./styles";
 import NavigationService from "../../../Navigation/NavigationService";
 import { AlertContext } from "../../Root/GlobalContext";
 import PickupFromSellerSheetContent from "./SheetContent/PickupFromSellerSheetContent";
-import { DeliveryOption } from "../../../../generated/graphql";
+import {
+  DeliveryOption,
+  ProductListingStatus,
+} from "../../../../generated/graphql";
 import PubSub from "pubsub-js";
 
 export default function ProductInfo({
@@ -55,9 +58,12 @@ export default function ProductInfo({
       PubSub.unsubscribe(refresh);
     };
   }, [pickUp, togglePickupFromSellerSheet]);
- console.log('product.deliveryOption====================================');
- console.log(product.deliveryOption);
- console.log('====================================');
+  console.log("product.deliveryOption====================================");
+  console.log(product.deliveryOption);
+  console.log("====================================");
+  const isMissing =
+    product.status === ProductListingStatus.Accepted ||
+    product.status === ProductListingStatus.Successful;
   return (
     <InView
       onChange={(isVisible) => {
@@ -72,9 +78,8 @@ export default function ProductInfo({
             <Text style={styles.heading2Bold}>{product.longName}</Text>
             <TouchableOpacity onPress={() => scrollSectionIntoView(3)}>
               <StarRating
-                fullMode
-                rating={product.rating}
-                ratingCount={product.ratingCount}
+                rating={product.numberOfStars}
+                ratingCount={product.numberOfReviews}
               />
             </TouchableOpacity>
           </View>
@@ -167,20 +172,35 @@ export default function ProductInfo({
 
         <View style={styles.v4}>
           <View style={{ marginRight: s(10) }}>
-            <Text style={styles.heading6Regular}>Order closes on:</Text>
-            <Text style={styles.txtRegular}>{product.orderClose}</Text>
+            {/* <Text style={styles.heading6Regular}>Order closes on:</Text> */}
+            <Text style={styles.heading6Regular}>
+              {product.deliveryOption === DeliveryOption.SellerDirectDelivery
+                ? "Delivery Date:"
+                : "Order closes on:"}
+            </Text>
+            <Text style={styles.heading6Regular}>
+              {product.deliveryOption === DeliveryOption.SellerDirectDelivery
+                ? product.announcementDeliveryDate
+                : product.openUntil}
+            </Text>
           </View>
 
           <View style={styles.row}>
             <Progress
+              maximumValue={isMissing ? "100" : product.noOfItemsInStock}
+              currentValue={isMissing ? "100" : product.noOfOrderedItems}
+              barWidth={s(60)}
+              barHeight={vs(6)}
+            />
+            {/* <Progress
               currentValue={24}
               maximumValue={100}
               style={{ marginHorizontal: s(10) }}
-            />
+            /> */}
 
             <Image source={Images.stock} style={styles.icStock} />
             <Text style={styles.txtOrderNumber}>
-              {product.orderCount}/{product.inStock}
+              {product.noOfOrderedItems}/{product.noOfItemsInStock}
             </Text>
             <TouchableOpacity
               onPress={() => NavigationService.navigate("ProductInfoScreen")}

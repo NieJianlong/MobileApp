@@ -25,13 +25,25 @@ import {
   useUpdateListingStatusMutation,
 } from "../../../../generated/graphql";
 import { useFocusEffect } from "@react-navigation/native";
+import useLoading from "../../../hooks/useLoading";
 
 function GroupInfoScreen(props) {
   const { params } = useRoute();
+  const { setLoading } = useLoading();
   const data = params.item;
-  const { data: orderData, refetch } = useGetOrderItemDetailsQuery({
+  const {
+    data: orderData,
+    refetch,
+    loading,
+  } = useGetOrderItemDetailsQuery({
     variables: {
       orderItemId: data.orderItemId,
+    },
+    onCompleted: () => {
+      setLoading({ show: false });
+    },
+    onError: () => {
+      setLoading({ show: false });
     },
     context: {
       headers: {
@@ -39,6 +51,10 @@ function GroupInfoScreen(props) {
       },
     },
   });
+
+  useEffect(() => {
+    setLoading({ show: loading });
+  }, [loading, setLoading]);
   useFocusEffect(
     React.useCallback(() => {
       refetch();

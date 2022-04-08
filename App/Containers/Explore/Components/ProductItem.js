@@ -78,7 +78,7 @@ function ProductItem(props) {
               <View>
                 <Text style={styles.heading4Bold}>{product.shortName}</Text>
                 <StarRating
-                  rating={product.rating}
+                  rating={product.numberOfStars}
                   ratingCount={product.numberOfReviews}
                 />
               </View>
@@ -131,7 +131,7 @@ function ProductItem(props) {
               <View>
                 <Text style={styles.heading4Bold}>{product.shortName}</Text>
                 <StarRating
-                  rating={product.rating}
+                  rating={product.numberOfStars}
                   ratingCount={product.numberOfReviews}
                 />
               </View>
@@ -204,7 +204,11 @@ function ProductItem(props) {
                 <Text style={styles.txtOrderNumber}>
                   {product.noOfOrderedItems}/{product.noOfItemsInStock}
                 </Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    NavigationService.navigate("ProductInfoScreen")
+                  }
+                >
                   <Image source={Images.info2} style={styles.icInfo} />
                 </TouchableOpacity>
               </View>

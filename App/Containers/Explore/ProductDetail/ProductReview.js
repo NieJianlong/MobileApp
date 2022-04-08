@@ -7,6 +7,10 @@ import { Colors } from "../../../Themes";
 import styles from "./styles";
 import NavigationService from "../../../Navigation/NavigationService";
 import Review from "../Components/Review";
+import { useIncrementHelpfulCountMutation } from "../../../../generated/graphql";
+import useAlert from "../../../hooks/useAlert";
+import useLoading from "../../../hooks/useLoading";
+import colors from "../../../Themes/Colors";
 //render users' reviews for the product
 const renderUserReview = () => {
   return (
@@ -27,7 +31,15 @@ const renderUserReview = () => {
   );
 };
 
-export default function ProductReview({ product, isPurchased, tabIndex }) {
+export default function ProductReview({
+  product,
+  isPurchased,
+  tabIndex,
+  refetch,
+}) {
+  const { setAlert } = useAlert();
+  const { setLoading } = useLoading();
+  const [incrementHelpfulCount] = useIncrementHelpfulCountMutation();
   return (
     <View style={styles.productReviewContainer}>
       <InView
@@ -88,7 +100,44 @@ export default function ProductReview({ product, isPurchased, tabIndex }) {
               </View>
             )} */}
             <View style={[styles.row, { marginTop: vs(15) }]}>
-              <TouchableOpacity style={styles.btnGrey}>
+              <TouchableOpacity
+                style={styles.btnGrey}
+                onPress={() => {
+                  setLoading({ show: true });
+                  incrementHelpfulCount({
+                    variables: { reviewId: comment.id },
+                    context: {
+                      headers: {
+                        isPrivate: true,
+                      },
+                    },
+                    onCompleted: () => {
+                      refetch();
+                      setLoading({ show: false });
+                      setAlert({
+                        title: "Successed",
+                        message: "Thanks for your feedback!",
+                        visible: true,
+                        color: colors.success,
+                        onDismiss: () => {
+                          setAlert({ visible: false });
+                        },
+                      });
+                    },
+                    onError: () => {
+                      setLoading({ show: false });
+                      setAlert({
+                        title: "Failed",
+                        visible: true,
+                        color: colors.error,
+                        onDismiss: () => {
+                          setAlert({ visible: false });
+                        },
+                      });
+                    },
+                  });
+                }}
+              >
                 <Text style={[styles.heading5Bold, { color: Colors.white }]}>
                   HELPFUL ({comment.helpfulCount ? comment.helpfulCount : 0})
                 </Text>

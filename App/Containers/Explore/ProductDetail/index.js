@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -14,8 +14,14 @@ import ProductInfo from "./ProductInfo";
 import { useRoute } from "@react-navigation/native";
 import HeaderTabs from "./HeaderTabs";
 import metrics from "../../../Themes/Metrics";
-import { DeliveryOption } from "../../../../generated/graphql";
+import {
+  DeliveryOption,
+  FilterType,
+  useGetListingsQuery,
+  useGetProductByProductIdQuery,
+} from "../../../../generated/graphql";
 import ReturnPolicy from "./ReturnPolicy";
+import useLoading from "../../../hooks/useLoading";
 
 const Sections = range(0, 4);
 // Wrap the original ScrollView
@@ -23,23 +29,59 @@ const CustomScrollView = wrapScrollView(ScrollView);
 
 function ProductDetail(props) {
   const {
-    params: { product },
+    params: { product: oldProduct },
   } = useRoute();
-  console.log("params====================================");
-  console.log(product);
-  console.log("====================================");
+  const { setLoading } = useLoading();
+  // const { data, loading } = useGetProductByProductIdQuery({
+  //   variables: { productId: oldProduct.productId },
+  //   onCompleted: () => {
+  //     setLoading({ show: false });
+  //   },
+  //   onError: () => {
+  //     setLoading({ show: false });
+  //   },
+  //   context: {
+  //     headers: {
+  //       isPrivate: true,
+  //     },
+  //   },
+  // });
+  const {
+    data: products,
+    refetch,
+    loading,
+  } = useGetListingsQuery({
+    variables: {
+      searchOptions: {
+        filter: FilterType.ByListingId,
+        filterParams: {
+          listingId: oldProduct.listingId,
+          productId: oldProduct.productId,
+        },
+      },
+    },
+    context: {
+      headers: {
+        isPrivate: global.access_token ? true : false,
+      },
+    },
+  });
+
+  useEffect(() => {
+    setLoading({ show: loading });
+  }, [loading]);
   const [pickUp, setPickUp] = useState(
     !(
-      product.deliveryOption === DeliveryOption.SellerLocationPickup ||
-      product.deliveryOption === DeliveryOption.CollectionPointPickup
+      oldProduct.deliveryOption === DeliveryOption.SellerLocationPickup ||
+      oldProduct.deliveryOption === DeliveryOption.CollectionPointPickup
     )
   );
   const onSetPickUp = (newValue) => {
     setPickUp(newValue);
   };
   const [currentVariant, setCurrentVariant] = useState(
-    product?.listingVariants?.length > 0
-      ? product?.listingVariants?.find(
+    oldProduct?.listingVariants?.length > 0
+      ? oldProduct?.listingVariants?.find(
           (item) => item.defaultVariant === true
         ) ?? null
       : null
@@ -113,19 +155,21 @@ function ProductDetail(props) {
           showsVerticalScrollIndicator={false}
         >
           <ScrollIntoView align={"top"} key={"section0"} ref={sectionsRefs[0]}>
-            <ProductCarousel product={product} />
+            <ProductCarousel product={products?.getListings.content[0]} />
             <ProductInfo
-              product={product}
+              product={products?.getListings.content[0]}
               setTabIndex={setTabIndex}
               scrollSectionIntoView={scrollSectionIntoView}
               pickUp={pickUp}
               onSetPickUp={onSetPickUp}
             />
-            <ReturnPolicy returnPolices={product.returnPolicies} />
-            {product.listingVariants && (
+            <ReturnPolicy
+              returnPolices={products?.getListings.content[0].returnPolicies}
+            />
+            {products?.getListings.content[0].listingVariants && (
               <ProductVariants
-                variants={product.listingVariants}
-                product={product}
+                variants={products?.getListings.content[0].listingVariants}
+                product={products?.getListings.content[0]}
                 onChange={(variant) => {
                   setCurrentVariant(variant);
                 }}
@@ -134,31 +178,35 @@ function ProductDetail(props) {
             {/* need to add ProductVariants components */}
           </ScrollIntoView>
           {/* <ScrollIntoView key={"section1"} ref={sectionsRefs[1]}>
-            <RelatedProducts productId={product.productId} />
-          </ScrollIntoView> */}
+                <RelatedProducts productId={product.productId} />
+              </ScrollIntoView> */}
           <ScrollIntoView key={"section2"} ref={sectionsRefs[2]}>
-            <StoreInfo tabIndex={tabIndex} product={product} />
+            <StoreInfo
+              tabIndex={tabIndex}
+              product={products?.getListings.content[0]}
+            />
           </ScrollIntoView>
           <ScrollIntoView key={"section3"} ref={sectionsRefs[3]}>
             <ProductReview
-              product={product}
+              product={products?.getListings.content[0]}
               tabIndex={tabIndex}
               isPurchased={isPurchased}
+              refetch={refetch}
             />
           </ScrollIntoView>
         </CustomScrollView>
 
         {/* {showHeaderTabs && (
-          <HeaderTabs
-            tabIndex={tabIndex}
-            setTabIndex={setTabIndex}
-            scrollSectionIntoView={scrollSectionIntoView}
-          />
-        )} */}
+              <HeaderTabs
+                tabIndex={tabIndex}
+                setTabIndex={setTabIndex}
+                scrollSectionIntoView={scrollSectionIntoView}
+              />
+            )} */}
 
         {showFooter && (
           <DetailFooter
-            product={product}
+            product={products?.getListings.content[0]}
             currentVariant={currentVariant}
             pickUp={pickUp}
           />

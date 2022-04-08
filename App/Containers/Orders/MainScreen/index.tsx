@@ -289,7 +289,11 @@ function OrderScreen() {
     }, [refetch])
   );
 
-  return <Order orderItems={data?.searchBuyerOrders?.content ?? []} />;
+  return loading ? (
+    <View />
+  ) : (
+    <Order orderItems={data?.searchBuyerOrders?.content ?? []} />
+  );
 }
 
 export default OrderScreen;

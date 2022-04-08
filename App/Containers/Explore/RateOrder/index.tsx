@@ -216,6 +216,7 @@ function RateOrderScreen() {
       setAlert({
         color: colors.error,
         title: "Review about the prodcut Failed",
+
         visible: true,
         onDismiss: () => {
           setAlert({ visible: false });
@@ -228,7 +229,8 @@ function RateOrderScreen() {
       setLoading({ show: false });
       setAlert({
         color: colors.success,
-        title: "Review about the prodcut Success",
+        title: "Thanks for your review",
+        message: "Your review has been added successfully",
         visible: true,
         onDismiss: () => {
           setAlert({ visible: false });
@@ -252,7 +254,8 @@ function RateOrderScreen() {
       setLoading({ show: false });
       setAlert({
         color: colors.success,
-        title: "Review about the seller Success",
+        title: "Thanks for your review",
+        message: "Your review has been added successfully",
         visible: true,
         onDismiss: () => {
           setAlert({ visible: false });

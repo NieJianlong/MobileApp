@@ -76,6 +76,8 @@ const allAPIS = {
   GetBuyerWishlistListing: PRODUCT_PORT,
   UpdateListingStatus: PRODUCT_PORT,
   AddReportReview: PRODUCT_PORT,
+  IncrementHelpfulCount: PRODUCT_PORT,
+  GetProductByProductId: PRODUCT_PORT,
 
   // Cart
   CreateCart: CART_PORT,

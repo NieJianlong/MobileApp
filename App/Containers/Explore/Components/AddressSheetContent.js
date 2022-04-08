@@ -17,10 +17,13 @@ import {
   setLocalStorageValue,
 } from "../../../Apollo/local-storage";
 import PubSub from "pubsub-js";
+import useAlert from "../../../hooks/useAlert";
+import colors from "../../../Themes/Colors";
 
 export default function AddressSheetContent(props) {
   const { dispatch, actionSheet } = useContext(AlertContext);
   const userProfileVarReactive = useReactiveVar(userProfileVar);
+  const { setAlert } = useAlert();
   const isAuth = useMemo(
     () => userProfileVarReactive.isAuth,
     [userProfileVarReactive.isAuth]
@@ -81,6 +84,15 @@ export default function AddressSheetContent(props) {
           setLocalStorageValue(CURRENT_ADDRESS, JSON.stringify(item)).then(
             () => {
               PubSub.publish("refresh-address", "");
+              setAlert({
+                color: colors.success,
+                title: "Your address has been changed",
+                message: "Discover the products of the area",
+                visible: true,
+                onDismiss: () => {
+                  setAlert({ visible: false });
+                },
+              });
               dispatch({
                 type: "changSheetState",
                 payload: {

@@ -1,5 +1,11 @@
 import React, { useState, useCallback, useContext, useMemo } from "react";
-import { FlatList, View, ActivityIndicator, Text } from "react-native";
+import {
+  FlatList,
+  View,
+  ActivityIndicator,
+  Text,
+  useWindowDimensions,
+} from "react-native";
 import ProductItem from "../ProductItem";
 import { HPageViewHoc } from "react-native-head-tab-view";
 import ExploreSortBar from "../ExploreSortBar";
@@ -15,6 +21,7 @@ import {
   useGetListingsQuery,
 } from "../../../../../generated/graphql";
 import { shareOptions } from "../ShareOptionList";
+import { t } from "react-native-tailwindcss";
 const pageSize = 5;
 
 const sortOptions = [
@@ -47,6 +54,7 @@ export default function ProductList(props) {
   const { isAnnouncement, index, filter, filterParams } = props;
   const [loadingMore, setLoadingMore] = useState(false);
   const [sortItem, setSortItem] = useState(sortOptions[1]);
+  const { width, height } = useWindowDimensions();
   const [isRereshing, setIsRereshing] = useState(false);
   const [showProductAsRows, setShowProductAsRows] = useState(true);
   const toggleShareSheet = useCallback(() => {
@@ -113,6 +121,8 @@ export default function ProductList(props) {
   return (
     <Container
       index={index}
+      style={{ height: height - 60 }}
+      contentContainerStyle={[t.pB32]}
       keyboardShouldPersistTaps="always"
       ListHeaderComponent={
         <ExploreSortBar

@@ -32,6 +32,7 @@ import {
   useIsListingInWishlistQuery,
 } from "../../../../generated/graphql";
 import Share from "react-native-share";
+import useImageViewer from "../../../hooks/useImageViewer";
 //render product images
 export default function ProductCarousel({ product }) {
   const { realm } = useRealm();
@@ -135,6 +136,7 @@ export default function ProductCarousel({ product }) {
   const onAddItemAndNavigateToCart = () => {
     NavigationService.navigate("CartScreen");
   };
+  const { setImageViewer } = useImageViewer();
   return (
     <View style={styles.imagesContainer}>
       <Carousel
@@ -145,10 +147,18 @@ export default function ProductCarousel({ product }) {
           return (
             <TouchableOpacity
               key={`{index}`}
-              onPress={() =>
-                NavigationService.navigate("ProductGalleryScreen", {
-                  fullscreenMode: true,
-                })
+              onPress={
+                () => {
+                  const imageUrls =
+                    product.photoUrls?.map((item: string) => {
+                      return { url: item };
+                    }) ?? [];
+                  setImageViewer({ visible: true, images: imageUrls });
+                }
+                // NavigationService.navigate("ProductGalleryScreen", {
+                //   fullscreenMode: true,
+                //   urls: product.photoUrls,
+                // })
               }
             >
               <Image

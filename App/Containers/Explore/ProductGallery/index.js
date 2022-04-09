@@ -16,9 +16,15 @@ import styles from "./styles";
 import { AppBar } from "../../../Components";
 import AppConfig from "../../../Config/AppConfig";
 import ImageViewer from "react-native-image-zoom-viewer";
+import { t } from "react-native-tailwindcss";
 
 function ProductGallery(props) {
   const { params } = useRoute();
+  const imageUrls =
+    params.urls?.map((item) => {
+      return { url: item };
+    }) ?? [];
+
   //fullscreen mode: to show a specific photo
   const [fullscreenMode, setFullscreenMode] = useState(
     params.fullscreenMode ?? false
@@ -34,74 +40,25 @@ function ProductGallery(props) {
   //render paging indicator
   const renderIndicator = (currentIndex, numberOfPhotos) => {
     return (
-      <View style={styles.indicatorContainer}>
+      <View style={[styles.indicatorContainer, t.absolute, t.mT12]}>
         <Text style={styles.indicator}>
           {currentIndex}/{numberOfPhotos}
         </Text>
       </View>
     );
   };
-
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-        <AppBar title={"Gallery (4)"} />
-
-        {fullscreenMode ? (
-          // use ImageViewer component to support zoom and pinch photo
-          <ImageViewer
-            index={currentImageIndex}
-            imageUrls={imageUrls}
-            backgroundColor={Colors.background}
-            onClick={() => toggleFullscreenMode(0)}
-            renderIndicator={(currentIndex, allSize) =>
-              renderIndicator(currentIndex, imageUrls.length)
-            }
-          />
-        ) : (
-          //list view mode
-          <ScrollView
-            contentContainerStyle={{
-              paddingHorizontal: AppConfig.paddingHorizontal,
-            }}
-          >
-            {imageUrls.map((image, index) => (
-              <TouchableOpacity
-                key={index.toString()}
-                onPress={() => toggleFullscreenMode(index)}
-              >
-                <Image
-                  resizeMode={"contain"}
-                  source={{ uri: image.url }}
-                  style={styles.image}
-                />
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        )}
-      </SafeAreaView>
-    </View>
+    // use ImageViewer component to support zoom and pinch photo
+    <ImageViewer
+      index={currentImageIndex}
+      imageUrls={imageUrls}
+      backgroundColor={Colors.background}
+      onClick={() => toggleFullscreenMode(0)}
+      renderIndicator={(currentIndex, allSize) =>
+        renderIndicator(currentIndex, imageUrls.length)
+      }
+    />
   );
 }
 
 export default ProductGallery;
-
-const imageUrls = [
-  {
-    url:
-      "https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png",
-  },
-  {
-    url:
-      "https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png",
-  },
-  {
-    url:
-      "https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png",
-  },
-  {
-    url:
-      "https://www.transparentpng.com/thumb/apple-iphone/fORwQR-smartphone-apple-iphone-x-transparent-background.png",
-  },
-];

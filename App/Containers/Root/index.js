@@ -4,6 +4,7 @@ import {
   StatusBar,
   Animated,
   TouchableWithoutFeedback,
+  Modal,
 } from "react-native";
 import { Alert, BottomSheet } from "../../Components";
 import AppNavigation from "../../Navigation/AppNavigation";
@@ -13,6 +14,8 @@ import { AlertContext } from "./GlobalContext";
 import Spinner from "react-native-loading-spinner-overlay";
 import useAlert from "../../hooks/useAlert";
 import useLoading from "../../hooks/useLoading";
+import ImageViewer from "react-native-image-zoom-viewer";
+import useImageViewer from "../../hooks/useImageViewer";
 
 const initialState = {
   alert: {
@@ -87,6 +90,12 @@ function RootContainer() {
       }, 2100);
     }
   }, [visible]);
+
+  const {
+    visible: imageViewerVisible,
+    images,
+    setImageViewer,
+  } = useImageViewer();
   return (
     <AlertContext.Provider value={{ dispatch, actionSheet }}>
       <View style={{ flex: 1 }}>
@@ -178,6 +187,14 @@ function RootContainer() {
           onDismiss={alertDissmiss}
         />
       )}
+      <Modal visible={imageViewerVisible} transparent={true}>
+        <ImageViewer
+          imageUrls={images}
+          onClick={() => {
+            setImageViewer({ visible: false, images: [] });
+          }}
+        />
+      </Modal>
     </AlertContext.Provider>
   );
 }

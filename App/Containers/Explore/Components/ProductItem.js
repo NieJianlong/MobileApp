@@ -71,6 +71,7 @@ function ProductItem(props) {
               source={{
                 uri: product.photo || defultUrl,
               }}
+              resizeMode="contain"
               style={[styles.productImage, t.mR2]}
             />
 

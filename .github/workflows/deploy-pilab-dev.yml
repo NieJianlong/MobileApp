@@ -43,14 +43,20 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - uses: expo/expo-github-action@v6
+      # - uses: expo/expo-github-action@v6
+      #   with:
+      #     expo-version: 4.x
+      #     token: ${{ secrets.EXPO_TOKEN }}
+      # expo-username: "niejianlong@cavalry.online"
+      # expo-password: "NJLd123456"
+      - name: 🏗 Setup Expo and EAS
+        uses: expo/expo-github-action@v7
         with:
-          expo-version: 4.x
+          expo-version: latest
+          eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-          # expo-username: "niejianlong@cavalry.online"
-          # expo-password: "NJLd123456"
-      - name: Echo Token
-        run: echo "${{ secrets.EXPO_TOKEN }}"
+      # - name: Echo Token
+      #   run: echo "${{ secrets.EXPO_TOKEN }}"
       # - name: Config
       #   run: sed -i 's/import "expo-dev-client";//g' index.js
 

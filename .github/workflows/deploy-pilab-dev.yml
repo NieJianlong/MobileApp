@@ -66,6 +66,9 @@ jobs:
       - name: Gen Graphql
         run: yarn gen:gql
 
+      - name: Expo updates
+        run: expo publish --release-channel production
+
       - name: Expo Publish
         run: eas build -p android --non-interactive
 

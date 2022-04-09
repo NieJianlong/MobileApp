@@ -13,6 +13,7 @@
 		367E7383F13C499DB3C34DA2 /* TitilliumWeb-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 75BBF419F95C4E4983E8D9AC /* TitilliumWeb-ExtraLightItalic.ttf */; };
 		4D549A0F26A0282D00D0DAA7 /* Blank.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D549A0E26A0282D00D0DAA7 /* Blank.swift */; };
 		4D549A1126A028ED00D0DAA7 /* libswiftWebKit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D549A1026A028ED00D0DAA7 /* libswiftWebKit.tbd */; };
+		4DDB15B12801B86F000859FC /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4DDB15B02801B86F000859FC /* Expo.plist */; };
 		662E2CEC40D74B72BC2F7A51 /* TitilliumWeb-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0543511077AF4E38A7007238 /* TitilliumWeb-Regular.ttf */; };
 		6B3D435D118B43BAB08F133F /* TitilliumWeb-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A8DECA8510384A5F89DBA0A5 /* TitilliumWeb-SemiBold.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -43,6 +44,7 @@
 		4D549A0E26A0282D00D0DAA7 /* Blank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blank.swift; sourceTree = "<group>"; };
 		4D549A1026A028ED00D0DAA7 /* libswiftWebKit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftWebKit.tbd; path = usr/lib/swift/libswiftWebKit.tbd; sourceTree = SDKROOT; };
 		4D57B733DE9940F0B5697975 /* TitilliumWeb-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TitilliumWeb-Black.ttf"; path = "../assets/fonts/TitilliumWeb-Black.ttf"; sourceTree = "<group>"; };
+		4DDB15B02801B86F000859FC /* Expo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		5C76EB5051F84412A0397EBF /* TitilliumWeb-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TitilliumWeb-BoldItalic.ttf"; path = "../assets/fonts/TitilliumWeb-BoldItalic.ttf"; sourceTree = "<group>"; };
 		652CA42BD9B74B569DADE703 /* TitilliumWeb-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TitilliumWeb-SemiBoldItalic.ttf"; path = "../assets/fonts/TitilliumWeb-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		6FBD16ED715B45D1836820B3 /* TitilliumWeb-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "TitilliumWeb-LightItalic.ttf"; path = "../assets/fonts/TitilliumWeb-LightItalic.ttf"; sourceTree = "<group>"; };
@@ -108,6 +110,14 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		4DDB15AF2801B841000859FC /* Supporting */ = {
+			isa = PBXGroup;
+			children = (
+				4DDB15B02801B86F000859FC /* Expo.plist */,
+			);
+			path = Supporting;
+			sourceTree = "<group>";
+		};
 		7E47836ED9837E9E68855E6C /* apollo */ = {
 			isa = PBXGroup;
 			children = (
@@ -126,6 +136,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				4DDB15AF2801B841000859FC /* Supporting */,
 				13B07FAE1A68108700A75B9A /* apollo */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -248,6 +259,7 @@
 				FF168ED18E3444F396BF712E /* TitilliumWeb-LightItalic.ttf in Resources */,
 				662E2CEC40D74B72BC2F7A51 /* TitilliumWeb-Regular.ttf in Resources */,
 				6B3D435D118B43BAB08F133F /* TitilliumWeb-SemiBold.ttf in Resources */,
+				4DDB15B12801B86F000859FC /* Expo.plist in Resources */,
 				F47C0F92C98D4A0BB4C2D55A /* TitilliumWeb-SemiBoldItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -299,6 +311,7 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-apollo/Pods-apollo-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXUpdates/EXUpdates.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController/TOCropViewControllerBundle.bundle",
@@ -306,6 +319,7 @@
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXConstants.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXUpdates.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TOCropViewControllerBundle.bundle",

@@ -73,16 +73,16 @@ jobs:
         run: eas build -p android --non-interactive
 
       - uses: actions/checkout@v2
-      # - name: Slack Notification
-      #   uses: rtCamp/action-slack-notify@v2
-      #   env:
-      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-      #     SLACK_FOOTER: |
-      #       :lock: This is a QR code for access to the preview app.
-      #       :iphone: Scan a code with your device.
-      #       https://expo.dev/@the-pique-lab/the-pi-lab?release-channel=pilab-staging-dev
-      #     SLACK_TITLE: Update Expo APP Successfully
-      #     SLACK_USERNAME: The PiLab Dev
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_FOOTER: |
+            :lock: This is a QR code for access to the preview app.
+            :iphone: Scan a code with your device.
+
+          SLACK_TITLE: Update Expo APP Successfully
+          SLACK_USERNAME: Salami Slicing Published
       # - name: Find Comment
       #   uses: peter-evans/find-comment@v1
       #   id: fc

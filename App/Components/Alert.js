@@ -30,7 +30,7 @@ class AlertComponent extends Component {
     setTimeout(() => {
       this.props.onDismiss && this.props.onDismiss();
       this.fadeOut();
-    }, 3000);
+    }, 5000);
   };
 
   //fade out animation

@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity as RNTouchableOpacity,
   Platform,
+  TouchableWithoutFeedback as RNTouchableWithoutFeedback,
 } from "react-native";
 import images from "../../../Themes/Images";
 
@@ -21,10 +22,18 @@ import {
 import { AlertContext } from "../../Root/GlobalContext";
 import NavigationService from "../../../Navigation/NavigationService";
 import PubSub from "pubsub-js";
-import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
+import {
+  TouchableOpacity as GHTouchableOpacity,
+  TouchableWithoutFeedback as GHTouchableWithoutFeedback,
+} from "react-native-gesture-handler";
 import { omit } from "lodash";
+import { t } from "react-native-tailwindcss";
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
+const TouchableWithoutFeedback =
+  Platform.OS === "ios"
+    ? RNTouchableWithoutFeedback
+    : GHTouchableWithoutFeedback;
 
 export default function AddressItem({ item, refetch, isCheckout, onPress }) {
   const { dispatch } = useContext(AlertContext);
@@ -93,8 +102,7 @@ export default function AddressItem({ item, refetch, isCheckout, onPress }) {
     },
   });
   return (
-    <TouchableOpacity
-      style={{ paddingHorizontal: AppConfig.paddingHorizontal }}
+    <TouchableWithoutFeedback
       onPress={() => {
         onPress
           ? onPress(item)
@@ -102,7 +110,7 @@ export default function AddressItem({ item, refetch, isCheckout, onPress }) {
       }}
     >
       <View style={[styles.item]}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View style={[{ flexDirection: "row", alignItems: "center" }]}>
           <Text style={styles.itemTitle}>{item.streetAddress1}</Text>
           {item.defaultAddress && (
             <Image style={styles.icon} source={images.check} />
@@ -116,7 +124,7 @@ export default function AddressItem({ item, refetch, isCheckout, onPress }) {
           } ${item.pinCode}`}</Text>
         </View>
 
-        <View style={styles.itemBottom}>
+        <View style={[styles.itemBottom]}>
           {item.defaultAddress ? (
             <View style={styles.itemTipsContainer}>
               <Text style={styles.itemTips}>Default address</Text>
@@ -133,21 +141,26 @@ export default function AddressItem({ item, refetch, isCheckout, onPress }) {
             </TouchableOpacity>
           )}
           <View style={{ flexDirection: "row" }}>
-            {!isCheckout && (
-              <TouchableOpacity
-                onPress={() => {
-                  NavigationService.navigate("AddNewAddressScreen", {
-                    title: "Edit address",
-                    currentAddress: item,
-                  });
-                }}
-              >
-                <Image
-                  style={styles.editImage}
-                  source={images.userAddressEditImage}
-                />
-              </TouchableOpacity>
-            )}
+            <TouchableOpacity
+              onPress={() => {
+                dispatch({
+                  type: "changSheetState",
+                  payload: {
+                    showSheet: false,
+                  },
+                });
+                NavigationService.navigate("AddNewAddressScreen", {
+                  title: "Edit address",
+                  currentAddress: item,
+                });
+              }}
+            >
+              <Image
+                style={styles.editImage}
+                source={images.userAddressEditImage}
+              />
+            </TouchableOpacity>
+
             <TouchableOpacity
               onPress={() => {
                 dispatch({ type: "loading" });
@@ -162,7 +175,7 @@ export default function AddressItem({ item, refetch, isCheckout, onPress }) {
           </View>
         </View>
       </View>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   );
 }
 

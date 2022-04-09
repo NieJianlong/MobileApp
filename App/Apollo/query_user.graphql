@@ -1,3 +1,21 @@
 query UserHasVerifiedPhoneNumber($userId: ID!) {
   userHasVerifiedPhoneNumber(userId: $userId)
 }
+query BuyerProfile($buyerId: ID!) {
+  buyerProfile(buyerId: $buyerId) {
+    firstName
+    lastName
+    email
+    phoneNumber
+    userName
+    userId
+  }
+}
+query GetBuyerSalamiWalletBalance {
+  getBuyerSalamiWalletBalance {
+    walletId
+    buyerId
+    walletBalance
+    giftBalance
+  }
+}

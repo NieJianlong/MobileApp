@@ -78,7 +78,7 @@ function UserInfo(props) {
             rightButton={() =>
               rightButtonShow ? (
                 <RightButton
-                  title="EDIT"
+                  title=""
                   onPress={() => {
                     PubSub.publish("go-edit-billing-detail");
                   }}

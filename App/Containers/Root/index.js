@@ -99,7 +99,20 @@ function RootContainer() {
         <AppNavigation />
       </View>
       {showSheet && (
-        <TouchableWithoutFeedback onPress={() => {}}>
+        <TouchableWithoutFeedback
+          disabled={true}
+          onPress={() => {
+            dispatch({
+              type: "changSheetState",
+              payload: {
+                showSheet: false,
+                height: 200,
+                children: () => null,
+                sheetTitle: "",
+              },
+            });
+          }}
+        >
           <Animated.View
             style={{
               width: "100%",

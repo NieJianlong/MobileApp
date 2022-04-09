@@ -1,8 +1,10 @@
 import React from "react";
 import { FlatList, useWindowDimensions, View } from "react-native";
+import { FlatList as GHFlatList } from "react-native-gesture-handler";
 import AddressItem from "./AddressItem";
 import TextTip from "../../../Components/EmptyReminder";
 import NavigationService from "../../../Navigation/NavigationService";
+import { t } from "react-native-tailwindcss";
 
 /**
  * @description:Display my address, list of my payment methods, display bill detail
@@ -18,11 +20,16 @@ export default function Addresses({
   isCheckout = false,
   needempty = true,
   onPress,
+  isInBottomSheet = false,
 }) {
   const { width } = useWindowDimensions();
+  const CustomeFlatList = isInBottomSheet ? GHFlatList : FlatList;
   return (
-    <FlatList
+    <CustomeFlatList
       data={data}
+      contentContainerStyle={[t.pB16]}
+      showsVerticalScrollIndicator={false}
+      style={[{ height: data ? 80 * data?.length : 200 }]}
       ListEmptyComponent={
         needempty ? (
           <View

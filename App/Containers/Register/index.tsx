@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+  useRef,
+} from "react";
 import {
   View,
   StatusBar,
@@ -35,14 +41,18 @@ import {
 } from "../../../generated/graphql";
 import { t } from "react-native-tailwindcss";
 import { trimStart } from "lodash";
+import useAlert from "../../hooks/useAlert";
+import useLoading from "../../hooks/useLoading";
 
 function RegisterScreen(props) {
   const { dispatch } = useContext(AlertContext);
-  // refs
-  let nameInput,
-    lastNameInput,
-    emailInput,
-    passwordInput = null;
+  const { setAlert } = useAlert();
+  const nameInput = useRef();
+  const lastNameInput = useRef();
+  const emailInput = useRef();
+  const phonenumInput = useRef();
+  const passwordInput = useRef();
+
   const {
     control,
     handleSubmit,
@@ -55,30 +65,12 @@ function RegisterScreen(props) {
   let [validationDisplay, setValidationDisplay] = useState("");
   let [showValidationAlert, setShowValidationAlert] = useState(false);
   let [validationMessage, setValidationMessage] = useState("");
+  const { setLoading } = useLoading();
   // because of the way the switch component is set up this is the opposite of what you would expect
   let [termsAccepted, setTermsAccepted] = useState(false);
   useEffect(() => {
     // let phoneNumber = "+918247278755";
     // setValue("phoneNumber", trimStart(phoneNumber, "+91"));
-    if (Platform.OS === "android") {
-      try {
-        SmsRetriever.requestPhoneNumber()
-          .then((resph) => {
-            console.log("SmsRetriever==request===PhoneNumber", resph);
-            if (resph.startsWith("+91")) {
-              setValue("phoneNumber", trimStart(resph, "+91"));
-            }
-            if (resph.startsWith("+86")) {
-              setValue("phoneNumber", trimStart(resph, "+86"));
-            }
-          })
-          .catch((err) => {
-            console.log("SmsRetriever error", err);
-          });
-      } catch (error) {
-        console.log(JSON.stringify(error));
-      }
-    }
 
     return () => {
       // Anything in here is fired on component unmount.
@@ -171,9 +163,9 @@ function RegisterScreen(props) {
     }
   }, [getBuyerId, getValues]);
   //when app open,when can do auto login
-  useEffect(() => {
-    autoSignIn();
-  }, [autoSignIn]);
+  // useEffect(() => {
+  //   autoSignIn();
+  // }, [autoSignIn]);
   /**
    * REGISTER_BUYER(registerBuyer) mutation is a public api endpoint
    * see  ./gql/register_mutations
@@ -182,10 +174,7 @@ function RegisterScreen(props) {
    */
   const [registerBuyer, { data }] = useRegisterBuyerMutation({
     onError: (error) => {
-      dispatch({
-        type: "changLoading",
-        payload: false,
-      });
+      setLoading({ show: false });
       dispatch({
         type: "changAlertState",
         payload: {
@@ -197,6 +186,7 @@ function RegisterScreen(props) {
       });
     },
     onCompleted: async (result) => {
+      setLoading({ show: false });
       if (typeof result.registerBuyer !== "undefined") {
         let buyerId = result.registerBuyer.buyerId;
 
@@ -214,7 +204,10 @@ function RegisterScreen(props) {
           // });
           const username = getValues("email");
           const password = getValues("password");
-          const { data } = await jwt.runTokenFlow({ username, password });
+          const { data } = await jwt.runTokenFlow({
+            username: username.trim(),
+            password,
+          });
           let access_token = data.access_token;
           global.access_token = access_token;
 
@@ -231,6 +224,7 @@ function RegisterScreen(props) {
           // autoSignIn();
         }
       } else {
+        setLoading({ show: false });
         dispatch({
           type: "changLoading",
           payload: false,
@@ -239,11 +233,30 @@ function RegisterScreen(props) {
     },
   });
   const onSubmit = (data: BuyerProfileRequestForCreate) => {
-    registerBuyer({
-      variables: {
-        request: { ...data, phoneNumber: "+91" + getValues("phoneNumber") },
-      },
-    });
+    if (termsAccepted) {
+      setLoading({ show: true });
+      registerBuyer({
+        variables: {
+          request: {
+            firstName: data.firstName?.trim(),
+            lastName: data.firstName?.trim(),
+            email: data.email.trim(),
+            password: data.password,
+            phoneNumber: "+91" + getValues("phoneNumber"),
+          },
+        },
+      });
+    } else {
+      setAlert({
+        color: colors.warning,
+        title: "Warning",
+        message: "Please accept Privacy Policy and Terms of use first",
+        visible: true,
+        onDismiss: () => {
+          setAlert({ visible: false });
+        },
+      });
+    }
   };
 
   const toggleResetValidationAlert = () => {
@@ -287,9 +300,11 @@ function RegisterScreen(props) {
             render={({ field: { onChange, value } }) => (
               <TextInput
                 style={[t.mT4]}
-                ref={(r) => (nameInput = r)}
+                ref={nameInput}
                 placeholder={"Type your first name"}
-                onSubmitEditing={() => lastNameInput.getInnerRef().focus()}
+                onSubmitEditing={() =>
+                  lastNameInput.current.getInnerRef().focus()
+                }
                 returnKeyType={"next"}
                 onChangeText={onChange}
                 value={value}
@@ -312,8 +327,10 @@ function RegisterScreen(props) {
               <TextInput
                 style={[t.mT4]}
                 placeholder={"Type your last name"}
-                ref={(r) => (lastNameInput = r)}
-                onSubmitEditing={() => emailInput.getInnerRef().focus()}
+                ref={lastNameInput}
+                onSubmitEditing={() =>
+                  emailInput?.current.getInnerRef().focus()
+                }
                 returnKeyType={"next"}
                 onChangeText={onChange}
                 value={value}
@@ -341,8 +358,10 @@ function RegisterScreen(props) {
               <TextInput
                 style={[t.mT4]}
                 placeholder={"Type your email"}
-                ref={(r) => (emailInput = r)}
-                onSubmitEditing={() => passwordInput.getInnerRef().focus()}
+                ref={emailInput}
+                onSubmitEditing={() => {
+                  phonenumInput.current.getInnerRef().focus();
+                }}
                 returnKeyType={"next"}
                 onChangeText={onChange}
                 value={value}
@@ -370,8 +389,34 @@ function RegisterScreen(props) {
               <TextInput
                 style={[t.mT4]}
                 placeholder={"Type your phone number"}
-                ref={(r) => (emailInput = r)}
-                onSubmitEditing={() => passwordInput.getInnerRef().focus()}
+                ref={phonenumInput}
+                onFocus={() => {
+                  if (Platform.OS === "android") {
+                    try {
+                      SmsRetriever.requestPhoneNumber()
+                        .then((resph) => {
+                          console.log(
+                            "SmsRetriever==request===PhoneNumber",
+                            resph
+                          );
+                          if (resph.startsWith("+91")) {
+                            setValue("phoneNumber", trimStart(resph, "+91"));
+                          }
+                          if (resph.startsWith("+86")) {
+                            setValue("phoneNumber", trimStart(resph, "+86"));
+                          }
+                        })
+                        .catch((err) => {
+                          console.log("SmsRetriever error", err);
+                        });
+                    } catch (error) {
+                      console.log(JSON.stringify(error));
+                    }
+                  }
+                }}
+                onSubmitEditing={() =>
+                  passwordInput?.current.getInnerRef().focus()
+                }
                 returnKeyType={"next"}
                 isPhoneNo={true}
                 onChangeText={onChange}
@@ -395,7 +440,7 @@ function RegisterScreen(props) {
               <PasswordInput
                 style={[t.mT4]}
                 placeholder={"Enter your password"}
-                ref={(r) => (passwordInput = r)}
+                ref={passwordInput}
                 //onSubmitEditing={onRegister}
                 defaultValue={""}
                 returnKeyType={"done"}
@@ -444,7 +489,7 @@ function RegisterScreen(props) {
           </TouchableOpacity>
         </KeyboardAwareScrollView>
       </SafeAreaView>
-      {renderValidationAlert()}
+      {/* {renderValidationAlert()} */}
     </View>
   );
 }

@@ -167,48 +167,48 @@ export const MenuConfig = [
       },
     },
   },
-  {
-    title: "My Payment Methods",
-    icon: images.userUPayImage,
-    selectedIcon: images.userPayImage,
-    key: "Payment",
-    textTip: "You haven't added any payment  method yet",
-    subTextTip:
-      "Add a payment method to be able to use it in your next  purchases",
-    needButton: true,
-    btnMsg: "ADD  NEW PAYMENT METHOD",
-    onPress: (callback) => {
-      NavigationService.navigate("AddPaymentMethodScreen", {
-        callback,
-      });
-    },
-    extra: "ADD  NEW PAYMENT METHOD",
-    itemActions: {
-      setDefault: (item) => {},
-      doEdit: (item) => {},
-      doDelete: (item) => {},
-    },
-  },
-  {
-    title: "My Billing Details",
-    icon: images.userUBillingImage,
-    selectedIcon: images.userBillingImage,
-    key: "Billing",
-    textTip: "You have not added \n billing details yet",
-    subTextTip: "Add your billing details to use in your next purchase",
-    needButton: true,
-    btnMsg: "ADD BILLING DETAILS",
-    onPress: (callback) => {
-      NavigationService.navigate("AddBillingDetailsScreen", {
-        callback,
-        title: "Please enter your billing details",
-      });
-    },
-    extra: "",
-    itemActions: {
-      setDefault: (item) => {},
-      doEdit: (item) => {},
-      doDelete: (item) => {},
-    },
-  },
+  // {
+  //   title: "My Payment Methods",
+  //   icon: images.userUPayImage,
+  //   selectedIcon: images.userPayImage,
+  //   key: "Payment",
+  //   textTip: "You haven't added any payment  method yet",
+  //   subTextTip:
+  //     "Add a payment method to be able to use it in your next  purchases",
+  //   needButton: true,
+  //   btnMsg: "ADD  NEW PAYMENT METHOD",
+  //   onPress: (callback) => {
+  //     NavigationService.navigate("AddPaymentMethodScreen", {
+  //       callback,
+  //     });
+  //   },
+  //   extra: "ADD  NEW PAYMENT METHOD",
+  //   itemActions: {
+  //     setDefault: (item) => {},
+  //     doEdit: (item) => {},
+  //     doDelete: (item) => {},
+  //   },
+  // },
+  // {
+  //   title: "My Billing Details",
+  //   icon: images.userUBillingImage,
+  //   selectedIcon: images.userBillingImage,
+  //   key: "Billing",
+  //   textTip: "You have not added \n billing details yet",
+  //   subTextTip: "Add your billing details to use in your next purchase",
+  //   needButton: true,
+  //   btnMsg: "ADD BILLING DETAILS",
+  //   onPress: (callback) => {
+  //     NavigationService.navigate("AddBillingDetailsScreen", {
+  //       callback,
+  //       title: "Please enter your billing details",
+  //     });
+  //   },
+  //   extra: "",
+  //   itemActions: {
+  //     setDefault: (item) => {},
+  //     doEdit: (item) => {},
+  //     doDelete: (item) => {},
+  //   },
+  // },
 ];

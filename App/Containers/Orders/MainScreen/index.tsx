@@ -25,6 +25,7 @@ import moment from "moment";
 import { useSearchBuyerOrdersQuery } from "../../../../generated/graphql";
 import { useFocusEffect } from "@react-navigation/native";
 import useLoading from "../../../hooks/useLoading";
+import { isEmpty } from "lodash";
 
 class Order extends Component {
   fall = new Animated.Value(0);
@@ -149,7 +150,8 @@ class Order extends Component {
 
   renderOrderItem = (item, index) => {
     let detail = "";
-    const statusText = item?.latestEventStatus?.replaceAll("_", " ");
+    const statusText = item?.latestEventStatus?.replace(/_/g, " ");
+
     detail =
       statusText?.substring(0, 1) +
       statusText?.substring(1, statusText.length).toLowerCase() +

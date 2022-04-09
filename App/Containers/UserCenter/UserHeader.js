@@ -27,6 +27,7 @@ import {
   FIND_USER_PROFILE,
 } from "../../Apollo/queries/queries_user";
 import { useFocusEffect } from "@react-navigation/native";
+import { useBuyerProfileQuery } from "../../../generated/graphql";
 
 /**
  * @description:The user header component, which contains basic user information
@@ -67,7 +68,7 @@ function UserHeader(props) {
 }
 
 function UserInfo() {
-  const { loading, error, data, refetch } = useQuery(FIND_BUYER_PROFILE, {
+  const { loading, error, data, refetch } = useBuyerProfileQuery({
     variables: { buyerId: global.buyerId },
     context: {
       headers: {
@@ -96,7 +97,7 @@ function UserInfo() {
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <Text style={ApplicationStyles.screen.heading3Bold}>
-              {data?.buyerProfile.userName}
+              {`${data?.buyerProfile?.firstName} ${data?.buyerProfile?.lastName}`}
             </Text>
 
             <TouchableOpacity

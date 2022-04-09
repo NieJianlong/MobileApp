@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
   View,
   StatusBar,
@@ -31,7 +31,9 @@ import colors from "../../Themes/Colors";
 
 function LoginScreen(props) {
   // refs
-  let passwordInput = null;
+  // let passwordInput = null;
+  const passwordInput = useRef();
+
   const { dispatch } = useContext(AlertContext);
 
   let [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -76,8 +78,10 @@ function LoginScreen(props) {
       // we are good so we can test for email or phone
       if (ret.isEmail || ret.isPhone) {
         let loginRequest = {
-          username: ret.isPhone ? "+91" + loginInput : loginInput,
-          password: psswd,
+          username: ret.isPhone
+            ? "+91" + loginInput?.trim()
+            : loginInput?.trim(),
+          password: psswd?.trim(),
         };
         // console.log(profile.data.userProfileVar.email)// to-do remove
         dispatch({
@@ -275,7 +279,7 @@ function LoginScreen(props) {
           <TextInput
             style={styles.emailInput}
             placeholder={"Email or phone number"}
-            onSubmitEditing={() => passwordInput.getInnerRef().focus()}
+            onSubmitEditing={() => passwordInput?.current.getInnerRef().focus()}
             returnKeyType={"next"}
             onChangeText={(text) => setLoginInput(text)}
           />
@@ -283,7 +287,7 @@ function LoginScreen(props) {
           <PasswordInput
             style={styles.passwordInput}
             placeholder={"Enter your password"}
-            ref={(r) => (passwordInput = r)}
+            ref={passwordInput}
             onSubmitEditing={onSignIn}
             returnKeyType={"done"}
             onChangeText={(text) => setPsswd(text)}

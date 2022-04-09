@@ -14,16 +14,16 @@ const datas = [
     value: false,
     key: "Activate",
   },
-  {
-    title: "Notification",
-    value: false,
-    key: "ANotification",
-  },
-  {
-    title: "Notification",
-    value: true,
-    key: "Notification",
-  },
+  // {
+  //   title: "Notification",
+  //   value: false,
+  //   key: "ANotification",
+  // },
+  // {
+  //   title: "Notification",
+  //   value: true,
+  //   key: "Notification",
+  // },
 ];
 function index(props) {
   return (
@@ -44,9 +44,9 @@ function index(props) {
         <TouchableOpacity
           key={index}
           onPress={() => {
-            NavigationService.navigate("SelectCountryOrLanguageScreen", {
-              ...item,
-            });
+            // NavigationService.navigate("SelectCountryOrLanguageScreen", {
+            //   ...item,
+            // });
           }}
         >
           <View

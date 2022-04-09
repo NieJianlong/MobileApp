@@ -1,5 +1,5 @@
 import React, { useContext, useCallback, useMemo, useEffect } from "react";
-import { View } from "react-native";
+import { useWindowDimensions, View } from "react-native";
 import { vs } from "react-native-size-matters";
 import { Button } from "../../../Components";
 import { Colors, Images } from "../../../Themes";
@@ -22,6 +22,7 @@ import colors from "../../../Themes/Colors";
 
 export default function AddressSheetContent(props) {
   const { dispatch, actionSheet } = useContext(AlertContext);
+  const { width, height: windowHeight } = useWindowDimensions();
   const userProfileVarReactive = useReactiveVar(userProfileVar);
   const { setAlert } = useAlert();
   const isAuth = useMemo(
@@ -41,6 +42,22 @@ export default function AddressSheetContent(props) {
         headers: {
           isPrivate: isAuth,
         },
+      },
+      onCompleted: (res) => {
+        let height = isAuth
+          ? res?.getBuyerAddressByType.length * 115
+          : res?.getGuestBuyerAddressByType.length * 115;
+        if (height > windowHeight - 500) {
+          height = windowHeight - 500;
+        }
+        dispatch({
+          type: "changSheetState",
+          payload: {
+            height: height + 200,
+
+            sheetTitle: "Add your delivery address",
+          },
+        });
       },
     }
   );
@@ -72,6 +89,7 @@ export default function AddressSheetContent(props) {
       <View style={{ height: vs(20) }} />
 
       <Addresses
+        isInBottomSheet={true}
         data={
           isAuth
             ? data?.getBuyerAddressByType

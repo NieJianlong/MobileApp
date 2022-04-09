@@ -86,6 +86,7 @@ function ProductDetail(props) {
         ) ?? null
       : null
   );
+
   //control whether to show the hearder (display and navigation to sections)
   const [showHeaderTabs, setShowHeaderTabs] = useState(false);
   //control whether to show the footer (display price and buy button)
@@ -141,7 +142,7 @@ function ProductDetail(props) {
     setShowFooter(true);
   };
 
-  return (
+  return products ? (
     <View style={styles.container}>
       <SafeAreaView
         style={styles.mainContainer}
@@ -213,6 +214,8 @@ function ProductDetail(props) {
         )}
       </SafeAreaView>
     </View>
+  ) : (
+    <View />
   );
 }
 

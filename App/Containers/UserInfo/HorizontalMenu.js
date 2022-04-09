@@ -40,18 +40,18 @@ function HorizontalMenu(props) {
       selectedIcon: images.userAddressImage,
       key: "Addresses",
     },
-    {
-      title: "My Payment Methods",
-      icon: images.userUPayImage,
-      selectedIcon: images.userPayImage,
-      key: "Payment",
-    },
-    {
-      title: "My Billing Details",
-      icon: images.userUBillingImage,
-      selectedIcon: images.userBillingImage,
-      key: "Billing",
-    },
+    // {
+    //   title: "My Payment Methods",
+    //   icon: images.userUPayImage,
+    //   selectedIcon: images.userPayImage,
+    //   key: "Payment",
+    // },
+    // {
+    //   title: "My Billing Details",
+    //   icon: images.userUBillingImage,
+    //   selectedIcon: images.userBillingImage,
+    //   key: "Billing",
+    // },
   ];
 
   // selected menu index

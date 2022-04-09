@@ -20,6 +20,7 @@ import AppConfig from "../../Config/AppConfig";
 import TextTip from "../../Components/EmptyReminder";
 import metrics from "../../Themes/Metrics";
 import { AlertContext } from "../Root/GlobalContext";
+import { useGetBuyerSalamiWalletBalanceQuery } from "../../../generated/graphql";
 
 const shareIcons = [
   { src: images.userShareIcon1Image, onPress: () => {} },
@@ -59,6 +60,13 @@ function SalamiCredit(props) {
   );
 }
 function listHeader(dispatch) {
+  const { data } = useGetBuyerSalamiWalletBalanceQuery({
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+  });
   const tips = {
     textTip: "About Salami Credit",
     subTextTip:
@@ -84,7 +92,9 @@ function listHeader(dispatch) {
           <Text style={[styles.balanceTipTxt, { color: colors.grey60 }]}>
             BALANCE
           </Text>
-          <Text style={styles.balanceTxt}>$20.00</Text>
+          <Text style={styles.balanceTxt}>
+            ${data?.getBuyerSalamiWalletBalance?.walletBalance}
+          </Text>
           <Text style={styles.useBalanceTxt}>USE CREDIT NOW</Text>
         </View>
       </View>
@@ -205,7 +215,7 @@ function listHeader(dispatch) {
           Pending invitations
         </Text>
       </View> */}
-      <View style={{ marginTop: vs(50) }}>
+      {/* <View style={{ marginTop: vs(50) }}>
         <Button
           onPress={() => {
             //  NavigationService.navigate("ReturnProductStep3Screen");
@@ -213,7 +223,7 @@ function listHeader(dispatch) {
           color={colors.primary}
           text="ADD MONEY TO MY WALLET"
         />
-      </View>
+      </View> */}
     </View>
   );
 }

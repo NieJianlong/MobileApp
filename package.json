@@ -8,6 +8,7 @@
     "start": "yarn gen:gql && react-native start",
     "test": "jest",
     "lint": "eslint .",
+    "buid-expo-android": "eas build -p android",
     "build-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
     "postinstall": "patch-package",
     "gen:gql": "graphql-codegen --config codegen.yml"

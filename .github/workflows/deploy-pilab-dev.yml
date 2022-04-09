@@ -1,0 +1,100 @@
+# PR to dev/main, run tests and create review
+name: Deploy Pilab Dev
+on:
+  push:
+    # branches:
+    #   - piLab-dev
+
+jobs:
+  ci-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [14]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Gen Token
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.REPO_READ_TOKEN }}" > ~/.npmrc
+
+      - name: Install
+        run: yarn
+        # run: yarn install
+
+      - name: Lint
+        run: yarn lint
+
+  review:
+    needs: [ci-test]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [14]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: expo/expo-github-action@v6
+        with:
+          expo-version: 4.x
+          token: ${{ secrets.EXPO_TOKEN }}
+          # expo-username: "niejianlong@cavalry.online"
+          # expo-password: "NJLd123456"
+      - name: Echo Token
+        run: echo "${{ secrets.EXPO_TOKEN }}"
+      # - name: Config
+      #   run: sed -i 's/import "expo-dev-client";//g' index.js
+
+      - name: Install
+        run: yarn install
+
+      - name: Gen Graphql
+        run: yarn gen:gql
+
+      - name: Expo Publish
+        run: eas build -p android --auto-submit
+
+      - uses: actions/checkout@v2
+      # - name: Slack Notification
+      #   uses: rtCamp/action-slack-notify@v2
+      #   env:
+      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      #     SLACK_FOOTER: |
+      #       :lock: This is a QR code for access to the preview app.
+      #       :iphone: Scan a code with your device.
+      #       https://expo.dev/@the-pique-lab/the-pi-lab?release-channel=pilab-staging-dev
+      #     SLACK_TITLE: Update Expo APP Successfully
+      #     SLACK_USERNAME: The PiLab Dev
+      # - name: Find Comment
+      #   uses: peter-evans/find-comment@v1
+      #   id: fc
+      #   with:
+      #     # issue-number: ${{ github.event.pull_request.number }}
+      #     issue-number: 1
+      #     comment-author: "github-actions[bot]"
+      #     body-includes: This is a QR code for access to the preview app.
+
+      # - name: Comment Review QR code
+      #   # if: steps.fc.outputs.comment-id == ''
+      #   uses: peter-evans/create-or-update-comment@v1
+      #   with:
+      #     # issue-number: ${{ github.event.pull_request.number }}
+      #     issue-number: 2
+      #     body: |
+      #       :lock: This is a QR code for access to the preview app.
+      #       :iphone: Scan a code with your device.
+      #       ![QR Code](https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://expo.dev/@the-pique-lab/frontend-parent?release-channel=staging-v1)
+      #     reactions: rocket
+  # slackNotification:
+  #   needs: [review]
+  #   runs-on: ubuntu-latest
+  #   steps:

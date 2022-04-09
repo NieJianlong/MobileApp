@@ -26,7 +26,7 @@ import {
   FIND_BUYER_PROFILE,
   FIND_USER_PROFILE,
 } from "../../Apollo/queries/queries_user";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useBuyerProfileQuery } from "../../../generated/graphql";
 
 /**
@@ -36,6 +36,7 @@ import { useBuyerProfileQuery } from "../../../generated/graphql";
  */
 function UserHeader(props) {
   const { needSafeArea, needEdit, islogin, setLogin } = props;
+  const navigation = useNavigation();
 
   const textTip = "You haven't add any personal \n details yet";
   return (
@@ -56,7 +57,11 @@ function UserHeader(props) {
           <View style={styles.signbtn}>
             <Button
               onPress={() => {
-                NavigationService.navigate("OnboardingScreen");
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "OnboardingScreen" }],
+                });
+                // NavigationService.navigate("OnboardingScreen");
               }}
               text="SIGN IN"
             />
@@ -97,7 +102,9 @@ function UserInfo() {
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <Text style={ApplicationStyles.screen.heading3Bold}>
-              {`${data?.buyerProfile?.firstName} ${data?.buyerProfile?.lastName}`}
+              {data
+                ? `${data?.buyerProfile?.firstName} ${data?.buyerProfile?.lastName}`
+                : ""}
             </Text>
 
             <TouchableOpacity

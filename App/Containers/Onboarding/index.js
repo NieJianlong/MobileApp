@@ -127,15 +127,18 @@ function OnboardingScreen(props) {
             text={"CONTINUE"}
             backgroundColor={Colors.white}
             textColor={Colors.black}
-            onPress={() => {
+            onPress={async () => {
               // call the CREATE_GUEST_BUYER mutation see onGetGuestBuyerId callback
-              if (bIdExists) {
+              let bid = await storage.getLocalStorageValue(
+                storage.GUEST_BUYER_ID_KEY
+              );
+              if (bid) {
                 console.log(
-                  "OnboardingScreen CONTINUE found guest bid in local storage"
+                  `OnboardingScreen checkBuyerIdExists found a bid in local storage ${bid}`
                 );
+                global.buyerId = bid;
                 NavigationService.navigate("MainScreen");
               } else {
-                console.log("OnboardingScreen CONTINUE create  guest bid");
                 dispatch({ type: "loading" });
                 guestBuyerId({
                   variables: { request: BuyerProfileRequestForCreate },

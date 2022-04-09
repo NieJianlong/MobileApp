@@ -73,19 +73,15 @@ export default function LaunchScreen() {
         NavigationService.navigate("OnboardingScreen");
       }
     } else {
-      const result = await checkBuyerIdExists();
-      if (result) {
-        NavigationService.navigate("MainScreen");
-      } else {
-        setTimeout(() => {
-          //this.props.navigation.navigate('OnboardingScreen')
-          NavigationService.navigate("OnboardingScreen");
-        }, 2000);
-      }
-      // setTimeout(() => {
-      //   //this.props.navigation.navigate('OnboardingScreen')
-      //   NavigationService.navigate("OnboardingScreen");
-      // }, 2000);
+      // const result = await checkBuyerIdExists();
+      // if (result) {
+      //   NavigationService.navigate("MainScreen");
+      // } else {
+      setTimeout(() => {
+        //this.props.navigation.navigate('OnboardingScreen')
+        NavigationService.navigate("OnboardingScreen");
+      }, 2000);
+      // }
     }
   }, [getBuyerId]);
   /** for now only guests end up here */

@@ -6,7 +6,7 @@
  * @Description: In User Settings Edit
  * @FilePath: /MobileApp/App/Navigation/NavigationService.js
  */
-import { NavigationActions, StackActions } from '@react-navigation/native';
+import { NavigationActions, StackActions } from "@react-navigation/native";
 
 let _navigator;
 
@@ -24,10 +24,14 @@ function goBack(routeName, params) {
 function pop(n) {
   _navigator.current?.dispatch(StackActions.pop({ n }));
 }
+function popToTop() {
+  _navigator.current?.dispatch(StackActions.popToTop());
+}
 // add other navigation functions that you need and export them
 export default {
   navigate,
   goBack,
   setTopLevelNavigator,
   pop,
+  popToTop,
 };

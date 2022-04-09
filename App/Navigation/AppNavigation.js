@@ -88,7 +88,6 @@ import LearnMore from "../Containers/LearnMore/index";
 const Stack = createStackNavigator();
 
 const Tab = createBottomTabNavigator();
-const LoginStack = createStackNavigator();
 
 function TabNav() {
   return (

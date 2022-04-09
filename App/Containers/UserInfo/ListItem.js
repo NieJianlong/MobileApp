@@ -15,6 +15,7 @@ import NavigationService from "../../Navigation/NavigationService";
 import { useReactiveVar } from "@apollo/client";
 import { localCartVar, userProfileVar } from "../../Apollo/cache";
 import { useNavigation } from "@react-navigation/core";
+
 /**
  * @description:tab menu item
  * @param {*} props
@@ -40,11 +41,20 @@ function ListItem(props) {
           // userProfileVarReactive.email = "";
           // userProfileVarReactive.isAuth = false;
           // userProfileVarReactive.phone = "";
-          await storage.setLocalStorageEmpty();
 
-          // navigation.reset("OnboardingScreen");
-          NavigationService.navigate("OnboardingScreen");
-          DevSettings.reload();
+          global.access_token = "";
+          await storage.setLocalStorageEmpty();
+          navigation.popToTop();
+          // navigation.reset({
+          //   index: 0,
+          //   routes: [{ name: "OnboardingScreen" }],
+          // });
+          // NavigationService.popToTop();
+          // navigation.dispatch(StackActions.popToTop());
+
+          // // navigation.reset("OnboardingScreen");
+          // NavigationService.navigate("OnboardingScreen");
+          // DevSettings.reload();
         } else {
           onPress();
         }

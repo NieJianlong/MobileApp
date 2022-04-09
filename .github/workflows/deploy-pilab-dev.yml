@@ -67,7 +67,7 @@ jobs:
         run: yarn gen:gql
 
       - name: Expo Publish
-        run: eas build -p android --auto-submit --non-interactive
+        run: eas build -p android --non-interactive
 
       - uses: actions/checkout@v2
       # - name: Slack Notification

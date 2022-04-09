@@ -27,8 +27,8 @@ jobs:
         run: yarn
         # run: yarn install
 
-      - name: Lint
-        run: yarn lint
+      # - name: Lint
+      #   run: yarn lint
 
   review:
     needs: [ci-test]

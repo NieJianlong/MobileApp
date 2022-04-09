@@ -6,7 +6,7 @@ on:
     #    branches-ignore:
     #      - 'main'
     paths:
-      - 'src/**'
+      - "src/**"
 
 jobs:
   ci-test:
@@ -27,16 +27,16 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.REPO_READ_TOKEN }}" > ~/.npmrc
 
       - name: Install
-        run: yarn install 
+        run: yarn install
 
-      - name: Lint
-        run: yarn lint
+      # - name: Lint
+      #   run: yarn lint
 
-      - name: Build
-        run: yarn build
+      # - name: Build
+      #   run: yarn build
 
-      - name: Test
-        run: yarn test
+      # - name: Test
+      #   run: yarn test
 
   review:
     needs: [ci-test]
@@ -61,17 +61,17 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.REPO_READ_TOKEN }}" > ~/.npmrc
 
       - name: Install
-        run: yarn install 
+        run: yarn install
 
-      - name: Expo Publish Review
-        run: expo publish --release-channel=pr-${{ github.event.number }}
+      # - name: Expo Publish Review
+      #   run: expo publish --release-channel=pr-${{ github.event.number }}
 
       - name: Find Comment
         uses: peter-evans/find-comment@v1
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
+          comment-author: "github-actions[bot]"
           body-includes: This is a QR code for access to the preview app.
 
       - name: Comment Review QR code

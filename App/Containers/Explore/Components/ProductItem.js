@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, Image, TouchableOpacity, Platform } from "react-native";
+import { Text, View, Image, Platform } from "react-native";
 import { s, ScaledSheet, vs } from "react-native-size-matters";
 import NumberFormat from "react-number-format";
 
@@ -12,6 +12,7 @@ import {
   ProductListingStatus,
 } from "../../../../generated/graphql";
 import { t } from "react-native-tailwindcss";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const defultUrl =
   "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000";
@@ -33,18 +34,18 @@ function ProductItem(props) {
   if (size === "M" || size === "L") {
     return (
       <TouchableOpacity
-        onPressIn={({ nativeEvent }) => {
-          setSartX(nativeEvent.locationX);
-          if (callBack) {
-            callBack();
-          }
-        }}
-        onPressOut={({ nativeEvent }) => {
-          setEndX(nativeEvent.locationX);
-          if (endX - startX < -50) {
-            goFirst && goFirst();
-          }
-        }}
+        // onPressIn={({ nativeEvent }) => {
+        //   setSartX(nativeEvent.locationX);
+        //   if (callBack) {
+        //     callBack();
+        //   }
+        // }}
+        // onPressOut={({ nativeEvent }) => {
+        //   setEndX(nativeEvent.locationX);
+        //   if (endX - startX < -50) {
+        //     goFirst && goFirst();
+        //   }
+        // }}
         onPress={() => {
           //
 

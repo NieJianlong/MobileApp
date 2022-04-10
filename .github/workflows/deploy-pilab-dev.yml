@@ -69,8 +69,12 @@ jobs:
       - name: Expo updates
         run: expo publish --release-channel production
 
-      - name: Expo Publish
-        run: eas build -p android --non-interactive --output=${{ github.event.number }}.apk
+     - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+     - name: Expo Publish
+       run: eas build -p android --non-interactive --output=${{ steps.date.outputs.date }}.apk
 
       - uses: actions/checkout@v2
       - name: Slack Notification

@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Text, View, Image, Platform } from "react-native";
+import {
+  Text,
+  View,
+  Image,
+  Platform,
+  TouchableOpacity as RNTouchableOpacity,
+} from "react-native";
 import { s, ScaledSheet, vs } from "react-native-size-matters";
 import NumberFormat from "react-number-format";
 
@@ -12,10 +18,13 @@ import {
   ProductListingStatus,
 } from "../../../../generated/graphql";
 import { t } from "react-native-tailwindcss";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
 
 const defultUrl =
   "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000";
+
+const TouchableOpacity =
+  Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
 function ProductItem(props) {
   const [startX, setSartX] = useState(999);
   const [endX, setEndX] = useState(999);

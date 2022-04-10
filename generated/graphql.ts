@@ -4338,6 +4338,13 @@ export type GetProductByProductIdQueryVariables = Exact<{
 
 export type GetProductByProductIdQuery = { __typename?: 'Query', getProductByProductId: { __typename?: 'SellerProductDetailView', productId: string, shortName: string, longName: string, description?: string | null | undefined, mainPhotoUrl?: string | null | undefined, vendorSku?: string | null | undefined, sellerSku?: string | null | undefined, brand?: string | null | undefined, productType?: ProductType | null | undefined, productStatus?: ProductStatus | null | undefined, vendorName?: string | null | undefined, itemsInStock: number, price?: { __typename?: 'SellerProductPrice', priceId: string, currency: string, retailPrice: number, wholeSalePrice: number, salePercentage?: number | null | undefined, totalQuantityPrice?: number | null | undefined, taxPercentage?: number | null | undefined } | null | undefined, images?: Array<{ __typename?: 'SellerProductImage', photoUrl?: string | null | undefined, imageName?: string | null | undefined, description?: string | null | undefined, imageType?: string | null | undefined } | null | undefined> | null | undefined, variants: Array<{ __typename?: 'SellerProductVariant', variantId: string, priceId: string, photoUrl: string, itemsInStock: number, defaultVariant: boolean, retailPrice: number, wholeSalePrice: number, options?: Array<{ __typename?: 'VariantOptionResponse', optionId: string, valueId: string, name: string, value: string }> | null | undefined }>, categories: Array<{ __typename?: 'ProductCategoryResponse', categoryId: string, name: string, description?: string | null | undefined }>, returnPolicy: { __typename?: 'SellerReturnPolicy', returnAddress?: { __typename?: 'AddressView', addressId?: string | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, landmark?: string | null | undefined, pinCode?: string | null | undefined, addressFloor?: string | null | undefined } | null | undefined, returnLabel?: { __typename?: 'SellerProductImage', photoUrl?: string | null | undefined, imageName?: string | null | undefined, description?: string | null | undefined, imageType?: string | null | undefined } | null | undefined, policies?: Array<{ __typename?: 'ProductReturnPolicy', returnPolicyId: string, name: string, value: string } | null | undefined> | null | undefined } } };
 
+export type GetPreferredCategoriesQueryVariables = Exact<{
+  buyerId: Scalars['ID'];
+}>;
+
+
+export type GetPreferredCategoriesQuery = { __typename?: 'Query', getPreferredCategories: Array<{ __typename?: 'CategoryView', categoryId?: string | null | undefined, name?: string | null | undefined, description?: string | null | undefined } | null | undefined> };
+
 export type UserHasVerifiedPhoneNumberQueryVariables = Exact<{
   userId: Scalars['ID'];
 }>;
@@ -5557,6 +5564,43 @@ export function useGetProductByProductIdLazyQuery(baseOptions?: Apollo.LazyQuery
 export type GetProductByProductIdQueryHookResult = ReturnType<typeof useGetProductByProductIdQuery>;
 export type GetProductByProductIdLazyQueryHookResult = ReturnType<typeof useGetProductByProductIdLazyQuery>;
 export type GetProductByProductIdQueryResult = Apollo.QueryResult<GetProductByProductIdQuery, GetProductByProductIdQueryVariables>;
+export const GetPreferredCategoriesDocument = gql`
+    query GetPreferredCategories($buyerId: ID!) {
+  getPreferredCategories(buyerId: $buyerId) {
+    categoryId
+    name
+    description
+  }
+}
+    `;
+
+/**
+ * __useGetPreferredCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetPreferredCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPreferredCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPreferredCategoriesQuery({
+ *   variables: {
+ *      buyerId: // value for 'buyerId'
+ *   },
+ * });
+ */
+export function useGetPreferredCategoriesQuery(baseOptions: Apollo.QueryHookOptions<GetPreferredCategoriesQuery, GetPreferredCategoriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPreferredCategoriesQuery, GetPreferredCategoriesQueryVariables>(GetPreferredCategoriesDocument, options);
+      }
+export function useGetPreferredCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPreferredCategoriesQuery, GetPreferredCategoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPreferredCategoriesQuery, GetPreferredCategoriesQueryVariables>(GetPreferredCategoriesDocument, options);
+        }
+export type GetPreferredCategoriesQueryHookResult = ReturnType<typeof useGetPreferredCategoriesQuery>;
+export type GetPreferredCategoriesLazyQueryHookResult = ReturnType<typeof useGetPreferredCategoriesLazyQuery>;
+export type GetPreferredCategoriesQueryResult = Apollo.QueryResult<GetPreferredCategoriesQuery, GetPreferredCategoriesQueryVariables>;
 export const UserHasVerifiedPhoneNumberDocument = gql`
     query UserHasVerifiedPhoneNumber($userId: ID!) {
   userHasVerifiedPhoneNumber(userId: $userId)

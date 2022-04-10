@@ -119,83 +119,85 @@ export default function ProductList(props) {
     []
   );
   return (
-    <Container
-      index={index}
-      style={{ height: height - 60 }}
-      contentContainerStyle={[t.pB32]}
-      keyboardShouldPersistTaps="always"
-      ListHeaderComponent={
-        <ExploreSortBar
-          onChange={(showAsRow) => {
-            setShowProductAsRows(!showProductAsRows);
-          }}
-          option={sortItem}
-          refresh={(item) => {
-            setSortItem(item);
-            refetch();
-          }}
-        />
-      }
-      showsHorizontalScrollIndicator={false}
-      // data={isAnnouncement ? announcements : products}
-      data={serverData}
-      keyExtractor={(item, index) => index.toString()}
-      onEndReachedThreshold={0.1}
-      //Set pull-up loading
-      ListFooterComponent={loadingMore ? LoadMoreView : null}
-      onStartRefresh={() => {
-        setIsRereshing(true);
-        refetch &&
-          refetch().then((res) => {
-            setServerData(res.data.getListings.content);
-            setIsRereshing(false);
-            setNoMore(false);
-            setPage(0);
-          });
-      }}
-      isRefreshing={isRereshing}
-      onEndReached={async () => {
-        console.log("get more data" + noMore);
-        if (noMore) {
-          return;
-        }
-        if (page + 1 >= data?.getListings?.totalPages) {
-          return;
-        }
-        setLoadingMore(true);
-        const moreData = await client.query({
-          query: GetListingsDocument,
-          variables: {
-            searchOptions: { ...searchOptions, pageNo: page + 1 },
-          },
-          context: {
-            headers: {
-              isPrivate: false,
-            },
-          },
-        });
-        setServerData([...serverData, ...moreData.data.getListings.content]);
-        setLoadingMore(false);
-        if (moreData.data.getListings.length < pageSize) {
-          setNoMore(true);
-        } else {
-          setNoMore(false);
-        }
-        setPage(page + 1);
-      }}
-      renderItem={({ item, index }) => {
-        return (
-          <ProductItem
-            onPressShare={toggleShareSheet}
-            key={index.toString()}
-            isAnnouncement={isAnnouncement}
-            product={item}
-            size={showProductAsRows ? "M" : "L"}
-            {...props}
+    <View style={[t.flexGrow]}>
+      <Container
+        index={index}
+        style={[{ height: height, width }]}
+        contentContainerStyle={[t.pB32]}
+        keyboardShouldPersistTaps="always"
+        ListHeaderComponent={
+          <ExploreSortBar
+            onChange={(showAsRow) => {
+              setShowProductAsRows(!showProductAsRows);
+            }}
+            option={sortItem}
+            refresh={(item) => {
+              setSortItem(item);
+              refetch();
+            }}
           />
-        );
-      }}
-      {...props}
-    />
+        }
+        showsHorizontalScrollIndicator={false}
+        // data={isAnnouncement ? announcements : products}
+        data={serverData}
+        keyExtractor={(item, index) => index.toString()}
+        onEndReachedThreshold={0.1}
+        //Set pull-up loading
+        ListFooterComponent={loadingMore ? LoadMoreView : null}
+        onStartRefresh={() => {
+          setIsRereshing(true);
+          refetch &&
+            refetch().then((res) => {
+              setServerData(res.data.getListings.content);
+              setIsRereshing(false);
+              setNoMore(false);
+              setPage(0);
+            });
+        }}
+        isRefreshing={isRereshing}
+        onEndReached={async () => {
+          console.log("get more data" + noMore);
+          if (noMore) {
+            return;
+          }
+          if (page + 1 >= data?.getListings?.totalPages) {
+            return;
+          }
+          setLoadingMore(true);
+          const moreData = await client.query({
+            query: GetListingsDocument,
+            variables: {
+              searchOptions: { ...searchOptions, pageNo: page + 1 },
+            },
+            context: {
+              headers: {
+                isPrivate: false,
+              },
+            },
+          });
+          setServerData([...serverData, ...moreData.data.getListings.content]);
+          setLoadingMore(false);
+          if (moreData.data.getListings.length < pageSize) {
+            setNoMore(true);
+          } else {
+            setNoMore(false);
+          }
+          setPage(page + 1);
+        }}
+        renderItem={({ item, index }) => {
+          return (
+            <ProductItem
+              onPressShare={toggleShareSheet}
+              key={index.toString()}
+              isAnnouncement={isAnnouncement}
+              product={item}
+              size={showProductAsRows ? "M" : "L"}
+              {...props}
+            />
+          );
+        }}
+        {...props}
+      />
+    </View>
   );
 }

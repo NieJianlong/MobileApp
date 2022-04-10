@@ -293,3 +293,11 @@ query GetProductByProductId($productId: String!) {
     ...SellerProductDetailViewField
   }
 }
+
+query GetPreferredCategories($buyerId: ID!) {
+  getPreferredCategories(buyerId: $buyerId) {
+    categoryId
+    name
+    description
+  }
+}

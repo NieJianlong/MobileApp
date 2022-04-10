@@ -11,6 +11,7 @@ import {
   Image,
   TouchableOpacity,
   useWindowDimensions,
+  SafeAreaView,
 } from "react-native";
 import NavigationService from "../../../Navigation/NavigationService";
 import { vs } from "react-native-size-matters";
@@ -19,7 +20,11 @@ import { useQuery, useReactiveVar } from "@apollo/client";
 import * as aQM from "../gql/explore_queries";
 import { localCartVar, userProfileVar } from "../../../Apollo/cache";
 import styles from "../styles";
-import { FilterType } from "../../../../generated/graphql";
+import {
+  FilterType,
+  useGetPreferredCategoriesQuery,
+} from "../../../../generated/graphql";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function Index(props) {
   const { textToSearch = "" } = props;
@@ -135,7 +140,11 @@ export default function Index(props) {
   //   }
   // }, [localCartVarReactive, runGeoQuery]);
   //get user's current favourite categories
-  const { data: categories, refetch } = useQuery(aQM.GET_PREFERRED_CATEGORIES, {
+  const {
+    data: categories,
+    refetch,
+    loading,
+  } = useGetPreferredCategoriesQuery({
     variables: {
       buyerId: global.buyerId,
     },
@@ -146,10 +155,16 @@ export default function Index(props) {
     },
   });
 
-  return (
-    <View style={{ flex: 1 }}>
+  const { width, height } = useWindowDimensions();
+  return loading ? (
+    <SafeAreaView>
+      <ActivityIndicator color={colors.primary} />
+    </SafeAreaView>
+  ) : (
+    <View style={{ height, width }}>
       <CollapsibleHeaderTabView
         prerenderingSiblingsNumber={1}
+        style={[{ height, width }]}
         makeHeaderHeight={() => vs(50)}
         tabBarActiveTextColor={colors.primary}
         renderTabBar={(mprops) => {
@@ -238,26 +253,25 @@ export default function Index(props) {
           tabLabel="Announcements"
           isAnnouncement={true}
         />
-        {categories?.getPreferredCategories &&
-          categories?.getPreferredCategories.map((category, index) => (
-            <ProductList
-              isNeedTabbar={true}
-              key={`${index}`}
-              listType={category.name}
-              index={index + 2}
-              filter={
-                textToSearch.length > 0
-                  ? FilterType.ActiveByAddressIdAndFullTextSearch
-                  : FilterType.ActiveByAddressIdAndCategory
-              }
-              tabLabel={category.name}
-              filterParams={{
-                addressId: localCartVarReactive.deliverAddress,
-                textToSearch,
-                category: category.name,
-              }}
-            />
-          ))}
+        {categories?.getPreferredCategories.map((category, index) => (
+          <ProductList
+            isNeedTabbar={true}
+            key={`${index}`}
+            listType={category.name}
+            index={index + 2}
+            filter={
+              textToSearch.length > 0
+                ? FilterType.ActiveByAddressIdAndFullTextSearch
+                : FilterType.ActiveByAddressIdAndCategory
+            }
+            tabLabel={category.name}
+            filterParams={{
+              addressId: localCartVarReactive.deliverAddress,
+              textToSearch,
+              category: category.name,
+            }}
+          />
+        ))}
       </CollapsibleHeaderTabView>
     </View>
   );

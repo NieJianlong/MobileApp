@@ -23,9 +23,9 @@ jobs:
         run: |
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.REPO_READ_TOKEN }}" > ~/.npmrc
 
-      - name: Install
-        run: yarn
-        # run: yarn install
+      # - name: Install
+      #   run: yarn
+      # run: yarn install
 
       # - name: Lint
       #   run: yarn lint
@@ -66,15 +66,29 @@ jobs:
       - name: Gen Graphql
         run: yarn gen:gql
 
-      - name: Expo updates
-        run: expo publish --release-channel production
+      # - name: Expo updates
+      #   run: expo publish --release-channel production
 
-     - name: Get current date
-        id: date
-        run: echo "$(date +'%Y-%m-%d')"
+      # - name: Get current date
+      #   id: date
+      #   run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
 
-     - name: Expo Publish
-       run: eas build -p android --non-interactive --output=${{ steps.date.outputs.date }}.apk
+      - name: Expo Publish
+        run: |
+          eas build -p android --non-interactive --json > buildLogAndroid.json
+          sed -i 's/\[//g' buildLogAndroid.json
+          sed -i 's/\]//g' buildLogAndroid.json
+          cat buildLogAndroid.json
+
+      - name: Parse Asset URL
+        id: androidUrl
+        uses: sergeysova/jq-action@v2
+        with:
+          cmd: "jq .artifacts buildLogAndroid.json -r"
+        # run: |
+        #   ASSET_URL=$(cat buildLogAndroid.txt | tail | egrep -o 'https?://expo\.io/artifacts/[^ ]+')
+        #   echo The android url is $ASSET_URL
+        #   echo "::set-output name=assetUrl::$ASSET_URL"
 
       - uses: actions/checkout@v2
       - name: Slack Notification
@@ -82,10 +96,9 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_FOOTER: |
-            :lock: This is a QR code for access to the preview app.
-            :iphone: Scan a code with your device.
+            :lock: Download the latest version
 
-          SLACK_TITLE: Update Expo APP Successfully
+          SLACK_TITLE: ${{ steps.androidUrl.outputs.value }}
           SLACK_USERNAME: Salami Slicing Published
       # - name: Find Comment
       #   uses: peter-evans/find-comment@v1

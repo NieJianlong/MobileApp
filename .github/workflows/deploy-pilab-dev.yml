@@ -70,7 +70,7 @@ jobs:
         run: expo publish --release-channel production
 
       - name: Expo Publish
-        run: eas build -p android --non-interactive
+        run: eas build -p android --non-interactive --output=${{ github.event.number }}.apk
 
       - uses: actions/checkout@v2
       - name: Slack Notification

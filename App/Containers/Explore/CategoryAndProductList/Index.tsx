@@ -17,7 +17,6 @@ import NavigationService from "../../../Navigation/NavigationService";
 import { vs } from "react-native-size-matters";
 import { Images } from "../../../Themes";
 import { useQuery, useReactiveVar } from "@apollo/client";
-import * as aQM from "../gql/explore_queries";
 import { localCartVar, userProfileVar } from "../../../Apollo/cache";
 import styles from "../styles";
 import {

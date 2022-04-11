@@ -38,6 +38,7 @@ import { DeliveryOption } from "../../../../generated/graphql";
 import { FIND_BUYER_ADDRESS_BY_ID } from "../../../Apollo/queries/queries_user";
 import AddBillingDetail from "../../../hooks/addBillingDetails";
 import alert from "../../../Components/Alert";
+import useShoppingCart from "../../../hooks/useShoppingCart";
 export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { dispatch } = useContext(AlertContext);
   const { realm } = useRealm();
@@ -49,6 +50,8 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
   const userProfile = useReactiveVar(userProfileVar);
   const { addbillingDetail, addBilling } = AddBillingDetail();
+  const { addProduct } = useShoppingCart();
+
   const { data } = useQuery(WALLET_BALANCE, {
     context: {
       headers: {
@@ -219,6 +222,19 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     if (!currentVariant.defaultVariant) {
       currentVariant.defaultVariant = false;
     }
+    addProduct({
+      id: shoppingCartId,
+      quantity,
+      variantId: currentVariant ? currentVariant.variantId : "",
+      variant: JSON.stringify(currentVariant),
+      isDraft: false,
+      addressId: localCartVar.deliverAddress,
+      productId: product.productId,
+      listingId: product.listingId,
+      product: JSON.stringify(product),
+      created: new Date(),
+      updated: new Date(),
+    });
     realm.write(() => {
       if (cartInfo) {
         cartInfo.quantity = quantity;

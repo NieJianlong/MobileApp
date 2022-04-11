@@ -23,6 +23,7 @@ import { GET_LOCAL_CART } from "../../../../Apollo/cache";
 import "react-native-get-random-values";
 import { nanoid } from "nanoid";
 import PubSub from "pubsub-js";
+import useShoppingCart from "../../../../hooks/useShoppingCart";
 class AccordionView extends React.Component {
   state = {
     activeSections: [],
@@ -128,7 +129,6 @@ class AccordionView extends React.Component {
  */
 const ProductVariants = ({ product, variants, onChange }) => {
   // to do reduce number props if possible
-  const { realm } = useRealm();
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
@@ -138,35 +138,59 @@ const ProductVariants = ({ product, variants, onChange }) => {
       ? variants.find((item) => item.defaultVariant === true) ?? null
       : null
   );
-  const info = useMemo(() => {
-    return realm
-      .objects("ShoppingCart")
-      .filtered("product.listingId == $0", product.listingId)
-      .filtered("addressId == $0", localCartVar.deliverAddress)
-      .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
-  }, [currentVariant, localCartVar, product.listingId, realm]);
+  const {
+    setShoppingCart,
+    shoppingCart,
+    queryProductInfoInDB,
+    currentProdcutShoppingInfo,
+    addProduct,
+  } = useShoppingCart();
+  useEffect(() => {
+    queryProductInfoInDB(
+      product.listingId,
+      localCartVar.deliverAddress,
+      currentVariant?.variantId
+    );
+  }, [currentVariant, localCartVar, product, queryProductInfoInDB]);
+  // const info = useMemo(() => {
+  //   return realm
+  //     .objects("ShoppingCart")
+  //     .filtered("product.listingId == $0", product.listingId)
+  //     .filtered("addressId == $0", localCartVar.deliverAddress)
+  //     .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
+  // }, [
+  //   currentVariant,
+  //   localCartVar,
+  //   product.listingId,
+  //   currentProdcutShoppingInfo,
+  // ]);
   useEffect(() => {
     if (currentVariant) {
-      realm.write(() => {
-        if (!info) {
-          realm.create("ShoppingCart", {
-            id: nanoid(),
-            quantity: 0,
-            variantId: currentVariant ? currentVariant.variantId : "",
-            variant: currentVariant,
-            isDraft: true,
-            addressId: localCartVar.deliverAddress,
-            productId: product.productId,
-            listingId: product.listingId,
-            product,
-            created: new Date(),
-            updated: new Date(),
-          });
-        }
-        PubSub.publish("refresh-shoppingcart", { variant: currentVariant });
-      });
+      if (!currentProdcutShoppingInfo) {
+        addProduct({
+          id: nanoid(),
+          quantity: 0,
+          variantId: currentVariant ? currentVariant.variantId : "",
+          variant: JSON.stringify(currentVariant),
+          isDraft: true,
+          addressId: localCartVar.deliverAddress,
+          productId: product.productId,
+          listingId: product.listingId,
+          product: JSON.stringify(product),
+          created: new Date(),
+          updated: new Date(),
+        });
+      }
+
+      PubSub.publish("refresh-shoppingcart", { variant: currentVariant });
     }
-  }, [info, currentVariant, realm, localCartVar, product]);
+  }, [
+    addProduct,
+    currentProdcutShoppingInfo,
+    currentVariant,
+    localCartVar.deliverAddress,
+    product,
+  ]);
   const onChangeVariant = (value) => {
     onChange(value);
     setCurrentVariant(value);

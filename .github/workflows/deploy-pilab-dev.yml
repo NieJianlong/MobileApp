@@ -84,7 +84,8 @@ jobs:
         id: androidUrl
         uses: sergeysova/jq-action@v2
         with:
-          cmd: "jq .artifacts buildLogAndroid.json -r"
+          cmd: "jq .artifacts .buildUrl buildLogAndroid.json -r"
+
         # run: |
         #   ASSET_URL=$(cat buildLogAndroid.txt | tail | egrep -o 'https?://expo\.io/artifacts/[^ ]+')
         #   echo The android url is $ASSET_URL

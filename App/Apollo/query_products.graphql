@@ -61,7 +61,6 @@ fragment ReviewViewField on ReviewView {
   ratingVote
   helpfulCount
   postedBy
-  userName
 }
 fragment ListingVariantViewField on ListingVariantView {
   listingId

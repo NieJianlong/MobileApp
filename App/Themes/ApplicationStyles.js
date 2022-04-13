@@ -90,6 +90,7 @@ const ApplicationStyles = {
       lineHeight: s(32),
     },
     heading3Bold: {
+      textAlign: 'center',
       fontSize: s(17),
       fontFamily: Fonts.primary,
       color: Colors.black,

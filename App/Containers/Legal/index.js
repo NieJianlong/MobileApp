@@ -1,107 +1,1244 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 import {
-    View,
-    StatusBar,
-    Text,
-    TouchableOpacity,
-    ScrollView
-} from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+  View,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import {
-    AppBar,
-    SegmentedControl
-} from '../../Components'
-import NavigationService from '../../Navigation/NavigationService'
+import { AppBar, SegmentedControl } from "../../Components";
+import NavigationService from "../../Navigation/NavigationService";
 
-import styles from './styles'
+import styles from "./styles";
 
 class LegalScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tabIndex: 0,
+    };
+  }
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            tabIndex: 0
-        }
-    }
+  componentDidMount() {}
 
-    componentDidMount() {
+  renderSegmentedControl() {
+    return (
+      <SegmentedControl
+        label1={"TERMS & CONDITIONS"}
+        label2={"PRIVACY POLICY"}
+        onSwitch={(t) => this.setState({ tabIndex: t })}
+      />
+    );
+  }
 
-    }
+  render() {
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" />
+        <SafeAreaView
+          style={styles.safeArea}
+          edges={["top", "right", "left", "bottom"]}
+        >
+          <AppBar
+            showLogo={false}
+            onPressBack={() => NavigationService.goBack()}
+          />
 
-    renderSegmentedControl() {
-        return (
-            <SegmentedControl
-                label1={'TERMS & CONDITIONS'}
-                label2={'PRIVACY POLICY'}
-                onSwitch={(t) => this.setState({ tabIndex: t })}
-            />
-        )
-    }
+          <View style={styles.bodyContainer}>
+            {this.renderSegmentedControl()}
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <StatusBar barStyle='dark-content' />
-                <SafeAreaView
-                    style={styles.safeArea}
-                    edges={['top', 'right', 'left', 'bottom']}
-                >
-                    <AppBar
-                        showLogo={false}
-                        onPressBack={() => NavigationService.goBack()}
-                    />
+            <Text style={styles.heading2Bold}>
+              {this.state.tabIndex === 0
+                ? "Terms & Conditions"
+                : "Privacy Policy"}
+            </Text>
+            <Text style={styles.heading4Bold}>Last updated: Apr 13, 2022</Text>
 
-                    <View style={styles.bodyContainer}>
+            <View style={styles.line} />
 
-                        {this.renderSegmentedControl()}
-
-                        <Text style={styles.heading2Bold}>{this.state.tabIndex === 0 ? 'Terms & Conditions' : 'Privacy Policy'}</Text>
-                        <Text style={styles.heading4Bold}>
-                            Last updated: May 21, 2018
-                        </Text>
-
-                        <View style={styles.line} />
-
-                        <ScrollView showsVerticalScrollIndicator={false}>
-                            <Text style={styles.txtRegular}>
-                                Computers have become ubiquitous in almost every facet of our lives.
-                                At work, desk jockeys spend hours in front of their desktops, while delivery
-                                people scan bar codes with handhelds and workers in the field stay in touch
-                                with the central office via their notebooks. At home, we rely on our desktops
-                                and notebooks to do our shopping, to entertain us, and to keep us abreast of
-                                world events. We may not see our email servers, but we count on them to deliver
-                                our email whenever and wherever we want it.
-                                Our PDAs keep track of our hectic schedules, our to-do lists, our contact lists,
-                                and even entertain us with games while we’re waiting for an appointment or to board
-                                a plane. Computer hardware weaves itself through the fabric of our lives.
-                            {'\n'}
-                            </Text>
-
-                            <Text style={styles.heading3Bold}>
-                                By using Salami Slicing Services you agree to these conditions. Please read them
-                                carefully.
-                        </Text>
-
-                            <Text style={styles.txtRegular}>
-                                Computers have become ubiquitous in almost every facet of our lives.
-                                At work, desk jockeys spend hours in front of their desktops, while delivery
-                                people scan bar codes with handhelds and workers in the field stay in touch
-                                with the central office via their notebooks. At home, we rely on our desktops
-                                and notebooks to do our shopping, to entertain us, and to keep us abreast of
-                                world events. We may not see our email servers, but we count on them to deliver
-                                our email whenever and wherever we want it.
-                                Our PDAs keep track of our hectic schedules, our to-do lists, our contact lists,
-                                and even entertain us with games while we’re waiting for an appointment or to board
-                                a plane. Computer hardware weaves itself through the fabric of our lives.
-                            {'\n'}
-                            </Text>
-                        </ScrollView>
-                    </View>
-                </SafeAreaView>
-            </View>
-        )
-    }
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {this.state.tabIndex === 0 ? (
+                <View>
+                  <Text style={styles.txtRegular}>
+                    This legal agreement is an electronic record in terms of the
+                    Indian Information Technology Act, 2000 and rules there
+                    under as applicable and the amended provisions about
+                    electronic records in various statutes as amended by the
+                    Indian Information Technology Act, 2000. This electronic
+                    record is generated by a computer system and does not
+                    require any physical or digital signatures. This legal
+                    document is published in accordance with the provisions of
+                    Rule 3 (1) of the Indian Information Technology
+                    (Intermediaries guidelines) Rules, 2011 and Rule 4 of the
+                    Information Technology (Reasonable security practices and
+                    procedures and sensitive personal data or information)
+                    Rules, 2011 of Information Technology Act, 2000 amended
+                    through Information Technology Amendment Act, 2008 that
+                    require publishing the Terms of Use and practices for access
+                    and usage of any functional Application. This Application is
+                    created and operated by M/s Salami Slicing Private
+                    Limited(hereinafter referred to as “We”, “Our”, and “Us”)
+                    having its registered address at H.No. 4-12, Opposite
+                    Panchayathy Pedavegi Mandalam, Garlamadugu Westgodavari
+                    ,West Godavari, Andra Pradesh, India - 534475 and operating
+                    under the brand name “Salami Slicing” (“Brand name”). We
+                    intend to ensure your steady commitment to the usage of this
+                    Application and the services provided by us through our
+                    Application “Salami Slicing” (“Application”)
+                    {"\n"}• For the purpose of these Terms of Use (“Terms of
+                    Use”), wherever the context so requires, “We”, “Firm”,
+                    “Our”, and “Us” shall mean and refer to the Application.
+                    {"\n"}• “You”, “Your”, “Yourself”, “User” and “Customer”
+                    shall mean and refer to natural and legal individuals who
+                    shall be users of this Application provided by us and who is
+                    competent to enter into binding contracts, as per Indian
+                    laws.
+                    {"\n"}• “Third Parties” refer to any Application or
+                    individual apart from the Users and the creator of this
+                    Application.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>GENERAL TERMS</Text>
+                  <Text style={styles.txtRegular}>
+                    The headings of each section in these Terms of Use are only
+                    for the purpose of organizing the various provisions under
+                    these Terms of Use in an orderly manner and shall be used by
+                    you to interpret the provisions contained herein in a manner
+                    as may apply to you. Further, it is specifically agreed by
+                    you that the headings shall have legal or contractual value
+                    on your usage of the Application.
+                    {"\n"}• The use of this Application is solely governed by
+                    these Terms of Use, Privacy Policy that may be uploaded on
+                    the Application and any modifications or amendments made
+                    thereto by us from time to time, at our sole discretion. If
+                    you as a user continue to access and use this Application,
+                    you are agreeing to comply with and be bound by the
+                    following Terms of Use and Privacy Policy.
+                    {"\n"}• You expressly agree and acknowledge that these Terms
+                    of Use and Privacy Policy are co-terminus in nature and that
+                    expiry/termination of either one will lead to the
+                    termination of the other.
+                    {"\n"}• You unequivocally agree that these Terms of Use and
+                    the Privacy Policy constitute a legally binding agreement
+                    between us, and that you shall be subject to the rules,
+                    guidelines, policies, terms, and conditions applicable to
+                    your use of the Application, and that the same shall be
+                    deemed to be incorporated into these Terms of Use and shall
+                    be treated as part and parcel of the same. You acknowledge
+                    and agree that no signature or express act is required to
+                    make these Terms of Use and the Privacy Policy binding on
+                    you and that your act of visiting any part of the
+                    Application constitutes your full and final acceptance of
+                    these Terms of Use and the Privacy Policy.
+                    {"\n"}• We reserve the sole and exclusive right to amend or
+                    modify these Terms of Use without any prior permission or
+                    intimation to you, and you expressly agree that any such
+                    amendments or modifications shall come into effect
+                    immediately. If you do not adhere to the changes, You must
+                    stop using the Application at once. Your continued use of
+                    the Application will signify your acceptance of the changed
+                    terms.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>REGISTRATION</Text>
+                  <Text style={styles.txtRegular}>
+                    Registration on the Platform is mandatory for Users of the
+                    Applications. The Users shall have to provide the following
+                    information at the time of registration. Registration on the
+                    Platform is mandatory for Users of the Application. The
+                    Users can register by providing the following information:
+                    {"\n"}• Name;
+                    {"\n"}• Phone Number;
+                    {"\n"}• Email ID; and
+                    {"\n"}• Delivery Address.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>APPLICATION OVERVIEW</Text>
+                  <Text style={styles.txtRegular}>
+                    The Platform works on the online applications “Salami
+                    Slicing” for users can purchase goods from the App as
+                    displayed. The goods will be delivered only when the listing
+                    will be closed ie., this is unlike other e-commerce App the
+                    Product is out for delivery only when the whole lot is sold.
+                    The App is designed to purchase goods in bulk and provides
+                    great margin of discount to its Customer, with this unique
+                    nature of the selling model. The Applications shall work as
+                    an aggregator to provide the listed selling partners on the
+                    website the required access to the updated untapped markets,
+                    and can leverage the service for guaranteed orders, payment
+                    security and incremental sales. The role of the Platform is
+                    to create an online marketplace that consists of various
+                    brands/ vendors selling their services by listing the same
+                    on the App for the users on the platform.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>PAYMENT GATEWAY</Text>
+                  <Text style={styles.txtRegular}>
+                    For making all payments for services on the Application, you
+                    shall be required to make payment for which you will be
+                    redirected to a third-party payment gateway, that we may
+                    have an agreement with. The payment gateway may additionally
+                    seek information from you to process the payment for your
+                    purchase and additionally may charge you the payment gateway
+                    charges that may be applicable. The payment gateway consists
+                    of Debit Card/Credit Card/Net Banking/UPI and other wallet
+                    options. You shall be governed under the concerned payment
+                    gateway’s Terms and Conditions and other Policies for the
+                    purpose of all payment-related aspects.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>ELIGIBILITY</Text>
+                  <Text style={styles.txtRegular}>
+                    • You represent and warrant that you are competent and
+                    eligible to enter into legally binding agreements and of age
+                    and that you have the requisite authority to bind themselves
+                    to these Terms of Use following the Law. However, if you are
+                    a minor using this Application, you may do so with the
+                    consent of your legal guardian. All Acts of minor shall be
+                    deemed to be considered as the acts undertaken under the
+                    supervision of their legal guardian.
+                    {"\n"}• You further represent that you will comply with
+                    these Terms of Use and all applicable local, state, national
+                    and international laws, rules and regulations.
+                    {"\n"}• You shall not use the Application if you are not
+                    competent to contract or are disqualified from doing so by
+                    any other applicable law, rule or regulation currently in
+                    force.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>CONTENT</Text>
+                  <Text style={styles.txtRegular}>
+                    All text, graphics, User interfaces, visual interfaces,
+                    photographs, trademarks, logos, brand names, descriptions,
+                    sounds, music and artwork (collectively, ‘Content’), is
+                    generated/provided or based on information provided by the
+                    users or third parties and We have no control and make no
+                    guarantees regarding the quality, the accuracy, integrity or
+                    genuineness of such content or such other information
+                    provided on the Application. All the Content displayed on
+                    the Application is subject to copyright and shall not be
+                    reused by You (or a third party) without the prior written
+                    consent from Us and the copyright owner. You are solely
+                    responsible for the integrity, authenticity, quality and
+                    genuineness of the content provided on the Application and
+                    whilst feedback and comments by You can be made via the
+                    Application, we bear no liability whatsoever for any
+                    feedback or comments made by the other Users or made in
+                    respect of any of the content on the Application. Further,
+                    the Application reserves its right to suspend the account of
+                    any User for an indefinite period to be decided at the
+                    discretion of the Application or to terminate the account of
+                    any User who is found to have created or shared or submitted
+                    any content or part thereof that is found to be
+                    untrue/inaccurate/misleading or offensive/vulgar. You shall
+                    be solely responsible for making good any financial or legal
+                    losses incurred through the creation/sharing/submission of
+                    Content or part thereof that is deemed to be
+                    untrue/inaccurate/misleading. You have a personal,
+                    non-exclusive, non-transferable, revocable, limited
+                    privilege to access the content on the Application. You
+                    shall not copy, adapt, and modify any content without
+                    written permission from Us.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>INDEMNITY</Text>
+                  <Text style={styles.txtRegular}>
+                    You agree to indemnify, defend and hold harmless the Us, and
+                    our respective directors, officers, employees and agents
+                    (collectively, "Parties"), from and against any losses,
+                    liabilities, claims, damages, demands, costs and expenses
+                    (including legal fees and disbursements in connection
+                    therewith and interest chargeable thereon) asserted against
+                    or incurred by Us that arise out of, result from, or maybe
+                    payable by, any breach or non-performance of any
+                    representation, warranty, covenant or agreement made or
+                    obligation to be performed according to these Terms of Use.
+                    Further, You agrees to hold the Us harmless against any
+                    claims made by any third party due to, or arising out of, or
+                    in connection with:
+                    {"\n"}• Your use of the Application,
+                    {"\n"}• Your violation of these Terms of Use;
+                    {"\n"}• Your violation of any rights of another;
+                    {"\n"}• Your alleged improper conduct according to these
+                    Terms of use;
+                    {"\n"}• Your conduct in connection with the Application;
+                    {"\n"}
+                    You agree to fully cooperate in indemnifying Us at your
+                    expense. You also agree not to settle with any party without
+                    consent from Us. In no event shall we be liable to
+                    compensate You or any third party for any special,
+                    incidental, indirect, consequential or punitive damages
+                    whatsoever, including those resulting from loss of use, data
+                    or profits, whether or not foreseeable, and whether or not
+                    You had been advised of the possibility of such damages, or
+                    based on any theory of liability, including breach of
+                    contract or warranty, negligence or other tortuous action,
+                    or any other claim arising out of or in connection with the
+                    Your use of or access to the Application and/or the Services
+                    or materials contained therein.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    LIMITATION OF LIABILITY
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    {"\n"}• We are not responsible for any consequences arising
+                    out of the following events:
+                    {"\n"}• If the Application is inoperative/non-responsive due
+                    to any connectivity errors associated with the internet
+                    connection such as but not limited to slow connectivity, no
+                    connectivity, server failure;
+                    {"\n"}• If you have fed incorrect information or data or for
+                    any deletion of data;
+                    {"\n"}• If there is an undue delay or inability to
+                    communicate through email;
+                    {"\n"}• If there is any deficiency or defect in the Services
+                    managed by Us;
+                    {"\n"}• If there is a failure in the functioning of any
+                    other service provided by Us.
+                    {"\n"}• The Application accepts no liability for any errors
+                    or omissions, on behalf of itself, or for any damage caused
+                    to You, Your belongings, or any third party, resulting from
+                    the use or misuse of the Application or any service availed
+                    of by Us through the Application. The service and any
+                    Content or material displayed on the service is provided
+                    without any guarantees, conditions or warranties as to its
+                    accuracy, suitability, completeness or reliability. We will
+                    not be liable to you for the unavailability or failure of
+                    the Application.
+                    {"\n"}• You are to comply with all laws applicable to you or
+                    your activities, and with all Policies, which are hereby
+                    incorporated into this Terms of Use by reference.
+                    {"\n"}• The Application expressly excludes any liability for
+                    any loss or damage that was not reasonably foreseeable by
+                    the Application and which is incurred by you in connection
+                    with the Application, including loss of profits; and any
+                    loss or damage incurred by you as a result of your breach of
+                    these Terms of Use.
+                    {"\n"}• To the fullest extent permitted by law, We shall not
+                    be liable to You or any other party for any loss or damage,
+                    regardless of the form of action or basis of any claim. You
+                    acknowledge and agree that your sole and exclusive remedy
+                    for any dispute with us is to terminate your use of the
+                    Application.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>TERM</Text>
+                  <Text style={styles.txtRegular}>
+                    • These Terms of Use shall continue to form a valid and
+                    binding contract between us and shall continue to be in full
+                    force and effect until you continue to access and use the
+                    Applications.
+                    {"\n"}• You may terminate your use of the Application at any
+                    time.
+                    {"\n"}• We may terminate these Terms of Use and close your
+                    account at any time without notice and/or suspend or
+                    terminate Your access to the Application at any time and for
+                    any reason, if any discrepancy or legal issue arises.
+                    {"\n"}• Such suspension or termination shall not limit our
+                    right to take any other action against you that we consider
+                    appropriate.
+                    {"\n"}• It is also hereby declared that we may discontinue
+                    the Services and Applications without any prior notice.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>TERMINATION</Text>
+                  <Text style={styles.txtRegular}>
+                    • We reserve the right, in its sole discretion, to
+                    unilaterally terminate Your access to the Application, or
+                    any portion thereof, at any time, without notice or cause.
+                    {"\n"}• We also reserve the universal right to deny access
+                    to You, to any/all of are on its Application without any
+                    prior notice/explanation to protect the interests of the
+                    Application and/or other Users to the Application.
+                    {"\n"}• We reserve the right to limit, deny or create
+                    different access to the Application and its features
+                    concerning different Users, or to change any of the features
+                    or introduce new features without prior notice.
+                    {"\n"}• You shall continue to be bound by these Terms of
+                    use, and it is expressly agreed to by You that You shall not
+                    have the right to terminate these Terms of Use till the
+                    expiry of the same.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>COMMUNICATION</Text>
+                  <Text style={styles.txtRegular}>
+                    By using this Application and providing Your identity and
+                    contact information to Us through the Application, You agree
+                    and consent to receive calls, e-mails or SMS from Us and/or
+                    any of its representatives at any time. You can report to
+                    “__________” if you find any discrepancy with regard to
+                    Application or content-related information and we will take
+                    necessary action after an investigation. The response with
+                    resolution (if any issues found) shall be dependent on the
+                    time is taken for investigation. You expressly agree that
+                    notwithstanding anything contained herein above, it may be
+                    contacted by Us relating to any services availed by You on
+                    the Application or anything pursuant thereto and You agree
+                    to indemnify Us from any harassment claims. It is expressly
+                    agreed to by Us that any information shared by Us shall be
+                    governed by the Privacy Policy.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    USER OBLIGATIONS AND FORMAL UNDERTAKINGS AS TO CONDUCT
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    You agree and acknowledges that you are a restricted user of
+                    this Application and you:
+                    {"\n"}• Agree to provide genuine credentials during the
+                    process whenever required on the Application. You shall not
+                    use a fictitious identity to register. We are not liable if
+                    you have provided incorrect information.
+                    {"\n"}• Agree to ensure the Name, Email address, Address,
+                    Mobile number and any such other information that may be
+                    provided during account registration is valid at all times
+                    and shall keep your information accurate and up-to-date.
+                    {"\n"}• Agrees that the User shall be entirely responsible
+                    for all activities that the user shall undertake post making
+                    the order of the service provider/vendor and the user shall
+                    undertake sole responsibility towards any activities
+                    including but not limited any illegal or prohibited
+                    activities. Further, the user shall waive all its rights to
+                    undertake any action against us towards any breach of
+                    personally identifiable information.
+                    {"\n"}• You agree that You are solely responsible for
+                    maintaining the confidentiality of your account password.
+                    You agree to notify us immediately of any unauthorized use
+                    of your account. We reserve the right to close your account
+                    at any time for any or no reason.
+                    {"\n"}• The User represents and warrants that the User shall
+                    undertake to exclude any liability and hold the Company
+                    harmless for any legal action that may arise for the Company
+                    due to the user’s activities which may involve any type of
+                    illegal activities in which the user undertakes to use the
+                    services of the vendor under the influence of drugs,
+                    alcohol, or for smuggling, trafficking etc which may or may
+                    not involve prohibited substances and commodities or if
+                    there arises any legal action against the User under the
+                    provisions of the Indian penal code.
+                    {"\n"}• The User further represents and warrants that the
+                    negotiations and the discussions between the user and the
+                    vendor shall be at their sole discretion and the Company in
+                    no manner shall be made a party to such discussions that may
+                    involve the vendor’s services to the user. Such discussions
+                    and negotiations may include but not limited to the payment
+                    and payment terms.
+                    {"\n"}• The User represents and warrants that We are not
+                    responsible for the operation of vendors, nor the content
+                    uploaded by them or the goods sold by them.
+                    {"\n"}• The User represents and warrants that the Company
+                    shall have a limited liability to provide the user with a
+                    basic acknowledgement on the condition of the vehicle that
+                    may be provided by the vendor. However, the Vendor shall be
+                    solely responsible for all the quality and the condition of
+                    the vehicle provided by the Vendor to the user and the user
+                    shall in no manner bring out any suit or thereby any legal
+                    action against the Company.
+                    {"\n"}• User represents and warrants that the Company may
+                    offer other additional accidental insurance packages from
+                    any third parties, which will benefit the user. However, the
+                    Firm does not guarantee the user the same at any time.
+                    {"\n"}• Authorize the Application to use, store or otherwise
+                    process certain personal information and all published
+                    Content, responses, locations, User comments, reviews and
+                    ratings for personalization of Services, marketing and
+                    promotional purposes and for optimisation of User-related
+                    options and Services.
+                    {"\n"}• Understand and agree that, to the fullest extent
+                    permissible by law, the Application or any of their
+                    affiliates or their respective officers, directors,
+                    employees, agents, licensors, representatives, operational
+                    service providers, advertisers or suppliers shall not be
+                    liable for any loss or damage, of any kind, direct or
+                    indirect, in connection with or arising from the use of the
+                    Application or this terms of use, including, but not limited
+                    to, compensatory, consequential, incidental, indirect,
+                    special or punitive damages.
+                    {"\n"}• Are bound not to cut, copy, modify, recreate,
+                    reverse engineer, distribute, disseminate, post, publish or
+                    create derivative works from, transfer, or sell any
+                    information or obtained from the Application. Any such
+                    use/limited use of the Application will only be allowed with
+                    the prior express written permission.
+                    {"\n"}• Agree that promotions and giveaways are governed by
+                    a different set of rules.
+                    {"\n"}• Agree that We are only responsible for the advance
+                    payments made to Us and not the offline payments made to the
+                    Vendors.
+                    {"\n"}• Agree not to access (or attempt to access) the
+                    Application and/or the materials or Services by any means
+                    other than through the interface provided by the
+                    Application. The use of deep-link, robot, spider or other
+                    automatic devices, program, algorithm or methodology, or any
+                    similar or equivalent manual process, to access, acquire,
+                    copy or monitor any portion of the Application or its
+                    content, or in any way reproduce or circumvent the
+                    navigational structure or presentation of the Application,
+                    materials or any content, or to obtain or attempt to obtain
+                    any materials, documents or information through any means
+                    not specifically made available through the Application will
+                    lead to suspension or termination of your access to the
+                    Application. We disclaim any liabilities arising concerning
+                    such offensive content on the Application.
+                    {"\n"}• Expressly agree and acknowledge that the Content
+                    generated by the Users and displayed on the Application is
+                    not owned by Us and that We are in no way responsible for
+                    the content of the same. You may, however, report any
+                    offensive or objectionable content, which We may then remove
+                    from the Application, at our sole discretion.
+                    {"\n"}
+                    You further undertake not to:
+                    {"\n"}• Engage in any activity that interferes with or
+                    disrupts access to the Application or the services provided
+                    therein (or the servers and networks which are connected to
+                    the Application);
+                    {"\n"}• Impersonate any person or entity, or falsely state
+                    or otherwise misrepresent his/her affiliation with a person
+                    or entity;
+                    {"\n"}• Probe, scan or test the vulnerability of the
+                    Application or any network connected to the Application, nor
+                    breach the security or authentication measures on the
+                    Application or any network connected to the Application. The
+                    User may not reverse look-up, trace or seek to trace any
+                    information relating to any other User of, or visitor to,
+                    the Application, or any other viewer of the Application,
+                    including any User account maintained on the Application not
+                    operated/managed by the User, or exploit the Application or
+                    information made available or offered by or through the
+                    Application, in any manner;
+                    {"\n"}• Disrupt or interfere with the security of, or
+                    otherwise cause harm to, the Application, systems resources,
+                    accounts, passwords, servers, or networks connected to or
+                    accessible through the Application or any affiliated or
+                    linked Applications.
+                    {"\n"}• Use the Application or any material or content
+                    therein for any purpose that is unlawful or prohibited by
+                    these Terms of Use, or to solicit the performance of any
+                    illegal activity or other activity which infringes the
+                    rights of this Application or any other third party (s);
+                    {"\n"}• Violate any code of conduct or guideline which may
+                    apply for or to any particular service offered on the
+                    Application;
+                    {"\n"}• Violate any applicable laws, rules or regulations
+                    currently in force within or outside India;
+                    {"\n"}• Violate any portion of these Terms of Use or the
+                    Privacy Policy, including but not limited to any applicable
+                    additional terms of the Application contained herein or
+                    elsewhere, whether made by amendment, modification, or
+                    otherwise;
+                    {"\n"}• Commit any act that causes Us to lose (in whole or
+                    in part) the Services of its Internet Establishment ("ISP")
+                    or in any manner disrupts the Services of any other
+                    supplier/service provider of the Application;
+                    {"\n"}• You hereby expressly authorize Us to disclose any
+                    and all information relating to You in our possession to law
+                    enforcement or other government officials, as We may in our
+                    sole discretion, believe necessary or appropriate in
+                    connection with the investigation and/or resolution of
+                    possible crimes, especially those involve personal injury
+                    and theft/infringement of intellectual property. You further
+                    understand that the Application might be directed to
+                    disclose any information (including the identity of persons
+                    providing information or materials on the Application) as
+                    necessary to satisfy any judicial Order, law, regulation or
+                    valid governmental request.
+                    {"\n"}• By indicating Your acceptance to use any services
+                    offered on the Application, You are obligated to complete
+                    such transactions after making payment. You shall be
+                    prohibited from indicating their acceptance to avail
+                    services where the transactions have remained incomplete.
+                    {"\n"}• You agree to use the services provided by Us, our
+                    affiliates, consultants and contracted companies, for lawful
+                    purposes only.
+                    {"\n"}• You agree to provide authentic and true information.
+                    We reserve the right to confirm and validate the information
+                    and other details provided by You at any point in time. If
+                    upon confirmation such details are found to be false, not to
+                    be true (wholly or partly), We shall in our sole discretion
+                    reject the registration and debar You from using the
+                    Application without prior intimation whatsoever.
+                    {"\n"}• You agree not to post any material on the
+                    Application that is defamatory, offensive, obscene,
+                    indecent, abusive, or needlessly distressful or advertising
+                    any goods or services. More specifically, You agree not to
+                    host, display, upload, update, publish, modify, transmit, or
+                    in any manner share any information that:
+                    {"\n"}• belongs to another person and to which you have no
+                    right to;
+                    {"\n"}• is grossly harmful, harassing, blasphemous,
+                    defamatory, obscene, pornographic, pedophilic, libellous,
+                    invasive of another's privacy, hateful, or racially,
+                    ethnically objectionable, disparaging, relating or
+                    encouraging money laundering or gambling, or otherwise
+                    unlawful in any manner whatever;
+                    {"\n"}• is in any way harmful to minors;
+                    {"\n"}• infringes any patent, trademark, copyright or other
+                    proprietary rights;
+                    {"\n"}• violates any law for the time being in force;
+                    {"\n"}• deceives or misleads the addressee about the origin
+                    of such messages or communicates any information which is
+                    grossly offensive or menacing;
+                    {"\n"}• Abuse, harass, threaten, defame, disillusion, erode,
+                    abrogate, demean or otherwise violate the legal rights of
+                    others;
+                    {"\n"}• Impersonate any person or entity, or falsely state
+                    or otherwise misrepresent Your affiliation with a person or
+                    entity;
+                    {"\n"}• Publish, post, disseminate, any grossly harmful
+                    information, harassing, blasphemous, defamatory, obscene,
+                    pornographic, pedophilic, libellous, invasive of another's
+                    privacy, hateful, or racially, ethnically objectionable,
+                    disparaging, relating or encouraging money laundering or
+                    gambling, or otherwise unlawful in any manner whatever; or
+                    unlawfully threatening or unlawfully harassing including but
+                    not limited to "indecent representation of women" within the
+                    meaning of the Indecent Representation of Women
+                    (Prohibition) Act, 1986;
+                    {"\n"}• Threatens the unity, integrity, defence, security or
+                    sovereignty of India, friendly relations with foreign
+                    states, or public order or causes incitement to the
+                    commission of any cognizable offence or prevents
+                    investigation of any offence or is insulting any other
+                    nation.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    SUSPENSION OF USER ACCESS AND ACTIVITY
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    Notwithstanding other legal remedies that may be available,
+                    we may in our sole discretion, limit your access and/or
+                    activity by immediately removing your access credentials
+                    either temporarily or indefinitely, or suspend/terminate
+                    your association with the Application, and/or refuse to the
+                    usage of the Application, without being required to provide
+                    you with notice or cause:
+                    {"\n"}• If you are in breach of any of these Terms of Use or
+                    the Privacy Policy;
+                    {"\n"}• If you have provided wrong, inaccurate, incomplete
+                    or incorrect information;
+                    {"\n"}• If your actions may cause any harm, damage or loss
+                    to the other Users or Us, at our sole discretion.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    INTELLECTUAL PROPERTY RIGHTS
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    Unless expressly agreed to in writing, nothing contained
+                    herein shall give you a right to use any of the trade names,
+                    trademarks, service marks, logos, domain names, information,
+                    questions, answers, solutions, reports and other distinctive
+                    brand features, save according to the provisions of these
+                    Terms of Use that shall be available on the Application. All
+                    logos, trademarks, brand names, service marks, domain names,
+                    including material, designs, and graphics created by and
+                    developed by either the Application or such other third
+                    party and other distinctive brand features of the
+                    Application are the property of the Application or the
+                    respective copyright or trademark owner. Furthermore,
+                    concerning the Application, we shall be the exclusive owner
+                    of all the designs, graphics and the like, related to the
+                    Application. You shall not use any of the intellectual
+                    property displayed on the Application in any manner that is
+                    likely to cause confusion among existing or prospective
+                    users of the Application, or that in any manner disparages
+                    or discredits the Application, to be determined in the sole
+                    discretion. You are aware all intellectual property,
+                    including but not limited to copyrights, relating to said
+                    services resides with the owners, and that at no point does
+                    any such intellectual property stand transferred from the
+                    aforementioned creators. You are aware that we merely
+                    provide the Application through which You can communicate
+                    with other users and the Application does not own any of the
+                    intellectual property relating to the independent content
+                    displayed on the Application, apart from created graphics
+                    and specified content. You are further aware that any
+                    reproduction or infringement of the intellectual property of
+                    the aforementioned owners by You will result in legal action
+                    being initiated against You by the respective owners of the
+                    intellectual property so reproduced/infringed upon. It is
+                    agreed to by You that the contents of this section shall
+                    survive even after the termination or expiry of these Terms
+                    of Use and/or Privacy Policy.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    DISCLAIMER OF WARRANTIES AND LIABILITIES
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    You further agree and undertake that you are accessing the
+                    Application at your sole risk and are that you are using the
+                    best and prudent judgment before availing of any features on
+                    the Application or accessing/using any information displayed
+                    thereon. You agree that any kind of information, resources,
+                    activities, recommendations obtained/availed from the
+                    Application, written or oral, will not create any warranty
+                    and we disclaim all liabilities resulting from these. We do
+                    not guarantee that the features and content contained in the
+                    Application will be uninterrupted or error-free, or that the
+                    Application or its server will be free of viruses or other
+                    harmful components, and You hereby expressly accepts any
+                    associated risks involved with your use of the Application.
+                    It is further agreed to by You that the contents of this
+                    section shall survive even after the termination or expiry
+                    of the Terms of Use and/or Privacy Policy.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>FORCE MAJEURE</Text>
+                  <Text style={styles.txtRegular}>
+                    We will not be liable for damages for any delay or failure
+                    to perform our obligations hereunder if such delay or
+                    failure is due to cause beyond our control or without its
+                    fault or negligence, due to Force Majeure events including
+                    but not limited to acts of war, acts of God, earthquake,
+                    riot, fire, festive activities sabotage, labour shortage or
+                    dispute, internet interruption, technical failure, breakage
+                    of sea cable, hacking, piracy, cheating, illegal or
+                    unauthorized.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    DISPUTE RESOLUTION AND JURISDICTION
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    In the event of any dispute arising out of or in connection
+                    with this agreement, including any dispute relating to the
+                    validity of this agreement, the parties shall, at first
+                    instance, attempt to resolve the dispute by mediation
+                    administered by the Centre for Online Resolution of Disputes
+                    (“CORD”) (www.resolveoncord.com) and conducted in accordance
+                    with the CORD Rules of Mediation, by a sole mediator to be
+                    appointed by CORD. In the event the parties are unable to
+                    resolve any such dispute through mediation within 45 days of
+                    the initiation of the dispute, subject to a contrary
+                    agreement between the parties, the dispute shall be finally
+                    resolved by arbitration administered by CORD and conducted
+                    in accordance with the Rules of Arbitration of CORD, by a
+                    sole arbitrator to be appointed by CORD. The language of
+                    arbitration shall be English. The seat of arbitration shall
+                    be West Godavari, Andhra Pradesh, India. You expressly agree
+                    that the Terms of Use, Privacy Policy and any other
+                    agreements entered into between the Parties are governed by
+                    the laws, rules, and regulations of India.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    MISCELLANEOUS PROVISIONS
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    • Entire Agreement: These Terms of Use, read with the
+                    Privacy Policy, form the complete and final contract between
+                    us with respect to the subject matter hereof and supersedes
+                    all other communications, representations, and agreements
+                    (whether oral, written or otherwise) relating thereto.
+                    {"\n"}• Waiver: The failure at any time to require
+                    performance of any provision of these Terms of Use shall in
+                    no manner affect our right at a later time to enforce the
+                    same. No waiver by us of any breach of these Terms of Use,
+                    whether by conduct or otherwise, in any one or more
+                    instances, shall be deemed to be or construed as a further
+                    or continuing waiver of any such breach, or a waiver of any
+                    other breach of these Terms of Use.
+                    {"\n"}• Severability: If any provision/clause of these Terms
+                    of Use is held to be invalid, illegal or unenforceable by
+                    any court or authority of competent jurisdiction, the
+                    validity, legality, and enforceability of the remaining
+                    provisions/clauses of these Terms of Use shall in no way be
+                    affected or impaired thereby, and each such provision/clause
+                    of these Terms of Use shall be valid and enforceable to the
+                    fullest extent permitted by law. In such case, these Terms
+                    of Use shall be reformed to the minimum extent necessary to
+                    correct any invalidity, illegality or unenforceability,
+                    while preserving to the maximum extent the original rights,
+                    intentions and commercial expectations of the Parties
+                    hereto, as expressed herein.
+                    {"\n"}• Contact Us: If you have any questions about these
+                    Terms of Use, the practices of the Application, or your
+                    experience, you can contact us by emailing at
+                    _________________.
+                    {"\n"}
+                  </Text>
+                </View>
+              ) : (
+                <View>
+                  <Text style={styles.txtRegular}>
+                    This legal agreement is an electronic record in terms of the
+                    Indian Information Technology Act, 2000 and rules there
+                    under as applicable and the amended provisions about
+                    electronic records in various statutes as amended by the
+                    Indian Information Technology Act, 2000. This electronic
+                    record is generated by a computer system and does not
+                    require any physical or digital signatures. This legal
+                    document is published in accordance with the provisions of
+                    Rule 3 (1) of the Indian Information Technology
+                    (Intermediaries guidelines) Rules, 2011 and Rule 4 of the
+                    Information Technology (Reasonable security practices and
+                    procedures and sensitive personal data or information)
+                    Rules, 2011 of Information Technology Act, 2000 amended
+                    through Information Technology Amendment Act, 2008 that
+                    require publishing the Terms of Use and practices for access
+                    and usage of any functional Application. This Application is
+                    created and operated by M/s Salami Slicing Private Limited,
+                    (hereinafter referred to as “We”, “Our”, and “Us”) and
+                    operating under the brand name “Salami Slicing” (“Brand
+                    name”). The creator of this Privacy Policy ensures a steady
+                    commitment to Your privacy with regard to the protection of
+                    your invaluable information that you may share across on
+                    this Application. This privacy policy contains information
+                    about the Application “Salami Slicing” (“Application”). For
+                    the purpose of these Privacy Policy (“Privacy Policy”),
+                    wherever the context so requires, “We”, “Our”, and “Us”
+                    shall mean and refer to the Application. “You”, “Your”,
+                    “Yourself”, “User” shall mean and refer to natural and legal
+                    individuals who shall be users of this Application provided
+                    by us and who is competent to enter into binding contracts,
+                    as per Indian laws. “Third Parties” refer to any Application
+                    or individual apart from the Users and the creator of this
+                    Application To provide You with Our uninterrupted use of the
+                    Application, We may collect and, in some circumstances,
+                    disclose information about you with your permission. To
+                    ensure better protection of Your privacy, We provide this
+                    notice explaining Our information collection and disclosure
+                    policies, and the choices You make about the way Your
+                    information is collected and used. This Privacy Policy shall
+                    be in compliance with the General Data Protection Regulation
+                    (GDPR) in effect from May 25, 2018, and any and all
+                    provisions that may read to the contrary shall be deemed to
+                    be void and unenforceable as of that date. If you do not
+                    agree with the terms and conditions of our Privacy Policy,
+                    including in relation to the manner of collection or use of
+                    your information, please do not use or access the Site. If
+                    you have any questions or concerns regarding this Privacy
+                    Policy, you should contact our Customer Support Desk at
+                    ____________. ANY CAPITALIZED WORDS USED HENCEFORTH SHALL
+                    HAVE THE MEANING ACCORDED TO THEM UNDER THIS AGREEMENT.
+                    FURTHER, ALL HEADING USED HEREIN ARE ONLY FOR THE PURPOSE OF
+                    ARRANGING THE VARIOUS PROVISIONS OF THE AGREEMENT IN ANY
+                    MANNER. NEITHER THE USER NOR THE CREATORS OF THIS PRIVACY
+                    POLICY MAY USE THE HEADING TO INTERPRET THE PROVISIONS
+                    CONTAINED WITHIN IT IN ANY MANNER.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    INFORMATION WE COLLECT
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    We are committed to respecting Your online privacy. We
+                    further recognize Your need for appropriate protection and
+                    management of any Personal Information You share with us. We
+                    may collect the following information:
+                    {"\n"}• Personal data including but not limited to Name,
+                    Phone Number, Email ID, City, Address, Payment Information.
+                    {"\n"}• Tracking Information such as, but not limited to the
+                    IP address of your device and Device ID when connected to
+                    the Internet. This information may include the URL that you
+                    just came from (whether this URL is on the Application or
+                    not), which URL you next go to (whether this URL is on the
+                    Application or not), your computer or device browser
+                    information, and other information associated with your
+                    interaction with the Application; This Privacy Policy also
+                    applies to data we collect from users who are not registered
+                    as members of this Application, including, but not limited
+                    to, browsing behaviour, pages viewed etc. We also collect
+                    and store personal information provided by You from time to
+                    time on the Application. We only collect and use such
+                    information from you that we consider necessary for
+                    achieving a seamless, efficient and safe experience,
+                    customized to your needs including:
+                    {"\n"}• To enable the provision of services opted for by
+                    you;
+                    {"\n"}• To enable the viewing of content in your interest;
+                    {"\n"}• To communicate the necessary account and
+                    service-related information from time to time;
+                    {"\n"}• To allow you to receive quality customer care
+                    services and data Collection;
+                    {"\n"}• To comply with applicable laws, rules and
+                    regulations;
+                    {"\n"}
+                    Where any service requested by You involves a third party,
+                    such information as is reasonably necessary by the Company
+                    to carry out Your service request may be shared with such
+                    third party. We also do use your contact information to send
+                    you offers based on your interests and prior activity and
+                    also to view the content preferred by you. The Company may
+                    also use contact information internally to direct its
+                    efforts for service improvement but shall immediately delete
+                    all such information upon withdrawal of your consent for the
+                    same through the ‘Delete Account’ button or through an email
+                    to be sent to ___________. To the extent possible, we
+                    provide You with the option of not divulging any specific
+                    information that you wish for us not to collect, store or
+                    use. You may also choose not to use a particular service or
+                    feature on the Application and opt-out of any non-essential
+                    communications from the Application. Further, transacting
+                    over the internet has inherent risks which can only be
+                    avoided by you following security practices yourself, such
+                    as not revealing account/login related information to any
+                    other person and informing our customer care team about any
+                    suspicious activity or where your account has/may have been
+                    compromised.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    OUR USE OF YOUR INFORMATION
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    The information provided by you shall be used to provide and
+                    improve the service for you and all users.
+                    {"\n"}• To provide you with services on your request.
+                    {"\n"}• For maintaining an internal record.
+                    {"\n"}• For enhancing the Services provided.
+                    {"\n"}• For maintaining record under the legal and statutory
+                    provisions.
+                    {"\n"}
+                    For more details about the nature of such communications,
+                    please refer to our Terms of Service. Further, your data and
+                    Sensitive Personal data may be collected and stored by Us
+                    for internal record. We use Your tracking information such
+                    as IP addresses, and or Device ID to help identify you and
+                    to gather broad demographic information and make further
+                    services available to you. We will not sell, license or
+                    trade Your personal information. We will not share your
+                    personal information with others unless they are acting
+                    under our instructions or we are required to do so by law.
+                    Information collected via Our server logs includes users' IP
+                    addresses and the pages visited; this will be used to manage
+                    the web system and troubleshoot problems. We also use
+                    third-party analytics, tracking, optimization and targeting
+                    tools to understand how users engage with our Application so
+                    that we can improve it and cater personalized content/ads
+                    according to their preferences.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    HOW INFORMATION IS COLLECTED
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    Before or at the time of collecting personal information, we
+                    will identify the purposes for which information is being
+                    collected. If the same is not identified to you, you have
+                    the right to request the Firm to elucidate the purpose of
+                    collection of said personal information, pending the
+                    fulfilment of which you shall not be mandated to disclose
+                    any information whatsoever. We will collect and use your
+                    personal information solely to fulfil those purposes
+                    specified by us, within the scope of the consent of the
+                    individual concerned or as required by law. We will only
+                    retain personal information as long as necessary for the
+                    fulfilment of those purposes. We will collect personal
+                    information by lawful and fair means and with the knowledge
+                    and consent of the individual concerned. Personal data
+                    should be relevant to the purposes for which it is to be
+                    used, and, to the extent necessary for those purposes,
+                    should be accurate, complete, and up-to-date.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>COOKIES</Text>
+                  <Text style={styles.txtRegular}>
+                    A cookie is a small file of letters and numbers that we
+                    store on your browser or the hard drive of your computer if
+                    you agree. By continuing to browse the site, you are
+                    agreeing to our use of cookies. Cookies contain information
+                    that is transferred to your computer’s hard drive. You can
+                    set your browser to refuse all or some browser cookies, or
+                    to alert you when Applications set or access cookies. If you
+                    disable or refuse cookies, please note that some parts of
+                    this Application may become inaccessible or not function
+                    properly. A list of the type of cookies we use is as
+                    follows;
+                    {"\n"}• Strictly necessary cookies. These are cookies that
+                    are required for the operation of our Application. They
+                    include, for example, cookies that enable you to log into
+                    secure areas of our Application, use a shopping cart or make
+                    use of e-billing services.
+                    {"\n"}• Analytical/performance cookies. They allow us to
+                    recognize and count the number of visitors and to see how
+                    visitors move around our Application when they are using it.
+                    This helps us to improve the way our Application works, for
+                    example, by ensuring that users are finding what they are
+                    looking for easily.
+                    {"\n"}• Functionality cookies. These are used to recognize
+                    you when you return to our Application. This enables us to
+                    personalize our content for you, greet you by name and
+                    remember your preferences (for example, your choice of
+                    language or region).
+                    {"\n"}• Targeting cookies. These cookies record your visit
+                    to our Application, the pages you have visited and the links
+                    you have followed. We will use this information to make our
+                    Application and the advertising displayed on it more
+                    relevant to your interests. We may also share this
+                    information with third-parties for this purpose. Please note
+                    that third-parties (including, for example, advertising
+                    networks and providers of external services like web traffic
+                    analysis services) may also use cookies, over which we have
+                    no control. These cookies are likely to be
+                    analytical/performance cookies or targeting cookies. You can
+                    block cookies by activating the setting on your browser that
+                    allows you to refuse the setting of all or some cookies.
+                    However, if you use your browser settings to block all
+                    cookies (including essential cookies) you may not be able to
+                    access all or parts of our Application.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>GOOGLE ANALYTICS</Text>
+                  <Text style={styles.txtRegular}>
+                    We use Google Analytics to help us to understand how you
+                    make use of our content and work out how we can make things
+                    better. These cookies may follow all visitors of the
+                    Application and collect anonymous data on where they have
+                    come from, which pages they visit, and how long they spend
+                    on the site. This data is then stored by Google to create
+                    reports. These cookies do not store personal data or
+                    business data. The information generated by the cookie about
+                    the use of the Application, including IP address, may be
+                    transmitted to, and stored by Google on servers in the
+                    United States. Google may use this information to evaluate
+                    the visitor’s use of the Application, compiling reports on
+                    Application activity for us and providing other services
+                    relating to Application activity and internet usage. Google
+                    may also transfer this information to third parties where
+                    required to do so by law, or where such third parties
+                    process the information on Google's behalf. Google will not
+                    associate any IP address’ with any other data held by
+                    Google. By using this Application, all visitor’s consent to
+                    the processing of data by Google in the manner and for the
+                    purposes set out above. The Google Application contains
+                    further information about Analytics and a copy of Google's
+                    privacy policy pages.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    EXTERNAL LINKS ON THE APPLICATION
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    The Application may include advertisements, hyperlinks to
+                    other Applications or resources. We have no control over any
+                    other Application or resources or contents available on
+                    these other Applications, which are provided by companies or
+                    persons other than Us. You acknowledge and agree that we are
+                    not responsible for the availability of any such external
+                    sites or resources, and do not endorse any advertising,
+                    services or other materials on or available from such
+                    Application or resources. You acknowledge and agree that We
+                    are not liable for any loss or damage which may be incurred
+                    by you as a result of the availability of those external
+                    sites or resources, or as a result of any reliance placed by
+                    you on the completeness, accuracy or existence of any
+                    advertising, services or other materials on, or available
+                    from, such Applications. These external third-party
+                    Applications and resource providers may have their privacy
+                    policies governing the collection, storage, retention and
+                    disclosure of Your Personal Information that You may be
+                    subject to. We recommend that you enter the Application and
+                    review their privacy policy.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    PERMISSION AND ACCESS FROM THE DEVICE
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    The Application requires permission to access the following
+                    features:
+                    {"\n"}• Name;
+                    {"\n"}• Address;
+                    {"\n"}• Email ID; and
+                    {"\n"}• Phone No.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>YOUR RIGHTS</Text>
+                  <Text style={styles.txtRegular}>
+                    Unless subject to an exemption, you have the following
+                    rights concerning your data:
+                    {"\n"}• The right to request a copy of your data which we
+                    hold about you;
+                    {"\n"}• The right to request for any correction to any
+                    personal data if it is found to be inaccurate or out of
+                    date;
+                    {"\n"}• The right to withdraw Your consent to the processing
+                    at any time;
+                    {"\n"}• The right to object to the processing of personal
+                    data;
+                    {"\n"}• The right to complain about a supervisory authority.
+                    {"\n"}• The right to obtain information as to whether
+                    personal data are transferred to a third country or an
+                    international organization.
+                    {"\n"}
+                    Where you hold an account with any of our services, you are
+                    entitled to a copy of all personal data which we hold
+                    concerning you. You are also entitled to request that we
+                    restrict how we use your data in your account when you log
+                    in.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>CONFIDENTIALITY</Text>
+                  <Text style={styles.txtRegular}>
+                    You further acknowledge that the Application may contain
+                    information that is designated confidential by us and that
+                    you shall not disclose such information without our prior
+                    written consent. Your information is regarded as
+                    confidential and therefore will not be divulged to any third
+                    party, unless if legally required to do so to the
+                    appropriate authorities. We will not sell, share, or rent
+                    your personal information to any third party or use your
+                    e-mail address for unsolicited mail. Any emails sent by us
+                    will only be in connection with the provision of agreed
+                    services, and you retain sole discretion to seek for
+                    discontinuation of such communications at any point in time.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    OTHER INFORMATION COLLECTORS
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    Except as otherwise expressly included in this Privacy
+                    Policy, this document only addresses the use and disclosure
+                    of information we collect from you. To the extent that you
+                    disclose your information to other parties, whether they are
+                    on our Application or other sites throughout the Internet,
+                    different rules may apply to their use or disclosure of the
+                    information you disclose to them. To the extent that we use
+                    third party advertisers, they adhere to their privacy
+                    policies. Since we do not control the privacy policies of
+                    the third parties, you are subject to ask questions before
+                    you disclose your personal information to others.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    OUR DISCLOSURE OF YOUR INFORMATION
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    We may host surveys for survey creators for our Application
+                    who are the owners and users of your survey responses. We do
+                    not own or sell your responses. Anything you expressly
+                    disclose in your responses will be disclosed to survey
+                    creators. Please contact the survey creator directly to
+                    better understand how they might share your survey
+                    responses. Information collected will not be considered as
+                    sensitive if it is freely available and accessible in the
+                    public domain or is furnished under the Right to Information
+                    Act, 2005, any rules made thereunder or any other law for
+                    the time being in force. Due to the existing regulatory
+                    environment, we cannot ensure that all of your private
+                    communications and other personally identifiable information
+                    will never be disclosed in ways not otherwise described in
+                    this Privacy Policy. By way of example (without limiting and
+                    foregoing), we may be forced to disclose information to the
+                    government, law enforcement agencies or third parties.
+                    Therefore, although we use industry-standard practices to
+                    protect your privacy, we do not promise, and you should not
+                    expect, that your personally identifiable information or
+                    private communications would always remain private. We do
+                    however assure you that any disclosure of your personally
+                    identifiable information shall be personally intimated to
+                    you through an email sent to your provided email address. As
+                    a matter of policy, we do not sell or rent any personally
+                    identifiable information about you to any third party.
+                    However, the following describes some of the ways that your
+                    personally identifiable information may be disclosed:
+                    {"\n"}• External Service Providers: There may be several
+                    services offered by external service providers that help you
+                    use our Application. If you choose to use these optional
+                    services, and in the course of doing so, disclose
+                    information to the external service providers, and/or permit
+                    them to collect information about you, then their use of
+                    your information is governed by their privacy policy.
+                    {"\n"}• Law and Order: We cooperate with law enforcement
+                    inquiries, as well as other third parties to enforce laws,
+                    such as intellectual property rights, fraud and other
+                    rights. We can (and you authorize us to) disclose any
+                    information about you to law enforcement and other
+                    government officials as we, in our sole discretion, believe
+                    necessary or appropriate, in connection with an
+                    investigation of fraud, intellectual property infringements,
+                    or other activity that is illegal or may expose us or you to
+                    legal liability.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    ACCESSING, REVIEWING AND CHANGING YOUR PROFILE
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    Following registration, you can review and change the
+                    information you submitted at the stage of registration,
+                    except Email ID and mobile number. An option for
+                    facilitating such change shall be present on the Application
+                    and such change shall be facilitated by the User. If you
+                    change any information, we may or may not keep track of your
+                    old information. We will not retain in our files information
+                    you have requested to remove for certain circumstances, such
+                    as to resolve disputes, troubleshoot problems and enforce
+                    our terms and conditions. Such prior information shall be
+                    completely removed from our databases, including stored
+                    ‘back up’ systems. If you believe that any information, we
+                    are holding on to you is incorrect or incomplete, or to
+                    remove your profile so that others cannot view it, the User
+                    needs to remediate, and promptly correct any such incorrect
+                    information.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>SECURITY</Text>
+                  <Text style={styles.txtRegular}>
+                    We treat data as an asset that must be protected against
+                    loss and unauthorized access. We employ many different
+                    security techniques to protect such data from unauthorized
+                    access by members inside and outside the Firm. We follow
+                    generally accepted industry standards to protect the
+                    Personal Information submitted to us and information that we
+                    have accessed. However, as effective as encryption
+                    technology is, no security system is impenetrable. Our Firm
+                    cannot guarantee the security of our database, nor can we
+                    guarantee that information you provide won’t be intercepted
+                    while being transmitted to the Firm over the Internet.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>SEVERABILITY</Text>
+                  <Text style={styles.txtRegular}>
+                    Each paragraph of this Privacy Policy shall be and remain
+                    separate from and independent of and severable from all and
+                    any other paragraphs herein except where otherwise expressly
+                    indicated or indicated by the context of the agreement. The
+                    decision or declaration that one or more of the paragraphs
+                    are null and void shall not affect the remaining paragraphs
+                    of this privacy policy.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>AMENDMENT</Text>
+                  <Text style={styles.txtRegular}>
+                    Our Privacy Policy may change from time to time. The most
+                    current version of the policy will govern our use of your
+                    information and will always be on the Application. Any
+                    amendments to this Policy shall be deemed as accepted by the
+                    User on their continued use of the Application.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>
+                    CONSENT WITHDRAWAL, DATA DOWNLOAD & DATA REMOVAL REQUESTS
+                  </Text>
+                  <Text style={styles.txtRegular}>
+                    To withdraw your consent, or to request the download or
+                    delete your data with us for any or all our services at any
+                    time, please email to _____________.
+                    {"\n"}
+                  </Text>
+                  <Text style={styles.heading3Bold}>CONTACT US</Text>
+                  <Text style={styles.txtRegular}>
+                    If you have any questions or concerns regarding this privacy
+                    policy, you should contact us by sending an e-mail to
+                    ____________.
+                    {"\n"}
+                  </Text>
+                </View>
+              )}
+            </ScrollView>
+          </View>
+        </SafeAreaView>
+      </View>
+    );
+  }
 }
 
-export default LegalScreen
+export default LegalScreen;

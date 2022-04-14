@@ -9,9 +9,7 @@ import { SellerView } from "./schemas/SellerView";
 import { ShoppingCart } from "./schemas/ShoppingCart";
 import { CartInfo } from "./schemas/CartInfo";
 
-export const DB = "mobile.realm";
 export const RealmConnector = {
-  path: DB,
   schema: [
     Address,
     KeyValuePair,

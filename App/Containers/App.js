@@ -12,6 +12,7 @@ import { RealmConnector } from "../db/connector";
 import { client } from "../Apollo/apolloClient";
 import useRealm from "../hooks/useRealm";
 import FlipperAsyncStorage from "rn-flipper-async-storage-advanced";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 /// ReactNativeFlipperDatabases - START
 
@@ -19,53 +20,55 @@ const App = () => {
   useEffect(() => {
     SplashScreen.hideAsync();
   }, []);
-  const realm = useRealm();
-  useEffect(() => {
-    if (__DEV__) {
-      // Import connectDatabases function and required DBDrivers
-      const {
-        connectDatabases,
-        RealmDB,
-      } = require("react-native-flipper-databases");
+  // const realm = useRealm();
+  // useEffect(() => {
+  //   if (__DEV__) {
+  //     // Import connectDatabases function and required DBDrivers
+  //     const {
+  //       connectDatabases,
+  //       RealmDB,
+  //     } = require("react-native-flipper-databases");
 
-      connectDatabases([
-        new RealmDB("Realm", realm), // Pass in a realm name and an open realm reference
-      ]);
-    }
-  }, [realm]);
-  useEffect(() => {
-    async function openRealm() {
-      // Since this is a non-sync realm (there is no "sync" field defined in the "config" object),
-      // the realm will be opened synchronously when calling "Realm.open"
-      const realm = await Realm.open(RealmConnector);
+  //     connectDatabases([
+  //       new RealmDB("Realm", realm), // Pass in a realm name and an open realm reference
+  //     ]);
+  //   }
+  // }, [realm]);
+  // useEffect(() => {
+  //   async function openRealm() {
+  //     // Since this is a non-sync realm (there is no "sync" field defined in the "config" object),
+  //     // the realm will be opened synchronously when calling "Realm.open"
+  //     const realm = await Realm.open(RealmConnector);
 
-      /// FlipperDatabasesPlugin - START
+  //     /// FlipperDatabasesPlugin - START
 
-      if (__DEV__) {
-        // Import connectDatabases function and required DBDrivers
-        const {
-          connectDatabases,
-          RealmDB,
-        } = require("react-native-flipper-databases");
+  //     if (__DEV__) {
+  //       // Import connectDatabases function and required DBDrivers
+  //       const {
+  //         connectDatabases,
+  //         RealmDB,
+  //       } = require("react-native-flipper-databases");
 
-        connectDatabases([
-          new RealmDB("Realm", realm), // Pass in realm reference
-        ]);
-      }
+  //       connectDatabases([
+  //         new RealmDB("Realm", realm), // Pass in realm reference
+  //       ]);
+  //     }
 
-      /// FlipperDatabasesPlugin - END
-    }
+  //     /// FlipperDatabasesPlugin - END
+  //   }
 
-    openRealm();
+  //   openRealm();
 
-    // Return a cleanup callback to close the realm to prevent memory leaks
-  }, []);
+  //   // Return a cleanup callback to close the realm to prevent memory leaks
+  // }, []);
   return (
-    <ApolloProvider client={client}>
-      <FlipperAsyncStorage />
-      <RootContainer />
-      {/* <View /> */}
-    </ApolloProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ApolloProvider client={client}>
+        <FlipperAsyncStorage />
+        <RootContainer />
+        {/* <View /> */}
+      </ApolloProvider>
+    </GestureHandlerRootView>
   );
 };
 

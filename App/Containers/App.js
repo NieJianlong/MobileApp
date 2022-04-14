@@ -33,33 +33,33 @@ const App = () => {
       ]);
     }
   }, [realm]);
-  // useEffect(() => {
-  //   async function openRealm() {
-  //     // Since this is a non-sync realm (there is no "sync" field defined in the "config" object),
-  //     // the realm will be opened synchronously when calling "Realm.open"
-  //     const realm = await Realm.open(RealmConnector);
+  useEffect(() => {
+    async function openRealm() {
+      // Since this is a non-sync realm (there is no "sync" field defined in the "config" object),
+      // the realm will be opened synchronously when calling "Realm.open"
+      const realm = await Realm.open(RealmConnector);
 
-  //     /// FlipperDatabasesPlugin - START
+      /// FlipperDatabasesPlugin - START
 
-  //     if (__DEV__) {
-  //       // Import connectDatabases function and required DBDrivers
-  //       const {
-  //         connectDatabases,
-  //         RealmDB,
-  //       } = require("react-native-flipper-databases");
+      if (__DEV__) {
+        // Import connectDatabases function and required DBDrivers
+        const {
+          connectDatabases,
+          RealmDB,
+        } = require("react-native-flipper-databases");
 
-  //       connectDatabases([
-  //         new RealmDB("Realm", realm), // Pass in realm reference
-  //       ]);
-  //     }
+        connectDatabases([
+          new RealmDB("Realm", realm), // Pass in realm reference
+        ]);
+      }
 
-  //     /// FlipperDatabasesPlugin - END
-  //   }
+      /// FlipperDatabasesPlugin - END
+    }
 
-  //   openRealm();
+    openRealm();
 
-  //   // Return a cleanup callback to close the realm to prevent memory leaks
-  // }, []);
+    // Return a cleanup callback to close the realm to prevent memory leaks
+  }, []);
   return (
     <ApolloProvider client={client}>
       <FlipperAsyncStorage />

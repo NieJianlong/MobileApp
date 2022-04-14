@@ -8,6 +8,7 @@ import styles from "./styles";
 import CategoryAndProductList from "./CategoryAndProductList/Index";
 import { useMutation } from "@apollo/client";
 import { SendVerifyEmail } from "../Register/gql/register_mutations";
+import { useNavigation } from "@react-navigation/native";
 const SearchBarContext = React.createContext({});
 
 function Explore(props) {
@@ -41,6 +42,14 @@ function Explore(props) {
       }, 5000);
     }
   }, [showAccountActivatedSuccessfullyAlert]);
+  const navigation = useNavigation();
+  React.useEffect(
+    () =>
+      navigation.addListener("beforeRemove", (e) => {
+        e.preventDefault();
+      }),
+    [navigation]
+  );
 
   /**
    *  design  updates see below  {isReady && (

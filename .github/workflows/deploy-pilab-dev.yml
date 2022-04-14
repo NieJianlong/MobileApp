@@ -83,8 +83,8 @@ jobs:
       - name: Parse Asset URL
         id: androidUrl
         run: |
-          cat buildLogAndroid.json  | sed 's/,/\n/g' | grep 'buildUrl'
-
+          result=$(cat buildLogAndroid.json  | sed 's/,/\n/g' | grep 'buildUrl' | sed 's/"buildUrl": "//g' | sed 's/"//g' | sed -e 's/^[ ]*//g' | sed -e 's/[ ]*$//g')
+          echo "::set-output name=releaseChannel::$result"
       # - name: Parse Asset URL
       #   id: androidUrl
       #   uses: sergeysova/jq-action@v2
@@ -101,11 +101,16 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_FOOTER: |
-            :lock: Download the latest version
+          SLACK_LINK_NAMES: true
+          SLACK_ICON: https://raw.githubusercontent.com/zhuchuanwu/publicImage/main/100.png
+          SLACK_FOOTER: ${{ steps.androidUrl.outputs.releaseChannel }}
 
-          SLACK_TITLE: ${{ steps.androidUrl.outputs.value }}
-          SLACK_USERNAME: Salami Slicing Published
+          SLACK_TITLE: Salami Slicing Published
+          SLACK_USERNAME: Salami Slicing
+
+      - name: Echo Parse Asset URL
+        run: echo ${{ steps.androidUrl.outputs.releaseChannel }}
+
       # - name: Find Comment
       #   uses: peter-evans/find-comment@v1
       #   id: fc

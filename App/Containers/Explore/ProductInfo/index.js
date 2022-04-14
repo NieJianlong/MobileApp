@@ -11,8 +11,8 @@ function ProductInfoScreen(props) {
     return (
       <View style={styles.body}>
         <SegmentedControl
-          label1={"EXPLANATORY VIDEO"}
-          label2={"GEOGRAPHIC AREA"}
+          label1={"How it works"}
+          label2={"Explanatory video"}
           onSwitch={() => {}}
         />
 

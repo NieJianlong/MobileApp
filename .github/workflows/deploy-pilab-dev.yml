@@ -82,14 +82,19 @@ jobs:
 
       - name: Parse Asset URL
         id: androidUrl
-        uses: sergeysova/jq-action@v2
-        with:
-          cmd: "jq .artifacts .buildUrl buildLogAndroid.json -r"
+        run: |
+          cat buildLogAndroid.json  | sed 's/,/\n/g' | grep 'buildUrl'
 
-        # run: |
-        #   ASSET_URL=$(cat buildLogAndroid.txt | tail | egrep -o 'https?://expo\.io/artifacts/[^ ]+')
-        #   echo The android url is $ASSET_URL
-        #   echo "::set-output name=assetUrl::$ASSET_URL"
+      # - name: Parse Asset URL
+      #   id: androidUrl
+      #   uses: sergeysova/jq-action@v2
+      #   with:
+      #     cmd: "jq .artifacts buildLogAndroid.json -r"
+
+      # run: |
+      #   ASSET_URL=$(cat buildLogAndroid.txt | tail | egrep -o 'https?://expo\.io/artifacts/[^ ]+')
+      #   echo The android url is $ASSET_URL
+      #   echo "::set-output name=assetUrl::$ASSET_URL"
 
       - uses: actions/checkout@v2
       - name: Slack Notification

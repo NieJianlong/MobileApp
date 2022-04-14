@@ -60,6 +60,7 @@ type AddReviewResponse {
   productId: ID
   sellerId: ID
   postedBy: ID!
+  postedByName: String
   title: String
   description: String
   ratingVote: Int!
@@ -718,6 +719,7 @@ type ReportReviewResponse {
   title: String
   description: String
   postedBy: ID!
+  postedByName: String
   reportReason: ReportReviewReason!
 }
 
@@ -782,7 +784,7 @@ type ReviewView {
   ratingVote: Int
   helpfulCount: Int
   postedBy: ID
-  userName: String
+  postedByName: String
 }
 
 input SearchOptions {

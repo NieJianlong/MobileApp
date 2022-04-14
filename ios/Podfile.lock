@@ -24,8 +24,6 @@ PODS:
   - EXSplashScreen (0.14.2):
     - ExpoModulesCore
     - React-Core
-  - EXSQLite (10.1.1):
-    - ExpoModulesCore
   - FBLazyVector (0.66.4)
   - FBReactNativeSpec (0.66.4):
     - RCT-Folly (= 2021.06.28.00-v2)
@@ -300,7 +298,7 @@ PODS:
   - React-jsinspector (0.66.4)
   - React-logger (0.66.4):
     - glog
-  - react-native-flipper (0.103.0):
+  - react-native-flipper (0.142.0):
     - React-Core
   - react-native-get-random-values (1.7.2):
     - React-Core
@@ -431,7 +429,6 @@ DEPENDENCIES:
   - Expo (from `../node_modules/expo/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
-  - EXSQLite (from `../node_modules/expo-sqlite/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - Flipper (= 0.100.0)
@@ -547,8 +544,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-modules-core/ios"
   EXSplashScreen:
     :path: "../node_modules/expo-splash-screen/ios"
-  EXSQLite:
-    :path: "../node_modules/expo-sqlite/ios"
   FBLazyVector:
     :path: "../node_modules/react-native/Libraries/FBLazyVector"
   FBReactNativeSpec:
@@ -656,7 +651,6 @@ SPEC CHECKSUMS:
   Expo: 534e51e607aba8229293297da5585f4b26f50fa1
   ExpoModulesCore: 32c0ccb47f477d330ee93db72505380adf0de09a
   EXSplashScreen: 21669e598804ee810547dbb6692c8deb5dd8dbf3
-  EXSQLite: 908e34753a9dcfbef6a0f3a543ad32a5a6ced452
   FBLazyVector: e5569e42a1c79ca00521846c223173a57aca1fe1
   FBReactNativeSpec: fe08c1cd7e2e205718d77ad14b34957cce949b58
   Flipper: 0560bdd1353e9fdaf2605c35cc04e7233780d01f
@@ -686,7 +680,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 94ce921e1d8ce7023366873ec371f3441383b396
   React-jsinspector: d0374f7509d407d2264168b6d0fad0b54e300b85
   React-logger: 933f80c97c633ee8965d609876848148e3fef438
-  react-native-flipper: 169e8ba429b73ad637ce007337ce4b415e783799
+  react-native-flipper: 6504d02aadad2cce9083b6437fc1927f8e2083bb
   react-native-get-random-values: 30b3f74ca34e30e2e480de48e4add2706a40ac8f
   react-native-html-to-pdf: 4c5c6e26819fe202971061594058877aa9b25265
   react-native-pager-view: 7f00d63688f7df9fad86dfb0154814419cc5eb8d

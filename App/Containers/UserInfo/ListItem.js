@@ -39,12 +39,20 @@ function ListItem(props) {
           // userProfileVarReactive.addressLine1 = null;
           // userProfileVarReactive.addressLine2 = null;
           // userProfileVarReactive.email = "";
-          // userProfileVarReactive.isAuth = false;
+          userProfileVarReactive.isAuth = false;
           // userProfileVarReactive.phone = "";
-
           global.access_token = "";
           await storage.setLocalStorageEmpty();
-          navigation.popToTop();
+          await storage.setLocalStorageValue(
+            storage.REGISTERED_USER_LOGOUT,
+            "true"
+          );
+          userProfileVar({
+            ...userProfileVarReactive,
+            isAuth: false,
+          });
+          NavigationService.navigate("ExploreScreen");
+          // navigation.popToTop();
           // navigation.reset({
           //   index: 0,
           //   routes: [{ name: "OnboardingScreen" }],

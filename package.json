@@ -83,7 +83,6 @@
     "react-number-format": "^4.6.3",
     "realm": "^10.10.1",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",
-    "rn-async-storage-flipper": "^0.0.10",
     "rn-flipper-async-storage-advanced": "^1.0.4"
   },
   "devDependencies": {

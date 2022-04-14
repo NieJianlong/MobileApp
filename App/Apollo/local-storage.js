@@ -10,6 +10,7 @@ export const LOCAL_STORAGE_USER_PROFILE = "@local_storage_user_profile";
 
 export const LOCAL_SEARCH_ITEM = "@local_storage_search_items";
 export const CURRENT_ADDRESS = "@local_storage_current_address";
+export const REGISTERED_USER_LOGOUT = "@REGISTERED_USER_LOGOUT";
 
 export const setLocalStorageValue = async (key, val) => {
   // console.log(`setLocalStorageValue key:${key} val ${val}`)
@@ -34,11 +35,11 @@ export const getLocalStorageValue = async (key) => {
 export const setLocalStorageEmpty = async () => {
   try {
     await AsyncStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, "");
-    await AsyncStorage.setItem(REGISTER_BUYER_ID_KEY, "");
-    await AsyncStorage.setItem(LOCAL_STORAGE_USER_NAME, "");
-    await AsyncStorage.setItem(LOCAL_STORAGE_USER_PASSWORD, "");
+    // await AsyncStorage.setItem(REGISTER_BUYER_ID_KEY, "");
+    // await AsyncStorage.setItem(LOCAL_STORAGE_USER_NAME, "");
+    // await AsyncStorage.setItem(LOCAL_STORAGE_USER_PASSWORD, "");
     await AsyncStorage.setItem(LOCAL_SEARCH_ITEM, "");
-    await AsyncStorage.setItem(CURRENT_ADDRESS, "");
+    // await AsyncStorage.setItem(CURRENT_ADDRESS, "");
     // await AsyncStorage.setItem(GUEST_BUYER_ID_KEY, "");
   } catch (err) {
     console.log(`getLocalStorageValue error ${err}`);

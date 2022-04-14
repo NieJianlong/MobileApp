@@ -327,7 +327,11 @@ function ShoppingCart(props) {
                       >
                         number of slices has been reached
                       </Text>
-                      <TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          props.navigation.navigate("LearnMoreScreen");
+                        }}
+                      >
                         <Text
                           style={[
                             styles.txtRegular,

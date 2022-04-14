@@ -3,18 +3,15 @@ import {
   View,
   Image,
   Text,
-  TouchableOpacity as RNTouchableOpacity,
+  TouchableOpacity,
   SafeAreaView,
-  Platform,
 } from "react-native";
 import { vs, s } from "react-native-size-matters";
 import { Images } from "../../../Themes";
 import styles from "../styles";
 import { AlertContext } from "../../Root/GlobalContext";
 import CheckBox from "./CheckBox";
-import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
-const TouchableOpacity =
-  Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
+
 const sortOptions = [
   { title: "Last added", sortDirection: "DESCENDING", sortType: "DATE" },
   {

@@ -18,23 +18,18 @@ import { AlertContext } from "../../Root/GlobalContext";
 import useRealm from "../../../hooks/useRealm";
 import BigNumber from "bignumber.js";
 import { t } from "react-native-tailwindcss";
-import useShoppingCart from "../../../hooks/useShoppingCart";
-import { localCartVar } from "../../../Apollo/cache";
 const defultUrl =
   "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000";
 function Index(props) {
   const { realm } = useRealm();
   // Alert and AlertContext are not correct semantic names, very confusing,  @nsavage
   const Alert = useContext(AlertContext);
-  const localCart = localCartVar();
-
   const {
     product: { product, variant },
     availble,
     onPress,
   } = props;
   const [quantity, setQuantity] = useState(props.product.quantity);
-  const { deleteProduct } = useShoppingCart();
 
   useEffect(() => {
     setQuantity(props.product.quantity);
@@ -53,7 +48,6 @@ function Index(props) {
       >
         <Image
           source={{ uri: product.photoUrls ? product.photoUrls[0] : defultUrl }}
-          resizeMode="contain"
           style={[styles.productImage, t.mR2]}
         />
         <View style={styles.v2}>
@@ -179,14 +173,13 @@ function Index(props) {
             disabled={!availble}
             onPress={() => {
               console.log("props.product=============", props.product);
-              deleteProduct(props.product.id, localCart.deliverAddress);
-              // realm.write(() => {
-              //   // Delete the task from the realm.
-              //   realm.delete(props.product);
-              //   // Discard the reference.
-              //   PubSub.publish("refresh-shoppingcart");
-              //   // props.product = null;
-              // });
+              realm.write(() => {
+                // Delete the task from the realm.
+                realm.delete(props.product);
+                // Discard the reference.
+                PubSub.publish("refresh-shoppingcart");
+                // props.product = null;
+              });
               Alert.dispatch({
                 type: "changAlertState",
                 payload: {

@@ -24,41 +24,64 @@ import useRealm from "../../hooks/useRealm";
 import { useLazyQuery } from "@apollo/client";
 import { localCartVar } from "../../Apollo/cache";
 import { IsListingAvailable } from "../Explore/gql/explore_queries";
-import useShoppingCart from "../../hooks/useShoppingCart";
 
 export const CartContext = React.createContext({});
 
 function ShoppingCart(props) {
-  const { queryShoppingCart, shoppingcartList } = useShoppingCart();
+  console.log("props ShoppingCart", props);
+  const { realm } = useRealm();
   const localCart = localCartVar();
+  const query = realm
+    .objects("ShoppingCart")
+    .filtered("addressId == $0", localCart.deliverAddress)
+    .filtered("quantity > 0")
+    .filtered("isDraft == false");
+  const [mydatas, setMydatas] = useState(query);
+  console.log("mydatas=======", mydatas);
+  // const mydatas = realm.objects("ShoppingCart");
   const [total, setTotal] = useState(0);
   useEffect(() => {
     props.navigation.addListener("focus", () => {
-      queryShoppingCart(localCart.deliverAddress);
+      const mydatas = query;
+      console.log("mydatas00", mydatas);
+      console.log("localCartlocalCart", localCart.items);
+      setMydatas(mydatas);
     });
-  }, [localCart.deliverAddress, props.navigation, queryShoppingCart]);
+  }, [props.navigate]);
 
   useEffect(() => {
-    queryShoppingCart(localCart.deliverAddress);
+    setMydatas(
+      realm
+        .objects("ShoppingCart")
+        .filtered("addressId == $0", localCart.deliverAddress)
+        .filtered("quantity > 0")
+        .filtered("isDraft == false")
+    );
     let refresh = PubSub.subscribe("refresh-shoppingcart", () => {
-      queryShoppingCart(localCart.deliverAddress);
+      setMydatas(
+        realm
+          .objects("ShoppingCart")
+          .filtered("addressId == $0", localCart.deliverAddress)
+          .filtered("quantity > 0")
+          .filtered("isDraft == false")
+      );
     });
     return () => {
       if (refresh) {
         PubSub.unsubscribe(refresh);
       }
     };
-  }, [localCart.deliverAddress]);
+  }, [localCart.deliverAddress, realm]);
 
   const isAvailableList = useMemo(() => {
-    return shoppingcartList?.map((item) => {
+    return mydatas?.map((item) => {
       return {
         listingId: item?.product?.listingId,
         variantId: item.variantId ?? "",
         quantity: item.quantity,
       };
     });
-  }, [shoppingcartList]);
+  }, [mydatas]);
   console.log("isAvailableList", isAvailableList);
   const [queryAvailble, { data: availbleList }] = useLazyQuery(
     IsListingAvailable,
@@ -78,7 +101,7 @@ function ShoppingCart(props) {
   const onProceed = () => {
     console.log("global.access_token", global.access_token);
     const itemArray = [];
-    shoppingcartList.map((item, index) => {
+    mydatas.map((item, index) => {
       let itemAvailble = true;
       if (availbleList) {
         const i = availbleList.isListingAvailable[index];
@@ -115,14 +138,14 @@ function ShoppingCart(props) {
     // }
     if (global.access_token === "" || !global.access_token) {
       NavigationService.navigate("Page_CheckoutAuth", {
-        items: shoppingcartList,
+        items: mydatas,
         availbleList: availbleList,
         from: "checkout",
       });
     } else {
       NavigationService.navigate("CheckoutResumeScreen", {
         orderStatus: 0,
-        data: shoppingcartList,
+        data: mydatas,
         availbleList: availbleList,
       });
     }
@@ -147,11 +170,7 @@ function ShoppingCart(props) {
           edges={["top", "left", "right"]}
         >
           <SectionList
-            sections={
-              shoppingcartList.length > 0
-                ? [{ title: "", data: shoppingcartList }]
-                : []
-            }
+            sections={mydatas.length > 0 ? [{ title: "", data: mydatas }] : []}
             ListEmptyComponent={() => {
               return <Empty />;
             }}
@@ -326,7 +345,7 @@ function ShoppingCart(props) {
             stickySectionHeadersEnabled={true}
             stickyHeaderIndices={0}
             ListHeaderComponent={() => {
-              return shoppingcartList.length > 0 ? (
+              return mydatas.length > 0 ? (
                 <View style={{ backgroundColor: "white" }}>
                   <AddressBar />
                   <CartSummary

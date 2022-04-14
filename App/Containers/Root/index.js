@@ -16,7 +16,6 @@ import useAlert from "../../hooks/useAlert";
 import useLoading from "../../hooks/useLoading";
 import ImageViewer from "react-native-image-zoom-viewer";
 import useImageViewer from "../../hooks/useImageViewer";
-import useShoppingCart from "../../hooks/useShoppingCart";
 
 const initialState = {
   alert: {
@@ -84,7 +83,6 @@ function RootContainer() {
     onDismiss: alertDissmiss,
   } = useAlert();
   const { show } = useLoading();
-  const { openDatabase } = useShoppingCart();
   useEffect(() => {
     if (visible) {
       setTimeout(() => {
@@ -92,14 +90,7 @@ function RootContainer() {
       }, 2100);
     }
   }, [visible]);
-  useEffect(() => {
-    const db = openDatabase();
-    db.transaction((tx) => {
-      tx.executeSql(
-        "create table if not exists ShoppingCart (id string primary key not null, listingId text, productId text, variantId text, quantity int, variant text, isDraft bool, addressId text, product text, created date, updated date);"
-      );
-    });
-  }, []);
+
   const {
     visible: imageViewerVisible,
     images,

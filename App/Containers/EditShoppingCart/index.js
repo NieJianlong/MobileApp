@@ -20,6 +20,7 @@ import useRealm from "../../hooks/useRealm";
  */
 function EditShoppingCart(props) {
   const { params } = useRoute();
+  const { realm } = useRealm();
   const [product, setProductFromProps] = useState(params.product);
   const [selected, setSelected] = useState(product.variant);
   const sections = [];

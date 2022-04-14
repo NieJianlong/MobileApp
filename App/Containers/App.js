@@ -11,6 +11,7 @@ import Realm from "realm";
 import { RealmConnector } from "../db/connector";
 import { client } from "../Apollo/apolloClient";
 import useRealm from "../hooks/useRealm";
+import FlipperAsyncStorage from "rn-flipper-async-storage-advanced";
 
 /// ReactNativeFlipperDatabases - START
 
@@ -61,6 +62,7 @@ const App = () => {
   // }, []);
   return (
     <ApolloProvider client={client}>
+      <FlipperAsyncStorage />
       <RootContainer />
       {/* <View /> */}
     </ApolloProvider>

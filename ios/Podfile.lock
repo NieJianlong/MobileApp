@@ -21,6 +21,11 @@ PODS:
   - ExpoModulesCore (0.6.5):
     - React-Core
     - ReactCommon/turbomodule/core
+  - EXSplashScreen (0.14.2):
+    - ExpoModulesCore
+    - React-Core
+  - EXSQLite (10.1.1):
+    - ExpoModulesCore
   - FBLazyVector (0.66.4)
   - FBReactNativeSpec (0.66.4):
     - RCT-Folly (= 2021.06.28.00-v2)
@@ -96,7 +101,7 @@ PODS:
   - glog (0.3.5)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.1100)
-  - razorpay-pod (1.2.1)
+  - razorpay-pod (1.2.2)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -425,6 +430,8 @@ DEPENDENCIES:
   - EXKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - Expo (from `../node_modules/expo/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core/ios`)
+  - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
+  - EXSQLite (from `../node_modules/expo-sqlite/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - Flipper (= 0.100.0)
@@ -538,6 +545,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core/ios"
+  EXSplashScreen:
+    :path: "../node_modules/expo-splash-screen/ios"
+  EXSQLite:
+    :path: "../node_modules/expo-sqlite/ios"
   FBLazyVector:
     :path: "../node_modules/react-native/Libraries/FBLazyVector"
   FBReactNativeSpec:
@@ -644,6 +655,8 @@ SPEC CHECKSUMS:
   EXKeepAwake: bf48d7f740a5cd2befed6cf9a49911d385c6c47d
   Expo: 534e51e607aba8229293297da5585f4b26f50fa1
   ExpoModulesCore: 32c0ccb47f477d330ee93db72505380adf0de09a
+  EXSplashScreen: 21669e598804ee810547dbb6692c8deb5dd8dbf3
+  EXSQLite: 908e34753a9dcfbef6a0f3a543ad32a5a6ced452
   FBLazyVector: e5569e42a1c79ca00521846c223173a57aca1fe1
   FBReactNativeSpec: fe08c1cd7e2e205718d77ad14b34957cce949b58
   Flipper: 0560bdd1353e9fdaf2605c35cc04e7233780d01f
@@ -660,7 +673,7 @@ SPEC CHECKSUMS:
   glog: 5337263514dd6f09803962437687240c5dc39aa4
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  razorpay-pod: 372528dcba385d95d384aa8abc44feeb7a644d4e
+  razorpay-pod: dfa66706727a7435d38b4ed79e53cad7a027d980
   RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
   RCTRequired: 4bf86c70714490bca4bf2696148638284622644b
   RCTTypeSafety: c475a7059eb77935fa53d2c17db299893f057d5d

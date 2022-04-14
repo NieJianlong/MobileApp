@@ -39,7 +39,7 @@ function ListItem(props) {
           // userProfileVarReactive.addressLine1 = null;
           // userProfileVarReactive.addressLine2 = null;
           // userProfileVarReactive.email = "";
-          userProfileVarReactive.isAuth = false;
+          // userProfileVarReactive.isAuth = false;
           // userProfileVarReactive.phone = "";
           global.access_token = "";
           await storage.setLocalStorageEmpty();

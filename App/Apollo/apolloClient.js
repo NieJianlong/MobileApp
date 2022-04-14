@@ -111,7 +111,7 @@ const customFetch = (uri, options) => {
   console.log(operationName);
   console.log(newUri);
   console.log(options);
-  console.log("====================================");
+
   return fetch(newUri, options);
 };
 const httpLink = new HttpLink({ uri: baseUrl, fetch: customFetch });

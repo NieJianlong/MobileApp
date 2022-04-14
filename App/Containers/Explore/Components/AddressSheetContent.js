@@ -12,10 +12,7 @@ import {
   FIND_GUEST_ADDRESS_BY_ID_AND_TPYE,
 } from "../../../Apollo/queries/queries_user";
 import { userProfileVar } from "../../../Apollo/cache";
-import {
-  CURRENT_ADDRESS,
-  setLocalStorageValue,
-} from "../../../Apollo/local-storage";
+import { setLocalStorageValue } from "../../../Apollo/local-storage";
 import PubSub from "pubsub-js";
 import useAlert from "../../../hooks/useAlert";
 import colors from "../../../Themes/Colors";
@@ -99,29 +96,30 @@ export default function AddressSheetContent(props) {
         isCheckout={true}
         refetch={refetch}
         onPress={(item) => {
-          setLocalStorageValue(CURRENT_ADDRESS, JSON.stringify(item)).then(
-            () => {
-              PubSub.publish("refresh-address", "");
-              setAlert({
-                color: colors.success,
-                title: "Your address has been changed",
-                message: "Discover the products of the area",
-                visible: true,
-                onDismiss: () => {
-                  setAlert({ visible: false });
-                },
-              });
-              dispatch({
-                type: "changSheetState",
-                payload: {
-                  showSheet: false,
-                  height: 600,
-                  children: () => <AddLocationSheetContent />,
-                  sheetTitle: "",
-                },
-              });
-            }
-          );
+          setLocalStorageValue(
+            global.buyerId + "Address",
+            JSON.stringify(item)
+          ).then(() => {
+            PubSub.publish("refresh-address", "");
+            setAlert({
+              color: colors.success,
+              title: "Your address has been changed",
+              message: "Discover the products of the area",
+              visible: true,
+              onDismiss: () => {
+                setAlert({ visible: false });
+              },
+            });
+            dispatch({
+              type: "changSheetState",
+              payload: {
+                showSheet: false,
+                height: 600,
+                children: () => <AddLocationSheetContent />,
+                sheetTitle: "",
+              },
+            });
+          });
         }}
       />
     </View>

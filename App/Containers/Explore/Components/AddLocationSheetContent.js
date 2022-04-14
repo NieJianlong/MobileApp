@@ -28,10 +28,7 @@ import { Controller, useForm } from "react-hook-form";
 import lodash from "lodash";
 import { GetStatesByCountryId } from "../gql/explore_queries";
 import NavigationService from "../../../Navigation/NavigationService";
-import {
-  CURRENT_ADDRESS,
-  setLocalStorageValue,
-} from "../../../Apollo/local-storage";
+import { setLocalStorageValue } from "../../../Apollo/local-storage";
 
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
@@ -64,7 +61,7 @@ function AddLocationSheetContent(props) {
       },
       onCompleted: (res) => {
         setLocalStorageValue(
-          CURRENT_ADDRESS,
+          global.buyerId + "Address",
           JSON.stringify(
             isAuth ? res.createAddress : res.createAddressForGuestBuyer
           )

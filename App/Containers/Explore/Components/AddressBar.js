@@ -19,10 +19,7 @@ import { localCartVar, userProfileVar } from "../../../Apollo/cache";
 import { useQuery, useReactiveVar } from "@apollo/client";
 import { useFocusEffect } from "@react-navigation/native";
 import PubSub from "pubsub-js";
-import {
-  CURRENT_ADDRESS,
-  getLocalStorageValue,
-} from "../../../Apollo/local-storage";
+import { getLocalStorageValue } from "../../../Apollo/local-storage";
 import { isEmpty } from "lodash";
 
 export default function AddressBar() {
@@ -116,7 +113,7 @@ export default function AddressBar() {
             ? result.getBuyerDefaultAddressByBuyerId
             : result.getGuestBuyerDefaultAddressByBuyerId;
           // handleData(resultJson);
-          getLocalStorageValue(CURRENT_ADDRESS).then((res) => {
+          getLocalStorageValue(global.buyerId + "Address").then((res) => {
             console.log("res========getLocalStorageValue", res);
             if (!isEmpty(res)) {
               const resultkkk = JSON.parse(res);
@@ -155,7 +152,7 @@ export default function AddressBar() {
   useFocusEffect(
     React.useCallback(() => {
       // refetch();
-      getLocalStorageValue(CURRENT_ADDRESS).then((res) => {
+      getLocalStorageValue(global.buyerId + "Address").then((res) => {
         if (!isEmpty(res)) {
           const result = JSON.parse(res);
           handleData(result);
@@ -168,7 +165,7 @@ export default function AddressBar() {
   );
   useEffect(() => {
     let refresh = PubSub.subscribe("refresh-address", () => {
-      getLocalStorageValue(CURRENT_ADDRESS).then((res) => {
+      getLocalStorageValue(global.buyerId + "Address").then((res) => {
         console.log("it is here====================================");
         console.log();
         console.log("====================================");

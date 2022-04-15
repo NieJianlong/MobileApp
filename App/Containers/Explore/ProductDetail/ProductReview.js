@@ -69,7 +69,7 @@ export default function ProductReview({
                   style={styles.sellerAvatar}
                 /> */}
               </View>
-              <Text style={styles.heading5Bold}>{comment.postedBy}</Text>
+              <Text style={styles.heading5Bold}>{comment.postedByName}</Text>
             </View>
             <View style={styles.row}>
               <StarRating rating={comment.ratingVote} />

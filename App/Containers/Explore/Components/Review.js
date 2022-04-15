@@ -61,7 +61,7 @@ function Review(props) {
               {
                 width:
                   maxRating > 0
-                    ? s((ratingDetail.fourStar / maxRating) * MAX_WIDTH)
+                    ? s((ratingDetail.threeStar / maxRating) * MAX_WIDTH)
                     : 100,
               },
             ]}
@@ -76,7 +76,7 @@ function Review(props) {
               {
                 width:
                   maxRating > 0
-                    ? s((ratingDetail.threeStar / maxRating) * MAX_WIDTH)
+                    ? s((ratingDetail.twoStar / maxRating) * MAX_WIDTH)
                     : 100,
               },
             ]}
@@ -91,7 +91,7 @@ function Review(props) {
               {
                 width:
                   maxRating > 0
-                    ? s((ratingDetail.twoStar / maxRating) * MAX_WIDTH)
+                    ? s((ratingDetail.oneStar / maxRating) * MAX_WIDTH)
                     : 100,
               },
             ]}

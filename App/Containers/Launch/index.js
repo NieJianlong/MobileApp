@@ -16,11 +16,11 @@ import { Images } from "../../Themes";
 import styles from "./styles";
 import jwt_decode from "jwt-decode";
 import { useLazyQuery } from "@apollo/client";
-import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import * as storage from "../../Apollo/local-storage";
+import { useBuyerProfileByUserIdLazyQuery } from "../../../generated/graphql";
 
 export default function LaunchScreen() {
-  const [getBuyerId] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
+  const [getBuyerId] = useBuyerProfileByUserIdLazyQuery({
     variables: { userProfileId: global.userProfileId },
     context: {
       headers: {
@@ -29,6 +29,17 @@ export default function LaunchScreen() {
     },
     onCompleted: (res) => {
       //server often breakon，we should use a constant for testing
+      userProfileVar({
+        userId: res?.buyerProfileByUserId?.userId ?? "",
+        buyerId: res?.buyerProfileByUserId?.buyerId ?? "",
+        userName: res?.buyerProfileByUserId?.userName ?? "",
+        email: res?.resbuyerProfileByUserId?.email ?? "",
+        phone: res?.buyerProfileByUserId?.phoneNumber ?? "",
+        isAuth: true,
+        billingDetails: res?.buyerProfileByUserId?.billingDetails,
+        billingDetailsId:
+          res.buyerProfileByUserId?.billingDetails?.billingDetailsId,
+      });
       const {
         buyerProfileByUserId: { buyerId },
       } = res;
@@ -56,10 +67,10 @@ export default function LaunchScreen() {
         if (access_token === "undefined") {
           console.log("no access token");
         }
-        userProfileVar({
-          ...JSON.parse(userData),
-          isAuth: true,
-        });
+        // userProfileVar({
+        //   ...JSON.parse(userData),
+        //   isAuth: true,
+        // });
         let decoded = jwt_decode(access_token);
         global.access_token = access_token;
         global.userProfileId = decoded.sub;

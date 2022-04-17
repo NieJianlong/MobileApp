@@ -86,3 +86,5 @@ get-graphql-schema https://dev-api.salamislicing.in/pm/graphql > ./App/schemas/s
 get-graphql-schema https://dev-api.salamislicing.in/um/graphql > ./App/schemas/schemaUM.graphql
 
 get-graphql-schema https://dev-api.salamislicing.in/om/graphql > ./App/schemas/schemaOM.graphql
+
+get-graphql-schema https://dev-api.salamislicing.in/pay/graphql > ./App/schemas/schemaPayM.graphql

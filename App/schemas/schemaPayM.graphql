@@ -1,0 +1,80 @@
+"""Exposes a URL that specifies the behaviour of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behaviour of this scalar."""
+  url: String!
+) on SCALAR
+
+scalar DateTime
+
+"""MUTATIONS"""
+type Mutation {
+  razorpayCreateOrder(request: RazorpayOrderRequest!): RazorpayOrderResponse!
+  razorpayVerifyPaymentSignature(request: RazorpayVerifyPaymentSignatureRequest!): RazorpayVerifyPaymentSignatureResponse!
+  razorpayCreateRefund(request: RazorpayRefundRequest!): RazorpayRefundResponse!
+}
+
+"""TYPES"""
+type PaymentResponse {
+  paymentTransactionId: ID
+  orderId: ID
+  gatewayPaymentId: String
+  gatewayOrderId: String
+  gatewayPaymentStatus: String
+  gatewayOrderStatus: String
+  paymentAmount: Float
+  refundedAmount: Float
+}
+
+"""QUERIES"""
+type Query {
+  getOrderPaymentDetails(orderId: ID!): PaymentResponse
+  razorpayGetOrderByOrderId(orderId: ID!): RazorpayOrderResponse!
+}
+
+"""INPUTS"""
+input RazorpayOrderRequest {
+  orderNumber: String!
+  orderId: ID!
+  amount: Float!
+}
+
+"""TYPES"""
+type RazorpayOrderResponse {
+  razorpayOrderId: String
+  razorpayOrderStatus: RazorpayOrderStatus
+}
+
+"""ENUMS"""
+enum RazorpayOrderStatus {
+  created
+  attempted
+  paid
+}
+
+input RazorpayRefundRequest {
+  orderId: ID!
+  amount: Float
+}
+
+type RazorpayRefundResponse {
+  refundPaymentTransactionId: ID
+  razorpayRefundId: String
+  razorpayRefundStatus: String
+  refundedAmount: Float
+  refundPaymentTimestamp: DateTime
+}
+
+input RazorpayVerifyPaymentSignatureRequest {
+  razorpayPaymentId: String!
+  razorpayOrderId: String!
+  razorpaySignature: String!
+}
+
+type RazorpayVerifyPaymentSignatureResponse {
+  valid: Boolean
+  razorpayPaymentId: String
+  razorpayPaymentStatus: String
+  razorpayOrderId: String
+  razorpayOrderStatus: String
+}
+

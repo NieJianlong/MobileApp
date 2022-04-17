@@ -70,3 +70,59 @@ mutation SubmitOrderReturnRequest($request: OrderReturnRequest!) {
     qrCodeAsBase64
   }
 }
+
+mutation CreateOrderFromCart($cart: CartInput!) {
+  createOrderFromCart(request: $cart) {
+    orderId
+    buyerId
+    orderNumber
+    subTotal
+    discount
+    serviceFees
+    shippingFees
+    taxes
+    totalSavings
+    orderTotal
+    orderItems {
+      orderItemId
+      listingId
+      variantId
+      sellerId
+      quantity
+      itemPrice
+    }
+    paymentDetails {
+      balanceToPay
+      usedGiftAmount
+      usedWalletAmount
+    }
+  }
+}
+
+mutation RazorpayCreateOrder($request: RazorpayOrderRequest!) {
+  razorpayCreateOrder(request: $request) {
+    razorpayOrderId
+  }
+}
+
+mutation RazorpayVerifyPaymentSignature(
+  $request: RazorpayVerifyPaymentSignatureRequest!
+) {
+  razorpayVerifyPaymentSignature(request: $request) {
+    valid
+    razorpayPaymentId
+    razorpayOrderId
+    razorpayPaymentStatus
+    razorpayOrderId
+    razorpayOrderStatus
+  }
+}
+
+query GetBuyerSalamiWalletBalance {
+  getBuyerSalamiWalletBalance {
+    walletId
+    buyerId
+    walletBalance
+    giftBalance
+  }
+}

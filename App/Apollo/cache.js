@@ -16,6 +16,7 @@ const userProfile = {
   addressLine1: "",
   addressLine2: "",
   billingDetailsId: "",
+  billingDetails: "",
 };
 
 /**

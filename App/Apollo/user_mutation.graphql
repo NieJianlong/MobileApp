@@ -43,3 +43,15 @@ mutation RegisterBuyer($request: BuyerProfileRequestForCreate!) {
     userId
   }
 }
+
+mutation UpdateBillingDetails($request: BillingDetailsRequest!) {
+  updateBillingDetails(request: $request) {
+    ...BillingDetailsFields
+  }
+}
+
+mutation CreateBillingDetails($request: BillingDetailsRequestForCreate!) {
+  createBillingDetails(request: $request) {
+    ...BillingDetailsFields
+  }
+}

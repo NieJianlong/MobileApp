@@ -4347,6 +4347,17 @@ export type GetPreferredCategoriesQueryVariables = Exact<{
 
 export type GetPreferredCategoriesQuery = { __typename?: 'Query', getPreferredCategories: Array<{ __typename?: 'CategoryView', categoryId?: string | null | undefined, name?: string | null | undefined, description?: string | null | undefined } | null | undefined> };
 
+export type BillingDetailsFieldsFragment = { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined };
+
+export type BuyerProfileResponseFieldsFragment = { __typename?: 'BuyerProfileResponse', userId?: string | null | undefined, buyerId?: string | null | undefined, userName?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, userType?: UserType | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, oneClickPurchaseOn?: boolean | null | undefined, guestBuyer?: boolean | null | undefined, geoLocation?: string | null | undefined, country?: string | null | undefined, languages?: Array<string | null | undefined> | null | undefined, currencies?: Array<string | null | undefined> | null | undefined, applicationSettings?: string | null | undefined, categoryPreferences?: Array<string | null | undefined> | null | undefined, productPreferences?: Array<string | null | undefined> | null | undefined, sellerPreferences?: Array<string | null | undefined> | null | undefined, refundSalamiCredit?: number | null | undefined, bonusSalamiCredit?: number | null | undefined, bonusSalamiCreditExpire?: any | null | undefined, walletId?: string | null | undefined, billingDetails?: { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined } | null | undefined };
+
+export type BuyerProfileByUserIdQueryVariables = Exact<{
+  userProfileId: Scalars['ID'];
+}>;
+
+
+export type BuyerProfileByUserIdQuery = { __typename?: 'Query', buyerProfileByUserId?: { __typename?: 'BuyerProfileResponse', userId?: string | null | undefined, buyerId?: string | null | undefined, userName?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, userType?: UserType | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, oneClickPurchaseOn?: boolean | null | undefined, guestBuyer?: boolean | null | undefined, geoLocation?: string | null | undefined, country?: string | null | undefined, languages?: Array<string | null | undefined> | null | undefined, currencies?: Array<string | null | undefined> | null | undefined, applicationSettings?: string | null | undefined, categoryPreferences?: Array<string | null | undefined> | null | undefined, productPreferences?: Array<string | null | undefined> | null | undefined, sellerPreferences?: Array<string | null | undefined> | null | undefined, refundSalamiCredit?: number | null | undefined, bonusSalamiCredit?: number | null | undefined, bonusSalamiCreditExpire?: any | null | undefined, walletId?: string | null | undefined, billingDetails?: { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined };
+
 export type UserHasVerifiedPhoneNumberQueryVariables = Exact<{
   userId: Scalars['ID'];
 }>;
@@ -4359,7 +4370,7 @@ export type BuyerProfileQueryVariables = Exact<{
 }>;
 
 
-export type BuyerProfileQuery = { __typename?: 'Query', buyerProfile?: { __typename?: 'BuyerProfileResponse', firstName?: string | null | undefined, lastName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, userName?: string | null | undefined, userId?: string | null | undefined } | null | undefined };
+export type BuyerProfileQuery = { __typename?: 'Query', buyerProfile?: { __typename?: 'BuyerProfileResponse', userId?: string | null | undefined, buyerId?: string | null | undefined, userName?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, userType?: UserType | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, oneClickPurchaseOn?: boolean | null | undefined, guestBuyer?: boolean | null | undefined, geoLocation?: string | null | undefined, country?: string | null | undefined, languages?: Array<string | null | undefined> | null | undefined, currencies?: Array<string | null | undefined> | null | undefined, applicationSettings?: string | null | undefined, categoryPreferences?: Array<string | null | undefined> | null | undefined, productPreferences?: Array<string | null | undefined> | null | undefined, sellerPreferences?: Array<string | null | undefined> | null | undefined, refundSalamiCredit?: number | null | undefined, bonusSalamiCredit?: number | null | undefined, bonusSalamiCreditExpire?: any | null | undefined, walletId?: string | null | undefined, billingDetails?: { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined };
 
 export type GetBuyerSalamiWalletBalanceQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4400,6 +4411,20 @@ export type RegisterBuyerMutationVariables = Exact<{
 
 
 export type RegisterBuyerMutation = { __typename?: 'Mutation', registerBuyer?: { __typename?: 'BuyerProfileResponse', buyerId?: string | null | undefined, userId?: string | null | undefined } | null | undefined };
+
+export type UpdateBillingDetailsMutationVariables = Exact<{
+  request: BillingDetailsRequest;
+}>;
+
+
+export type UpdateBillingDetailsMutation = { __typename?: 'Mutation', updateBillingDetails?: { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined } | null | undefined };
+
+export type CreateBillingDetailsMutationVariables = Exact<{
+  request: BillingDetailsRequestForCreate;
+}>;
+
+
+export type CreateBillingDetailsMutation = { __typename?: 'Mutation', createBillingDetails?: { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined } | null | undefined };
 
 export const AddressOrderFiledFragmentDoc = gql`
     fragment AddressOrderFiled on AddressResponse {
@@ -4808,6 +4833,69 @@ ${AddressFieldFragmentDoc}
 ${RatingDetailFieldFragmentDoc}
 ${ProductCategoryViewFieldFragmentDoc}
 ${ImagesFieldFragmentDoc}`;
+export const BillingDetailsFieldsFragmentDoc = gql`
+    fragment BillingDetailsFields on BillingDetailsResponse {
+  billingDetailsId
+  buyerId
+  firstName
+  lastName
+  companyName
+  email
+  phoneNumber
+  billingAddress {
+    addressId
+    addressType
+    flat
+    block
+    building
+    houseNumber
+    streetAddress1
+    streetAddress2
+    streetAddress3
+    townCity
+    villageArea
+    district
+    provinceState
+    country
+    areaCode
+    pinCode
+  }
+  taxCode
+  createdAt
+  updatedAt
+}
+    `;
+export const BuyerProfileResponseFieldsFragmentDoc = gql`
+    fragment BuyerProfileResponseFields on BuyerProfileResponse {
+  userId
+  buyerId
+  userName
+  firstName
+  lastName
+  email
+  phoneNumber
+  userType
+  createdAt
+  updatedAt
+  oneClickPurchaseOn
+  guestBuyer
+  geoLocation
+  country
+  languages
+  currencies
+  applicationSettings
+  categoryPreferences
+  productPreferences
+  sellerPreferences
+  billingDetails {
+    ...BillingDetailsFields
+  }
+  refundSalamiCredit
+  bonusSalamiCredit
+  bonusSalamiCreditExpire
+  walletId
+}
+    ${BillingDetailsFieldsFragmentDoc}`;
 export const AddProductReviewDocument = gql`
     mutation AddProductReview($input: ProductReviewInput!) {
   addProductReview(input: $input) {
@@ -5603,6 +5691,41 @@ export function useGetPreferredCategoriesLazyQuery(baseOptions?: Apollo.LazyQuer
 export type GetPreferredCategoriesQueryHookResult = ReturnType<typeof useGetPreferredCategoriesQuery>;
 export type GetPreferredCategoriesLazyQueryHookResult = ReturnType<typeof useGetPreferredCategoriesLazyQuery>;
 export type GetPreferredCategoriesQueryResult = Apollo.QueryResult<GetPreferredCategoriesQuery, GetPreferredCategoriesQueryVariables>;
+export const BuyerProfileByUserIdDocument = gql`
+    query BuyerProfileByUserId($userProfileId: ID!) {
+  buyerProfileByUserId(userProfileId: $userProfileId) {
+    ...BuyerProfileResponseFields
+  }
+}
+    ${BuyerProfileResponseFieldsFragmentDoc}`;
+
+/**
+ * __useBuyerProfileByUserIdQuery__
+ *
+ * To run a query within a React component, call `useBuyerProfileByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBuyerProfileByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBuyerProfileByUserIdQuery({
+ *   variables: {
+ *      userProfileId: // value for 'userProfileId'
+ *   },
+ * });
+ */
+export function useBuyerProfileByUserIdQuery(baseOptions: Apollo.QueryHookOptions<BuyerProfileByUserIdQuery, BuyerProfileByUserIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BuyerProfileByUserIdQuery, BuyerProfileByUserIdQueryVariables>(BuyerProfileByUserIdDocument, options);
+      }
+export function useBuyerProfileByUserIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BuyerProfileByUserIdQuery, BuyerProfileByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BuyerProfileByUserIdQuery, BuyerProfileByUserIdQueryVariables>(BuyerProfileByUserIdDocument, options);
+        }
+export type BuyerProfileByUserIdQueryHookResult = ReturnType<typeof useBuyerProfileByUserIdQuery>;
+export type BuyerProfileByUserIdLazyQueryHookResult = ReturnType<typeof useBuyerProfileByUserIdLazyQuery>;
+export type BuyerProfileByUserIdQueryResult = Apollo.QueryResult<BuyerProfileByUserIdQuery, BuyerProfileByUserIdQueryVariables>;
 export const UserHasVerifiedPhoneNumberDocument = gql`
     query UserHasVerifiedPhoneNumber($userId: ID!) {
   userHasVerifiedPhoneNumber(userId: $userId)
@@ -5639,15 +5762,10 @@ export type UserHasVerifiedPhoneNumberQueryResult = Apollo.QueryResult<UserHasVe
 export const BuyerProfileDocument = gql`
     query BuyerProfile($buyerId: ID!) {
   buyerProfile(buyerId: $buyerId) {
-    firstName
-    lastName
-    email
-    phoneNumber
-    userName
-    userId
+    ...BuyerProfileResponseFields
   }
 }
-    `;
+    ${BuyerProfileResponseFieldsFragmentDoc}`;
 
 /**
  * __useBuyerProfileQuery__
@@ -5881,3 +5999,69 @@ export function useRegisterBuyerMutation(baseOptions?: Apollo.MutationHookOption
 export type RegisterBuyerMutationHookResult = ReturnType<typeof useRegisterBuyerMutation>;
 export type RegisterBuyerMutationResult = Apollo.MutationResult<RegisterBuyerMutation>;
 export type RegisterBuyerMutationOptions = Apollo.BaseMutationOptions<RegisterBuyerMutation, RegisterBuyerMutationVariables>;
+export const UpdateBillingDetailsDocument = gql`
+    mutation UpdateBillingDetails($request: BillingDetailsRequest!) {
+  updateBillingDetails(request: $request) {
+    ...BillingDetailsFields
+  }
+}
+    ${BillingDetailsFieldsFragmentDoc}`;
+export type UpdateBillingDetailsMutationFn = Apollo.MutationFunction<UpdateBillingDetailsMutation, UpdateBillingDetailsMutationVariables>;
+
+/**
+ * __useUpdateBillingDetailsMutation__
+ *
+ * To run a mutation, you first call `useUpdateBillingDetailsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBillingDetailsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBillingDetailsMutation, { data, loading, error }] = useUpdateBillingDetailsMutation({
+ *   variables: {
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useUpdateBillingDetailsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBillingDetailsMutation, UpdateBillingDetailsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateBillingDetailsMutation, UpdateBillingDetailsMutationVariables>(UpdateBillingDetailsDocument, options);
+      }
+export type UpdateBillingDetailsMutationHookResult = ReturnType<typeof useUpdateBillingDetailsMutation>;
+export type UpdateBillingDetailsMutationResult = Apollo.MutationResult<UpdateBillingDetailsMutation>;
+export type UpdateBillingDetailsMutationOptions = Apollo.BaseMutationOptions<UpdateBillingDetailsMutation, UpdateBillingDetailsMutationVariables>;
+export const CreateBillingDetailsDocument = gql`
+    mutation CreateBillingDetails($request: BillingDetailsRequestForCreate!) {
+  createBillingDetails(request: $request) {
+    ...BillingDetailsFields
+  }
+}
+    ${BillingDetailsFieldsFragmentDoc}`;
+export type CreateBillingDetailsMutationFn = Apollo.MutationFunction<CreateBillingDetailsMutation, CreateBillingDetailsMutationVariables>;
+
+/**
+ * __useCreateBillingDetailsMutation__
+ *
+ * To run a mutation, you first call `useCreateBillingDetailsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBillingDetailsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createBillingDetailsMutation, { data, loading, error }] = useCreateBillingDetailsMutation({
+ *   variables: {
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useCreateBillingDetailsMutation(baseOptions?: Apollo.MutationHookOptions<CreateBillingDetailsMutation, CreateBillingDetailsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateBillingDetailsMutation, CreateBillingDetailsMutationVariables>(CreateBillingDetailsDocument, options);
+      }
+export type CreateBillingDetailsMutationHookResult = ReturnType<typeof useCreateBillingDetailsMutation>;
+export type CreateBillingDetailsMutationResult = Apollo.MutationResult<CreateBillingDetailsMutation>;
+export type CreateBillingDetailsMutationOptions = Apollo.BaseMutationOptions<CreateBillingDetailsMutation, CreateBillingDetailsMutationVariables>;

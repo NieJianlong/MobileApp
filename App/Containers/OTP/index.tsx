@@ -17,15 +17,15 @@ import { Colors } from "../../Themes";
 import styles from "./styles";
 import * as jwt from "../../Apollo/jwt-request";
 import NavigationService from "../../Navigation/NavigationService";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { ForgotPasswordStep2VerifyTokenEmail } from "./gql/validate";
 import { userProfileVar } from "../../Apollo/cache";
 import * as storage from "../../Apollo/local-storage";
 import jwt_decode from "jwt-decode";
-import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import colors from "../../Themes/Colors";
 import { AlertContext } from "../Root/GlobalContext";
 import {
+  useBuyerProfileByUserIdLazyQuery,
   useForgotPasswordStep1SendNotificationEmailMutation,
   useSendOtpCodeMutation,
   useValidateCodeMutation,
@@ -77,7 +77,7 @@ function OTPScreen(props) {
   const otpCode = useMemo(() => {
     return field1.concat(field2).concat(field3).concat(field4).concat(field5);
   }, [field1, field2, field3, field4, field5]);
-  const [getBuyerId] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
+  const [getBuyerId] = useBuyerProfileByUserIdLazyQuery({
     variables: { userProfileId: global.userProfileId },
     context: {
       headers: {

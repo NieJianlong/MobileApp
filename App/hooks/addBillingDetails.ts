@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useMutation, useReactiveVar } from "@apollo/client";
+import { useReactiveVar } from "@apollo/client";
 import { localCartVar, userProfileVar } from "../Apollo/cache";
 import {
-  CREATE_BILLING_DETAILS,
-  UPDATE_BILLING_DETAILS,
-} from "../Apollo/mutations/mutations_user";
-import { AddressType } from "../../generated/graphql";
+  AddressType,
+  useCreateBillingDetailsMutation,
+  useUpdateBillingDetailsMutation,
+} from "../../generated/graphql";
+import { isEmpty } from "lodash";
 
 const AddBillingDetail = () => {
   const userProfile = useReactiveVar(userProfileVar);
@@ -45,40 +46,67 @@ const AddBillingDetail = () => {
       : billingAddress,
     taxCode: addressLocal?.pinCode,
   };
+  const [updateBillingDetails] = useUpdateBillingDetailsMutation({
+    variables: {
+      request: {
+        billingDetailsId: userProfile.billingDetailsId,
+        ...request,
+      },
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {
+      userProfileVar({
+        ...userProfile,
+        billingDetails: res.updateBillingDetails,
+        billingDetailsId: res.updateBillingDetails?.billingDetailsId,
+      });
+      console.log(
+        "In complete===",
+        userProfile?.billingDetailsId
+          ? res.updateBillingDetails
+          : res.createBillingDetails
+      );
+    },
+    onError: (err) => {
+      console.log("error-======", err);
+      alert(err.message);
+      return err;
+    },
+  });
+  const [createBilling] = useCreateBillingDetailsMutation({
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    variables: {
+      request: request,
+    },
+    onCompleted: (res) => {
+      userProfileVar({
+        ...userProfile,
+        billingDetails: res.createBillingDetails,
+        billingDetailsId: res.createBillingDetails?.billingDetailsId,
+      });
+    },
+    onError: (err) => {
+      console.log("error-======", err);
 
-  const [addBilling] = useMutation(
-    userProfile.billingDetailsId
-      ? UPDATE_BILLING_DETAILS
-      : CREATE_BILLING_DETAILS,
-    {
-      variables: {
-        request: userProfile.billingDetailsId
-          ? {
-              billingDetailsId: userProfile.billingDetailsId,
-              ...request,
-            }
-          : request,
-      },
-      context: {
-        headers: {
-          isPrivate: true,
-        },
-      },
-      onCompleted: (res) => {
-        console.log(
-          "In complete===",
-          userProfile?.billingDetailsId
-            ? res.updateBillingDetails
-            : res.createBillingDetails
-        );
-      },
-      onError: (err) => {
-        console.log("error-======", err);
-        alert(err.message);
-        return err;
-      },
+      return err;
+    },
+  });
+
+  async function addBilling() {
+    if (isEmpty(userProfile.billingDetailsId)) {
+      await createBilling();
+    } else {
+      await updateBillingDetails();
     }
-  );
+  }
   return {
     isBillingLoaded,
     addbillingDetail,

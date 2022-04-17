@@ -1,14 +1,75 @@
+fragment BillingDetailsFields on BillingDetailsResponse {
+  billingDetailsId
+  buyerId
+  firstName
+  lastName
+  companyName
+  email
+  phoneNumber
+  billingAddress {
+    addressId
+    addressType
+    flat
+    block
+    building
+    houseNumber
+    streetAddress1
+    streetAddress2
+    streetAddress3
+    townCity
+    villageArea
+    district
+    provinceState
+    country
+    areaCode
+    pinCode
+  }
+  taxCode
+  createdAt
+  updatedAt
+}
+
+fragment BuyerProfileResponseFields on BuyerProfileResponse {
+  userId
+  buyerId
+  userName
+  firstName
+  lastName
+  email
+  phoneNumber
+  userType
+  createdAt
+  updatedAt
+  oneClickPurchaseOn
+  guestBuyer
+  geoLocation
+  country
+  languages
+  currencies
+  applicationSettings
+  categoryPreferences
+  productPreferences
+  sellerPreferences
+  billingDetails {
+    ...BillingDetailsFields
+  }
+  refundSalamiCredit
+  bonusSalamiCredit
+  bonusSalamiCreditExpire
+  walletId
+}
+
+query BuyerProfileByUserId($userProfileId: ID!) {
+  buyerProfileByUserId(userProfileId: $userProfileId) {
+    ...BuyerProfileResponseFields
+  }
+}
 query UserHasVerifiedPhoneNumber($userId: ID!) {
   userHasVerifiedPhoneNumber(userId: $userId)
 }
 query BuyerProfile($buyerId: ID!) {
   buyerProfile(buyerId: $buyerId) {
-    firstName
-    lastName
-    email
-    phoneNumber
-    userName
-    userId
+    ...BuyerProfileResponseFields
   }
 }
 query GetBuyerSalamiWalletBalance {

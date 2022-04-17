@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useContext, useRef, useMemo } from "react";
 import {
   View,
   StatusBar,
@@ -24,15 +24,60 @@ import { userProfileVar } from "../../Apollo/cache";
 import NavigationService from "../../Navigation/NavigationService";
 import jwt_decode from "jwt-decode";
 
-import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
-import { client } from "../../Apollo/apolloClient";
 import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
+import { useBuyerProfileByUserIdLazyQuery } from "../../../generated/graphql";
 
 function LoginScreen(props) {
   // refs
   // let passwordInput = null;
   const passwordInput = useRef();
+
+  const [getBuerIdProfile] = useBuyerProfileByUserIdLazyQuery({
+    onError: (err) => {
+      dispatch({
+        type: "changLoading",
+        payload: false,
+      });
+    },
+    onCompleted: (result) => {
+      dispatch({
+        type: "changLoading",
+        payload: false,
+      });
+      if (typeof result.buyerProfileByUserId !== "undefined") {
+        const { buyerProfileByUserId } = result;
+        if (buyerProfileByUserId?.buyerId === null) {
+          console.log("found null GuestBuyer buyerId");
+        } else {
+          global.buyerId = buyerProfileByUserId?.buyerId;
+          storage.setLocalStorageValue(
+            loginRequestMemo.username,
+            buyerProfileByUserId.buyerId
+          );
+
+          storage.setLocalStorageValue(
+            storage.LOCAL_STORAGE_USER_PROFILE,
+            JSON.stringify(buyerProfileByUserId)
+          );
+          userProfileVar({
+            userId: buyerProfileByUserId?.userId ?? "",
+            buyerId: buyerProfileByUserId?.buyerId ?? "",
+            userName: buyerProfileByUserId?.userName ?? "",
+            email: buyerProfileByUserId?.email ?? "",
+            phone: buyerProfileByUserId?.phoneNumber ?? "",
+            isAuth: true,
+            billingDetails: buyerProfileByUserId?.billingDetails,
+            billingDetailsId:
+              buyerProfileByUserId?.billingDetails?.billingDetailsId,
+          });
+          NavigationService.navigate("MainScreen");
+        }
+      } else {
+        console.log("Login  server error");
+      }
+    },
+  });
 
   const { dispatch } = useContext(AlertContext);
 
@@ -40,7 +85,25 @@ function LoginScreen(props) {
   let [loginInput, setLoginInput] = useState("");
   let [psswd, setPsswd] = useState("");
   const { params } = useRoute();
-
+  const loginRequestMemo = useMemo(() => {
+    let ret = validator.loginDifferentiator(loginInput);
+    if (ret.isValid) {
+      // we are good so we can test for email or phone
+      if (ret.isEmail || ret.isPhone) {
+        let loginRequest = {
+          username: ret.isPhone
+            ? "+91" + loginInput?.trim()
+            : loginInput?.trim(),
+          password: psswd?.trim(),
+        };
+        return loginRequest;
+      }
+    }
+    return {
+      username: loginInput?.trim(),
+      password: psswd?.trim(),
+    };
+  }, [loginInput, psswd]);
   useEffect(() => {
     storage.setLocalStorageEmpty();
   }, []);
@@ -144,67 +207,15 @@ function LoginScreen(props) {
               console.log("====================================");
               global.userProfileId = decoded.sub;
               // this is wrong need request for buyerId from userId
-              client
-                .query({
-                  query: BUYER_PROFILE_BY_USERID,
-                  variables: { userProfileId: decoded.sub },
-                  context: {
-                    headers: {
-                      isPrivate: true,
-                      Authorization: `Bearer ${access_token}`,
-                    },
+              getBuerIdProfile({
+                variables: { userProfileId: decoded.sub },
+                context: {
+                  headers: {
+                    isPrivate: true,
+                    Authorization: `Bearer ${access_token}`,
                   },
-                })
-                .then((result) => {
-                  dispatch({
-                    type: "changLoading",
-                    payload: false,
-                  });
-                  if (typeof result.data !== "undefined") {
-                    console.log(
-                      `Login BUYER_PROFILE_BY_USERID look up buyerId calls back ${JSON.stringify(
-                        result.data
-                      )}`
-                    );
-                    const { buyerProfileByUserId } = result.data;
-                    if (buyerProfileByUserId.buyerId === null) {
-                      console.log("found null GuestBuyer buyerId");
-                    } else {
-                      global.buyerId = buyerProfileByUserId.buyerId;
-                      storage.setLocalStorageValue(
-                        loginRequest.username,
-                        buyerProfileByUserId.buyerId
-                      );
-
-                      storage.setLocalStorageValue(
-                        storage.LOCAL_STORAGE_USER_PROFILE,
-                        JSON.stringify(buyerProfileByUserId)
-                      );
-                      userProfileVar({
-                        userId: buyerProfileByUserId?.userId,
-                        buyerId: buyerProfileByUserId?.buyerId,
-                        userName: buyerProfileByUserId?.userName,
-                        email: buyerProfileByUserId?.email,
-                        phone: buyerProfileByUserId?.phoneNumber,
-                        isAuth: true,
-                      });
-                      NavigationService.navigate("MainScreen");
-                    }
-                  } else {
-                    console.log("Login BUYER_PROFILE_BY_USERID server error");
-                  }
-                })
-                .catch((err) => {
-                  dispatch({
-                    type: "changLoading",
-                    payload: false,
-                  });
-                  if (typeof err !== "undefined") {
-                    console.log(
-                      "Login BUYER_PROFILE_BY_USERID Query error " + err
-                    );
-                  }
-                });
+                },
+              });
             }
             // need check for status code = 200
             // below is a mock for the expected jwt shpould be something like res.data.<some json token id>

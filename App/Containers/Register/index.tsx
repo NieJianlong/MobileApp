@@ -28,15 +28,14 @@ import { userProfileVar } from "../../Apollo/cache";
 import { Colors } from "../../Themes";
 import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
-import { useLazyQuery } from "@apollo/client";
 import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
 import jwt_decode from "jwt-decode";
-import { BUYER_PROFILE_BY_USERID } from "../../Apollo/queries/queries_user";
 import { Controller, useForm } from "react-hook-form";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   BuyerProfileRequestForCreate,
+  useBuyerProfileByUserIdLazyQuery,
   useRegisterBuyerMutation,
 } from "../../../generated/graphql";
 import { t } from "react-native-tailwindcss";
@@ -76,7 +75,7 @@ function RegisterScreen(props) {
       // Anything in here is fired on component unmount.
     };
   }, [setValue]);
-  const [getBuyerId] = useLazyQuery(BUYER_PROFILE_BY_USERID, {
+  const [getBuyerId] = useBuyerProfileByUserIdLazyQuery({
     variables: { userProfileId: global.userProfileId },
     context: {
       headers: {
@@ -102,11 +101,15 @@ function RegisterScreen(props) {
       const { buyerProfileByUserId } = res;
 
       userProfileVar({
-        userId: buyerProfileByUserId?.userId,
-        buyerId: buyerProfileByUserId?.buyerId,
-        userName: buyerProfileByUserId?.userName,
-        email: buyerProfileByUserId?.email,
-        phone: buyerProfileByUserId?.phoneNumber,
+        userId: res?.buyerProfileByUserId?.userId ?? "",
+        buyerId: res?.buyerProfileByUserId?.buyerId ?? "",
+        userName: res?.buyerProfileByUserId?.userName ?? "",
+        email: res?.resbuyerProfileByUserId?.email ?? "",
+        phone: res?.buyerProfileByUserId?.phoneNumber ?? "",
+        isAuth: true,
+        billingDetails: res?.buyerProfileByUserId?.billingDetails,
+        billingDetailsId:
+          res.buyerProfileByUserId?.billingDetails?.billingDetailsId,
         isAuth: true,
       });
 

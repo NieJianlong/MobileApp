@@ -17,15 +17,8 @@ import fonts from "../../Themes/Fonts";
 import colors from "../../Themes/Colors";
 import NavigationService from "../../Navigation/NavigationService";
 import images from "../../Themes/Images";
-import UserAvatar from "./UserAvatar";
 import { ApplicationStyles } from "../../Themes";
 import { userProfileVar } from "../../Apollo/cache";
-import { useQuery } from "@apollo/client";
-import {
-  BUYER_PROFILE_BY_USERID,
-  FIND_BUYER_PROFILE,
-  FIND_USER_PROFILE,
-} from "../../Apollo/queries/queries_user";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useBuyerProfileQuery } from "../../../generated/graphql";
 

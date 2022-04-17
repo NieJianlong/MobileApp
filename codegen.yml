@@ -1,5 +1,11 @@
 overwrite: true
-schema: ["App/schemas/schemaPM.graphql", "App/schemas/schemaUM.graphql","App/schemas/schemaOM.graphql"]
+schema:
+  [
+    "App/schemas/schemaPM.graphql",
+    "App/schemas/schemaUM.graphql",
+    "App/schemas/schemaOM.graphql",
+    "App/schemas/schemaPayM.graphql",
+  ]
 documents: "App/**/*.graphql"
 generates:
   generated/graphql.ts:

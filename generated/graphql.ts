@@ -833,6 +833,9 @@ export type Mutation = {
   markOrderItemAsDelivered?: Maybe<Scalars['Boolean']>;
   markOrderReturnAsReceived?: Maybe<Scalars['Boolean']>;
   rateSeller?: Maybe<Scalars['Boolean']>;
+  razorpayCreateOrder: RazorpayOrderResponse;
+  razorpayCreateRefund: RazorpayRefundResponse;
+  razorpayVerifyPaymentSignature: RazorpayVerifyPaymentSignatureResponse;
   reduceOrderAmountFromWallet?: Maybe<ReduceWalletResponse>;
   reduceSoldQuantity: Scalars['Boolean'];
   refillSalamiCredit?: Maybe<SalamiWalletTransactionResponse>;
@@ -1399,6 +1402,24 @@ export type MutationRateSellerArgs = {
   buyerId: Scalars['ID'];
   rating: Scalars['Float'];
   sellerId: Scalars['ID'];
+};
+
+
+/** MUTATIONS */
+export type MutationRazorpayCreateOrderArgs = {
+  request: RazorpayOrderRequest;
+};
+
+
+/** MUTATIONS */
+export type MutationRazorpayCreateRefundArgs = {
+  request: RazorpayRefundRequest;
+};
+
+
+/** MUTATIONS */
+export type MutationRazorpayVerifyPaymentSignatureArgs = {
+  request: RazorpayVerifyPaymentSignatureRequest;
 };
 
 
@@ -2006,6 +2027,19 @@ export type PaymentDetailResponse = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
+/** TYPES */
+export type PaymentResponse = {
+  __typename?: 'PaymentResponse';
+  gatewayOrderId?: Maybe<Scalars['String']>;
+  gatewayOrderStatus?: Maybe<Scalars['String']>;
+  gatewayPaymentId?: Maybe<Scalars['String']>;
+  gatewayPaymentStatus?: Maybe<Scalars['String']>;
+  orderId?: Maybe<Scalars['ID']>;
+  paymentAmount?: Maybe<Scalars['Float']>;
+  paymentTransactionId?: Maybe<Scalars['ID']>;
+  refundedAmount?: Maybe<Scalars['Float']>;
+};
+
 export enum PaymentType {
   CashAtDelivery = 'CASH_AT_DELIVERY',
   CreditCard = 'CREDIT_CARD',
@@ -2427,6 +2461,7 @@ export type Query = {
   /** options */
   getOptionReference: Array<Option>;
   getOrderItemDetails: OrderItemDetailResponse;
+  getOrderPaymentDetails?: Maybe<PaymentResponse>;
   getOrderReturn: OrderReturnResponse;
   getOrderReturnStatus: OrderReturnStatusResponse;
   /** return policies */
@@ -2469,6 +2504,7 @@ export type Query = {
   paymentDetailsByBuyerId?: Maybe<Array<Maybe<PaymentDetailResponse>>>;
   preferenceById?: Maybe<PreferenceResponse>;
   preferences?: Maybe<Array<Maybe<PreferenceResponse>>>;
+  razorpayGetOrderByOrderId: RazorpayOrderResponse;
   searchBuyerOrders: BuyerOrderResponse;
   searchStoreByName: StoreResponse;
   sellerBillingDetails?: Maybe<Array<Maybe<SellerBillingDetailsResponse>>>;
@@ -2671,6 +2707,12 @@ export type QueryGetListingsArgs = {
 /** QUERIES */
 export type QueryGetOrderItemDetailsArgs = {
   orderItemId: Scalars['ID'];
+};
+
+
+/** QUERIES */
+export type QueryGetOrderPaymentDetailsArgs = {
+  orderId: Scalars['ID'];
 };
 
 
@@ -2891,6 +2933,12 @@ export type QueryPreferenceByIdArgs = {
 
 
 /** QUERIES */
+export type QueryRazorpayGetOrderByOrderIdArgs = {
+  orderId: Scalars['ID'];
+};
+
+
+/** QUERIES */
 export type QuerySearchBuyerOrdersArgs = {
   options: BuyerOrderOption;
 };
@@ -3003,6 +3051,56 @@ export type RatingDetail = {
   threeStar?: Maybe<Scalars['Int']>;
   twoStar?: Maybe<Scalars['Int']>;
   zeroStar?: Maybe<Scalars['Int']>;
+};
+
+/** INPUTS */
+export type RazorpayOrderRequest = {
+  amount: Scalars['Float'];
+  orderId: Scalars['ID'];
+  orderNumber: Scalars['String'];
+};
+
+/** TYPES */
+export type RazorpayOrderResponse = {
+  __typename?: 'RazorpayOrderResponse';
+  razorpayOrderId?: Maybe<Scalars['String']>;
+  razorpayOrderStatus?: Maybe<RazorpayOrderStatus>;
+};
+
+/** ENUMS */
+export enum RazorpayOrderStatus {
+  Attempted = 'attempted',
+  Created = 'created',
+  Paid = 'paid'
+}
+
+export type RazorpayRefundRequest = {
+  amount?: InputMaybe<Scalars['Float']>;
+  orderId: Scalars['ID'];
+};
+
+export type RazorpayRefundResponse = {
+  __typename?: 'RazorpayRefundResponse';
+  razorpayRefundId?: Maybe<Scalars['String']>;
+  razorpayRefundStatus?: Maybe<Scalars['String']>;
+  refundPaymentTimestamp?: Maybe<Scalars['DateTime']>;
+  refundPaymentTransactionId?: Maybe<Scalars['ID']>;
+  refundedAmount?: Maybe<Scalars['Float']>;
+};
+
+export type RazorpayVerifyPaymentSignatureRequest = {
+  razorpayOrderId: Scalars['String'];
+  razorpayPaymentId: Scalars['String'];
+  razorpaySignature: Scalars['String'];
+};
+
+export type RazorpayVerifyPaymentSignatureResponse = {
+  __typename?: 'RazorpayVerifyPaymentSignatureResponse';
+  razorpayOrderId?: Maybe<Scalars['String']>;
+  razorpayOrderStatus?: Maybe<Scalars['String']>;
+  razorpayPaymentId?: Maybe<Scalars['String']>;
+  razorpayPaymentStatus?: Maybe<Scalars['String']>;
+  valid?: Maybe<Scalars['Boolean']>;
 };
 
 export type RecurringListingInput = {
@@ -4236,6 +4334,32 @@ export type SubmitOrderReturnRequestMutationVariables = Exact<{
 
 export type SubmitOrderReturnRequestMutation = { __typename?: 'Mutation', submitOrderReturnRequest?: { __typename?: 'OrderReturnResponse', orderReturnId: string, deadline?: any | null | undefined, latestEventStatus: ReturnEventType, deliveryOption: DeliveryOption, returnLabel?: string | null | undefined, qrCodeAsBase64?: string | null | undefined, returnAddress?: { __typename?: 'AddressResponse', addressId: string, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined } | null | undefined, collectionPoint?: { __typename?: 'CollectionPointPickupResponse', collectionPointId?: string | null | undefined, microHubId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, openingHours?: Array<string | null | undefined> | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined } | null | undefined, sellerLocation?: { __typename?: 'SellerLocationPickupResponse', collectionPointId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined, collectionDate?: any | null | undefined } | null | undefined } | null | undefined };
 
+export type CreateOrderFromCartMutationVariables = Exact<{
+  cart: CartInput;
+}>;
+
+
+export type CreateOrderFromCartMutation = { __typename?: 'Mutation', createOrderFromCart?: { __typename?: 'OrderResponse', orderId?: string | null | undefined, buyerId?: string | null | undefined, orderNumber?: string | null | undefined, subTotal?: number | null | undefined, discount?: number | null | undefined, serviceFees?: number | null | undefined, shippingFees?: number | null | undefined, taxes?: number | null | undefined, totalSavings?: number | null | undefined, orderTotal?: number | null | undefined, orderItems?: Array<{ __typename?: 'OrderItemResponse', orderItemId?: string | null | undefined, listingId?: string | null | undefined, variantId?: string | null | undefined, sellerId?: string | null | undefined, quantity?: number | null | undefined, itemPrice?: number | null | undefined } | null | undefined> | null | undefined, paymentDetails?: { __typename?: 'OrderPaymentDetailsResponse', balanceToPay?: number | null | undefined, usedGiftAmount?: number | null | undefined, usedWalletAmount?: number | null | undefined } | null | undefined } | null | undefined };
+
+export type RazorpayCreateOrderMutationVariables = Exact<{
+  request: RazorpayOrderRequest;
+}>;
+
+
+export type RazorpayCreateOrderMutation = { __typename?: 'Mutation', razorpayCreateOrder: { __typename?: 'RazorpayOrderResponse', razorpayOrderId?: string | null | undefined } };
+
+export type RazorpayVerifyPaymentSignatureMutationVariables = Exact<{
+  request: RazorpayVerifyPaymentSignatureRequest;
+}>;
+
+
+export type RazorpayVerifyPaymentSignatureMutation = { __typename?: 'Mutation', razorpayVerifyPaymentSignature: { __typename?: 'RazorpayVerifyPaymentSignatureResponse', valid?: boolean | null | undefined, razorpayPaymentId?: string | null | undefined, razorpayOrderId?: string | null | undefined, razorpayPaymentStatus?: string | null | undefined, razorpayOrderStatus?: string | null | undefined } };
+
+export type GetBuyerSalamiWalletBalanceQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetBuyerSalamiWalletBalanceQuery = { __typename?: 'Query', getBuyerSalamiWalletBalance?: { __typename?: 'SalamiWalletResponse', walletId?: string | null | undefined, buyerId?: string | null | undefined, walletBalance?: number | null | undefined, giftBalance?: number | null | undefined } | null | undefined };
+
 export type CollectionPointFragment = { __typename?: 'CollectionPointPickupResponse', collectionPointId?: string | null | undefined, microHubId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, openingHours?: Array<string | null | undefined> | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined };
 
 export type SellerLocationFragment = { __typename?: 'SellerLocationPickupResponse', collectionPointId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined, collectionDate?: any | null | undefined };
@@ -4371,11 +4495,6 @@ export type BuyerProfileQueryVariables = Exact<{
 
 
 export type BuyerProfileQuery = { __typename?: 'Query', buyerProfile?: { __typename?: 'BuyerProfileResponse', userId?: string | null | undefined, buyerId?: string | null | undefined, userName?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, userType?: UserType | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, oneClickPurchaseOn?: boolean | null | undefined, guestBuyer?: boolean | null | undefined, geoLocation?: string | null | undefined, country?: string | null | undefined, languages?: Array<string | null | undefined> | null | undefined, currencies?: Array<string | null | undefined> | null | undefined, applicationSettings?: string | null | undefined, categoryPreferences?: Array<string | null | undefined> | null | undefined, productPreferences?: Array<string | null | undefined> | null | undefined, sellerPreferences?: Array<string | null | undefined> | null | undefined, refundSalamiCredit?: number | null | undefined, bonusSalamiCredit?: number | null | undefined, bonusSalamiCreditExpire?: any | null | undefined, walletId?: string | null | undefined, billingDetails?: { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined };
-
-export type GetBuyerSalamiWalletBalanceQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetBuyerSalamiWalletBalanceQuery = { __typename?: 'Query', getBuyerSalamiWalletBalance?: { __typename?: 'SalamiWalletResponse', walletId?: string | null | undefined, buyerId?: string | null | undefined, walletBalance?: number | null | undefined, giftBalance?: number | null | undefined } | null | undefined };
 
 export type DeleteBuyerProfileMutationVariables = Exact<{
   buyerId: Scalars['ID'];
@@ -5259,6 +5378,169 @@ export function useSubmitOrderReturnRequestMutation(baseOptions?: Apollo.Mutatio
 export type SubmitOrderReturnRequestMutationHookResult = ReturnType<typeof useSubmitOrderReturnRequestMutation>;
 export type SubmitOrderReturnRequestMutationResult = Apollo.MutationResult<SubmitOrderReturnRequestMutation>;
 export type SubmitOrderReturnRequestMutationOptions = Apollo.BaseMutationOptions<SubmitOrderReturnRequestMutation, SubmitOrderReturnRequestMutationVariables>;
+export const CreateOrderFromCartDocument = gql`
+    mutation CreateOrderFromCart($cart: CartInput!) {
+  createOrderFromCart(request: $cart) {
+    orderId
+    buyerId
+    orderNumber
+    subTotal
+    discount
+    serviceFees
+    shippingFees
+    taxes
+    totalSavings
+    orderTotal
+    orderItems {
+      orderItemId
+      listingId
+      variantId
+      sellerId
+      quantity
+      itemPrice
+    }
+    paymentDetails {
+      balanceToPay
+      usedGiftAmount
+      usedWalletAmount
+    }
+  }
+}
+    `;
+export type CreateOrderFromCartMutationFn = Apollo.MutationFunction<CreateOrderFromCartMutation, CreateOrderFromCartMutationVariables>;
+
+/**
+ * __useCreateOrderFromCartMutation__
+ *
+ * To run a mutation, you first call `useCreateOrderFromCartMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrderFromCartMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOrderFromCartMutation, { data, loading, error }] = useCreateOrderFromCartMutation({
+ *   variables: {
+ *      cart: // value for 'cart'
+ *   },
+ * });
+ */
+export function useCreateOrderFromCartMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrderFromCartMutation, CreateOrderFromCartMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOrderFromCartMutation, CreateOrderFromCartMutationVariables>(CreateOrderFromCartDocument, options);
+      }
+export type CreateOrderFromCartMutationHookResult = ReturnType<typeof useCreateOrderFromCartMutation>;
+export type CreateOrderFromCartMutationResult = Apollo.MutationResult<CreateOrderFromCartMutation>;
+export type CreateOrderFromCartMutationOptions = Apollo.BaseMutationOptions<CreateOrderFromCartMutation, CreateOrderFromCartMutationVariables>;
+export const RazorpayCreateOrderDocument = gql`
+    mutation RazorpayCreateOrder($request: RazorpayOrderRequest!) {
+  razorpayCreateOrder(request: $request) {
+    razorpayOrderId
+  }
+}
+    `;
+export type RazorpayCreateOrderMutationFn = Apollo.MutationFunction<RazorpayCreateOrderMutation, RazorpayCreateOrderMutationVariables>;
+
+/**
+ * __useRazorpayCreateOrderMutation__
+ *
+ * To run a mutation, you first call `useRazorpayCreateOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRazorpayCreateOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [razorpayCreateOrderMutation, { data, loading, error }] = useRazorpayCreateOrderMutation({
+ *   variables: {
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useRazorpayCreateOrderMutation(baseOptions?: Apollo.MutationHookOptions<RazorpayCreateOrderMutation, RazorpayCreateOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RazorpayCreateOrderMutation, RazorpayCreateOrderMutationVariables>(RazorpayCreateOrderDocument, options);
+      }
+export type RazorpayCreateOrderMutationHookResult = ReturnType<typeof useRazorpayCreateOrderMutation>;
+export type RazorpayCreateOrderMutationResult = Apollo.MutationResult<RazorpayCreateOrderMutation>;
+export type RazorpayCreateOrderMutationOptions = Apollo.BaseMutationOptions<RazorpayCreateOrderMutation, RazorpayCreateOrderMutationVariables>;
+export const RazorpayVerifyPaymentSignatureDocument = gql`
+    mutation RazorpayVerifyPaymentSignature($request: RazorpayVerifyPaymentSignatureRequest!) {
+  razorpayVerifyPaymentSignature(request: $request) {
+    valid
+    razorpayPaymentId
+    razorpayOrderId
+    razorpayPaymentStatus
+    razorpayOrderId
+    razorpayOrderStatus
+  }
+}
+    `;
+export type RazorpayVerifyPaymentSignatureMutationFn = Apollo.MutationFunction<RazorpayVerifyPaymentSignatureMutation, RazorpayVerifyPaymentSignatureMutationVariables>;
+
+/**
+ * __useRazorpayVerifyPaymentSignatureMutation__
+ *
+ * To run a mutation, you first call `useRazorpayVerifyPaymentSignatureMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRazorpayVerifyPaymentSignatureMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [razorpayVerifyPaymentSignatureMutation, { data, loading, error }] = useRazorpayVerifyPaymentSignatureMutation({
+ *   variables: {
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useRazorpayVerifyPaymentSignatureMutation(baseOptions?: Apollo.MutationHookOptions<RazorpayVerifyPaymentSignatureMutation, RazorpayVerifyPaymentSignatureMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RazorpayVerifyPaymentSignatureMutation, RazorpayVerifyPaymentSignatureMutationVariables>(RazorpayVerifyPaymentSignatureDocument, options);
+      }
+export type RazorpayVerifyPaymentSignatureMutationHookResult = ReturnType<typeof useRazorpayVerifyPaymentSignatureMutation>;
+export type RazorpayVerifyPaymentSignatureMutationResult = Apollo.MutationResult<RazorpayVerifyPaymentSignatureMutation>;
+export type RazorpayVerifyPaymentSignatureMutationOptions = Apollo.BaseMutationOptions<RazorpayVerifyPaymentSignatureMutation, RazorpayVerifyPaymentSignatureMutationVariables>;
+export const GetBuyerSalamiWalletBalanceDocument = gql`
+    query GetBuyerSalamiWalletBalance {
+  getBuyerSalamiWalletBalance {
+    walletId
+    buyerId
+    walletBalance
+    giftBalance
+  }
+}
+    `;
+
+/**
+ * __useGetBuyerSalamiWalletBalanceQuery__
+ *
+ * To run a query within a React component, call `useGetBuyerSalamiWalletBalanceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBuyerSalamiWalletBalanceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBuyerSalamiWalletBalanceQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetBuyerSalamiWalletBalanceQuery(baseOptions?: Apollo.QueryHookOptions<GetBuyerSalamiWalletBalanceQuery, GetBuyerSalamiWalletBalanceQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBuyerSalamiWalletBalanceQuery, GetBuyerSalamiWalletBalanceQueryVariables>(GetBuyerSalamiWalletBalanceDocument, options);
+      }
+export function useGetBuyerSalamiWalletBalanceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBuyerSalamiWalletBalanceQuery, GetBuyerSalamiWalletBalanceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBuyerSalamiWalletBalanceQuery, GetBuyerSalamiWalletBalanceQueryVariables>(GetBuyerSalamiWalletBalanceDocument, options);
+        }
+export type GetBuyerSalamiWalletBalanceQueryHookResult = ReturnType<typeof useGetBuyerSalamiWalletBalanceQuery>;
+export type GetBuyerSalamiWalletBalanceLazyQueryHookResult = ReturnType<typeof useGetBuyerSalamiWalletBalanceLazyQuery>;
+export type GetBuyerSalamiWalletBalanceQueryResult = Apollo.QueryResult<GetBuyerSalamiWalletBalanceQuery, GetBuyerSalamiWalletBalanceQueryVariables>;
 export const SearchBuyerOrdersDocument = gql`
     query SearchBuyerOrders($options: BuyerOrderOption!) {
   searchBuyerOrders(options: $options) {
@@ -5794,43 +6076,6 @@ export function useBuyerProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type BuyerProfileQueryHookResult = ReturnType<typeof useBuyerProfileQuery>;
 export type BuyerProfileLazyQueryHookResult = ReturnType<typeof useBuyerProfileLazyQuery>;
 export type BuyerProfileQueryResult = Apollo.QueryResult<BuyerProfileQuery, BuyerProfileQueryVariables>;
-export const GetBuyerSalamiWalletBalanceDocument = gql`
-    query GetBuyerSalamiWalletBalance {
-  getBuyerSalamiWalletBalance {
-    walletId
-    buyerId
-    walletBalance
-    giftBalance
-  }
-}
-    `;
-
-/**
- * __useGetBuyerSalamiWalletBalanceQuery__
- *
- * To run a query within a React component, call `useGetBuyerSalamiWalletBalanceQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBuyerSalamiWalletBalanceQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetBuyerSalamiWalletBalanceQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetBuyerSalamiWalletBalanceQuery(baseOptions?: Apollo.QueryHookOptions<GetBuyerSalamiWalletBalanceQuery, GetBuyerSalamiWalletBalanceQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBuyerSalamiWalletBalanceQuery, GetBuyerSalamiWalletBalanceQueryVariables>(GetBuyerSalamiWalletBalanceDocument, options);
-      }
-export function useGetBuyerSalamiWalletBalanceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBuyerSalamiWalletBalanceQuery, GetBuyerSalamiWalletBalanceQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBuyerSalamiWalletBalanceQuery, GetBuyerSalamiWalletBalanceQueryVariables>(GetBuyerSalamiWalletBalanceDocument, options);
-        }
-export type GetBuyerSalamiWalletBalanceQueryHookResult = ReturnType<typeof useGetBuyerSalamiWalletBalanceQuery>;
-export type GetBuyerSalamiWalletBalanceLazyQueryHookResult = ReturnType<typeof useGetBuyerSalamiWalletBalanceLazyQuery>;
-export type GetBuyerSalamiWalletBalanceQueryResult = Apollo.QueryResult<GetBuyerSalamiWalletBalanceQuery, GetBuyerSalamiWalletBalanceQueryVariables>;
 export const DeleteBuyerProfileDocument = gql`
     mutation DeleteBuyerProfile($buyerId: ID!) {
   deleteBuyerProfile(buyerId: $buyerId)

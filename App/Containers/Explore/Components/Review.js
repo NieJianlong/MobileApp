@@ -30,9 +30,11 @@ function Review(props) {
               styles.bar,
               {
                 width:
-                  maxRating > 0
-                    ? s((ratingDetail.fiveStar / maxRating) * MAX_WIDTH)
-                    : 100,
+                  ratingCount > 0
+                    ? maxRating > 0
+                      ? s((ratingDetail.fiveStar / maxRating) * MAX_WIDTH)
+                      : 100
+                    : 0,
               },
             ]}
           />
@@ -45,9 +47,11 @@ function Review(props) {
               styles.bar,
               {
                 width:
-                  maxRating > 0
-                    ? s((ratingDetail.fourStar / maxRating) * MAX_WIDTH)
-                    : 100,
+                  ratingCount > 0
+                    ? maxRating > 0
+                      ? s((ratingDetail.fourStar / maxRating) * MAX_WIDTH)
+                      : 100
+                    : 0,
               },
             ]}
           />
@@ -60,9 +64,11 @@ function Review(props) {
               styles.bar,
               {
                 width:
-                  maxRating > 0
-                    ? s((ratingDetail.threeStar / maxRating) * MAX_WIDTH)
-                    : 100,
+                  ratingCount > 0
+                    ? maxRating > 0
+                      ? s((ratingDetail.threeStar / maxRating) * MAX_WIDTH)
+                      : 100
+                    : 0,
               },
             ]}
           />
@@ -75,9 +81,11 @@ function Review(props) {
               styles.bar,
               {
                 width:
-                  maxRating > 0
-                    ? s((ratingDetail.twoStar / maxRating) * MAX_WIDTH)
-                    : 100,
+                  ratingCount > 0
+                    ? maxRating > 0
+                      ? s((ratingDetail.twoStar / maxRating) * MAX_WIDTH)
+                      : 100
+                    : 0,
               },
             ]}
           />
@@ -90,9 +98,11 @@ function Review(props) {
               styles.bar,
               {
                 width:
-                  maxRating > 0
-                    ? s((ratingDetail.oneStar / maxRating) * MAX_WIDTH)
-                    : 100,
+                  ratingCount > 0
+                    ? maxRating > 0
+                      ? s((ratingDetail.oneStar / maxRating) * MAX_WIDTH)
+                      : 100
+                    : 0,
               },
             ]}
           />

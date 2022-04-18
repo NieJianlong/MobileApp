@@ -15,7 +15,7 @@ import NavigationService from "../../Navigation/NavigationService";
 import { Images } from "../../Themes";
 import styles from "./styles";
 import jwt_decode from "jwt-decode";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useReactiveVar } from "@apollo/client";
 import * as storage from "../../Apollo/local-storage";
 import { useBuyerProfileByUserIdLazyQuery } from "../../../generated/graphql";
 
@@ -33,13 +33,16 @@ export default function LaunchScreen() {
         userId: res?.buyerProfileByUserId?.userId ?? "",
         buyerId: res?.buyerProfileByUserId?.buyerId ?? "",
         userName: res?.buyerProfileByUserId?.userName ?? "",
-        email: res?.resbuyerProfileByUserId?.email ?? "",
+        email: res?.buyerProfileByUserId?.email ?? "",
         phone: res?.buyerProfileByUserId?.phoneNumber ?? "",
         isAuth: true,
         billingDetails: res?.buyerProfileByUserId?.billingDetails,
         billingDetailsId:
           res.buyerProfileByUserId?.billingDetails?.billingDetailsId,
+        firstName: res.buyerProfileByUserId?.firstName ?? "",
+        lastName: res.buyerProfileByUserId?.lastName ?? "",
       });
+
       const {
         buyerProfileByUserId: { buyerId },
       } = res;

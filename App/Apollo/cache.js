@@ -6,6 +6,8 @@ import { InMemoryCache } from "@apollo/client";
  * on user login
  */
 const userProfile = {
+  firstName: "",
+  lastName: "",
   userId: "",
   buyerId: "",
   userName: "",
@@ -38,6 +40,12 @@ const localCart = {
   deliverAddress: "", // update this on lookUpDefault address, when an address is updated. cart should be cleared
   callBackAddress: {}, // when address query  calls back add here, use for store co-ordinates ect ..., use gql mapper for now
   billingAddressDetail: {}, //  when billingaddress query  calls back add here, use for store co-ordinates ect ..., use gql mapper for now
+  razorpay_payment_id: "",
+  razorpay_order_id: "",
+  razorpay_signature: "",
+  orderNumber: "",
+  orderId: "",
+  amount: 0,
 };
 
 const localBuyNow = {

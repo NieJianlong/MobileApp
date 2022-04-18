@@ -104,13 +104,15 @@ function RegisterScreen(props) {
         userId: res?.buyerProfileByUserId?.userId ?? "",
         buyerId: res?.buyerProfileByUserId?.buyerId ?? "",
         userName: res?.buyerProfileByUserId?.userName ?? "",
-        email: res?.resbuyerProfileByUserId?.email ?? "",
+        email: res?.buyerProfileByUserId?.email ?? "",
         phone: res?.buyerProfileByUserId?.phoneNumber ?? "",
         isAuth: true,
         billingDetails: res?.buyerProfileByUserId?.billingDetails,
         billingDetailsId:
           res.buyerProfileByUserId?.billingDetails?.billingDetailsId,
         isAuth: true,
+        firstName: res.buyerProfileByUserId?.firstName ?? "",
+        lastName: res.buyerProfileByUserId?.lastName ?? "",
       });
 
       global.buyerId = buyerProfileByUserId.buyerId;

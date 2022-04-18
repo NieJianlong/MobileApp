@@ -6,9 +6,10 @@ import { Alert, RadiusButton } from "../../Components";
 import { Colors } from "../../Themes";
 import styles from "./styles";
 import CategoryAndProductList from "./CategoryAndProductList/Index";
-import { useMutation } from "@apollo/client";
+import { useMutation, useReactiveVar } from "@apollo/client";
 import { SendVerifyEmail } from "../Register/gql/register_mutations";
 import { useNavigation } from "@react-navigation/native";
+import { userProfileVar } from "../../Apollo/cache";
 const SearchBarContext = React.createContext({});
 
 function Explore(props) {

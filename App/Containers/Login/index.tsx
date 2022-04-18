@@ -70,6 +70,8 @@ function LoginScreen(props) {
             billingDetails: buyerProfileByUserId?.billingDetails,
             billingDetailsId:
               buyerProfileByUserId?.billingDetails?.billingDetailsId,
+            firstName: buyerProfileByUserId?.firstName ?? "",
+            lastName: buyerProfileByUserId?.lastName ?? "",
           });
           NavigationService.navigate("MainScreen");
         }

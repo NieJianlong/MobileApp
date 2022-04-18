@@ -13,6 +13,7 @@ import { client } from "../Apollo/apolloClient";
 import useRealm from "../hooks/useRealm";
 import FlipperAsyncStorage from "rn-flipper-async-storage-advanced";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { enableFlipperApolloDevtools } from "react-native-flipper-apollo-devtools";
 
 /// ReactNativeFlipperDatabases - START
 
@@ -61,6 +62,7 @@ const App = () => {
 
   //   // Return a cleanup callback to close the realm to prevent memory leaks
   // }, []);
+  enableFlipperApolloDevtools(client);
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ApolloProvider client={client}>

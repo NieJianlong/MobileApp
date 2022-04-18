@@ -1,22 +1,22 @@
-import React from 'react';
-import { View, StatusBar, Text, Image, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { AppBar } from '../../Components';
-import styles from './styles';
-import images from '../../Themes/Images';
-import { ScrollView } from 'react-native-gesture-handler';
-import Nav from '../../Navigation/NavigationService';
-import colors from '../../Themes/Colors';
-import { useRoute } from '@react-navigation/native';
+import React from "react";
+import { View, StatusBar, Text, Image, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { AppBar } from "../../Components";
+import styles from "./styles";
+import images from "../../Themes/Images";
+import { ScrollView } from "react-native-gesture-handler";
+import Nav from "../../Navigation/NavigationService";
+import colors from "../../Themes/Colors";
+import { useRoute } from "@react-navigation/native";
 
 function AddCheckoutPaymentMethod(props) {
   const payments = [
     {
       image: images.userPayMethod2Image,
       onPress: () => {
-        Nav.navigate('AddCreditScreen', {
+        Nav.navigate("AddCreditScreen", {
           callback: () => {
-            Nav.navigate('CheckoutResumeScreen', { orderStatus: 0 });
+            Nav.navigate("CheckoutResumeScreen", { orderStatus: 0 });
             // Nav.goBack();
           },
         });
@@ -25,13 +25,13 @@ function AddCheckoutPaymentMethod(props) {
     {
       image: images.userPayMethod6Image,
       onPress: () => {
-        Nav.navigate('InSufficientSalamiCreditScreen');
+        Nav.navigate("InSufficientSalamiCreditScreen");
       },
     },
     {
       image: images.userPayMethod1Image,
       onPress: () => {
-        Nav.navigate('CheckoutResumeScreen', { orderStatus: 0 });
+        Nav.navigate("CheckoutResumeScreen", { orderStatus: 0 });
       },
     },
     {
@@ -54,7 +54,7 @@ function AddCheckoutPaymentMethod(props) {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar />
         <View style={styles.bodyContainer}>
@@ -73,9 +73,9 @@ function AddCheckoutPaymentMethod(props) {
                       if (item.onPress) {
                         item.onPress();
                       } else {
-                        Nav.navigate('AddCreditScreen', {
+                        Nav.navigate("AddCreditScreen", {
                           callback: () => {
-                            Nav.navigate('CheckoutResumeScreen', {
+                            Nav.navigate("CheckoutResumeScreen", {
                               orderStatus: 0,
                             });
                             // Nav.goBack();

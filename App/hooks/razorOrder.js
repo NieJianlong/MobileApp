@@ -5,10 +5,7 @@ import { RAZOR_ORDER } from "./gql";
 
 export const useCreateRazorOrder = () => {
   const userProfile = useReactiveVar(userProfileVar);
-  const isAuth = useMemo(
-    () => userProfile.isAuth,
-    [userProfile.isAuth]
-  );
+  const isAuth = useMemo(() => userProfile.isAuth, [userProfile.isAuth]);
 
   const cartOrder = useReactiveVar(cartOrderVar);
   const [razorOrder, setRazorOrder] = useState(null);

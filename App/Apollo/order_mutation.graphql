@@ -102,6 +102,7 @@ mutation CreateOrderFromCart($cart: CartInput!) {
 mutation RazorpayCreateOrder($request: RazorpayOrderRequest!) {
   razorpayCreateOrder(request: $request) {
     razorpayOrderId
+    razorpayOrderStatus
   }
 }
 

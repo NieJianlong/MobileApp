@@ -583,6 +583,7 @@ type Query {
   sellerProfilesPaginated(pageable: SellerProfilePageable): SellerProfileResponsePaginated!
   sellerProfile(sellerId: ID!): SellerProfileResponse
   sellerProfileByUserId(userProfileId: ID!): SellerProfileResponse
+  sellerProfileBasicDetails(sellerId: ID!): SellerProfileBasicDetailsResponse
   serviceOperatorProfileByUserId(userProfileId: ID!): ServiceOperatorResponse
   addresses: [AddressResponse]
   addressById(addressId: ID!): AddressResponse
@@ -770,6 +771,13 @@ type SellerContactResponse {
 
 type SellerDocumentResponse {
   documentKey: String
+}
+
+type SellerProfileBasicDetailsResponse {
+  sellerId: ID
+  firstName: String
+  lastName: String
+  storeName: String
 }
 
 input SellerProfilePageable {

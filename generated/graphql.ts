@@ -2124,7 +2124,7 @@ export type Product = {
   keywords?: Maybe<Array<Maybe<Scalars['String']>>>;
   longName?: Maybe<Scalars['String']>;
   productStatus: ProductStatus;
-  productType?: Maybe<ProductType>;
+  productType?: Maybe<Scalars['String']>;
   shortName: Scalars['String'];
   vendorName?: Maybe<Scalars['String']>;
 };
@@ -2202,6 +2202,7 @@ export enum ProductListingType {
 
 export type ProductListingUpdateInput = {
   listingId: Scalars['String'];
+  minQtyPerCart?: InputMaybe<Scalars['Int']>;
   minSoldQuantity?: InputMaybe<Scalars['Int']>;
   openUntil?: InputMaybe<Scalars['Date']>;
   productId: Scalars['String'];
@@ -2280,6 +2281,7 @@ export type ProductListingView = {
 export type ProductListingsInput = {
   courierDeliveryDetails?: InputMaybe<CourierDeliveryDetailsInput>;
   deliveryOption: DeliveryOption;
+  minQtyPerCart: Scalars['Int'];
   minSoldQuantity: Scalars['Int'];
   openUntil: Scalars['Date'];
   productId: Scalars['String'];
@@ -2382,12 +2384,6 @@ export type ProductStocksAndPricingInput = {
   weightUnit?: InputMaybe<Scalars['String']>;
   wholeSalePrice: Scalars['Float'];
 };
-
-export enum ProductType {
-  DontUseMe_1 = 'DONT_USE_ME_1',
-  DontUseMe_2 = 'DONT_USE_ME_2',
-  Undefined = 'UNDEFINED'
-}
 
 export type ProductUpdateInput = {
   productDetailsInput: ProductDetailsInput;
@@ -2514,6 +2510,7 @@ export type Query = {
   sellerContacts?: Maybe<Array<Maybe<SellerContactResponse>>>;
   sellerContactsBySeller?: Maybe<Array<Maybe<SellerContactResponse>>>;
   sellerProfile?: Maybe<SellerProfileResponse>;
+  sellerProfileBasicDetails?: Maybe<SellerProfileBasicDetailsResponse>;
   sellerProfileByUserId?: Maybe<SellerProfileResponse>;
   sellerProfilesPaginated: SellerProfileResponsePaginated;
   sellerToOnlineStoreById?: Maybe<SellerToOnlineStoreResponse>;
@@ -2978,6 +2975,12 @@ export type QuerySellerContactsBySellerArgs = {
 
 /** QUERIES */
 export type QuerySellerProfileArgs = {
+  sellerId: Scalars['ID'];
+};
+
+
+/** QUERIES */
+export type QuerySellerProfileBasicDetailsArgs = {
   sellerId: Scalars['ID'];
 };
 
@@ -3628,7 +3631,7 @@ export type SellerProductDetailView = {
   price?: Maybe<SellerProductPrice>;
   productId: Scalars['ID'];
   productStatus?: Maybe<ProductStatus>;
-  productType?: Maybe<ProductType>;
+  productType?: Maybe<Scalars['String']>;
   returnPolicy: SellerReturnPolicy;
   sellerSku?: Maybe<Scalars['String']>;
   shortName: Scalars['String'];
@@ -3673,6 +3676,14 @@ export type SellerProductVariant = {
   sellerSku?: Maybe<Scalars['String']>;
   variantId: Scalars['ID'];
   wholeSalePrice: Scalars['Float'];
+};
+
+export type SellerProfileBasicDetailsResponse = {
+  __typename?: 'SellerProfileBasicDetailsResponse';
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  sellerId?: Maybe<Scalars['ID']>;
+  storeName?: Maybe<Scalars['String']>;
 };
 
 export type SellerProfilePageable = {
@@ -4424,7 +4435,7 @@ export type SellerReturnPolicyFieldFragment = { __typename?: 'SellerReturnPolicy
 
 export type SellerProductVariantFieldFragment = { __typename?: 'SellerProductVariant', variantId: string, priceId: string, photoUrl: string, itemsInStock: number, defaultVariant: boolean, retailPrice: number, wholeSalePrice: number, options?: Array<{ __typename?: 'VariantOptionResponse', optionId: string, valueId: string, name: string, value: string }> | null | undefined };
 
-export type SellerProductDetailViewFieldFragment = { __typename?: 'SellerProductDetailView', productId: string, shortName: string, longName: string, description?: string | null | undefined, mainPhotoUrl?: string | null | undefined, vendorSku?: string | null | undefined, sellerSku?: string | null | undefined, brand?: string | null | undefined, productType?: ProductType | null | undefined, productStatus?: ProductStatus | null | undefined, vendorName?: string | null | undefined, itemsInStock: number, price?: { __typename?: 'SellerProductPrice', priceId: string, currency: string, retailPrice: number, wholeSalePrice: number, salePercentage?: number | null | undefined, totalQuantityPrice?: number | null | undefined, taxPercentage?: number | null | undefined } | null | undefined, images?: Array<{ __typename?: 'SellerProductImage', photoUrl?: string | null | undefined, imageName?: string | null | undefined, description?: string | null | undefined, imageType?: string | null | undefined } | null | undefined> | null | undefined, variants: Array<{ __typename?: 'SellerProductVariant', variantId: string, priceId: string, photoUrl: string, itemsInStock: number, defaultVariant: boolean, retailPrice: number, wholeSalePrice: number, options?: Array<{ __typename?: 'VariantOptionResponse', optionId: string, valueId: string, name: string, value: string }> | null | undefined }>, categories: Array<{ __typename?: 'ProductCategoryResponse', categoryId: string, name: string, description?: string | null | undefined }>, returnPolicy: { __typename?: 'SellerReturnPolicy', returnAddress?: { __typename?: 'AddressView', addressId?: string | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, landmark?: string | null | undefined, pinCode?: string | null | undefined, addressFloor?: string | null | undefined } | null | undefined, returnLabel?: { __typename?: 'SellerProductImage', photoUrl?: string | null | undefined, imageName?: string | null | undefined, description?: string | null | undefined, imageType?: string | null | undefined } | null | undefined, policies?: Array<{ __typename?: 'ProductReturnPolicy', returnPolicyId: string, name: string, value: string } | null | undefined> | null | undefined } };
+export type SellerProductDetailViewFieldFragment = { __typename?: 'SellerProductDetailView', productId: string, shortName: string, longName: string, description?: string | null | undefined, mainPhotoUrl?: string | null | undefined, vendorSku?: string | null | undefined, sellerSku?: string | null | undefined, brand?: string | null | undefined, productType?: string | null | undefined, productStatus?: ProductStatus | null | undefined, vendorName?: string | null | undefined, itemsInStock: number, price?: { __typename?: 'SellerProductPrice', priceId: string, currency: string, retailPrice: number, wholeSalePrice: number, salePercentage?: number | null | undefined, totalQuantityPrice?: number | null | undefined, taxPercentage?: number | null | undefined } | null | undefined, images?: Array<{ __typename?: 'SellerProductImage', photoUrl?: string | null | undefined, imageName?: string | null | undefined, description?: string | null | undefined, imageType?: string | null | undefined } | null | undefined> | null | undefined, variants: Array<{ __typename?: 'SellerProductVariant', variantId: string, priceId: string, photoUrl: string, itemsInStock: number, defaultVariant: boolean, retailPrice: number, wholeSalePrice: number, options?: Array<{ __typename?: 'VariantOptionResponse', optionId: string, valueId: string, name: string, value: string }> | null | undefined }>, categories: Array<{ __typename?: 'ProductCategoryResponse', categoryId: string, name: string, description?: string | null | undefined }>, returnPolicy: { __typename?: 'SellerReturnPolicy', returnAddress?: { __typename?: 'AddressView', addressId?: string | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, landmark?: string | null | undefined, pinCode?: string | null | undefined, addressFloor?: string | null | undefined } | null | undefined, returnLabel?: { __typename?: 'SellerProductImage', photoUrl?: string | null | undefined, imageName?: string | null | undefined, description?: string | null | undefined, imageType?: string | null | undefined } | null | undefined, policies?: Array<{ __typename?: 'ProductReturnPolicy', returnPolicyId: string, name: string, value: string } | null | undefined> | null | undefined } };
 
 export type ProductListingViewFieldFragment = { __typename?: 'ProductListingView', photo?: string | null | undefined, photoUrls?: Array<string | null | undefined> | null | undefined, shortName?: string | null | undefined, numberOfStars?: number | null | undefined, numberOfReviews?: number | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, salePercentage?: number | null | undefined, percentOff?: number | null | undefined, amountSaved?: number | null | undefined, openUntil?: string | null | undefined, noOfOrderedItems?: number | null | undefined, noOfItemsInStock?: number | null | undefined, description?: string | null | undefined, technicalDetails?: string | null | undefined, highlightBullets?: string | null | undefined, relatedProducts?: string | null | undefined, listingId?: string | null | undefined, productId?: string | null | undefined, storeId?: string | null | undefined, storeName?: string | null | undefined, status?: string | null | undefined, rating?: number | null | undefined, closedDate?: string | null | undefined, productListingType?: string | null | undefined, progressBarValue?: number | null | undefined, numberOfItemsAvailable?: number | null | undefined, qtyAvailable?: number | null | undefined, minSoldQuantity?: number | null | undefined, itemSold?: number | null | undefined, createOn?: string | null | undefined, returnAddressId?: string | null | undefined, longName?: string | null | undefined, announcementId?: string | null | undefined, sellerId?: string | null | undefined, deliveryOption?: DeliveryOption | null | undefined, courierName?: string | null | undefined, courierShippingFee?: number | null | undefined, courierShippingFeeTax?: number | null | undefined, announcementDeliveryDate?: any | null | undefined, seller?: { __typename?: 'SellerView', id?: string | null | undefined, brandName?: string | null | undefined, avatarUrl?: string | null | undefined, usersRating?: number | null | undefined, name?: string | null | undefined, description?: string | null | undefined, ratingCount?: number | null | undefined } | null | undefined, returnPolicies?: Array<{ __typename?: 'ProductReturnPolicyView', id?: string | null | undefined, productId?: string | null | undefined, name?: string | null | undefined, description?: string | null | undefined, value?: string | null | undefined } | null | undefined> | null | undefined, listingVariants?: Array<{ __typename?: 'ListingVariantView', listingId: string, variantId?: string | null | undefined, productId?: string | null | undefined, defaultVariant?: boolean | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, fullPath?: string | null | undefined, itemsInStock?: number | null | undefined, itemsAvailable?: number | null | undefined, itemsSold?: number | null | undefined, isAvailable?: boolean | null | undefined, options?: Array<{ __typename?: 'KeyValuePair', key: string, value: string } | null | undefined> | null | undefined } | null | undefined> | null | undefined, reviews?: Array<{ __typename?: 'ReviewView', id?: string | null | undefined, productId?: string | null | undefined, sellerId?: string | null | undefined, title?: string | null | undefined, description?: string | null | undefined, ratingVote?: number | null | undefined, helpfulCount?: number | null | undefined, postedBy?: string | null | undefined, postedByName?: string | null | undefined } | null | undefined> | null | undefined, returnAddress?: { __typename?: 'AddressView', addressId?: string | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, landmark?: string | null | undefined, pinCode?: string | null | undefined, addressFloor?: string | null | undefined } | null | undefined, ratingDetail?: { __typename?: 'RatingDetail', zeroStar?: number | null | undefined, oneStar?: number | null | undefined, twoStar?: number | null | undefined, threeStar?: number | null | undefined, fourStar?: number | null | undefined, fiveStar?: number | null | undefined, sixAndMoreStar?: number | null | undefined } | null | undefined, categories?: Array<{ __typename?: 'ProductCategoryView', categoryId?: string | null | undefined, productId?: string | null | undefined, name?: string | null | undefined, description?: string | null | undefined } | null | undefined> | null | undefined, images?: Array<{ __typename?: 'Images', id: string, referenceId?: string | null | undefined, imageName?: string | null | undefined, imageType?: ImageType | null | undefined, description?: string | null | undefined, fullPath?: string | null | undefined } | null | undefined> | null | undefined, pickupAddress?: { __typename?: 'AddressView', addressId?: string | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, landmark?: string | null | undefined, pinCode?: string | null | undefined, addressFloor?: string | null | undefined } | null | undefined };
 
@@ -4440,7 +4451,7 @@ export type GetRelatedProductsQueryVariables = Exact<{
 }>;
 
 
-export type GetRelatedProductsQuery = { __typename?: 'Query', getRelatedProducts?: Array<{ __typename?: 'SellerProductDetailView', productId: string, shortName: string, longName: string, description?: string | null | undefined, mainPhotoUrl?: string | null | undefined, vendorSku?: string | null | undefined, sellerSku?: string | null | undefined, brand?: string | null | undefined, productType?: ProductType | null | undefined, productStatus?: ProductStatus | null | undefined, vendorName?: string | null | undefined, itemsInStock: number, price?: { __typename?: 'SellerProductPrice', priceId: string, currency: string, retailPrice: number, wholeSalePrice: number, salePercentage?: number | null | undefined, totalQuantityPrice?: number | null | undefined, taxPercentage?: number | null | undefined } | null | undefined, images?: Array<{ __typename?: 'SellerProductImage', photoUrl?: string | null | undefined, imageName?: string | null | undefined, description?: string | null | undefined, imageType?: string | null | undefined } | null | undefined> | null | undefined, variants: Array<{ __typename?: 'SellerProductVariant', variantId: string, priceId: string, photoUrl: string, itemsInStock: number, defaultVariant: boolean, retailPrice: number, wholeSalePrice: number, options?: Array<{ __typename?: 'VariantOptionResponse', optionId: string, valueId: string, name: string, value: string }> | null | undefined }>, categories: Array<{ __typename?: 'ProductCategoryResponse', categoryId: string, name: string, description?: string | null | undefined }>, returnPolicy: { __typename?: 'SellerReturnPolicy', returnAddress?: { __typename?: 'AddressView', addressId?: string | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, landmark?: string | null | undefined, pinCode?: string | null | undefined, addressFloor?: string | null | undefined } | null | undefined, returnLabel?: { __typename?: 'SellerProductImage', photoUrl?: string | null | undefined, imageName?: string | null | undefined, description?: string | null | undefined, imageType?: string | null | undefined } | null | undefined, policies?: Array<{ __typename?: 'ProductReturnPolicy', returnPolicyId: string, name: string, value: string } | null | undefined> | null | undefined } } | null | undefined> | null | undefined };
+export type GetRelatedProductsQuery = { __typename?: 'Query', getRelatedProducts?: Array<{ __typename?: 'SellerProductDetailView', productId: string, shortName: string, longName: string, description?: string | null | undefined, mainPhotoUrl?: string | null | undefined, vendorSku?: string | null | undefined, sellerSku?: string | null | undefined, brand?: string | null | undefined, productType?: string | null | undefined, productStatus?: ProductStatus | null | undefined, vendorName?: string | null | undefined, itemsInStock: number, price?: { __typename?: 'SellerProductPrice', priceId: string, currency: string, retailPrice: number, wholeSalePrice: number, salePercentage?: number | null | undefined, totalQuantityPrice?: number | null | undefined, taxPercentage?: number | null | undefined } | null | undefined, images?: Array<{ __typename?: 'SellerProductImage', photoUrl?: string | null | undefined, imageName?: string | null | undefined, description?: string | null | undefined, imageType?: string | null | undefined } | null | undefined> | null | undefined, variants: Array<{ __typename?: 'SellerProductVariant', variantId: string, priceId: string, photoUrl: string, itemsInStock: number, defaultVariant: boolean, retailPrice: number, wholeSalePrice: number, options?: Array<{ __typename?: 'VariantOptionResponse', optionId: string, valueId: string, name: string, value: string }> | null | undefined }>, categories: Array<{ __typename?: 'ProductCategoryResponse', categoryId: string, name: string, description?: string | null | undefined }>, returnPolicy: { __typename?: 'SellerReturnPolicy', returnAddress?: { __typename?: 'AddressView', addressId?: string | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, landmark?: string | null | undefined, pinCode?: string | null | undefined, addressFloor?: string | null | undefined } | null | undefined, returnLabel?: { __typename?: 'SellerProductImage', photoUrl?: string | null | undefined, imageName?: string | null | undefined, description?: string | null | undefined, imageType?: string | null | undefined } | null | undefined, policies?: Array<{ __typename?: 'ProductReturnPolicy', returnPolicyId: string, name: string, value: string } | null | undefined> | null | undefined } } | null | undefined> | null | undefined };
 
 export type IsListingInWishlistQueryVariables = Exact<{
   buyerId: Scalars['ID'];
@@ -4462,7 +4473,7 @@ export type GetProductByProductIdQueryVariables = Exact<{
 }>;
 
 
-export type GetProductByProductIdQuery = { __typename?: 'Query', getProductByProductId: { __typename?: 'SellerProductDetailView', productId: string, shortName: string, longName: string, description?: string | null | undefined, mainPhotoUrl?: string | null | undefined, vendorSku?: string | null | undefined, sellerSku?: string | null | undefined, brand?: string | null | undefined, productType?: ProductType | null | undefined, productStatus?: ProductStatus | null | undefined, vendorName?: string | null | undefined, itemsInStock: number, price?: { __typename?: 'SellerProductPrice', priceId: string, currency: string, retailPrice: number, wholeSalePrice: number, salePercentage?: number | null | undefined, totalQuantityPrice?: number | null | undefined, taxPercentage?: number | null | undefined } | null | undefined, images?: Array<{ __typename?: 'SellerProductImage', photoUrl?: string | null | undefined, imageName?: string | null | undefined, description?: string | null | undefined, imageType?: string | null | undefined } | null | undefined> | null | undefined, variants: Array<{ __typename?: 'SellerProductVariant', variantId: string, priceId: string, photoUrl: string, itemsInStock: number, defaultVariant: boolean, retailPrice: number, wholeSalePrice: number, options?: Array<{ __typename?: 'VariantOptionResponse', optionId: string, valueId: string, name: string, value: string }> | null | undefined }>, categories: Array<{ __typename?: 'ProductCategoryResponse', categoryId: string, name: string, description?: string | null | undefined }>, returnPolicy: { __typename?: 'SellerReturnPolicy', returnAddress?: { __typename?: 'AddressView', addressId?: string | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, landmark?: string | null | undefined, pinCode?: string | null | undefined, addressFloor?: string | null | undefined } | null | undefined, returnLabel?: { __typename?: 'SellerProductImage', photoUrl?: string | null | undefined, imageName?: string | null | undefined, description?: string | null | undefined, imageType?: string | null | undefined } | null | undefined, policies?: Array<{ __typename?: 'ProductReturnPolicy', returnPolicyId: string, name: string, value: string } | null | undefined> | null | undefined } } };
+export type GetProductByProductIdQuery = { __typename?: 'Query', getProductByProductId: { __typename?: 'SellerProductDetailView', productId: string, shortName: string, longName: string, description?: string | null | undefined, mainPhotoUrl?: string | null | undefined, vendorSku?: string | null | undefined, sellerSku?: string | null | undefined, brand?: string | null | undefined, productType?: string | null | undefined, productStatus?: ProductStatus | null | undefined, vendorName?: string | null | undefined, itemsInStock: number, price?: { __typename?: 'SellerProductPrice', priceId: string, currency: string, retailPrice: number, wholeSalePrice: number, salePercentage?: number | null | undefined, totalQuantityPrice?: number | null | undefined, taxPercentage?: number | null | undefined } | null | undefined, images?: Array<{ __typename?: 'SellerProductImage', photoUrl?: string | null | undefined, imageName?: string | null | undefined, description?: string | null | undefined, imageType?: string | null | undefined } | null | undefined> | null | undefined, variants: Array<{ __typename?: 'SellerProductVariant', variantId: string, priceId: string, photoUrl: string, itemsInStock: number, defaultVariant: boolean, retailPrice: number, wholeSalePrice: number, options?: Array<{ __typename?: 'VariantOptionResponse', optionId: string, valueId: string, name: string, value: string }> | null | undefined }>, categories: Array<{ __typename?: 'ProductCategoryResponse', categoryId: string, name: string, description?: string | null | undefined }>, returnPolicy: { __typename?: 'SellerReturnPolicy', returnAddress?: { __typename?: 'AddressView', addressId?: string | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, landmark?: string | null | undefined, pinCode?: string | null | undefined, addressFloor?: string | null | undefined } | null | undefined, returnLabel?: { __typename?: 'SellerProductImage', photoUrl?: string | null | undefined, imageName?: string | null | undefined, description?: string | null | undefined, imageType?: string | null | undefined } | null | undefined, policies?: Array<{ __typename?: 'ProductReturnPolicy', returnPolicyId: string, name: string, value: string } | null | undefined> | null | undefined } } };
 
 export type GetPreferredCategoriesQueryVariables = Exact<{
   buyerId: Scalars['ID'];
@@ -4495,6 +4506,13 @@ export type BuyerProfileQueryVariables = Exact<{
 
 
 export type BuyerProfileQuery = { __typename?: 'Query', buyerProfile?: { __typename?: 'BuyerProfileResponse', userId?: string | null | undefined, buyerId?: string | null | undefined, userName?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, userType?: UserType | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, oneClickPurchaseOn?: boolean | null | undefined, guestBuyer?: boolean | null | undefined, geoLocation?: string | null | undefined, country?: string | null | undefined, languages?: Array<string | null | undefined> | null | undefined, currencies?: Array<string | null | undefined> | null | undefined, applicationSettings?: string | null | undefined, categoryPreferences?: Array<string | null | undefined> | null | undefined, productPreferences?: Array<string | null | undefined> | null | undefined, sellerPreferences?: Array<string | null | undefined> | null | undefined, refundSalamiCredit?: number | null | undefined, bonusSalamiCredit?: number | null | undefined, bonusSalamiCreditExpire?: any | null | undefined, walletId?: string | null | undefined, billingDetails?: { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined };
+
+export type SellerProfileBasicDetailsQueryVariables = Exact<{
+  sellerId: Scalars['ID'];
+}>;
+
+
+export type SellerProfileBasicDetailsQuery = { __typename?: 'Query', sellerProfileBasicDetails?: { __typename?: 'SellerProfileBasicDetailsResponse', sellerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, storeName?: string | null | undefined } | null | undefined };
 
 export type DeleteBuyerProfileMutationVariables = Exact<{
   buyerId: Scalars['ID'];
@@ -6076,6 +6094,44 @@ export function useBuyerProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type BuyerProfileQueryHookResult = ReturnType<typeof useBuyerProfileQuery>;
 export type BuyerProfileLazyQueryHookResult = ReturnType<typeof useBuyerProfileLazyQuery>;
 export type BuyerProfileQueryResult = Apollo.QueryResult<BuyerProfileQuery, BuyerProfileQueryVariables>;
+export const SellerProfileBasicDetailsDocument = gql`
+    query SellerProfileBasicDetails($sellerId: ID!) {
+  sellerProfileBasicDetails(sellerId: $sellerId) {
+    sellerId
+    firstName
+    lastName
+    storeName
+  }
+}
+    `;
+
+/**
+ * __useSellerProfileBasicDetailsQuery__
+ *
+ * To run a query within a React component, call `useSellerProfileBasicDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSellerProfileBasicDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSellerProfileBasicDetailsQuery({
+ *   variables: {
+ *      sellerId: // value for 'sellerId'
+ *   },
+ * });
+ */
+export function useSellerProfileBasicDetailsQuery(baseOptions: Apollo.QueryHookOptions<SellerProfileBasicDetailsQuery, SellerProfileBasicDetailsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SellerProfileBasicDetailsQuery, SellerProfileBasicDetailsQueryVariables>(SellerProfileBasicDetailsDocument, options);
+      }
+export function useSellerProfileBasicDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SellerProfileBasicDetailsQuery, SellerProfileBasicDetailsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SellerProfileBasicDetailsQuery, SellerProfileBasicDetailsQueryVariables>(SellerProfileBasicDetailsDocument, options);
+        }
+export type SellerProfileBasicDetailsQueryHookResult = ReturnType<typeof useSellerProfileBasicDetailsQuery>;
+export type SellerProfileBasicDetailsLazyQueryHookResult = ReturnType<typeof useSellerProfileBasicDetailsLazyQuery>;
+export type SellerProfileBasicDetailsQueryResult = Apollo.QueryResult<SellerProfileBasicDetailsQuery, SellerProfileBasicDetailsQueryVariables>;
 export const DeleteBuyerProfileDocument = gql`
     mutation DeleteBuyerProfile($buyerId: ID!) {
   deleteBuyerProfile(buyerId: $buyerId)

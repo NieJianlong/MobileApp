@@ -7,11 +7,20 @@ import { StarRating, DescriptionText } from "../../../Components";
 import { Colors } from "../../../Themes";
 import styles from "./styles";
 import NavigationService from "../../../Navigation/NavigationService";
+import { useSellerProfileBasicDetailsQuery } from "../../../../generated/graphql";
 
 export default function StoreInfo({ tabIndex, product }) {
   if (!product.seller) {
     return null;
   }
+  const { data } = useSellerProfileBasicDetailsQuery({
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    variables: { sellerId: product.seller.id },
+  });
   return (
     <InView
       onChange={(isVisible) => {
@@ -29,7 +38,9 @@ export default function StoreInfo({ tabIndex, product }) {
                 style={styles.sellerAvatar}
               />
             </View>
-            <Text style={styles.heading5Bold}>{product.seller.name}</Text>
+            <Text style={styles.heading5Bold}>
+              {data?.sellerProfileBasicDetails?.storeName ?? ""}
+            </Text>
           </View>
 
           <TouchableOpacity
@@ -37,7 +48,7 @@ export default function StoreInfo({ tabIndex, product }) {
               NavigationService.navigate("SellerStoreScreen", {
                 seller: product.seller,
                 storeId: product.storeId,
-                storeName: product.storeName,
+                storeName: data?.sellerProfileBasicDetails?.storeName ?? "",
               })
             }
           >

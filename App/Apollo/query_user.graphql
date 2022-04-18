@@ -80,3 +80,11 @@ query GetBuyerSalamiWalletBalance {
     giftBalance
   }
 }
+query SellerProfileBasicDetails($sellerId: ID!) {
+  sellerProfileBasicDetails(sellerId: $sellerId) {
+    sellerId
+    firstName
+    lastName
+    storeName
+  }
+}

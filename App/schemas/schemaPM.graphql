@@ -367,7 +367,7 @@ type Product {
   vendorName: String
   highlightBullets: [String]
   keywords: [String]
-  productType: ProductType
+  productType: String
   productStatus: ProductStatus!
 }
 
@@ -423,6 +423,7 @@ input ProductListingsInput {
   productListingType: ProductListingType!
   openUntil: Date!
   minSoldQuantity: Int!
+  minQtyPerCart: Int!
   startDate: DateTime!
   variants: [ListingVariantInput]!
   deliveryOption: DeliveryOption!
@@ -458,6 +459,7 @@ input ProductListingUpdateInput {
   storeId: String
   openUntil: Date
   minSoldQuantity: Int
+  minQtyPerCart: Int
   startDate: DateTime
 }
 
@@ -615,12 +617,6 @@ input ProductStocksAndPricingInput {
   itemsInStock: Int!
   inventoryLocation: String
   variantInputs: [ProductVariantInput]
-}
-
-enum ProductType {
-  UNDEFINED
-  DONT_USE_ME_1
-  DONT_USE_ME_2
 }
 
 input ProductUpdateInput {
@@ -965,7 +961,7 @@ type SellerProductDetailView {
   brand: String
   highlightBullets: [String]
   keywords: [String]
-  productType: ProductType
+  productType: String
   productStatus: ProductStatus
   validationStatus: ProductValidationStatus
   vendorName: String

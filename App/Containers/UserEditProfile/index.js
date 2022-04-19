@@ -40,6 +40,7 @@ import { UPDATE_BUYER_PROFILE } from "../../Apollo/mutations/mutations_user";
 import { AlertContext } from "../Root/GlobalContext";
 import { FIND_BUYER_PROFILE } from "../../Apollo/queries/queries_user";
 import { useDeleteBuyerProfileMutation } from "../../../generated/graphql";
+import { isEmpty, omit } from "lodash";
 
 /**
  * @description:User edit page
@@ -74,7 +75,7 @@ function UserEditProfile(props) {
       NavigationService.navigate("DeleteAccountMessageScreen");
     },
     onError: (err) => {
-      alert(err.message)
+      alert(err.message);
     },
   });
   useEffect(() => {
@@ -123,7 +124,9 @@ function UserEditProfile(props) {
   };
   const [updateProfile, { data }] = useMutation(UPDATE_BUYER_PROFILE, {
     variables: {
-      request: BuyerProfileRequest,
+      request: !isEmpty(newPhoneNumber)
+        ? BuyerProfileRequest
+        : omit(BuyerProfileRequest, "phoneNumber"),
     },
     context: {
       headers: {

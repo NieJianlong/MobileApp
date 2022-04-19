@@ -4357,7 +4357,7 @@ export type RazorpayCreateOrderMutationVariables = Exact<{
 }>;
 
 
-export type RazorpayCreateOrderMutation = { __typename?: 'Mutation', razorpayCreateOrder: { __typename?: 'RazorpayOrderResponse', razorpayOrderId?: string | null | undefined } };
+export type RazorpayCreateOrderMutation = { __typename?: 'Mutation', razorpayCreateOrder: { __typename?: 'RazorpayOrderResponse', razorpayOrderId?: string | null | undefined, razorpayOrderStatus?: RazorpayOrderStatus | null | undefined } };
 
 export type RazorpayVerifyPaymentSignatureMutationVariables = Exact<{
   request: RazorpayVerifyPaymentSignatureRequest;
@@ -5455,6 +5455,7 @@ export const RazorpayCreateOrderDocument = gql`
     mutation RazorpayCreateOrder($request: RazorpayOrderRequest!) {
   razorpayCreateOrder(request: $request) {
     razorpayOrderId
+    razorpayOrderStatus
   }
 }
     `;

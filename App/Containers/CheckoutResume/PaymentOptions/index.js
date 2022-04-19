@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image } from "react-native";
 import { ApplicationStyles } from "../../../Themes";
-import { useQuery } from "@apollo/client";
-import { WALLET_BALANCE } from "../../../hooks/gql";
 import images from "../../../Themes/Images";
 import { ScaledSheet, vs } from "react-native-size-matters";
 import colors from "../../../Themes/Colors";
 import AppConfig from "../../../Config/AppConfig";
 import fonts from "../../../Themes/Fonts";
+import { useGetBuyerSalamiWalletBalanceQuery } from "../../../../generated/graphql";
 
 const PaymentOptions = () => {
   const [displayData, setDisplayData] = useState({
@@ -17,34 +16,18 @@ const PaymentOptions = () => {
     subtitle1: images.userLogoImage,
     type: "Payment",
   });
-  const { data } = useQuery(WALLET_BALANCE, {
+  const { data } = useGetBuyerSalamiWalletBalanceQuery({
     context: {
       headers: {
         isPrivate: true,
       },
-      onCompleted: (res) => {
-        console.log(res);
-      },
-      onError: (res) => {
-        console.log(res);
-      },
     },
   });
-  console.log(
-    "Data In Wallet Balance",
-    data?.getBuyerSalamiWalletBalance,
-    displayData
-  );
+
   return (
     <View>
       <Text style={ApplicationStyles.screen.heading4Bold}>Payment Options</Text>
       <View style={[styles.item, { height: vs(80) }]}>
-        {/*<View style={{ flexDirection: "row", alignItems: "center" }}>*/}
-        {/*  <Image style={styles.paytypeIcon} source={displayData.icon} />*/}
-        {/*  <Text style={ApplicationStyles.screen.heading5Bold}>*/}
-        {/*    {displayData.title}*/}
-        {/*  </Text>*/}
-        {/*</View>*/}
         <View style={{ flexDirection: "row" }}>
           <Image style={styles.walletIcon} source={displayData.subtitle1} />
           <View

@@ -25,7 +25,6 @@ import { useCreateRazorOrder } from "../../hooks/razorOrder";
 import {
   cartOrderVar,
   GET_LOCAL_CART,
-  localBuyNowVar,
   razorOrderPaymentVar,
   userProfileVar,
   localCartVar as localCartCache,
@@ -34,22 +33,22 @@ import { useRazorVerifyPayment } from "../../hooks/verifyPayment";
 import images from "../../Themes/Images";
 import { ApplicationStyles } from "../../Themes";
 import { useQuery, useReactiveVar } from "@apollo/client";
-import { CreateOrderFromCart, WALLET_BALANCE } from "../../hooks/gql";
 import { AlertContext } from "../Root/GlobalContext";
 import PubSub from "pubsub-js";
 import useRealm from "../../hooks/useRealm";
 import AddBillingDetail from "../../hooks/addBillingDetails";
 import { usePaymentConfigration } from "../../Utils/utils";
+import { useGetBuyerSalamiWalletBalanceQuery } from "../../../generated/graphql";
 //orderStatus：1,completed
 function CheckoutResume(props) {
   const { params } = useRoute();
   const [on, setOnSwitch] = useState(false);
-  const { createOrderFromCart, order } = useCreateOrder();
-  const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
+  const { createOrderFromCart } = useCreateOrder();
+  const { razorpayCreateOrder } = useCreateRazorOrder();
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
-  const { addbillingDetail, addBilling } = AddBillingDetail();
+  const { addBilling } = AddBillingDetail();
   const getPaymentConfigration = usePaymentConfigration();
   const { realm } = useRealm();
   console.log("callBackAddress", localCartVar.callBackAddress);
@@ -59,8 +58,7 @@ function CheckoutResume(props) {
     () => userProfileVarReactive.isAuth,
     [userProfileVarReactive.isAuth]
   );
-  const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
-    useRazorVerifyPayment();
+  const { razorpayVerifyPaymentSignature } = useRazorVerifyPayment();
   const { orderStatus, data, availbleList } = params;
   const money = useMemo(() => {
     let currentBilling = 0;
@@ -99,18 +97,13 @@ function CheckoutResume(props) {
       deliveryFess: deliveryFess,
     };
   }, [data, availbleList]);
-  const { data: dataWallet } = useQuery(WALLET_BALANCE, {
+  const { data: dataWallet } = useGetBuyerSalamiWalletBalanceQuery({
     context: {
       headers: {
         isPrivate: true,
       },
-      onCompleted: (res) => {
-        console.log("Completed", res);
-      },
-      onError: (err) => {},
     },
   });
-  console.log("dataWalletdataWalletdataWalletdataWallet", dataWallet);
   const { dispatch } = useContext(AlertContext);
   const [mydatas, setMydatas] = useState(
     realm

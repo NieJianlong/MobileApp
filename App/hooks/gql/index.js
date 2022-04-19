@@ -52,14 +52,3 @@ export const RAZOR_VERIFY = gql`
     }
   }
 `;
-
-export const WALLET_BALANCE = gql`
-  query GetBuyerSalamiWalletBalance {
-    getBuyerSalamiWalletBalance {
-      walletId
-      buyerId
-      walletBalance
-      giftBalance
-    }
-  }
-`;

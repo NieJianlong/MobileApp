@@ -88,3 +88,12 @@ query SellerProfileBasicDetails($sellerId: ID!) {
     storeName
   }
 }
+
+query GetBuyerSalamiWalletBalance {
+  getBuyerSalamiWalletBalance {
+    walletId
+    buyerId
+    walletBalance
+    giftBalance
+  }
+}

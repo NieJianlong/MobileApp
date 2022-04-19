@@ -28,15 +28,16 @@ import {
 } from "../../../Apollo/cache";
 import { nanoid } from "nanoid";
 import BigNumber from "bignumber.js";
-import { WALLET_BALANCE } from "../../../hooks/gql";
 import NavigationService from "../../../Navigation/NavigationService";
 import { useCreateOrder } from "../../../hooks/order";
 import RazorpayCheckout from "react-native-razorpay";
 import { useRazorVerifyPayment } from "../../../hooks/verifyPayment";
 import { useCreateRazorOrder } from "../../../hooks/razorOrder";
-import { DeliveryOption } from "../../../../generated/graphql";
+import {
+  DeliveryOption,
+  useGetBuyerSalamiWalletBalanceQuery,
+} from "../../../../generated/graphql";
 import AddBillingDetail from "../../../hooks/addBillingDetails";
-import alert from "../../../Components/Alert";
 import { usePaymentConfigration } from "../../../Utils/utils";
 import { isEmpty } from "lodash";
 export default function DetailFooter({ product, currentVariant, pickUp }) {
@@ -46,20 +47,15 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
-  const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
-    useRazorVerifyPayment();
-  const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
+  const { razorpayVerifyPaymentSignature } = useRazorVerifyPayment();
+  const { razorpayCreateOrder } = useCreateRazorOrder();
   const userProfile = useReactiveVar(userProfileVar);
-  const { addbillingDetail, addBilling } = AddBillingDetail();
-  const { data } = useQuery(WALLET_BALANCE, {
+  const { addBilling } = AddBillingDetail();
+  const { data } = useGetBuyerSalamiWalletBalanceQuery({
     context: {
       headers: {
         isPrivate: true,
       },
-      onCompleted: (res) => {
-        console.log("Completed", res);
-      },
-      onError: (err) => {},
     },
   });
 
@@ -80,9 +76,6 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
         data?.getBuyerSalamiWalletBalance?.giftBalance
     ).toFixed(2)
   );
-
-  console.log("walletBalance", walletBalance);
-  //const walletBalance = parseFloat(BigNumber(0.5).toFixed(2));
 
   const orderCreate = (type: string, billingDetailsId: string) => {
     const productBuyNow = {

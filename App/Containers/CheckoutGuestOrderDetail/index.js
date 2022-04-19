@@ -15,10 +15,6 @@ import {
 import styles from "./styles";
 import { BILLING_DETAIL_BY_GUEST_BUYERID } from "../../Apollo/queries/queries_user";
 import RazorpayCheckout from "react-native-razorpay";
-import {
-  CREATE_BILLING_DETAILS_FOR_GUEST_BUYER,
-  UPDATE_BILLING_DETAILS_FOR_GUEST_BUYER,
-} from "../../Apollo/mutations/mutations_user";
 import NavigationService from "../../Navigation/NavigationService";
 import BigNumber from "bignumber.js";
 import { useCreateOrder } from "../../hooks/order";
@@ -45,8 +41,6 @@ function CheckoutGuestOrderDetail(props) {
   const [deliveryAddress, setDeliveryAddress] = useState(
     localCart.callBackAddress
   );
-  console.log("localCart========deliverAddrtesss", localCart.deliverAddress);
-  console.log("localCart========callbackAddress", localCart.callBackAddress);
   const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
     useRazorVerifyPayment();
   const { dispatch } = useContext(AlertContext);
@@ -68,11 +62,7 @@ function CheckoutGuestOrderDetail(props) {
     variables: {
       guestBuyerId: global.buyerId,
     },
-    context: {
-      headers: {
-        isPrivate: isAuth,
-      },
-    },
+
     onError: (err) => {
       console.log("Error===========BILLING_DETAIL_BY_BUYERID", err);
     },
@@ -97,90 +87,6 @@ function CheckoutGuestOrderDetail(props) {
   useEffect(() => {
     getBillingAddress();
   }, [getBillingAddress]);
-
-  console.log("getBillingDataResponse", getBillingData);
-  console.log("global.buyerId", global.buyerId);
-
-  //To get default delivery address
-  // const { loading, refetch } = useQuery(
-  //   aQM.FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID,
-  //   {
-  //     variables: { buyerId: global.buyerId },
-  //     context: {
-  //       headers: {
-  //         isPrivate: isAuth,
-  //       },
-  //     },
-  //     onError: (err) => {
-  //       console.log("Error===========", err);
-  //     },
-  //     onCompleted: (result) => {
-  //       console.log(
-  //         "resultJson FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID",
-  //         result
-  //       );
-  //       if (result) {
-  //         const resultJson = result.getGuestBuyerDefaultAddressByBuyerId;
-  //         setDeliveryAddress(resultJson);
-  //       }
-  //     },
-  //   }
-  // );
-  console.log(
-    "HERE VALUE getBillingData",
-    getBillingData ? "create" : "update"
-  );
-
-  const requestCreate = {
-    buyerId: global.buyerId,
-    firstName: fName,
-    lastName: lName,
-    companyName: "",
-    email: email,
-    phoneNumber: "+91" + phno,
-    billingAddress: {
-      flat: deliveryAddress?.flatNumber,
-      floor: deliveryAddress?.floor,
-      defaultAddress: true,
-      houseNumber: deliveryAddress?.houseNumber,
-      villageArea: deliveryAddress?.villageArea,
-      country: "India",
-      landMark: deliveryAddress?.landMark,
-      pinCode: deliveryAddress?.pinCode,
-      referenceId: global.buyerId,
-      provinceState: deliveryAddress?.provinceState,
-      townCity: deliveryAddress?.townCity,
-    },
-    taxCode: deliveryAddress?.pinCode,
-  };
-
-  const requestUpdate = {
-    billingDetailsId: billingAddress?.billingDetailsId,
-    buyerId: global.buyerId,
-    firstName: fName,
-    lastName: lName,
-    companyName: billingAddress?.companyName,
-    email: billingAddress?.email,
-    phoneNumber: phno,
-    billingAddress: {
-      addressId: billingAddress?.billingAddress?.addressId,
-      flat: deliveryAddress?.flatNumber,
-      floor: deliveryAddress?.floor,
-      defaultAddress: true,
-      houseNumber: deliveryAddress?.houseNumber,
-      villageArea: deliveryAddress?.villageArea,
-      district: billingAddress.billingAddress?.district,
-      provinceState: billingAddress.billingAddress?.provinceState,
-      country: "India",
-      landMark: deliveryAddress?.landMark,
-      pinCode: deliveryAddress?.pinCode,
-      addressType: billingAddress.billingAddress?.addressType,
-      referenceId: global.buyerId,
-    },
-    taxCode: deliveryAddress?.pinCode,
-  };
-  console.log("billingAddress.length > 0", billingAddress.length > 0);
-  console.log("billingAddress.length > 0", billingAddress);
 
   //need to call updateORcreatebillingaddress here
   const onPressNext = async () => {
@@ -275,7 +181,7 @@ function CheckoutGuestOrderDetail(props) {
             type: "changLoading",
             payload: false,
           });
-          alert(err.message);
+          // alert(err.message);
         },
       });
     }

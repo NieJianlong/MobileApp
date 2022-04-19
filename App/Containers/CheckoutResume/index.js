@@ -289,6 +289,7 @@ function CheckoutResume(props) {
     });
     return;
   };
+
   return (
     <View
       style={{
@@ -414,7 +415,11 @@ function CheckoutResume(props) {
                       >
                         number of slices has been reached
                       </Text>
-                      <TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          props.navigation.navigate("LearnMoreScreen");
+                        }}
+                      >
                         <Text
                           style={[
                             ApplicationStyles.screen.txtRegular,

@@ -60,7 +60,7 @@ const items = [
     title: "Legal",
     icon: images.userDocImage,
     onPress: () => {
-      NavigationService.navigate("CustomerSupportScreen");
+      NavigationService.navigate("LegalScreen");
     },
   },
   {

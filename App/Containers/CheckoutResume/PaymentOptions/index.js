@@ -33,7 +33,7 @@ const PaymentOptions = () => {
   console.log(
     "Data In Wallet Balance",
     data?.getBuyerSalamiWalletBalance,
-    displayData,
+    displayData
   );
   return (
     <View>

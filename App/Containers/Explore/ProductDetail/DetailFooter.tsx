@@ -35,11 +35,13 @@ import RazorpayCheckout from "react-native-razorpay";
 import { useRazorVerifyPayment } from "../../../hooks/verifyPayment";
 import { useCreateRazorOrder } from "../../../hooks/razorOrder";
 import { DeliveryOption } from "../../../../generated/graphql";
-import { FIND_BUYER_ADDRESS_BY_ID } from "../../../Apollo/queries/queries_user";
 import AddBillingDetail from "../../../hooks/addBillingDetails";
 import alert from "../../../Components/Alert";
+import { usePaymentConfigration } from "../../../Utils/utils";
+import { isEmpty } from "lodash";
 export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { dispatch } = useContext(AlertContext);
+  const getPaymentConfigration = usePaymentConfigration();
   const { realm } = useRealm();
   const {
     data: { localCartVar },
@@ -58,21 +60,6 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
         console.log("Completed", res);
       },
       onError: (err) => {},
-    },
-  });
-  const {
-    loading,
-    error,
-    data: addressdata,
-    refetch,
-  } = useQuery(FIND_BUYER_ADDRESS_BY_ID, {
-    variables: {
-      buyerId: global.buyerId,
-    },
-    context: {
-      headers: {
-        isPrivate: true,
-      },
     },
   });
 
@@ -97,7 +84,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   console.log("walletBalance", walletBalance);
   //const walletBalance = parseFloat(BigNumber(0.5).toFixed(2));
 
-  const orderCreate = (type) => {
+  const orderCreate = (type: string, billingDetailsId: string) => {
     const productBuyNow = {
       listingId: product.listingId,
       quantity,
@@ -113,7 +100,9 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
         cart: {
           buyerId: userProfile.buyerId,
           shippingAddressId: localCartVar.deliverAddress,
-          billingDetailsId: userProfile.billingDetailsId,
+          billingDetailsId: isEmpty(billingDetailsId)
+            ? userProfile.billingDetailsId
+            : billingDetailsId,
           useSalamiWallet: true,
           cartItems: [productBuyNow],
         },
@@ -150,20 +139,8 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
             razorpayCreateOrder().then((res) => {
               if (res?.data) {
                 const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
-                var options = {
-                  description: "Credits towords consultation",
-                  image: "https://i.imgur.com/3g7nmJC.png",
-                  currency: "INR",
-                  key: "rzp_test_I8X2v4LgupMLv0",
-                  name: "Acme Corp",
-                  order_id: razorId, //Replace this with an order_id created using Orders API.
-                  prefill: {
-                    email: userProfile?.email,
-                    contact: userProfile?.phoneNumber,
-                    name: userProfile?.firstName + userProfile.lastName,
-                  },
-                  theme: { color: "#53a20e" },
-                };
+                let options = getPaymentConfigration(razorId);
+
                 RazorpayCheckout.open(options)
                   .then((data) => {
                     razorOrderPaymentVar({
@@ -172,7 +149,6 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
                       razorpay_signature: data.razorpay_signature,
                     });
                     razorpayVerifyPaymentSignature();
-                    alert(`Success: ${data.razorpay_payment_id}`);
 
                     NavigationService.navigate("OrderPlacedScreen", {
                       items: product,
@@ -180,7 +156,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
                     });
                   })
                   .catch((error) => {
-                    alert(`Error: ${error.code} | ${error.description}`);
+                    // alert(`Error: ${error.code} | ${error.description}`);
                   });
               }
             });
@@ -201,7 +177,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
           type: "changLoading",
           payload: false,
         });
-        alert(JSON.stringify(res.message));
+        // alert(JSON.stringify(res.message));
         console.log(`Explore useCreateOrder onError ${JSON.stringify(res)}`);
       },
     });
@@ -259,18 +235,19 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       return;
     } else {
       if (data !== undefined && !isNaN(walletBalance)) {
-        await addBilling();
+        const billingDetailsId = await addBilling();
+
         if (
           walletBalance >=
           parseFloat(
             new BigNumber(quantity * product.wholeSalePrice).toFixed(2)
           )
         ) {
-          orderCreate("sufficient");
+          orderCreate("sufficient", billingDetailsId ?? "");
         } else if (walletBalance === 0 || walletBalance < 0) {
-          orderCreate("zero");
+          orderCreate("zero", billingDetailsId ?? "");
         } else {
-          orderCreate("InSufficient");
+          orderCreate("InSufficient", billingDetailsId ?? "");
         }
       }
     }

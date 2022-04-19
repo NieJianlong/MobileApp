@@ -39,6 +39,7 @@ import { AlertContext } from "../Root/GlobalContext";
 import PubSub from "pubsub-js";
 import useRealm from "../../hooks/useRealm";
 import AddBillingDetail from "../../hooks/addBillingDetails";
+import { usePaymentConfigration } from "../../Utils/utils";
 //orderStatus：1,completed
 function CheckoutResume(props) {
   const { params } = useRoute();
@@ -49,6 +50,7 @@ function CheckoutResume(props) {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
   const { addbillingDetail, addBilling } = AddBillingDetail();
+  const getPaymentConfigration = usePaymentConfigration();
   const { realm } = useRealm();
   console.log("callBackAddress", localCartVar.callBackAddress);
   const userProfile = useReactiveVar(userProfileVar);
@@ -232,20 +234,7 @@ function CheckoutResume(props) {
             razorpayCreateOrder().then((res) => {
               if (res?.data) {
                 const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
-                var options = {
-                  description: "Credits towords consultation",
-                  image: "https://i.imgur.com/3g7nmJC.png",
-                  currency: "INR",
-                  key: "rzp_test_I8X2v4LgupMLv0",
-                  name: "Acme Corp",
-                  order_id: razorId, //Replace this with an order_id created using Orders API.
-                  prefill: {
-                    email: userProfile?.email || "",
-                    contact: userProfile?.phoneNumber || "",
-                    name: userProfile?.firstName + userProfile.lastName || "",
-                  },
-                  theme: { color: "#53a20e" },
-                };
+                let options = getPaymentConfigration(razorId);
                 RazorpayCheckout.open(options)
                   .then((data) => {
                     razorOrderPaymentVar({

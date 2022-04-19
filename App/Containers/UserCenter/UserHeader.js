@@ -127,7 +127,7 @@ function UserInfo() {
               source={require("../../Images/usercenter/phone.png")}
             ></Image>
             <Text style={styles.emailtext}>
-              {data?.buyerProfile.phoneNumber === null ? data?.buyerProfile.userName : data?.buyerProfile.phoneNumber}
+              {data?.buyerProfile.phoneNumber}
             </Text>
           </View>
         </View>

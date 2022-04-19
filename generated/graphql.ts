@@ -4563,6 +4563,20 @@ export type CreateBillingDetailsMutationVariables = Exact<{
 
 export type CreateBillingDetailsMutation = { __typename?: 'Mutation', createBillingDetails?: { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined } | null | undefined };
 
+export type CreateBillingDetailsForGuestBuyerMutationVariables = Exact<{
+  request: BillingDetailsRequestForCreate;
+}>;
+
+
+export type CreateBillingDetailsForGuestBuyerMutation = { __typename?: 'Mutation', createBillingDetailsForGuestBuyer?: { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined } | null | undefined };
+
+export type UpdateBillingDetailsForGuestBuyerMutationVariables = Exact<{
+  request: BillingDetailsRequest;
+}>;
+
+
+export type UpdateBillingDetailsForGuestBuyerMutation = { __typename?: 'Mutation', updateBillingDetailsForGuestBuyer?: { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined } | null | undefined };
+
 export const AddressOrderFiledFragmentDoc = gql`
     fragment AddressOrderFiled on AddressResponse {
   addressId
@@ -6367,3 +6381,69 @@ export function useCreateBillingDetailsMutation(baseOptions?: Apollo.MutationHoo
 export type CreateBillingDetailsMutationHookResult = ReturnType<typeof useCreateBillingDetailsMutation>;
 export type CreateBillingDetailsMutationResult = Apollo.MutationResult<CreateBillingDetailsMutation>;
 export type CreateBillingDetailsMutationOptions = Apollo.BaseMutationOptions<CreateBillingDetailsMutation, CreateBillingDetailsMutationVariables>;
+export const CreateBillingDetailsForGuestBuyerDocument = gql`
+    mutation CreateBillingDetailsForGuestBuyer($request: BillingDetailsRequestForCreate!) {
+  createBillingDetailsForGuestBuyer(request: $request) {
+    ...BillingDetailsFields
+  }
+}
+    ${BillingDetailsFieldsFragmentDoc}`;
+export type CreateBillingDetailsForGuestBuyerMutationFn = Apollo.MutationFunction<CreateBillingDetailsForGuestBuyerMutation, CreateBillingDetailsForGuestBuyerMutationVariables>;
+
+/**
+ * __useCreateBillingDetailsForGuestBuyerMutation__
+ *
+ * To run a mutation, you first call `useCreateBillingDetailsForGuestBuyerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBillingDetailsForGuestBuyerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createBillingDetailsForGuestBuyerMutation, { data, loading, error }] = useCreateBillingDetailsForGuestBuyerMutation({
+ *   variables: {
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useCreateBillingDetailsForGuestBuyerMutation(baseOptions?: Apollo.MutationHookOptions<CreateBillingDetailsForGuestBuyerMutation, CreateBillingDetailsForGuestBuyerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateBillingDetailsForGuestBuyerMutation, CreateBillingDetailsForGuestBuyerMutationVariables>(CreateBillingDetailsForGuestBuyerDocument, options);
+      }
+export type CreateBillingDetailsForGuestBuyerMutationHookResult = ReturnType<typeof useCreateBillingDetailsForGuestBuyerMutation>;
+export type CreateBillingDetailsForGuestBuyerMutationResult = Apollo.MutationResult<CreateBillingDetailsForGuestBuyerMutation>;
+export type CreateBillingDetailsForGuestBuyerMutationOptions = Apollo.BaseMutationOptions<CreateBillingDetailsForGuestBuyerMutation, CreateBillingDetailsForGuestBuyerMutationVariables>;
+export const UpdateBillingDetailsForGuestBuyerDocument = gql`
+    mutation UpdateBillingDetailsForGuestBuyer($request: BillingDetailsRequest!) {
+  updateBillingDetailsForGuestBuyer(request: $request) {
+    ...BillingDetailsFields
+  }
+}
+    ${BillingDetailsFieldsFragmentDoc}`;
+export type UpdateBillingDetailsForGuestBuyerMutationFn = Apollo.MutationFunction<UpdateBillingDetailsForGuestBuyerMutation, UpdateBillingDetailsForGuestBuyerMutationVariables>;
+
+/**
+ * __useUpdateBillingDetailsForGuestBuyerMutation__
+ *
+ * To run a mutation, you first call `useUpdateBillingDetailsForGuestBuyerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBillingDetailsForGuestBuyerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBillingDetailsForGuestBuyerMutation, { data, loading, error }] = useUpdateBillingDetailsForGuestBuyerMutation({
+ *   variables: {
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useUpdateBillingDetailsForGuestBuyerMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBillingDetailsForGuestBuyerMutation, UpdateBillingDetailsForGuestBuyerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateBillingDetailsForGuestBuyerMutation, UpdateBillingDetailsForGuestBuyerMutationVariables>(UpdateBillingDetailsForGuestBuyerDocument, options);
+      }
+export type UpdateBillingDetailsForGuestBuyerMutationHookResult = ReturnType<typeof useUpdateBillingDetailsForGuestBuyerMutation>;
+export type UpdateBillingDetailsForGuestBuyerMutationResult = Apollo.MutationResult<UpdateBillingDetailsForGuestBuyerMutation>;
+export type UpdateBillingDetailsForGuestBuyerMutationOptions = Apollo.BaseMutationOptions<UpdateBillingDetailsForGuestBuyerMutation, UpdateBillingDetailsForGuestBuyerMutationVariables>;

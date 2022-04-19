@@ -26,6 +26,8 @@ import { AlertContext } from "../Root/GlobalContext";
 import { useCreateRazorOrder } from "../../hooks/razorOrder";
 import { useRazorVerifyPayment } from "../../hooks/verifyPayment";
 import { fn } from "moment";
+import { usePaymentConfigration } from "../../Utils/utils";
+import AddBillingDetail from "../../hooks/addBillingDetails";
 
 function CheckoutGuestOrderDetail(props) {
   const userProfileVarReactive = useReactiveVar(userProfileVar);
@@ -34,6 +36,7 @@ function CheckoutGuestOrderDetail(props) {
   const [fName, setFName] = useState(billingAddress?.firstName || null);
   const [lName, setLName] = useState(billingAddress?.lastName || null);
   const [phno, setPhno] = useState(billingAddress?.phoneNumber || null);
+  const { addBilling } = AddBillingDetail();
 
   const [isSameAsDelivery, setIsSameAsDelivery] = useState(true);
   const { createOrderFromCart, order } = useCreateOrder();
@@ -51,6 +54,7 @@ function CheckoutGuestOrderDetail(props) {
     () => userProfileVarReactive.isAuth,
     [userProfileVarReactive.isAuth]
   );
+  const getPaymentConfigration = usePaymentConfigration();
 
   //getBillingAddress of guest buyer
   const [
@@ -177,185 +181,105 @@ function CheckoutGuestOrderDetail(props) {
   };
   console.log("billingAddress.length > 0", billingAddress.length > 0);
   console.log("billingAddress.length > 0", billingAddress);
-  const [
-    createUpdateBillingAddress,
-    {
-      loading: createloadingBilling,
-      error: createbillingError,
-      data: createBillingData,
-    },
-  ] = useMutation(
-    billingAddress?.billingDetailsId
-      ? UPDATE_BILLING_DETAILS_FOR_GUEST_BUYER
-      : CREATE_BILLING_DETAILS_FOR_GUEST_BUYER,
-    {
-      variables: {
-        request: billingAddress?.billingDetailsId
-          ? requestUpdate
-          : requestCreate,
-      },
-      context: {
-        headers: {
-          isPrivate: isAuth,
-        },
-      },
-      onError: (err) => {
-        console.log("Here createbillingError", err);
-        dispatch({
-          type: "changLoading",
-          payload: false,
-        });
-        alert(err?.message);
-      },
-      onCompleted: (result) => {
-        console.log(
-          "result=========billingDetails",
-          result?.createBillingDetailsForGuestBuyer
-        );
-        console.log(
-          "billingDetails",
-          result?.updateBillingDetailsForGuestBuyer
-        );
-        dispatch({
-          type: "changLoading",
-          payload: false,
-        });
-        localCartVar({
-          ...localCart,
-          billingAddressDetail: billingAddress?.billingDetailsId
-            ? result.updateBillingDetailsForGuestBuyer
-            : result.createBillingDetailsForGuestBuyer,
-        });
-        console.log("props?.route?.params?.from", props?.route?.params?.from);
-        if (props?.route?.params?.from === "checkout") {
-          dispatch({
-            type: "changLoading",
-            payload: false,
-          });
-          NavigationService.navigate("CheckoutResumeScreen", {
-            orderStatus: 0,
-            data: props?.route?.params?.items,
-            availbleList: props?.route?.params?.availbleList,
-          });
-        } else {
-          const productBuyNow = {
-            listingId: props?.route?.params?.product?.listingId,
-            quantity: props?.route?.params?.product?.quantity,
-            variantId: props?.route?.params?.product?.variantId,
-          };
-          localBuyNowVar({
-            items: [productBuyNow],
-          });
-          console.log(
-            "props?.route?.params?.product",
-            props?.route?.params?.product
-          );
-          console.log(
-            "localCartVar.deliverAddress",
-            localCartVar.deliverAddress
-          );
-          const billingDetailsId = result?.createBillingDetailsForGuestBuyer
-            ?.billingDetailsId
-            ? result?.createBillingDetailsForGuestBuyer?.billingDetailsId
-            : result.updateBillingDetailsForGuestBuyer?.billingDetailsId;
-          // createUpdateBillingAddress();
-          createOrderFromCart({
-            variables: {
-              cart: {
-                buyerId: global.buyerId,
-                shippingAddressId: localCartVar.deliverAddress,
-                billingDetailsId: billingDetailsId,
-                useSalamiWallet: false,
-                cartItems:
-                  localBuyNowVar().items.length > 0
-                    ? localBuyNowVar().items
-                    : localCartVar().items,
-              },
-            },
-            context: {
-              headers: {
-                isPrivate: isAuth,
-              },
-            },
-            onCompleted: (res) => {
-              console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
-              dispatch({
-                type: "changLoading",
-                payload: false,
-              });
-              const order = res?.createOrderFromCart;
-              if (res?.createOrderFromCart?.orderId) {
-                cartOrderVar({
-                  orderNumber: order?.orderNumber,
-                  orderId: order?.orderId,
-                  amount: order?.subTotal,
-                });
-                razorpayCreateOrder().then((res) => {
-                  if (res?.data) {
-                    const razorId =
-                      res?.data?.razorpayCreateOrder?.razorpayOrderId;
-                    var options = {
-                      description: "Credits towords consultation",
-                      image: "https://i.imgur.com/3g7nmJC.png",
-                      currency: "INR",
-                      key: "rzp_test_I8X2v4LgupMLv0",
-                      name: "Acme Corp",
-                      order_id: razorId, //Replace this with an order_id created using Orders API.
-                      prefill: {
-                        email: email,
-                        contact: phno,
-                        name: fName + lName,
-                      },
-                      theme: { color: "#53a20e" },
-                    };
-                    RazorpayCheckout.open(options)
-                      .then((data) => {
-                        razorOrderPaymentVar({
-                          razorpay_payment_id: data.razorpay_payment_id,
-                          razorpay_order_id: data.razorpay_order_id,
-                          razorpay_signature: data.razorpay_signature,
-                        });
-                        razorpayVerifyPaymentSignature();
-                        dispatch({
-                          type: "changLoading",
-                          payload: false,
-                        });
-                        alert(`Success: ${data.razorpay_payment_id}`);
 
-                        NavigationService.navigate("OrderPlacedScreen", {
-                          items: props?.route?.params?.items,
-                          from: props?.route?.params?.from,
-                        });
-                      })
-                      .catch((error) => {
-                        alert(`Error: ${error.code} | ${error.description}`);
-                      });
-                  }
-                });
-              }
-              return res?.createOrderFromCart;
-            },
-            onError: (err) => {
-              console.log("Here createOrder", err);
-              dispatch({
-                type: "changLoading",
-                payload: false,
-              });
-              alert(err.message);
-            },
-          });
-        }
-      },
-    }
-  );
   //need to call updateORcreatebillingaddress here
-  const onPressNext = () => {
-    console.log("props?.route?.params?.from", props?.route?.params?.from);
+  const onPressNext = async () => {
+    const billingDetailsId = await addBilling();
     dispatch({
       type: "changLoading",
       payload: true,
     });
-    createUpdateBillingAddress();
+    if (props?.route?.params?.from === "checkout") {
+      dispatch({
+        type: "changLoading",
+        payload: false,
+      });
+      NavigationService.navigate("CheckoutResumeScreen", {
+        orderStatus: 0,
+        data: props?.route?.params?.items,
+        availbleList: props?.route?.params?.availbleList,
+      });
+    } else {
+      const productBuyNow = {
+        listingId: props?.route?.params?.product?.listingId,
+        quantity: props?.route?.params?.product?.quantity,
+        variantId: props?.route?.params?.product?.variantId,
+      };
+      localBuyNowVar({
+        items: [productBuyNow],
+      });
+      // createUpdateBillingAddress();
+      createOrderFromCart({
+        variables: {
+          cart: {
+            buyerId: global.buyerId,
+            shippingAddressId: localCartVar.deliverAddress,
+            billingDetailsId: billingDetailsId,
+            useSalamiWallet: false,
+            cartItems:
+              localBuyNowVar().items.length > 0
+                ? localBuyNowVar().items
+                : localCartVar().items,
+          },
+        },
+        context: {
+          headers: {
+            isPrivate: isAuth,
+          },
+        },
+        onCompleted: (res) => {
+          console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
+          dispatch({
+            type: "changLoading",
+            payload: false,
+          });
+          const order = res?.createOrderFromCart;
+          if (res?.createOrderFromCart?.orderId) {
+            cartOrderVar({
+              orderNumber: order?.orderNumber,
+              orderId: order?.orderId,
+              amount: order?.subTotal,
+            });
+            razorpayCreateOrder().then((res) => {
+              if (res?.data) {
+                const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
+                let options = getPaymentConfigration(razorId);
+
+                RazorpayCheckout.open(options)
+                  .then((data) => {
+                    razorOrderPaymentVar({
+                      razorpay_payment_id: data.razorpay_payment_id,
+                      razorpay_order_id: data.razorpay_order_id,
+                      razorpay_signature: data.razorpay_signature,
+                    });
+                    razorpayVerifyPaymentSignature();
+                    dispatch({
+                      type: "changLoading",
+                      payload: false,
+                    });
+
+                    NavigationService.navigate("OrderPlacedScreen", {
+                      items: props?.route?.params?.items,
+                      from: props?.route?.params?.from,
+                    });
+                  })
+                  .catch((error) => {});
+              }
+            });
+          }
+          return res?.createOrderFromCart;
+        },
+        onError: (err) => {
+          console.log("Here createOrder", err);
+          dispatch({
+            type: "changLoading",
+            payload: false,
+          });
+          alert(err.message);
+        },
+      });
+    }
+
     // NavigationService.navigate("OrderPlacedScreen", {
     //   items: props?.route?.params?.items,
     //   from: props?.route?.params?.from,

@@ -32,6 +32,7 @@ import { useRazorVerifyPayment } from "../../hooks/verifyPayment";
 import { useQuery, useReactiveVar } from "@apollo/client";
 import BigNumber from "bignumber.js";
 import { AlertContext } from "../Root/GlobalContext";
+import { usePaymentConfigration } from "../../Utils/utils";
 
 function InSufficientSalamiCredit(props) {
   const params = props?.route?.params;
@@ -45,6 +46,7 @@ function InSufficientSalamiCredit(props) {
   const { dispatch } = useContext(AlertContext);
   const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
     useRazorVerifyPayment();
+  const getPaymentConfigration = usePaymentConfigration();
   const payments = [
     {
       image: images.userPayMethod2Image,
@@ -316,21 +318,7 @@ function InSufficientSalamiCredit(props) {
                         if (res?.data) {
                           const razorId =
                             res?.data?.razorpayCreateOrder?.razorpayOrderId;
-                          var options = {
-                            description: "Credits towords consultation",
-                            image: "https://i.imgur.com/3g7nmJC.png",
-                            currency: "INR",
-                            key: "rzp_test_I8X2v4LgupMLv0",
-                            name: "Acme Corp",
-                            order_id: razorId, //Replace this with an order_id created using Orders API.
-                            prefill: {
-                              email: userProfile?.email,
-                              contact: userProfile?.phoneNumber,
-                              name:
-                                userProfile?.firstName + userProfile.lastName,
-                            },
-                            theme: { color: "#53a20e" },
-                          };
+                          let options = getPaymentConfigration(razorId);
                           RazorpayCheckout.open(options)
                             .then((data) => {
                               razorOrderPaymentVar({

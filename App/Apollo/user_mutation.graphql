@@ -55,3 +55,17 @@ mutation CreateBillingDetails($request: BillingDetailsRequestForCreate!) {
     ...BillingDetailsFields
   }
 }
+
+mutation CreateBillingDetailsForGuestBuyer(
+  $request: BillingDetailsRequestForCreate!
+) {
+  createBillingDetailsForGuestBuyer(request: $request) {
+    ...BillingDetailsFields
+  }
+}
+
+mutation UpdateBillingDetailsForGuestBuyer($request: BillingDetailsRequest!) {
+  updateBillingDetailsForGuestBuyer(request: $request) {
+    ...BillingDetailsFields
+  }
+}

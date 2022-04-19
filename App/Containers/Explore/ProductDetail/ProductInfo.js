@@ -221,7 +221,7 @@ export default function ProductInfo({
         <View style={[styles.v2, { paddingTop: vs(15) }]}>
           <Text style={styles.heading3Bold}>Details & Highlights</Text>
 
-          {product.highlightBullets &&
+          {product?.highlightBullets &&
             JSON.parse(product?.highlightBullets).map((bul, index) => (
               <View key={index} style={styles.row}>
                 <Text style={styles.txtDot}>•</Text>

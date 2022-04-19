@@ -3,7 +3,9 @@ import { useReactiveVar } from "@apollo/client";
 import { localCartVar, userProfileVar } from "../Apollo/cache";
 import {
   AddressType,
+  useCreateBillingDetailsForGuestBuyerMutation,
   useCreateBillingDetailsMutation,
+  useUpdateBillingDetailsForGuestBuyerMutation,
   useUpdateBillingDetailsMutation,
 } from "../../generated/graphql";
 import { isEmpty } from "lodash";
@@ -14,13 +16,6 @@ const AddBillingDetail = () => {
   const [isBillingLoaded, setIsBillingLoaded] = useState(false);
   const [addbillingDetail, setBillingDetail] = useState(null);
   const addressLocal = localCartVarReactive.callBackAddress;
-  console.log("Here call========", localCartVarReactive.callBackAddress);
-  console.log("userProfile=====", userProfile);
-  console.log(
-    "userProfile ===== billingDetailsId",
-    userProfile.billingDetailsId
-  );
-
   const billingAddress = {
     pinCode: addressLocal?.pinCode,
     addressType: AddressType.Billing,
@@ -38,7 +33,6 @@ const AddBillingDetail = () => {
     buyerId: global.buyerId,
     firstName: userProfile?.firstName,
     lastName: userProfile?.lastName,
-    companyName: "",
     email: userProfile?.email,
     phoneNumber: userProfile?.phoneNumber,
     billingAddress: userProfile.billingDetailsId
@@ -77,6 +71,34 @@ const AddBillingDetail = () => {
       return err;
     },
   });
+  const [updateGuestBillingDetails] =
+    useUpdateBillingDetailsForGuestBuyerMutation({
+      variables: {
+        request: {
+          billingDetailsId: userProfile.billingDetailsId,
+          ...request,
+        },
+      },
+
+      onCompleted: (res) => {
+        userProfileVar({
+          ...userProfile,
+          billingDetails: res.updateBillingDetails,
+          billingDetailsId: res.updateBillingDetails?.billingDetailsId,
+        });
+        console.log(
+          "In complete===",
+          userProfile?.billingDetailsId
+            ? res.updateBillingDetails
+            : res.createBillingDetails
+        );
+      },
+      onError: (err) => {
+        console.log("error-======", err);
+        alert(err.message);
+        return err;
+      },
+    });
   const [createBilling] = useCreateBillingDetailsMutation({
     context: {
       headers: {
@@ -86,11 +108,22 @@ const AddBillingDetail = () => {
     variables: {
       request: request,
     },
+    onError: (err) => {
+      console.log("error-======", err);
+
+      return err;
+    },
+  });
+  const [createGuestBilling] = useCreateBillingDetailsForGuestBuyerMutation({
+    variables: {
+      request: request,
+    },
     onCompleted: (res) => {
       userProfileVar({
         ...userProfile,
-        billingDetails: res.createBillingDetails,
-        billingDetailsId: res.createBillingDetails?.billingDetailsId,
+        billingDetails: res.createBillingDetailsForGuestBuyer,
+        billingDetailsId:
+          res.createBillingDetailsForGuestBuyer?.billingDetailsId,
       });
     },
     onError: (err) => {
@@ -99,13 +132,32 @@ const AddBillingDetail = () => {
       return err;
     },
   });
-
   async function addBilling() {
+    let result;
+    let resultTemp1;
     if (isEmpty(userProfile.billingDetailsId)) {
-      await createBilling();
+      if (userProfile.isAuth) {
+        resultTemp1 = await createBilling();
+        result = resultTemp1?.data?.createBillingDetails;
+      } else {
+        resultTemp1 = await createGuestBilling();
+        result = resultTemp1?.data?.createBillingDetailsForGuestBuyer;
+      }
     } else {
-      await updateBillingDetails();
+      if (userProfile.isAuth) {
+        resultTemp1 = await updateBillingDetails();
+        result = resultTemp1?.data?.updateBillingDetails;
+      } else {
+        resultTemp1 = await updateGuestBillingDetails();
+        result = resultTemp1?.data?.updateBillingDetailsForGuestBuyer;
+      }
     }
+    userProfileVar({
+      ...userProfile,
+      billingDetails: result,
+      billingDetailsId: result?.billingDetailsId,
+    });
+    return result?.billingDetailsId;
   }
   return {
     isBillingLoaded,

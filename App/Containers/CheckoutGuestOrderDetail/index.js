@@ -1,10 +1,10 @@
-import React, { useState, useMemo, useEffect, useContext } from "react";
+import React, { useState, useMemo, useContext } from "react";
 import { View, TouchableOpacity, Text } from "react-native";
 
 import BaseScreen from "../BaseScreen";
 import { AppBar, Button, Switch } from "../../Components";
 import { MaterialTextInput } from "../../Components";
-import { useLazyQuery, useMutation, useReactiveVar } from "@apollo/client";
+import { useReactiveVar } from "@apollo/client";
 import {
   userProfileVar,
   localBuyNowVar,
@@ -13,80 +13,59 @@ import {
   razorOrderPaymentVar,
 } from "../../Apollo/cache";
 import styles from "./styles";
-import { BILLING_DETAIL_BY_GUEST_BUYERID } from "../../Apollo/queries/queries_user";
 import RazorpayCheckout from "react-native-razorpay";
 import NavigationService from "../../Navigation/NavigationService";
-import BigNumber from "bignumber.js";
 import { useCreateOrder } from "../../hooks/order";
 import { AlertContext } from "../Root/GlobalContext";
 import { useCreateRazorOrder } from "../../hooks/razorOrder";
 import { useRazorVerifyPayment } from "../../hooks/verifyPayment";
-import { fn } from "moment";
 import { usePaymentConfigration } from "../../Utils/utils";
 import AddBillingDetail from "../../hooks/addBillingDetails";
+import { useFocusEffect } from "@react-navigation/native";
+import { useBillingDetailsByGuestBuyerIdLazyQuery } from "../../../generated/graphql";
 
 function CheckoutGuestOrderDetail(props) {
-  const userProfileVarReactive = useReactiveVar(userProfileVar);
+  const userProfile = useReactiveVar(userProfileVar);
   const [billingAddress, setBillingAddress] = useState([]);
-  const [email, setEmail] = useState(billingAddress?.email || null);
-  const [fName, setFName] = useState(billingAddress?.firstName || null);
-  const [lName, setLName] = useState(billingAddress?.lastName || null);
-  const [phno, setPhno] = useState(billingAddress?.phoneNumber || null);
+
   const { addBilling } = AddBillingDetail();
 
   const [isSameAsDelivery, setIsSameAsDelivery] = useState(true);
-  const { createOrderFromCart, order } = useCreateOrder();
-  const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
+  const { createOrderFromCart } = useCreateOrder();
+  const { razorpayCreateOrder } = useCreateRazorOrder();
   const localCart = localCartVar();
-  const [deliveryAddress, setDeliveryAddress] = useState(
-    localCart.callBackAddress
-  );
-  const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
-    useRazorVerifyPayment();
+  const [deliveryAddress] = useState(localCart.callBackAddress);
+  const { razorpayVerifyPaymentSignature } = useRazorVerifyPayment();
   const { dispatch } = useContext(AlertContext);
-  const isAuth = useMemo(
-    () => userProfileVarReactive.isAuth,
-    [userProfileVarReactive.isAuth]
-  );
+  const isAuth = useMemo(() => userProfile.isAuth, [userProfile.isAuth]);
   const getPaymentConfigration = usePaymentConfigration();
 
   //getBillingAddress of guest buyer
-  const [
-    getBillingAddress,
-    {
-      loading: loadingBillingDetails,
-      error: billingError,
-      data: getBillingData,
-    },
-  ] = useLazyQuery(BILLING_DETAIL_BY_GUEST_BUYERID, {
+  const [getBillingAddress] = useBillingDetailsByGuestBuyerIdLazyQuery({
     variables: {
       guestBuyerId: global.buyerId,
     },
 
-    onError: (err) => {
-      console.log("Error===========BILLING_DETAIL_BY_BUYERID", err);
-    },
     onCompleted: (result) => {
-      console.log(
-        "resultJson BILLING_DETAIL_BY_BUYERID",
-        result.billingDetailsByGuestBuyerId[0]
-      );
       if (result.billingDetailsByGuestBuyerId.length > 0) {
-        setEmail(result.billingDetailsByGuestBuyerId[0].email);
-        setFName(result.billingDetailsByGuestBuyerId[0].firstName);
-        setLName(result.billingDetailsByGuestBuyerId[0].lastName);
-        setPhno(result.billingDetailsByGuestBuyerId[0].phoneNumber);
-        setBillingAddress(result.billingDetailsByGuestBuyerId[0]);
-      }
-      if (result) {
-        console.log("result", result);
+        const billingDetails = result.billingDetailsByGuestBuyerId[0];
+        userProfileVar({
+          ...userProfile,
+          billingDetails: billingDetails,
+          billingDetailsId: billingDetails?.billingDetailsId,
+          firstName: billingDetails?.firstName ?? "",
+          lastName: billingDetails?.lastName ?? "",
+          email: billingDetails?.email ?? "",
+          phone: billingDetails?.phoneNumber ?? "",
+        });
       }
     },
   });
-
-  useEffect(() => {
-    getBillingAddress();
-  }, [getBillingAddress]);
+  useFocusEffect(
+    React.useCallback(() => {
+      getBillingAddress();
+    }, [])
+  );
 
   //need to call updateORcreatebillingaddress here
   const onPressNext = async () => {
@@ -185,12 +164,6 @@ function CheckoutGuestOrderDetail(props) {
         },
       });
     }
-
-    // NavigationService.navigate("OrderPlacedScreen", {
-    //   items: props?.route?.params?.items,
-    //   from: props?.route?.params?.from,
-    // });
-    // return;
   };
 
   return (
@@ -222,38 +195,58 @@ function CheckoutGuestOrderDetail(props) {
         <View style={styles.inputsWrapper}>
           <MaterialTextInput
             placeholder="Email*"
-            onChangeText={(text) => setEmail(text)}
+            onChangeText={(email) =>
+              userProfileVar({
+                ...userProfile,
+                email,
+              })
+            }
             showError={false}
             keyboardType="email-address"
-            value={email}
+            value={userProfile.email}
           />
           <View style={styles.inputWrapper3}>
             <MaterialTextInput
               placeholder="phone number*"
-              onChangeText={(text) => setPhno(text)}
+              onChangeText={(phone) =>
+                userProfileVar({
+                  ...userProfile,
+                  phone,
+                })
+              }
               showError={false}
               keyboardType="default"
-              value={phno}
+              value={userProfile.phone}
             />
           </View>
           <View style={styles.inputsWrapper2}>
             <View style={styles.inputName}>
               <MaterialTextInput
                 placeholder="FirstName*"
-                onChangeText={(text) => setFName(text)}
+                onChangeText={(firstName) =>
+                  userProfileVar({
+                    ...userProfile,
+                    firstName,
+                  })
+                }
                 showError={false}
                 keyboardType="default"
-                value={fName}
+                value={userProfile.firstName}
               />
             </View>
 
             <View style={styles.inputName}>
               <MaterialTextInput
                 placeholder="LastName*"
-                onChangeText={(text) => setLName(text)}
+                onChangeText={(lastName) =>
+                  userProfileVar({
+                    ...userProfile,
+                    lastName,
+                  })
+                }
                 showError={false}
                 keyboardType="default"
-                value={lName}
+                value={userProfile.lastName}
               />
             </View>
           </View>

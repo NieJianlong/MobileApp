@@ -97,3 +97,9 @@ query GetBuyerSalamiWalletBalance {
     giftBalance
   }
 }
+
+query BillingDetailsByGuestBuyerId($guestBuyerId: ID!) {
+  billingDetailsByGuestBuyerId(guestBuyerId: $guestBuyerId) {
+    ...BillingDetailsFields
+  }
+}

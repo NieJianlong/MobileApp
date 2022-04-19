@@ -51,13 +51,8 @@ function CheckoutResume(props) {
   const { addBilling } = AddBillingDetail();
   const getPaymentConfigration = usePaymentConfigration();
   const { realm } = useRealm();
-  console.log("callBackAddress", localCartVar.callBackAddress);
   const userProfile = useReactiveVar(userProfileVar);
-  const userProfileVarReactive = useReactiveVar(userProfileVar);
-  const isAuth = useMemo(
-    () => userProfileVarReactive.isAuth,
-    [userProfileVarReactive.isAuth]
-  );
+  const isAuth = useMemo(() => userProfile.isAuth, [userProfile.isAuth]);
   const { razorpayVerifyPaymentSignature } = useRazorVerifyPayment();
   const { orderStatus, data, availbleList } = params;
   const money = useMemo(() => {
@@ -117,7 +112,6 @@ function CheckoutResume(props) {
     dataWallet?.getBuyerSalamiWalletBalance?.walletBalance +
       dataWallet?.getBuyerSalamiWalletBalance?.giftBalance
   ).toFixed(2);
-  console.log("walletBalance =========== typeOGGGGG", typeof walletBalance);
   const clearData = () => {
     let index = mydatas.length - 1;
     while (index >= 0) {
@@ -161,31 +155,11 @@ function CheckoutResume(props) {
         longName: productItem.product.longName,
       };
     });
-    const res = isAuth ? await addBilling() : "";
+    const billingDetailsId = await addBilling();
     dispatch({
       type: "changLoading",
       payload: false,
     });
-    console.log("res=====", res);
-    const billingDetailsId = isAuth
-      ? userProfile?.billingDetailsId
-        ? res?.data?.updateBillingDetails?.billingDetailsId
-        : res?.data?.createBillingDetails?.billingDetailsId
-      : localCartVar?.billingAddressDetail?.billingDetailsId;
-    if (isAuth) {
-      localCartCache({
-        ...localCartVar,
-        billingAddressDetail: userProfile?.billingDetailsId
-          ? res?.data?.updateBillingDetails
-          : res?.data?.createBillingDetails,
-      });
-      userProfileVar({
-        ...userProfile,
-        billingDetailsId: userProfile?.billingDetailsId
-          ? res?.data?.updateBillingDetails?.billingDetailsId
-          : res?.data?.createBillingDetails?.billingDetailsId,
-      });
-    }
     console.log("billingDetailsId pass", billingDetailsId);
     createOrderFromCart({
       variables: {

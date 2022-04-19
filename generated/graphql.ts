@@ -4514,6 +4514,13 @@ export type SellerProfileBasicDetailsQueryVariables = Exact<{
 
 export type SellerProfileBasicDetailsQuery = { __typename?: 'Query', sellerProfileBasicDetails?: { __typename?: 'SellerProfileBasicDetailsResponse', sellerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, storeName?: string | null | undefined } | null | undefined };
 
+export type BillingDetailsByGuestBuyerIdQueryVariables = Exact<{
+  guestBuyerId: Scalars['ID'];
+}>;
+
+
+export type BillingDetailsByGuestBuyerIdQuery = { __typename?: 'Query', billingDetailsByGuestBuyerId?: Array<{ __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined };
+
 export type DeleteBuyerProfileMutationVariables = Exact<{
   buyerId: Scalars['ID'];
 }>;
@@ -6147,6 +6154,41 @@ export function useSellerProfileBasicDetailsLazyQuery(baseOptions?: Apollo.LazyQ
 export type SellerProfileBasicDetailsQueryHookResult = ReturnType<typeof useSellerProfileBasicDetailsQuery>;
 export type SellerProfileBasicDetailsLazyQueryHookResult = ReturnType<typeof useSellerProfileBasicDetailsLazyQuery>;
 export type SellerProfileBasicDetailsQueryResult = Apollo.QueryResult<SellerProfileBasicDetailsQuery, SellerProfileBasicDetailsQueryVariables>;
+export const BillingDetailsByGuestBuyerIdDocument = gql`
+    query BillingDetailsByGuestBuyerId($guestBuyerId: ID!) {
+  billingDetailsByGuestBuyerId(guestBuyerId: $guestBuyerId) {
+    ...BillingDetailsFields
+  }
+}
+    ${BillingDetailsFieldsFragmentDoc}`;
+
+/**
+ * __useBillingDetailsByGuestBuyerIdQuery__
+ *
+ * To run a query within a React component, call `useBillingDetailsByGuestBuyerIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBillingDetailsByGuestBuyerIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBillingDetailsByGuestBuyerIdQuery({
+ *   variables: {
+ *      guestBuyerId: // value for 'guestBuyerId'
+ *   },
+ * });
+ */
+export function useBillingDetailsByGuestBuyerIdQuery(baseOptions: Apollo.QueryHookOptions<BillingDetailsByGuestBuyerIdQuery, BillingDetailsByGuestBuyerIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BillingDetailsByGuestBuyerIdQuery, BillingDetailsByGuestBuyerIdQueryVariables>(BillingDetailsByGuestBuyerIdDocument, options);
+      }
+export function useBillingDetailsByGuestBuyerIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BillingDetailsByGuestBuyerIdQuery, BillingDetailsByGuestBuyerIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BillingDetailsByGuestBuyerIdQuery, BillingDetailsByGuestBuyerIdQueryVariables>(BillingDetailsByGuestBuyerIdDocument, options);
+        }
+export type BillingDetailsByGuestBuyerIdQueryHookResult = ReturnType<typeof useBillingDetailsByGuestBuyerIdQuery>;
+export type BillingDetailsByGuestBuyerIdLazyQueryHookResult = ReturnType<typeof useBillingDetailsByGuestBuyerIdLazyQuery>;
+export type BillingDetailsByGuestBuyerIdQueryResult = Apollo.QueryResult<BillingDetailsByGuestBuyerIdQuery, BillingDetailsByGuestBuyerIdQueryVariables>;
 export const DeleteBuyerProfileDocument = gql`
     mutation DeleteBuyerProfile($buyerId: ID!) {
   deleteBuyerProfile(buyerId: $buyerId)

@@ -21,6 +21,7 @@ import { ApplicationStyles } from "../../Themes";
 import { userProfileVar } from "../../Apollo/cache";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useBuyerProfileQuery } from "../../../generated/graphql";
+import useLogin from "../../hooks/useLogin";
 
 /**
  * @description:The user header component, which contains basic user information
@@ -32,6 +33,7 @@ function UserHeader(props) {
   const navigation = useNavigation();
 
   const textTip = "You haven't add any personal \n details yet";
+  const { setLogin: setLoginAction } = useLogin();
   return (
     <View style={styles.headerContainer}>
       {userProfileVar().isAuth ? (
@@ -50,11 +52,11 @@ function UserHeader(props) {
           <View style={styles.signbtn}>
             <Button
               onPress={() => {
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: "OnboardingScreen" }],
-                });
-                // NavigationService.navigate("OnboardingScreen");
+                // navigation.reset({
+                //   index: 0,
+                //   routes: [{ name: "OnboardingScreen" }],
+                // });
+                setLoginAction({ loginVisible: true });
               }}
               text="SIGN IN"
             />

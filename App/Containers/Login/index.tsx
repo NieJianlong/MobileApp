@@ -60,6 +60,7 @@ function LoginScreen(props) {
             storage.LOCAL_STORAGE_USER_PROFILE,
             JSON.stringify(buyerProfileByUserId)
           );
+          storage.setLocalStorageValue(storage.GUEST_BUYER_ID_KEY, "");
           userProfileVar({
             userId: buyerProfileByUserId?.userId ?? "",
             buyerId: buyerProfileByUserId?.buyerId ?? "",
@@ -86,7 +87,6 @@ function LoginScreen(props) {
   let [keyboardHeight, setKeyboardHeight] = useState(0);
   let [loginInput, setLoginInput] = useState("");
   let [psswd, setPsswd] = useState("");
-  const { params } = useRoute();
   const loginRequestMemo = useMemo(() => {
     let ret = validator.loginDifferentiator(loginInput);
     if (ret.isValid) {
@@ -113,23 +113,13 @@ function LoginScreen(props) {
   useEffect(() => {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
     Keyboard.addListener("keyboardWillHide", _keyboardWillHide);
-    /**
-     * this page is a bit diferent as the navigation params will aways be
-     * undefined unless in the single case where we are coming from
-     * ForgotPassword
-     */
-    if (params === undefined) {
-      //console.log ('debug message caught expected undefined parameter')
-    } else {
-      //  console.log (`'debug message ${props.navigation.state.params.showEms}`)
-    }
 
     return () => {
       // Anything in here is fired on component unmount.
       Keyboard.removeListener("keyboardWillShow", _keyboardWillShow);
       Keyboard.removeListener("keyboardWillHide", _keyboardWillHide);
     };
-  }, [params, props]);
+  }, [props]);
 
   // useEffect(() => {
   //   if (isBillingLoaded) NavigationService.navigate("MainScreen");

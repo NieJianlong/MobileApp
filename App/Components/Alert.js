@@ -63,7 +63,6 @@ class AlertComponent extends Component {
                   <Text style={[styles.txtTitle, { color: color }]}>
                     {title}
                   </Text>
-
                   <TouchableOpacity
                     onPress={() => {
                       onDismiss && onDismiss();

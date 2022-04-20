@@ -50,8 +50,6 @@ export default function LaunchScreen() {
       NavigationService.navigate("MainScreen");
     },
     onError: (res) => {
-      //server often breakon，we should use a constant for testing
-      global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
       NavigationService.navigate("MainScreen");
     },
   });
@@ -67,19 +65,9 @@ export default function LaunchScreen() {
       try {
         const { data } = await runTokenFlow({ username, password });
         let access_token = data.access_token;
-        if (access_token === "undefined") {
-          console.log("no access token");
-        }
-        // userProfileVar({
-        //   ...JSON.parse(userData),
-        //   isAuth: true,
-        // });
         let decoded = jwt_decode(access_token);
         global.access_token = access_token;
         global.userProfileId = decoded.sub;
-        console.log("decoded====================================");
-        console.log(JSON.stringify(decoded));
-        console.log("====================================");
         getBuyerId();
 
         setLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY, access_token);
@@ -87,15 +75,15 @@ export default function LaunchScreen() {
         NavigationService.navigate("OnboardingScreen");
       }
     } else {
-      // const result = await checkBuyerIdExists();
-      // if (result) {
-      //   NavigationService.navigate("MainScreen");
-      // } else {
-      setTimeout(() => {
-        //this.props.navigation.navigate('OnboardingScreen')
-        NavigationService.navigate("OnboardingScreen");
-      }, 2000);
-      // }
+      const result = await checkBuyerIdExists();
+      if (result) {
+        NavigationService.navigate("MainScreen");
+      } else {
+        setTimeout(() => {
+          //this.props.navigation.navigate('OnboardingScreen')
+          NavigationService.navigate("OnboardingScreen");
+        }, 2000);
+      }
     }
   }, [getBuyerId]);
   /** for now only guests end up here */

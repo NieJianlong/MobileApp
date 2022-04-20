@@ -16,6 +16,8 @@ import useAlert from "../../hooks/useAlert";
 import useLoading from "../../hooks/useLoading";
 import ImageViewer from "react-native-image-zoom-viewer";
 import useImageViewer from "../../hooks/useImageViewer";
+import LoginScreen from "../Login";
+import useLogin from "../../hooks/useLogin";
 
 const initialState = {
   alert: {
@@ -96,6 +98,7 @@ function RootContainer() {
     images,
     setImageViewer,
   } = useImageViewer();
+  const { loginVisible } = useLogin();
   return (
     <AlertContext.Provider value={{ dispatch, actionSheet }}>
       <View style={{ flex: 1 }}>
@@ -187,6 +190,9 @@ function RootContainer() {
           onDismiss={alertDissmiss}
         />
       )}
+      <Modal visible={loginVisible} transparent={true}>
+        <LoginScreen />
+      </Modal>
       <Modal visible={imageViewerVisible} transparent={true}>
         <ImageViewer
           imageUrls={images}

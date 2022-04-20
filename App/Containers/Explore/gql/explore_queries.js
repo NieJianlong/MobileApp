@@ -163,59 +163,6 @@ export const FIND_BUYER_ADDRESS_BY_ID = gql`
 `;
 
 /**
- * @query  getGuestBuyerDefaultAddressByBuyerId
- *
- * schema
- *  getGuestBuyerDefaultAddressByBuyerId(sellerId : ID!) : AddressResponse
- * see @query addresses
- */
-export const FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
-  query GetGuestBuyerDefaultAddressByBuyerId($buyerId: ID!) {
-    getGuestBuyerDefaultAddressByBuyerId(buyerId: $buyerId) {
-      addressId
-      pinCode
-      provinceState
-      townCity
-      villageArea
-      houseNumber
-      flat
-      landMark
-    }
-  }
-`;
-
-/**
- * @query  getBuyerDefaultAddressByBuyerId
- *
- * schema
- * getBuyerDefaultAddressByBuyerId(buyerId : ID!) : AddressResponse
- * see @query addresses
- */
-/**
- * @query  getBuyerDefaultAddressByBuyerId
- *
- * schema
- * getBuyerDefaultAddressByBuyerId(buyerId : ID!) : AddressResponse
- * see @query addresses
- */
-export const FIND_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
-  query GetBuyerDefaultAddressByBuyerId($buyerId: ID!) {
-    getBuyerDefaultAddressByBuyerId(buyerId: $buyerId) {
-      addressId
-      pinCode
-      provinceState
-      townCity
-      villageArea
-      houseNumber
-      flat
-      landMark
-      building
-      streetAddress1
-    }
-  }
-`;
-
-/**
  *
  *  @Depreciated
  *  @query  activeProductListingsByStoreId(storeId: String, sortfield: String, sortDirection: SortDirection, pageNo: Int, pageSize: Int)

@@ -62,7 +62,7 @@ const styles = ScaledSheet.create({
   },
   deliveryDescriptionBox: {
     marginTop: s(5),
-    paddingHorizontal: s(33),
+    paddingHorizontal: s(16),
     borderColor: Colors.grey10,
     borderRadius: s(3),
     borderWidth: s(1),

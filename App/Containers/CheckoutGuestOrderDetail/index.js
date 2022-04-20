@@ -33,8 +33,8 @@ function CheckoutGuestOrderDetail(props) {
   const [isSameAsDelivery, setIsSameAsDelivery] = useState(true);
   const { createOrderFromCart } = useCreateOrder();
   const { razorpayCreateOrder } = useCreateRazorOrder();
-  const localCart = localCartVar();
-  const [deliveryAddress] = useState(localCart.callBackAddress);
+  const localCart = useReactiveVar(localCartVar);
+
   const { razorpayVerifyPaymentSignature } = useRazorVerifyPayment();
   const { dispatch } = useContext(AlertContext);
   const isAuth = useMemo(() => userProfile.isAuth, [userProfile.isAuth]);
@@ -128,27 +128,11 @@ function CheckoutGuestOrderDetail(props) {
             razorpayCreateOrder().then((res) => {
               if (res?.data) {
                 const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
-                let options = getPaymentConfigration(razorId);
-
-                RazorpayCheckout.open(options)
-                  .then((data) => {
-                    razorOrderPaymentVar({
-                      razorpay_payment_id: data.razorpay_payment_id,
-                      razorpay_order_id: data.razorpay_order_id,
-                      razorpay_signature: data.razorpay_signature,
-                    });
-                    razorpayVerifyPaymentSignature();
-                    dispatch({
-                      type: "changLoading",
-                      payload: false,
-                    });
-
-                    NavigationService.navigate("OrderPlacedScreen", {
-                      items: props?.route?.params?.items,
-                      from: props?.route?.params?.from,
-                    });
-                  })
-                  .catch((error) => {});
+                getPaymentConfigration(
+                  razorId,
+                  props?.route?.params?.items,
+                  props?.route?.params?.from
+                );
               }
             });
           }
@@ -258,14 +242,12 @@ function CheckoutGuestOrderDetail(props) {
           </Text>
           <View style={styles.deliveryDescriptionBox}>
             <Text style={styles.deliveryDescriptionText}>
-              {`${deliveryAddress?.flatNumber + "," || ""}  ${
-                deliveryAddress?.houseNumber || ""
-              }`}
+              {`${localCart?.callBackAddress?.building + "," || ""}`}
             </Text>
             <Text style={styles.deliveryDescriptionText}>
               {billingAddress.length > 0
                 ? `${billingAddress.billingAddress?.pinCode} , ${billingAddress.billingAddress?.provinceState}`
-                : `${deliveryAddress?.pinCode} , ${deliveryAddress?.provinceState}`}
+                : `${localCart?.callBackAddress?.pinCode} , ${localCart?.callBackAddress?.provinceState}`}
             </Text>
             <Text style={styles.deliveryDescriptionText}>India</Text>
           </View>

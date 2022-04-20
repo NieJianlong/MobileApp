@@ -34,7 +34,7 @@ const AddBillingDetail = () => {
     firstName: userProfile?.firstName,
     lastName: userProfile?.lastName,
     email: userProfile?.email,
-    phoneNumber: userProfile?.phoneNumber,
+    phoneNumber: userProfile?.phone,
     billingAddress: userProfile.billingDetailsId
       ? { addressId: userProfile.billingDetailsId, ...billingAddress }
       : billingAddress,

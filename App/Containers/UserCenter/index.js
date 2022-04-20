@@ -23,6 +23,7 @@ import { useCreateRazorOrder } from "../../hooks/razorOrder";
 import Share from "react-native-share";
 import { shareOptions } from "../Explore/Components/ShareOptionList";
 import { t } from "react-native-tailwindcss";
+import { isEmpty } from "lodash";
 
 const salamiItem = [
   {
@@ -126,7 +127,13 @@ function UserCenter(props) {
       <View style={[t.flexWrap, t.flexRow, t.justifyBetween, t.pX4]}>
         {/*hide salami credit when user not sign in*/}
         {serviceItems.map((item, i) => (
-          <View key={i} style={[i === 5 ? t.opacity0 : t.opacity100]}>
+          <View
+            key={i}
+            style={[
+              i === 5 ? t.opacity0 : t.opacity100,
+              isEmpty(item.title) ? t.opacity0 : t.opacity100,
+            ]}
+          >
             <ItemBox {...item} />
           </View>
         ))}

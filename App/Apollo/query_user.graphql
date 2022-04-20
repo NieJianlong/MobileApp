@@ -103,3 +103,14 @@ query BillingDetailsByGuestBuyerId($guestBuyerId: ID!) {
     ...BillingDetailsFields
   }
 }
+
+query GetGuestBuyerDefaultAddressByBuyerId($buyerId: ID!) {
+  getGuestBuyerDefaultAddressByBuyerId(buyerId: $buyerId) {
+    ...AddressOrderFiled
+  }
+}
+query GetBuyerDefaultAddressByBuyerId($buyerId: ID!) {
+  getBuyerDefaultAddressByBuyerId(buyerId: $buyerId) {
+    ...AddressOrderFiled
+  }
+}

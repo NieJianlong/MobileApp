@@ -409,24 +409,6 @@ export const FIND_GUEST_BUYER_ADDRESS_BY_ID = gql`
 `;
 
 /**
- * @query  getGuestBuyerDefaultAddressByBuyerId
- *
- * schema
- *  getGuestBuyerDefaultAddressByBuyerId(sellerId : ID!) : AddressResponse
- * see @query addresses
- */
-export const FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID = gql`
-  query GetGuestBuyerDefaultAddressByBuyerId($buyerId: ID!) {
-    getGuestBuyerDefaultAddressByBuyerId(buyerId: $buyerId) {
-      addressId
-      villageArea
-      provinceState
-      defaultAddress
-    }
-  }
-`;
-
-/**
  *
  * coordinatesForAddressRequest(address : AddressRequestToGetCoordinates!) : CoordinateResponse
  * schema see @query addresses

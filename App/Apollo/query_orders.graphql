@@ -39,10 +39,7 @@ fragment AddressOrderFiled on AddressResponse {
   provinceState
   country
   areaCode
-  landmark
   pinCode
-  isDefault
-  addressFloor
 }
 
 fragment OrderItemDetailField on OrderItemDetailResponse {

@@ -21,6 +21,10 @@ import { useFocusEffect } from "@react-navigation/native";
 import PubSub from "pubsub-js";
 import { getLocalStorageValue } from "../../../Apollo/local-storage";
 import { isEmpty } from "lodash";
+import {
+  GetBuyerDefaultAddressByBuyerIdDocument,
+  GetGuestBuyerDefaultAddressByBuyerIdDocument,
+} from "../../../../generated/graphql";
 
 export default function AddressBar() {
   const userProfileVarReactive = useReactiveVar(userProfileVar);
@@ -62,32 +66,10 @@ export default function AddressBar() {
     }
   }, [error]);
 
-  /**
-   * get the list of address to populate the add addres bottom sheet
-   * called when component mounts useEffect via getBuyerId
-   * use mutation hook is only available for public api
-   * so using standalone clients
-   * FIND_BUYER_ADDRESS_BY_ID is private endpoint use emais as key for
-   * guest buyer id in local storage
-   *
-   * FIND_GUEST_BUYER_ADDRESS_BY_ID public endpoint  use device id as key for
-   * guest buyer id in local storage
-   * see './gql/explore_queries'
-   */
-  /** FIND_BUYER_DEFAULT_ADDRESS_BY_ID is a private api */
-
-  // const { data } = useQuery(aQM.GetCountries, {
-  //   onCompleted: (res) => {
-  //     console.log("data====================================");
-  //     console.log(data);
-  //     console.log("====================================");
-  //   },
-  // });
-
   const { loading, refetch } = useQuery(
     isAuth
-      ? aQM.FIND_BUYER_DEFAULT_ADDRESS_BY_ID
-      : aQM.FIND_GUEST_BUYER_DEFAULT_ADDRESS_BY_ID,
+      ? GetBuyerDefaultAddressByBuyerIdDocument
+      : GetGuestBuyerDefaultAddressByBuyerIdDocument,
     {
       variables: { buyerId: global.buyerId },
       fetchPolicy: "network-only",
@@ -141,7 +123,7 @@ export default function AddressBar() {
     localCartVar({
       ...localCartVar(),
       deliverAddress: resultJson?.addressId,
-      callBackAddress: gqlMappers.mapGQLAddressResponseToCache(resultJson),
+      callBackAddress: resultJson,
     });
     setAddrLine1(aL1);
     setAddrLine2(aL2);
@@ -166,13 +148,7 @@ export default function AddressBar() {
   useEffect(() => {
     let refresh = PubSub.subscribe("refresh-address", () => {
       getLocalStorageValue(global.buyerId + "Address").then((res) => {
-        console.log("it is here====================================");
-        console.log();
-        console.log("====================================");
         if (!isEmpty(res)) {
-          console.log("myaddress====================================");
-          console.log(res);
-          console.log("====================================");
           const result = JSON.parse(res);
           handleData(result);
         }

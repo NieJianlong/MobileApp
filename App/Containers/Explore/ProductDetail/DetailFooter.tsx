@@ -38,7 +38,7 @@ import {
   useGetBuyerSalamiWalletBalanceQuery,
 } from "../../../../generated/graphql";
 import AddBillingDetail from "../../../hooks/addBillingDetails";
-import { usePaymentConfigration } from "../../../Utils/utils";
+import { ComeFromType, usePaymentConfigration } from "../../../Utils/utils";
 import { isEmpty } from "lodash";
 export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { dispatch } = useContext(AlertContext);
@@ -118,7 +118,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
             });
             NavigationService.navigate("OrderPlacedScreen", {
               items: product,
-              from: "Buynow",
+              from: ComeFromType.Buynow,
             });
           }
         } else if (type === "zero") {
@@ -132,25 +132,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
             razorpayCreateOrder().then((res) => {
               if (res?.data) {
                 const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
-                let options = getPaymentConfigration(razorId);
-
-                RazorpayCheckout.open(options)
-                  .then((data) => {
-                    razorOrderPaymentVar({
-                      razorpay_payment_id: data.razorpay_payment_id,
-                      razorpay_order_id: data.razorpay_order_id,
-                      razorpay_signature: data.razorpay_signature,
-                    });
-                    razorpayVerifyPaymentSignature();
-
-                    NavigationService.navigate("OrderPlacedScreen", {
-                      items: product,
-                      from: "Buynow",
-                    });
-                  })
-                  .catch((error) => {
-                    // alert(`Error: ${error.code} | ${error.description}`);
-                  });
+                getPaymentConfigration(razorId, product, ComeFromType.Buynow);
               }
             });
           }

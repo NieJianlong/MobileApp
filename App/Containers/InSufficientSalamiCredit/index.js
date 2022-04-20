@@ -32,7 +32,7 @@ import { useRazorVerifyPayment } from "../../hooks/verifyPayment";
 import { useQuery, useReactiveVar } from "@apollo/client";
 import BigNumber from "bignumber.js";
 import { AlertContext } from "../Root/GlobalContext";
-import { usePaymentConfigration } from "../../Utils/utils";
+import { ComeFromType, usePaymentConfigration } from "../../Utils/utils";
 
 function InSufficientSalamiCredit(props) {
   const params = props?.route?.params;
@@ -318,28 +318,11 @@ function InSufficientSalamiCredit(props) {
                         if (res?.data) {
                           const razorId =
                             res?.data?.razorpayCreateOrder?.razorpayOrderId;
-                          let options = getPaymentConfigration(razorId);
-                          RazorpayCheckout.open(options)
-                            .then((data) => {
-                              razorOrderPaymentVar({
-                                razorpay_payment_id: data.razorpay_payment_id,
-                                razorpay_order_id: data.razorpay_order_id,
-                                razorpay_signature: data.razorpay_signature,
-                              });
-                              razorpayVerifyPaymentSignature();
-                              alert(`Success: ${data.razorpay_payment_id}`);
-
-                              NavigationService.navigate("OrderPlacedScreen", {
-                                items: params.product,
-                                from: "Buynow",
-                              });
-                              //
-                            })
-                            .catch((error) => {
-                              alert(
-                                `Error: ${error.code} | ${error.description}`
-                              );
-                            });
+                          getPaymentConfigration(
+                            razorId,
+                            params.product,
+                            ComeFromType.Buynow
+                          );
                         }
                       });
                     }

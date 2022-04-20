@@ -21,7 +21,7 @@ type Address {
   areaCode: String
   landMark: String
   pinCode: String
-  addressType: String
+  addressType: AddressType
   referenceId: String
   defaultAddress: Boolean
 }
@@ -33,6 +33,15 @@ input AddressInput {
   country: String
   provinceState: String
   areaCode: String
+}
+
+enum AddressType {
+  SHIPPING
+  BILLING
+  BUSINESS
+  RETURN
+  COLLECTION_POINT
+  UNDEFINED
 }
 
 type AddressView {
@@ -413,6 +422,7 @@ type ProductListing {
   deliveryDate: Date
   productListingStatus: ProductListingStatus!
   minSoldQuantity: Int!
+  minQtyPerCart: Int
   openUntil: Date!
   startDate: DateTime!
 }

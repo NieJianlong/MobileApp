@@ -37,7 +37,7 @@ import { AlertContext } from "../Root/GlobalContext";
 import PubSub from "pubsub-js";
 import useRealm from "../../hooks/useRealm";
 import AddBillingDetail from "../../hooks/addBillingDetails";
-import { usePaymentConfigration } from "../../Utils/utils";
+import { ComeFromType, usePaymentConfigration } from "../../Utils/utils";
 import { useGetBuyerSalamiWalletBalanceQuery } from "../../../generated/graphql";
 //orderStatus：1,completed
 function CheckoutResume(props) {
@@ -100,10 +100,11 @@ function CheckoutResume(props) {
     },
   });
   const { dispatch } = useContext(AlertContext);
+  const localCart = useReactiveVar(localCartVar);
   const [mydatas, setMydatas] = useState(
     realm
       .objects("ShoppingCart")
-      .filtered("addressId == $0", localCartVar.deliverAddress)
+      .filtered("addressId == $0", localCart.deliverAddress)
       .filtered("quantity > 0")
       .filtered("isDraft == false")
   );
@@ -187,7 +188,7 @@ function CheckoutResume(props) {
             clearData();
             NavigationService.navigate("OrderPlacedScreen", {
               items: finalItems,
-              from: "checkout",
+              from: ComeFromType.checkout,
             });
           }
         } else if (type === "zero") {
@@ -201,27 +202,11 @@ function CheckoutResume(props) {
             razorpayCreateOrder().then((res) => {
               if (res?.data) {
                 const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
-                let options = getPaymentConfigration(razorId);
-                RazorpayCheckout.open(options)
-                  .then((data) => {
-                    razorOrderPaymentVar({
-                      razorpay_payment_id: data.razorpay_payment_id,
-                      razorpay_order_id: data.razorpay_order_id,
-                      razorpay_signature: data.razorpay_signature,
-                    });
-                    razorpayVerifyPaymentSignature();
-                    //alert(`Success: ${data.razorpay_payment_id}`);
-                    alert("Order Created Successfully");
-                    clearData();
-                    NavigationService.navigate("OrderPlacedScreen", {
-                      items: finalItems,
-                      from: "checkout",
-                    });
-                  })
-                  .catch((error) => {
-                    console.log("error in RazorpayCheckout", error);
-                    alert(`Error: ${error.code} | ${error.description}`);
-                  });
+                getPaymentConfigration(
+                  razorId,
+                  finalItems,
+                  ComeFromType.checkout
+                );
               }
             });
           }

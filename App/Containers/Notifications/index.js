@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from "react";
 import {
   View,
   StatusBar,
@@ -7,50 +7,50 @@ import {
   Image,
   FlatList,
   Animated,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { s } from 'react-native-size-matters';
-import { AppBar, RightButton } from '../../Components';
-import { Colors } from '../../Themes';
-import styles from './styles';
-import colors from '../../Themes/Colors';
-import AppConfig from '../../Config/AppConfig';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { s } from "react-native-size-matters";
+import { AppBar, RightButton } from "../../Components";
+import { Colors } from "../../Themes";
+import styles from "./styles";
+import colors from "../../Themes/Colors";
+import AppConfig from "../../Config/AppConfig";
 
 const invitedUsers = [
   {
-    email: 'Notification Title',
-    msg: 'Notification description',
-    avatar: 'https://measure.3vyd.com/uPic/Grey 32.png',
+    email: "Notification Title",
+    msg: "Notification description",
+    avatar: "https://measure.3vyd.com/uPic/Grey 32.png",
     readed: false,
   },
   {
-    email: 'Notification Title',
-    msg: 'Notification description',
-    avatar: 'https://measure.3vyd.com/uPic/Grey 32.png',
+    email: "Notification Title",
+    msg: "Notification description",
+    avatar: "https://measure.3vyd.com/uPic/Grey 32.png",
     readed: false,
   },
   {
-    email: 'Notification Title',
-    msg: 'Notification description',
-    avatar: 'https://measure.3vyd.com/uPic/Grey 32.png',
+    email: "Notification Title",
+    msg: "Notification description",
+    avatar: "https://measure.3vyd.com/uPic/Grey 32.png",
     readed: false,
   },
   {
-    email: 'Notification Title',
-    msg: 'Notification description',
-    avatar: 'https://measure.3vyd.com/uPic/Grey 32.png',
+    email: "Notification Title",
+    msg: "Notification description",
+    avatar: "https://measure.3vyd.com/uPic/Grey 32.png",
     readed: true,
   },
   {
-    email: 'Notification Title',
-    msg: 'Notification description',
-    avatar: 'https://measure.3vyd.com/uPic/Grey 32.png',
+    email: "Notification Title",
+    msg: "Notification description",
+    avatar: "https://measure.3vyd.com/uPic/Grey 32.png",
     readed: true,
   },
   {
-    email: 'Notification Title',
-    msg: 'Notification description',
-    avatar: 'https://measure.3vyd.com/uPic/Grey 32.png',
+    email: "Notification Title",
+    msg: "Notification description",
+    avatar: "https://measure.3vyd.com/uPic/Grey 32.png",
     readed: true,
   },
 ];
@@ -59,18 +59,20 @@ function Notifications(props) {
   fall = new Animated.Value(0);
   const [showSheet, setShowSheet] = useState(false);
   const sheetEl = useRef(null);
+  const [clearAll, setClearAll] = useState(false);
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar
           rightButton={() => (
             <RightButton
               title="CLEAR ALL"
               onPress={() => {
+                setClearAll(true);
                 // NavigationService.goBack();
               }}
             />
@@ -78,13 +80,13 @@ function Notifications(props) {
         />
 
         <FlatList
-          data={invitedUsers}
+          data={clearAll ? [] : invitedUsers}
           ListHeaderComponent={() => listHeader(setShowSheet)}
           renderItem={({ item }) => {
             return (
               <View
                 style={{
-                  backgroundColor: 'white',
+                  backgroundColor: "white",
                   paddingHorizontal: AppConfig.paddingHorizontal,
                   marginTop: s(8),
                   opacity: item.readed ? 0.7 : 1,
@@ -92,15 +94,15 @@ function Notifications(props) {
               >
                 <View
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   }}
                 >
                   <View
                     style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
+                      flexDirection: "row",
+                      alignItems: "center",
                     }}
                   >
                     <View
@@ -108,7 +110,7 @@ function Notifications(props) {
                         styles.dot,
                         {
                           backgroundColor: item.readed
-                            ? 'transparent'
+                            ? "transparent"
                             : colors.primary,
                         },
                       ]}
@@ -116,7 +118,7 @@ function Notifications(props) {
                     <Image
                       style={styles.shareIcon}
                       source={{
-                        uri: 'https://measure.3vyd.com/uPic/iphone.png',
+                        uri: "https://measure.3vyd.com/uPic/iphone.png",
                       }}
                     ></Image>
                     <View style={{ marginLeft: 15 }}>

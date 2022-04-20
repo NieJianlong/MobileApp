@@ -11,10 +11,11 @@ import DynamicTabView from "../UserInfo/DynamicTabView";
 import CountryLanguage from "./CountryLanguage";
 import Notifications from "./Notifications";
 import Permissions from "./Permissions";
+import { t } from "react-native-tailwindcss";
 
 export const MenuConfig = [
   {
-    title: "Country & Languageg",
+    title: "Country & Language",
     icon: images.userFlagImage,
     selectedIcon: images.userFlagImage,
     // screen: NoPurchase,
@@ -46,7 +47,7 @@ function Setting(props) {
       >
         <AppBar />
         <View style={{ padding: AppConfig.paddingHorizontal }}>
-          <Text style={styles.heading2Bold}>Setting</Text>
+          <Text style={styles.heading2Bold}>Settings</Text>
         </View>
         <DynamicTabView
           data={MenuConfig}
@@ -76,7 +77,7 @@ function Setting(props) {
           headerBackgroundColor={"transparent"}
           highlightStyle={{ color: "white" }}
           noHighlightStyle={{ color: "gray" }}
-          headerTextStyle={{ color: "white" }}
+          headerTextStyle={[t.textWhite]}
           onChangeTab={(index) => {}}
           headerUnderlayColor={"transparent"}
         />

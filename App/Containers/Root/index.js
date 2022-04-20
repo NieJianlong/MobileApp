@@ -5,6 +5,7 @@ import {
   Animated,
   TouchableWithoutFeedback,
   Modal,
+  BackHandler,
 } from "react-native";
 import { Alert, BottomSheet } from "../../Components";
 import AppNavigation from "../../Navigation/AppNavigation";
@@ -92,6 +93,22 @@ function RootContainer() {
       }, 2100);
     }
   }, [visible]);
+
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", function () {
+      dispatch({
+        type: "changSheetState",
+        payload: {
+          showSheet: false,
+          height: 380,
+          children: () => null,
+          onCloseEnd: () => {},
+          sheetTitle: "",
+        },
+      });
+      return false;
+    });
+  }, []);
 
   const {
     visible: imageViewerVisible,

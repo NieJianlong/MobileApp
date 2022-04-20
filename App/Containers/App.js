@@ -1,16 +1,8 @@
 import React, { useEffect } from "react";
 import RootContainer from "./Root";
-/**
- * we are using apollo for gql and state
- * see https://www.apollographql.com/docs/react/api/react/hooks/
- */
 import { ApolloProvider } from "@apollo/client";
-/** pubClient is gql client for public api and is also the global cache */
 import * as SplashScreen from "expo-splash-screen";
-import Realm from "realm";
-import { RealmConnector } from "../db/connector";
 import { client } from "../Apollo/apolloClient";
-import useRealm from "../hooks/useRealm";
 import FlipperAsyncStorage from "rn-flipper-async-storage-advanced";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { enableFlipperApolloDevtools } from "react-native-flipper-apollo-devtools";
@@ -21,6 +13,7 @@ const App = () => {
   useEffect(() => {
     SplashScreen.hideAsync();
   }, []);
+
   // const realm = useRealm();
   // useEffect(() => {
   //   if (__DEV__) {

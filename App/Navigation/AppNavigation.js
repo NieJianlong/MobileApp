@@ -118,6 +118,7 @@ function PrimaryNav() {
         return {
           // headerTintColor: "#21c064",
           // headerTitleStyle: styles.headerTitleStyle,
+          gestureEnabled: false,
           cardStyleInterpolator: cardStyleInterpolator,
         };
       }}
@@ -165,7 +166,11 @@ function PrimaryNav() {
       <Stack.Screen name={"SellerStoreScreen"} component={SellerStoreScreen} />
       <Stack.Screen name={"InvoiceScreen"} component={InvoiceScreen} />
       <Stack.Screen name={"GroupInfoScreen"} component={GroupInfoScreen} />
-      <Stack.Screen name={"LoginScreen"} component={LoginScreen} />
+      <Stack.Screen
+        name={"LoginScreen"}
+        component={LoginScreen}
+        options={{ gesturesEnabled: false }}
+      />
       <Stack.Screen name={"RegisterScreen"} component={RegisterScreen} />
       <Stack.Screen name={"LegalScreen"} component={LegalScreen} />
       <Stack.Screen name={"UserInfoScreen"} component={UserInfoScreen} />

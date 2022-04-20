@@ -103,11 +103,7 @@ function RootContainer() {
     <AlertContext.Provider value={{ dispatch, actionSheet }}>
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" />
-        <Spinner
-          visible={spinner || show}
-          textContent={"Loading..."}
-          textStyle={{ color: "white" }}
-        />
+
         <AppNavigation />
       </View>
       {showSheet && (
@@ -172,6 +168,21 @@ function RootContainer() {
           )}
         </BottomSheet>
       )}
+
+      <Modal visible={imageViewerVisible} transparent={true}>
+        <ImageViewer
+          imageUrls={images}
+          onClick={() => {
+            setImageViewer({ visible: false, images: [] });
+          }}
+        />
+      </Modal>
+      {/* {loginVisible && <LoginScreen />} */}
+      <Spinner
+        visible={spinner || show}
+        textContent={"Loading..."}
+        textStyle={{ color: "white" }}
+      />
       {visible && (
         <Alert
           visible={true}
@@ -190,17 +201,6 @@ function RootContainer() {
           onDismiss={alertDissmiss}
         />
       )}
-      <Modal visible={loginVisible} transparent={true}>
-        <LoginScreen />
-      </Modal>
-      <Modal visible={imageViewerVisible} transparent={true}>
-        <ImageViewer
-          imageUrls={images}
-          onClick={() => {
-            setImageViewer({ visible: false, images: [] });
-          }}
-        />
-      </Modal>
     </AlertContext.Provider>
   );
 }

@@ -8,15 +8,18 @@ import { Colors } from "../../../Themes";
 import styles from "./styles";
 import NavigationService from "../../../Navigation/NavigationService";
 import { useSellerProfileBasicDetailsQuery } from "../../../../generated/graphql";
+import { userProfileVar } from "../../../Apollo/cache";
+import { useReactiveVar } from "@apollo/client";
 
 export default function StoreInfo({ tabIndex, product }) {
+  const userProfile = useReactiveVar(userProfileVar);
   if (!product.seller) {
     return null;
   }
   const { data } = useSellerProfileBasicDetailsQuery({
     context: {
       headers: {
-        isPrivate: true,
+        isPrivate: userProfile.isAuth,
       },
     },
     variables: { sellerId: product.seller.id },

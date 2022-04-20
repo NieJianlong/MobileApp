@@ -5,6 +5,8 @@ import {
   Text,
   TouchableOpacity,
   Keyboard,
+  Image,
+  useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -27,11 +29,15 @@ import jwt_decode from "jwt-decode";
 import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
 import { useBuyerProfileByUserIdLazyQuery } from "../../../generated/graphql";
+import { Images } from "../../Themes";
+import { t } from "react-native-tailwindcss";
+import useLogin from "../../hooks/useLogin";
 
 function LoginScreen(props) {
   // refs
   // let passwordInput = null;
   const passwordInput = useRef();
+  const { showCloseButton, setLogin, onDismiss } = useLogin();
 
   const [getBuerIdProfile] = useBuyerProfileByUserIdLazyQuery({
     onError: (err) => {
@@ -75,6 +81,9 @@ function LoginScreen(props) {
             lastName: buyerProfileByUserId?.lastName ?? "",
           });
           NavigationService.navigate("MainScreen");
+          if (onDismiss) {
+            onDismiss();
+          }
         }
       } else {
         console.log("Login  server error");
@@ -264,14 +273,23 @@ function LoginScreen(props) {
   const _keyboardWillHide = () => {
     setKeyboardHeight(0);
   };
-
+  const { width, height } = useWindowDimensions();
   return (
-    <View style={styles.container}>
+    <View style={[t.absolute, t.left0, t.top0, { width, height }, t.bgWhite]}>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
+        <TouchableOpacity
+          style={[{ marginLeft: width - 50 }, t.mT4]}
+          onPress={() => {
+            NavigationService.goBack();
+          }}
+        >
+          <Image style={[t.h6, t.w6]} source={Images.crossMedium} />
+        </TouchableOpacity>
+
         <View style={styles.bodyContainer}>
           <Text style={styles.txt1}>Sign In</Text>
 

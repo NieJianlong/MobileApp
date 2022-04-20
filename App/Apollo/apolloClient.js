@@ -1,4 +1,5 @@
 import { ApolloClient, HttpLink, ApolloLink, concat } from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
 import globalCache from "./cache";
 /**
  * need fetch as we are not in a browser
@@ -119,6 +120,18 @@ const publicHeaders = {
   "Content-Type": "application/json",
   Accept: "application/json",
 };
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    debugger;
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    );
+  }
+
+  if (networkError) console.log(`[Network error]: ${networkError}`);
+});
 
 const getClient = () => {
   // let httpLink = USER_MANAGEMENT_Link;
@@ -151,7 +164,7 @@ const getClient = () => {
   });
   return new ApolloClient({
     cache: globalCache,
-    link: concat(authMiddleware, httpLink),
+    link: concat(authMiddleware, httpLink, errorLink),
   });
 };
 

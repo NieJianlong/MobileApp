@@ -66,7 +66,7 @@ function LoginScreen(props) {
             storage.LOCAL_STORAGE_USER_PROFILE,
             JSON.stringify(buyerProfileByUserId)
           );
-          storage.setLocalStorageValue(storage.GUEST_BUYER_ID_KEY, "");
+
           userProfileVar({
             userId: buyerProfileByUserId?.userId ?? "",
             buyerId: buyerProfileByUserId?.buyerId ?? "",

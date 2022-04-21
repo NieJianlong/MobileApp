@@ -47,12 +47,14 @@ function Index(props) {
         style={[styles.row, { paddingHorizontal: AppConfig.paddingHorizontal }]}
       >
         <Image
-          source={{ uri: product.photoUrls ? product.photoUrls[0] : defultUrl }}
+          source={{
+            uri: product?.photoUrls ? product?.photoUrls[0] : defultUrl,
+          }}
           style={[styles.productImage, t.mR2]}
         />
         <View style={styles.v2}>
           <View>
-            <Text style={styles.heading4Bold}>{product.shortName}</Text>
+            <Text style={styles.heading4Bold}>{product?.shortName}</Text>
             <Text
               style={[
                 styles.heading4Bold,
@@ -68,7 +70,7 @@ function Index(props) {
               <Text style={styles.txtRetailPrice}>
                 $
                 {BigNumber(
-                  variant ? variant.retailPrice : product.retailPrice
+                  variant ? variant?.retailPrice : product?.retailPrice
                 ).toFixed(2) + ""}
               </Text>
             </View>
@@ -79,7 +81,7 @@ function Index(props) {
               <Text style={styles.txtWholesalePrice}>
                 $
                 {BigNumber(
-                  variant ? variant.wholeSalePrice : product.wholeSalePrice
+                  variant ? variant?.wholeSalePrice : product?.wholeSalePrice
                 ).toFixed(2) + ""}
               </Text>
             </View>
@@ -88,7 +90,7 @@ function Index(props) {
               <Text
                 style={[styles.heading6Bold, { color: Colors.secondary00 }]}
               >
-                {product.percentOff}% OFF
+                {product?.percentOff}% OFF
               </Text>
             </View>
           </View>
@@ -124,7 +126,7 @@ function Index(props) {
               <Image
                 style={styles.cartadd}
                 source={
-                  product.count === 1
+                  product?.count === 1
                     ? images.shopcartRemoveImage
                     : images.shopcartSubImage
                 }

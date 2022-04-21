@@ -260,7 +260,7 @@ export const GetStatesByCountryId = gql`
 `;
 
 export const IsListingAvailable = gql`
-  query IsListingAvailable($listings: [IsListingAvailableInput]) {
+  query IsListingAvailable($listings: [IsListingAvailableInput!]!) {
     isListingAvailable(listings: $listings) {
       listingId
       variantId

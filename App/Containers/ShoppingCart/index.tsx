@@ -36,9 +36,7 @@ function ShoppingCart(props) {
     .filtered("addressId == $0", localCart.deliverAddress)
     .filtered("quantity > 0")
     .filtered("isDraft == false");
-  const [mydatas, setMydatas] = useState(
-    query.map((item) => Object.assign({}, item))
-  );
+  const [mydatas, setMydatas] = useState(query);
   console.log("mydatas=======", mydatas);
   // const mydatas = realm.objects("ShoppingCart");
   const [total, setTotal] = useState(0);
@@ -46,10 +44,15 @@ function ShoppingCart(props) {
     props.navigation.addListener("focus", () => {
       // const mydatas = query;
       // console.log("mydatas00", mydatas);
+      const query1 = realm
+        .objects("ShoppingCart")
+        .filtered("addressId == $0", localCart.deliverAddress)
+        .filtered("quantity > 0")
+        .filtered("isDraft == false");
       console.log("localCartlocalCart", localCart.items);
-      setMydatas(query.map((item) => Object.assign({}, item)));
+      setMydatas(query1);
     });
-  }, [props.navigate]);
+  }, []);
 
   useEffect(() => {
     setMydatas(

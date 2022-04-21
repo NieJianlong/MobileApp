@@ -222,7 +222,7 @@ export default function ProductInfo({
           <Text style={styles.heading3Bold}>Details & Highlights</Text>
 
           {product?.highlightBullets &&
-            JSON.parse(product?.highlightBullets).map((bul, index) => (
+            product?.highlightBullets.map((bul, index) => (
               <View key={index} style={styles.row}>
                 <Text style={styles.txtDot}>•</Text>
                 <Text style={styles.txtRegular}>{bul}</Text>

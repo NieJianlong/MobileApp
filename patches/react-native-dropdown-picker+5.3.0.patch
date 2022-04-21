@@ -1,16 +1,14 @@
 diff --git a/node_modules/react-native-dropdown-picker/.DS_Store b/node_modules/react-native-dropdown-picker/.DS_Store
 new file mode 100644
-index 0000000..82fb7a4
-Binary files /dev/null and b/node_modules/react-native-dropdown-picker/.DS_Store differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-dropdown-picker/src/.DS_Store b/node_modules/react-native-dropdown-picker/src/.DS_Store
 new file mode 100644
-index 0000000..40b64f5
-Binary files /dev/null and b/node_modules/react-native-dropdown-picker/src/.DS_Store differ
+index 0000000..e69de29
 diff --git a/node_modules/react-native-dropdown-picker/src/components/Picker.js b/node_modules/react-native-dropdown-picker/src/components/Picker.js
-index a154d88..82ddc13 100644
+index a154d88..8fc81bd 100644
 --- a/node_modules/react-native-dropdown-picker/src/components/Picker.js
 +++ b/node_modules/react-native-dropdown-picker/src/components/Picker.js
-@@ -1,1752 +1,1895 @@
+@@ -1,1752 +1,1894 @@
  import React, {
 -    useCallback,
 -    useState,
@@ -51,13 +49,13 @@ index a154d88..82ddc13 100644
 -import Colors from '../constants/colors';
 +  View,
 +  SafeAreaView,
-+  TouchableOpacity as RNTouchableOpacity,
++  TouchableOpacity,
 +  Text,
 +  Image,
-+  FlatList as RNFlatList,
++  FlatList,
 +  TextInput,
 +  Dimensions,
-+  ScrollView as RNScrollView,
++  ScrollView,
 +  Modal,
 +  ActivityIndicator,
 +  Platform,
@@ -87,34 +85,9 @@ index a154d88..82ddc13 100644
 +  ScrollView as GHScrollView,
 +} from "react-native-gesture-handler";
 +const { height: WINDOW_HEIGHT } = Dimensions.get("window");
-+const TouchableOpacity =
-+  Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
-+
-+const FlatList = Platform.OS === "ios" ? RNFlatList : GHFlatList;
-+const ScrollView = Platform.OS === "ios" ? RNScrollView : GHScrollView;
-+
-+import Colors from "../constants/colors";
-+import {
-+  SCHEMA,
-+  GET_TRANSLATION,
-+  BADGE_COLORS,
-+  BADGE_DOT_COLORS,
-+  ASCII_CODE,
-+  TRANSLATIONS,
-+  MODE,
-+  LIST_MODE,
-+  DROPDOWN_DIRECTION,
-+  GET_DROPDOWN_DIRECTION,
-+  LANGUAGE,
-+  RTL_DIRECTION,
-+  RTL_STYLE,
-+} from "../constants";
-+import THEMES from "../themes";
-+import RenderBadgeItem from "./RenderBadgeItem";
-+import RenderListItem from "./RenderListItem";
-+import ListEmpty from "./ListEmpty";
++// const TouchableOpacity = RNTouchableOpacity;
  
- function Picker({
+-function Picker({
 -    value = null,
 -    items = [],
 -    open,
@@ -222,6 +195,80 @@ index a154d88..82ddc13 100644
 -    testID,
 -    closeOnBackPressed = false,
 -    onSelectItem = (item) => {}
+-}) {
+-    const [necessaryItems, setNecessaryItems] = useState([]);
+-    const [searchText, setSearchText] = useState('');
+-    const [pickerHeight, setPickerHeight] = useState(0);
+-    const [direction, setDirection] = useState(GET_DROPDOWN_DIRECTION(dropDownDirection));
+-
+-    const badgeFlatListRef = useRef();
+-    const pickerRef = useRef(null);
+-    const initializationRef = useRef(false);
+-    const itemPositionsRef = useRef({});
+-    const flatListRef = useRef();
+-    const scrollViewRef = useRef();
+-    const memoryRef = useRef({
+-        value: null,
+-        items: []
+-    });
++// const FlatList = Platform.OS === "ios" ? RNFlatList : GHFlatList;
++// const ScrollView = Platform.OS === "ios" ? RNScrollView : GHScrollView;
+ 
+-    const THEME = useMemo(() => THEMES[theme].default, [theme]);
+-    const ICON = useMemo(() => THEMES[theme].ICONS, [theme])
+-
+-    /**
+-     * The item schema.
+-     * @returns {object}
+-     */
+-     const _schema = useMemo(() => ({...SCHEMA, ...schema}), [schema]);
+-
+-    /**
+-     * componentDidMount.
+-     */
+-    useEffect(() => {
+-        memoryRef.current.value = multiple ? (Array.isArray(value) ? value : []) : value;
+-
+-        // Get initial seleted items
+-        let initialSelectedItems = [];
+-        const valueNotNull = value !== null && (Array.isArray(value) && value.length !== 0);
+-
+-        if (valueNotNull) {
+-            if (multiple) {
+-                initialSelectedItems = items.filter(item => value.includes(item[_schema.value]));
+-            } else {
+-                initialSelectedItems = items.find(item => item[_schema.value] === value);
+-            }
+-        }
+-
+-        setNecessaryItems(initialSelectedItems);
+-    }, []);
++import Colors from "../constants/colors";
++import {
++  SCHEMA,
++  GET_TRANSLATION,
++  BADGE_COLORS,
++  BADGE_DOT_COLORS,
++  ASCII_CODE,
++  TRANSLATIONS,
++  MODE,
++  LIST_MODE,
++  DROPDOWN_DIRECTION,
++  GET_DROPDOWN_DIRECTION,
++  LANGUAGE,
++  RTL_DIRECTION,
++  RTL_STYLE,
++} from "../constants";
++import THEMES from "../themes";
++import RenderBadgeItem from "./RenderBadgeItem";
++import RenderListItem from "./RenderListItem";
++import ListEmpty from "./ListEmpty";
+ 
+-    useEffect(() => {
+-        if (closeOnBackPressed && open) {
+-            const backAction = () => {
+-                setOpen(false);
++function Picker({
 +  value = null,
 +  items = [],
 +  open,
@@ -326,57 +373,7 @@ index a154d88..82ddc13 100644
 +  dropDownDirection = DROPDOWN_DIRECTION.DEFAULT,
 +  disableLocalSearch = false,
 +  theme = THEMES.DEFAULT,
- }) {
--    const [necessaryItems, setNecessaryItems] = useState([]);
--    const [searchText, setSearchText] = useState('');
--    const [pickerHeight, setPickerHeight] = useState(0);
--    const [direction, setDirection] = useState(GET_DROPDOWN_DIRECTION(dropDownDirection));
--
--    const badgeFlatListRef = useRef();
--    const pickerRef = useRef(null);
--    const initializationRef = useRef(false);
--    const itemPositionsRef = useRef({});
--    const flatListRef = useRef();
--    const scrollViewRef = useRef();
--    const memoryRef = useRef({
--        value: null,
--        items: []
--    });
--
--    const THEME = useMemo(() => THEMES[theme].default, [theme]);
--    const ICON = useMemo(() => THEMES[theme].ICONS, [theme])
--
--    /**
--     * The item schema.
--     * @returns {object}
--     */
--     const _schema = useMemo(() => ({...SCHEMA, ...schema}), [schema]);
--
--    /**
--     * componentDidMount.
--     */
--    useEffect(() => {
--        memoryRef.current.value = multiple ? (Array.isArray(value) ? value : []) : value;
--
--        // Get initial seleted items
--        let initialSelectedItems = [];
--        const valueNotNull = value !== null && (Array.isArray(value) && value.length !== 0);
--
--        if (valueNotNull) {
--            if (multiple) {
--                initialSelectedItems = items.filter(item => value.includes(item[_schema.value]));
--            } else {
--                initialSelectedItems = items.find(item => item[_schema.value] === value);
--            }
--        }
--
--        setNecessaryItems(initialSelectedItems);
--    }, []);
--
--    useEffect(() => {
--        if (closeOnBackPressed && open) {
--            const backAction = () => {
--                setOpen(false);
++}) {
 +  const [necessaryItems, setNecessaryItems] = useState([]);
 +  const [searchText, setSearchText] = useState("");
 +  const [pickerHeight, setPickerHeight] = useState(0);
@@ -442,7 +439,7 @@ index a154d88..82ddc13 100644
 +        const _item = items.find(
 +          (x) => x[_schema.value] === item[_schema.value]
 +        );
-                 
+ 
 -            return () => backHandler.remove();
 +        if (_item) {
 +          return { ...item, ..._item };
@@ -477,7 +474,7 @@ index a154d88..82ddc13 100644
 +        let _state = [...state].filter((item) =>
 +          value.includes(item[_schema.value])
 +        );
- 
+                 
 -                return item;
 -            });
 -        });
@@ -486,7 +483,7 @@ index a154d88..82ddc13 100644
 +          const index = _state.findIndex(
 +            (item) => item[_schema.value] === currentValue
 +          );
-                 
+ 
 -    /**
 -     * Sync necessary items.
 -     */
@@ -499,7 +496,7 @@ index a154d88..82ddc13 100644
 +            const item = items.find(
 +              (item) => item[_schema.value] === currentValue
 +            );
- 
+                 
 -                let _state = [...state].filter(item => value.includes(item[_schema.value]));
 +            if (item) {
 +              return [...accumulator, item];
@@ -509,12 +506,12 @@ index a154d88..82ddc13 100644
 -                    const index = _state.findIndex(item => item[_schema.value] === currentValue);
 +            return accumulator;
 +          }
-                     
+ 
 -                    if (index === -1) {
 -                        const item = items.find(item => item[_schema.value] === currentValue);
 +          return accumulator;
 +        }, []);
- 
+                     
 -                        if (item) {
 -                            return [...accumulator, item];
 -                        }
@@ -541,7 +538,7 @@ index a154d88..82ddc13 100644
 -            let state = [];
 +      setNecessaryItems(state);
 +    }
-             
+ 
 -            if (value !== null) {
 -                const item = items.find(item => item[_schema.value] === value);
 +    if (initializationRef.current) {
@@ -637,7 +634,7 @@ index a154d88..82ddc13 100644
 +          item[_schema.parent] === child[_schema.parent] ||
 +          item[_schema.value] === child[_schema.parent]
 +      );
- 
+             
 -            setNecessaryItems(state);
 -        }
 +      if (index > -1) {
@@ -889,9 +886,11 @@ index a154d88..82ddc13 100644
 +          return true;
          }
 -        return stickyHeaderIndices;
--
--    }, [stickyHeader, sortedItems])
  
+-    }, [stickyHeader, sortedItems])
++        return false;
++      });
+     
 -    /**
 -     * The items.
 -     * @returns {object}
@@ -902,9 +901,7 @@ index a154d88..82ddc13 100644
 -        } else {
 -            if (disableLocalSearch)
 -                return sortedItems;
-+        return false;
-+      });
- 
+-    
 -            const values = [];
 -            let results = sortedItems.filter(item => {
 -                if (item[_schema.label].toLowerCase().includes(searchText.toLowerCase())) {
@@ -918,9 +915,13 @@ index a154d88..82ddc13 100644
 +          values.includes(item[_schema.parent])
 +        )
 +          return;
-     
+ 
 -                return false;
 -            });
+-
+-            results.forEach((item, index) => {
+-                if (item[_schema.parent] === undefined || item[_schema.parent] === null || values.includes(item[_schema.parent]))
+-                    return;
 +        const parent = sortedItems.find(
 +          (x) => x[_schema.value] === item[_schema.parent]
 +        );
@@ -944,15 +945,14 @@ index a154d88..82ddc13 100644
 +        });
 +      }
  
--            results.forEach((item, index) => {
--                if (item[_schema.parent] === undefined || item[_schema.parent] === null || values.includes(item[_schema.parent]))
--                    return;
+-                const parent = sortedItems.find(x => x[_schema.value] === item[_schema.parent]);
+-                values.push(item[_schema.parent]);
 +      return results;
 +    }
 +  }, [sortedItems, _schema, searchText, addCustomItem]);
  
--                const parent = sortedItems.find(x => x[_schema.value] === item[_schema.parent]);
--                values.push(item[_schema.parent]);
+-                results.splice(index, 0, parent);
+-            });
 +  /**
 +   * The value.
 +   * @returns {string|object|null}}
@@ -961,11 +961,6 @@ index a154d88..82ddc13 100644
 +    if (multiple) {
 +      if (value === null) return [];
  
--                results.splice(index, 0, parent);
--            });
-+      return [...new Set(value)];
-+    }
- 
 -            if ((results.length === 0 || results.findIndex(item => item[_schema.label].toLowerCase() === searchText.toLowerCase()) === -1) && addCustomItem) {
 -                results.push({
 -                    [_schema.label]: searchText,
@@ -973,18 +968,14 @@ index a154d88..82ddc13 100644
 -                    custom: true
 -                });
 -            }
-+    return value;
-+  }, [value, multiple]);
++      return [...new Set(value)];
++    }
  
 -            return results;
 -        }
 -    }, [sortedItems, _schema, searchText, addCustomItem]);
-+  /**
-+   * Selected items only for multiple items.
-+   * @returns {object}
-+   */
-+  const selectedItems = useMemo(() => {
-+    if (!multiple) return [];
++    return value;
++  }, [value, multiple]);
  
 -    /**
 -     * The value.
@@ -994,6 +985,15 @@ index a154d88..82ddc13 100644
 -        if (multiple) {
 -            if (value === null)
 -                return [];
++  /**
++   * Selected items only for multiple items.
++   * @returns {object}
++   */
++  const selectedItems = useMemo(() => {
++    if (!multiple) return [];
+ 
+-            return [...new Set(value)];
+-        }
 +    return necessaryItems.filter((item) =>
 +      _value.includes(item[_schema.value])
 +    );
@@ -1122,9 +1122,6 @@ index a154d88..82ddc13 100644
 +    }
 +  }, [getSelectedItem, multiple, _schema]);
  
--            return [...new Set(value)];
--        }
--
 -        return value;
 -    }, [value, multiple]);
 -
@@ -3332,7 +3329,7 @@ index a154d88..82ddc13 100644
 +            <TextInput
 +              value={searchText}
 +              onChangeText={_onChangeSearchText}
-+              style={_searchTextInputStyle}
++              style={[_searchTextInputStyle,{borderColor:"transparent"}]}
 +              placeholder={_searchPlaceholder}
 +              placeholderTextColor={searchPlaceholderTextColor}
 +              {...searchTextInputProps}
@@ -3585,12 +3582,11 @@ index a154d88..82ddc13 100644
  });
  
  export default memo(Picker);
-\ No newline at end of file
 diff --git a/node_modules/react-native-dropdown-picker/src/components/RenderListItem.js b/node_modules/react-native-dropdown-picker/src/components/RenderListItem.js
-index 401f5d6..cb94f54 100644
+index 401f5d6..d030495 100644
 --- a/node_modules/react-native-dropdown-picker/src/components/RenderListItem.js
 +++ b/node_modules/react-native-dropdown-picker/src/components/RenderListItem.js
-@@ -6,9 +6,11 @@ import React, {
+@@ -6,9 +6,10 @@ import React, {
  
  import {
      Text,
@@ -3599,8 +3595,7 @@ index 401f5d6..cb94f54 100644
  } from 'react-native';
 -
 +import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
-+const TouchableOpacity =
-+  Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
++const TouchableOpacity = RNTouchableOpacity;
  import { LIST_MODE } from '../constants';
  
  function RenderListItem({

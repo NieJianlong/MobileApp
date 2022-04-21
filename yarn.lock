@@ -2553,6 +2553,14 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-native-material-textfield@^0.16.5":
+  "integrity" "sha512-QS3QzYiIE8DcaMp0ZALI3CQYsSn2mC8jjJAcbDleDfMeQ3+CD49kRpvKRKrgBkq7n4eRTZ2/KvaEKvb12sJ7Iw=="
+  "resolved" "https://registry.npmjs.org/@types/react-native-material-textfield/-/react-native-material-textfield-0.16.5.tgz"
+  "version" "0.16.5"
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native-scrollable-tab-view@^0.10.3":
   "integrity" "sha512-TH5oGSgoSej7gzl7/zWk9slvgfT3S7cMvNPrGs4p5kpT3zpywyN4l9ILuOMUf9SJiwDr9v81+b75MZRRhZYQJQ=="
   "resolved" "https://registry.npmjs.org/@types/react-native-scrollable-tab-view/-/react-native-scrollable-tab-view-0.10.3.tgz"

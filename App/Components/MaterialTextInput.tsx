@@ -26,6 +26,7 @@ function MaterialTextInput(props) {
     <TextField
       ref={inputRef}
       label={placeholder}
+      autoCapitalize="none"
       // labelTextStyle={styles.labelTextStyle}
       // labelFontSize={12}
       keyboardType={keyboardType}

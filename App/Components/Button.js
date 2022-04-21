@@ -22,6 +22,7 @@ class Button extends Component {
       backgroundColor,
       textColor,
       disabledColor,
+      style,
       prefixIcon,
     } = this.props;
     console.log("disabled", disabled);
@@ -31,8 +32,10 @@ class Button extends Component {
         disabled={disabled}
         style={[
           styles.container,
-          { backgroundColor: disabled ? 'grey': backgroundColor },
+          { backgroundColor: disabled ? "grey" : backgroundColor },
           disabled && { opacity: 0.25 },
+          ,
+          style,
         ]}
         onPress={onPress}
       >

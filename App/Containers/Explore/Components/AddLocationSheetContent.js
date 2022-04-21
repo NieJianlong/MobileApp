@@ -50,7 +50,7 @@ function AddLocationSheetContent(props) {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [open, setOpen] = useState();
+  const [open, setOpen] = useState(false);
   const [addAddress] = useMutation(
     isAuth ? CREATE_ADDRESS : CREATE_ADDRESS_FOR_GUEST,
     {
@@ -218,7 +218,7 @@ function AddLocationSheetContent(props) {
                     }}
                   >
                     {item.keyboardType === "selector" ? (
-                      <View>
+                      <View style={[t.z100]}>
                         <Controller
                           control={control}
                           rules={{
@@ -226,10 +226,12 @@ function AddLocationSheetContent(props) {
                           }}
                           render={({ field: { onChange, value } }) => (
                             <DropDownPicker
-                              listMode="SCROLLVIEW"
+                              listMode="MODAL"
                               placeholder="State (Province)*"
                               value={value}
+                              searchPlaceholder="Search……"
                               open={open}
+                              searchable={true}
                               setOpen={setOpen}
                               items={items}
                               setValue={onChange}

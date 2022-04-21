@@ -19,7 +19,7 @@ export const ProductSchema = {
     noOfItemsInStock: { type: "int?", default: null },
     description: { type: "string?", default: null },
     technicalDetails: { type: "string?", default: null },
-    highlightBullets: { type: "string?", default: null },
+    highlightBullets: { type: "string[]", default: null },
     seller: { type: "SellerView?", default: null },
     returnPolicies: {
       type: "list",

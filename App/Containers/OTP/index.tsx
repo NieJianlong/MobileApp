@@ -408,9 +408,9 @@ function OTPScreen(props) {
                       title: "Failed",
                     },
                   });
-                  NavigationService.navigate("CreateNewPasswordScreen", {
-                    actionTokenValue: "error",
-                  });
+                  // NavigationService.navigate("CreateNewPasswordScreen", {
+                  //   actionTokenValue: "error",
+                  // });
                 },
               });
             } else {

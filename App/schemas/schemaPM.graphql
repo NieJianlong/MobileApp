@@ -503,7 +503,7 @@ type ProductListingView {
   noOfItemsInStock: Int
   description: String
   technicalDetails: String
-  highlightBullets: String
+  highlightBullets: [String]
   seller: SellerView
   returnPolicies: [ProductReturnPolicyView]
   listingVariants: [ListingVariantView]
@@ -980,6 +980,7 @@ type SellerProductDetailView {
   variants: [SellerProductVariant!]!
   categories: [ProductCategoryResponse!]!
   itemsInStock: Int!
+  availableInventory: Int!
   inventoryLocation: String
   returnPolicy: SellerReturnPolicy!
 }
@@ -1009,6 +1010,7 @@ type SellerProductVariant {
   priceId: ID!
   photoUrl: String!
   itemsInStock: Int!
+  availableInventory: Int!
   defaultVariant: Boolean!
   retailPrice: Float!
   wholeSalePrice: Float!

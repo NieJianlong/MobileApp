@@ -34,6 +34,16 @@ function Index(props) {
   useEffect(() => {
     setQuantity(props.product.quantity);
   }, [props.product.quantity]);
+  const tempProduct = realm
+    .objects("ShoppingCart")
+    .filtered("id == $0", props.product.id)[0];
+  console.log("currentProduct====================================");
+  console.log(tempProduct?.id);
+  console.log("====================================");
+
+  console.log("props.product.id====================================");
+  console.log(props.product.id);
+  console.log("====================================");
 
   return (
     <TouchableOpacity
@@ -116,7 +126,7 @@ function Index(props) {
                   });
                 } else {
                   realm.write(() => {
-                    props.product.quantity = quantity - 1;
+                    tempProduct.quantity = quantity - 1;
                   });
                   setQuantity(quantity - 1);
                   PubSub.publish("refresh-shoppingcart");
@@ -137,7 +147,7 @@ function Index(props) {
               disabled={!availble}
               onPress={() => {
                 realm.write(() => {
-                  props.product.quantity = quantity + 1;
+                  tempProduct.quantity = quantity + 1;
                 });
                 setQuantity(quantity + 1);
                 PubSub.publish("refresh-shoppingcart");
@@ -177,7 +187,7 @@ function Index(props) {
               console.log("props.product=============", props.product);
               realm.write(() => {
                 // Delete the task from the realm.
-                realm.delete(props.product);
+                realm.delete(tempProduct);
                 // Discard the reference.
                 PubSub.publish("refresh-shoppingcart");
                 // props.product = null;

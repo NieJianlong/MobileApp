@@ -28,48 +28,101 @@ import { IsListingAvailable } from "../Explore/gql/explore_queries";
 export const CartContext = React.createContext({});
 
 function ShoppingCart(props) {
-  console.log("props ShoppingCart", props);
   const { realm } = useRealm();
   const localCart = localCartVar();
-  const query = realm
-    .objects("ShoppingCart")
-    .filtered("addressId == $0", localCart.deliverAddress)
-    .filtered("quantity > 0")
-    .filtered("isDraft == false");
-  const [mydatas, setMydatas] = useState(query);
+
+  const [mydatas, setMydatas] = useState([]);
   console.log("mydatas=======", mydatas);
   // const mydatas = realm.objects("ShoppingCart");
   const [total, setTotal] = useState(0);
   useEffect(() => {
+    const query1 = realm
+      .objects("ShoppingCart")
+      .filtered("addressId == $0", localCart.deliverAddress)
+      .filtered("quantity > 0")
+      .filtered("isDraft == false");
+    const datas = [];
+    if (query1) {
+      query1.map((item) => {
+        const newItem = {
+          id: item.id,
+          listingId: item.listingId,
+          productId: item.productId,
+          variantId: item.variantId,
+          quantity: item.quantity,
+          variant: item.variant,
+          isDraft: item.isDraft,
+          addressId: item.addressId,
+          product: item.product,
+          created: item.created,
+          updated: item.updated,
+        };
+
+        datas.push(newItem);
+      });
+    } else {
+      setMydatas(datas);
+    }
     props.navigation.addListener("focus", () => {
-      // const mydatas = query;
-      // console.log("mydatas00", mydatas);
       const query1 = realm
         .objects("ShoppingCart")
         .filtered("addressId == $0", localCart.deliverAddress)
         .filtered("quantity > 0")
         .filtered("isDraft == false");
-      console.log("localCartlocalCart", localCart.items);
-      setMydatas(query1);
+      const datas = [];
+      if (query1) {
+        query1.map((item) => {
+          const newItem = {
+            id: item.id,
+            listingId: item.listingId,
+            productId: item.productId,
+            variantId: item.variantId,
+            quantity: item.quantity,
+            variant: item.variant,
+            isDraft: item.isDraft,
+            addressId: item.addressId,
+            product: item.product,
+            created: item.created,
+            updated: item.updated,
+          };
+          datas.push(newItem);
+        });
+        setMydatas(datas);
+      } else {
+        setMydatas([]);
+      }
     });
   }, []);
 
   useEffect(() => {
-    setMydatas(
-      realm
+    let refresh = PubSub.subscribe("refresh-shoppingcart", () => {
+      const query1 = realm
         .objects("ShoppingCart")
         .filtered("addressId == $0", localCart.deliverAddress)
         .filtered("quantity > 0")
-        .filtered("isDraft == false")
-    );
-    let refresh = PubSub.subscribe("refresh-shoppingcart", () => {
-      setMydatas(
-        realm
-          .objects("ShoppingCart")
-          .filtered("addressId == $0", localCart.deliverAddress)
-          .filtered("quantity > 0")
-          .filtered("isDraft == false")
-      );
+        .filtered("isDraft == false");
+      const datas = [];
+      if (query1) {
+        query1.map((item) => {
+          const newItem = {
+            id: item.id,
+            listingId: item.listingId,
+            productId: item.productId,
+            variantId: item.variantId,
+            quantity: item.quantity,
+            variant: item.variant,
+            isDraft: item.isDraft,
+            addressId: item.addressId,
+            product: item.product,
+            created: item.created,
+            updated: item.updated,
+          };
+          datas.push(newItem);
+        });
+        setMydatas(datas);
+      } else {
+        setMydatas([]);
+      }
     });
     return () => {
       if (refresh) {
@@ -204,108 +257,6 @@ function ShoppingCart(props) {
                   height: 80,
                 }}
               >
-                {/*{!paidDuringDelivery ? (*/}
-                {/*  <TouchableOpacity*/}
-                {/*    onPress={() => setPaidDuringDeliver(true)}*/}
-                {/*    style={{*/}
-                {/*      borderRadius: s(40),*/}
-                {/*      backgroundColor: colors.grey80,*/}
-                {/*      width: s(170),*/}
-                {/*      height: s(32),*/}
-                {/*      alignItems: "center",*/}
-                {/*      justifyContent: "center",*/}
-                {/*      marginTop: -15,*/}
-                {/*    }}*/}
-                {/*  >*/}
-                {/*    <Text*/}
-                {/*      style={[*/}
-                {/*        styles.heading5Bold,*/}
-                {/*        { color: "white", textAlign: "center" },*/}
-                {/*      ]}*/}
-                {/*    >*/}
-                {/*      PAY DURING DELIVERY*/}
-                {/*    </Text>*/}
-                {/*  </TouchableOpacity>*/}
-                {/*) : (*/}
-                {/*  <View*/}
-                {/*    style={{*/}
-                {/*      flexDirection: "row",*/}
-                {/*      justifyContent: "space-between",*/}
-                {/*    }}*/}
-                {/*  >*/}
-                {/*    <View style={{ flexDirection: "row" }}>*/}
-                {/*      <Text*/}
-                {/*        style={[*/}
-                {/*          styles.txtRegular,*/}
-                {/*          { fontSize: s(14), color: colors.black },*/}
-                {/*        ]}*/}
-                {/*      >*/}
-                {/*        Product paid during delivery.*/}
-                {/*      </Text>*/}
-                {/*      <TouchableOpacity*/}
-                {/*        onPress={() => {*/}
-                {/*          sheetContext.dispatch({*/}
-                {/*            type: "changSheetState",*/}
-                {/*            payload: {*/}
-                {/*              showSheet: true,*/}
-                {/*              height: 300,*/}
-                {/*              children: () => {*/}
-                {/*                const data = {*/}
-                {/*                  textTip: "Paying during delivery",*/}
-                {/*                  subTextTip:*/}
-                {/*                    "This is an explanatory text about this feature, lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professo.",*/}
-                {/*                  needButton: true,*/}
-                {/*                  btnMsg: "OK",*/}
-                {/*                  onPress: () => {*/}
-                {/*                    sheetContext.dispatch({*/}
-                {/*                      type: "changSheetState",*/}
-                {/*                      payload: {*/}
-                {/*                        showSheet: false,*/}
-                {/*                      },*/}
-                {/*                    });*/}
-                {/*                  },*/}
-                {/*                };*/}
-                {/*                return (*/}
-                {/*                  <View*/}
-                {/*                    style={{*/}
-                {/*                      height: 320,*/}
-                {/*                      marginLeft: -AppConfig.paddingHorizontal,*/}
-                {/*                    }}*/}
-                {/*                  >*/}
-                {/*                    <TextTip {...data} />*/}
-                {/*                  </View>*/}
-                {/*                );*/}
-                {/*              },*/}
-                {/*            },*/}
-                {/*          });*/}
-                {/*        }}*/}
-                {/*      >*/}
-                {/*        <Text*/}
-                {/*          style={[*/}
-                {/*            styles.txtRegular,*/}
-                {/*            { color: colors.secondary00, paddingLeft: 6 },*/}
-                {/*          ]}*/}
-                {/*        >*/}
-                {/*          Details*/}
-                {/*        </Text>*/}
-                {/*      </TouchableOpacity>*/}
-                {/*    </View>*/}
-                {/*    <TouchableOpacity*/}
-                {/*      onPress={() => {*/}
-                {/*        // NavigationService.navigate("PaymentScreen")*/}
-                {/*      }}*/}
-                {/*    >*/}
-                {/*      <Text*/}
-                {/*        style={[*/}
-                {/*          styles.txtRegular,*/}
-                {/*          { color: colors.secondary00, paddingLeft: 6 },*/}
-                {/*        ]}*/}
-                {/*      >*/}
-                {/*        PAY NOW*/}
-                {/*      </Text>*/}
-                {/*    </TouchableOpacity>*/}
-                {/*  </View>*/}
-                {/*)}*/}
                 <View
                   style={{
                     marginTop: 30,

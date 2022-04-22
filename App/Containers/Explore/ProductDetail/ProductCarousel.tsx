@@ -215,11 +215,13 @@ export default function ProductCarousel({ product }) {
         </View>
 
         <TouchableOpacity
-          onPress={() =>
-            NavigationService.navigate("ProductGalleryScreen", {
-              fullscreenMode: false,
-            })
-          }
+          onPress={() => {
+            const imageUrls =
+              product.photoUrls?.map((item: string) => {
+                return { url: item };
+              }) ?? [];
+            setImageViewer({ visible: true, images: imageUrls });
+          }}
           style={styles.photoNumberContainer}
         >
           <Text style={styles.photoNumberTxt}>

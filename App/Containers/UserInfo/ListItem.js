@@ -51,7 +51,7 @@ function ListItem(props) {
             ...userProfileVarReactive,
             isAuth: false,
           });
-          NavigationService.navigate("ExploreScreen");
+          NavigationService.navigate("LoginScreen");
           // navigation.popToTop();
           // navigation.reset({
           //   index: 0,

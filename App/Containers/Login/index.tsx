@@ -28,10 +28,15 @@ import jwt_decode from "jwt-decode";
 
 import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
-import { useBuyerProfileByUserIdLazyQuery } from "../../../generated/graphql";
+import {
+  useBuyerProfileByUserIdLazyQuery,
+  useSendOtpCodeMutation,
+  ValidationType,
+} from "../../../generated/graphql";
 import { Images } from "../../Themes";
 import { t } from "react-native-tailwindcss";
 import useLogin from "../../hooks/useLogin";
+import { isEmpty } from "lodash";
 
 function LoginScreen(props) {
   // refs
@@ -129,6 +134,7 @@ function LoginScreen(props) {
       Keyboard.removeListener("keyboardWillHide", _keyboardWillHide);
     };
   }, [props]);
+  const [resendCode] = useSendOtpCodeMutation();
 
   // useEffect(() => {
   //   if (isBillingLoaded) NavigationService.navigate("MainScreen");
@@ -158,34 +164,40 @@ function LoginScreen(props) {
             if (typeof res !== "undefined") {
               let access_token = res.data.access_token;
               let decoded = jwt_decode(access_token);
-              console.log("decoded====================================");
-              console.log(JSON.stringify(decoded));
-              console.log("====================================");
-              // await userHasVerifiedPhoneNumber({
-              //   variables: { userId: decoded.sub },
-              // });
-              // if (!decoded.email_verified) {
-              //   resendCode({
-              //     variables: { phoneNumber: decoded.email },
-              //     onCompleted: () => {
-              //       dispatch({
-              //         type: "changLoading",
-              //         payload: false,
-              //       });
-              //       NavigationService.navigate("OTPScreen", {
-              //         fromScreen: "RegisterScreen",
-              //         phone: decoded.email,
-              //       });
-              //     },
-              //     onError: () => {
-              //       dispatch({
-              //         type: "changLoading",
-              //         payload: false,
-              //       });
-              //     },
-              //   });
-              //   return;
-              // }
+              if (isEmpty(decoded.phone_number)) {
+                resendCode({
+                  variables: {
+                    sendCodeRequest: {
+                      userId: decoded?.sub,
+                      validationType: validator.isValidEmail(loginInput?.trim())
+                        ? ValidationType.Email
+                        : ValidationType.Sms,
+                    },
+                  },
+                  context: {
+                    headers: {
+                      isPrivate: true,
+                    },
+                  },
+                  onCompleted: () => {
+                    dispatch({
+                      type: "changLoading",
+                      payload: false,
+                    });
+                    NavigationService.navigate("OTPScreen", {
+                      fromScreen: "RegisterScreen",
+                      phone: ret.isPhone ? "+91" + loginInput : loginInput,
+                    });
+                  },
+                  onError: () => {
+                    dispatch({
+                      type: "changLoading",
+                      payload: false,
+                    });
+                  },
+                });
+                return;
+              }
               if (access_token === "undefined") {
                 console.log("no access token");
               }

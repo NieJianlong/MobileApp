@@ -92,7 +92,9 @@ function UserEditProfile(props) {
   const [newFirstName, setNewFirstName] = useState(firstName);
   const [newLastName, setNewLastName] = useState(lastName);
   const [newEmail, setNewEmail] = useState(email);
-  const [newPhoneNumber, setNewPhoneNumber] = useState(phoneNumber);
+  const [newPhoneNumber, setNewPhoneNumber] = useState(
+    isEmpty(phoneNumber) ? "" : phoneNumber.replace("+91", "")
+  );
   const inputs = [
     {
       placeholder: "First Name",

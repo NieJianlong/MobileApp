@@ -22,6 +22,7 @@ import { userProfileVar } from "../../Apollo/cache";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useBuyerProfileQuery } from "../../../generated/graphql";
 import useLogin from "../../hooks/useLogin";
+import { isEmpty, trimStart } from "lodash";
 
 /**
  * @description:The user header component, which contains basic user information
@@ -137,7 +138,9 @@ function UserInfo() {
               source={require("../../Images/usercenter/phone.png")}
             ></Image>
             <Text style={styles.emailtext}>
-              {data?.buyerProfile.phoneNumber}
+              {isEmpty(data?.buyerProfile.phoneNumber)
+                ? ""
+                : data?.buyerProfile.phoneNumber.replace("+91", "")}
             </Text>
           </View>
         </View>

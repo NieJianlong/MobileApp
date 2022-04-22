@@ -163,6 +163,8 @@ function LoginScreen(props) {
           .then(async (res) => {
             if (typeof res !== "undefined") {
               let access_token = res.data.access_token;
+              global.access_token = access_token;
+              // global.userProfileId = decoded.sub;
               let decoded = jwt_decode(access_token);
               if (isEmpty(decoded.phone_number)) {
                 resendCode({
@@ -187,6 +189,7 @@ function LoginScreen(props) {
                     NavigationService.navigate("OTPScreen", {
                       fromScreen: "RegisterScreen",
                       phone: ret.isPhone ? "+91" + loginInput : loginInput,
+                      userId: decoded?.sub,
                     });
                   },
                   onError: () => {

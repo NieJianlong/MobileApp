@@ -28,6 +28,7 @@ import {
   razorOrderPaymentVar,
   userProfileVar,
   localCartVar as localCartCache,
+  localCartVar,
 } from "../../Apollo/cache";
 import { useRazorVerifyPayment } from "../../hooks/verifyPayment";
 import images from "../../Themes/Images";
@@ -39,21 +40,21 @@ import useRealm from "../../hooks/useRealm";
 import AddBillingDetail from "../../hooks/addBillingDetails";
 import { ComeFromType, usePaymentConfigration } from "../../Utils/utils";
 import { useGetBuyerSalamiWalletBalanceQuery } from "../../../generated/graphql";
+import { pick } from "lodash";
 //orderStatus：1,completed
 function CheckoutResume(props) {
   const { params } = useRoute();
   const [on, setOnSwitch] = useState(false);
   const { createOrderFromCart } = useCreateOrder();
   const { razorpayCreateOrder } = useCreateRazorOrder();
-  const {
-    data: { localCartVar },
-  } = useQuery(GET_LOCAL_CART);
+
+  debugger;
   const { addBilling } = AddBillingDetail();
   const getPaymentConfigration = usePaymentConfigration();
   const { realm } = useRealm();
   const userProfile = useReactiveVar(userProfileVar);
   const isAuth = useMemo(() => userProfile.isAuth, [userProfile.isAuth]);
-  const { razorpayVerifyPaymentSignature } = useRazorVerifyPayment();
+
   const { orderStatus, data, availbleList } = params;
   const money = useMemo(() => {
     let currentBilling = 0;
@@ -147,7 +148,7 @@ function CheckoutResume(props) {
       type: "changLoading",
       payload: true,
     });
-    const finalItems = localCartVar.items.map((item) => {
+    const finalItems = data?.map((item) => {
       const productItem = mydatas.find(
         (dataItem) => item.variantId === dataItem.variantId
       );
@@ -166,10 +167,12 @@ function CheckoutResume(props) {
       variables: {
         cart: {
           buyerId: global.buyerId,
-          shippingAddressId: localCartVar.deliverAddress,
+          shippingAddressId: localCart.deliverAddress,
           billingDetailsId: billingDetailsId,
           useSalamiWallet: true,
-          cartItems: localCartVar.items,
+          cartItems: data?.map((item) =>
+            pick(item, ["listingId", "quantity", "variantId"])
+          ),
         },
       },
       context: {

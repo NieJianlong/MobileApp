@@ -111,9 +111,9 @@ function OTPScreen(props) {
     },
   });
   const autoSignIn = async () => {
-    if (params.email && params.password) {
+    if (params.phone && params.password) {
       const { data } = await jwt.runTokenFlow({
-        username: isValidEmail(params.phone) ? params.email : params.phone,
+        username: params.phone,
         password: params.password,
         //username: "vijay.msbi@gmail.com",
         //password: "123456789",

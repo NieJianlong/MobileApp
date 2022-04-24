@@ -20,24 +20,20 @@ import { useRoute } from "@react-navigation/native";
 import BigNumber from "bignumber.js";
 import { useCreateOrder } from "../../hooks/order";
 import PaymentOptions from "./PaymentOptions";
-import RazorpayCheckout from "react-native-razorpay";
 import { useCreateRazorOrder } from "../../hooks/razorOrder";
 import {
   cartOrderVar,
-  GET_LOCAL_CART,
-  razorOrderPaymentVar,
   userProfileVar,
   localCartVar as localCartCache,
   localCartVar,
 } from "../../Apollo/cache";
-import { useRazorVerifyPayment } from "../../hooks/verifyPayment";
 import images from "../../Themes/Images";
 import { ApplicationStyles } from "../../Themes";
 import { useQuery, useReactiveVar } from "@apollo/client";
 import { AlertContext } from "../Root/GlobalContext";
 import PubSub from "pubsub-js";
 import useRealm from "../../hooks/useRealm";
-import AddBillingDetail from "../../hooks/addBillingDetails";
+import AddBillingDetail from "../../hooks/useBillingDetail";
 import { ComeFromType, usePaymentConfigration } from "../../Utils/utils";
 import { useGetBuyerSalamiWalletBalanceQuery } from "../../../generated/graphql";
 import { pick } from "lodash";

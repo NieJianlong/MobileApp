@@ -23,23 +23,23 @@ import {
   cartOrderVar,
   GET_LOCAL_CART,
   localBuyNowVar,
-  razorOrderPaymentVar,
   userProfileVar,
 } from "../../../Apollo/cache";
 import { nanoid } from "nanoid";
 import BigNumber from "bignumber.js";
 import NavigationService from "../../../Navigation/NavigationService";
 import { useCreateOrder } from "../../../hooks/order";
-import RazorpayCheckout from "react-native-razorpay";
+
 import { useRazorVerifyPayment } from "../../../hooks/verifyPayment";
 import { useCreateRazorOrder } from "../../../hooks/razorOrder";
 import {
   DeliveryOption,
   useGetBuyerSalamiWalletBalanceQuery,
 } from "../../../../generated/graphql";
-import AddBillingDetail from "../../../hooks/addBillingDetails";
+
 import { ComeFromType, usePaymentConfigration } from "../../../Utils/utils";
 import { isEmpty } from "lodash";
+import UseBillingDetail from "../../../hooks/useBillingDetail";
 export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { dispatch } = useContext(AlertContext);
   const getPaymentConfigration = usePaymentConfigration();
@@ -50,7 +50,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { razorpayVerifyPaymentSignature } = useRazorVerifyPayment();
   const { razorpayCreateOrder } = useCreateRazorOrder();
   const userProfile = useReactiveVar(userProfileVar);
-  const { addBilling } = AddBillingDetail();
+  const { addBilling } = UseBillingDetail();
   const { data } = useGetBuyerSalamiWalletBalanceQuery({
     context: {
       headers: {

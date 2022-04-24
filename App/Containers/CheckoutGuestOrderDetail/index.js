@@ -10,25 +10,24 @@ import {
   localBuyNowVar,
   localCartVar,
   cartOrderVar,
-  razorOrderPaymentVar,
 } from "../../Apollo/cache";
 import styles from "./styles";
-import RazorpayCheckout from "react-native-razorpay";
 import NavigationService from "../../Navigation/NavigationService";
 import { useCreateOrder } from "../../hooks/order";
 import { AlertContext } from "../Root/GlobalContext";
 import { useCreateRazorOrder } from "../../hooks/razorOrder";
 import { useRazorVerifyPayment } from "../../hooks/verifyPayment";
 import { usePaymentConfigration } from "../../Utils/utils";
-import AddBillingDetail from "../../hooks/addBillingDetails";
+
 import { useFocusEffect } from "@react-navigation/native";
 import { useBillingDetailsByGuestBuyerIdLazyQuery } from "../../../generated/graphql";
+import UseBillingDetail from "../../hooks/useBillingDetail";
 
 function CheckoutGuestOrderDetail(props) {
   const userProfile = useReactiveVar(userProfileVar);
   const [billingAddress, setBillingAddress] = useState([]);
 
-  const { addBilling } = AddBillingDetail();
+  const { addBilling } = UseBillingDetail();
 
   const [isSameAsDelivery, setIsSameAsDelivery] = useState(true);
   const { createOrderFromCart } = useCreateOrder();

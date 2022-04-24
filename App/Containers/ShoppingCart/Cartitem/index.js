@@ -182,7 +182,7 @@ function Index(props) {
         <View style={styles.row}>
           <TouchableOpacity
             style={styles.removebtn}
-            disabled={!availble}
+            // disabled={!availble}
             onPress={() => {
               console.log("props.product=============", props.product);
               realm.write(() => {

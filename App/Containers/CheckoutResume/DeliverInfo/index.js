@@ -7,46 +7,32 @@ import images from "../../../Themes/Images";
 import colors from "../../../Themes/Colors";
 import fonts from "../../../Themes/Fonts";
 import { ApplicationStyles } from "../../../Themes";
+import { localCartVar, userProfileVar } from "../../../Apollo/cache";
+import { useReactiveVar } from "@apollo/client";
 
 function index(props) {
   console.log("props======", props);
-  const { orderStatus, isAuth, billingAddressDetail, userProfile} = props;
+  const localCart = useReactiveVar(localCartVar);
+  const userProfile = useReactiveVar(userProfileVar);
+  // const { orderStatus, isAuth, billingAddressDetail, userProfile } = props;
   console.log("props.billinfDetail", props.billingAddressDetail);
-  const fname = isAuth
+  const fname = userProfile.isAuth
     ? userProfile.firstName
-    : billingAddressDetail?.firstName;
-  const provinceState = isAuth
-    ? billingAddressDetail?.provinceState
-    : billingAddressDetail?.billingAddress?.provinceState;
-  const towncity = isAuth
-    ? billingAddressDetail?.townCity
-    : billingAddressDetail?.billingAddress?.townCity;
+    : userProfile.billingDetails?.firstName;
+  const provinceState = localCart?.callBackAddress?.provinceState;
+  const towncity = localCart?.callBackAddress?.townCity;
   const [datas, setDatas] = useState([
     {
       icon: images.userDeliverytoImage,
       title: "Deliver to:",
       subtitle: `${fname}, ${towncity}, ${
-        props?.billingAddressDetail?.billingAddress?.streetAddress1 || ""
-      } ${props?.billingAddressDetail?.billingAddress?.streetAddress2 || ""} ${
+        localCart.callBackAddress.streetAddress1 || ""
+      } ${localCart.callBackAddress.streetAddress2 || ""} ${
         props?.billingAddressDetail?.billingAddress?.streetAddress3 || ""
       }`,
       subtitle1: `India, ${provinceState}`,
       type: "delivery",
     },
-    // {
-    //   icon: images.userUBillingImage,
-    //   title: 'Billing Address:',
-    //   subtitle: 'Username, Streetname 00',
-    //   subtitle1: 'County, City',
-    //   type: 'delivery',
-    // },
-    // {
-    //   icon: images.userUPayImage,
-    //   title: 'Payment',
-    //   subtitle: 'Salami Credit',
-    //   subtitle1: images.userLogoImage,
-    //   type: 'Payment',
-    // },
   ]);
   return (
     <View>

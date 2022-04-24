@@ -30,10 +30,8 @@ export const CartContext = React.createContext({});
 function ShoppingCart(props) {
   const { realm } = useRealm();
   const localCart = localCartVar();
-
+  // const { addBilling } = AddBillingDetail();
   const [mydatas, setMydatas] = useState([]);
-  console.log("mydatas=======", mydatas);
-  // const mydatas = realm.objects("ShoppingCart");
   const [total, setTotal] = useState(0);
   useEffect(() => {
     const query1 = realm
@@ -129,7 +127,7 @@ function ShoppingCart(props) {
         PubSub.unsubscribe(refresh);
       }
     };
-  }, [localCart.deliverAddress, realm]);
+  }, [localCart.deliverAddress]);
 
   const isAvailableList = useMemo(() => {
     return mydatas?.map((item) => {
@@ -151,12 +149,13 @@ function ShoppingCart(props) {
     if (isAvailableList.length > 0) {
       queryAvailble();
     }
-  }, [isAvailableList, queryAvailble]);
+  }, [isAvailableList]);
 
   /** nasavge thnks we should put the blocks of view code below into functions
    * to make the code more readable
    */
-  const onProceed = () => {
+  const onProceed = async () => {
+    // await addBilling();
     console.log("global.access_token", global.access_token);
     const itemArray = [];
     mydatas.map((item, index) => {

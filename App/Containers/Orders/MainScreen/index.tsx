@@ -222,7 +222,7 @@ class Order extends Component {
             <ScrollView sshowsVerticalScrollIndicator={false}>
               <View style={styles.v1}>
                 <Text style={styles.heading1Bold}>Orders</Text>
-                {this.renderFilter()}
+                {/* {this.renderFilter()} */}
               </View>
               <View style={{ height: vs(15) }} />
               {this.props.orderItems.map((item, index) =>

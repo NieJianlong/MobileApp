@@ -147,6 +147,8 @@ export default function Index(props) {
     variables: {
       buyerId: global.buyerId,
     },
+    nextFetchPolicy: "standby",
+    fetchPolicy: "network-only",
     context: {
       headers: {
         isPrivate: global.access_token ? true : false,

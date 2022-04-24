@@ -10,11 +10,9 @@ import {
 } from "../../generated/graphql";
 import { isEmpty } from "lodash";
 
-const AddBillingDetail = () => {
+const UseBillingDetail = () => {
   const userProfile = useReactiveVar(userProfileVar);
   const localCartVarReactive = useReactiveVar(localCartVar);
-  const [isBillingLoaded, setIsBillingLoaded] = useState(false);
-  const [addbillingDetail, setBillingDetail] = useState(null);
   const addressLocal = localCartVarReactive.callBackAddress;
   const billingAddress = {
     pinCode: addressLocal?.pinCode,
@@ -160,10 +158,8 @@ const AddBillingDetail = () => {
     return result?.billingDetailsId;
   }
   return {
-    isBillingLoaded,
-    addbillingDetail,
     addBilling,
   };
 };
 
-export default AddBillingDetail;
+export default UseBillingDetail;

@@ -32,7 +32,7 @@ function ShoppingCart(props) {
   const localCart = localCartVar();
   // const { addBilling } = AddBillingDetail();
   const [mydatas, setMydatas] = useState([]);
-  const [total, setTotal] = useState(0);
+
   useEffect(() => {
     const query1 = realm
       .objects("ShoppingCart")
@@ -208,12 +208,6 @@ function ShoppingCart(props) {
     }
   };
 
-  const subTotal = (subtotal) => {
-    setTotal(parseInt(subtotal));
-
-    console.log("total", total);
-    console.log("total===0", total === 0);
-  };
   return (
     <CartContext.Provider>
       <View style={styles.container}>
@@ -242,7 +236,6 @@ function ShoppingCart(props) {
               >
                 <Button
                   disabledColor={"grey"}
-                  disabled={total === 0}
                   onPress={onProceed}
                   text="PROCEED TO CHECKOUT"
                 />
@@ -307,10 +300,7 @@ function ShoppingCart(props) {
               return mydatas.length > 0 ? (
                 <View style={{ backgroundColor: "white" }}>
                   <AddressBar />
-                  <CartSummary
-                    availbleList={availbleList}
-                    subtotal={subTotal}
-                  />
+                  <CartSummary availbleList={availbleList} />
                 </View>
               ) : null;
             }}

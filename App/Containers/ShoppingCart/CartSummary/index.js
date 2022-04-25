@@ -72,7 +72,7 @@ function CartSummary(props) {
     }
     const total = new BigNumber(currentBilling).toFixed(2);
     const saving = new BigNumber(originalBilling - currentBilling).toFixed(2);
-    props.subtotal(total);
+
     return {
       total: total,
       saving: saving,

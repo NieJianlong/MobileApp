@@ -16,12 +16,18 @@ import NavigationService from "../../Navigation/NavigationService";
 import { useCreateOrder } from "../../hooks/order";
 import { AlertContext } from "../Root/GlobalContext";
 import { useCreateRazorOrder } from "../../hooks/razorOrder";
-import { useRazorVerifyPayment } from "../../hooks/verifyPayment";
 import { usePaymentConfigration } from "../../Utils/utils";
+import { Controller, useForm } from "react-hook-form";
 
 import { useFocusEffect } from "@react-navigation/native";
-import { useBillingDetailsByGuestBuyerIdLazyQuery } from "../../../generated/graphql";
+import {
+  BillingDetailsRequestForCreate,
+  useBillingDetailsByGuestBuyerIdLazyQuery,
+} from "../../../generated/graphql";
 import UseBillingDetail from "../../hooks/useBillingDetail";
+import { get, trimStart } from "lodash";
+import { t } from "react-native-tailwindcss";
+import { vs } from "react-native-size-matters";
 
 function CheckoutGuestOrderDetail(props) {
   const userProfile = useReactiveVar(userProfileVar);
@@ -33,11 +39,15 @@ function CheckoutGuestOrderDetail(props) {
   const { createOrderFromCart } = useCreateOrder();
   const { razorpayCreateOrder } = useCreateRazorOrder();
   const localCart = useReactiveVar(localCartVar);
-
-  const { razorpayVerifyPaymentSignature } = useRazorVerifyPayment();
   const { dispatch } = useContext(AlertContext);
   const isAuth = useMemo(() => userProfile.isAuth, [userProfile.isAuth]);
   const getPaymentConfigration = usePaymentConfigration();
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<BillingDetailsRequestForCreate>();
 
   //getBillingAddress of guest buyer
   const [getBillingAddress] = useBillingDetailsByGuestBuyerIdLazyQuery({
@@ -48,6 +58,14 @@ function CheckoutGuestOrderDetail(props) {
     onCompleted: (result) => {
       if (result.billingDetailsByGuestBuyerId.length > 0) {
         const billingDetails = result.billingDetailsByGuestBuyerId[0];
+        setValue(
+          "phoneNumber",
+          trimStart(billingDetails?.phoneNumber, "+91") ?? ""
+        );
+        setValue("email", billingDetails?.email ?? "");
+        setValue("firstName", billingDetails?.firstName ?? "");
+        setValue("lastName", billingDetails?.lastName ?? "");
+
         userProfileVar({
           ...userProfile,
           billingDetails: billingDetails,
@@ -66,9 +84,11 @@ function CheckoutGuestOrderDetail(props) {
     }, [])
   );
 
-  //need to call updateORcreatebillingaddress here
-  const onPressNext = async () => {
-    const billingDetailsId = await addBilling();
+  const onSubmit = async (data: BillingDetailsRequestForCreate) => {
+    const data1 = { ...data, phoneNumber: "+91" + data.phoneNumber };
+
+    dispatch({ type: "loading" });
+    const billingDetailsId = await addBilling(data1);
     dispatch({
       type: "changLoading",
       payload: true,
@@ -97,7 +117,7 @@ function CheckoutGuestOrderDetail(props) {
         variables: {
           cart: {
             buyerId: global.buyerId,
-            shippingAddressId: localCartVar.deliverAddress,
+            shippingAddressId: localCart?.deliverAddress,
             billingDetailsId: billingDetailsId,
             useSalamiWallet: false,
             cartItems:
@@ -148,7 +168,7 @@ function CheckoutGuestOrderDetail(props) {
       });
     }
   };
-
+  debugger;
   return (
     <BaseScreen {...props}>
       <AppBar
@@ -176,60 +196,113 @@ function CheckoutGuestOrderDetail(props) {
         </View>
 
         <View style={styles.inputsWrapper}>
-          <MaterialTextInput
-            placeholder="Email*"
-            onChangeText={(email) =>
-              userProfileVar({
-                ...userProfile,
-                email,
-              })
-            }
-            showError={false}
-            keyboardType="email-address"
-            value={userProfile.email}
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+              pattern:
+                /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
+              minLength: 10,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <View>
+                <MaterialTextInput
+                  placeholder="Email*"
+                  style={{ marginTop: vs(18) }}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                />
+                {get(errors, "email") && (
+                  <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
+                    {get(errors, "email.type") === "pattern"
+                      ? "Invalid email"
+                      : "This is required."}
+                  </Text>
+                )}
+              </View>
+            )}
+            name={"email"}
           />
+
           <View style={styles.inputWrapper3}>
-            <MaterialTextInput
-              placeholder="phone number*"
-              onChangeText={(phone) =>
-                userProfileVar({
-                  ...userProfile,
-                  phone,
-                })
-              }
-              showError={false}
-              keyboardType="default"
-              value={userProfile.phone}
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+                pattern: /^[6-9]\d{9}$/,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <View>
+                  <MaterialTextInput
+                    placeholder="phone number*"
+                    style={{ marginTop: vs(18) }}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                  />
+                  {get(errors, "phoneNumber") && (
+                    <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
+                      {get(errors, "phoneNumber.type") === "pattern"
+                        ? "Invalid phone number"
+                        : "This is required."}
+                    </Text>
+                  )}
+                </View>
+              )}
+              name={"phoneNumber"}
             />
           </View>
           <View style={styles.inputsWrapper2}>
             <View style={styles.inputName}>
-              <MaterialTextInput
-                placeholder="FirstName*"
-                onChangeText={(firstName) =>
-                  userProfileVar({
-                    ...userProfile,
-                    firstName,
-                  })
-                }
-                showError={false}
-                keyboardType="default"
-                value={userProfile.firstName}
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <View>
+                    <MaterialTextInput
+                      placeholder="FirstName*"
+                      style={{ marginTop: vs(18) }}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      value={value}
+                    />
+                    {get(errors, "firstName") && (
+                      <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
+                        This is required.
+                      </Text>
+                    )}
+                  </View>
+                )}
+                name={"firstName"}
               />
             </View>
 
             <View style={styles.inputName}>
-              <MaterialTextInput
-                placeholder="LastName*"
-                onChangeText={(lastName) =>
-                  userProfileVar({
-                    ...userProfile,
-                    lastName,
-                  })
-                }
-                showError={false}
-                keyboardType="default"
-                value={userProfile.lastName}
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <View>
+                    <MaterialTextInput
+                      placeholder="LastName*"
+                      style={{ marginTop: vs(18) }}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      value={value}
+                    />
+                    {get(errors, "lastName") && (
+                      <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
+                        This is required.
+                      </Text>
+                    )}
+                  </View>
+                )}
+                name={"lastName"}
               />
             </View>
           </View>
@@ -259,7 +332,7 @@ function CheckoutGuestOrderDetail(props) {
             />
           </View>
           <View style={styles.button}>
-            <Button text="NEXT" onPress={onPressNext} />
+            <Button text="NEXT" onPress={handleSubmit(onSubmit)} />
           </View>
         </View>
       </View>

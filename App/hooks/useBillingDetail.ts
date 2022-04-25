@@ -39,12 +39,6 @@ const UseBillingDetail = () => {
     taxCode: addressLocal?.pinCode,
   };
   const [updateBillingDetails] = useUpdateBillingDetailsMutation({
-    variables: {
-      request: {
-        billingDetailsId: userProfile.billingDetailsId,
-        ...request,
-      },
-    },
     context: {
       headers: {
         isPrivate: true,
@@ -71,13 +65,6 @@ const UseBillingDetail = () => {
   });
   const [updateGuestBillingDetails] =
     useUpdateBillingDetailsForGuestBuyerMutation({
-      variables: {
-        request: {
-          billingDetailsId: userProfile.billingDetailsId,
-          ...request,
-        },
-      },
-
       onCompleted: (res) => {
         userProfileVar({
           ...userProfile,
@@ -103,9 +90,6 @@ const UseBillingDetail = () => {
         isPrivate: true,
       },
     },
-    variables: {
-      request: request,
-    },
     onError: (err) => {
       console.log("error-======", err);
 
@@ -113,9 +97,6 @@ const UseBillingDetail = () => {
     },
   });
   const [createGuestBilling] = useCreateBillingDetailsForGuestBuyerMutation({
-    variables: {
-      request: request,
-    },
     onCompleted: (res) => {
       userProfileVar({
         ...userProfile,
@@ -130,23 +111,48 @@ const UseBillingDetail = () => {
       return err;
     },
   });
-  async function addBilling() {
+  async function addBilling(data) {
     let result;
     let resultTemp1;
     if (isEmpty(userProfile.billingDetailsId)) {
       if (userProfile.isAuth) {
-        resultTemp1 = await createBilling();
+        resultTemp1 = await createBilling({
+          variables: {
+            request: { ...request, ...data },
+          },
+        });
         result = resultTemp1?.data?.createBillingDetails;
       } else {
-        resultTemp1 = await createGuestBilling();
+        resultTemp1 = await createGuestBilling({
+          variables: {
+            request: { ...request, ...data },
+          },
+        });
         result = resultTemp1?.data?.createBillingDetailsForGuestBuyer;
       }
     } else {
       if (userProfile.isAuth) {
-        resultTemp1 = await updateBillingDetails();
+        resultTemp1 = await updateBillingDetails({
+          variables: {
+            request: {
+              billingDetailsId: userProfile.billingDetailsId,
+              ...request,
+              ...request,
+              ...data,
+            },
+          },
+        });
         result = resultTemp1?.data?.updateBillingDetails;
       } else {
-        resultTemp1 = await updateGuestBillingDetails();
+        resultTemp1 = await updateGuestBillingDetails({
+          variables: {
+            request: {
+              billingDetailsId: userProfile.billingDetailsId,
+              ...request,
+              ...data,
+            },
+          },
+        });
         result = resultTemp1?.data?.updateBillingDetailsForGuestBuyer;
       }
     }

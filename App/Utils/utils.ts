@@ -72,9 +72,9 @@ export function usePaymentConfigration() {
       order_id: orderId, //Replace this with an order_id created using Orders API.
       prefill: {
         email: userProfile?.email,
-        contact: userProfile?.userName
-          ? trimStart(userProfile?.userName, "+91")
-          : userProfile?.phone,
+        contact: userProfile?.isAuth
+          ? trimStart(userProfile?.phone, "+91")
+          : trimStart(userProfile?.billingDetails?.phoneNumber, "+91"),
         name: userProfile?.firstName + userProfile.lastName,
       },
       theme: { color: colors.primary },

@@ -166,7 +166,8 @@ function LoginScreen(props) {
               global.access_token = access_token;
               // global.userProfileId = decoded.sub;
               let decoded = jwt_decode(access_token);
-              if (isEmpty(decoded.phone_number)) {
+              //&& !decoded.email_verified
+              if (isEmpty(decoded.phone_number) && !decoded.email_verified) {
                 resendCode({
                   variables: {
                     sendCodeRequest: {
@@ -189,6 +190,7 @@ function LoginScreen(props) {
                     NavigationService.navigate("OTPScreen", {
                       fromScreen: "RegisterScreen",
                       phone: ret.isPhone ? "+91" + loginInput : loginInput,
+                      password: psswd?.trim(),
                       userId: decoded?.sub,
                     });
                   },

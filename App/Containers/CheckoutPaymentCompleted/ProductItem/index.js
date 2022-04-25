@@ -10,7 +10,9 @@ function ProductItem(props) {
   const { product, onPress } = props;
   return (
     <TouchableOpacity
-      onPress={() => NavigationService.navigate("ProductDetailScreen", { product })}
+      onPress={() =>
+        NavigationService.navigate("ProductDetailScreen", { product })
+      }
       style={styles.productContainer}
     >
       <View style={[styles.row]}>
@@ -27,7 +29,7 @@ function ProductItem(props) {
           <View style={styles.row}>
             <View style={styles.v3}>
               <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
-              <Text style={styles.txtRetailPrice}>${product.retailPrice}</Text>
+              <Text style={styles.txtRetailPrice}>₹{product.retailPrice}</Text>
             </View>
 
             <View style={styles.v3}>
@@ -35,7 +37,7 @@ function ProductItem(props) {
                 WHOLE SALE PRICE
               </Text>
               <Text style={styles.txtWholesalePrice}>
-                ${product.wholesalePrice}
+                ₹{product.wholesalePrice}
               </Text>
             </View>
 

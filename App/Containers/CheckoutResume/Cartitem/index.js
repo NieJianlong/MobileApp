@@ -23,7 +23,9 @@ function index(props) {
 
   return (
     <TouchableOpacity
-      onPress={() => NavigationService.navigate("ProductDetailScreen", { product })}
+      onPress={() =>
+        NavigationService.navigate("ProductDetailScreen", { product })
+      }
       style={styles.productContainer}
     >
       <View
@@ -33,7 +35,9 @@ function index(props) {
         ]}
       >
         <Image
-          source={{ uri: product.photoUrls ? product.photoUrls[0] : defultUrl }} style={styles.productImage} />
+          source={{ uri: product.photoUrls ? product.photoUrls[0] : defultUrl }}
+          style={styles.productImage}
+        />
         <View
           style={[styles.v2, { maxWidth: "90%", justifyContent: "center" }]}
         >
@@ -51,7 +55,7 @@ function index(props) {
         </View>
         <View>
           <Text style={styles.txtWholesalePrice}>
-            $
+            ₹
             {BigNumber(
               variant ? variant.wholeSalePrice : product.wholeSalePrice
             ).toFixed(2) + ""}

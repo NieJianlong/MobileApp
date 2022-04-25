@@ -56,16 +56,16 @@ function CartSummary(props) {
       }
       const element = mydatas[index];
       if (element.variant) {
-        if(itemAvailble) {
+        if (itemAvailble) {
           originalBilling =
             originalBilling + element.variant.retailPrice * element.quantity;
           currentBilling =
             currentBilling + element.variant.wholeSalePrice * element.quantity;
         }
       } else {
-        if(itemAvailble)
-        originalBilling =
-          originalBilling + element.product.retailPrice * element.quantity;
+        if (itemAvailble)
+          originalBilling =
+            originalBilling + element.product.retailPrice * element.quantity;
         currentBilling =
           currentBilling + element.product.wholeSalePrice * element.quantity;
       }
@@ -98,7 +98,7 @@ function CartSummary(props) {
           You save
         </Text>
         <Text style={[styles.heading4Regular, { fontSize: s(14) }]}>
-          ${money.saving} ({(!isNaN(money.percent))? money.percent + "" : ""}%)
+          ${money.saving} ({!isNaN(money.percent) ? money.percent + "" : ""}%)
         </Text>
       </View>
     </View>

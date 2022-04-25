@@ -121,7 +121,7 @@ const QuickGuide = () => {
                     <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
                     <NumberFormat
                       thousandSeparator={true}
-                      prefix={"$"}
+                      prefix={"₹"}
                       value={"20.5"}
                       displayType={"text"}
                       renderText={(text) => (
@@ -136,8 +136,8 @@ const QuickGuide = () => {
                     </Text>
                     <NumberFormat
                       thousandSeparator={true}
-                      prefix={"$"}
-                      value={"$15"}
+                      prefix={"₹"}
+                      value={"₹15"}
                       displayType={"text"}
                       renderText={(text) => (
                         <Text style={styles.txtWholesalePrice}>{"$15"}</Text>
@@ -233,7 +233,7 @@ const QuickGuide = () => {
                   <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
                   <NumberFormat
                     thousandSeparator={true}
-                    prefix={"$"}
+                    prefix={"₹"}
                     value={"20.5"}
                     displayType={"text"}
                     renderText={(text) => (
@@ -248,11 +248,11 @@ const QuickGuide = () => {
                   </Text>
                   <NumberFormat
                     thousandSeparator={true}
-                    prefix={"$"}
-                    value={"$15"}
+                    prefix={"₹"}
+                    value={"15"}
                     displayType={"text"}
                     renderText={(text) => (
-                      <Text style={styles.txtWholesalePrice}>{"$15"}</Text>
+                      <Text style={styles.txtWholesalePrice}>{"₹15"}</Text>
                     )}
                   />
                 </View>

@@ -17,7 +17,7 @@ const countries = [
   {
     label: "Shipping method",
     sublabel: "Need to print label",
-    extra: "$3.00",
+    extra: "₹3.00",
   },
 ];
 

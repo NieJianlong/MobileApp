@@ -37,7 +37,7 @@ export default function ColorItem({ item, currentVariant, onChangeVariant }) {
           <Text style={[t.fontSemibold, t.textLg]}>{item.value}</Text>
           <Text style={selected ? [t.textLg] : [t.textSm]}>
             {selected
-              ? `$${BigNumber(item.wholeSalePrice).toFixed(2)}`
+              ? `₹${BigNumber(item.wholeSalePrice).toFixed(2)}`
               : "See available"}
           </Text>
           <Text

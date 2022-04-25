@@ -26,23 +26,23 @@ export const hardCodedState = {
     {
       title: "Size",
       data: [
-        { title: "256GB", price: "+$145" },
-        { title: "128GB", price: "-$45" },
+        { title: "256GB", price: "+₹145" },
+        { title: "128GB", price: "-₹45" },
       ],
     },
     {
       title: "Style",
       data: [
-        { title: "OnePlus 8 Pro", price: "+$125" },
-        { title: "OnePlus 8", price: "-$45" },
+        { title: "OnePlus 8 Pro", price: "+₹125" },
+        { title: "OnePlus 8", price: "-₹45" },
       ],
     },
     {
       title: "Color",
       data: [
-        { title: "Onyx Black", price: "+$125", color: "#292929" },
-        { title: "Glaciar Green", price: "-$45", color: "#96E9E0" },
-        { title: "Ultramarine Blue", price: "-$45", color: "#9CACE5" },
+        { title: "Onyx Black", price: "+₹125", color: "#292929" },
+        { title: "Glaciar Green", price: "-₹45", color: "#96E9E0" },
+        { title: "Ultramarine Blue", price: "-₹45", color: "#9CACE5" },
       ],
     },
   ],

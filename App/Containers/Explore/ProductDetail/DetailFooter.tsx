@@ -283,7 +283,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
           <View style={styles.priceContainer}>
             <NumberFormat
               thousandSeparator={true}
-              prefix={"$"}
+              prefix={"₹"}
               value={`${new BigNumber(
                 quantity * product.wholeSalePrice
               ).toFixed(2)}`}

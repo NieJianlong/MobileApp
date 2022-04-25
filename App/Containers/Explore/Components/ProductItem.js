@@ -98,7 +98,7 @@ function ProductItem(props) {
                   <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
                   <NumberFormat
                     thousandSeparator={true}
-                    prefix={"$"}
+                    prefix={"₹"}
                     value={product.retailPrice}
                     displayType={"text"}
                     renderText={(text) => (
@@ -113,7 +113,7 @@ function ProductItem(props) {
                   </Text>
                   <NumberFormat
                     thousandSeparator={true}
-                    prefix={"$"}
+                    prefix={"₹"}
                     value={product.wholeSalePrice}
                     displayType={"text"}
                     renderText={(text) => (
@@ -151,7 +151,7 @@ function ProductItem(props) {
                   <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
                   <NumberFormat
                     thousandSeparator={true}
-                    prefix={"$"}
+                    prefix={"₹"}
                     value={product.retailPrice}
                     displayType={"text"}
                     renderText={(text) => (
@@ -166,7 +166,7 @@ function ProductItem(props) {
                   </Text>
                   <NumberFormat
                     thousandSeparator={true}
-                    prefix={"$"}
+                    prefix={"₹"}
                     value={product.wholeSalePrice}
                     displayType={"text"}
                     renderText={(text) => (
@@ -282,7 +282,7 @@ function ProductItem(props) {
               {/* <Text style={styles.txtRetailPrice}>${product.retailPrice}</Text> */}
               <NumberFormat
                 thousandSeparator={true}
-                prefix={"$"}
+                prefix={"₹"}
                 value={product.retailPrice}
                 displayType={"text"}
                 renderText={(text) => (
@@ -298,7 +298,7 @@ function ProductItem(props) {
               {/* <Text style={styles.txtWholesalePrice}>${product.wholesalePrice}</Text> */}
               <NumberFormat
                 thousandSeparator={true}
-                prefix={"$"}
+                prefix={"₹"}
                 value={product.wholeSalePrice}
                 displayType={"text"}
                 renderText={(text) => (

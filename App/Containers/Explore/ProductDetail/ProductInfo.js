@@ -91,7 +91,7 @@ export default function ProductInfo({
               {/* <Text style={styles.txtRetailPrice}>${product.retailPrice}</Text> */}
               <NumberFormat
                 thousandSeparator={true}
-                prefix={"$"}
+                prefix={"₹"}
                 value={product.retailPrice}
                 displayType={"text"}
                 renderText={(text) => (
@@ -107,7 +107,7 @@ export default function ProductInfo({
               {/* <Text style={styles.txtWholesalePrice}>${product.wholesalePrice}</Text> */}
               <NumberFormat
                 thousandSeparator={true}
-                prefix={"$"}
+                prefix={"₹"}
                 value={product.wholeSalePrice}
                 displayType={"text"}
                 renderText={(text) => (
@@ -133,7 +133,7 @@ export default function ProductInfo({
               <Text style={styles.heading5Regular}>
                 Delivery fee:{" "}
                 <Text style={{ color: Colors.primary }}>
-                  ${product.courierShippingFee}
+                  ₹{product.courierShippingFee}
                 </Text>
               </Text>
             )}

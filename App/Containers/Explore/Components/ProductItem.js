@@ -20,8 +20,7 @@ import {
 import { t } from "react-native-tailwindcss";
 import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
 
-const defultUrl =
-  "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000";
+const defultUrl = "";
 
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;

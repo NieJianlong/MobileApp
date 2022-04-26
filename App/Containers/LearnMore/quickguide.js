@@ -140,7 +140,7 @@ const QuickGuide = () => {
                       value={"₹15"}
                       displayType={"text"}
                       renderText={(text) => (
-                        <Text style={styles.txtWholesalePrice}>{"$15"}</Text>
+                        <Text style={styles.txtWholesalePrice}>{"₹15"}</Text>
                       )}
                     />
                   </View>

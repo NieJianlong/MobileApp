@@ -78,7 +78,7 @@ function Index(props) {
             <View style={styles.v3}>
               <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
               <Text style={styles.txtRetailPrice}>
-                $
+                ₹
                 {BigNumber(
                   variant ? variant?.retailPrice : product?.retailPrice
                 ).toFixed(2) + ""}
@@ -89,7 +89,7 @@ function Index(props) {
                 WHOLE SALE PRICE
               </Text>
               <Text style={styles.txtWholesalePrice}>
-                $
+                ₹
                 {BigNumber(
                   variant ? variant?.wholeSalePrice : product?.wholeSalePrice
                 ).toFixed(2) + ""}

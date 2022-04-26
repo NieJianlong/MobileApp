@@ -89,7 +89,7 @@ class Invoice extends Component {
         <View style={styles.totalContainer}>
           <Text style={styles.txtOrder}>TOTAL</Text>
           <View style={{ height: vs(10) }} />
-          <Text style={styles.txtMoney}>${order.orderTotal}</Text>
+          <Text style={styles.txtMoney}>₹{order.orderTotal}</Text>
           <Text style={styles.txtAddress}>
             {moment(order.orderDatetime).format("MMM DD,YYYY")}
           </Text>
@@ -142,7 +142,7 @@ class Invoice extends Component {
             </View>
             <Text style={styles.productOptionText}>{optionString}</Text>
           </View>
-          <Text style={styles.txt1}>${order.orderSubTotal}</Text>
+          <Text style={styles.txt1}>₹{order.orderSubTotal}</Text>
         </View>
         <View style={styles.line} />
         <Text style={[styles.heading4Bold, { marginBottom: vs(15) }]}>
@@ -150,25 +150,25 @@ class Invoice extends Component {
         </Text>
         <View style={styles.v2}>
           <Text style={styles.heading4Regular}>Subtotal</Text>
-          <Text style={styles.heading4Regular}>${order.orderSubTotal}</Text>
+          <Text style={styles.heading4Regular}>₹{order.orderSubTotal}</Text>
         </View>
         <View style={styles.v2}>
           <Text style={styles.heading4Regular}>Service fee</Text>
-          <Text style={styles.heading4Regular}>${order.orderServiceFees}</Text>
+          <Text style={styles.heading4Regular}>₹{order.orderServiceFees}</Text>
         </View>
         <View style={styles.v2}>
           <Text style={styles.heading4Regular}>Delivery</Text>
           <Text style={styles.heading4Regular}>
-            ${product.courierShippingFee ?? 0}
+            ₹{product.courierShippingFee ?? 0}
           </Text>
         </View>
         <View style={styles.v2}>
           <Text style={styles.heading4Regular}>Total savings</Text>
-          <Text style={styles.heading4Regular}>${order.totalSavings}</Text>
+          <Text style={styles.heading4Regular}>₹{order.totalSavings}</Text>
         </View>
         <View style={styles.v2}>
           <Text style={styles.heading4Bold}>Total</Text>
-          <Text style={styles.heading4Bold}>${order.orderTotal}</Text>
+          <Text style={styles.heading4Bold}>₹{order.orderTotal}</Text>
         </View>
       </View>
     );

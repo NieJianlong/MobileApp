@@ -84,7 +84,7 @@ function CartSummary(props) {
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.heading4Bold}>Subtotal ({quantity} items)</Text>
         <Text style={[styles.heading4Bold, { color: colors.primary }]}>
-          ${money.total}
+          ₹{money.total}
         </Text>
       </View>
       <View
@@ -98,7 +98,7 @@ function CartSummary(props) {
           You save
         </Text>
         <Text style={[styles.heading4Regular, { fontSize: s(14) }]}>
-          ${money.saving} ({!isNaN(money.percent) ? money.percent + "" : ""}%)
+          ₹{money.saving} ({!isNaN(money.percent) ? money.percent + "" : ""}%)
         </Text>
       </View>
     </View>

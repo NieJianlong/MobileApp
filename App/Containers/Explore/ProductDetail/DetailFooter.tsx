@@ -122,6 +122,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
             });
           }
         } else if (type === "zero") {
+          debugger;
           const order = res?.createOrderFromCart;
           if (res?.createOrderFromCart?.orderId) {
             cartOrderVar({
@@ -211,7 +212,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     } else {
       if (data !== undefined && !isNaN(walletBalance)) {
         const billingDetailsId = await addBilling();
-
+        debugger;
         if (
           walletBalance >=
           parseFloat(

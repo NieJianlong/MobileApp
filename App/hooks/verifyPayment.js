@@ -22,12 +22,9 @@ export const useRazorVerifyPayment = () => {
           isPrivate: isAuth,
         },
       },
-      onCompleted: (res) => {
-        console.log(`Explore VerifyPayment res ${JSON.stringify(res)}`);
-      },
+      onCompleted: (res) => {},
       onError: (res) => {
         alert(JSON.stringify(res.message));
-        console.log(`Explore VerifyPayment onError ${JSON.stringify(res)}`);
       },
     });
 

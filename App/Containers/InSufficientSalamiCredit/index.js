@@ -122,7 +122,7 @@ function InSufficientSalamiCredit(props) {
                     }}
                   >
                     <Text style={styles.itemSubTitle}>
-                      {"$ " + `${params.walletBalance}`}
+                      {"₹ " + `${params.walletBalance}`}
                     </Text>
                   </View>
                 </View>
@@ -150,7 +150,7 @@ function InSufficientSalamiCredit(props) {
               <Text style={styles.title}>Add a payment</Text>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Text style={ApplicationStyles.screen.heading2Bold}>
-                  {"$ " + `${params.productPrice - params.walletBalance}`}
+                  {"₹ " + `${params.productPrice - params.walletBalance}`}
                 </Text>
                 <Text
                   style={[
@@ -163,109 +163,6 @@ function InSufficientSalamiCredit(props) {
               </View>
             </View>
           </View>
-          {/*<FlatList*/}
-          {/*  data={payments}*/}
-          {/*  showsVerticalScrollIndicator={false}*/}
-          {/*  style={{ height: metrics.screenHeight - 200 }}*/}
-          {/*  ListHeaderComponent={() => {*/}
-          {/*    return (*/}
-          {/*      <View>*/}
-          {/*        <View style={[styles.item, { height: vs(64) }]}>*/}
-          {/*          <View>*/}
-          {/*            <View*/}
-          {/*              style={{ flexDirection: 'row', alignItems: 'center' }}*/}
-          {/*            >*/}
-          {/*              <Text style={styles.itemTitle}>Salami Credit</Text>*/}
-          {/*            </View>*/}
-          {/*            <View>*/}
-          {/*              <View*/}
-          {/*                style={{*/}
-          {/*                  flexDirection: 'row',*/}
-          {/*                  alignItems: 'center',*/}
-          {/*                }}*/}
-          {/*              >*/}
-          {/*                <Text style={styles.itemSubTitle}>*/}
-          {/*                  {`$ ` + `${params.walletBalance}`}*/}
-          {/*                </Text>*/}
-          {/*              </View>*/}
-          {/*            </View>*/}
-          {/*          </View>*/}
-
-          {/*          <TouchableOpacity>*/}
-          {/*            <Text*/}
-          {/*              style={[*/}
-          {/*                ApplicationStyles.screen.subtitle,*/}
-          {/*                { color: colors.grey60 },*/}
-          {/*              ]}*/}
-          {/*            >*/}
-          {/*              DESELECT*/}
-          {/*            </Text>*/}
-          {/*          </TouchableOpacity>*/}
-          {/*        </View>*/}
-          {/*        <View*/}
-          {/*          style={{*/}
-          {/*            flexDirection: 'row',*/}
-          {/*            justifyContent: 'space-between',*/}
-          {/*            alignItems: 'center',*/}
-          {/*            marginTop: 20,*/}
-          {/*          }}*/}
-          {/*        >*/}
-          {/*          <Text style={styles.title}>Add a payment</Text>*/}
-          {/*          <View*/}
-          {/*            style={{ flexDirection: 'row', alignItems: 'center' }}*/}
-          {/*          >*/}
-          {/*            <Text style={ApplicationStyles.screen.heading2Bold}>*/}
-          {/*              {`$ ` + `${params.productPrice - params.walletBalance}`}*/}
-          {/*            </Text>*/}
-          {/*            <Text*/}
-          {/*              style={[*/}
-          {/*                ApplicationStyles.screen.subtitle,*/}
-          {/*                { marginTop: 10, color: colors.grey60 },*/}
-          {/*              ]}*/}
-          {/*            >*/}
-          {/*              left*/}
-          {/*            </Text>*/}
-          {/*          </View>*/}
-          {/*        </View>*/}
-          {/*      </View>*/}
-          {/*    );*/}
-          {/*  }}*/}
-          {/*  renderItem={({ item }) => {*/}
-          {/*    return (*/}
-          {/*      <View*/}
-          {/*        style={{*/}
-          {/*          maxHeight: 110,*/}
-          {/*        }}*/}
-          {/*      >*/}
-          {/*        <TouchableOpacity*/}
-          {/*          onPress={() => {*/}
-          {/*            if (item.onPress) {*/}
-          {/*              item.onPress();*/}
-          {/*            } else {*/}
-          {/*              NavigationService.navigate('AddCreditScreen', {*/}
-          {/*                callback: () => {*/}
-          {/*                  NavigationService.navigate('CheckoutResumeScreen', {*/}
-          {/*                    orderStatus: 0,*/}
-          {/*                  });*/}
-          {/*                  // Nav.goBack();*/}
-          {/*                },*/}
-          {/*              });*/}
-          {/*            }*/}
-          {/*          }}*/}
-          {/*        >*/}
-          {/*          <Image*/}
-          {/*            source={item.image}*/}
-          {/*            style={{*/}
-          {/*              width: '100%',*/}
-          {/*              //   marginTop:'10@vs',*/}
-          {/*              resizeMode: 'contain',*/}
-          {/*            }}*/}
-          {/*          />*/}
-          {/*        </TouchableOpacity>*/}
-          {/*      </View>*/}
-          {/*    );*/}
-          {/*  }}*/}
-          {/*/>*/}
           <View
             style={{
               height: vs(80),
@@ -299,9 +196,6 @@ function InSufficientSalamiCredit(props) {
                     },
                   },
                   onCompleted: (res) => {
-                    console.log(
-                      `Explore useCreateOrder res ${JSON.stringify(res)}`
-                    );
                     dispatch({
                       type: "changLoading",
                       payload: false,
@@ -334,9 +228,6 @@ function InSufficientSalamiCredit(props) {
                       payload: false,
                     });
                     alert(JSON.stringify(res.message));
-                    console.log(
-                      `Explore useCreateOrder onError ${JSON.stringify(res)}`
-                    );
                   },
                 });
               }}

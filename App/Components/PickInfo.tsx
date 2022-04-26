@@ -7,15 +7,6 @@ import {
   DeliveryOption,
   SellerLocationFragment,
 } from "../../generated/graphql";
-// {`${
-//     data?.pickupAddress?.houseNumber ?? ""
-//   }${data?.pickupAddress?.flat ?? ""}${
-//     data?.pickupAddress?.villageArea ?? ""
-//   }${data?.pickupAddress?.townCity}${
-//     data?.pickupAddress?.provinceState
-//   }${data?.pickupAddress?.country} ${
-//     data?.pickupAddress?.pinCode ?? ""
-//   }`}
 
 interface PickInfoProps {
   collectionPoint?: CollectionPointFragment;

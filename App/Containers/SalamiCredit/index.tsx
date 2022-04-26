@@ -21,6 +21,7 @@ import TextTip from "../../Components/EmptyReminder";
 import metrics from "../../Themes/Metrics";
 import { AlertContext } from "../Root/GlobalContext";
 import { useGetBuyerSalamiWalletBalanceQuery } from "../../../generated/graphql";
+import { useFocusEffect } from "@react-navigation/native";
 
 const shareIcons = [
   { src: images.userShareIcon1Image, onPress: () => {} },
@@ -60,7 +61,9 @@ function SalamiCredit(props) {
   );
 }
 function listHeader(dispatch) {
-  const { data } = useGetBuyerSalamiWalletBalanceQuery({
+  const { data, refetch } = useGetBuyerSalamiWalletBalanceQuery({
+    nextFetchPolicy: "standby",
+    fetchPolicy: "network-only",
     context: {
       headers: {
         isPrivate: true,
@@ -83,6 +86,11 @@ function listHeader(dispatch) {
     },
     callback: () => {},
   };
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch();
+    }, [])
+  );
 
   return (
     <View style={styles.bodyContainer}>
@@ -93,7 +101,7 @@ function listHeader(dispatch) {
             BALANCE
           </Text>
           <Text style={styles.balanceTxt}>
-            ${data?.getBuyerSalamiWalletBalance?.walletBalance}
+            ₹{data?.getBuyerSalamiWalletBalance?.walletBalance}
           </Text>
           <Text style={styles.useBalanceTxt}>USE CREDIT NOW</Text>
         </View>

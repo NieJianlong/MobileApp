@@ -18,7 +18,6 @@ const Variant = (props) => {
   }, [props.variant, props.product]);
 
   const updateSelectedValue = (selData, key) => {
-    // console.log( `selected val ${selData} and gid ${variant.optionGroupId}` );
     setSelectedVaueDisplay(selData); // will be only one value at a time
     /** now need to update the selected variants */
     let selectedVariant = {

@@ -142,7 +142,6 @@ function LoginScreen(props) {
 
   const onSignIn = async () => {
     // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
-    console.log("onSignIn" + `${loginInput}:::${psswd}`); // to-do remove
     let ret = validator.loginDifferentiator(loginInput);
     if (ret.isValid) {
       // we are good so we can test for email or phone

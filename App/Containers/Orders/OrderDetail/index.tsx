@@ -147,7 +147,7 @@ class OrderDetail extends Component {
             </View>
           </View>
 
-          <Text style={styles.txtPrice}>${price}</Text>
+          <Text style={styles.txtPrice}>₹{price}</Text>
         </View>
       </View>
     );
@@ -164,29 +164,29 @@ class OrderDetail extends Component {
 
         <View style={styles.v2}>
           <Text style={styles.heading4Regular}>Subtotal</Text>
-          <Text style={styles.heading4Regular}>${order.orderSubTotal}</Text>
+          <Text style={styles.heading4Regular}>₹{order.orderSubTotal}</Text>
         </View>
 
         <View style={styles.v2}>
           <Text style={styles.heading4Regular}>Service fee</Text>
-          <Text style={styles.heading4Regular}>${order.orderServiceFees}</Text>
+          <Text style={styles.heading4Regular}>₹{order.orderServiceFees}</Text>
         </View>
 
         <View style={styles.v2}>
           <Text style={styles.heading4Regular}>Delivery</Text>
           <Text style={styles.heading4Regular}>
-            ${product.courierShippingFee ?? 0}
+            ₹{product.courierShippingFee ?? 0}
           </Text>
         </View>
 
         <View style={styles.v2}>
           <Text style={styles.heading4Regular}>Total savings</Text>
-          <Text style={styles.heading4Regular}>${order.totalSavings}</Text>
+          <Text style={styles.heading4Regular}>₹{order.totalSavings}</Text>
         </View>
 
         <View style={styles.v2}>
           <Text style={styles.heading4Bold}>Total</Text>
-          <Text style={styles.heading4Bold}>${order.orderTotal}</Text>
+          <Text style={styles.heading4Bold}>₹{order.orderTotal}</Text>
         </View>
       </View>
     );

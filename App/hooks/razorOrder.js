@@ -24,12 +24,9 @@ export const useCreateRazorOrder = () => {
           isPrivate: isAuth,
         },
       },
-      onCompleted: (res) => {
-        console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
-      },
+      onCompleted: (res) => {},
       onError: (res) => {
         alert(JSON.stringify(res.message));
-        console.log(`Explore useCreateOrder onError ${JSON.stringify(res)}`);
       },
     }
   );

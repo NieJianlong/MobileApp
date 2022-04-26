@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import RootContainer from "./Root";
 import { ApolloProvider } from "@apollo/client";
-
+import * as SplashScreen from "expo-splash-screen";
 import { client } from "../Apollo/apolloClient";
 import FlipperAsyncStorage from "rn-flipper-async-storage-advanced";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -14,7 +14,9 @@ import { enableFlipperApolloDevtools } from "react-native-flipper-apollo-devtool
 /// ReactNativeFlipperDatabases - START
 
 const App = () => {
-  useEffect(() => {}, []);
+  useEffect(() => {
+    SplashScreen.hideAsync();
+  }, []);
 
   // const realm = useRealm();
   // useEffect(() => {

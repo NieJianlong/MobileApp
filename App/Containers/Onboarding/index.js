@@ -60,6 +60,10 @@ function OnboardingScreen(props) {
       );
       global.buyerId = bid;
       setBIdExists(true);
+    } else {
+      guestBuyerId({
+        variables: { request: BuyerProfileRequestForCreate },
+      });
     }
   };
 
@@ -79,7 +83,7 @@ function OnboardingScreen(props) {
     let buyerId = data.createGuestBuyer.buyerId;
     await storage.setLocalStorageValue(storage.GUEST_BUYER_ID_KEY, buyerId);
     global.buyerId = buyerId;
-    NavigationService.navigate("MainScreen");
+    //NavigationService.navigate("MainScreen");
   };
 
   const togglePlayPauseVideo = () => {
@@ -132,18 +136,21 @@ function OnboardingScreen(props) {
               let bid = await storage.getLocalStorageValue(
                 storage.GUEST_BUYER_ID_KEY
               );
+              // if (bid) {
+              //   console.log(
+              //     `OnboardingScreen checkBuyerIdExists found a bid in local storage ${bid}`
+              //   );
               if (bid) {
-                console.log(
-                  `OnboardingScreen checkBuyerIdExists found a bid in local storage ${bid}`
-                );
                 global.buyerId = bid;
-                NavigationService.navigate("MainScreen");
-              } else {
-                dispatch({ type: "loading" });
-                guestBuyerId({
-                  variables: { request: BuyerProfileRequestForCreate },
-                });
               }
+
+              NavigationService.navigate("MainScreen");
+              // } else {
+              //   dispatch({ type: "loading" });
+              //   guestBuyerId({
+              //     variables: { request: BuyerProfileRequestForCreate },
+              //   });
+              // }
             }}
           />
         </View>

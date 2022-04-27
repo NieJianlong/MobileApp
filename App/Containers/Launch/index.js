@@ -18,6 +18,8 @@ import jwt_decode from "jwt-decode";
 import { useLazyQuery, useReactiveVar } from "@apollo/client";
 import * as storage from "../../Apollo/local-storage";
 import { useBuyerProfileByUserIdLazyQuery } from "../../../generated/graphql";
+import LottieView from "lottie-react-native";
+import { t } from "react-native-tailwindcss";
 
 export default function LaunchScreen() {
   const [getBuyerId] = useBuyerProfileByUserIdLazyQuery({
@@ -47,11 +49,11 @@ export default function LaunchScreen() {
         buyerProfileByUserId: { buyerId },
       } = res;
       global.buyerId = buyerId;
-      NavigationService.navigate("MainScreen");
+      setTimeout(() => {
+        NavigationService.navigate("MainScreen");
+      }, 3000);
     },
-    onError: (res) => {
-      NavigationService.navigate("MainScreen");
-    },
+    onError: (res) => {},
   });
 
   const autoSignIn = useCallback(async () => {
@@ -71,18 +73,18 @@ export default function LaunchScreen() {
         getBuyerId();
 
         setLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY, access_token);
-      } catch (error) {
-        NavigationService.navigate("OnboardingScreen");
-      }
+      } catch (error) {}
     } else {
       const result = await checkBuyerIdExists();
       if (result) {
-        NavigationService.navigate("MainScreen");
+        setTimeout(() => {
+          NavigationService.navigate("MainScreen");
+        }, 3000);
       } else {
         setTimeout(() => {
           //this.props.navigation.navigate('OnboardingScreen')
           NavigationService.navigate("OnboardingScreen");
-        }, 2000);
+        }, 4000);
       }
     }
   }, [getBuyerId]);
@@ -107,13 +109,11 @@ export default function LaunchScreen() {
   }, [autoSignIn]);
 
   return (
-    <View style={styles.container}>
-      <StatusBar
-        barStyle="light-content"
-        translucent
-        backgroundColor={"rgba(0,0,0,0.0)"}
-      />
-      <Image source={Images.logo2} style={styles.logo} resizeMode={"contain"} />
-    </View>
+    <LottieView
+      source={require("./animation_icon.json")}
+      autoPlay
+      loop={false}
+      style={[t.bgPrimary]}
+    />
   );
 }

@@ -62,6 +62,7 @@ export function usePaymentConfigration() {
     items: any[],
     comefrom: ComeFromType
   ) => {
+    debugger;
     const options = {
       description: "Wholesale Marketplace",
       image:
@@ -73,8 +74,8 @@ export function usePaymentConfigration() {
       prefill: {
         email: userProfile?.email,
         contact: userProfile?.isAuth
-          ? trimStart(userProfile?.phone, "+91")
-          : trimStart(userProfile?.billingDetails?.phoneNumber, "+91"),
+          ? userProfile?.phone
+          : userProfile?.billingDetails?.phoneNumber,
         name: userProfile?.firstName + userProfile.lastName,
       },
       theme: { color: colors.primary },

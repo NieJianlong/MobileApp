@@ -24,6 +24,7 @@ import Share from "react-native-share";
 import { shareOptions } from "../Explore/Components/ShareOptionList";
 import { t } from "react-native-tailwindcss";
 import { isEmpty } from "lodash";
+import { useReactiveVar } from "@apollo/client";
 
 const salamiItem = [
   {
@@ -94,6 +95,7 @@ const buttons = [
 function UserCenter(props) {
   const [serviceItems, setServiceItems] = useState([]);
   const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
+  const userProfile = useReactiveVar(userProfileVar);
   // const { loading, error, data } = useQuery(BUYER_PROFILES, {
   //   context: { headers: { isPrivate: true } },
   //   onCompleted: (res) => {
@@ -106,12 +108,12 @@ function UserCenter(props) {
   //43aeaddd-de66-45bb-81aa-192f4f5e2b33
 
   useEffect(() => {
-    if (userProfileVar().isAuth) {
+    if (userProfile.isAuth) {
       setServiceItems([...salamiItem, ...items]);
     } else {
       setServiceItems(items);
     }
-  }, []);
+  }, [userProfile]);
   return (
     <View style={styles.container}>
       <StatusBar

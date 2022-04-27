@@ -11,7 +11,7 @@ import StoreInfo from "./StoreInfo";
 import DetailFooter from "./DetailFooter";
 import ProductReview from "./ProductReview";
 import ProductInfo from "./ProductInfo";
-import { useRoute } from "@react-navigation/native";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 import HeaderTabs from "./HeaderTabs";
 import metrics from "../../../Themes/Metrics";
 import {
@@ -51,6 +51,8 @@ function ProductDetail(props) {
     refetch,
     loading,
   } = useGetListingsQuery({
+    nextFetchPolicy: "standby",
+    fetchPolicy: "network-only",
     variables: {
       searchOptions: {
         filter: FilterType.ByListingId,
@@ -66,7 +68,11 @@ function ProductDetail(props) {
       },
     },
   });
-
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
   useEffect(() => {
     setLoading({ show: loading });
   }, [loading]);

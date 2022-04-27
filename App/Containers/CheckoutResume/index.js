@@ -140,10 +140,7 @@ function CheckoutResume(props) {
       alert("Please accept privacy and policy");
       return;
     }
-    dispatch({
-      type: "changLoading",
-      payload: true,
-    });
+
     const finalItems = data?.map((item) => {
       const productItem = mydatas.find(
         (dataItem) => item.variantId === dataItem.variantId
@@ -152,6 +149,18 @@ function CheckoutResume(props) {
         photo: productItem.product.photo,
         longName: productItem.product.longName,
       };
+    });
+    if (type === "InSufficient") {
+      NavigationService.navigate("InSufficientSalamiCreditScreen", {
+        walletBalance: walletBalance,
+        productPrice: parseFloat(money.total).toFixed(2),
+        product: finalItems,
+      });
+      return;
+    }
+    dispatch({
+      type: "changLoading",
+      payload: true,
     });
     const billingDetailsId = await addBilling();
     dispatch({

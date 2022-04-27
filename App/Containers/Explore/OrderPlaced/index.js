@@ -12,8 +12,6 @@ import { s, vs } from "react-native-size-matters";
 
 import styles from "./styles";
 
-import { Button } from "../../../Components";
-import ProductItem from "../Components/ProductItem";
 import { Colors, Images } from "../../../Themes";
 import NavigationService from "../../../Navigation/NavigationService";
 import Share from "react-native-share";
@@ -119,7 +117,10 @@ function OrderPlaced(props) {
             onPress={() => {
               Share.open(shareOptions);
             }}
-            style={[styles.chatButton, { backgroundColor: Colors.whatsapp, paddingLeft: 0 }]}
+            style={[
+              styles.chatButton,
+              { backgroundColor: Colors.whatsapp, paddingLeft: 0 },
+            ]}
           >
             <Image source={Images.whatsapp} style={styles.chatIcon} />
           </TouchableOpacity>
@@ -181,78 +182,3 @@ function OrderPlaced(props) {
 }
 
 export default OrderPlaced;
-
-const products = [
-  {
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    rating: 3.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    orderClose: "22/12/2020",
-    inStock: 100,
-    orderCount: 24,
-  },
-  {
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    rating: 4.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    orderClose: "22/12/2020",
-    inStock: 100,
-    orderCount: 24,
-  },
-  {
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    rating: 3.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    orderClose: "22/12/2020",
-    inStock: 100,
-    orderCount: 24,
-  },
-  {
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    rating: 3.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    orderClose: "22/12/2020",
-    inStock: 100,
-    orderCount: 24,
-  },
-  {
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    rating: 3.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    orderClose: "22/12/2020",
-    inStock: 100,
-    orderCount: 24,
-  },
-  {
-    name: "iPhone 11",
-    picture:
-      "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000",
-    rating: 3.0,
-    ratingCount: 124,
-    retailPrice: 2345,
-    wholesalePrice: 1542,
-    orderClose: "22/12/2020",
-    inStock: 100,
-    orderCount: 24,
-  },
-];

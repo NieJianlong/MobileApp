@@ -39,45 +39,12 @@ function InSufficientSalamiCredit(props) {
   const { createOrderFromCart, order } = useCreateOrder();
   const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
   const userProfile = useReactiveVar(userProfileVar);
-  console.log("userProfile", userProfile);
+
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
   const { dispatch } = useContext(AlertContext);
-  const { razorpayVerifyPaymentSignature, razorVerifyPayment } =
-    useRazorVerifyPayment();
   const getPaymentConfigration = usePaymentConfigration();
-  const payments = [
-    {
-      image: images.userPayMethod2Image,
-      onPress: () => {
-        NavigationService.navigate("AddCreditScreen", {
-          callback: () => {
-            NavigationService.navigate("CheckoutResumeScreen", {
-              orderStatus: 0,
-            });
-            // Nav.goBack();
-          },
-        });
-      },
-    },
-    {
-      image: images.userPayMethod1Image,
-      onPress: () => {},
-    },
-    {
-      image: images.userPayMethod3Image,
-      onPress: () => {},
-    },
-    {
-      image: images.userPayMethod4Image,
-      onPress: () => {},
-    },
-    {
-      image: images.userPayMethod5Image,
-      onPress: () => {},
-    },
-  ];
 
   return (
     <View
@@ -184,10 +151,7 @@ function InSufficientSalamiCredit(props) {
                       shippingAddressId: localCartVar.deliverAddress,
                       billingDetailsId: userProfile.billingDetailsId,
                       useSalamiWallet: true,
-                      cartItems:
-                        localBuyNowVar().items.length > 0
-                          ? localBuyNowVar().items
-                          : localCartVar.items,
+                      cartItems: params.product,
                     },
                   },
                   context: {

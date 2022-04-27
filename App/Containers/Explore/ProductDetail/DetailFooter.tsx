@@ -47,7 +47,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
-  const { razorpayVerifyPaymentSignature } = useRazorVerifyPayment();
+
   const { razorpayCreateOrder } = useCreateRazorOrder();
   const userProfile = useReactiveVar(userProfileVar);
   const { addBilling } = UseBillingDetail();
@@ -83,6 +83,16 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       quantity,
       variantId: currentVariant?.variantId,
     };
+    if (type === "InSufficient") {
+      NavigationService.navigate("InSufficientSalamiCreditScreen", {
+        walletBalance: walletBalance,
+        productPrice: new BigNumber(quantity * product.wholeSalePrice).toFixed(
+          2
+        ),
+        product: [productBuyNow],
+      });
+      return;
+    }
     console.log("type", type);
     dispatch({
       type: "changLoading",
@@ -138,14 +148,6 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
             });
           }
           return res?.createOrderFromCart;
-        } else if (type === "InSufficient") {
-          NavigationService.navigate("InSufficientSalamiCreditScreen", {
-            walletBalance: walletBalance,
-            productPrice: new BigNumber(
-              quantity * product.wholeSalePrice
-            ).toFixed(2),
-            product: product,
-          });
         }
       },
       onError: (res) => {

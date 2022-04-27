@@ -26,8 +26,8 @@ function index(props) {
       icon: images.userDeliverytoImage,
       title: "Deliver to:",
       subtitle: `${fname}, ${towncity}, ${
-        localCart.callBackAddress.streetAddress1 || ""
-      } ${localCart.callBackAddress.streetAddress2 || ""} ${
+        localCart?.callBackAddress?.streetAddress1 || ""
+      } ${localCart?.callBackAddress?.streetAddress2 || ""} ${
         props?.billingAddressDetail?.billingAddress?.streetAddress3 || ""
       }`,
       subtitle1: `India, ${provinceState}`,

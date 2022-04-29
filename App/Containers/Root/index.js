@@ -19,6 +19,7 @@ import ImageViewer from "react-native-image-zoom-viewer";
 import useImageViewer from "../../hooks/useImageViewer";
 import LoginScreen from "../Login";
 import useLogin from "../../hooks/useLogin";
+import MapScreen from "../MapScreen";
 
 const initialState = {
   alert: {
@@ -195,11 +196,7 @@ function RootContainer() {
         />
       </Modal>
       {/* {loginVisible && <LoginScreen />} */}
-      <Spinner
-        visible={spinner || show}
-        textContent={"Loading..."}
-        textStyle={{ color: "white" }}
-      />
+
       {visible && (
         <Alert
           visible={true}
@@ -218,6 +215,16 @@ function RootContainer() {
           onDismiss={alertDissmiss}
         />
       )}
+      <Modal visible={true} transparent={true}>
+        <MapScreen />
+      </Modal>
+      <Modal visible={spinner || show} transparent={true}>
+        <Spinner
+          visible={spinner || show}
+          textContent={"Loading..."}
+          textStyle={{ color: "white" }}
+        />
+      </Modal>
     </AlertContext.Provider>
   );
 }

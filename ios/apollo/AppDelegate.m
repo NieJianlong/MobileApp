@@ -10,6 +10,8 @@
 #import <FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h>
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
+@import GooglePlaces;
+@import GoogleMaps;
 
 static void InitializeFlipper(UIApplication *application) {
   FlipperClient *client = [FlipperClient sharedClient];
@@ -43,6 +45,9 @@ static void InitializeFlipper(UIApplication *application) {
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  [GMSPlacesClient provideAPIKey:@"AIzaSyBfDTs1ejBI3MIVhrPeXgpvDNkTovWkIuU"];
+
+  [GMSServices provideAPIKey:@"AIzaSyCSmWyca_Q7CihE_noGCpku0QkHz7Hl274"]; 
   [super application:application didFinishLaunchingWithOptions:launchOptions];
   return YES;
 }

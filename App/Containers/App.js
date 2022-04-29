@@ -6,6 +6,7 @@ import { client } from "../Apollo/apolloClient";
 import FlipperAsyncStorage from "rn-flipper-async-storage-advanced";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { enableFlipperApolloDevtools } from "react-native-flipper-apollo-devtools";
+import MapScreen from "./MapScreen";
 
 // Instruct SplashScreen not to hide yet, we want to do this manually
 // SplashScreen.preventAutoHideAsync().catch(() => {
@@ -65,7 +66,6 @@ const App = () => {
       <ApolloProvider client={client}>
         <FlipperAsyncStorage />
         <RootContainer />
-        {/* <View /> */}
       </ApolloProvider>
     </GestureHandlerRootView>
   );

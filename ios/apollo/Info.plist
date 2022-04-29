@@ -42,6 +42,10 @@
 			</dict>
 		</dict>
 	</dict>
+  <key>NSLocationWhenInUseUsageDescription</key>
+    <string>RNGPDemos needs your location to show you places</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>RNGPDemos needs your location to show you places</string>
 	<key>NSCameraUsageDescription</key>
 	<string>We need to use camera to take your progress photo</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

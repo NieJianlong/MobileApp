@@ -9,6 +9,15 @@
     <!-- required for react-native-share base64 sharing -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- Added permissions -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- Optional permissions -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
@@ -16,6 +25,9 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCSmWyca_Q7CihE_noGCpku0QkHz7Hl274"/>
 <!--        <meta-data android:name="expo.modules.updates.EXPO_UPDATE_URL" android:value="https://exp.host/@salamislicing/SalamiSlicing"/>-->
 <!--        <meta-data android:name="expo.modules.updates.EXPO_SDK_VERSION" android:value="44.0.0"/>-->
       <activity

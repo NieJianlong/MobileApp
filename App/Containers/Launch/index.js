@@ -73,7 +73,21 @@ export default function LaunchScreen() {
         getBuyerId();
 
         setLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY, access_token);
-      } catch (error) {}
+      } catch (error) {
+        storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_NAME, "");
+        storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_PASSWORD, "");
+        const result = await checkBuyerIdExists();
+        if (result) {
+          setTimeout(() => {
+            NavigationService.navigate("MainScreen");
+          }, 3000);
+        } else {
+          setTimeout(() => {
+            //this.props.navigation.navigate('OnboardingScreen')
+            NavigationService.navigate("OnboardingScreen");
+          }, 4000);
+        }
+      }
     } else {
       const result = await checkBuyerIdExists();
       if (result) {

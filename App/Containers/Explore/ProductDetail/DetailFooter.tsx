@@ -143,7 +143,12 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
             razorpayCreateOrder().then((res) => {
               if (res?.data) {
                 const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
-                getPaymentConfigration(razorId, product, ComeFromType.Buynow);
+                getPaymentConfigration(
+                  razorId,
+                  product,
+                  ComeFromType.Buynow,
+                  order.paymentDetails.balanceToPay
+                );
               }
             });
           }

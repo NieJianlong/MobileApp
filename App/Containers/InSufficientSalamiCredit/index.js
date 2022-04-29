@@ -179,7 +179,8 @@ function InSufficientSalamiCredit(props) {
                           getPaymentConfigration(
                             razorId,
                             params.product,
-                            ComeFromType.Buynow
+                            ComeFromType.Buynow,
+                            order?.paymentDetails.balanceToPay
                           );
                         }
                       });

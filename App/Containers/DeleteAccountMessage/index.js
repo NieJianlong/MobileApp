@@ -26,6 +26,9 @@ import TextTip from "../../Components/EmptyReminder";
 import images from "../../Themes/Images";
 import metrics from "../../Themes/Metrics";
 import * as storage from "../../Apollo/local-storage";
+import { useDeleteBuyerProfileMutation } from "../../../generated/graphql";
+import { userProfileVar } from "../../Apollo/cache";
+import { useReactiveVar } from "@apollo/client";
 
 function DeleteAccountMessage(props) {
   const textTip = "Are you sure you want to remove  your account?";
@@ -37,6 +40,34 @@ function DeleteAccountMessage(props) {
     needButton: false,
     btnMsg: "",
   };
+  const userProfile = useReactiveVar(userProfileVar);
+  const [deleteBuyer] = useDeleteBuyerProfileMutation({
+    variables: { buyerId: global.buyerId },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: () => {
+      storage.setLocalStorageEmpty();
+      storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_NAME, "");
+      storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_PASSWORD, "");
+      userProfileVar({
+        billingDetails: "",
+        billingDetailsId: "",
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        isAuth: false,
+      });
+      NavigationService.navigate("LoginScreen");
+      // NavigationService.navigate("OnboardingScreen");
+    },
+    onError: (err) => {
+      alert(err.message);
+    },
+  });
   return (
     <View style={styles.container}>
       <SafeAreaView>
@@ -48,8 +79,7 @@ function DeleteAccountMessage(props) {
         <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <Button
             onPress={() => {
-              storage.setLocalStorageEmpty();
-              NavigationService.navigate("OnboardingScreen");
+              deleteBuyer();
             }}
             text="CONFIRM"
           />

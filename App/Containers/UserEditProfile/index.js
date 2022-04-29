@@ -64,20 +64,7 @@ function UserEditProfile(props) {
     onCompleted: (res) => {},
     onError: (res) => {},
   });
-  const [deleteBuyer] = useDeleteBuyerProfileMutation({
-    variables: { buyerId: global.buyerId },
-    context: {
-      headers: {
-        isPrivate: true,
-      },
-    },
-    onCompleted: () => {
-      NavigationService.navigate("DeleteAccountMessageScreen");
-    },
-    onError: (err) => {
-      alert(err.message);
-    },
-  });
+
   useEffect(() => {
     refetch && refetch();
   }, []);
@@ -241,7 +228,7 @@ function UserEditProfile(props) {
         <SafeAreaView style={styles.bottom}>
           <TouchableOpacity
             onPress={() => {
-              deleteBuyer();
+              NavigationService.navigate("DeleteAccountMessageScreen");
             }}
           >
             <Text

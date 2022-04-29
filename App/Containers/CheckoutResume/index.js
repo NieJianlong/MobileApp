@@ -213,7 +213,8 @@ function CheckoutResume(props) {
                 getPaymentConfigration(
                   razorId,
                   finalItems,
-                  ComeFromType.checkout
+                  ComeFromType.checkout,
+                  order.paymentDetails.balanceToPay
                 );
               }
             });

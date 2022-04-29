@@ -60,7 +60,8 @@ export function usePaymentConfigration() {
   const getPaymentConfigration = (
     orderId: string,
     items: any[],
-    comefrom: ComeFromType
+    comefrom: ComeFromType,
+    amount: number
   ) => {
     debugger;
     const options = {
@@ -70,6 +71,7 @@ export function usePaymentConfigration() {
       currency: "INR",
       key: "rzp_test_I8X2v4LgupMLv0",
       name: "Salami Slicing",
+      amount: amount,
       order_id: orderId, //Replace this with an order_id created using Orders API.
       prefill: {
         email: userProfile?.email,

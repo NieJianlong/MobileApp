@@ -70,7 +70,7 @@ export default function AddressList({ dispatch, xIndex }) {
   return (
     <View style={{ flex: 1 }}>
       <Addresses data={data?.getBuyerAddressByType || []} refetch={refetch} />
-      {data?.getBuyerAddressByType.length > 0 && (
+      {data?.getBuyerAddressByType?.length > 0 && (
         <SafeAreaView
           style={{
             marginBottom: vs(20),

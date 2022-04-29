@@ -54,11 +54,13 @@ function OnboardingScreen(props) {
     // lets check if a buyer id exists
     // first check for an existing buyer id
     let bid = await storage.getLocalStorageValue(storage.GUEST_BUYER_ID_KEY);
+
     if (bid) {
       console.log(
         `OnboardingScreen checkBuyerIdExists found a bid in local storage ${bid}`
       );
       global.buyerId = bid;
+      NavigationService.navigate("MainScreen");
       setBIdExists(true);
     } else {
       guestBuyerId({

@@ -165,8 +165,9 @@ function LoginScreen(props) {
               global.access_token = access_token;
               // global.userProfileId = decoded.sub;
               let decoded = jwt_decode(access_token);
+              // phone_number_verified
               //&& !decoded.email_verified
-              if (isEmpty(decoded.phone_number) && !decoded.email_verified) {
+              if (!decoded.phone_number_verified && !decoded.email_verified) {
                 resendCode({
                   variables: {
                     sendCodeRequest: {
@@ -254,6 +255,11 @@ function LoginScreen(props) {
             }
           })
           .catch(function (err) {
+            storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_NAME, "");
+            storage.setLocalStorageValue(
+              storage.LOCAL_STORAGE_USER_PASSWORD,
+              ""
+            );
             // here we will need to deal with a  status` code 401 and refresh jwt and try again
           });
       } else {
@@ -297,14 +303,14 @@ function LoginScreen(props) {
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={[{ marginLeft: width - 50 }, t.mT4]}
           onPress={() => {
             NavigationService.goBack();
           }}
         >
           <Image style={[t.h6, t.w6]} source={Images.crossMedium} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <View style={styles.bodyContainer}>
           <Text style={styles.txt1}>Sign In</Text>

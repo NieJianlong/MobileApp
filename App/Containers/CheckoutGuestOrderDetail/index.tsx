@@ -138,19 +138,21 @@ function CheckoutGuestOrderDetail(props) {
             payload: false,
           });
           const order = res?.createOrderFromCart;
-          if (res?.createOrderFromCart?.orderId) {
+          if (order?.orderId) {
             cartOrderVar({
               orderNumber: order?.orderNumber,
               orderId: order?.orderId,
               amount: order?.subTotal,
             });
-            razorpayCreateOrder().then((res) => {
-              if (res?.data) {
-                const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
+            razorpayCreateOrder().then((result) => {
+              if (result?.data) {
+                const razorId =
+                  result?.data?.razorpayCreateOrder?.razorpayOrderId;
                 getPaymentConfigration(
                   razorId,
                   props?.route?.params?.items,
-                  props?.route?.params?.from
+                  props?.route?.params?.from,
+                  order.paymentDetails.balanceToPay
                 );
               }
             });

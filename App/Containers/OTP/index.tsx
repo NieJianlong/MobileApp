@@ -34,6 +34,8 @@ import {
 import RNOtpVerify from "react-native-otp-verify";
 import { isEmpty, split } from "lodash";
 import { isValidEmail } from "../../Validation";
+import * as validator from "../../Validation";
+import useLoading from "../../hooks/useLoading";
 
 function OTPScreen(props) {
   const { dispatch } = useContext(AlertContext);
@@ -41,6 +43,7 @@ function OTPScreen(props) {
   const validationType = isValidEmail(params.phone)
     ? ValidationType.Email
     : ValidationType.Sms;
+  const { setLoading } = useLoading();
   // refs
   let field1Input,
     field2Input,
@@ -49,10 +52,12 @@ function OTPScreen(props) {
     field5Input = null;
   const [validate] = useValidateCodeMutation({
     onCompleted: (res) => {
+      setLoading({ show: false });
       // alert("验证成功");
       autoSignIn();
     },
     onError: (error) => {
+      setLoading({ show: false });
       // autoSignIn();
       alert("Validation fails");
     },
@@ -62,6 +67,7 @@ function OTPScreen(props) {
       },
     },
   });
+
   const [resetPasswordStep2] = useMutation(ForgotPasswordStep2VerifyTokenEmail);
   const [forgetPasswordResendCode] =
     useForgotPasswordStep1SendNotificationEmailMutation();
@@ -124,7 +130,6 @@ function OTPScreen(props) {
         console.log("no access token");
       }
       userProfileVar({
-        email: params.email,
         isAuth: true,
       });
       let decoded = jwt_decode(access_token);
@@ -152,6 +157,11 @@ function OTPScreen(props) {
       );
     }
   };
+
+  const isEmail = useMemo(() => {
+    let ret = validator.loginDifferentiator(params?.phone);
+    return ret.isEmail;
+  }, [params.phone]);
 
   useEffect(() => {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
@@ -312,10 +322,12 @@ function OTPScreen(props) {
       <View>
         <TouchableOpacity
           onPress={() => {
+            setLoading({ show: true });
             if (params.fromScreen === "ForgotPasswordScreen") {
               forgetPasswordResendCode({
                 variables: { email: params?.phone ?? "" },
                 onCompleted: (res) => {
+                  setLoading({ show: false });
                   dispatch({
                     type: "changAlertState",
                     payload: {
@@ -326,6 +338,7 @@ function OTPScreen(props) {
                   });
                 },
                 onError: () => {
+                  setLoading({ show: false });
                   dispatch({
                     type: "changAlertState",
                     payload: {
@@ -352,6 +365,7 @@ function OTPScreen(props) {
                   },
                 },
                 onCompleted: (res) => {
+                  setLoading({ show: false });
                   dispatch({
                     type: "changAlertState",
                     payload: {
@@ -362,6 +376,7 @@ function OTPScreen(props) {
                   });
                 },
                 onError: () => {
+                  setLoading({ show: false });
                   dispatch({
                     type: "changAlertState",
                     payload: {
@@ -388,10 +403,12 @@ function OTPScreen(props) {
         <Button
           // disabled={!allowToResendCode}
           onPress={() => {
+            setLoading({ show: true });
             if (params.fromScreen === "ForgotPasswordScreen") {
               resetPasswordStep2({
                 variables: { email: params.phone, tokenCode: otpCode },
                 onCompleted: (res) => {
+                  setLoading({ show: false });
                   NavigationService.navigate("CreateNewPasswordScreen", {
                     actionTokenValue:
                       res.forgotPasswordStep2VerifyTokenEmail.actionToken,
@@ -399,6 +416,7 @@ function OTPScreen(props) {
                 },
                 //等待修改
                 onError: () => {
+                  setLoading({ show: false });
                   dispatch({
                     type: "changAlertState",
                     payload: {
@@ -442,9 +460,13 @@ function OTPScreen(props) {
         />
 
         <View style={styles.bodyContainer}>
-          <Text style={styles.heading2Bold}>{"Validate your phone no"}</Text>
+          <Text style={styles.heading2Bold}>{`Validate your ${
+            isEmail ? "email" : "phone no"
+          }`}</Text>
           <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
-            Please enter the code number sent to [{params.phone}]
+            {`Please enter the code number sent to your ${
+              isEmail ? "email" : "phone no"
+            } [${params.phone}]`}
           </Text>
           {renderOTPInput()}
           <View style={{ flex: 1 }} />

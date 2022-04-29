@@ -65,6 +65,18 @@ function ChangePassword(props) {
       });
       NavigationService.goBack();
     },
+    onError: () => {
+      dispatch({ type: "hideloading" });
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "Changed your password failed.",
+          color: colors.error,
+          title: "Password Changed",
+        },
+      });
+    },
   });
   const changePassword = useCallback(() => {
     if (

@@ -1,27 +1,33 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   TouchableOpacity,
   Image,
   SafeAreaView,
   StatusBar,
-} from 'react-native';
-import { s, ScaledSheet } from 'react-native-size-matters';
-import fonts from '../../Themes/Fonts';
-import colors from '../../Themes/Colors';
-import { AppBar } from '../../Components';
-import NavigationService from '../../Navigation/NavigationService';
-import TextTip from '../../Components/EmptyReminder';
-import images from '../../Themes/Images';
+} from "react-native";
+import { s, ScaledSheet } from "react-native-size-matters";
+import fonts from "../../Themes/Fonts";
+import colors from "../../Themes/Colors";
+import { AppBar } from "../../Components";
+import NavigationService from "../../Navigation/NavigationService";
+import TextTip from "../../Components/EmptyReminder";
+import images from "../../Themes/Images";
+import { useRoute } from "@react-navigation/native";
+import { OrderItemHistoryEventType } from "../../../generated/graphql";
 
 function CancelOrderCompleted(props) {
+  const { params } = useRoute();
   const data = {
-    textTip: 'Your order has been canceled',
-    subTextTip: 'You will receive the refund money in 3-5 business days',
+    textTip: "Your order has been canceled",
+    subTextTip:
+      params.data.latestEventStatus === OrderItemHistoryEventType.Paid
+        ? "You will receive the refund money in 3-5 business days"
+        : "You can go on to browse other products",
     needButton: true,
-    btnMsg: 'CONTINUE EXPLORING',
+    btnMsg: "CONTINUE EXPLORING",
     onPress: () => {
-      NavigationService.navigate('ExploreScreen');
+      NavigationService.navigate("ExploreScreen");
     },
   };
   return (
@@ -29,7 +35,7 @@ function CancelOrderCompleted(props) {
       style={{
         flex: 1,
         backgroundColor: colors.background,
-        position: 'absolute',
+        position: "absolute",
         top: 0,
         left: 0,
         right: 0,
@@ -39,7 +45,7 @@ function CancelOrderCompleted(props) {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
-        edges={['top', 'right', 'left', 'bottom']}
+        edges={["top", "right", "left", "bottom"]}
       >
         <AppBar
           hiddenBackBtn
@@ -65,14 +71,14 @@ function CancelOrderCompleted(props) {
         <View>
           <Image
             style={{
-              width: '100%',
+              width: "100%",
               height: 80,
               marginTop: 50,
-              resizeMode: 'contain',
+              resizeMode: "contain",
             }}
             source={images.orderCanceledImage}
           />
-          <View style={{ height: s(230), backgroundColor: 'transparent' }}>
+          <View style={{ height: s(230), backgroundColor: "transparent" }}>
             <TextTip {...data} />
           </View>
         </View>
@@ -85,8 +91,8 @@ export default CancelOrderCompleted;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,
-    fontSize: '16@s',
+    fontSize: "16@s",
     color: colors.black,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

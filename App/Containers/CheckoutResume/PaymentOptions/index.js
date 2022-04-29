@@ -44,7 +44,7 @@ const PaymentOptions = () => {
               </Text>
             </View>
             <View style={{ justifyContent: "center" }}>
-              <Text style={styles.selectText}>SELECT</Text>
+              <Text style={styles.selectText}></Text>
             </View>
           </View>
         </View>

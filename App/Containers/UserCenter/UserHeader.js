@@ -23,6 +23,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useBuyerProfileQuery } from "../../../generated/graphql";
 import useLogin from "../../hooks/useLogin";
 import { isEmpty, trimStart } from "lodash";
+import { useReactiveVar } from "@apollo/client";
 
 /**
  * @description:The user header component, which contains basic user information
@@ -32,12 +33,13 @@ import { isEmpty, trimStart } from "lodash";
 function UserHeader(props) {
   const { needSafeArea, needEdit, islogin, setLogin } = props;
   const navigation = useNavigation();
+  const userProfile = useReactiveVar(userProfileVar);
 
   const textTip = "You haven't add any personal \n details yet";
   const { setLogin: setLoginAction } = useLogin();
   return (
     <View style={styles.headerContainer}>
-      {userProfileVar().isAuth ? (
+      {userProfile.isAuth ? (
         needSafeArea ? (
           <SafeAreaView style={styles.toppart}>
             <UserInfo />

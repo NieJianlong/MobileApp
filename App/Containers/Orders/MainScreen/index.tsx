@@ -270,7 +270,7 @@ function OrderScreen() {
         searchString: "",
         pageOption: {
           pageNumber: 0,
-          pageSize: 10,
+          pageSize: 1000,
         },
       },
     },

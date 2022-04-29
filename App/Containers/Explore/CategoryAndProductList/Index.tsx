@@ -132,7 +132,7 @@ export default function Index(props) {
           filter={
             textToSearch.length > 0
               ? FilterType.ActiveByAddressIdAndFullTextSearch
-              : FilterType.ActiveByAddressId
+              : FilterType.Active
           }
           tabLabel="All"
         />

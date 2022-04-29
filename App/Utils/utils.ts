@@ -63,7 +63,6 @@ export function usePaymentConfigration() {
     comefrom: ComeFromType,
     amount: number
   ) => {
-    debugger;
     const options = {
       description: "Wholesale Marketplace",
       image:

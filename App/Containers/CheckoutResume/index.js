@@ -43,8 +43,6 @@ function CheckoutResume(props) {
   const [on, setOnSwitch] = useState(false);
   const { createOrderFromCart } = useCreateOrder();
   const { razorpayCreateOrder } = useCreateRazorOrder();
-
-  debugger;
   const { addBilling } = AddBillingDetail();
   const getPaymentConfigration = usePaymentConfigration();
   const { realm } = useRealm();

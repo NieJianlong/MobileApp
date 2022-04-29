@@ -31,7 +31,6 @@ function CancelOrder(props) {
   const [message, setMessage] = useState<string>("");
   const { setAlert } = useAlert();
   const { params } = useRoute();
-  debugger;
   const reasonParams = useMemo(() => {
     if (reason === "Mistake order") {
       return CancellationReason.MistakeOrder;

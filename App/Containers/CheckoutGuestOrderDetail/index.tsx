@@ -170,7 +170,6 @@ function CheckoutGuestOrderDetail(props) {
       });
     }
   };
-  debugger;
   return (
     <BaseScreen {...props}>
       <AppBar

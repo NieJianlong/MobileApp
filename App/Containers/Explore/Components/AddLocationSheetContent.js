@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from "react";
+import React, { useState, useContext, useMemo, useEffect } from "react";
 import {
   View,
   StatusBar,
@@ -36,6 +36,7 @@ const TouchableOpacity =
 function AddLocationSheetContent(props) {
   //123e4567-e89b-12d3-a456-556642440000
   // const [selectedState, setSelectedState] = useState();
+
   const { data } = useQuery(GetStatesByCountryId, {
     variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
   });
@@ -48,8 +49,17 @@ function AddLocationSheetContent(props) {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
+  useEffect(() => {
+    if (data) {
+      setValue("provinceState", props.state);
+      setValue("townCity", props.city);
+      setValue("pinCode", props.post_code);
+      setValue("streetAddress1", props.street);
+    }
+  }, [data, props]);
   const [open, setOpen] = useState(false);
   const [addAddress] = useMutation(
     isAuth ? CREATE_ADDRESS : CREATE_ADDRESS_FOR_GUEST,

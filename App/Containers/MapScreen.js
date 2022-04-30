@@ -1,5 +1,5 @@
 import * as Location from "expo-location";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -21,6 +21,9 @@ import { Button } from "../Components";
 import { Modal } from "react-native-paper";
 import { t } from "react-native-tailwindcss";
 import useLoading from "../hooks/useLoading";
+import { AlertContext } from "./Root/GlobalContext";
+import AddLocationSheetContent from "./Explore/Components/AddLocationSheetContent";
+import useMapScreen from "../hooks/useMapScreen";
 
 Geocoder.init("AIzaSyBfDTs1ejBI3MIVhrPeXgpvDNkTovWkIuU");
 
@@ -31,6 +34,8 @@ const MapScreen = () => {
   // eslint-disable-next-line no-unused-vars
   const [additionalInfo, setAdditionalInfo] = useState({});
   const { setLoading } = useLoading();
+  const { dispatch } = useContext(AlertContext);
+  const { setShowMap } = useMapScreen();
 
   useEffect(() => {
     (async () => {
@@ -67,6 +72,7 @@ const MapScreen = () => {
   const _openLocationModal = () => {
     RNGooglePlaces.openAutocompleteModal()
       .then((place) => {
+        debugger;
         setLocation({ location: place.location, address: place.address });
       })
       .catch((error) => console.log(error.message)); // error is a Javascript Error object
@@ -77,7 +83,6 @@ const MapScreen = () => {
       latitude: region.latitude,
       longitude: region.longitude,
     });
-
     if (results && results[0]) {
       const houseNo = results[0].address_components.find((item) =>
         item.types.includes("premise")
@@ -96,6 +101,9 @@ const MapScreen = () => {
       );
 
       const address = results[0].formatted_address;
+      const post_code = results[0].address_components.find((item) =>
+        item.types.includes("postal_code")
+      );
 
       setLocation({
         address: address || "",
@@ -104,6 +112,7 @@ const MapScreen = () => {
         street: street ? street.long_name : "",
         houseNo: houseNo ? houseNo.long_name : "",
         country: country ? country.long_name : "",
+        post_code: post_code ? post_code.long_name : "",
         location: { latitude: region.latitude, longitude: region.longitude },
       });
     }
@@ -131,15 +140,6 @@ const MapScreen = () => {
         </MapView>
 
         {/* <View style={styles.centerPin} /> */}
-
-        {additionalInfoModal && location && (
-          <AdditionalInfoModal
-            location={location}
-            visible={additionalInfoModal}
-            onSubmit={setAdditionalInfo}
-            onClose={() => setAdditionalInfoModal(false)}
-          />
-        )}
       </View>
       <View style={[{ width, height: 250 }, t.bgWhite, t.p4]}>
         <Text>Select Delivery Location</Text>
@@ -160,10 +160,31 @@ const MapScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <Button
-          onPress={() => setAdditionalInfoModal(true)}
-          text={"Confirm Location"}
-        />
+        <TouchableOpacity
+          style={[
+            t.bgPrimary,
+            t.h12,
+
+            { borderRadius: 16 },
+            t.itemsCenter,
+            t.justifyCenter,
+          ]}
+          onPress={() => {
+            debugger;
+            setShowMap({ mapVisible: false });
+            dispatch({
+              type: "changSheetState",
+              payload: {
+                showSheet: true,
+                height: 600,
+                children: () => <AddLocationSheetContent {...location} />,
+                sheetTitle: "",
+              },
+            });
+          }}
+        >
+          <Text style={[t.textWhite]}>Confirm Location</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

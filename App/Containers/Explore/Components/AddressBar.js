@@ -25,6 +25,7 @@ import {
   GetBuyerDefaultAddressByBuyerIdDocument,
   GetGuestBuyerDefaultAddressByBuyerIdDocument,
 } from "../../../../generated/graphql";
+import useMapScreen from "../../../hooks/useMapScreen";
 
 export default function AddressBar() {
   const userProfileVarReactive = useReactiveVar(userProfileVar);
@@ -36,6 +37,7 @@ export default function AddressBar() {
     () => userProfileVarReactive.isAuth,
     [userProfileVarReactive.isAuth]
   );
+  const { setShowMap } = useMapScreen();
 
   /**
    * we need to add comments for stuff like this
@@ -105,7 +107,8 @@ export default function AddressBar() {
             }
           });
         } else {
-          toggleAddressSheet();
+          setShowMap({ mapVisible: true });
+          // toggleAddressSheet();
         }
       },
     }
@@ -128,7 +131,8 @@ export default function AddressBar() {
     setAddrLine1(aL1);
     setAddrLine2(aL2);
     if (aL1.length === 0) {
-      toggleAddressSheet();
+      setShowMap({ mapVisible: true });
+      // toggleAddressSheet();
     }
   }
   useFocusEffect(

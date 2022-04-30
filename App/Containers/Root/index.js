@@ -20,6 +20,7 @@ import useImageViewer from "../../hooks/useImageViewer";
 import LoginScreen from "../Login";
 import useLogin from "../../hooks/useLogin";
 import MapScreen from "../MapScreen";
+import useMapScreen from "../../hooks/useMapScreen";
 
 const initialState = {
   alert: {
@@ -117,6 +118,7 @@ function RootContainer() {
     setImageViewer,
   } = useImageViewer();
   const { loginVisible } = useLogin();
+  const { mapVisible } = useMapScreen();
   return (
     <AlertContext.Provider value={{ dispatch, actionSheet }}>
       <View style={{ flex: 1 }}>
@@ -215,7 +217,7 @@ function RootContainer() {
           onDismiss={alertDissmiss}
         />
       )}
-      <Modal visible={true} transparent={true}>
+      <Modal visible={mapVisible} transparent={true}>
         <MapScreen />
       </Modal>
       <Modal visible={spinner || show} transparent={true}>

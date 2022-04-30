@@ -16,11 +16,13 @@ import { setLocalStorageValue } from "../../../Apollo/local-storage";
 import PubSub from "pubsub-js";
 import useAlert from "../../../hooks/useAlert";
 import colors from "../../../Themes/Colors";
+import useMapScreen from "../../../hooks/useMapScreen";
 
 export default function AddressSheetContent(props) {
   const { dispatch, actionSheet } = useContext(AlertContext);
   const { width, height: windowHeight } = useWindowDimensions();
   const userProfileVarReactive = useReactiveVar(userProfileVar);
+  const { setShowMap } = useMapScreen();
   const { setAlert } = useAlert();
   const isAuth = useMemo(
     () => userProfileVarReactive.isAuth,
@@ -64,16 +66,17 @@ export default function AddressSheetContent(props) {
     }
   }, [actionSheet.showSheet, refetch]);
   const toggleAddressSheet = useCallback(() => {
-    dispatch({
-      type: "changSheetState",
-      payload: {
-        showSheet: true,
-        height: 600,
-        children: () => <AddLocationSheetContent />,
-        sheetTitle: "",
-      },
-    });
-  }, [dispatch]);
+    setShowMap({ mapVisible: true });
+    // dispatch({
+    //   type: "changSheetState",
+    //   payload: {
+    //     showSheet: true,
+    //     height: 600,
+    //     children: () => <AddLocationSheetContent />,
+    //     sheetTitle: "",
+    //   },
+    // });
+  }, []);
   return (
     <View style={[{ flex: 1, justifyContent: "flex-start" }]}>
       <View style={{ height: vs(30) }} />

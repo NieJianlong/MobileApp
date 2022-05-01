@@ -41,6 +41,7 @@ import { AlertContext } from "../Root/GlobalContext";
 import { FIND_BUYER_PROFILE } from "../../Apollo/queries/queries_user";
 import { useDeleteBuyerProfileMutation } from "../../../generated/graphql";
 import { isEmpty, omit } from "lodash";
+import { ActivityIndicator } from "react-native-paper";
 
 /**
  * @description:User edit page
@@ -68,7 +69,20 @@ function UserEditProfile(props) {
   useEffect(() => {
     refetch && refetch();
   }, []);
-  const { firstName, lastName, email, phoneNumber } = userProfile?.buyerProfile;
+  // if (!userProfile) {
+  //   return (
+  //     <ActivityIndicator
+  //       style={{
+  //         color: colors.primary,
+  //         margin: 10,
+  //       }}
+  //       size={"large"}
+  //       color={"red"}
+  //       animating={true}
+  //     />
+  //   );
+  // }
+  // const { firstName, lastName, email, phoneNumber } = userProfile?.buyerProfile;
   // const {
   //   params: { firstName, lastName, email, phoneNumber },
   // } = useRoute();
@@ -76,11 +90,19 @@ function UserEditProfile(props) {
 
   const [showBottom, setShowBottom] = useState(true);
   const [newAvatar, setNewAvatar] = useState(null);
-  const [newFirstName, setNewFirstName] = useState(firstName);
-  const [newLastName, setNewLastName] = useState(lastName);
-  const [newEmail, setNewEmail] = useState(email);
+  const [newFirstName, setNewFirstName] = useState(
+    userProfile?.buyerProfile?.firstName ?? ""
+  );
+  const [newLastName, setNewLastName] = useState(
+    userProfile?.buyerProfile?.lastName ?? ""
+  );
+  const [newEmail, setNewEmail] = useState(
+    userProfile?.buyerProfile?.email ?? ""
+  );
   const [newPhoneNumber, setNewPhoneNumber] = useState(
-    isEmpty(phoneNumber) ? "" : phoneNumber.replace("+91", "")
+    isEmpty(userProfile?.buyerProfile?.phoneNumber)
+      ? ""
+      : userProfile?.buyerProfile?.phoneNumber.replace("+91", "")
   );
   const inputs = [
     {

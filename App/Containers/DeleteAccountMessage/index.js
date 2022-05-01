@@ -13,6 +13,7 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
+  DevSettings,
 } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
 import { AppBar, Button } from "../../Components";
@@ -29,6 +30,8 @@ import * as storage from "../../Apollo/local-storage";
 import { useDeleteBuyerProfileMutation } from "../../../generated/graphql";
 import { userProfileVar } from "../../Apollo/cache";
 import { useReactiveVar } from "@apollo/client";
+import { useNavigation } from "@react-navigation/native";
+import { CommonActions } from "@react-navigation/native";
 
 function DeleteAccountMessage(props) {
   const textTip = "Are you sure you want to remove  your account?";
@@ -40,6 +43,7 @@ function DeleteAccountMessage(props) {
     needButton: false,
     btnMsg: "",
   };
+  const navigation = useNavigation();
   const userProfile = useReactiveVar(userProfileVar);
   const [deleteBuyer] = useDeleteBuyerProfileMutation({
     variables: { buyerId: global.buyerId },
@@ -61,6 +65,13 @@ function DeleteAccountMessage(props) {
         phone: "",
         isAuth: false,
       });
+
+      // navigation.reset({
+      //   index: 0,
+      //   routes: [{ name: "LoginScreen" }],
+      // });
+      // DevSettings.reload();
+
       NavigationService.navigate("LoginScreen");
       // NavigationService.navigate("OnboardingScreen");
     },

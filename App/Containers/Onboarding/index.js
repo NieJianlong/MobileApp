@@ -60,7 +60,7 @@ function OnboardingScreen(props) {
         `OnboardingScreen checkBuyerIdExists found a bid in local storage ${bid}`
       );
       global.buyerId = bid;
-      NavigationService.navigate("MainScreen");
+      NavigationService.navigate("MainScreen", { screen: "ExploreScreen" });
       setBIdExists(true);
     } else {
       guestBuyerId({
@@ -85,7 +85,6 @@ function OnboardingScreen(props) {
     let buyerId = data.createGuestBuyer.buyerId;
     await storage.setLocalStorageValue(storage.GUEST_BUYER_ID_KEY, buyerId);
     global.buyerId = buyerId;
-    //NavigationService.navigate("MainScreen");
   };
 
   const togglePlayPauseVideo = () => {
@@ -146,7 +145,9 @@ function OnboardingScreen(props) {
                 global.buyerId = bid;
               }
 
-              NavigationService.navigate("MainScreen");
+              NavigationService.navigate("MainScreen", {
+                screen: "ExploreScreen",
+              });
               // } else {
               //   dispatch({ type: "loading" });
               //   guestBuyerId({

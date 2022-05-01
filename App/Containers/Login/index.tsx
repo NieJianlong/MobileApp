@@ -85,7 +85,7 @@ function LoginScreen(props) {
             firstName: buyerProfileByUserId?.firstName ?? "",
             lastName: buyerProfileByUserId?.lastName ?? "",
           });
-          NavigationService.navigate("MainScreen");
+          NavigationService.navigate("MainScreen", { screen: "ExploreScreen" });
           if (onDismiss) {
             onDismiss();
           }

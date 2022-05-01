@@ -50,7 +50,7 @@ export default function LaunchScreen() {
       } = res;
       global.buyerId = buyerId;
       setTimeout(() => {
-        NavigationService.navigate("MainScreen");
+        NavigationService.navigate("MainScreen", { screen: "ExploreScreen" });
       }, 3000);
     },
     onError: (res) => {},
@@ -79,7 +79,9 @@ export default function LaunchScreen() {
         const result = await checkBuyerIdExists();
         if (result) {
           setTimeout(() => {
-            NavigationService.navigate("MainScreen");
+            NavigationService.navigate("MainScreen", {
+              screen: "ExploreScreen",
+            });
           }, 3000);
         } else {
           setTimeout(() => {
@@ -92,7 +94,7 @@ export default function LaunchScreen() {
       const result = await checkBuyerIdExists();
       if (result) {
         setTimeout(() => {
-          NavigationService.navigate("MainScreen");
+          NavigationService.navigate("MainScreen", { screen: "ExploreScreen" });
         }, 3000);
       } else {
         setTimeout(() => {

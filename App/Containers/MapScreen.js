@@ -53,20 +53,31 @@ const MapScreen = () => {
 
   const _getCurrentLocation = () => {
     setLoading({ show: true });
-    RNGooglePlaces.getCurrentPlace(["placeID", "location", "name", "address"])
-      .then((results) => {
-        console.log("getCurrentPlace", results[0]);
-        setLoading({ show: false });
-        // setLocation(
-        //   results && results[0] && { location: results[0].location, address: results[0].address }
-        // );
+    setTimeout(() => {
+      RNGooglePlaces.getCurrentPlace(["placeID", "location", "name", "address"])
+        .then((results) => {
+          debugger;
+          console.log("getCurrentPlace", results[0]);
+          setLoading({ show: false });
+          debugger;
+          // setLocation(
+          //   results && results[0] && { location: results[0].location, address: results[0].address }
+          // );
 
-        _onChangeRegion(results[0] && results[0].location);
-      })
-      .catch((error) => {
-        setLoading({ show: false });
-        console.log("Error", error.message);
-      });
+          _onChangeRegion(results[0] && results[0].location);
+        })
+        .catch((error) => {
+          setLoading({ show: false });
+          setLocation({
+            location: {
+              longitude: 28.684166500711854,
+              latitude: 77.1772169293581,
+            },
+          });
+
+          console.log("Error", error.message);
+        });
+    }, 0);
   };
 
   const _openLocationModal = () => {
@@ -79,6 +90,7 @@ const MapScreen = () => {
   };
 
   const _onChangeRegion = async (region) => {
+    debugger;
     const { results } = await Geocoder.from({
       latitude: region.latitude,
       longitude: region.longitude,
@@ -131,6 +143,7 @@ const MapScreen = () => {
         <MapView
           ref={mapRef}
           showsUserLocation
+          userLocationUpdateInterval={2000}
           style={styles.map}
           provider={PROVIDER_GOOGLE}
           initialRegion={INITIAL_REGION}

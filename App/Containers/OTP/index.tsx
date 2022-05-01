@@ -110,10 +110,10 @@ function OTPScreen(props) {
         buyerProfileByUserId: { buyerId },
       } = res;
       global.buyerId = buyerId;
-      NavigationService.navigate("MainScreen");
+      NavigationService.navigate("MainScreen", { screen: "ExploreScreen" });
     },
     onError: (res) => {
-      NavigationService.navigate("MainScreen");
+      NavigationService.navigate("MainScreen", { screen: "ExploreScreen" });
     },
   });
   const autoSignIn = async () => {

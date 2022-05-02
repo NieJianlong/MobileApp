@@ -12,7 +12,10 @@ import { useMutation } from "@apollo/client";
 import { ForgotPasswordStep1SendNotificationEmail } from "./forgot_mutation";
 import colors from "../../Themes/Colors";
 import { AlertContext } from "../Root/GlobalContext";
-import { useForgotPasswordStep1SendNotificationEmailMutation } from "../../../generated/graphql";
+import {
+  useForgotPasswordStep1SendNotificationEmailMutation,
+  useForgotPasswordStep1SendNotificationSmsMutation,
+} from "../../../generated/graphql";
 
 class ForgotPassword extends Component {
   _isMounted = false;
@@ -77,16 +80,16 @@ class ForgotPassword extends Component {
                * add router parameter here for Login screen to show EMS alert
                */
               // this.props.navigation.navigate('LoginScreen')
-              this.props.onGetCode(this.state.email);
+              this.props.onGetCode(this.state.email, true);
               //NavigationService.navigate("LoginScreen", { showEms: true });
             } else if (this.validatePhone(this.state.email)) {
               /**
                * To-Do need clarity for OTP flow
                */
-
-              NavigationService.navigate("OTPScreen", {
-                fromScreen: "ForgotPasswordScreen",
-              });
+              this.props.onGetCode(this.state.email, false);
+              // NavigationService.navigate("OTPScreen", {
+              //   fromScreen: "ForgotPasswordScreen",
+              // });
             }
           }}
           text={"RESET PASSWORD"}
@@ -146,33 +149,51 @@ class ForgotPassword extends Component {
 function ForgotPasswordScreen() {
   const [getValidateCode] =
     useForgotPasswordStep1SendNotificationEmailMutation();
+  const [getPhoneValidateCode] =
+    useForgotPasswordStep1SendNotificationSmsMutation();
   const { dispatch } = useContext(AlertContext);
+  const onSuccess = (email) => {
+    NavigationService.navigate("OTPScreen", {
+      fromScreen: "ForgotPasswordScreen",
+      phone: email,
+      userId: "",
+      password: "",
+    });
+  };
+  const onError = () => {
+    dispatch({
+      type: "changAlertState",
+      payload: {
+        visible: true,
+        message: "Invalid email address",
+        color: colors.error,
+        title: "Failed",
+      },
+    });
+  };
   const getCode = useCallback(
-    (email) => {
-      getValidateCode({
-        variables: { email },
-        onError: () => {
-          dispatch({
-            type: "changAlertState",
-            payload: {
-              visible: true,
-              message: "Invalid email address",
-              color: colors.error,
-              title: "Failed",
+    (email, isEmail) => {
+      isEmail
+        ? getValidateCode({
+            variables: { email },
+            onError: () => {
+              onError();
+            },
+            onCompleted: (res) => {
+              onSuccess(email);
+            },
+          })
+        : getPhoneValidateCode({
+            variables: { sms: "+91" + email },
+            onError: () => {
+              onError();
+            },
+            onCompleted: (res) => {
+              onSuccess("+91" + email);
             },
           });
-        },
-        onCompleted: (res) => {
-          NavigationService.navigate("OTPScreen", {
-            fromScreen: "ForgotPasswordScreen",
-            phone: email,
-            userId: "",
-            password: "",
-          });
-        },
-      });
     },
-    [dispatch, getValidateCode]
+    [getPhoneValidateCode, getValidateCode]
   );
 
   return <ForgotPassword onGetCode={getCode} />;

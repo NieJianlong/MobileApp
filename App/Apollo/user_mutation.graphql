@@ -30,6 +30,13 @@ mutation ForgotPasswordStep1SendNotificationEmail($email: String!) {
   }
 }
 
+mutation ForgotPasswordStep1SendNotificationSms($sms: String!) {
+  forgotPasswordStep1SendNotificationSms(sms: $sms) {
+    email
+    phoneNumber
+    message
+  }
+}
 # resendVerificationCodeInSms(phoneNumber: String!): ResendCodeResponse
 # mutation ResendVerificationCodeInSms($phoneNumber: String!) {
 #   resendVerificationCodeInSms(phoneNumber: $phoneNumber) {
@@ -67,5 +74,26 @@ mutation CreateBillingDetailsForGuestBuyer(
 mutation UpdateBillingDetailsForGuestBuyer($request: BillingDetailsRequest!) {
   updateBillingDetailsForGuestBuyer(request: $request) {
     ...BillingDetailsFields
+  }
+}
+
+mutation ForgotPasswordStep2VerifyTokenSms($sms: String!, $tokenCode: String) {
+  forgotPasswordStep2VerifyTokenSms(sms: $sms, tokenCode: $tokenCode) {
+    message
+    actionToken
+  }
+}
+
+mutation ForgotPasswordStep3ChangeBySms(
+  $actionTokenValue: String!
+  $newPassword: String!
+  $confirmPassword: String!
+) {
+  forgotPasswordStep3ChangeBySms(
+    actionTokenValue: $actionTokenValue
+    newPassword: $newPassword
+    confirmPassword: $confirmPassword
+  ) {
+    message
   }
 }

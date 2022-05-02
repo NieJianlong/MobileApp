@@ -4566,6 +4566,13 @@ export type ForgotPasswordStep1SendNotificationEmailMutationVariables = Exact<{
 
 export type ForgotPasswordStep1SendNotificationEmailMutation = { __typename?: 'Mutation', forgotPasswordStep1SendNotificationEmail?: { __typename?: 'ForgotPasswordStep1Response', email?: string | null | undefined, phoneNumber?: string | null | undefined, message?: string | null | undefined } | null | undefined };
 
+export type ForgotPasswordStep1SendNotificationSmsMutationVariables = Exact<{
+  sms: Scalars['String'];
+}>;
+
+
+export type ForgotPasswordStep1SendNotificationSmsMutation = { __typename?: 'Mutation', forgotPasswordStep1SendNotificationSms?: { __typename?: 'ForgotPasswordStep1Response', email?: string | null | undefined, phoneNumber?: string | null | undefined, message?: string | null | undefined } | null | undefined };
+
 export type RegisterBuyerMutationVariables = Exact<{
   request: BuyerProfileRequestForCreate;
 }>;
@@ -4600,6 +4607,23 @@ export type UpdateBillingDetailsForGuestBuyerMutationVariables = Exact<{
 
 
 export type UpdateBillingDetailsForGuestBuyerMutation = { __typename?: 'Mutation', updateBillingDetailsForGuestBuyer?: { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined } | null | undefined };
+
+export type ForgotPasswordStep2VerifyTokenSmsMutationVariables = Exact<{
+  sms: Scalars['String'];
+  tokenCode?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type ForgotPasswordStep2VerifyTokenSmsMutation = { __typename?: 'Mutation', forgotPasswordStep2VerifyTokenSms?: { __typename?: 'ForgotPasswordStep2Response', message?: string | null | undefined, actionToken?: string | null | undefined } | null | undefined };
+
+export type ForgotPasswordStep3ChangeBySmsMutationVariables = Exact<{
+  actionTokenValue: Scalars['String'];
+  newPassword: Scalars['String'];
+  confirmPassword: Scalars['String'];
+}>;
+
+
+export type ForgotPasswordStep3ChangeBySmsMutation = { __typename?: 'Mutation', forgotPasswordStep3ChangeBySms?: { __typename?: 'ForgotPasswordStep3Response', message?: string | null | undefined } | null | undefined };
 
 export const AddressOrderFiledFragmentDoc = gql`
     fragment AddressOrderFiled on AddressResponse {
@@ -6407,6 +6431,41 @@ export function useForgotPasswordStep1SendNotificationEmailMutation(baseOptions?
 export type ForgotPasswordStep1SendNotificationEmailMutationHookResult = ReturnType<typeof useForgotPasswordStep1SendNotificationEmailMutation>;
 export type ForgotPasswordStep1SendNotificationEmailMutationResult = Apollo.MutationResult<ForgotPasswordStep1SendNotificationEmailMutation>;
 export type ForgotPasswordStep1SendNotificationEmailMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordStep1SendNotificationEmailMutation, ForgotPasswordStep1SendNotificationEmailMutationVariables>;
+export const ForgotPasswordStep1SendNotificationSmsDocument = gql`
+    mutation ForgotPasswordStep1SendNotificationSms($sms: String!) {
+  forgotPasswordStep1SendNotificationSms(sms: $sms) {
+    email
+    phoneNumber
+    message
+  }
+}
+    `;
+export type ForgotPasswordStep1SendNotificationSmsMutationFn = Apollo.MutationFunction<ForgotPasswordStep1SendNotificationSmsMutation, ForgotPasswordStep1SendNotificationSmsMutationVariables>;
+
+/**
+ * __useForgotPasswordStep1SendNotificationSmsMutation__
+ *
+ * To run a mutation, you first call `useForgotPasswordStep1SendNotificationSmsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useForgotPasswordStep1SendNotificationSmsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [forgotPasswordStep1SendNotificationSmsMutation, { data, loading, error }] = useForgotPasswordStep1SendNotificationSmsMutation({
+ *   variables: {
+ *      sms: // value for 'sms'
+ *   },
+ * });
+ */
+export function useForgotPasswordStep1SendNotificationSmsMutation(baseOptions?: Apollo.MutationHookOptions<ForgotPasswordStep1SendNotificationSmsMutation, ForgotPasswordStep1SendNotificationSmsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ForgotPasswordStep1SendNotificationSmsMutation, ForgotPasswordStep1SendNotificationSmsMutationVariables>(ForgotPasswordStep1SendNotificationSmsDocument, options);
+      }
+export type ForgotPasswordStep1SendNotificationSmsMutationHookResult = ReturnType<typeof useForgotPasswordStep1SendNotificationSmsMutation>;
+export type ForgotPasswordStep1SendNotificationSmsMutationResult = Apollo.MutationResult<ForgotPasswordStep1SendNotificationSmsMutation>;
+export type ForgotPasswordStep1SendNotificationSmsMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordStep1SendNotificationSmsMutation, ForgotPasswordStep1SendNotificationSmsMutationVariables>;
 export const RegisterBuyerDocument = gql`
     mutation RegisterBuyer($request: BuyerProfileRequestForCreate!) {
   registerBuyer(request: $request) {
@@ -6573,3 +6632,77 @@ export function useUpdateBillingDetailsForGuestBuyerMutation(baseOptions?: Apoll
 export type UpdateBillingDetailsForGuestBuyerMutationHookResult = ReturnType<typeof useUpdateBillingDetailsForGuestBuyerMutation>;
 export type UpdateBillingDetailsForGuestBuyerMutationResult = Apollo.MutationResult<UpdateBillingDetailsForGuestBuyerMutation>;
 export type UpdateBillingDetailsForGuestBuyerMutationOptions = Apollo.BaseMutationOptions<UpdateBillingDetailsForGuestBuyerMutation, UpdateBillingDetailsForGuestBuyerMutationVariables>;
+export const ForgotPasswordStep2VerifyTokenSmsDocument = gql`
+    mutation ForgotPasswordStep2VerifyTokenSms($sms: String!, $tokenCode: String) {
+  forgotPasswordStep2VerifyTokenSms(sms: $sms, tokenCode: $tokenCode) {
+    message
+    actionToken
+  }
+}
+    `;
+export type ForgotPasswordStep2VerifyTokenSmsMutationFn = Apollo.MutationFunction<ForgotPasswordStep2VerifyTokenSmsMutation, ForgotPasswordStep2VerifyTokenSmsMutationVariables>;
+
+/**
+ * __useForgotPasswordStep2VerifyTokenSmsMutation__
+ *
+ * To run a mutation, you first call `useForgotPasswordStep2VerifyTokenSmsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useForgotPasswordStep2VerifyTokenSmsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [forgotPasswordStep2VerifyTokenSmsMutation, { data, loading, error }] = useForgotPasswordStep2VerifyTokenSmsMutation({
+ *   variables: {
+ *      sms: // value for 'sms'
+ *      tokenCode: // value for 'tokenCode'
+ *   },
+ * });
+ */
+export function useForgotPasswordStep2VerifyTokenSmsMutation(baseOptions?: Apollo.MutationHookOptions<ForgotPasswordStep2VerifyTokenSmsMutation, ForgotPasswordStep2VerifyTokenSmsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ForgotPasswordStep2VerifyTokenSmsMutation, ForgotPasswordStep2VerifyTokenSmsMutationVariables>(ForgotPasswordStep2VerifyTokenSmsDocument, options);
+      }
+export type ForgotPasswordStep2VerifyTokenSmsMutationHookResult = ReturnType<typeof useForgotPasswordStep2VerifyTokenSmsMutation>;
+export type ForgotPasswordStep2VerifyTokenSmsMutationResult = Apollo.MutationResult<ForgotPasswordStep2VerifyTokenSmsMutation>;
+export type ForgotPasswordStep2VerifyTokenSmsMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordStep2VerifyTokenSmsMutation, ForgotPasswordStep2VerifyTokenSmsMutationVariables>;
+export const ForgotPasswordStep3ChangeBySmsDocument = gql`
+    mutation ForgotPasswordStep3ChangeBySms($actionTokenValue: String!, $newPassword: String!, $confirmPassword: String!) {
+  forgotPasswordStep3ChangeBySms(
+    actionTokenValue: $actionTokenValue
+    newPassword: $newPassword
+    confirmPassword: $confirmPassword
+  ) {
+    message
+  }
+}
+    `;
+export type ForgotPasswordStep3ChangeBySmsMutationFn = Apollo.MutationFunction<ForgotPasswordStep3ChangeBySmsMutation, ForgotPasswordStep3ChangeBySmsMutationVariables>;
+
+/**
+ * __useForgotPasswordStep3ChangeBySmsMutation__
+ *
+ * To run a mutation, you first call `useForgotPasswordStep3ChangeBySmsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useForgotPasswordStep3ChangeBySmsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [forgotPasswordStep3ChangeBySmsMutation, { data, loading, error }] = useForgotPasswordStep3ChangeBySmsMutation({
+ *   variables: {
+ *      actionTokenValue: // value for 'actionTokenValue'
+ *      newPassword: // value for 'newPassword'
+ *      confirmPassword: // value for 'confirmPassword'
+ *   },
+ * });
+ */
+export function useForgotPasswordStep3ChangeBySmsMutation(baseOptions?: Apollo.MutationHookOptions<ForgotPasswordStep3ChangeBySmsMutation, ForgotPasswordStep3ChangeBySmsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ForgotPasswordStep3ChangeBySmsMutation, ForgotPasswordStep3ChangeBySmsMutationVariables>(ForgotPasswordStep3ChangeBySmsDocument, options);
+      }
+export type ForgotPasswordStep3ChangeBySmsMutationHookResult = ReturnType<typeof useForgotPasswordStep3ChangeBySmsMutation>;
+export type ForgotPasswordStep3ChangeBySmsMutationResult = Apollo.MutationResult<ForgotPasswordStep3ChangeBySmsMutation>;
+export type ForgotPasswordStep3ChangeBySmsMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordStep3ChangeBySmsMutation, ForgotPasswordStep3ChangeBySmsMutationVariables>;

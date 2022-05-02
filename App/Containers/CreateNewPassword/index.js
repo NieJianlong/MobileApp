@@ -14,6 +14,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
 import NavigationService from "../../Navigation/NavigationService";
+import { useForgotPasswordStep3ChangeBySmsMutation } from "../../../generated/graphql";
 
 class CreateNewPassword extends Component {
   _isMounted = false;
@@ -147,38 +148,67 @@ function CreateNewPasswordScreen() {
   const navigation = useNavigation();
   const { dispatch } = useContext(AlertContext);
   const [createNewPsw] = useMutation(ForgotPasswordStep3ChangeByEmail);
+  const [createNewPswPhone] = useForgotPasswordStep3ChangeBySmsMutation();
   const reSetPsw = useCallback(
     (newPassword, confirmPassword) => {
-      createNewPsw({
-        variables: {
-          actionTokenValue: params.actionTokenValue,
-          newPassword,
-          confirmPassword,
-        },
-        onError: () => {
-          dispatch({
-            type: "changAlertState",
-            payload: {
-              visible: true,
-              message: "Failed to set password",
-              color: colors.error,
-              title: "Failed",
+      const requestParams = {
+        actionTokenValue: params.actionTokenValue,
+        newPassword,
+        confirmPassword,
+      };
+      params.isEmail
+        ? createNewPsw({
+            variables: requestParams,
+            onError: () => {
+              dispatch({
+                type: "changAlertState",
+                payload: {
+                  visible: true,
+                  message: "Failed to set password",
+                  color: colors.error,
+                  title: "Failed",
+                },
+              });
+            },
+            onCompleted: (res) => {
+              dispatch({
+                type: "changAlertState",
+                payload: {
+                  visible: true,
+                  message: "You have successfully set the password",
+                  color: colors.success,
+                  title: "Success",
+                },
+              });
+              NavigationService.navigate("LoginScreen");
+            },
+          })
+        : createNewPswPhone({
+            variables: requestParams,
+            onError: () => {
+              dispatch({
+                type: "changAlertState",
+                payload: {
+                  visible: true,
+                  message: "Failed to set password",
+                  color: colors.error,
+                  title: "Failed",
+                },
+              });
+            },
+            onCompleted: (res) => {
+              dispatch({
+                type: "changAlertState",
+                payload: {
+                  visible: true,
+                  message: "You have successfully set the password",
+                  color: colors.success,
+                  title: "Success",
+                },
+              });
+              NavigationService.navigate("LoginScreen");
             },
           });
-        },
-        onCompleted: (res) => {
-          dispatch({
-            type: "changAlertState",
-            payload: {
-              visible: true,
-              message: "You have successfully set the password",
-              color: colors.success,
-              title: "Success",
-            },
-          });
-          NavigationService.navigate("LoginScreen");
-        },
-      });
     },
     [createNewPsw, dispatch, params.actionTokenValue]
   );

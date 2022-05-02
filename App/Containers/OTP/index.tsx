@@ -27,6 +27,7 @@ import { AlertContext } from "../Root/GlobalContext";
 import {
   useBuyerProfileByUserIdLazyQuery,
   useForgotPasswordStep1SendNotificationEmailMutation,
+  useForgotPasswordStep2VerifyTokenSmsMutation,
   useSendOtpCodeMutation,
   useValidateCodeMutation,
   ValidationType,
@@ -69,6 +70,8 @@ function OTPScreen(props) {
   });
 
   const [resetPasswordStep2] = useMutation(ForgotPasswordStep2VerifyTokenEmail);
+  const [resetPasswordStep2Sms] =
+    useForgotPasswordStep2VerifyTokenSmsMutation();
   const [forgetPasswordResendCode] =
     useForgotPasswordStep1SendNotificationEmailMutation();
   const [resendCode] = useSendOtpCodeMutation();
@@ -405,32 +408,61 @@ function OTPScreen(props) {
           onPress={() => {
             setLoading({ show: true });
             if (params.fromScreen === "ForgotPasswordScreen") {
-              resetPasswordStep2({
-                variables: { email: params.phone, tokenCode: otpCode },
-                onCompleted: (res) => {
-                  setLoading({ show: false });
-                  NavigationService.navigate("CreateNewPasswordScreen", {
-                    actionTokenValue:
-                      res.forgotPasswordStep2VerifyTokenEmail.actionToken,
-                  });
-                },
-                //等待修改
-                onError: () => {
-                  setLoading({ show: false });
-                  dispatch({
-                    type: "changAlertState",
-                    payload: {
-                      visible: true,
-                      message: "Invalid verification code",
-                      color: colors.error,
-                      title: "Failed",
+              isEmail
+                ? resetPasswordStep2({
+                    variables: { email: params.phone, tokenCode: otpCode },
+                    onCompleted: (res) => {
+                      setLoading({ show: false });
+                      NavigationService.navigate("CreateNewPasswordScreen", {
+                        actionTokenValue:
+                          res.forgotPasswordStep2VerifyTokenEmail.actionToken,
+                        isEmail,
+                      });
+                    },
+                    //等待修改
+                    onError: () => {
+                      setLoading({ show: false });
+                      dispatch({
+                        type: "changAlertState",
+                        payload: {
+                          visible: true,
+                          message: "Invalid verification code",
+                          color: colors.error,
+                          title: "Failed",
+                        },
+                      });
+                      // NavigationService.navigate("CreateNewPasswordScreen", {
+                      //   actionTokenValue: "error",
+                      // });
+                    },
+                  })
+                : resetPasswordStep2Sms({
+                    variables: { sms: params.phone, tokenCode: otpCode },
+                    onCompleted: (res) => {
+                      setLoading({ show: false });
+                      NavigationService.navigate("CreateNewPasswordScreen", {
+                        actionTokenValue:
+                          res?.forgotPasswordStep2VerifyTokenSms?.actionToken,
+                        isEmail,
+                      });
+                    },
+                    //等待修改
+                    onError: () => {
+                      setLoading({ show: false });
+                      dispatch({
+                        type: "changAlertState",
+                        payload: {
+                          visible: true,
+                          message: "Invalid verification code",
+                          color: colors.error,
+                          title: "Failed",
+                        },
+                      });
+                      // NavigationService.navigate("CreateNewPasswordScreen", {
+                      //   actionTokenValue: "error",
+                      // });
                     },
                   });
-                  // NavigationService.navigate("CreateNewPasswordScreen", {
-                  //   actionTokenValue: "error",
-                  // });
-                },
-              });
             } else {
               onValidate();
             }

@@ -210,7 +210,13 @@ function CreateNewPasswordScreen() {
             },
           });
     },
-    [createNewPsw, dispatch, params.actionTokenValue]
+    [
+      createNewPsw,
+      createNewPswPhone,
+      dispatch,
+      params.actionTokenValue,
+      params.isEmail,
+    ]
   );
 
   return <CreateNewPassword onGetCode={reSetPsw} navigation={navigation} />;

@@ -99,19 +99,7 @@ function SelectDeliveryAddress(props) {
             left: 0,
             paddingHorizontal: AppConfig.paddingHorizontal,
           }}
-        >
-          {/* <Button
-            onPress={(callback) => {
-              NavigationService.navigate("AddNewAddressScreen", {
-                callback,
-                title: "Add new address",
-              });
-            }}
-            textColor="white"
-            text="Add new address"
-            backgroundColor={colors.grey80}
-          /> */}
-        </SafeAreaView>
+        ></SafeAreaView>
       </SafeAreaView>
     </View>
   );

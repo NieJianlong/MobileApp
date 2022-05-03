@@ -16,7 +16,15 @@ import {
   useForgotPasswordStep1SendNotificationEmailMutation,
   useForgotPasswordStep1SendNotificationSmsMutation,
 } from "../../../generated/graphql";
-
+const validateEmail = (email) => {
+  const reg =
+    /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/;
+  return reg.test(email);
+};
+const validatePhone = (phone) => {
+  const reg = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+  return reg.test(phone);
+};
 class ForgotPassword extends Component {
   _isMounted = false;
 
@@ -25,6 +33,7 @@ class ForgotPassword extends Component {
     this.state = {
       email: "",
       keyboardHeight: 0,
+      disable: false,
     };
 
     Keyboard.addListener("keyboardWillShow", this._keyboardWillShow);
@@ -55,34 +64,20 @@ class ForgotPassword extends Component {
     });
   };
 
-  validateEmail = (email) => {
-    const reg =
-      /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/;
-    return reg.test(email);
-  };
-
-  validatePhone = (phone) => {
-    const reg = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-    return reg.test(phone);
-  };
-
   renderAction() {
     return (
       <View>
         <Button
-          disabled={
-            !this.validateEmail(this.state.email) &&
-            !this.validatePhone(this.state.email)
-          }
+          disabled={this.state.email.length === 0 || this.state.disable}
           onPress={() => {
-            if (this.validateEmail(this.state.email)) {
+            if (validateEmail(this.state.email)) {
               /**
                * add router parameter here for Login screen to show EMS alert
                */
               // this.props.navigation.navigate('LoginScreen')
               this.props.onGetCode(this.state.email, true);
               //NavigationService.navigate("LoginScreen", { showEms: true });
-            } else if (this.validatePhone(this.state.email)) {
+            } else if (validatePhone(this.state.email)) {
               /**
                * To-Do need clarity for OTP flow
                */
@@ -132,7 +127,10 @@ class ForgotPassword extends Component {
               style={{ marginTop: vs(12) }}
               placeholder={"Email or phone number"}
               onChangeText={(text) => {
-                this.setState({ email: text });
+                this.setState({
+                  email: text,
+                  disable: !validateEmail(text) && !validatePhone(text),
+                });
               }}
             />
 

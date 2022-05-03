@@ -70,6 +70,7 @@ function RootContainer() {
     },
     dispatch,
   ] = useReducer(reducer, initialState);
+  const { setShowMap } = useMapScreen();
   const {
     showSheet,
     children,
@@ -108,6 +109,7 @@ function RootContainer() {
           sheetTitle: "",
         },
       });
+      setShowMap({ mapVisible: false });
       return false;
     });
   }, []);

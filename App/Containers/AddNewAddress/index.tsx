@@ -47,7 +47,7 @@ function AddNewAddress() {
     variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
   });
 
-  const [open, setOpen] = useState();
+  const [open, setOpen] = useState(false);
 
   const [asDefault, setAsDefault] = useState(
     currentAddress?.defaultAddress || false
@@ -219,10 +219,12 @@ function AddNewAddress() {
                           }}
                           render={({ field: { onChange, value } }) => (
                             <DropDownPicker
-                              listMode="SCROLLVIEW"
+                              listMode="MODAL"
                               placeholder="State (Province)*"
                               value={value}
+                              searchPlaceholder="Search……"
                               open={open}
+                              searchable={true}
                               setOpen={setOpen}
                               items={items}
                               setValue={onChange}

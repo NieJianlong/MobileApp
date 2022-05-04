@@ -171,9 +171,9 @@ export default function AddressBar() {
         <View style={styles.row}>
           <Image source={Images.locationMed} style={styles.icLocation} />
           <Text style={styles.heading5Regular}>Deliver to - {addrLine1}</Text>
-          <View style={styles.areaContainer}>
+          {/* <View style={styles.areaContainer}>
             <Text style={styles.heading6Bold}>{addrLine2}</Text>
-          </View>
+          </View> */}
         </View>
         <Image source={Images.arrow_left} style={styles.icArrowDown} />
       </View>

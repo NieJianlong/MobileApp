@@ -33,7 +33,6 @@ class Button extends Component {
         style={[
           styles.container,
           { backgroundColor: disabled ? "grey" : backgroundColor },
-          ,
           // disabled && { opacity: 0.25 },
           style,
         ]}

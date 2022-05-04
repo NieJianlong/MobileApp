@@ -159,7 +159,7 @@ function index(props) {
                 },
               ]}
             >
-              {item.value}
+              ₹{item.value}
             </Text>
           </View>
         );

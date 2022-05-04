@@ -12,6 +12,7 @@ import {
 import { useFocusEffect } from "@react-navigation/core";
 import Addresses from "./Addresses";
 import { AlertContext } from "../../Root/GlobalContext";
+import { t } from "react-native-tailwindcss";
 /**
  * @description:Display my address, list of my payment methods, display bill detail
  * @param {*} item Menu Item with a special configuration
@@ -69,7 +70,12 @@ export default function AddressList({ dispatch, xIndex }) {
   }, [refreshData, xIndex]);
   return (
     <View style={{ flex: 1 }}>
-      <Addresses data={data?.getBuyerAddressByType || []} refetch={refetch} />
+      <Addresses
+        data={data?.getBuyerAddressByType || []}
+        refetch={refetch}
+        style={[t.pX4]}
+      />
+
       {data?.getBuyerAddressByType?.length > 0 && (
         <SafeAreaView
           style={{

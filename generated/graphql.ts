@@ -4625,6 +4625,13 @@ export type ForgotPasswordStep3ChangeBySmsMutationVariables = Exact<{
 
 export type ForgotPasswordStep3ChangeBySmsMutation = { __typename?: 'Mutation', forgotPasswordStep3ChangeBySms?: { __typename?: 'ForgotPasswordStep3Response', message?: string | null | undefined } | null | undefined };
 
+export type UpdateBuyerProfileMutationVariables = Exact<{
+  request: BuyerProfileRequest;
+}>;
+
+
+export type UpdateBuyerProfileMutation = { __typename?: 'Mutation', updateBuyerProfile?: { __typename?: 'BuyerProfileResponse', buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined } | null | undefined };
+
 export const AddressOrderFiledFragmentDoc = gql`
     fragment AddressOrderFiled on AddressResponse {
   addressId
@@ -6706,3 +6713,40 @@ export function useForgotPasswordStep3ChangeBySmsMutation(baseOptions?: Apollo.M
 export type ForgotPasswordStep3ChangeBySmsMutationHookResult = ReturnType<typeof useForgotPasswordStep3ChangeBySmsMutation>;
 export type ForgotPasswordStep3ChangeBySmsMutationResult = Apollo.MutationResult<ForgotPasswordStep3ChangeBySmsMutation>;
 export type ForgotPasswordStep3ChangeBySmsMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordStep3ChangeBySmsMutation, ForgotPasswordStep3ChangeBySmsMutationVariables>;
+export const UpdateBuyerProfileDocument = gql`
+    mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
+  updateBuyerProfile(request: $request) {
+    buyerId
+    firstName
+    lastName
+    email
+    phoneNumber
+  }
+}
+    `;
+export type UpdateBuyerProfileMutationFn = Apollo.MutationFunction<UpdateBuyerProfileMutation, UpdateBuyerProfileMutationVariables>;
+
+/**
+ * __useUpdateBuyerProfileMutation__
+ *
+ * To run a mutation, you first call `useUpdateBuyerProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBuyerProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBuyerProfileMutation, { data, loading, error }] = useUpdateBuyerProfileMutation({
+ *   variables: {
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useUpdateBuyerProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBuyerProfileMutation, UpdateBuyerProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateBuyerProfileMutation, UpdateBuyerProfileMutationVariables>(UpdateBuyerProfileDocument, options);
+      }
+export type UpdateBuyerProfileMutationHookResult = ReturnType<typeof useUpdateBuyerProfileMutation>;
+export type UpdateBuyerProfileMutationResult = Apollo.MutationResult<UpdateBuyerProfileMutation>;
+export type UpdateBuyerProfileMutationOptions = Apollo.BaseMutationOptions<UpdateBuyerProfileMutation, UpdateBuyerProfileMutationVariables>;

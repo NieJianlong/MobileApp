@@ -34,14 +34,19 @@ import { ApplicationStyles } from "../../Themes";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ImagePicker from "react-native-image-crop-picker";
 import ActionSheet from "react-native-actionsheet";
-import { useRoute } from "@react-navigation/core";
-import { useMutation, useQuery } from "@apollo/client";
-import { UPDATE_BUYER_PROFILE } from "../../Apollo/mutations/mutations_user";
+import { useQuery } from "@apollo/client";
 import { AlertContext } from "../Root/GlobalContext";
 import { FIND_BUYER_PROFILE } from "../../Apollo/queries/queries_user";
-import { useDeleteBuyerProfileMutation } from "../../../generated/graphql";
+import { useUpdateBuyerProfileMutation } from "../../../generated/graphql";
 import { isEmpty, omit } from "lodash";
-import { ActivityIndicator } from "react-native-paper";
+import {
+  getLocalStorageValue,
+  LOCAL_STORAGE_USER_NAME,
+  LOCAL_STORAGE_USER_PASSWORD,
+  LOCAL_STORAGE_USER_PROFILE,
+} from "../../Apollo/local-storage";
+import { runTokenFlow } from "../../Apollo/jwt-request";
+import jwt_decode from "jwt-decode";
 
 /**
  * @description:User edit page
@@ -69,23 +74,7 @@ function UserEditProfile(props) {
   useEffect(() => {
     refetch && refetch();
   }, []);
-  // if (!userProfile) {
-  //   return (
-  //     <ActivityIndicator
-  //       style={{
-  //         color: colors.primary,
-  //         margin: 10,
-  //       }}
-  //       size={"large"}
-  //       color={"red"}
-  //       animating={true}
-  //     />
-  //   );
-  // }
-  // const { firstName, lastName, email, phoneNumber } = userProfile?.buyerProfile;
-  // const {
-  //   params: { firstName, lastName, email, phoneNumber },
-  // } = useRoute();
+
   const { dispatch } = useContext(AlertContext);
 
   const [showBottom, setShowBottom] = useState(true);
@@ -133,7 +122,7 @@ function UserEditProfile(props) {
     email: newEmail,
     phoneNumber: "+91" + newPhoneNumber,
   };
-  const [updateProfile, { data }] = useMutation(UPDATE_BUYER_PROFILE, {
+  const [updateProfile, { data }] = useUpdateBuyerProfileMutation({
     variables: {
       request: !isEmpty(newPhoneNumber)
         ? BuyerProfileRequest
@@ -199,6 +188,22 @@ function UserEditProfile(props) {
       setNewAvatar(image[0]);
     });
   }, []);
+
+  // const autoSignIn = useCallback(async () => {
+  //   //get username and possword from localStorage
+  //   const username = await getLocalStorageValue(LOCAL_STORAGE_USER_NAME);
+  //   const password = await getLocalStorageValue(LOCAL_STORAGE_USER_PASSWORD);
+  //   if (username && password) {
+  //     //just for test
+  //     try {
+  //       const { data } = await runTokenFlow({ username, password });
+  //       let access_token = data.access_token;
+  //       let decoded = jwt_decode(access_token);
+  //       global.access_token = access_token;
+  //       global.userProfileId = decoded.sub;
+  //     } catch (error) {}
+  //   }
+  // }, [getBuyerId]);
   return (
     <View style={styles.container}>
       <SafeAreaView>

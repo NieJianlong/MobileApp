@@ -76,17 +76,17 @@ export const UPDATE_USER_PROFILE = gql`
 //   }
 // `;
 
-export const UPDATE_BUYER_PROFILE = gql`
-  mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
-    updateBuyerProfile(request: $request) {
-      buyerId
-      firstName
-      lastName
-      email
-      phoneNumber
-    }
-  }
-`;
+// export const UPDATE_BUYER_PROFILE = gql`
+//   mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
+//     updateBuyerProfile(request: $request) {
+//       buyerId
+//       firstName
+//       lastName
+//       email
+//       phoneNumber
+//     }
+//   }
+// `;
 
 export const CREATE_GUEST_BUYER = gql`
   mutation CreateGuestBuyer($request: BuyerProfileRequestForCreate!) {

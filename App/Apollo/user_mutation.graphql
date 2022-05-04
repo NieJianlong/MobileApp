@@ -97,3 +97,8 @@ mutation ForgotPasswordStep3ChangeBySms(
     message
   }
 }
+mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
+  updateBuyerProfile(request: $request) {
+    ...BuyerProfileResponseFields
+  }
+}

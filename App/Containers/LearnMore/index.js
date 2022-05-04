@@ -13,6 +13,7 @@ import { s, ScaledSheet } from "react-native-size-matters";
 import { ApplicationStyles, Colors } from "../../Themes";
 import Explanatory from "./explanatory";
 import QuickGuide from "./quickguide";
+import { t } from "react-native-tailwindcss";
 
 export default function LearnMore(props) {
   const [index, setIndex] = useState(1);
@@ -32,38 +33,52 @@ export default function LearnMore(props) {
           <TouchableOpacity
             onPress={() => {
               setIndex(0);
-            }}
-          >
-            <View
-              style={[
-                styles.videoView,
-                index === 0
-                  ? { backgroundColor: Colors.secondary00 }
-                  : { backgroundColor: Colors.white },
-              ]}
-            >
-              <Text>{"EXPLANATORY VIDEO"}</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setIndex(1);
               console.log("index", index);
             }}
           >
             <View
               style={[
                 styles.guideView,
+                index === 0
+                  ? { backgroundColor: Colors.secondary00 }
+                  : { backgroundColor: Colors.white },
+              ]}
+            >
+              <Text
+                style={[
+                  t.fontPrimary,
+                  index === 0 ? t.textWhite : t.textGray600,
+                ]}
+              >
+                {"QUICK GUIDE"}
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setIndex(1);
+            }}
+          >
+            <View
+              style={[
+                styles.videoView,
                 index === 1
                   ? { backgroundColor: Colors.secondary00 }
                   : { backgroundColor: Colors.white },
               ]}
             >
-              <Text>{"QUICK GUIDE"}</Text>
+              <Text
+                style={[
+                  t.fontPrimary,
+                  index === 1 ? t.textWhite : t.textGray600,
+                ]}
+              >
+                {"EXPLANATORY VIDEO"}
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
-        {index === 0 ? <Explanatory /> : <QuickGuide />}
+        {index === 0 ? <QuickGuide /> : <Explanatory />}
       </SafeAreaView>
     </View>
   );

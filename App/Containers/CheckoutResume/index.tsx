@@ -35,7 +35,10 @@ import PubSub from "pubsub-js";
 import useRealm from "../../hooks/useRealm";
 import AddBillingDetail from "../../hooks/useBillingDetail";
 import { ComeFromType, usePaymentConfigration } from "../../Utils/utils";
-import { useGetBuyerSalamiWalletBalanceQuery } from "../../../generated/graphql";
+import {
+  DeliveryOption,
+  useGetBuyerSalamiWalletBalanceQuery,
+} from "../../../generated/graphql";
 import { pick } from "lodash";
 //orderStatus：1,completed
 function CheckoutResume(props) {
@@ -54,6 +57,7 @@ function CheckoutResume(props) {
     let currentBilling = 0;
     let originalBilling = 0;
     let deliveryFess = 0;
+    debugger;
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
       let itemAvailble = true;
@@ -62,8 +66,10 @@ function CheckoutResume(props) {
         itemAvailble = i?.isAvailable;
       }
       if (itemAvailble) {
-        if (element?.deliveryOption === "COURIER_DELIVERY") {
-          deliveryFess = element.courierShippingFee + deliveryFess;
+        if (
+          element?.product?.deliveryOption === DeliveryOption.CourierDelivery
+        ) {
+          deliveryFess = element.product.courierShippingFee + deliveryFess;
         }
         if (element.variant) {
           originalBilling =

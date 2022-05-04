@@ -21,13 +21,14 @@ export default function Addresses({
   needempty = true,
   onPress,
   isInBottomSheet = false,
+  style,
 }) {
   const { width } = useWindowDimensions();
   const CustomeFlatList = isInBottomSheet ? GHFlatList : FlatList;
   return (
     <CustomeFlatList
       data={data}
-      contentContainerStyle={[t.pB16]}
+      contentContainerStyle={[t.pB16, style]}
       showsVerticalScrollIndicator={false}
       style={[{ height: data ? 80 * data?.length : 200 }]}
       ListEmptyComponent={

@@ -16,7 +16,7 @@ import {
 import NavigationService from "../../../Navigation/NavigationService";
 import { vs } from "react-native-size-matters";
 import { Images } from "../../../Themes";
-import { useQuery, useReactiveVar } from "@apollo/client";
+import { useReactiveVar } from "@apollo/client";
 import { localCartVar, userProfileVar } from "../../../Apollo/cache";
 import styles from "../styles";
 import {
@@ -24,6 +24,7 @@ import {
   useGetPreferredCategoriesQuery,
 } from "../../../../generated/graphql";
 import { ActivityIndicator } from "react-native-paper";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Index(props) {
   const { textToSearch = "" } = props;
@@ -57,6 +58,12 @@ export default function Index(props) {
   });
 
   const { width, height } = useWindowDimensions();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
   return loading ? (
     <SafeAreaView>
       <ActivityIndicator color={colors.primary} />
@@ -65,7 +72,7 @@ export default function Index(props) {
     <View style={{ height, width }}>
       <CollapsibleHeaderTabView
         prerenderingSiblingsNumber={1}
-        style={[{ height, width }]}
+        style={[{ height, width: width }]}
         makeHeaderHeight={() => vs(50)}
         tabBarActiveTextColor={colors.primary}
         renderTabBar={(mprops) => {
@@ -78,7 +85,8 @@ export default function Index(props) {
                 }}
                 inactiveTextColor={colors.grey60}
                 activeTextColor={colors.primary}
-                style={{ borderWidth: 0, paddingRight: 50 }}
+                style={{ borderWidth: 0 }}
+                tabsContainerStyle={{ paddingRight: 60 }}
                 textStyle={{
                   fontFamily: fonts.primary,
                   width: "100%",

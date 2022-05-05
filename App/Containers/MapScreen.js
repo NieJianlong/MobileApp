@@ -81,8 +81,48 @@ const MapScreen = () => {
 
   const _openLocationModal = () => {
     RNGooglePlaces.openAutocompleteModal()
-      .then((place) => {
-        setLocation({ location: place.location, address: place.address });
+      .then((results) => {
+        if (results && results) {
+          const houseNo = results.addressComponents.find((item) =>
+            item.types.includes("premise")
+          );
+          const street = results.addressComponents.find(
+            (item) =>
+              item.types.includes("neighborhood") ||
+              item.types.includes("route")
+          );
+          const city = results.addressComponents.find((item) =>
+            item.types.includes("locality")
+          );
+          const state = results.addressComponents.find((item) =>
+            item.types.includes("administrative_area_level_1")
+          );
+          const country = results.addressComponents.find((item) =>
+            item.types.includes("country")
+          );
+
+          const address = results.address;
+          const post_code = results.addressComponents.find((item) =>
+            item.types.includes("postal_code")
+          );
+
+          const newLocation = {
+            address: address || "",
+            city: city ? city.name : "",
+            state: state ? state.name : "",
+            street: street ? street.name : "",
+            houseNo: houseNo ? houseNo.name : "",
+            country: country ? country.name : "",
+            post_code: post_code ? post_code.name : "",
+            location: {
+              latitude: results?.location?.latitude,
+              longitude: results?.location?.longitude,
+            },
+          };
+          debugger;
+          setLocation(newLocation);
+        }
+        // setLocation({ location: place.location, address: place.address });
       })
       .catch((error) => console.log(error.message)); // error is a Javascript Error object
   };

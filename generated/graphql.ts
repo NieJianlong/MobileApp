@@ -871,6 +871,7 @@ export type Mutation = {
   updateDeliveryAddressToOnlineStore?: Maybe<DeliveryAddressToOnlineStoreResponse>;
   updateListingStatus: ProductListing;
   updateNotification?: Maybe<NotificationResponse>;
+  updateOrderPaymentStatus: Scalars['Boolean'];
   updatePaymentDetail?: Maybe<PaymentDetailResponse>;
   updatePreference?: Maybe<PreferenceResponse>;
   updateProduct: SellerProductDetailView;
@@ -1645,6 +1646,12 @@ export type MutationUpdateNotificationArgs = {
 
 
 /** MUTATIONS */
+export type MutationUpdateOrderPaymentStatusArgs = {
+  request: UpdateOrderPaymentStatusRequest;
+};
+
+
+/** MUTATIONS */
 export type MutationUpdatePaymentDetailArgs = {
   request: PaymentDetailRequest;
 };
@@ -1908,6 +1915,7 @@ export type OrderItemResponse = {
   itemPrice?: Maybe<Scalars['Float']>;
   listingId?: Maybe<Scalars['ID']>;
   orderItemId?: Maybe<Scalars['ID']>;
+  orderItemNumber?: Maybe<Scalars['String']>;
   quantity?: Maybe<Scalars['Int']>;
   sellerId?: Maybe<Scalars['ID']>;
   taxPercentage?: Maybe<Scalars['Float']>;
@@ -2123,6 +2131,7 @@ export type Product = {
   id: Scalars['ID'];
   keywords?: Maybe<Array<Maybe<Scalars['String']>>>;
   longName?: Maybe<Scalars['String']>;
+  productNumber?: Maybe<Scalars['String']>;
   productStatus: ProductStatus;
   productType?: Maybe<Scalars['String']>;
   shortName: Scalars['String'];
@@ -2174,6 +2183,7 @@ export type ProductListing = {
   minSoldQuantity: Scalars['Int'];
   openUntil: Scalars['Date'];
   product: Product;
+  productListingNumber?: Maybe<Scalars['String']>;
   productListingStatus: ProductListingStatus;
   startDate: Scalars['DateTime'];
   store: Store;
@@ -2245,6 +2255,7 @@ export type ProductListingView = {
   listingId?: Maybe<Scalars['String']>;
   listingVariants?: Maybe<Array<Maybe<ListingVariantView>>>;
   longName?: Maybe<Scalars['String']>;
+  minQtyPerCart?: Maybe<Scalars['Int']>;
   minSoldQuantity?: Maybe<Scalars['Int']>;
   noOfItemsInStock?: Maybe<Scalars['Int']>;
   noOfOrderedItems?: Maybe<Scalars['Int']>;
@@ -3411,6 +3422,7 @@ export type SellerListingDetailView = {
   courierDelivery?: Maybe<CourierDeliveryDetailView>;
   deliveryOption: DeliveryOption;
   listingId: Scalars['ID'];
+  listingNumber?: Maybe<Scalars['String']>;
   minSoldQuantity?: Maybe<Scalars['Int']>;
   openUntil?: Maybe<Scalars['Date']>;
   product: SellerProductDetailView;
@@ -3492,16 +3504,16 @@ export type SellerListingStore = {
 
 export type SellerListingVariant = {
   __typename?: 'SellerListingVariant';
-  defaultVariant: Scalars['Boolean'];
+  defaultVariant?: Maybe<Scalars['Boolean']>;
   itemsAvailable: Scalars['Int'];
   itemsInStock: Scalars['Int'];
   itemsSold: Scalars['Int'];
   options?: Maybe<Array<Maybe<KeyValuePair>>>;
   photoUrl?: Maybe<Scalars['String']>;
-  priceId: Scalars['ID'];
+  priceId?: Maybe<Scalars['ID']>;
   retailPrice: Scalars['Float'];
   sellerSku?: Maybe<Scalars['String']>;
-  variantId: Scalars['ID'];
+  variantId?: Maybe<Scalars['ID']>;
   wholeSalePrice: Scalars['Float'];
 };
 
@@ -3512,6 +3524,7 @@ export type SellerListingView = {
   daysLeft?: Maybe<Scalars['Int']>;
   discountPercentage?: Maybe<Scalars['Float']>;
   listingId: Scalars['ID'];
+  listingNumber?: Maybe<Scalars['String']>;
   listingStatus: ProductListingStatus;
   mainPhotoUrl?: Maybe<Scalars['String']>;
   minSoldQuantity?: Maybe<Scalars['Int']>;
@@ -3632,6 +3645,7 @@ export type SellerProductDetailView = {
   mainPhotoUrl?: Maybe<Scalars['String']>;
   price?: Maybe<SellerProductPrice>;
   productId: Scalars['ID'];
+  productNumber?: Maybe<Scalars['String']>;
   productStatus?: Maybe<ProductStatus>;
   productType?: Maybe<Scalars['String']>;
   returnPolicy: SellerReturnPolicy;
@@ -4130,6 +4144,7 @@ export type StoreResponse = {
 export enum StoreSort {
   City = 'CITY',
   Created = 'CREATED',
+  Date = 'DATE',
   Name = 'NAME'
 }
 
@@ -4153,6 +4168,11 @@ export type TrackOrderItemResponse = {
   sellerDirectDelivery?: Maybe<SellerDirectDeliveryResponse>;
   sellerLocation?: Maybe<SellerLocationPickupResponse>;
   shippingDetails?: Maybe<ShippingDetailsResponse>;
+};
+
+export type UpdateOrderPaymentStatusRequest = {
+  orderId: Scalars['ID'];
+  paymentStatus: OrderItemHistoryEventType;
 };
 
 export type UserProfileResponse = {
@@ -4538,6 +4558,20 @@ export type GetBuyerDefaultAddressByBuyerIdQueryVariables = Exact<{
 
 export type GetBuyerDefaultAddressByBuyerIdQuery = { __typename?: 'Query', getBuyerDefaultAddressByBuyerId?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined };
 
+export type DeliveryAddressForBuyerQueryVariables = Exact<{
+  buyerId: Scalars['ID'];
+}>;
+
+
+export type DeliveryAddressForBuyerQuery = { __typename?: 'Query', deliveryAddressForBuyer?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined };
+
+export type DeliveryAddressForGuestBuyerQueryVariables = Exact<{
+  buyerId: Scalars['ID'];
+}>;
+
+
+export type DeliveryAddressForGuestBuyerQuery = { __typename?: 'Query', deliveryAddressForGuestBuyer?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined };
+
 export type DeleteBuyerProfileMutationVariables = Exact<{
   buyerId: Scalars['ID'];
 }>;
@@ -4630,7 +4664,7 @@ export type UpdateBuyerProfileMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBuyerProfileMutation = { __typename?: 'Mutation', updateBuyerProfile?: { __typename?: 'BuyerProfileResponse', buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined } | null | undefined };
+export type UpdateBuyerProfileMutation = { __typename?: 'Mutation', updateBuyerProfile?: { __typename?: 'BuyerProfileResponse', userId?: string | null | undefined, buyerId?: string | null | undefined, userName?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, userType?: UserType | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, oneClickPurchaseOn?: boolean | null | undefined, guestBuyer?: boolean | null | undefined, geoLocation?: string | null | undefined, country?: string | null | undefined, languages?: Array<string | null | undefined> | null | undefined, currencies?: Array<string | null | undefined> | null | undefined, applicationSettings?: string | null | undefined, categoryPreferences?: Array<string | null | undefined> | null | undefined, productPreferences?: Array<string | null | undefined> | null | undefined, sellerPreferences?: Array<string | null | undefined> | null | undefined, refundSalamiCredit?: number | null | undefined, bonusSalamiCredit?: number | null | undefined, bonusSalamiCreditExpire?: any | null | undefined, walletId?: string | null | undefined, billingDetails?: { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined };
 
 export const AddressOrderFiledFragmentDoc = gql`
     fragment AddressOrderFiled on AddressResponse {
@@ -6304,6 +6338,76 @@ export function useGetBuyerDefaultAddressByBuyerIdLazyQuery(baseOptions?: Apollo
 export type GetBuyerDefaultAddressByBuyerIdQueryHookResult = ReturnType<typeof useGetBuyerDefaultAddressByBuyerIdQuery>;
 export type GetBuyerDefaultAddressByBuyerIdLazyQueryHookResult = ReturnType<typeof useGetBuyerDefaultAddressByBuyerIdLazyQuery>;
 export type GetBuyerDefaultAddressByBuyerIdQueryResult = Apollo.QueryResult<GetBuyerDefaultAddressByBuyerIdQuery, GetBuyerDefaultAddressByBuyerIdQueryVariables>;
+export const DeliveryAddressForBuyerDocument = gql`
+    query DeliveryAddressForBuyer($buyerId: ID!) {
+  deliveryAddressForBuyer(buyerId: $buyerId) {
+    ...AddressOrderFiled
+  }
+}
+    ${AddressOrderFiledFragmentDoc}`;
+
+/**
+ * __useDeliveryAddressForBuyerQuery__
+ *
+ * To run a query within a React component, call `useDeliveryAddressForBuyerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDeliveryAddressForBuyerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDeliveryAddressForBuyerQuery({
+ *   variables: {
+ *      buyerId: // value for 'buyerId'
+ *   },
+ * });
+ */
+export function useDeliveryAddressForBuyerQuery(baseOptions: Apollo.QueryHookOptions<DeliveryAddressForBuyerQuery, DeliveryAddressForBuyerQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DeliveryAddressForBuyerQuery, DeliveryAddressForBuyerQueryVariables>(DeliveryAddressForBuyerDocument, options);
+      }
+export function useDeliveryAddressForBuyerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DeliveryAddressForBuyerQuery, DeliveryAddressForBuyerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DeliveryAddressForBuyerQuery, DeliveryAddressForBuyerQueryVariables>(DeliveryAddressForBuyerDocument, options);
+        }
+export type DeliveryAddressForBuyerQueryHookResult = ReturnType<typeof useDeliveryAddressForBuyerQuery>;
+export type DeliveryAddressForBuyerLazyQueryHookResult = ReturnType<typeof useDeliveryAddressForBuyerLazyQuery>;
+export type DeliveryAddressForBuyerQueryResult = Apollo.QueryResult<DeliveryAddressForBuyerQuery, DeliveryAddressForBuyerQueryVariables>;
+export const DeliveryAddressForGuestBuyerDocument = gql`
+    query DeliveryAddressForGuestBuyer($buyerId: ID!) {
+  deliveryAddressForGuestBuyer(buyerId: $buyerId) {
+    ...AddressOrderFiled
+  }
+}
+    ${AddressOrderFiledFragmentDoc}`;
+
+/**
+ * __useDeliveryAddressForGuestBuyerQuery__
+ *
+ * To run a query within a React component, call `useDeliveryAddressForGuestBuyerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDeliveryAddressForGuestBuyerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDeliveryAddressForGuestBuyerQuery({
+ *   variables: {
+ *      buyerId: // value for 'buyerId'
+ *   },
+ * });
+ */
+export function useDeliveryAddressForGuestBuyerQuery(baseOptions: Apollo.QueryHookOptions<DeliveryAddressForGuestBuyerQuery, DeliveryAddressForGuestBuyerQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DeliveryAddressForGuestBuyerQuery, DeliveryAddressForGuestBuyerQueryVariables>(DeliveryAddressForGuestBuyerDocument, options);
+      }
+export function useDeliveryAddressForGuestBuyerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DeliveryAddressForGuestBuyerQuery, DeliveryAddressForGuestBuyerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DeliveryAddressForGuestBuyerQuery, DeliveryAddressForGuestBuyerQueryVariables>(DeliveryAddressForGuestBuyerDocument, options);
+        }
+export type DeliveryAddressForGuestBuyerQueryHookResult = ReturnType<typeof useDeliveryAddressForGuestBuyerQuery>;
+export type DeliveryAddressForGuestBuyerLazyQueryHookResult = ReturnType<typeof useDeliveryAddressForGuestBuyerLazyQuery>;
+export type DeliveryAddressForGuestBuyerQueryResult = Apollo.QueryResult<DeliveryAddressForGuestBuyerQuery, DeliveryAddressForGuestBuyerQueryVariables>;
 export const DeleteBuyerProfileDocument = gql`
     mutation DeleteBuyerProfile($buyerId: ID!) {
   deleteBuyerProfile(buyerId: $buyerId)
@@ -6716,14 +6820,10 @@ export type ForgotPasswordStep3ChangeBySmsMutationOptions = Apollo.BaseMutationO
 export const UpdateBuyerProfileDocument = gql`
     mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
   updateBuyerProfile(request: $request) {
-    buyerId
-    firstName
-    lastName
-    email
-    phoneNumber
+    ...BuyerProfileResponseFields
   }
 }
-    `;
+    ${BuyerProfileResponseFieldsFragmentDoc}`;
 export type UpdateBuyerProfileMutationFn = Apollo.MutationFunction<UpdateBuyerProfileMutation, UpdateBuyerProfileMutationVariables>;
 
 /**

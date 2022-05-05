@@ -378,6 +378,7 @@ type Product {
   keywords: [String]
   productType: String
   productStatus: ProductStatus!
+  productNumber: String
 }
 
 type ProductCategoryResponse {
@@ -425,6 +426,7 @@ type ProductListing {
   minQtyPerCart: Int
   openUntil: Date!
   startDate: DateTime!
+  productListingNumber: String
 }
 
 input ProductListingsInput {
@@ -521,6 +523,7 @@ type ProductListingView {
   numberOfItemsAvailable: Int
   qtyAvailable: Int
   minSoldQuantity: Int
+  minQtyPerCart: Int
   itemSold: Int
   createOn: String
   returnAddressId: String
@@ -848,6 +851,7 @@ enum SellerFilterType {
 
 type SellerListingDetailView {
   listingId: ID!
+  listingNumber: String
   product: SellerProductDetailView!
   store: SellerListingStore
   productListingType: ProductListingType
@@ -899,21 +903,22 @@ type SellerListingStore {
 }
 
 type SellerListingVariant {
-  variantId: ID!
-  priceId: ID!
+  variantId: ID
+  priceId: ID
   itemsAvailable: Int!
   itemsSold: Int!
   retailPrice: Float!
   wholeSalePrice: Float!
   photoUrl: String
   itemsInStock: Int!
-  defaultVariant: Boolean!
+  defaultVariant: Boolean
   sellerSku: String
   options: [KeyValuePair]
 }
 
 type SellerListingView {
   listingId: ID!
+  listingNumber: String
   listingStatus: ProductListingStatus!
   productId: ID!
   shortName: String!
@@ -962,6 +967,7 @@ input SellerPageOption {
 
 type SellerProductDetailView {
   productId: ID!
+  productNumber: String
   shortName: String!
   longName: String!
   description: String
@@ -1134,6 +1140,7 @@ enum StoreSort {
   NAME
   CREATED
   CITY
+  DATE
 }
 
 type VariantOptionResponse {

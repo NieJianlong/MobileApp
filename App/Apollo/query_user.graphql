@@ -114,3 +114,13 @@ query GetBuyerDefaultAddressByBuyerId($buyerId: ID!) {
     ...AddressOrderFiled
   }
 }
+query DeliveryAddressForBuyer($buyerId: ID!) {
+  deliveryAddressForBuyer(buyerId: $buyerId) {
+    ...AddressOrderFiled
+  }
+}
+query DeliveryAddressForGuestBuyer($buyerId: ID!) {
+  deliveryAddressForGuestBuyer(buyerId: $buyerId) {
+    ...AddressOrderFiled
+  }
+}

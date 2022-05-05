@@ -124,6 +124,7 @@ input ListingOrderOptions {
 """MUTATIONS"""
 type Mutation {
   createOrderFromCart(request: CartInput!): OrderResponse
+  updateOrderPaymentStatus(request: UpdateOrderPaymentStatusRequest!): Boolean!
   cancelOrderItem(request: CancelOrderItemRequest): Boolean
   cancelOrderItemByListingId(listingId: ID!): Boolean
   markOrderItemAsDelivered(request: OrderItemDeliveredRequest!): Boolean
@@ -225,6 +226,7 @@ type OrderItemHistoryResponse {
 
 type OrderItemResponse {
   orderItemId: ID
+  orderItemNumber: String
   listingId: ID
   variantId: ID
   sellerId: ID
@@ -494,5 +496,10 @@ type TrackOrderItemResponse {
   sellerLocation: SellerLocationPickupResponse
   sellerDirectDelivery: SellerDirectDeliveryResponse
   qrCodeAsBase64: String
+}
+
+input UpdateOrderPaymentStatusRequest {
+  orderId: ID!
+  paymentStatus: OrderItemHistoryEventType!
 }
 

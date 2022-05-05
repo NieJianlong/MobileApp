@@ -22,6 +22,8 @@ import PubSub from "pubsub-js";
 import { getLocalStorageValue } from "../../../Apollo/local-storage";
 import { isEmpty } from "lodash";
 import {
+  DeliveryAddressForBuyerDocument,
+  DeliveryAddressForGuestBuyerDocument,
   GetBuyerDefaultAddressByBuyerIdDocument,
   GetGuestBuyerDefaultAddressByBuyerIdDocument,
 } from "../../../../generated/graphql";
@@ -70,8 +72,8 @@ export default function AddressBar() {
 
   const { loading, refetch } = useQuery(
     isAuth
-      ? GetBuyerDefaultAddressByBuyerIdDocument
-      : GetGuestBuyerDefaultAddressByBuyerIdDocument,
+      ? DeliveryAddressForBuyerDocument
+      : DeliveryAddressForGuestBuyerDocument,
     {
       variables: { buyerId: global.buyerId },
       fetchPolicy: "network-only",
@@ -88,14 +90,10 @@ export default function AddressBar() {
       onCompleted: (result) => {
         if (result) {
           // debug only
-          console.log(
-            `AddressBar fetchAddressData Guest/Buyer look up addressId ${JSON.stringify(
-              result.getBuyerDefaultAddressByBuyerId
-            )}`
-          );
+
           const resultJson = isAuth
-            ? result.getBuyerDefaultAddressByBuyerId
-            : result.getGuestBuyerDefaultAddressByBuyerId;
+            ? result.deliveryAddressForBuyer
+            : result.deliveryAddressForGuestBuyer;
           // handleData(resultJson);
           getLocalStorageValue(global.buyerId + "Address").then((res) => {
             console.log("res========getLocalStorageValue", res);

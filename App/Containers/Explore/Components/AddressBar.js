@@ -116,7 +116,7 @@ export default function AddressBar() {
   function handleData(resultJson) {
     let aL1 = gqlMappers.mapGQLAddressToDelivery(resultJson);
     let aL2 = gqlMappers.mapGQLAddressToLine2(resultJson);
-    debugger;
+
     // if (aL1.length > 10) {
     //   aL1 = aL1.substring(0, 17);
     // }

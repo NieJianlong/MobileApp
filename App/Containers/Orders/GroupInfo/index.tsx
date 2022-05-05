@@ -169,12 +169,12 @@ function GroupInfoScreen(props) {
   function renderActions() {
     return (
       <View>
-        {renderAction(Images.packageMed, "Order details", () =>
+        {renderAction(Images.packageMed, "Order details", () => {
           NavigationService.navigate("OrderDetailScreen", {
             data: orderData?.getOrderItemDetails,
             product: product?.getListings?.content[0],
-          })
-        )}
+          });
+        })}
         {renderAction(Images.invoice, "Invoice", () =>
           NavigationService.navigate("InvoiceScreen", {
             data: orderData?.getOrderItemDetails,

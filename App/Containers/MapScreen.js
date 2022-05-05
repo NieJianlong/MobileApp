@@ -56,10 +56,9 @@ const MapScreen = () => {
     setTimeout(() => {
       RNGooglePlaces.getCurrentPlace(["placeID", "location", "name", "address"])
         .then((results) => {
-          debugger;
           console.log("getCurrentPlace", results[0]);
           setLoading({ show: false });
-          debugger;
+
           // setLocation(
           //   results && results[0] && { location: results[0].location, address: results[0].address }
           // );
@@ -83,14 +82,12 @@ const MapScreen = () => {
   const _openLocationModal = () => {
     RNGooglePlaces.openAutocompleteModal()
       .then((place) => {
-        debugger;
         setLocation({ location: place.location, address: place.address });
       })
       .catch((error) => console.log(error.message)); // error is a Javascript Error object
   };
 
   const _onChangeRegion = async (region) => {
-    debugger;
     const { results } = await Geocoder.from({
       latitude: region.latitude,
       longitude: region.longitude,
@@ -183,7 +180,6 @@ const MapScreen = () => {
             t.justifyCenter,
           ]}
           onPress={() => {
-            debugger;
             setShowMap({ mapVisible: false });
             dispatch({
               type: "changSheetState",

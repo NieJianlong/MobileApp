@@ -57,7 +57,7 @@ function CheckoutResume(props) {
     let currentBilling = 0;
     let originalBilling = 0;
     let deliveryFess = 0;
-    debugger;
+
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
       let itemAvailble = true;

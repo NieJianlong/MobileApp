@@ -19,14 +19,7 @@ function SellerStoreScreen() {
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
         <View style={styles.header}>
-          <AppBar
-            title={params?.storeName}
-            // rightButton={() => (
-            //   <TouchableOpacity onPress={this.onPost}>
-            //     <Image source={Images.search} style={styles.icSearch} />
-            //   </TouchableOpacity>
-            // )}
-          />
+          <AppBar title={params?.storeName} />
         </View>
       </SafeAreaView>
       <AddressBar />

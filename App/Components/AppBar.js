@@ -6,6 +6,7 @@ import { Fonts, Colors, ApplicationStyles } from "../Themes";
 import AppConfig from "../Config/AppConfig";
 import { Images } from "../Themes";
 import NavigationService from "../Navigation/NavigationService";
+import { isEmpty } from "lodash";
 
 class AppBar extends Component {
   render() {
@@ -37,7 +38,7 @@ class AppBar extends Component {
             <Image style={styles.icBack} source={Images.arrow_left} />
           )}
         </TouchableOpacity>
-        {title && <Text style={styles.title}>{title}</Text>}
+        {!isEmpty(title) && <Text style={styles.title}>{title}</Text>}
         {showLogo && (
           <Image
             source={Images.logo3}

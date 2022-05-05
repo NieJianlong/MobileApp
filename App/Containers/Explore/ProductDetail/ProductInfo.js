@@ -20,6 +20,7 @@ import {
   ProductListingStatus,
 } from "../../../../generated/graphql";
 import PubSub from "pubsub-js";
+import { t } from "react-native-tailwindcss";
 
 export default function ProductInfo({
   product,
@@ -211,7 +212,9 @@ export default function ProductInfo({
         </View>
 
         <View style={[styles.v2, { paddingTop: vs(15) }]}>
-          <Text style={styles.heading3Bold}>Product Description</Text>
+          <Text style={[styles.heading3Bold, t.textLeft]}>
+            Product Description
+          </Text>
           <DescriptionText
             style={styles.descriptionContainer}
             text={product.description}
@@ -219,7 +222,9 @@ export default function ProductInfo({
         </View>
 
         <View style={[styles.v2, { paddingTop: vs(15) }]}>
-          <Text style={styles.heading3Bold}>Details & Highlights</Text>
+          <Text style={[styles.heading3Bold, t.textLeft]}>
+            Details & Highlights
+          </Text>
 
           {product?.highlightBullets &&
             product?.highlightBullets.map((bul, index) => (

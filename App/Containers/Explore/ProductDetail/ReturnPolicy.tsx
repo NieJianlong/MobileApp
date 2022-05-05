@@ -45,7 +45,7 @@ function ReturnPolicy({ returnPolices }: ReturnPolicyProps) {
         <Text>
           {Number(return_period?.value) === 0 || return_period?.value === "0"
             ? "No returns"
-            : `Covered by Seller Name ${return_period?.value} day return policy, for:`}
+            : `Covered by seller ${return_period?.value} day return policy, for:`}
         </Text>
         <View style={[t.wFull, t.flexRow, t.justifyAround, t.mY4]}>
           {items.map((title, index) => {

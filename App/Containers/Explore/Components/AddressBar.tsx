@@ -24,8 +24,6 @@ import { isEmpty } from "lodash";
 import {
   DeliveryAddressForBuyerDocument,
   DeliveryAddressForGuestBuyerDocument,
-  GetBuyerDefaultAddressByBuyerIdDocument,
-  GetGuestBuyerDefaultAddressByBuyerIdDocument,
 } from "../../../../generated/graphql";
 import useMapScreen from "../../../hooks/useMapScreen";
 
@@ -63,6 +61,7 @@ export default function AddressBar() {
 
   const handleError = useCallback(() => {
     if (typeof error !== "undefined") {
+      // setShowMap({ mapVisible: true });
       console.log(
         "AddressBar fetchAddressDataGuest Query error GetGuestBuyerDefaultAddressByBuyerId" +
           error

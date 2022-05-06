@@ -47,10 +47,10 @@ function ReturnPolicy({ returnPolices }: ReturnPolicyProps) {
             ? "No returns"
             : `Covered by seller ${return_period?.value} day return policy, for:`}
         </Text>
-        <View style={[t.wFull, t.flexRow, t.justifyAround, t.mY4]}>
+        <View style={[t.wFull, t.flexRow, t.justifyAround, t.mY4, t.flexWrap]}>
           {items.map((title, index) => {
             return (
-              <View style={[t.itemsCenter]}>
+              <View style={[t.itemsCenter, t.mT2]}>
                 {icons[index]}
                 <Text style={[{ width: width1 / 3 }, t.textCenter, t.mT2]}>
                   {title.value}

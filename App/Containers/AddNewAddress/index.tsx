@@ -12,11 +12,8 @@ import {
 import styles from "./styles";
 import colors from "../../Themes/Colors";
 import { useRoute } from "@react-navigation/native";
-import { useMutation, useQuery } from "@apollo/client";
-import {
-  CREATE_ADDRESS,
-  UPDATE_ADDRESS,
-} from "../../Apollo/mutations/mutations_user";
+import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
+import { CREATE_ADDRESS } from "../../Apollo/mutations/mutations_user";
 import { AlertContext } from "../Root/GlobalContext";
 import { Controller, useForm } from "react-hook-form";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -24,11 +21,17 @@ import lodash, { isEmpty } from "lodash";
 import { t } from "react-native-tailwindcss";
 import { GetStatesByCountryId } from "../Explore/gql/explore_queries";
 import NavigationService from "../../Navigation/NavigationService";
-import { AddressRequestForCreate } from "../../../generated/graphql";
+import {
+  AddressRequestForCreate,
+  UpdateAddressDocument,
+  UpdateAddressForGuestBuyerDocument,
+} from "../../../generated/graphql";
+import { userProfileVar } from "../../Apollo/cache";
 
 function AddNewAddress() {
   const { dispatch } = useContext(AlertContext);
   const { params } = useRoute();
+  const userProfile = useReactiveVar(userProfileVar);
   const { currentAddress } = params;
   const {
     control,
@@ -52,30 +55,35 @@ function AddNewAddress() {
   const [asDefault, setAsDefault] = useState(
     currentAddress?.defaultAddress || false
   );
-  const [updateAddress] = useMutation(UPDATE_ADDRESS, {
-    context: {
-      headers: {
-        isPrivate: true,
-      },
-    },
-    onCompleted: () => {
-      dispatch({ type: "hideloading" });
-      dispatch({
-        type: "changAlertState",
-        payload: {
-          visible: true,
-          message: "You have successfully changed your address.",
-          color: colors.secondary00,
-          title: "Address Changed",
+  const [updateAddress] = useMutation(
+    userProfile.isAuth
+      ? UpdateAddressDocument
+      : UpdateAddressForGuestBuyerDocument,
+    {
+      context: {
+        headers: {
+          isPrivate: userProfile.isAuth,
         },
-      });
+      },
+      onCompleted: () => {
+        dispatch({ type: "hideloading" });
+        dispatch({
+          type: "changAlertState",
+          payload: {
+            visible: true,
+            message: "You have successfully changed your address.",
+            color: colors.secondary00,
+            title: "Address Changed",
+          },
+        });
 
-      NavigationService.goBack();
-    },
-    onError: () => {
-      dispatch({ type: "hideloading" });
-    },
-  });
+        NavigationService.goBack();
+      },
+      onError: () => {
+        dispatch({ type: "hideloading" });
+      },
+    }
+  );
   const [addAddress] = useMutation(CREATE_ADDRESS, {
     context: {
       headers: {

@@ -102,3 +102,15 @@ mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
     ...BuyerProfileResponseFields
   }
 }
+mutation UpdateAddress($request: AddressRequest!) {
+  updateAddress(request: $request) {
+    addressId
+  }
+}
+mutation UpdateAddressForGuestBuyer($request: AddressRequest!) {
+  updateAddressForGuestBuyer(request: $request) {
+    addressId
+  }
+}
+
+#  updateAddressForGuestBuyer(request: AddressRequest!): AddressResponse

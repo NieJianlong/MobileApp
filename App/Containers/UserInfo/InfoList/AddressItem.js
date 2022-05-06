@@ -14,11 +14,8 @@ import images from "../../../Themes/Images";
 import colors from "../../../Themes/Colors";
 import fonts from "../../../Themes/Fonts";
 import Fonts from "../../../Themes/Fonts";
-import { useMutation } from "@apollo/client";
-import {
-  DELETE_ADDRESS,
-  UPDATE_ADDRESS,
-} from "../../../Apollo/mutations/mutations_user";
+import { useMutation, useReactiveVar } from "@apollo/client";
+import { DELETE_ADDRESS } from "../../../Apollo/mutations/mutations_user";
 import { AlertContext } from "../../Root/GlobalContext";
 import NavigationService from "../../../Navigation/NavigationService";
 import PubSub from "pubsub-js";
@@ -28,6 +25,11 @@ import {
 } from "react-native-gesture-handler";
 import { omit } from "lodash";
 import { t } from "react-native-tailwindcss";
+import {
+  UpdateAddressDocument,
+  UpdateAddressForGuestBuyerDocument,
+} from "../../../../generated/graphql";
+import { userProfileVar } from "../../../Apollo/cache";
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
 const TouchableWithoutFeedback =
@@ -37,6 +39,7 @@ const TouchableWithoutFeedback =
 
 export default function AddressItem({ item, refetch, isCheckout, onPress }) {
   const { dispatch } = useContext(AlertContext);
+  const userProfile = useReactiveVar(userProfileVar);
   const [deleteAddress, { error, data }] = useMutation(DELETE_ADDRESS, {
     variables: { addressId: item.addressId },
     context: {
@@ -67,40 +70,45 @@ export default function AddressItem({ item, refetch, isCheckout, onPress }) {
   console.log("item====================================");
   console.log(item);
   console.log("====================================");
-  const [setAddressDefault] = useMutation(UPDATE_ADDRESS, {
-    variables: {
-      request: {
-        ...omit(item, ["__typename", "updatedAt", "createdAt"]),
-        addressId: item.addressId,
-        referenceId: item.referenceId,
-        defaultAddress: true,
-        addressType: item.addressType,
-      },
-    },
-    context: {
-      headers: {
-        isPrivate: true,
-      },
-    },
-    onCompleted: (res) => {
-      dispatch({ type: "hideloading" });
-      PubSub.publish("refresh-address", "");
-      refetch();
-      dispatch({
-        type: "changAlertState",
-        payload: {
-          visible: true,
-          message: "You have successfully Changed your default address.",
-          color: colors.secondary00,
-          title: "Default Address Changed!",
+  const [setAddressDefault] = useMutation(
+    userProfile.isAuth
+      ? UpdateAddressDocument
+      : UpdateAddressForGuestBuyerDocument,
+    {
+      variables: {
+        request: {
+          ...omit(item, ["__typename", "updatedAt", "createdAt"]),
+          addressId: item.addressId,
+          referenceId: item.referenceId,
+          defaultAddress: true,
+          addressType: item.addressType,
         },
-      });
-    },
-    onError: (error) => {
-      console.log("Error UPDATE_ADDRESS", error);
-      dispatch({ type: "hideloading" });
-    },
-  });
+      },
+      context: {
+        headers: {
+          isPrivate: userProfile.isAuth,
+        },
+      },
+      onCompleted: (res) => {
+        dispatch({ type: "hideloading" });
+        PubSub.publish("refresh-address", "");
+        refetch();
+        dispatch({
+          type: "changAlertState",
+          payload: {
+            visible: true,
+            message: "You have successfully Changed your default address.",
+            color: colors.secondary00,
+            title: "Default Address Changed!",
+          },
+        });
+      },
+      onError: (error) => {
+        console.log("Error UPDATE_ADDRESS", error);
+        dispatch({ type: "hideloading" });
+      },
+    }
+  );
   return (
     <TouchableWithoutFeedback
       onPress={() => {

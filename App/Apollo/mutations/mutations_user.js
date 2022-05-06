@@ -252,19 +252,6 @@ export const CREATE_ADDRESS_FOR_GUEST = gql`
 `;
 
 /**
- * @mutation updateAddress
- * schema  see @mutation createAddress
- *
- */
-export const UPDATE_ADDRESS = gql`
-  mutation UpdateAddress($request: AddressRequest!) {
-    updateAddress(request: $request) {
-      addressId
-    }
-  }
-`;
-
-/**
  * @mutation deleteAddress
  * schema  see @mutation createAddress
  *

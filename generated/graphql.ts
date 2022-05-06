@@ -4666,6 +4666,20 @@ export type UpdateBuyerProfileMutationVariables = Exact<{
 
 export type UpdateBuyerProfileMutation = { __typename?: 'Mutation', updateBuyerProfile?: { __typename?: 'BuyerProfileResponse', userId?: string | null | undefined, buyerId?: string | null | undefined, userName?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, userType?: UserType | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, oneClickPurchaseOn?: boolean | null | undefined, guestBuyer?: boolean | null | undefined, geoLocation?: string | null | undefined, country?: string | null | undefined, languages?: Array<string | null | undefined> | null | undefined, currencies?: Array<string | null | undefined> | null | undefined, applicationSettings?: string | null | undefined, categoryPreferences?: Array<string | null | undefined> | null | undefined, productPreferences?: Array<string | null | undefined> | null | undefined, sellerPreferences?: Array<string | null | undefined> | null | undefined, refundSalamiCredit?: number | null | undefined, bonusSalamiCredit?: number | null | undefined, bonusSalamiCreditExpire?: any | null | undefined, walletId?: string | null | undefined, billingDetails?: { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined };
 
+export type UpdateAddressMutationVariables = Exact<{
+  request: AddressRequest;
+}>;
+
+
+export type UpdateAddressMutation = { __typename?: 'Mutation', updateAddress?: { __typename?: 'AddressResponse', addressId: string } | null | undefined };
+
+export type UpdateAddressForGuestBuyerMutationVariables = Exact<{
+  request: AddressRequest;
+}>;
+
+
+export type UpdateAddressForGuestBuyerMutation = { __typename?: 'Mutation', updateAddressForGuestBuyer?: { __typename?: 'AddressResponse', addressId: string } | null | undefined };
+
 export const AddressOrderFiledFragmentDoc = gql`
     fragment AddressOrderFiled on AddressResponse {
   addressId
@@ -6850,3 +6864,69 @@ export function useUpdateBuyerProfileMutation(baseOptions?: Apollo.MutationHookO
 export type UpdateBuyerProfileMutationHookResult = ReturnType<typeof useUpdateBuyerProfileMutation>;
 export type UpdateBuyerProfileMutationResult = Apollo.MutationResult<UpdateBuyerProfileMutation>;
 export type UpdateBuyerProfileMutationOptions = Apollo.BaseMutationOptions<UpdateBuyerProfileMutation, UpdateBuyerProfileMutationVariables>;
+export const UpdateAddressDocument = gql`
+    mutation UpdateAddress($request: AddressRequest!) {
+  updateAddress(request: $request) {
+    addressId
+  }
+}
+    `;
+export type UpdateAddressMutationFn = Apollo.MutationFunction<UpdateAddressMutation, UpdateAddressMutationVariables>;
+
+/**
+ * __useUpdateAddressMutation__
+ *
+ * To run a mutation, you first call `useUpdateAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAddressMutation, { data, loading, error }] = useUpdateAddressMutation({
+ *   variables: {
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useUpdateAddressMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAddressMutation, UpdateAddressMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAddressMutation, UpdateAddressMutationVariables>(UpdateAddressDocument, options);
+      }
+export type UpdateAddressMutationHookResult = ReturnType<typeof useUpdateAddressMutation>;
+export type UpdateAddressMutationResult = Apollo.MutationResult<UpdateAddressMutation>;
+export type UpdateAddressMutationOptions = Apollo.BaseMutationOptions<UpdateAddressMutation, UpdateAddressMutationVariables>;
+export const UpdateAddressForGuestBuyerDocument = gql`
+    mutation UpdateAddressForGuestBuyer($request: AddressRequest!) {
+  updateAddressForGuestBuyer(request: $request) {
+    addressId
+  }
+}
+    `;
+export type UpdateAddressForGuestBuyerMutationFn = Apollo.MutationFunction<UpdateAddressForGuestBuyerMutation, UpdateAddressForGuestBuyerMutationVariables>;
+
+/**
+ * __useUpdateAddressForGuestBuyerMutation__
+ *
+ * To run a mutation, you first call `useUpdateAddressForGuestBuyerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAddressForGuestBuyerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAddressForGuestBuyerMutation, { data, loading, error }] = useUpdateAddressForGuestBuyerMutation({
+ *   variables: {
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useUpdateAddressForGuestBuyerMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAddressForGuestBuyerMutation, UpdateAddressForGuestBuyerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAddressForGuestBuyerMutation, UpdateAddressForGuestBuyerMutationVariables>(UpdateAddressForGuestBuyerDocument, options);
+      }
+export type UpdateAddressForGuestBuyerMutationHookResult = ReturnType<typeof useUpdateAddressForGuestBuyerMutation>;
+export type UpdateAddressForGuestBuyerMutationResult = Apollo.MutationResult<UpdateAddressForGuestBuyerMutation>;
+export type UpdateAddressForGuestBuyerMutationOptions = Apollo.BaseMutationOptions<UpdateAddressForGuestBuyerMutation, UpdateAddressForGuestBuyerMutationVariables>;

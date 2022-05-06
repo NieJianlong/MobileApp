@@ -114,7 +114,9 @@ class RateOrder extends Component {
     return (
       <View style={styles.body}>
         <View style={styles.center}>
-          <Text style={styles.txtProductName}>iPhone 11</Text>
+          <Text style={styles.txtProductName}>
+            {this.props.data?.shortName}
+          </Text>
 
           <StarRating
             ratingMode

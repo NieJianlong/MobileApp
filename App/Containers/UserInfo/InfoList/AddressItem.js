@@ -26,6 +26,8 @@ import {
 import { omit } from "lodash";
 import { t } from "react-native-tailwindcss";
 import {
+  DeleteAddressDocument,
+  DeleteAddressForGuestBuyerDocument,
   UpdateAddressDocument,
   UpdateAddressForGuestBuyerDocument,
 } from "../../../../generated/graphql";
@@ -40,33 +42,41 @@ const TouchableWithoutFeedback =
 export default function AddressItem({ item, refetch, isCheckout, onPress }) {
   const { dispatch } = useContext(AlertContext);
   const userProfile = useReactiveVar(userProfileVar);
-  const [deleteAddress, { error, data }] = useMutation(DELETE_ADDRESS, {
-    variables: { addressId: item.addressId },
-    context: {
-      headers: {
-        isPrivate: true,
+  const variables = userProfile.isAuth
+    ? { addressId: item.addressId }
+    : { addressId: item.addressId, guestBuyerId: global.buyerId };
+  const [deleteAddress, { error, data }] = useMutation(
+    userProfile.isAuth
+      ? DeleteAddressDocument
+      : DeleteAddressForGuestBuyerDocument,
+    {
+      variables: variables,
+      context: {
+        headers: {
+          isPrivate: userProfile.isAuth,
+        },
       },
-    },
-    onCompleted: (res) => {
-      dispatch({ type: "hideloading" });
-      PubSub.publish("refresh-address", "");
-      if (res.deleteAddress) {
-        refetch();
-        dispatch({
-          type: "changAlertState",
-          payload: {
-            visible: true,
-            message: "You have successfully removed your address.",
-            color: colors.secondary00,
-            title: "Address Removed!",
-          },
-        });
-      }
-    },
-    onError: (res) => {
-      dispatch({ type: "hideloading" });
-    },
-  });
+      onCompleted: (res) => {
+        dispatch({ type: "hideloading" });
+        PubSub.publish("refresh-address", "");
+        if (res.deleteAddress || res.deleteAddressForGuestBuyer) {
+          refetch();
+          dispatch({
+            type: "changAlertState",
+            payload: {
+              visible: true,
+              message: "You have successfully removed your address.",
+              color: colors.secondary00,
+              title: "Address Removed!",
+            },
+          });
+        }
+      },
+      onError: (res) => {
+        dispatch({ type: "hideloading" });
+      },
+    }
+  );
   console.log("item====================================");
   console.log(item);
   console.log("====================================");

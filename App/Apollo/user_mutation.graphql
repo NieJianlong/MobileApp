@@ -112,5 +112,11 @@ mutation UpdateAddressForGuestBuyer($request: AddressRequest!) {
     addressId
   }
 }
-
+mutation DeleteAddress($addressId: ID!) {
+  deleteAddress(addressId: $addressId)
+}
+mutation DeleteAddressForGuestBuyer($addressId: ID!, $guestBuyerId: ID!) {
+  deleteAddressForGuestBuyer(addressId: $addressId, guestBuyerId: $guestBuyerId)
+}
+# deleteAddressForGuestBuyer(addressId: ID!, guestBuyerId: ID!): Boolean
 #  updateAddressForGuestBuyer(request: AddressRequest!): AddressResponse

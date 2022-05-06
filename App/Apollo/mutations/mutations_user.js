@@ -256,11 +256,11 @@ export const CREATE_ADDRESS_FOR_GUEST = gql`
  * schema  see @mutation createAddress
  *
  */
-export const DELETE_ADDRESS = gql`
-  mutation DeleteAddress($addressId: ID!) {
-    deleteAddress(addressId: $addressId)
-  }
-`;
+// export const DELETE_ADDRESS = gql`
+//   mutation DeleteAddress($addressId: ID!) {
+//     deleteAddress(addressId: $addressId)
+//   }
+// `;
 
 /**
  * @mutation createPaymentDetail

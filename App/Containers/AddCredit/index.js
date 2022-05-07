@@ -5,10 +5,11 @@ import { vs } from "react-native-size-matters";
 import { AppBar, TextInput, Switch, RightButton } from "../../Components";
 import styles from "./styles";
 import colors from "../../Themes/Colors";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useMutation } from "@apollo/client";
 import { CREATE_PAYMENT_DETAIL } from "../../Apollo/mutations/mutations_user";
 import { AlertContext } from "../Root/GlobalContext";
+import { t } from "react-native-tailwindcss";
 
 function AddCredit(props) {
   const [name, setName] = useState("");
@@ -138,54 +139,49 @@ function AddCredit(props) {
   ];
 
   const { params } = useRoute();
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <RightButton title="SAVE" disable={disable} onPress={onAddPayMent} />
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar
-          rightButton={() => (
-            <RightButton
-              title="SAVE"
-              disable={disable}
-              onPress={onAddPayMent}
-            />
-          )}
-        />
-        <View style={styles.bodyContainer}>
-          <Text style={styles.heading2Bold}>Add your credit card details</Text>
-          <View
-            style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
-              justifyContent: "space-between",
-            }}
-          >
-            {inputs.map((item, index) => {
-              return (
-                <View
-                  key={index}
-                  style={{
-                    width: `${(item.weight / 12) * 100}%`,
-                  }}
-                >
-                  <TextInput style={{ marginTop: vs(18) }} {...item} />
-                </View>
-              );
-            })}
-          </View>
-          <View style={{ marginTop: 20 }}>
-            <Switch
-              onSwitch={(value) => {
-                setIsDefaultPaymentType(value);
-              }}
-              label="Set as default payment method"
-            ></Switch>
-          </View>
+      <View style={styles.bodyContainer}>
+        <Text style={styles.heading2Bold}>Add your credit card details</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+          }}
+        >
+          {inputs.map((item, index) => {
+            return (
+              <View
+                key={index}
+                style={{
+                  width: `${(item.weight / 12) * 100}%`,
+                }}
+              >
+                <TextInput style={{ marginTop: vs(18) }} {...item} />
+              </View>
+            );
+          })}
         </View>
-      </SafeAreaView>
+        <View style={{ marginTop: 20 }}>
+          <Switch
+            onSwitch={(value) => {
+              setIsDefaultPaymentType(value);
+            }}
+            label="Set as default payment method"
+          />
+        </View>
+      </View>
     </View>
   );
 }

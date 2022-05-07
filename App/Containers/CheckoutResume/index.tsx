@@ -261,9 +261,6 @@ function CheckoutResume(props) {
         style={{ flex: 1 }}
         edges={["top", "right", "left", "bottom"]}
       >
-        <AppBar
-          title={orderStatus === 1 ? "Order 782788" : "Review your details"}
-        />
         <View style={{ flex: 1 }}>
           <ScrollView
             style={{

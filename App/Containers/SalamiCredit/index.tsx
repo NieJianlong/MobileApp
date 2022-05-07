@@ -54,7 +54,6 @@ function SalamiCredit(props) {
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        <AppBar />
         {listHeader(dispatch)}
       </SafeAreaView>
     </View>

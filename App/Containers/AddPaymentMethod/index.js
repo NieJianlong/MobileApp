@@ -40,7 +40,6 @@ function AddPaymentMethod(props) {
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        <AppBar />
         <View style={styles.bodyContainer}>
           <Text style={styles.heading2Bold}> Add a payment method </Text>
           <ScrollView>

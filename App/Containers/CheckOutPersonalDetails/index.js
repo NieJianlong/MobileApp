@@ -20,10 +20,11 @@ import {
 import { ApplicationStyles, Colors, Metrics } from "../../Themes";
 import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 // validation
 import * as validator from "../../Validation";
+import { t } from "react-native-tailwindcss";
 
 function CheckOutPersonalDetails(props) {
   /**
@@ -220,90 +221,84 @@ function CheckOutPersonalDetails(props) {
 
     return validatorResponse;
   };
-
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <RightButton
+            title="NEXT"
+            disable={disable}
+            onPress={() => {
+              // Validation here, simply check in state and set validation message if requried
+              // make an object so code is more concise in validate function
+              let reporter = updateForCacheAndValidation();
+              if (reporter.hasMissing) {
+                setValidationDisplay(`${reporter.missingVal}`);
+              } else if (!reporter.validPhoneOrEmail) {
+                setValidationDisplay("Valid Phone or Email Required");
+              } else {
+                NavigationService.navigate("CheckoutBillingDetailsScreen", {
+                  title: "Please enter your billing details",
+                });
+              }
+              // NavigationService.goBack();
+            }}
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
+      <KeyboardAwareScrollView
+        keyboardVerticalOffset={50}
+        behavior="position"
+        style={{ flex: 1 }}
+        enabled
+        contentContainerStyle={{ flex: 1 }}
       >
-        <AppBar
-          rightButton={() => (
-            <RightButton
-              title="NEXT"
-              disable={disable}
-              onPress={() => {
-                // Validation here, simply check in state and set validation message if requried
-                // make an object so code is more concise in validate function
-                let reporter = updateForCacheAndValidation();
-                if (reporter.hasMissing) {
-                  setValidationDisplay(`${reporter.missingVal}`);
-                } else if (!reporter.validPhoneOrEmail) {
-                  setValidationDisplay("Valid Phone or Email Required");
-                } else {
-                  NavigationService.navigate("CheckoutBillingDetailsScreen", {
-                    title: "Please enter your billing details",
-                  });
-                }
-                // NavigationService.goBack();
-              }}
-            />
-          )}
-        />
+        <View style={styles.bodyContainer}>
+          <Text style={styles.heading2Bold}>
+            Please enter your personal details
+          </Text>
 
-        <KeyboardAwareScrollView
-          keyboardVerticalOffset={50}
-          behavior="position"
-          style={{ flex: 1 }}
-          enabled
-          contentContainerStyle={{ flex: 1 }}
-        >
-          <View style={styles.bodyContainer}>
-            <Text style={styles.heading2Bold}>
-              Please enter your personal details
-            </Text>
-
-            <View
-              style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                justifyContent: "space-between",
-              }}
-            >
-              {inputs.map((item, index) => {
-                return (
-                  <View
-                    key={index}
-                    style={{
-                      width: item.type == "short" ? "48%" : "100%",
-                      marginTop: vs(18),
-                    }}
-                  >
-                    {item.keyboardType === "selector" ? (
-                      <Selector
-                        placeholder={"Sate"}
-                        value={mstate}
-                        data={["AAA", "BBB", "CCC"]}
-                        onValueChange={(text) => setMstate(text)}
-                      />
-                    ) : (
-                      <MaterialTextInput {...item} />
-                    )}
-                  </View>
-                );
-              })}
-            </View>
-            <View style={{ marginTop: 20 }}>
-              <Switch
-                onSwitch={() => {}}
-                label="Use as default address"
-              ></Switch>
-            </View>
-            <Text style={styles.txtValidate}>{validationDisplay} </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+            }}
+          >
+            {inputs.map((item, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    width: item.type == "short" ? "48%" : "100%",
+                    marginTop: vs(18),
+                  }}
+                >
+                  {item.keyboardType === "selector" ? (
+                    <Selector
+                      placeholder={"Sate"}
+                      value={mstate}
+                      data={["AAA", "BBB", "CCC"]}
+                      onValueChange={(text) => setMstate(text)}
+                    />
+                  ) : (
+                    <MaterialTextInput {...item} />
+                  )}
+                </View>
+              );
+            })}
           </View>
-        </KeyboardAwareScrollView>
-      </SafeAreaView>
+          <View style={{ marginTop: 20 }}>
+            <Switch onSwitch={() => {}} label="Use as default address"></Switch>
+          </View>
+          <Text style={styles.txtValidate}>{validationDisplay} </Text>
+        </View>
+      </KeyboardAwareScrollView>
     </View>
   );
 }

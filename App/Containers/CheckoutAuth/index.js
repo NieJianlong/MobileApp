@@ -18,7 +18,6 @@ function CheckoutAuth(props) {
   console.log("props?.route?.params?.product", props?.route?.params?.product);
   return (
     <BaseScreen {...props}>
-      <AppBar />
       <View style={styles.item_wrapper}>
         <TouchableOpacity
           onPress={() => {

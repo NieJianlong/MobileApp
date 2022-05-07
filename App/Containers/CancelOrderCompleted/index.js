@@ -9,12 +9,12 @@ import {
 import { s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
 import colors from "../../Themes/Colors";
-import { AppBar } from "../../Components";
 import NavigationService from "../../Navigation/NavigationService";
 import TextTip from "../../Components/EmptyReminder";
 import images from "../../Themes/Images";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { OrderItemHistoryEventType } from "../../../generated/graphql";
+import { t } from "react-native-tailwindcss";
 
 function CancelOrderCompleted(props) {
   const { params } = useRoute();
@@ -30,6 +30,30 @@ function CancelOrderCompleted(props) {
       NavigationService.navigate("ExploreScreen");
     },
   };
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => null,
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <TouchableOpacity
+            onPress={() => {
+              NavigationService.goBack();
+            }}
+          >
+            <Image
+              style={{
+                width: s(25),
+                height: s(25),
+                tintColor: colors.grey60,
+              }}
+              source={images.crossMedium}
+            />
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View
       style={{
@@ -42,47 +66,20 @@ function CancelOrderCompleted(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar
-          hiddenBackBtn
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  NavigationService.goBack();
-                }}
-              >
-                <Image
-                  style={{
-                    width: s(25),
-                    height: s(25),
-                    tintColor: colors.grey60,
-                  }}
-                  source={images.crossMedium}
-                />
-              </TouchableOpacity>
-            );
+      <View>
+        <Image
+          style={{
+            width: "100%",
+            height: 80,
+            marginTop: 50,
+            resizeMode: "contain",
           }}
+          source={images.orderCanceledImage}
         />
-        <View>
-          <Image
-            style={{
-              width: "100%",
-              height: 80,
-              marginTop: 50,
-              resizeMode: "contain",
-            }}
-            source={images.orderCanceledImage}
-          />
-          <View style={{ height: s(230), backgroundColor: "transparent" }}>
-            <TextTip {...data} />
-          </View>
+        <View style={{ height: s(230), backgroundColor: "transparent" }}>
+          <TextTip {...data} />
         </View>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

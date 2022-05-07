@@ -103,11 +103,6 @@ class CreateNewPassword extends Component {
           style={styles.safeArea}
           edges={["top", "right", "left", "bottom"]}
         >
-          <AppBar
-            showLogo={false}
-            onPressBack={() => this.props.navigation.goBack()}
-          />
-
           <View style={styles.bodyContainer}>
             <Text style={styles.heading2Bold}>Create your new password</Text>
             <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>

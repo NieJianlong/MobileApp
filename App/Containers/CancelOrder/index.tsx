@@ -12,10 +12,10 @@ import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
 import colors from "../../Themes/Colors";
-import { AppBar, Selector } from "../../Components";
+import { Selector } from "../../Components";
 import NavigationService from "../../Navigation/NavigationService";
 import { ApplicationStyles } from "../../Themes";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   CancellationReason,
   useCancelOrderItemMutation,
@@ -23,6 +23,7 @@ import {
 import { isEmpty } from "lodash";
 import useLoading from "../../hooks/useLoading";
 import useAlert from "../../hooks/useAlert";
+import { t } from "react-native-tailwindcss";
 
 function CancelOrder(props) {
   const [showPrefer, setShowPrefer] = useState(false);
@@ -79,6 +80,30 @@ function CancelOrder(props) {
       setLoading({ show: false });
     },
   });
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <TouchableOpacity
+            disabled={isEmpty(reason)}
+            onPress={() => {
+              setLoading({ show: true });
+              cancelOrder();
+              // NavigationService.navigate("RefundScreen", {
+              //   cancel: true,
+              //   orderItemId: params.orderItemId,
+              //   reason: reasonParams,
+              //   message,
+              // });
+            }}
+          >
+            <Text style={[ApplicationStyles.screen.heading5Bold]}>NEXT</Text>
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View
       style={{
@@ -91,83 +116,54 @@ function CancelOrder(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                disabled={isEmpty(reason)}
-                onPress={() => {
-                  setLoading({ show: true });
-                  cancelOrder();
-                  // NavigationService.navigate("RefundScreen", {
-                  //   cancel: true,
-                  //   orderItemId: params.orderItemId,
-                  //   reason: reasonParams,
-                  //   message,
-                  // });
-                }}
-              >
-                <Text style={[ApplicationStyles.screen.heading5Bold]}>
-                  NEXT
-                </Text>
-              </TouchableOpacity>
-            );
+      <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+        <Text
+          style={{
+            fontSize: s(22),
+            fontFamily: fonts.primary,
+            color: colors.black,
+            fontWeight: "600",
+          }}
+        >
+          Are you sure you want to cancel your order?
+        </Text>
+        <Text
+          style={{
+            fontSize: s(16),
+            fontFamily: fonts.primary,
+            color: colors.grey80,
+            fontWeight: "400",
+            marginTop: vs(15),
+          }}
+        >
+          Select one of the options for which you want to cancel the product
+        </Text>
+      </View>
+      <ScrollView style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+        <Selector
+          style={{ marginTop: vs(15), marginBottom: vs(10) }}
+          placeholder={"Problem reason goes here"}
+          value={"Mistake order"}
+          data={[
+            "Mistake order",
+            "Not able to wait for listing completion",
+            "Product not required",
+          ]}
+          onValueChange={(item: string) => {
+            setShowPrefer(true);
+            setReason(item);
           }}
         />
-        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-          <Text
-            style={{
-              fontSize: s(22),
-              fontFamily: fonts.primary,
-              color: colors.black,
-              fontWeight: "600",
-            }}
-          >
-            Are you sure you want to cancel your order?
-          </Text>
-          <Text
-            style={{
-              fontSize: s(16),
-              fontFamily: fonts.primary,
-              color: colors.grey80,
-              fontWeight: "400",
-              marginTop: vs(15),
-            }}
-          >
-            Select one of the options for which you want to cancel the product
-          </Text>
-        </View>
-        <ScrollView style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-          <Selector
-            style={{ marginTop: vs(15), marginBottom: vs(10) }}
-            placeholder={"Problem reason goes here"}
-            value={"Mistake order"}
-            data={[
-              "Mistake order",
-              "Not able to wait for listing completion",
-              "Product not required",
-            ]}
-            onValueChange={(item: string) => {
-              setShowPrefer(true);
-              setReason(item);
-            }}
-          />
-          <RNTextInput
-            multiline={true}
-            placeholder="Message"
-            value={message}
-            onChangeText={(text) => {
-              setMessage(text);
-            }}
-            style={styles.input}
-          />
-        </ScrollView>
-      </SafeAreaView>
+        <RNTextInput
+          multiline={true}
+          placeholder="Message"
+          value={message}
+          onChangeText={(text) => {
+            setMessage(text);
+          }}
+          style={styles.input}
+        />
+      </ScrollView>
     </View>
   );
 }

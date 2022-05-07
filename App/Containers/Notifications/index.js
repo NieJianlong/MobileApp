@@ -15,6 +15,8 @@ import { Colors } from "../../Themes";
 import styles from "./styles";
 import colors from "../../Themes/Colors";
 import AppConfig from "../../Config/AppConfig";
+import { useNavigation } from "@react-navigation/native";
+import { t } from "react-native-tailwindcss";
 
 const invitedUsers = [
   {
@@ -60,99 +62,97 @@ function Notifications(props) {
   const [showSheet, setShowSheet] = useState(false);
   const sheetEl = useRef(null);
   const [clearAll, setClearAll] = useState(false);
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <RightButton
+            title="CLEAR ALL"
+            onPress={() => {
+              setClearAll(true);
+              // NavigationService.goBack();
+            }}
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar
-          rightButton={() => (
-            <RightButton
-              title="CLEAR ALL"
-              onPress={() => {
-                setClearAll(true);
-                // NavigationService.goBack();
+      <FlatList
+        data={clearAll ? [] : invitedUsers}
+        ListHeaderComponent={() => listHeader(setShowSheet)}
+        renderItem={({ item }) => {
+          return (
+            <View
+              style={{
+                backgroundColor: "white",
+                paddingHorizontal: AppConfig.paddingHorizontal,
+                marginTop: s(8),
+                opacity: item.readed ? 0.7 : 1,
               }}
-            />
-          )}
-        />
-
-        <FlatList
-          data={clearAll ? [] : invitedUsers}
-          ListHeaderComponent={() => listHeader(setShowSheet)}
-          renderItem={({ item }) => {
-            return (
+            >
               <View
                 style={{
-                  backgroundColor: "white",
-                  paddingHorizontal: AppConfig.paddingHorizontal,
-                  marginTop: s(8),
-                  opacity: item.readed ? 0.7 : 1,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
               >
                 <View
                   style={{
                     flexDirection: "row",
-                    justifyContent: "space-between",
                     alignItems: "center",
                   }}
                 >
                   <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <View
-                      style={[
-                        styles.dot,
-                        {
-                          backgroundColor: item.readed
-                            ? "transparent"
-                            : colors.primary,
-                        },
-                      ]}
-                    ></View>
-                    <Image
-                      style={styles.shareIcon}
-                      source={{
-                        uri: "https://measure.3vyd.com/uPic/iphone.png",
-                      }}
-                    ></Image>
-                    <View style={{ marginLeft: 15 }}>
-                      <Text style={[styles.balanceTxt, { fontSize: s(15) }]}>
-                        {item.email}
-                      </Text>
-                      <Text
-                        style={[
-                          styles.balanceTxt,
-                          { color: colors.grey60, fontSize: s(14) },
-                        ]}
-                      >
-                        {item.msg}
-                      </Text>
-                    </View>
-                  </View>
-                  <Text
                     style={[
-                      styles.balanceTxt,
+                      styles.dot,
                       {
-                        color: colors.grey60,
-                        fontSize: s(14),
+                        backgroundColor: item.readed
+                          ? "transparent"
+                          : colors.primary,
                       },
                     ]}
-                  >
-                    2h ago
-                  </Text>
+                  ></View>
+                  <Image
+                    style={styles.shareIcon}
+                    source={{
+                      uri: "https://measure.3vyd.com/uPic/iphone.png",
+                    }}
+                  ></Image>
+                  <View style={{ marginLeft: 15 }}>
+                    <Text style={[styles.balanceTxt, { fontSize: s(15) }]}>
+                      {item.email}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.balanceTxt,
+                        { color: colors.grey60, fontSize: s(14) },
+                      ]}
+                    >
+                      {item.msg}
+                    </Text>
+                  </View>
                 </View>
+                <Text
+                  style={[
+                    styles.balanceTxt,
+                    {
+                      color: colors.grey60,
+                      fontSize: s(14),
+                    },
+                  ]}
+                >
+                  2h ago
+                </Text>
               </View>
-            );
-          }}
-          keyExtractor={(item, index) => `list${index}`}
-        ></FlatList>
-      </SafeAreaView>
+            </View>
+          );
+        }}
+        keyExtractor={(item, index) => `list${index}`}
+      />
     </View>
   );
 }

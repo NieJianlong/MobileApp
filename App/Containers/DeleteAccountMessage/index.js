@@ -81,9 +81,6 @@ function DeleteAccountMessage(props) {
   });
   return (
     <View style={styles.container}>
-      <SafeAreaView>
-        <AppBar />
-      </SafeAreaView>
       <Image style={styles.trash} source={images.userTrashImage} />
       <TextTip {...param} />
       <SafeAreaView style={styles.bottom}>

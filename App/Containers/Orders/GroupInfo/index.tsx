@@ -282,17 +282,7 @@ function GroupInfoScreen(props) {
       return null;
     }
   }
-  return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-        <View style={styles.header}>
-          <AppBar title={"Group Info"} />
-        </View>
-        {renderBody()}
-      </SafeAreaView>
-    </View>
-  );
+  return <View style={styles.container}>{renderBody()}</View>;
 }
 
 export default GroupInfoScreen;

@@ -204,7 +204,7 @@ export default function ProductInfo({
               {product.noOfOrderedItems}/{product.noOfItemsInStock}
             </Text>
             <TouchableOpacity
-              onPress={() => NavigationService.navigate("ProductInfoScreen")}
+              onPress={() => NavigationService.navigate("LearnMoreScreen")}
             >
               <Image source={Images.info2} style={styles.icInfo} />
             </TouchableOpacity>

@@ -24,6 +24,8 @@ import images from "../../Themes/Images";
 import TextTip from "../../Components/EmptyReminder";
 import NavigationService from "../../Navigation/NavigationService";
 import PubSub from "pubsub-js";
+import { useNavigation } from "@react-navigation/native";
+import { t } from "react-native-tailwindcss";
 
 //Alert Context, which controls the display and hiding of an alert, for example, Add Address Success
 export const AlertContext = React.createContext({});
@@ -69,24 +71,27 @@ function UserInfo(props) {
       }, 2100);
     }
   }, [visible]);
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          {rightButtonShow ? (
+            <RightButton
+              title=""
+              onPress={() => {
+                PubSub.publish("go-edit-billing-detail");
+              }}
+            />
+          ) : null}
+        </View>
+      ),
+    });
+  }, [navigation, rightButtonShow]);
   return (
     <AlertContext.Provider value={{ dispatch }}>
       {showSheet && renderSheet(sheetEl, dispatch)}
       <View style={styles.container}>
-        <SafeAreaView style={{ maxHeight: 64 }}>
-          <AppBar
-            rightButton={() =>
-              rightButtonShow ? (
-                <RightButton
-                  title=""
-                  onPress={() => {
-                    PubSub.publish("go-edit-billing-detail");
-                  }}
-                />
-              ) : null
-            }
-          />
-        </SafeAreaView>
         <View style={{ marginBottom: vs(15) }}>
           <UserHeader needEdit islogin={true} />
         </View>

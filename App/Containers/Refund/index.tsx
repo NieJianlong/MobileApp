@@ -100,7 +100,6 @@ function Refund(props) {
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        <AppBar />
         <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <Text
             style={{

@@ -5,18 +5,45 @@ import {
   Text,
   Image,
   SafeAreaView,
-  StatusBar,
 } from "react-native";
 import AppConfig from "../../../Config/AppConfig";
-import { vs, s, ScaledSheet } from "react-native-size-matters";
+import { vs, s } from "react-native-size-matters";
 import fonts from "../../../Themes/Fonts";
 import colors from "../../../Themes/Colors";
-import { AppBar, Button } from "../../../Components";
+import { Button } from "../../../Components";
 import NavigationService from "../../../Navigation/NavigationService";
 import images from "../../../Themes/Images";
 import { t } from "react-native-tailwindcss";
+import { useNavigation } from "@react-navigation/native";
 
 function ReturnInformation() {
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => null,
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <TouchableOpacity
+            onPress={() => {
+              NavigationService.navigate("GroupInfoScreen", {
+                type: "returnstatus",
+              });
+              // NavigationService.goBack();
+            }}
+          >
+            <Image
+              style={{
+                width: s(25),
+                height: s(25),
+                tintColor: colors.grey60,
+              }}
+              source={images.crossMedium}
+            />
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View
       style={{
@@ -29,70 +56,41 @@ function ReturnInformation() {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar
-          hiddenBackBtn
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  NavigationService.navigate("GroupInfoScreen", {
-                    type: "returnstatus",
-                  });
-                  // NavigationService.goBack();
-                }}
-              >
-                <Image
-                  style={{
-                    width: s(25),
-                    height: s(25),
-                    tintColor: colors.grey60,
-                  }}
-                  source={images.crossMedium}
-                />
-              </TouchableOpacity>
-            );
+      <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+        <Text
+          style={{
+            fontSize: s(24),
+            fontFamily: fonts.primary,
+            color: colors.black,
+            fontWeight: "600",
           }}
-        />
-        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+        >
+          Returns Information
+        </Text>
+        <View style={[t.bgWhite, t.itemsCenter, t.mT4, t.pY2, t.roundedSm]}>
           <Text
             style={{
-              fontSize: s(24),
+              fontSize: s(14),
               fontFamily: fonts.primary,
               color: colors.black,
-              fontWeight: "600",
             }}
           >
-            Returns Information
+            Products must be returned before Dec 2, 2020
           </Text>
-          <View style={[t.bgWhite, t.itemsCenter, t.mT4, t.pY2, t.roundedSm]}>
-            <Text
-              style={{
-                fontSize: s(14),
-                fontFamily: fonts.primary,
-                color: colors.black,
-              }}
-            >
-              Products must be returned before Dec 2, 2020
-            </Text>
-          </View>
-          <Image
-            style={[t.wFull, t.bgTransparent, t._mT32]}
-            resizeMode="contain"
-            source={require("../../../Images/Instructions.png")}
-          />
-          <View
-            style={{
-              marginTop: vs(50),
-              paddingHorizontal: AppConfig.paddingHorizontal,
-            }}
-          ></View>
         </View>
-      </SafeAreaView>
+        <Image
+          style={[t.wFull, t.bgTransparent, t._mT32]}
+          resizeMode="contain"
+          source={require("../../../Images/Instructions.png")}
+        />
+        <View
+          style={{
+            marginTop: vs(50),
+            paddingHorizontal: AppConfig.paddingHorizontal,
+          }}
+        ></View>
+      </View>
+
       <SafeAreaView
         style={{
           position: "absolute",
@@ -122,13 +120,5 @@ function ReturnInformation() {
     </View>
   );
 }
-const styles = ScaledSheet.create({
-  title: {
-    fontFamily: fonts.primary,
-    fontSize: "16@s",
-    color: colors.black,
-    fontWeight: "600",
-  },
-});
 
 export default ReturnInformation;

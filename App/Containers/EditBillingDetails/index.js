@@ -22,8 +22,9 @@ import NavigationService from "../../Navigation/NavigationService";
 import colors from "../../Themes/Colors";
 import AppConfig from "../../Config/AppConfig";
 import metrics from "../../Themes/Metrics";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { AlertContext } from "../Root/GlobalContext";
+import { t } from "react-native-tailwindcss";
 /**
  * @description: Edit Billing detail Screen
  * @param {*} props
@@ -196,102 +197,101 @@ function EditBillingDetails(props) {
   ];
 
   const { params } = useRoute();
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <RightButton
+            title="SAVE"
+            disable={disable}
+            onPress={() => {
+              if (typeof params.saveCallback === "function") {
+                params.saveCallback({});
+              }
+
+              NavigationService.goBack();
+            }}
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
+      <KeyboardAwareScrollView
+        keyboardVerticalOffset={50}
+        style={{ height: metrics.screenHeight - 100, paddingBottom: 100 }}
+        enabled
       >
-        <AppBar
-          rightButton={() => (
-            <RightButton
-              title="SAVE"
-              disable={disable}
-              onPress={() => {
-                if (typeof params.saveCallback === "function") {
-                  params.saveCallback({});
-                }
-
-                NavigationService.goBack();
-              }}
+        <View style={styles.bodyContainer}>
+          <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
+            Edit billing details
+          </Text>
+          <View style={{ marginTop: 20 }}>
+            <Switch
+              onSwitch={() => {}}
+              label="Use the same info as default delivery address"
             />
-          )}
-        />
-        <KeyboardAwareScrollView
-          keyboardVerticalOffset={50}
-          style={{ height: metrics.screenHeight - 100, paddingBottom: 100 }}
-          enabled
-        >
-          <View style={styles.bodyContainer}>
-            <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
-              Edit billing details
-            </Text>
-            <View style={{ marginTop: 20 }}>
-              <Switch
-                onSwitch={() => {}}
-                label="Use the same info as default delivery address"
-              />
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                justifyContent: "space-between",
-              }}
-            >
-              {inputs.map((item, index) => {
-                return (
-                  <View
-                    key={index}
-                    style={{
-                      width: item.type == "short" ? "48%" : "100%",
-                      marginTop: vs(18),
-                    }}
-                  >
-                    {item.keyboardType === "selector" ? (
-                      <Selector
-                        placeholder={"Sate"}
-                        value={mstate}
-                        data={["AAA", "BBB", "CCC"]}
-                        onValueChange={(text) => setMstate(text)}
-                      />
-                    ) : (
-                      <MaterialTextInput {...item} />
-                    )}
-                  </View>
-                );
-              })}
-            </View>
           </View>
-        </KeyboardAwareScrollView>
-        {showBottom && (
           <View
             style={{
-              position: "absolute",
-              bottom: 10,
-              right: 0,
-              backgroundColor: colors.background,
-              left: 0,
-              paddingHorizontal: AppConfig.paddingHorizontal,
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
             }}
           >
-            <Button
-              onPress={() => {
-                if (params) {
-                  if (typeof params.removeCallback == "function") {
-                    params.removeCallback();
-                  }
-                }
-              }}
-              textColor={colors.grey80}
-              text="REMOVE BILLING DETAILS"
-              backgroundColor="transparent"
-            />
+            {inputs.map((item, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    width: item.type == "short" ? "48%" : "100%",
+                    marginTop: vs(18),
+                  }}
+                >
+                  {item.keyboardType === "selector" ? (
+                    <Selector
+                      placeholder={"Sate"}
+                      value={mstate}
+                      data={["AAA", "BBB", "CCC"]}
+                      onValueChange={(text) => setMstate(text)}
+                    />
+                  ) : (
+                    <MaterialTextInput {...item} />
+                  )}
+                </View>
+              );
+            })}
           </View>
-        )}
-      </SafeAreaView>
+        </View>
+      </KeyboardAwareScrollView>
+      {showBottom && (
+        <View
+          style={{
+            position: "absolute",
+            bottom: 10,
+            right: 0,
+            backgroundColor: colors.background,
+            left: 0,
+            paddingHorizontal: AppConfig.paddingHorizontal,
+          }}
+        >
+          <Button
+            onPress={() => {
+              if (params) {
+                if (typeof params.removeCallback == "function") {
+                  params.removeCallback();
+                }
+              }
+            }}
+            textColor={colors.grey80}
+            text="REMOVE BILLING DETAILS"
+            backgroundColor="transparent"
+          />
+        </View>
+      )}
     </View>
   );
 }

@@ -78,7 +78,7 @@ export default function ExploreSortBar({ onChange, refresh, option }) {
             }}
           />
         ),
-        sheetTitle: "Sorty by",
+        sheetTitle: "Sort by",
       },
     });
   }, [currentOption, dispatch, refresh]);

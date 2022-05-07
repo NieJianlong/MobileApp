@@ -66,8 +66,6 @@ function ReturnProductStep2(props) {
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        <AppBar />
-
         <FlatList
           contentContainerStyle={{ paddingBottom: vs(44) }}
           data={countries}

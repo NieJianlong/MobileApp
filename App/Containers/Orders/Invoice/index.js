@@ -18,24 +18,6 @@ class Invoice extends Component {
 
   componentDidMount() {}
 
-  renderHeader() {
-    return (
-      <View style={styles.header}>
-        <AppBar
-        // rightButton={() => (
-        //   <TouchableOpacity>
-        //     <Image
-        //       resizeMode={"contain"}
-        //       style={styles.icDownload}
-        //       source={Images.download}
-        //     />
-        //   </TouchableOpacity>
-        // )}
-        />
-      </View>
-    );
-  }
-
   renderDeliverTo() {
     const order = this.props.data;
     const deliverAddress = this.props.data.deliveryAddress;
@@ -185,15 +167,7 @@ class Invoice extends Component {
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-          {this.renderHeader()}
-          {this.renderBody()}
-        </SafeAreaView>
-      </View>
-    );
+    return <View style={styles.container}>{this.renderBody()}</View>;
   }
 }
 

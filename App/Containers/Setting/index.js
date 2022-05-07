@@ -45,7 +45,6 @@ function Setting(props) {
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        <AppBar />
         <View style={{ padding: AppConfig.paddingHorizontal }}>
           <Text style={styles.heading2Bold}>Settings</Text>
         </View>

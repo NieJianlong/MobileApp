@@ -19,7 +19,7 @@ import { useCreateRazorOrder } from "../../hooks/razorOrder";
 import { usePaymentConfigration } from "../../Utils/utils";
 import { Controller, useForm } from "react-hook-form";
 
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   BillingDetailsRequestForCreate,
   useBillingDetailsByGuestBuyerIdLazyQuery,
@@ -170,21 +170,24 @@ function CheckoutGuestOrderDetail(props) {
       });
     }
   };
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <TouchableOpacity
+            onPress={() => {
+              onPressNext();
+            }}
+          >
+            <Text style={styles.rightButton}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <BaseScreen {...props}>
-      <AppBar
-        rightButton={() => {
-          return (
-            <TouchableOpacity
-              onPress={() => {
-                onPressNext();
-              }}
-            >
-              <Text style={styles.rightButton}>Next</Text>
-            </TouchableOpacity>
-          );
-        }}
-      />
       <View style={styles.container}>
         <View style={styles.horizontalCenter}>
           <Text style={styles.title}>Please enter details for the order</Text>

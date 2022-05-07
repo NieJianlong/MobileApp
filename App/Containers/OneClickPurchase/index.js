@@ -8,10 +8,15 @@ import NavigationService from "../../Navigation/NavigationService";
 import colors from "../../Themes/Colors";
 import AppConfig from "../../Config/AppConfig";
 import fonts from "../../Themes/Fonts";
-import { useFocusEffect, useRoute } from "@react-navigation/native";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { useQuery } from "@apollo/client";
 import { PAYMENT_METHODS_BY_ID } from "../../Apollo/queries/queries_user";
 import Payments from "../UserInfo/InfoList/Payments";
+import { t } from "react-native-tailwindcss";
 /**
  * @description: 1 Click purchase Screen
  * @param {*} props
@@ -34,76 +39,71 @@ function OneClickPurchase(props) {
     refetch();
   }, [refetch]);
   useFocusEffect(refreshData);
-
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <RightButton
+            title="NEXT"
+            onPress={() => {
+              NavigationService.navigate("SelectDeliveryAddressScreen", params);
+            }}
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar
-          rightButton={() => (
-            <RightButton
-              title="NEXT"
-              onPress={() => {
-                NavigationService.navigate(
-                  "SelectDeliveryAddressScreen",
-                  params
-                );
-              }}
-            />
-          )}
-        />
-        <View>
-          <View style={[styles.bodyContainer, { paddingBottom: 0 }]}>
-            <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
-              1 Click Purchasing preference
-            </Text>
-            <View style={{ marginTop: 20 }}>
-              <Text
-                style={{
-                  color: colors.grey80,
-                  fontSize: s(14),
-                  fontFamily: fonts.primary,
-                }}
-              >{`This is an explanatory text on how this functionality works`}</Text>
-            </View>
+      <View>
+        <View style={[styles.bodyContainer, { paddingBottom: 0 }]}>
+          <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
+            1 Click Purchasing preference
+          </Text>
+          <View style={{ marginTop: 20 }}>
             <Text
-              style={[
-                styles.heading2Bold,
-                {
-                  fontSize: s(18),
-                  marginVertical: AppConfig.paddingHorizontal,
-                },
-              ]}
-            >
-              Select a default payment method
-            </Text>
+              style={{
+                color: colors.grey80,
+                fontSize: s(14),
+                fontFamily: fonts.primary,
+              }}
+            >{`This is an explanatory text on how this functionality works`}</Text>
           </View>
-          <Payments data={data?.paymentDetailsByBuyerId} refetch={refetch} />
+          <Text
+            style={[
+              styles.heading2Bold,
+              {
+                fontSize: s(18),
+                marginVertical: AppConfig.paddingHorizontal,
+              },
+            ]}
+          >
+            Select a default payment method
+          </Text>
         </View>
+        <Payments data={data?.paymentDetailsByBuyerId} refetch={refetch} />
+      </View>
 
-        <SafeAreaView
-          style={{
-            position: "absolute",
-            bottom: 10,
-            right: 0,
-            left: 0,
-            paddingHorizontal: AppConfig.paddingHorizontal,
+      <SafeAreaView
+        style={{
+          position: "absolute",
+          bottom: 10,
+          right: 0,
+          left: 0,
+          paddingHorizontal: AppConfig.paddingHorizontal,
+        }}
+      >
+        <Button
+          onPress={(callback) => {
+            NavigationService.navigate("AddPaymentMethodScreen", {
+              callback,
+            });
           }}
-        >
-          <Button
-            onPress={(callback) => {
-              NavigationService.navigate("AddPaymentMethodScreen", {
-                callback,
-              });
-            }}
-            textColor="white"
-            text="ADD NEW PAYMENT METHOD"
-            backgroundColor={colors.grey80}
-          />
-        </SafeAreaView>
+          textColor="white"
+          text="ADD NEW PAYMENT METHOD"
+          backgroundColor={colors.grey80}
+        />
       </SafeAreaView>
     </View>
   );

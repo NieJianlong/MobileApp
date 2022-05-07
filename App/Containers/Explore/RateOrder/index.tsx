@@ -1,4 +1,4 @@
-import React, { Component, useContext } from "react";
+import React, { Component, useContext, useState } from "react";
 import {
   View,
   StatusBar,
@@ -22,12 +22,13 @@ import {
   useAddProductReviewMutation,
   useAddSellerReviewMutation,
 } from "../../../../generated/graphql";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 import colors from "../../../Themes/Colors";
 import { AlertContext } from "../../Root/GlobalContext";
 import useAlert from "../../../hooks/useAlert";
 import useLoading from "../../../hooks/useLoading";
+import { t } from "react-native-tailwindcss";
 
 class RateOrder extends Component {
   constructor(props) {
@@ -76,22 +77,6 @@ class RateOrder extends Component {
     this.setState({ images });
   };
   //render screen's header
-  renderHeader() {
-    return (
-      <View style={styles.header}>
-        <AppBar
-          title={this.props.title}
-          rightButton={() => (
-            <TouchableOpacity
-              onPress={() => this.props.onPost(this.state.stars)}
-            >
-              <Text style={styles.txtSave}>POST</Text>
-            </TouchableOpacity>
-          )}
-        />
-      </View>
-    );
-  }
 
   renderImageItem = ({ item, index }) => {
     return (
@@ -122,6 +107,7 @@ class RateOrder extends Component {
             ratingMode
             onChange={(star) => {
               this.setState({ stars: star });
+              this.props.onChange(star);
             }}
           />
         </View>
@@ -185,12 +171,7 @@ class RateOrder extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-          {this.renderHeader()}
-
-          {this.renderBody()}
-        </SafeAreaView>
+        {this.renderBody()}
 
         <ActionSheet
           ref={(o) => (this.ActionSheet = o)}
@@ -213,6 +194,7 @@ class RateOrder extends Component {
 
 function RateOrderScreen() {
   const { dispatch } = useContext(AlertContext);
+  const [stars, setStars] = useState(0);
   const [addProductReview] = useAddProductReviewMutation({
     onError: () => {
       setAlert({
@@ -285,6 +267,57 @@ function RateOrderScreen() {
   } = useForm<MutationAddProductReviewArgs>();
   const { setAlert } = useAlert();
   const { setLoading } = useLoading();
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: params.title ?? "Rate Order",
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <TouchableOpacity
+            onPress={() => {
+              handleSubmit((data) => {
+                setLoading({ show: true });
+                if (params.title) {
+                  addSellerReview({
+                    variables: {
+                      input: {
+                        ...data,
+                        sellerId: params.data.sellerId,
+                        ratingVote: stars,
+                      },
+                    },
+
+                    context: {
+                      headers: {
+                        isPrivate: true,
+                      },
+                    },
+                  });
+                  return;
+                }
+                addProductReview({
+                  variables: {
+                    input: {
+                      ...data,
+                      productId: params.product.productId,
+                      ratingVote: stars,
+                    },
+                  },
+                  context: {
+                    headers: {
+                      isPrivate: true,
+                    },
+                  },
+                });
+              })();
+            }}
+          >
+            <Text style={styles.txtSave}>POST</Text>
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
   // const onSubmit = (data) => {
   //   addProductReview({
   //     variables: {
@@ -307,43 +340,8 @@ function RateOrderScreen() {
       register={register}
       title={params.title ?? "Rate Order"}
       control={control}
-      onPost={(stars) => {
-        // alert(stars);
-        handleSubmit((data) => {
-          setLoading({ show: true });
-          if (params.title) {
-            addSellerReview({
-              variables: {
-                input: {
-                  ...data,
-                  sellerId: params.data.sellerId,
-                  ratingVote: stars,
-                },
-              },
-
-              context: {
-                headers: {
-                  isPrivate: true,
-                },
-              },
-            });
-            return;
-          }
-          addProductReview({
-            variables: {
-              input: {
-                ...data,
-                productId: params.product.productId,
-                ratingVote: stars,
-              },
-            },
-            context: {
-              headers: {
-                isPrivate: true,
-              },
-            },
-          });
-        })();
+      onChange={(stars1) => {
+        setStars(stars1);
       }}
     />
   );

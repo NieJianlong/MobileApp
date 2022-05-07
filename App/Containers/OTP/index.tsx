@@ -481,30 +481,19 @@ function OTPScreen(props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar
-          showLogo={false}
-          onPressBack={() => props.navigation.goBack()}
-        />
-
-        <View style={styles.bodyContainer}>
-          <Text style={styles.heading2Bold}>{`Validate your ${
+      <View style={styles.bodyContainer}>
+        <Text style={styles.heading2Bold}>{`Validate your ${
+          isEmail ? "email" : "phone no"
+        }`}</Text>
+        <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
+          {`Please enter the code number sent to your ${
             isEmail ? "email" : "phone no"
-          }`}</Text>
-          <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
-            {`Please enter the code number sent to your ${
-              isEmail ? "email" : "phone no"
-            } [${params.phone}]`}
-          </Text>
-          {renderOTPInput()}
-          <View style={{ flex: 1 }} />
-          {renderAction()}
-        </View>
-      </SafeAreaView>
+          } [${params.phone}]`}
+        </Text>
+        {renderOTPInput()}
+        <View style={{ flex: 1 }} />
+        {renderAction()}
+      </View>
     </View>
   );
 }

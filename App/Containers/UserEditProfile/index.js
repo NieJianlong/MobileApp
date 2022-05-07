@@ -47,6 +47,8 @@ import {
 } from "../../Apollo/local-storage";
 import { runTokenFlow } from "../../Apollo/jwt-request";
 import jwt_decode from "jwt-decode";
+import { useNavigation } from "@react-navigation/native";
+import { t } from "react-native-tailwindcss";
 
 /**
  * @description:User edit page
@@ -168,6 +170,23 @@ function UserEditProfile(props) {
       Keyboard.removeListener("keyboardDidHide", keyboardHide);
     };
   }, []);
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <RightButton
+            title="SAVE"
+            onPress={() => {
+              // NavigationService.goBack();
+              dispatch({ type: "loading" });
+              updateProfile();
+            }}
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
   const showSheet = useCallback(() => {
     sheetRef.current.show();
   }, []);
@@ -206,21 +225,6 @@ function UserEditProfile(props) {
   // }, [getBuyerId]);
   return (
     <View style={styles.container}>
-      <SafeAreaView>
-        <AppBar
-          title={"Update your details"}
-          rightButton={() => (
-            <RightButton
-              title="SAVE"
-              onPress={() => {
-                // NavigationService.goBack();
-                dispatch({ type: "loading" });
-                updateProfile();
-              }}
-            />
-          )}
-        />
-      </SafeAreaView>
       <KeyboardAwareScrollView>
         <View style={styles.contentContainer}>
           {/* <UserAvatar

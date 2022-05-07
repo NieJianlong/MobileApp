@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   View,
   StatusBar,
@@ -7,17 +7,17 @@ import {
   TouchableOpacity,
   FlatList,
   ImageBackground,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import ActionSheet from 'react-native-actionsheet';
-import ImagePicker from 'react-native-image-crop-picker';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import ActionSheet from "react-native-actionsheet";
+import ImagePicker from "react-native-image-crop-picker";
 
-import styles from './styles';
+import styles from "./styles";
 
-import { AppBar, StarRating, TextInput } from '../../../Components';
-import { Colors, Images } from '../../../Themes';
-import NavigationService from '../../../Navigation/NavigationService';
-import { s } from 'react-native-size-matters';
+import { StarRating, TextInput } from "../../../Components";
+import { Images } from "../../../Themes";
+import NavigationService from "../../../Navigation/NavigationService";
+import { s } from "react-native-size-matters";
 
 class RateSellerScreen extends Component {
   constructor(props) {
@@ -28,7 +28,17 @@ class RateSellerScreen extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props)
+    console.log(this.props);
+    this.props.navigation.setOptions({
+      title: "Evaluate the seller",
+      headerRight: () => {
+        return (
+          <TouchableOpacity onPress={this.onPost}>
+            <Text style={styles.txtSave}>POST</Text>
+          </TouchableOpacity>
+        );
+      },
+    });
   }
 
   onPost = () => {
@@ -66,21 +76,6 @@ class RateSellerScreen extends Component {
     this.setState({ images });
   };
 
-  renderHeader() {
-    return (
-      <View style={styles.header}>
-        <AppBar
-          title={'Evaluate the seller'}
-          rightButton={() => (
-            <TouchableOpacity onPress={this.onPost}>
-              <Text style={styles.txtSave}>POST</Text>
-            </TouchableOpacity>
-          )}
-        />
-      </View>
-    );
-  }
-
   renderImageItem = ({ item, index }) => {
     return (
       <ImageBackground
@@ -109,7 +104,7 @@ class RateSellerScreen extends Component {
         <TextInput
           style={styles.reviewInput}
           multiline
-          placeholder={'Write here your review'}
+          placeholder={"Write here your review"}
         />
       </View>
     );
@@ -118,17 +113,12 @@ class RateSellerScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-          {this.renderHeader()}
-
-          {this.renderBody()}
-        </SafeAreaView>
+        {this.renderBody()}
 
         <ActionSheet
           ref={(o) => (this.ActionSheet = o)}
-          title={'Which one do you like ?'}
-          options={['Camera', 'Photo Gallery', 'Cancel']}
+          title={"Which one do you like ?"}
+          options={["Camera", "Photo Gallery", "Cancel"]}
           cancelButtonIndex={2}
           //destructiveButtonIndex={1}
           onPress={(index) => {

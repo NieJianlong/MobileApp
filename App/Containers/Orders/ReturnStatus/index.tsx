@@ -25,6 +25,7 @@ import { capitalize, last } from "lodash";
 import QRCode from "react-native-qrcode-svg";
 import { t } from "react-native-tailwindcss";
 import PickInfo from "../../../Components/PickInfo";
+import { useNavigation } from "@react-navigation/native";
 
 function ReturnStatus(props) {
   const {
@@ -65,6 +66,12 @@ function ReturnStatus(props) {
     return null;
   }, [trackData]);
 
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: type === "track" ? "Track Order" : "Order return status",
+    });
+  }, [navigation]);
   return (
     <View
       style={{
@@ -77,82 +84,67 @@ function ReturnStatus(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar
-          title={type === "track" ? "Track Order" : "Order return status"}
-        />
-        <ScrollView contentContainerStyle={{ paddingBottom: vs(64) }}>
-          <View>
+      <ScrollView contentContainerStyle={{ paddingBottom: vs(64) }}>
+        <View>
+          <View
+            style={{
+              alignItems: "center",
+              height: vs(100),
+              justifyContent: "center",
+            }}
+          >
+            <Text
+              style={[ApplicationStyles.screen.txtRegular, { fontSize: s(14) }]}
+            >
+              {`Estimated ${type === "track" ? "delivery" : "return"} date`}
+            </Text>
+            <Text
+              style={[ApplicationStyles.screen.txtRegular, { fontSize: s(14) }]}
+            >
+              {moment(trackData?.getOrderReturnStatus.deadline).format(
+                "DD MMM yyyy"
+              )}
+            </Text>
+            <View style={{ height: 10, width: "100%" }} />
+          </View>
+          <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
             <View
               style={{
-                alignItems: "center",
-                height: vs(100),
-                justifyContent: "center",
+                backgroundColor: "white",
+                borderRadius: s(16),
+                flex: 1,
               }}
             >
-              <Text
-                style={[
-                  ApplicationStyles.screen.txtRegular,
-                  { fontSize: s(14) },
-                ]}
-              >
-                {`Estimated ${type === "track" ? "delivery" : "return"} date`}
-              </Text>
-              <Text
-                style={[
-                  ApplicationStyles.screen.txtRegular,
-                  { fontSize: s(14) },
-                ]}
-              >
-                {moment(trackData?.getOrderReturnStatus.deadline).format(
-                  "DD MMM yyyy"
-                )}
-              </Text>
-              <View style={{ height: 10, width: "100%" }} />
+              <Header orderNumber={data.orderNumber} />
+              {lastEvent?.eventType !== ReturnEventType.WaitingBuyerReturn ? (
+                <Trackers events={events} />
+              ) : (
+                <View style={[t.justifyCenter, t.itemsCenter, t.mY6]}>
+                  <QRCode
+                    value={JSON.stringify({
+                      orderReturnId:
+                        trackData?.getOrderReturnStatus.orderReturnId,
+                      buyerId: global.buyerId,
+                    })}
+                    size={width / 2.5}
+                  />
+                  <Text style={[t.textCenter, t.w8_12, t.mT6]}>
+                    The seller must scan this QR code before they can give you a
+                    refund
+                  </Text>
+                </View>
+              )}
             </View>
-            <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-              <View
-                style={{
-                  backgroundColor: "white",
-                  borderRadius: s(16),
-                  flex: 1,
-                }}
-              >
-                <Header orderNumber={data.orderNumber} />
-                {lastEvent?.eventType !== ReturnEventType.WaitingBuyerReturn ? (
-                  <Trackers events={events} />
-                ) : (
-                  <View style={[t.justifyCenter, t.itemsCenter, t.mY6]}>
-                    <QRCode
-                      value={JSON.stringify({
-                        orderReturnId:
-                          trackData?.getOrderReturnStatus.orderReturnId,
-                        buyerId: global.buyerId,
-                      })}
-                      size={width / 2.5}
-                    />
-                    <Text style={[t.textCenter, t.w8_12, t.mT6]}>
-                      The seller must scan this QR code before they can give you
-                      a refund
-                    </Text>
-                  </View>
-                )}
-              </View>
-            </View>
-            {lastEvent?.eventType === ReturnEventType.WaitingBuyerReturn && (
-              <PickInfo
-                deliveryOption={data.deliveryOption}
-                sellerLocation={data.sellerLocation}
-                collectionPoint={data.collectionPoint}
-              />
-            )}
           </View>
-        </ScrollView>
-      </SafeAreaView>
+          {lastEvent?.eventType === ReturnEventType.WaitingBuyerReturn && (
+            <PickInfo
+              deliveryOption={data.deliveryOption}
+              sellerLocation={data.sellerLocation}
+              collectionPoint={data.collectionPoint}
+            />
+          )}
+        </View>
+      </ScrollView>
     </View>
   );
 }

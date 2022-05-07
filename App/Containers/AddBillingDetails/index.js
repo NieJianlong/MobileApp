@@ -21,7 +21,7 @@ import {
 import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
 import colors from "../../Themes/Colors";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useMutation, useReactiveVar, useLazyQuery } from "@apollo/client";
 import {
   CREATE_BILLING_DETAILS,
@@ -37,6 +37,7 @@ import { userProfileVar } from "../../Apollo/cache";
 import { Action_Type, Billing_Type } from "./const";
 import GetBillingDetail from "../../hooks/billingDetails";
 import images from "../../Themes/Images";
+import { t } from "react-native-tailwindcss";
 
 function AddBillingDetails(props) {
   const {
@@ -405,103 +406,99 @@ function AddBillingDetails(props) {
       }
     }
   }, [addBilling, isEmpty, dispatch, email, phoneNum]);
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <RightButton
+            title={actionType}
+            disable={isEmpty && !useDefaultAddress}
+            onPress={() => {
+              onAddBilling();
+            }}
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar
-          rightButton={() => {
-            return (
-              <RightButton
-                title={actionType}
-                disable={isEmpty && !useDefaultAddress}
-                onPress={() => {
-                  onAddBilling();
-                }}
-              />
-            );
-          }}
-        />
-        <KeyboardAwareScrollView>
-          <View style={styles.bodyContainer}>
-            <Text style={[styles.heading2Bold, { fontSize: s(20) }]}>
-              {title}
-            </Text>
-            <View style={{ marginTop: 20 }}>
-              <Switch
-                onSwitch={(b) => setUseDefaultAddress(b)}
-                label="Use the same info as default delivery address"
-              />
-            </View>
-            <TouchableOpacity onPress={() => {}}>
-              <View style={styles.saveAddress}>
-                <View style={styles.addressIcon}>
-                  <Image source={images.addressIcon} />
-                </View>
-                <Text style={styles.saveAddressText}>Use a saved address</Text>
-              </View>
-            </TouchableOpacity>
-
-            <View
-              style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                justifyContent: "space-between",
-              }}
-            >
-              {inputs.map((item, index) => {
-                return (
-                  <View
-                    key={index}
-                    style={{
-                      width: item.type == "short" ? "48%" : "100%",
-                      marginTop: vs(18),
-                    }}
-                  >
-                    {item.keyboardType === "selector" ? (
-                      <Selector
-                        placeholder={"Sate"}
-                        value={mstate}
-                        data={["AAA", "BBB", "CCC"]}
-                        onValueChange={(text) => setMstate(text)}
-                      />
-                    ) : (
-                      <MaterialTextInput {...item} />
-                    )}
-                  </View>
-                );
-              })}
-            </View>
+      <KeyboardAwareScrollView>
+        <View style={styles.bodyContainer}>
+          <Text style={[styles.heading2Bold, { fontSize: s(20) }]}>
+            {title}
+          </Text>
+          <View style={{ marginTop: 20 }}>
+            <Switch
+              onSwitch={(b) => setUseDefaultAddress(b)}
+              label="Use the same info as default delivery address"
+            />
           </View>
-        </KeyboardAwareScrollView>
-        {billingDetail?.billingDetailsId &&
-          billingType !== Billing_Type.BILLING && (
-            <View
-              style={{
-                position: "absolute",
-                bottom: 10,
-                right: 0,
-                backgroundColor: colors.background,
-                left: 0,
-                paddingHorizontal: AppConfig.paddingHorizontal,
-              }}
-            >
-              <Button
-                onPress={() => {
-                  dispatch({ type: "loading" });
-                  deleteBilling();
-                }}
-                textColor={colors.grey80}
-                text="REMOVE BILLING DETAILS"
-                backgroundColor="transparent"
-              />
+          <TouchableOpacity onPress={() => {}}>
+            <View style={styles.saveAddress}>
+              <View style={styles.addressIcon}>
+                <Image source={images.addressIcon} />
+              </View>
+              <Text style={styles.saveAddressText}>Use a saved address</Text>
             </View>
-          )}
-      </SafeAreaView>
+          </TouchableOpacity>
+
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+            }}
+          >
+            {inputs.map((item, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    width: item.type == "short" ? "48%" : "100%",
+                    marginTop: vs(18),
+                  }}
+                >
+                  {item.keyboardType === "selector" ? (
+                    <Selector
+                      placeholder={"Sate"}
+                      value={mstate}
+                      data={["AAA", "BBB", "CCC"]}
+                      onValueChange={(text) => setMstate(text)}
+                    />
+                  ) : (
+                    <MaterialTextInput {...item} />
+                  )}
+                </View>
+              );
+            })}
+          </View>
+        </View>
+      </KeyboardAwareScrollView>
+      {billingDetail?.billingDetailsId && billingType !== Billing_Type.BILLING && (
+        <View
+          style={{
+            position: "absolute",
+            bottom: 10,
+            right: 0,
+            backgroundColor: colors.background,
+            left: 0,
+            paddingHorizontal: AppConfig.paddingHorizontal,
+          }}
+        >
+          <Button
+            onPress={() => {
+              dispatch({ type: "loading" });
+              deleteBilling();
+            }}
+            textColor={colors.grey80}
+            text="REMOVE BILLING DETAILS"
+            backgroundColor="transparent"
+          />
+        </View>
+      )}
     </View>
   );
 }

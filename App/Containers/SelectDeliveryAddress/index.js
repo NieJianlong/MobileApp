@@ -16,6 +16,7 @@ import { StackActions } from "@react-navigation/native";
 import Addresses from "../UserInfo/InfoList/Addresses";
 import { useQuery } from "@apollo/client";
 import { FIND_BUYER_ADDRESS_BY_ID_AND_TPYE } from "../../Apollo/queries/queries_user";
+import { t } from "react-native-tailwindcss";
 /**
  * @description: The user selects the shipping address page
  * @param {*} props
@@ -45,62 +46,57 @@ function SelectDeliveryAddress(props) {
   }, [refetch]);
   useFocusEffect(refreshData);
 
-  return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar
-          rightButton={() => (
-            <RightButton
-              title="SAVE"
-              onPress={() => {
-                navigation.dispatch(popAction);
-                context.dispatch({
-                  type: "changAlertState",
-                  payload: {
-                    visible: true,
-                    message:
-                      "You have successfully activated 1 click purchasing method.",
-                    color: colors.success,
-                    title: "1 Click Purchasing Activated!",
-                  },
-                });
-              }}
-            />
-          )}
-        />
-
-        <View style={{ flex: 1, paddingBottom: 90 }}>
-          <Text
-            style={[
-              styles.heading2Bold,
-              {
-                fontSize: s(22),
-                paddingHorizontal: AppConfig.paddingHorizontal,
-              },
-            ]}
-          >
-            Select a default delivery address
-          </Text>
-
-          <Addresses
-            data={data?.getBuyerAddressByType || []}
-            refetch={refetch}
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <RightButton
+            title="SAVE"
+            onPress={() => {
+              navigation.dispatch(popAction);
+              context.dispatch({
+                type: "changAlertState",
+                payload: {
+                  visible: true,
+                  message:
+                    "You have successfully activated 1 click purchasing method.",
+                  color: colors.success,
+                  title: "1 Click Purchasing Activated!",
+                },
+              });
+            }}
           />
         </View>
-        <SafeAreaView
-          style={{
-            position: "absolute",
-            bottom: 10,
-            right: 0,
-            left: 0,
-            paddingHorizontal: AppConfig.paddingHorizontal,
-          }}
-        ></SafeAreaView>
-      </SafeAreaView>
+      ),
+    });
+  }, [navigation]);
+
+  return (
+    <View style={styles.container}>
+      <View style={{ flex: 1, paddingBottom: 90 }}>
+        <Text
+          style={[
+            styles.heading2Bold,
+            {
+              fontSize: s(22),
+              paddingHorizontal: AppConfig.paddingHorizontal,
+            },
+          ]}
+        >
+          Select a default delivery address
+        </Text>
+
+        <Addresses data={data?.getBuyerAddressByType || []} refetch={refetch} />
+      </View>
+      <SafeAreaView
+        style={{
+          position: "absolute",
+          bottom: 10,
+          right: 0,
+          left: 0,
+          paddingHorizontal: AppConfig.paddingHorizontal,
+        }}
+      />
     </View>
   );
 }

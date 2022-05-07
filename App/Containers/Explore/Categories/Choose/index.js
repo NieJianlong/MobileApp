@@ -1,4 +1,4 @@
-import React, { Component, useMemo } from "react";
+import React, { Component, useEffect, useMemo, useState } from "react";
 import {
   View,
   StatusBar,
@@ -15,39 +15,7 @@ import * as aQM from "../../gql/explore_queries";
 
 import { SAVE_PREFERRED_CATEGORIES } from "../../../../Apollo/mutations/mutations_product";
 import { t } from "react-native-tailwindcss";
-
-function Header({ selected }) {
-  const selectedIds = useMemo(() => {
-    return selected.map((item) => item.categoryId);
-  }, [selected]);
-  const [savePrefered] = useMutation(SAVE_PREFERRED_CATEGORIES, {
-    variables: { buyerId: global.buyerId, categories: selectedIds },
-    onCompleted: (res) => {
-      NavigationService.goBack();
-    },
-    context: {
-      headers: {
-        isPrivate: true,
-      },
-    },
-    onError: (res) => {},
-  });
-  return (
-    <View style={styles.header}>
-      <AppBar
-        rightButton={() => (
-          <TouchableOpacity
-            onPress={() => {
-              savePrefered();
-            }}
-          >
-            <Text style={styles.txtSave}>SAVE</Text>
-          </TouchableOpacity>
-        )}
-      />
-    </View>
-  );
-}
+import { useNavigation } from "@react-navigation/native";
 
 class OldChooseCategoriesScreen extends Component {
   constructor(props) {
@@ -72,6 +40,7 @@ class OldChooseCategoriesScreen extends Component {
       let index = categories.indexOf(item);
       categories.splice(index, 1);
     }
+    this.props.onChanged(categories);
     this.setState({ categories });
   };
 
@@ -116,8 +85,6 @@ class OldChooseCategoriesScreen extends Component {
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" />
         <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-          <Header selected={this.state.categories} />
-
           {this.renderBody()}
         </SafeAreaView>
       </View>
@@ -136,12 +103,52 @@ export default function ChooseCategoriesScreen() {
     },
   });
   const { data: allCategories } = useQuery(aQM.GET_ALL_CATEGORIES);
+  const [selected, setSelected] = useState([]);
+  useEffect(() => {
+    if (categories) {
+      setSelected(categories?.getPreferredCategories);
+    }
+  }, [categories]);
+  const selectedIds = useMemo(() => {
+    return selected.map((item) => item.categoryId);
+  }, [selected]);
+  const [savePrefered] = useMutation(SAVE_PREFERRED_CATEGORIES, {
+    variables: { buyerId: global.buyerId, categories: selectedIds },
+    onCompleted: (res) => {
+      NavigationService.goBack();
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onError: (res) => {},
+  });
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <TouchableOpacity
+            onPress={() => {
+              savePrefered();
+            }}
+          >
+            <Text style={styles.txtSave}>SAVE</Text>
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View style={[t.hFull]}>
       {categories !== undefined && allCategories !== undefined && (
         <OldChooseCategoriesScreen
           selected={categories?.getPreferredCategories || []}
           allCategories={allCategories?.getAllCategories || []}
+          onChanged={(items) => {
+            setSelected(items);
+          }}
         />
       )}
     </View>

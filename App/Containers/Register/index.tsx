@@ -286,214 +286,206 @@ function RegisterScreen(props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar showLogo onPressBack={() => props.navigation.goBack()} />
-        <KeyboardAwareScrollView style={styles.bodyContainer}>
-          <Text style={styles.heading2Bold}>Register</Text>
-          <Text style={styles.heading4Regular}>
-            Create an account to have access to the best promos in your area!
-          </Text>
-          <Controller
-            control={control}
-            rules={{
-              required: "Field is required.",
-            }}
-            render={({ field: { onChange, value } }) => (
-              <TextInput
-                style={[t.mT4]}
-                ref={nameInput}
-                placeholder={"Type your first name"}
-                onSubmitEditing={() =>
-                  lastNameInput.current.getInnerRef().focus()
-                }
-                returnKeyType={"next"}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="firstName"
-          />
-          {errors.firstName && (
-            <Text style={[t.textRed900, t.mT1, t.mL4]}>
-              {errors.firstName.message}
-            </Text>
-          )}
-
-          <Controller
-            control={control}
-            rules={{
-              required: "Field is required.",
-            }}
-            render={({ field: { onChange, value } }) => (
-              <TextInput
-                style={[t.mT4]}
-                placeholder={"Type your last name"}
-                ref={lastNameInput}
-                onSubmitEditing={() =>
-                  emailInput?.current.getInnerRef().focus()
-                }
-                returnKeyType={"next"}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="lastName"
-          />
-          {errors.lastName && (
-            <Text style={[t.textRed900, t.mT1, t.mL4]}>
-              {errors.lastName.message}
-            </Text>
-          )}
-
-          <Controller
-            control={control}
-            rules={{
-              required: "Field is required.",
-              // pattern: {
-              //   value:
-              //     /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
-              //   message: "invalid email address",
-              // },
-            }}
-            render={({ field: { onChange, value } }) => (
-              <TextInput
-                style={[t.mT4]}
-                placeholder={"Type your email"}
-                ref={emailInput}
-                onSubmitEditing={() => {
-                  phonenumInput.current.getInnerRef().focus();
-                }}
-                returnKeyType={"next"}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="email"
-          />
-
-          {errors.email && (
-            <Text style={[t.textRed900, t.mT1, t.mL4]}>
-              {errors.email.message}
-            </Text>
-          )}
-
-          <Controller
-            control={control}
-            rules={{
-              required: "Field is required.",
-              pattern: {
-                value: /^[6-9]\d{9}$/,
-                message: "invalid phone number",
-              },
-            }}
-            render={({ field: { onChange, value } }) => (
-              <TextInput
-                style={[t.mT4]}
-                placeholder={"Type your phone number"}
-                ref={phonenumInput}
-                onFocus={() => {
-                  if (Platform.OS === "android") {
-                    try {
-                      SmsRetriever.requestPhoneNumber()
-                        .then((resph) => {
-                          console.log(
-                            "SmsRetriever==request===PhoneNumber",
-                            resph
-                          );
-                          if (resph.startsWith("+91")) {
-                            setValue("phoneNumber", trimStart(resph, "+91"));
-                          }
-                          if (resph.startsWith("+86")) {
-                            setValue("phoneNumber", trimStart(resph, "+86"));
-                          }
-                        })
-                        .catch((err) => {
-                          console.log("SmsRetriever error", err);
-                        });
-                    } catch (error) {
-                      console.log(JSON.stringify(error));
-                    }
-                  }
-                }}
-                onSubmitEditing={() =>
-                  passwordInput?.current.getInnerRef().focus()
-                }
-                returnKeyType={"next"}
-                isPhoneNo={true}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="phoneNumber"
-          />
-
-          {errors.phoneNumber && (
-            <Text style={[t.textRed900, t.mT1, t.mL4]}>
-              {errors.phoneNumber.message}
-            </Text>
-          )}
-          <Controller
-            control={control}
-            rules={{
-              required: "Field is required.",
-            }}
-            render={({ field: { onChange, value } }) => (
-              <PasswordInput
-                style={[t.mT4]}
-                placeholder={"Enter your password"}
-                ref={passwordInput}
-                //onSubmitEditing={onRegister}
-                defaultValue={""}
-                returnKeyType={"done"}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="password"
-          />
-          {errors.password && (
-            <Text style={[t.textRed900, t.mT1, t.mL4]}>
-              {errors.password.message}
-            </Text>
-          )}
-
-          <View style={styles.switch}>
-            <Switch
-              onSwitch={() => {
-                toggleTermsAccepted();
-              }}
-            />
-            <TouchableOpacity
-              onPress={() =>
-                props.navigation.navigate("LegalScreen", { tabIndex: 0 })
+      <KeyboardAwareScrollView style={styles.bodyContainer}>
+        <Text style={styles.heading2Bold}>Register</Text>
+        <Text style={styles.heading4Regular}>
+          Create an account to have access to the best promos in your area!
+        </Text>
+        <Controller
+          control={control}
+          rules={{
+            required: "Field is required.",
+          }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={[t.mT4]}
+              ref={nameInput}
+              placeholder={"Type your first name"}
+              onSubmitEditing={() =>
+                lastNameInput.current.getInnerRef().focus()
               }
-            >
-              <Text style={styles.txtAccept}>
-                I accept
-                <Text style={styles.txtPrivacy}> Privacy Policy </Text>
-                and
-                <Text style={styles.txtPrivacy}> Terms of use</Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
+              returnKeyType={"next"}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+          name="firstName"
+        />
+        {errors.firstName && (
+          <Text style={[t.textRed900, t.mT1, t.mL4]}>
+            {errors.firstName.message}
+          </Text>
+        )}
 
-          <View style={{ flex: 1 }} />
-          <Text style={styles.txtValidate}>{validationDisplay} </Text>
+        <Controller
+          control={control}
+          rules={{
+            required: "Field is required.",
+          }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={[t.mT4]}
+              placeholder={"Type your last name"}
+              ref={lastNameInput}
+              onSubmitEditing={() => emailInput?.current.getInnerRef().focus()}
+              returnKeyType={"next"}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+          name="lastName"
+        />
+        {errors.lastName && (
+          <Text style={[t.textRed900, t.mT1, t.mL4]}>
+            {errors.lastName.message}
+          </Text>
+        )}
 
-          <Button onPress={handleSubmit(onSubmit)} text={"REGISTER"} />
+        <Controller
+          control={control}
+          rules={{
+            required: "Field is required.",
+            // pattern: {
+            //   value:
+            //     /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
+            //   message: "invalid email address",
+            // },
+          }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={[t.mT4]}
+              placeholder={"Type your email"}
+              ref={emailInput}
+              onSubmitEditing={() => {
+                phonenumInput.current.getInnerRef().focus();
+              }}
+              returnKeyType={"next"}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+          name="email"
+        />
 
+        {errors.email && (
+          <Text style={[t.textRed900, t.mT1, t.mL4]}>
+            {errors.email.message}
+          </Text>
+        )}
+
+        <Controller
+          control={control}
+          rules={{
+            required: "Field is required.",
+            pattern: {
+              value: /^[6-9]\d{9}$/,
+              message: "invalid phone number",
+            },
+          }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={[t.mT4]}
+              placeholder={"Type your phone number"}
+              ref={phonenumInput}
+              onFocus={() => {
+                if (Platform.OS === "android") {
+                  try {
+                    SmsRetriever.requestPhoneNumber()
+                      .then((resph) => {
+                        console.log(
+                          "SmsRetriever==request===PhoneNumber",
+                          resph
+                        );
+                        if (resph.startsWith("+91")) {
+                          setValue("phoneNumber", trimStart(resph, "+91"));
+                        }
+                        if (resph.startsWith("+86")) {
+                          setValue("phoneNumber", trimStart(resph, "+86"));
+                        }
+                      })
+                      .catch((err) => {
+                        console.log("SmsRetriever error", err);
+                      });
+                  } catch (error) {
+                    console.log(JSON.stringify(error));
+                  }
+                }
+              }}
+              onSubmitEditing={() =>
+                passwordInput?.current.getInnerRef().focus()
+              }
+              returnKeyType={"next"}
+              isPhoneNo={true}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+          name="phoneNumber"
+        />
+
+        {errors.phoneNumber && (
+          <Text style={[t.textRed900, t.mT1, t.mL4]}>
+            {errors.phoneNumber.message}
+          </Text>
+        )}
+        <Controller
+          control={control}
+          rules={{
+            required: "Field is required.",
+          }}
+          render={({ field: { onChange, value } }) => (
+            <PasswordInput
+              style={[t.mT4]}
+              placeholder={"Enter your password"}
+              ref={passwordInput}
+              //onSubmitEditing={onRegister}
+              defaultValue={""}
+              returnKeyType={"done"}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+          name="password"
+        />
+        {errors.password && (
+          <Text style={[t.textRed900, t.mT1, t.mL4]}>
+            {errors.password.message}
+          </Text>
+        )}
+
+        <View style={styles.switch}>
+          <Switch
+            onSwitch={() => {
+              toggleTermsAccepted();
+            }}
+          />
           <TouchableOpacity
-            onPress={() => props.navigation.goBack()}
-            style={styles.btnSignin}
+            onPress={() =>
+              props.navigation.navigate("LegalScreen", { tabIndex: 0 })
+            }
           >
-            <Text style={styles.txtAction}>SIGN IN</Text>
+            <Text style={styles.txtAccept}>
+              I accept
+              <Text style={styles.txtPrivacy}> Privacy Policy </Text>
+              and
+              <Text style={styles.txtPrivacy}> Terms of use</Text>
+            </Text>
           </TouchableOpacity>
-        </KeyboardAwareScrollView>
-      </SafeAreaView>
+        </View>
+
+        <View style={{ flex: 1 }} />
+        <Text style={styles.txtValidate}>{validationDisplay} </Text>
+
+        <Button onPress={handleSubmit(onSubmit)} text={"REGISTER"} />
+
+        <TouchableOpacity
+          onPress={() => props.navigation.goBack()}
+          style={styles.btnSignin}
+        >
+          <Text style={styles.txtAction}>SIGN IN</Text>
+        </TouchableOpacity>
+      </KeyboardAwareScrollView>
+
       {/* {renderValidationAlert()} */}
     </View>
   );

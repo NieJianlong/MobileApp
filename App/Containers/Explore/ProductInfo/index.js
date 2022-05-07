@@ -34,8 +34,6 @@ function ProductInfoScreen(props) {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-        <AppBar />
-
         {renderBody()}
       </SafeAreaView>
     </View>

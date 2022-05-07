@@ -15,7 +15,8 @@ import { AppBar, RightButton, SearchBox } from "../../Components";
 import NavigationService from "../../Navigation/NavigationService";
 import CheckBox from "../Explore/Components/CheckBox";
 import metrics from "../../Themes/Metrics";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { t } from "react-native-tailwindcss";
 
 const countries = () => ["India"];
 
@@ -27,6 +28,22 @@ function SelectCountryOrLanguage(props) {
   const [selectValue, setSelectValue] = useState(
     key == "country" ? countries()[0] : languages()[0]
   );
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: `Select a ${key}`,
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <RightButton
+            title="SAVE"
+            onPress={() => {
+              NavigationService.goBack();
+            }}
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View
       style={{
@@ -39,49 +56,29 @@ function SelectCountryOrLanguage(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar
-          title={`Select a ${key}`}
-          rightButton={() => (
-            <RightButton
-              title="SAVE"
-              onPress={() => {
-                NavigationService.goBack();
-              }}
-            />
-          )}
-        />
-
-        <View style={{ height: metrics.screenHeight - vs(64) }}>
-          <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-            <SearchBox placeholder={`Search for a ${key}`}></SearchBox>
-          </View>
-
-          <FlatList
-            contentContainerStyle={{ paddingBottom: vs(44) }}
-            data={key == "country" ? countries() : languages()}
-            renderItem={({ item }, index) => {
-              return (
-                <View
-                  style={{ paddingHorizontal: AppConfig.paddingHorizontal }}
-                >
-                  <View style={{ height: vs(12) }} />
-                  <CheckBox
-                    defaultValue={selectValue == item}
-                    onSwitch={(t) => setSelectValue(item)}
-                    label={item}
-                  />
-                </View>
-              );
-            }}
-            keyExtractor={(item, index) => `ass${index}`}
-          />
+      <View style={{ height: metrics.screenHeight - vs(64) }}>
+        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+          <SearchBox placeholder={`Search for a ${key}`} />
         </View>
-      </SafeAreaView>
+
+        <FlatList
+          contentContainerStyle={{ paddingBottom: vs(44) }}
+          data={key == "country" ? countries() : languages()}
+          renderItem={({ item }, index) => {
+            return (
+              <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+                <View style={{ height: vs(12) }} />
+                <CheckBox
+                  defaultValue={selectValue == item}
+                  onSwitch={(t) => setSelectValue(item)}
+                  label={item}
+                />
+              </View>
+            );
+          }}
+          keyExtractor={(item, index) => `ass${index}`}
+        />
+      </View>
     </View>
   );
 }

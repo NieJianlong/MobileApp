@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { View, Text, SafeAreaView, StatusBar, SectionList } from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
@@ -14,6 +14,7 @@ import { ApplicationStyles } from "../../Themes";
 import * as ecM from "./editCartMappers.js";
 import { lowerFirst } from "lodash";
 import useRealm from "../../hooks/useRealm";
+import { t } from "react-native-tailwindcss";
 
 /**
  * we are coming here from a navigation event
@@ -47,9 +48,26 @@ function EditShoppingCart(props) {
       }
     }
   }
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "Edit details",
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <RightButton
+            title="SAVE"
+            onPress={() => {
+              NavigationService.goBack();
+            }}
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
   if (!product.product?.listingVariants || sections.length === 0) {
     return null;
   }
+
   return (
     <View
       style={{
@@ -62,90 +80,71 @@ function EditShoppingCart(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar
-          title={"Edit details"}
-          rightButton={() => {
-            return (
-              <RightButton
-                title="SAVE"
-                onPress={() => {
-                  NavigationService.goBack();
-                }}
-              />
+      <View style={{ height: metrics.screenHeight - vs(64) }}>
+        <SectionList
+          contentContainerStyle={{ paddingBottom: vs(44) }}
+          sections={sections}
+          renderSectionHeader={({ section: { title } }) => (
+            <View
+              style={{
+                paddingHorizontal: s(18),
+                height: 50,
+                justifyContent: "center",
+                backgroundColor: "#F8F9FA",
+              }}
+            >
+              <Text
+                style={[
+                  ApplicationStyles.screen.heading4Bold,
+                  { marginTop: 20 },
+                ]}
+              >
+                {title}
+              </Text>
+            </View>
+          )}
+          renderItem={({ item, section, separators }, index) => {
+            const optionValue = item.options.find(
+              (i) => i.key === section.title
             );
-          }}
-        />
-        <View style={{ height: metrics.screenHeight - vs(64) }}>
-          <SectionList
-            contentContainerStyle={{ paddingBottom: vs(44) }}
-            sections={sections}
-            renderSectionHeader={({ section: { title } }) => (
+            const selectedOption =
+              selected.options?.find((i) => i.key === section.title) ?? null;
+            return (
               <View
                 style={{
-                  paddingHorizontal: s(18),
-                  height: 50,
-                  justifyContent: "center",
-                  backgroundColor: "#F8F9FA",
+                  paddingHorizontal: AppConfig.paddingHorizontal,
                 }}
               >
-                <Text
-                  style={[
-                    ApplicationStyles.screen.heading4Bold,
-                    { marginTop: 20 },
-                  ]}
-                >
-                  {title}
-                </Text>
-              </View>
-            )}
-            renderItem={({ item, section, separators }, index) => {
-              const optionValue = item.options.find(
-                (i) => i.key === section.title
-              );
-              const selectedOption =
-                selected.options?.find((i) => i.key === section.title) ?? null;
-              return (
-                <View
-                  style={{
-                    paddingHorizontal: AppConfig.paddingHorizontal,
+                <View style={{ height: vs(12) }} />
+                <CheckBox
+                  defaultValue={selectedOption?.value === optionValue.value}
+                  onSwitch={(t) => {
+                    setSelected(item);
                   }}
-                >
-                  <View style={{ height: vs(12) }} />
-                  <CheckBox
-                    defaultValue={selectedOption?.value === optionValue.value}
-                    onSwitch={(t) => {
-                      setSelected(item);
-                    }}
-                    hasIcon={false}
-                    iconColor={item.color}
-                    label={optionValue.value}
-                  />
-                  {selectedOption?.value !== optionValue.value && (
-                    <Text
-                      style={[
-                        { position: "absolute", top: vs(25), right: 40 },
-                        {
-                          color: colors.grey40,
-                          fontSize: vs(14),
-                          fontFamily: fonts.primary,
-                        },
-                      ]}
-                    >
-                      {item.price}
-                    </Text>
-                  )}
-                </View>
-              );
-            }}
-            keyExtractor={(item, index) => `ass${index}`}
-          />
-        </View>
-      </SafeAreaView>
+                  hasIcon={false}
+                  iconColor={item.color}
+                  label={optionValue.value}
+                />
+                {selectedOption?.value !== optionValue.value && (
+                  <Text
+                    style={[
+                      { position: "absolute", top: vs(25), right: 40 },
+                      {
+                        color: colors.grey40,
+                        fontSize: vs(14),
+                        fontFamily: fonts.primary,
+                      },
+                    ]}
+                  >
+                    {item.price}
+                  </Text>
+                )}
+              </View>
+            );
+          }}
+          keyExtractor={(item, index) => `ass${index}`}
+        />
+      </View>
     </View>
   );
 }

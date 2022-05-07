@@ -37,7 +37,6 @@ function CustomerSupport(props) {
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        <AppBar />
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <TouchableOpacity
             onPress={() =>

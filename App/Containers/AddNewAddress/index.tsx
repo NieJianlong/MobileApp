@@ -11,7 +11,7 @@ import {
 } from "../../Components";
 import styles from "./styles";
 import colors from "../../Themes/Colors";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { CREATE_ADDRESS } from "../../Apollo/mutations/mutations_user";
 import { AlertContext } from "../Root/GlobalContext";
@@ -187,6 +187,16 @@ function AddNewAddress() {
     }
     return [];
   }, [data]);
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <RightButton title="SAVE" onPress={handleSubmit(onSubmit)} />
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
@@ -194,11 +204,6 @@ function AddNewAddress() {
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        <AppBar
-          rightButton={() => (
-            <RightButton title="SAVE" onPress={handleSubmit(onSubmit)} />
-          )}
-        />
         <View style={styles.bodyContainer}>
           <Text style={styles.heading2Bold}>{params.title}</Text>
           <KeyboardAwareScrollView>

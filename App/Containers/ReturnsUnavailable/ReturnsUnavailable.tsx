@@ -5,7 +5,6 @@ import {
   Text,
   Image,
   SafeAreaView,
-  StatusBar,
 } from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
@@ -15,9 +14,37 @@ import { AppBar, Button } from "../../Components";
 import NavigationService from "../../Navigation/NavigationService";
 import images from "../../Themes/Images";
 import Content from "./Content";
-import { ApplicationStyles } from "../../Themes";
+import { useNavigation } from "@react-navigation/native";
+import { t } from "react-native-tailwindcss";
 
 function ReturnsUnavailable() {
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => null,
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <TouchableOpacity
+            onPress={() => {
+              NavigationService.navigate("GroupInfoScreen", {
+                type: "returnstatus",
+              });
+              // NavigationService.goBack();
+            }}
+          >
+            <Image
+              style={{
+                width: s(25),
+                height: s(25),
+                tintColor: colors.grey60,
+              }}
+              source={images.crossMedium}
+            />
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View
       style={{
@@ -30,55 +57,26 @@ function ReturnsUnavailable() {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar
-          hiddenBackBtn
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  NavigationService.navigate("GroupInfoScreen", {
-                    type: "returnstatus",
-                  });
-                  // NavigationService.goBack();
-                }}
-              >
-                <Image
-                  style={{
-                    width: s(25),
-                    height: s(25),
-                    tintColor: colors.grey60,
-                  }}
-                  source={images.crossMedium}
-                />
-              </TouchableOpacity>
-            );
+      <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+        <Text
+          style={{
+            fontSize: s(24),
+            fontFamily: fonts.primary,
+            color: colors.black,
+            fontWeight: "600",
           }}
-        />
-        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-          <Text
-            style={{
-              fontSize: s(24),
-              fontFamily: fonts.primary,
-              color: colors.black,
-              fontWeight: "600",
-            }}
-          >
-            Returns Unavailable
-          </Text>
-          <Content />
-          <View
-            style={{
-              marginTop: vs(50),
-              paddingHorizontal: AppConfig.paddingHorizontal,
-            }}
-          ></View>
-        </View>
-      </SafeAreaView>
+        >
+          Returns Unavailable
+        </Text>
+        <Content />
+        <View
+          style={{
+            marginTop: vs(50),
+            paddingHorizontal: AppConfig.paddingHorizontal,
+          }}
+        ></View>
+      </View>
+
       <SafeAreaView
         style={{
           position: "absolute",

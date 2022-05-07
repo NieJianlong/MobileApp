@@ -107,38 +107,27 @@ class ForgotPassword extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView
-          style={styles.safeArea}
-          edges={["top", "right", "left", "bottom"]}
-        >
-          <AppBar
-            showLogo={false}
-            onPressBack={() => NavigationService.goBack()}
+        <View style={styles.bodyContainer}>
+          <Text style={styles.heading2Bold}>Forgot your password?</Text>
+          <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
+            Please enter your information below to create a new one
+          </Text>
+
+          <TextInput
+            style={{ marginTop: vs(12) }}
+            placeholder={"Email or phone number"}
+            onChangeText={(text) => {
+              this.setState({
+                email: text,
+                disable: !validateEmail(text) && !validatePhone(text),
+              });
+            }}
           />
 
-          <View style={styles.bodyContainer}>
-            <Text style={styles.heading2Bold}>Forgot your password?</Text>
-            <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
-              Please enter your information below to create a new one
-            </Text>
+          <View style={{ flex: 1 }} />
 
-            <TextInput
-              style={{ marginTop: vs(12) }}
-              placeholder={"Email or phone number"}
-              onChangeText={(text) => {
-                this.setState({
-                  email: text,
-                  disable: !validateEmail(text) && !validatePhone(text),
-                });
-              }}
-            />
-
-            <View style={{ flex: 1 }} />
-
-            {this.renderAction()}
-          </View>
-        </SafeAreaView>
+          {this.renderAction()}
+        </View>
       </View>
     );
   }

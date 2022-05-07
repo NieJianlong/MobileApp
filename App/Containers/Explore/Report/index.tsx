@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { View, StatusBar, Text, TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import styles from "./styles";
 
-import { AppBar, TextInput, Selector } from "../../../Components";
+import { TextInput, Selector } from "../../../Components";
 import NavigationService from "../../../Navigation/NavigationService";
 import {
   ReportReviewReason,
@@ -15,6 +14,7 @@ import {
 import useAlert from "../../../hooks/useAlert";
 import colors from "../../../Themes/Colors";
 import useLoading from "../../../hooks/useLoading";
+import { t } from "react-native-tailwindcss";
 
 function Report(props) {
   const { params } = useRoute();
@@ -78,20 +78,18 @@ function Report(props) {
     }
   };
 
-  const renderHeader = () => {
-    return (
-      <View style={styles.header}>
-        <AppBar
-          rightButton={() => (
-            <TouchableOpacity onPress={onSubmit}>
-              <Text style={styles.txtSave}>SUBMIT</Text>
-            </TouchableOpacity>
-          )}
-        />
-      </View>
-    );
-  };
-
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <TouchableOpacity onPress={onSubmit}>
+            <Text style={styles.txtSave}>SUBMIT</Text>
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
   const renderBody = () => {
     return (
       <View style={styles.body}>
@@ -131,16 +129,7 @@ function Report(props) {
     );
   };
 
-  return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-        {renderHeader()}
-
-        {renderBody()}
-      </SafeAreaView>
-    </View>
-  );
+  return <View style={styles.container}>{renderBody()}</View>;
 }
 
 export default Report;

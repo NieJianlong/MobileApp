@@ -11,6 +11,8 @@ import { useMutation, useQuery } from "@apollo/client";
 import { CHANGE_PASSWORD } from "../../Apollo/mutations/mutations_user";
 import { AlertContext } from "../Root/GlobalContext";
 import * as storage from "../../Apollo/local-storage";
+import { useNavigation } from "@react-navigation/native";
+import { t } from "react-native-tailwindcss";
 function ChangePassword(props) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -124,41 +126,41 @@ function ChangePassword(props) {
       Keyboard.removeListener("keyboardWillHide", keyboardHide);
     };
   }, []);
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <RightButton
+            title="UPDATE"
+            disable={false}
+            onPress={changePassword}
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar
-          rightButton={() => (
-            <RightButton
-              title="UPDATE"
-              disable={false}
-              onPress={changePassword}
-            />
-          )}
-        />
-        <View style={styles.bodyContainer}>
-          <Text style={styles.heading2Bold}>Change my password</Text>
-          <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
-            For security reasons please first enter your current password.
-          </Text>
+      <View style={styles.bodyContainer}>
+        <Text style={styles.heading2Bold}>Change my password</Text>
+        <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
+          For security reasons please first enter your current password.
+        </Text>
 
-          <View>
-            {inputs.map((item, index) => {
-              return (
-                <PasswordInput
-                  key={index}
-                  style={{ marginTop: vs(18) }}
-                  {...item}
-                />
-              );
-            })}
-          </View>
+        <View>
+          {inputs.map((item, index) => {
+            return (
+              <PasswordInput
+                key={index}
+                style={{ marginTop: vs(18) }}
+                {...item}
+              />
+            );
+          })}
+        </View>
 
-          {/* <View style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
+        {/* <View style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
             <Button
               backgroundColor="transparent"
               textColor={colors.grey80}
@@ -166,8 +168,7 @@ function ChangePassword(props) {
               text={"I DON’T REMEMBER MY PASSWORD"}
             />
           </View> */}
-        </View>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

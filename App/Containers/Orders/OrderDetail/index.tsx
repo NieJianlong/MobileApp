@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-import { View, StatusBar, Text, Image, ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View, Text, Image, ScrollView } from "react-native";
 import styles from "./styles";
-import { AppBar } from "../../../Components";
 import { Images } from "../../../Themes";
 import { vs } from "react-native-size-matters";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { DeliveryOption } from "../../../../generated/graphql";
 import { t } from "react-native-tailwindcss";
 import { trimEnd } from "lodash";
@@ -18,14 +16,6 @@ class OrderDetail extends Component {
   }
 
   componentDidMount() {}
-
-  renderHeader() {
-    return (
-      <View style={styles.header}>
-        <AppBar title={this.props.data.orderNumber} />
-      </View>
-    );
-  }
 
   renderDeliverTo() {
     const deliverAddress = this.props.data?.deliveryAddress;
@@ -209,21 +199,18 @@ class OrderDetail extends Component {
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-          {this.renderHeader()}
-
-          {this.renderBody()}
-        </SafeAreaView>
-      </View>
-    );
+    return <View style={styles.container}>{this.renderBody()}</View>;
   }
 }
 
 function OrderDetailScreen(props) {
   const { params } = useRoute();
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: params?.data.orderNumber,
+    });
+  }, [navigation]);
   return <OrderDetail data={params?.data} product={params.product} />;
 }
 

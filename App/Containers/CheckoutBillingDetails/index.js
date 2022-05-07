@@ -15,7 +15,8 @@ import {
 import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
 import colors from "../../Themes/Colors";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { t } from "react-native-tailwindcss";
 
 function CheckoutBillingDetails(props) {
   const [firstName, setFirstName] = useState("");
@@ -180,82 +181,80 @@ function CheckoutBillingDetails(props) {
   ];
 
   const { params } = useRoute();
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <RightButton
+            title="NEXT"
+            disable={disable}
+            onPress={() => {
+              NavigationService.navigate("AddCheckoutPaymentMethodScreen");
+            }}
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
+      <KeyboardAwareScrollView
+        keyboardVerticalOffset={50}
+        behavior="position"
+        style={{ flex: 1 }}
+        enabled
+        contentContainerStyle={{ flex: 1 }}
       >
-        <AppBar
-          rightButton={() => (
-            <RightButton
-              title="NEXT"
-              disable={disable}
-              onPress={() => {
-                NavigationService.navigate("AddCheckoutPaymentMethodScreen");
+        <View style={styles.bodyContainer}>
+          <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
+            {params.title}
+          </Text>
+          <View style={{ marginTop: 20 }}>
+            <Switch
+              onSwitch={(check) => {
+                setUseAsPersonalInfo(check);
               }}
+              label="Use the same info as default delivery address"
             />
-          )}
-        />
-
-        <KeyboardAwareScrollView
-          keyboardVerticalOffset={50}
-          behavior="position"
-          style={{ flex: 1 }}
-          enabled
-          contentContainerStyle={{ flex: 1 }}
-        >
-          <View style={styles.bodyContainer}>
-            <Text style={[styles.heading2Bold, { fontSize: s(22) }]}>
-              {params.title}
-            </Text>
-            <View style={{ marginTop: 20 }}>
-              <Switch
-                onSwitch={(check) => {
-                  setUseAsPersonalInfo(check);
-                }}
-                label="Use the same info as default delivery address"
-              />
-            </View>
-            {!useAsPersonalInfo && (
-              <View
-                style={{
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                  justifyContent: "space-between",
-                }}
-              >
-                {inputs.map((item, index) => {
-                  return (
-                    <View
-                      key={index}
-                      style={{
-                        width: item.type == "short" ? "48%" : "100%",
-                        marginTop: vs(18),
-                      }}
-                    >
-                      {item.keyboardType === "selector" ? (
-                        <Selector
-                          placeholder={"Sate"}
-                          value={mstate}
-                          data={["AAA", "BBB", "CCC"]}
-                          onValueChange={(text) => setMstate(text)}
-                        />
-                      ) : (
-                        <MaterialTextInput
-                          style={{ marginTop: vs(18) }}
-                          {...item}
-                        />
-                      )}
-                    </View>
-                  );
-                })}
-              </View>
-            )}
           </View>
-        </KeyboardAwareScrollView>
-      </SafeAreaView>
+          {!useAsPersonalInfo && (
+            <View
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "space-between",
+              }}
+            >
+              {inputs.map((item, index) => {
+                return (
+                  <View
+                    key={index}
+                    style={{
+                      width: item.type == "short" ? "48%" : "100%",
+                      marginTop: vs(18),
+                    }}
+                  >
+                    {item.keyboardType === "selector" ? (
+                      <Selector
+                        placeholder={"Sate"}
+                        value={mstate}
+                        data={["AAA", "BBB", "CCC"]}
+                        onValueChange={(text) => setMstate(text)}
+                      />
+                    ) : (
+                      <MaterialTextInput
+                        style={{ marginTop: vs(18) }}
+                        {...item}
+                      />
+                    )}
+                  </View>
+                );
+              })}
+            </View>
+          )}
+        </View>
+      </KeyboardAwareScrollView>
     </View>
   );
 }

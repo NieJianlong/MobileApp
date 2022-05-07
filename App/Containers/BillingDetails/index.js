@@ -11,6 +11,8 @@ import { billingAddrsses } from "./constant";
 import { Action_Type, Billing_Type } from "../AddBillingDetails/const";
 import NavigationService from "../../Navigation/NavigationService";
 import images from "../../Themes/Images";
+import { useNavigation } from "@react-navigation/native";
+import { t } from "react-native-tailwindcss";
 
 function BillingDetails(props) {
   const { dispatch } = useContext(AlertContext);
@@ -42,18 +44,20 @@ function BillingDetails(props) {
     };
     NavigationService.navigate("AddBillingDetailsScreen", params);
   };
-
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <TouchableOpacity onPress={() => {}}>
+            <Text style={styles.rightButton}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <BaseScreen {...props}>
-      <AppBar
-        rightButton={() => {
-          return (
-            <TouchableOpacity onPress={() => {}}>
-              <Text style={styles.rightButton}>Next</Text>
-            </TouchableOpacity>
-          );
-        }}
-      />
       <View style={styles.container}>
         <View style={styles.horizontalCenter}>
           <Text style={styles.title}>Please enter your billing details</Text>

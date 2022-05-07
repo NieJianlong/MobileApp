@@ -16,8 +16,36 @@ import NavigationService from "../../Navigation/NavigationService";
 import images from "../../Themes/Images";
 import Content from "./Content";
 import { ApplicationStyles } from "../../Themes";
+import { useNavigation } from "@react-navigation/native";
 
 function ReturnProductStep3(props) {
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => null,
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <TouchableOpacity
+            onPress={() => {
+              NavigationService.navigate("GroupInfoScreen", {
+                type: "returnstatus",
+              });
+              // NavigationService.goBack();
+            }}
+          >
+            <Image
+              style={{
+                width: s(25),
+                height: s(25),
+                tintColor: colors.grey60,
+              }}
+              source={images.crossMedium}
+            />
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View
       style={{
@@ -30,83 +58,54 @@ function ReturnProductStep3(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <AppBar
-          hiddenBackBtn
-          rightButton={() => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  NavigationService.navigate("GroupInfoScreen", {
-                    type: "returnstatus",
-                  });
-                  // NavigationService.goBack();
-                }}
-              >
-                <Image
-                  style={{
-                    width: s(25),
-                    height: s(25),
-                    tintColor: colors.grey60,
-                  }}
-                  source={images.crossMedium}
-                />
-              </TouchableOpacity>
-            );
+      <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+        <Text
+          style={{
+            fontSize: s(24),
+            fontFamily: fonts.primary,
+            color: colors.black,
+            fontWeight: "600",
           }}
-        />
-        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-          <Text
-            style={{
-              fontSize: s(24),
-              fontFamily: fonts.primary,
-              color: colors.black,
-              fontWeight: "600",
-            }}
-          >
-            Your return label
-          </Text>
-          <Content />
+        >
+          Your return label
+        </Text>
+        <Content />
+        <View
+          style={{
+            marginTop: vs(50),
+            paddingHorizontal: AppConfig.paddingHorizontal,
+          }}
+        >
           <View
             style={{
-              marginTop: vs(50),
-              paddingHorizontal: AppConfig.paddingHorizontal,
+              width: "100%",
+              height: vs(24),
+              flexDirection: "row",
+              justifyContent: "center",
+              backgroundColor: "white",
+              alignItems: "center",
             }}
           >
-            <View
-              style={{
-                width: "100%",
-                height: vs(24),
-                flexDirection: "row",
-                justifyContent: "center",
-                backgroundColor: "white",
-                alignItems: "center",
-              }}
+            <Text
+              style={[
+                ApplicationStyles.screen.txtRegular,
+                { color: colors.black },
+              ]}
             >
-              <Text
-                style={[
-                  ApplicationStyles.screen.txtRegular,
-                  { color: colors.black },
-                ]}
-              >
-                Products must be returned before
-              </Text>
-              <Text
-                style={[
-                  ApplicationStyles.screen.heading4Regular,
-                  { color: colors.black, marginLeft: s(5), fontWeight: "bold" },
-                ]}
-              >
-                Dec 2, 2020
-              </Text>
-            </View>
+              Products must be returned before
+            </Text>
+            <Text
+              style={[
+                ApplicationStyles.screen.heading4Regular,
+                { color: colors.black, marginLeft: s(5), fontWeight: "bold" },
+              ]}
+            >
+              Dec 2, 2020
+            </Text>
           </View>
         </View>
-      </SafeAreaView>
+      </View>
+
       <SafeAreaView
         style={{
           position: "absolute",

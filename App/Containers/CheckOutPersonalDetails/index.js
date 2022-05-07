@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  StatusBar,
-  Text,
-  Keyboard,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, Keyboard, TouchableOpacity } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";

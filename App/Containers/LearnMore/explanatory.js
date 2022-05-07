@@ -1,5 +1,5 @@
 import React, { useRef, useState, useContext } from "react";
-import { View, StatusBar, Text } from "react-native";
+import { View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs, s } from "react-native-size-matters";
 import { AppBar, BottomSheet, Button } from "../../Components";
@@ -9,7 +9,6 @@ import Video from "react-native-video";
 const Explanatory = () => {
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}

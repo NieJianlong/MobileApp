@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StatusBar, Text, Keyboard } from "react-native";
+import { View, Text, Keyboard } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 

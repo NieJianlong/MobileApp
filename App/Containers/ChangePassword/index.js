@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
-import { View, StatusBar, Text, Keyboard } from "react-native";
+import { View, Text, Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import { AppBar, Button, PasswordInput, RightButton } from "../../Components";

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, SafeAreaView, StatusBar } from "react-native";
+import { View, Text, SafeAreaView } from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
@@ -95,7 +95,6 @@ function Refund(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" />
       <SafeAreaView
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}

@@ -7,10 +7,9 @@
  * @FilePath: /MobileApp/App/Containers/UserCenter/index.js
  */
 import React, { useCallback, useState, useEffect } from "react";
-import { View, StatusBar } from "react-native";
+import { View } from "react-native";
 import { s, ScaledSheet, vs } from "react-native-size-matters";
 import Colors from "../../Themes/Colors";
-import { Button } from "../../Components";
 import Fonts from "../../Themes/Fonts";
 import AppConfig from "../../Config/AppConfig";
 import ItemBox from "./ItemBox";

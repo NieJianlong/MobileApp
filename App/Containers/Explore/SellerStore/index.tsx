@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StatusBar, useWindowDimensions } from "react-native";
+import { View, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "./styles";
 import { AppBar } from "../../../Components";

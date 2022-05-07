@@ -4,7 +4,6 @@ import {
   TouchableOpacity,
   Text,
   SafeAreaView,
-  StatusBar,
   FlatList,
 } from "react-native";
 import AppConfig from "../../Config/AppConfig";

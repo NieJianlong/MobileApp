@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect, useMemo } from "react";
 import {
-  StatusBar,
   View,
   SafeAreaView,
   SectionList,
@@ -211,11 +210,6 @@ function ShoppingCart(props) {
   return (
     <CartContext.Provider>
       <View style={styles.container}>
-        <StatusBar
-          barStyle="dark-content"
-          translucent={false}
-          backgroundColor={colors.background}
-        />
         <SafeAreaView
           style={styles.mainContainer}
           edges={["top", "left", "right"]}

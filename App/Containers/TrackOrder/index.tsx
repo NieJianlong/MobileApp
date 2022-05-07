@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
-import { View, ScrollView, Text, SafeAreaView, StatusBar } from "react-native";
+import { View, ScrollView, Text } from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
 import colors from "../../Themes/Colors";
-import { AppBar } from "../../Components";
+
 import { ApplicationStyles } from "../../Themes";
 import Header from "./header";
 import Footer from "./footer";

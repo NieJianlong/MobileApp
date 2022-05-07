@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StatusBar } from "react-native";
+import { View } from "react-native";
 import { s } from "react-native-size-matters";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert, RadiusButton } from "../../Components";
@@ -8,11 +8,13 @@ import styles from "./styles";
 import CategoryAndProductList from "./CategoryAndProductList/Index";
 import { useMutation, useReactiveVar } from "@apollo/client";
 import { SendVerifyEmail } from "../Register/gql/register_mutations";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { userProfileVar } from "../../Apollo/cache";
+import useStatusBar from "../../hooks/useStatusBar";
 const SearchBarContext = React.createContext({});
 
 function Explore(props) {
+  const { setStatusBar } = useStatusBar();
   //to show an alert to users that their accounts have been activated
   const [
     showAccountActivatedSuccessfullyAlert,
@@ -51,6 +53,11 @@ function Explore(props) {
       }),
     [navigation]
   );
+  useFocusEffect(
+    React.useCallback(() => {
+      setStatusBar({ hidden: false });
+    }, [])
+  );
 
   /**
    *  design  updates see below  {isReady && (
@@ -62,7 +69,6 @@ function Explore(props) {
    */
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
       <SafeAreaView
         style={styles.mainContainer}
         edges={["top", "left", "right"]}

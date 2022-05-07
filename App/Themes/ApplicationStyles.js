@@ -1,9 +1,9 @@
-import { s, vs } from 'react-native-size-matters';
+import { s, vs } from "react-native-size-matters";
 
-import Fonts from './Fonts';
-import Metrics from './Metrics';
-import Colors from './Colors';
-import { Platform } from 'react-native';
+import Fonts from "./Fonts";
+import Metrics from "./Metrics";
+import Colors from "./Colors";
+import { Platform } from "react-native";
 // This file is for a reusable grouping of Theme items.
 // Similar to an XML fragment layout in Android
 
@@ -14,7 +14,7 @@ const ApplicationStyles = {
       backgroundColor: Colors.transparent,
     },
     backgroundImage: {
-      position: 'absolute',
+      position: "absolute",
       top: 0,
       left: 0,
       bottom: 0,
@@ -34,7 +34,7 @@ const ApplicationStyles = {
       paddingVertical: Metrics.doubleBaseMargin,
       color: Colors.snow,
       marginVertical: Metrics.smallMargin,
-      textAlign: 'center',
+      textAlign: "center",
       fontFamily: Fonts.primary,
     },
     subtitle: {
@@ -67,58 +67,58 @@ const ApplicationStyles = {
       fontSize: s(12.5),
       fontFamily: Fonts.primary,
       color: Colors.black,
-      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
+      fontWeight: Platform.OS == "ios" ? "600" : "bold",
     },
     txtHeroBold: {
       fontSize: s(44),
       fontFamily: Fonts.primary,
       color: Colors.black,
-      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
+      fontWeight: Platform.OS == "ios" ? "600" : "bold",
     },
     heading1Bold: {
       fontSize: s(30),
       fontFamily: Fonts.primary,
       color: Colors.black,
-      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
+      fontWeight: Platform.OS == "ios" ? "600" : "bold",
       lineHeight: s(38),
     },
     heading2Bold: {
       fontSize: s(24),
       fontFamily: Fonts.primary,
       color: Colors.black,
-      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
+      fontWeight: Platform.OS == "ios" ? "600" : "bold",
       lineHeight: s(32),
     },
     heading3Bold: {
-      textAlign: 'center',
+      textAlign: "center",
       fontSize: s(17),
       fontFamily: Fonts.primary,
       color: Colors.black,
-      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
+      fontWeight: Platform.OS == "ios" ? "600" : "bold",
     },
     heading4Bold: {
       fontSize: s(15),
       fontFamily: Fonts.primary,
       color: Colors.black,
-      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
+      fontWeight: Platform.OS == "ios" ? "600" : "bold",
     },
     heading5Bold: {
       fontSize: s(13),
       fontFamily: Fonts.primary,
       color: Colors.black,
-      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
+      fontWeight: Platform.OS == "ios" ? "600" : "bold",
     },
     heading6Bold: {
       fontSize: s(11),
       fontFamily: Fonts.primary,
       color: Colors.black,
-      fontWeight: Platform.OS == 'ios' ? '600' : 'bold',
+      fontWeight: Platform.OS == "ios" ? "600" : "bold",
     },
     heading4Regular: {
       fontSize: s(15),
       fontFamily: Fonts.primary,
       color: Colors.black,
-      fontWeight: '400',
+      fontWeight: "400",
     },
     heading5Regular: {
       fontSize: s(12.5),
@@ -144,9 +144,9 @@ const ApplicationStyles = {
   },
   groupContainer: {
     margin: Metrics.smallMargin,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
   },
   sectionTitle: {
     ...Fonts.style.h4,
@@ -157,8 +157,8 @@ const ApplicationStyles = {
     marginHorizontal: Metrics.baseMargin,
     borderWidth: 1,
     borderColor: Colors.ember,
-    alignItems: 'center',
-    textAlign: 'center',
+    alignItems: "center",
+    textAlign: "center",
   },
 };
 

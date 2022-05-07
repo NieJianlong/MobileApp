@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
-  StatusBar,
-  Text,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { s, vs } from "react-native-size-matters";
 
@@ -171,7 +164,6 @@ function OrderPlaced(props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
         {renderHeader()}
 

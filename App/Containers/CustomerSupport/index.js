@@ -3,7 +3,6 @@ import {
   View,
   Text,
   SafeAreaView,
-  StatusBar,
   TextInput as RNTextInput,
   Linking,
   TouchableOpacity,
@@ -15,6 +14,7 @@ import colors from "../../Themes/Colors";
 import { AppBar, RightButton, Selector, TextInput } from "../../Components";
 import NavigationService from "../../Navigation/NavigationService";
 import { AlertContext } from "../Root/GlobalContext";
+import { t } from "react-native-tailwindcss";
 
 function CustomerSupport(props) {
   const { dispatch } = useContext(AlertContext);
@@ -32,30 +32,25 @@ function CustomerSupport(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <TouchableOpacity
-            onPress={() =>
-              Linking.openURL(
-                "mailto:somethingemail@gmail.com?subject=abcdefg&body=body"
-              )
-                .then((res) => {
-                  console.log("RESSSSSSSSSSSS OPEN ", res);
-                })
-                .catch((err) => {
-                  console.log("ERRRRRRRRRRR LINKING", err);
-                })
-            }
-          >
-            <Text>{"support mail: vk@gmail.com"}</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={[t.itemsCenter, t.pT12]}>
+        <TouchableOpacity
+          onPress={() =>
+            Linking.openURL(
+              "mailto:somethingemail@gmail.com?subject=abcdefg&body=body"
+            )
+              .then((res) => {
+                console.log("RESSSSSSSSSSSS OPEN ", res);
+              })
+              .catch((err) => {
+                console.log("ERRRRRRRRRRR LINKING", err);
+              })
+          }
+        >
+          <Text>{"support mail: vk@gmail.com"}</Text>
+        </TouchableOpacity>
+      </View>
 
-        {/* <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+      {/* <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <Text
             style={{
               fontSize: s(24),
@@ -96,7 +91,6 @@ function CustomerSupport(props) {
             }}
           />
         </View> */}
-      </SafeAreaView>
     </View>
   );
 }

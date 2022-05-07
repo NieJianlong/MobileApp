@@ -5,7 +5,6 @@ import {
   Text,
   Image,
   SafeAreaView,
-  StatusBar,
 } from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";

@@ -1,37 +1,36 @@
-import React from 'react';
-import { View, Text, Image, StatusBar, SafeAreaView } from 'react-native';
-import { s, vs } from 'react-native-size-matters';
-import { Button, PasswordInput } from '../../Components';
-import AppConfig from '../../Config/AppConfig';
-import { ApplicationStyles } from '../../Themes';
-import colors from '../../Themes/Colors';
-import images from '../../Themes/Images';
-import metrics from '../../Themes/Metrics';
-import TextTip from '../../Components/EmptyReminder';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import NavigationService from '../../Navigation/NavigationService';
+import React from "react";
+import { View, Text, Image, SafeAreaView } from "react-native";
+import { s, vs } from "react-native-size-matters";
+import { Button, PasswordInput } from "../../Components";
+import AppConfig from "../../Config/AppConfig";
+import { ApplicationStyles } from "../../Themes";
+import colors from "../../Themes/Colors";
+import images from "../../Themes/Images";
+import metrics from "../../Themes/Metrics";
+import TextTip from "../../Components/EmptyReminder";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import NavigationService from "../../Navigation/NavigationService";
 
 function CheckoutPaymentCompletedGuest(props) {
   const data = {
-    textTip: 'Your order has been processed sucessfully',
+    textTip: "Your order has been processed sucessfully",
     subTextTip:
-      'Remember that you will receive your order once the required number of orders is reached',
+      "Remember that you will receive your order once the required number of orders is reached",
     needButton: false,
-    btnMsg: '',
-    onPress: '',
+    btnMsg: "",
+    onPress: "",
   };
   return (
     <View
       style={{
-        position: 'absolute',
+        position: "absolute",
         top: 0,
         left: 0,
         bottom: 0,
         right: 0,
-        backgroundColor: 'white',
+        backgroundColor: "white",
       }}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <KeyboardAwareScrollView>
         <SafeAreaView>
           <View style={{ height: 25 }} />
@@ -39,7 +38,7 @@ function CheckoutPaymentCompletedGuest(props) {
             style={{
               width: metrics.screenWidth,
               height: vs(150),
-              resizeMode: 'contain',
+              resizeMode: "contain",
             }}
             source={images.shopBagimage}
           />
@@ -54,7 +53,7 @@ function CheckoutPaymentCompletedGuest(props) {
             {
               color: colors.black,
               fontSize: s(16),
-              textAlign: 'center',
+              textAlign: "center",
               marginTop: -60,
             },
           ]}
@@ -69,7 +68,7 @@ function CheckoutPaymentCompletedGuest(props) {
             marginTop: 25,
           }}
         >
-          <PasswordInput placeholder={'Enter your password'} />
+          <PasswordInput placeholder={"Enter your password"} />
         </View>
         <View
           style={{
@@ -80,7 +79,7 @@ function CheckoutPaymentCompletedGuest(props) {
           <Button
             text="REGISTER"
             onPress={() => {
-              NavigationService.navigate('ExploreScreen');
+              NavigationService.navigate("ExploreScreen");
             }}
           />
           <View style={{ marginTop: 30 }}>
@@ -89,7 +88,7 @@ function CheckoutPaymentCompletedGuest(props) {
               text="CLOSE WITHOUT AN ACCOUNT"
               textColor={colors.grey80}
               onPress={() => {
-                NavigationService.navigate('ExploreScreen');
+                NavigationService.navigate("ExploreScreen");
               }}
             />
           </View>

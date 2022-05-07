@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StatusBar, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AppBar } from "../../Components";
 import styles from "./styles";
@@ -35,42 +35,36 @@ function AddPaymentMethod(props) {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <View style={styles.bodyContainer}>
-          <Text style={styles.heading2Bold}> Add a payment method </Text>
-          <ScrollView>
-            {payments.map((item, index) => {
-              return (
-                <View
-                  key={`paymengt${index}`}
-                  style={{
-                    maxHeight: 110,
+      <View style={styles.bodyContainer}>
+        <Text style={styles.heading2Bold}> Add a payment method </Text>
+        <ScrollView>
+          {payments.map((item, index) => {
+            return (
+              <View
+                key={`paymengt${index}`}
+                style={{
+                  maxHeight: 110,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={(item) => {
+                    Nav.navigate("AddCreditScreen", {
+                      callback: () => {
+                        navigation.dispatch(popAction);
+                        if (typeof params.callback == "function") {
+                          params.callback();
+                        }
+                      },
+                    });
                   }}
                 >
-                  <TouchableOpacity
-                    onPress={(item) => {
-                      Nav.navigate("AddCreditScreen", {
-                        callback: () => {
-                          navigation.dispatch(popAction);
-                          if (typeof params.callback == "function") {
-                            params.callback();
-                          }
-                        },
-                      });
-                    }}
-                  >
-                    <Image source={item.image} style={styles.item} />
-                  </TouchableOpacity>
-                </View>
-              );
-            })}
-          </ScrollView>
-        </View>
-      </SafeAreaView>
+                  <Image source={item.image} style={styles.item} />
+                </TouchableOpacity>
+              </View>
+            );
+          })}
+        </ScrollView>
+      </View>
     </View>
   );
 }

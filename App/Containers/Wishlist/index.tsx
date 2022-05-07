@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import {
   View,
-  StatusBar,
   Image,
   Text,
   TouchableOpacity,
@@ -66,12 +65,6 @@ function Wishlist(props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        barStyle="dark-content"
-        translucent
-        backgroundColor={"rgba(0,0,0,0.0)"}
-      />
-
       <SafeAreaView
         style={styles.mainContainer}
         edges={["top", "left", "right"]}

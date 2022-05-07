@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer, useRef } from "react";
 import {
   View,
-  StatusBar,
   Animated,
   TouchableWithoutFeedback,
   Modal,
@@ -124,8 +123,6 @@ function RootContainer() {
   return (
     <AlertContext.Provider value={{ dispatch, actionSheet }}>
       <View style={{ flex: 1 }}>
-        <StatusBar barStyle="light-content" />
-
         <AppNavigation />
       </View>
       {showSheet && (

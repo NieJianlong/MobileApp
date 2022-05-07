@@ -1,12 +1,5 @@
 import React, { Component, useEffect } from "react";
-import {
-  View,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-} from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import Animated from "react-native-reanimated";
@@ -240,7 +233,6 @@ class Order extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
         <SafeAreaView
           style={styles.safeArea}
           edges={["top", "right", "left", "bottom"]}

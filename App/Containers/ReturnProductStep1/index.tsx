@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   Text,
   SafeAreaView,
-  StatusBar,
   TextInput as RNTextInput,
 } from "react-native";
 import AppConfig from "../../Config/AppConfig";

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, SafeAreaView, StatusBar, FlatList } from "react-native";
+import { View, Text, SafeAreaView, FlatList } from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
@@ -35,43 +35,38 @@ function AskForReplacement(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <FlatList
-          contentContainerStyle={{ paddingBottom: vs(44) }}
-          data={countries}
-          ListHeaderComponent={
+      <FlatList
+        contentContainerStyle={{ paddingBottom: vs(44) }}
+        data={countries}
+        ListHeaderComponent={
+          <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+            <Text
+              style={{
+                fontSize: s(24),
+                fontFamily: fonts.primary,
+                color: colors.black,
+                fontWeight: "600",
+              }}
+            >
+              Select a shipping method
+            </Text>
+          </View>
+        }
+        renderItem={({ item }, index) => {
+          return (
             <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-              <Text
-                style={{
-                  fontSize: s(24),
-                  fontFamily: fonts.primary,
-                  color: colors.black,
-                  fontWeight: "600",
-                }}
-              >
-                Select a shipping method
-              </Text>
+              <View style={{ height: vs(12) }} />
+              <CheckBox
+                defaultValue={selectValue == item}
+                onSwitch={(t) => setSelectValue(item)}
+                {...item}
+              />
             </View>
-          }
-          renderItem={({ item }, index) => {
-            return (
-              <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-                <View style={{ height: vs(12) }} />
-                <CheckBox
-                  defaultValue={selectValue == item}
-                  onSwitch={(t) => setSelectValue(item)}
-                  {...item}
-                />
-              </View>
-            );
-          }}
-          keyExtractor={(item, index) => `ass${index}`}
-        />
-      </SafeAreaView>
+          );
+        }}
+        keyExtractor={(item, index) => `ass${index}`}
+      />
+
       <SafeAreaView
         style={{
           position: "absolute",

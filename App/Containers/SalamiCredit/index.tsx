@@ -1,7 +1,6 @@
 import React, { useRef, useState, useContext } from "react";
 import {
   View,
-  StatusBar,
   Text,
   TouchableOpacity,
   Image,
@@ -22,6 +21,7 @@ import metrics from "../../Themes/Metrics";
 import { AlertContext } from "../Root/GlobalContext";
 import { useGetBuyerSalamiWalletBalanceQuery } from "../../../generated/graphql";
 import { useFocusEffect } from "@react-navigation/native";
+import { t } from "react-native-tailwindcss";
 
 const shareIcons = [
   { src: images.userShareIcon1Image, onPress: () => {} },
@@ -49,7 +49,6 @@ function SalamiCredit(props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
@@ -92,7 +91,7 @@ function listHeader(dispatch) {
   );
 
   return (
-    <View style={styles.bodyContainer}>
+    <View style={[t.pX4]}>
       <Text style={styles.heading2Bold}>Salami Wallet</Text>
       <View style={styles.tipContainer}>
         <View style={styles.balanceContainer}>

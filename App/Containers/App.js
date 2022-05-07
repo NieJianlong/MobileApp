@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import RootContainer from "./Root";
 import { ApolloProvider } from "@apollo/client";
 import * as SplashScreen from "expo-splash-screen";
@@ -7,7 +7,8 @@ import FlipperAsyncStorage from "rn-flipper-async-storage-advanced";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { enableFlipperApolloDevtools } from "react-native-flipper-apollo-devtools";
 import MapScreen from "./MapScreen";
-
+import { StatusBar } from "expo-status-bar";
+import useStatusBar from "../hooks/useStatusBar";
 // Instruct SplashScreen not to hide yet, we want to do this manually
 // SplashScreen.preventAutoHideAsync().catch(() => {
 //   /* reloading the app might trigger some race conditions, ignore them */
@@ -15,8 +16,12 @@ import MapScreen from "./MapScreen";
 /// ReactNativeFlipperDatabases - START
 
 const App = () => {
+  const { hidden } = useStatusBar();
   useEffect(() => {
-    SplashScreen.hideAsync();
+    const hideSplash = async () => {
+      await SplashScreen.hideAsync();
+    };
+    hideSplash();
   }, []);
 
   // const realm = useRealm();
@@ -65,6 +70,7 @@ const App = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ApolloProvider client={client}>
         <FlipperAsyncStorage />
+        <StatusBar hidden={hidden} />
         <RootContainer />
       </ApolloProvider>
     </GestureHandlerRootView>

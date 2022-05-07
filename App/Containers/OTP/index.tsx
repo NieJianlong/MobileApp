@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import {
   View,
-  StatusBar,
   Text,
   TouchableOpacity,
   TextInput,

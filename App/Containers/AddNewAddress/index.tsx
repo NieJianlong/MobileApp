@@ -1,5 +1,5 @@
 import React, { useState, useContext, useMemo } from "react";
-import { View, StatusBar, Text } from "react-native";
+import { View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -199,112 +199,106 @@ function AddNewAddress() {
   }, [navigation]);
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <SafeAreaView
-        style={styles.safeArea}
-        edges={["top", "right", "left", "bottom"]}
-      >
-        <View style={styles.bodyContainer}>
-          <Text style={styles.heading2Bold}>{params.title}</Text>
-          <KeyboardAwareScrollView>
-            <View
-              style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                justifyContent: "space-between",
-              }}
-            >
-              {inputs.map((item, index) => {
-                return (
-                  <View
-                    key={index}
-                    style={{
-                      width: item.type === "short" ? "48%" : "100%",
-                      marginTop: vs(18),
-                    }}
-                  >
-                    {item.keyboardType === "selector" ? (
-                      <View>
-                        <Controller
-                          control={control}
-                          rules={{
-                            required: true,
-                          }}
-                          render={({ field: { onChange, value } }) => (
-                            <DropDownPicker
-                              listMode="MODAL"
-                              placeholder="State (Province)*"
-                              value={value}
-                              searchPlaceholder="Search……"
-                              open={open}
-                              searchable={true}
-                              setOpen={setOpen}
-                              items={items}
-                              setValue={onChange}
-                              onChangeValue={onChange}
-                              placeholderStyle={[
-                                { color: colors.grey40, fontSize: 16 },
-                              ]}
-                              // containerStyle={[t.bgBlue300]}
-                              style={[
-                                {
-                                  borderRadius: 20,
-                                  height: vs(46),
-                                  borderColor: colors.grey20,
-                                },
-                              ]}
-                              dropDownContainerStyle={{ borderWidth: 0 }}
-                            />
-                          )}
-                          name={item.name}
-                        />
-                        {lodash.get(errors, item.name) && (
-                          <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
-                            This is required.
-                          </Text>
-                        )}
-                      </View>
-                    ) : (
+      <View style={styles.bodyContainer}>
+        <Text style={styles.heading2Bold}>{params.title}</Text>
+        <KeyboardAwareScrollView>
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+            }}
+          >
+            {inputs.map((item, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    width: item.type === "short" ? "48%" : "100%",
+                    marginTop: vs(18),
+                  }}
+                >
+                  {item.keyboardType === "selector" ? (
+                    <View>
                       <Controller
                         control={control}
                         rules={{
                           required: true,
                         }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                          <View>
-                            <MaterialTextInput
-                              style={{ marginTop: vs(18) }}
-                              {...item}
-                              onChangeText={onChange}
-                              onBlur={onBlur}
-                              value={value}
-                            />
-                            {lodash.get(errors, item.name) && (
-                              <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
-                                This is required.
-                              </Text>
-                            )}
-                          </View>
+                        render={({ field: { onChange, value } }) => (
+                          <DropDownPicker
+                            listMode="MODAL"
+                            placeholder="State (Province)*"
+                            value={value}
+                            searchPlaceholder="Search……"
+                            open={open}
+                            searchable={true}
+                            setOpen={setOpen}
+                            items={items}
+                            setValue={onChange}
+                            onChangeValue={onChange}
+                            placeholderStyle={[
+                              { color: colors.grey40, fontSize: 16 },
+                            ]}
+                            // containerStyle={[t.bgBlue300]}
+                            style={[
+                              {
+                                borderRadius: 20,
+                                height: vs(46),
+                                borderColor: colors.grey20,
+                              },
+                            ]}
+                            dropDownContainerStyle={{ borderWidth: 0 }}
+                          />
                         )}
                         name={item.name}
                       />
-                    )}
-                  </View>
-                );
-              })}
-            </View>
-          </KeyboardAwareScrollView>
-          <View style={{ marginTop: 20 }}>
-            <Switch
-              onSwitch={(res) => {
-                setAsDefault(res);
-              }}
-              active={asDefault}
-              label="Set as default address"
-            />
+                      {lodash.get(errors, item.name) && (
+                        <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
+                          This is required.
+                        </Text>
+                      )}
+                    </View>
+                  ) : (
+                    <Controller
+                      control={control}
+                      rules={{
+                        required: true,
+                      }}
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <View>
+                          <MaterialTextInput
+                            style={{ marginTop: vs(18) }}
+                            {...item}
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                            value={value}
+                          />
+                          {lodash.get(errors, item.name) && (
+                            <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
+                              This is required.
+                            </Text>
+                          )}
+                        </View>
+                      )}
+                      name={item.name}
+                    />
+                  )}
+                </View>
+              );
+            })}
           </View>
+        </KeyboardAwareScrollView>
+        <View style={{ marginTop: 20 }}>
+          <Switch
+            onSwitch={(res) => {
+              setAsDefault(res);
+            }}
+            active={asDefault}
+            label="Set as default address"
+          />
         </View>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

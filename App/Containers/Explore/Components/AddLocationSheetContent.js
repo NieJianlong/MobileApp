@@ -1,7 +1,6 @@
 import React, { useState, useContext, useMemo, useEffect } from "react";
 import {
   View,
-  StatusBar,
   Text,
   TouchableOpacity as RNTouchableOpacity,
   Platform,
@@ -179,7 +178,6 @@ function AddLocationSheetContent(props) {
   ];
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}

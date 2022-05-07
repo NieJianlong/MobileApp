@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { View, StatusBar, Text, Animated } from "react-native";
+import { View, Text, Animated } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { s } from "react-native-size-matters";
 import { AppBar } from "../../Components";
@@ -40,7 +40,6 @@ function Setting(props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}

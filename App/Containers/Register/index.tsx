@@ -5,13 +5,7 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import {
-  View,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  Platform,
-} from "react-native";
+import { View, Text, TouchableOpacity, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SmsRetriever from "react-native-sms-retriever";
 import {

@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState } from "react";
-import { View, StatusBar, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DraggableFlatList from "react-native-draggable-flatlist";
 

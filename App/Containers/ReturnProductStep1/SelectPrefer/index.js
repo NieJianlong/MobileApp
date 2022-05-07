@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   ScrollView,
@@ -6,22 +6,21 @@ import {
   Text,
   Image,
   SafeAreaView,
-  StatusBar,
   FlatList,
-} from 'react-native';
-import AppConfig from '../../../Config/AppConfig';
-import { vs, s, ScaledSheet } from 'react-native-size-matters';
-import fonts from '../../../Themes/Fonts';
-import colors from '../../../Themes/Colors';
-import { AppBar, SearchBox } from '../../../Components';
-import NavigationService from '../../../Navigation/NavigationService';
-import metrics from '../../../Themes/Metrics';
-import CheckBox from '../../Explore/Components/CheckBox';
-import { ApplicationStyles } from '../../../Themes';
+} from "react-native";
+import AppConfig from "../../../Config/AppConfig";
+import { vs, s, ScaledSheet } from "react-native-size-matters";
+import fonts from "../../../Themes/Fonts";
+import colors from "../../../Themes/Colors";
+import { AppBar, SearchBox } from "../../../Components";
+import NavigationService from "../../../Navigation/NavigationService";
+import metrics from "../../../Themes/Metrics";
+import CheckBox from "../../Explore/Components/CheckBox";
+import { ApplicationStyles } from "../../../Themes";
 
 const countries = [
   `Return the product and get a refund`,
-  'Ask for a replacement',
+  "Ask for a replacement",
 ];
 
 function index(props) {
@@ -31,7 +30,7 @@ function index(props) {
       contentContainerStyle={{ paddingBottom: vs(44) }}
       ListHeaderComponent={() => {
         return (
-          <View style={{ height: 70, justifyContent: 'center' }}>
+          <View style={{ height: 70, justifyContent: "center" }}>
             <Text
               style={[
                 ApplicationStyles.screen.heading4Bold,
@@ -52,7 +51,7 @@ function index(props) {
               defaultValue={selectValue == item}
               onSwitch={(t) => {
                 setSelectValue(item);
-                if (typeof props.onChangeValue == 'function') {
+                if (typeof props.onChangeValue == "function") {
                   props.onChangeValue(item);
                 }
               }}
@@ -70,8 +69,8 @@ export default index;
 const styles = ScaledSheet.create({
   title: {
     fontFamily: fonts.primary,
-    fontSize: '16@s',
+    fontSize: "16@s",
     color: colors.black,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

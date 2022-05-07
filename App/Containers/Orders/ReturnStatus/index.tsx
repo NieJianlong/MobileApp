@@ -4,7 +4,6 @@ import {
   ScrollView,
   Text,
   SafeAreaView,
-  StatusBar,
   useWindowDimensions,
 } from "react-native";
 import AppConfig from "../../../Config/AppConfig";

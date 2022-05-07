@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  View,
-  TouchableOpacity,
-  Image,
-  SafeAreaView,
-  StatusBar,
-} from "react-native";
+import { View, TouchableOpacity, Image, SafeAreaView } from "react-native";
 import { s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
 import colors from "../../Themes/Colors";

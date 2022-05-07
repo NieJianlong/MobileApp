@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StatusBar, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { vs } from "react-native-size-matters";
 import { useNavigation, useRoute } from "@react-navigation/native";
 

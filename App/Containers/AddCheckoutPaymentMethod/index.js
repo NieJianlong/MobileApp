@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StatusBar, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AppBar } from "../../Components";
 import styles from "./styles";
@@ -51,7 +51,6 @@ function AddCheckoutPaymentMethod(props) {
   const { params } = useRoute();
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}

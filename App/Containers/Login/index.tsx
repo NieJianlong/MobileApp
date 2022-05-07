@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext, useRef, useMemo } from "react";
 import {
   View,
-  StatusBar,
   Text,
   TouchableOpacity,
   Keyboard,
@@ -298,7 +297,6 @@ function LoginScreen(props) {
   const { width, height } = useWindowDimensions();
   return (
     <View style={[t.absolute, t.left0, t.top0, { width, height }, t.bgWhite]}>
-      <StatusBar barStyle="dark-content" />
       <SafeAreaView
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}

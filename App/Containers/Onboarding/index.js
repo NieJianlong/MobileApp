@@ -1,11 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  View,
-  StatusBar,
-  Image,
-  TouchableOpacity,
-  Platform,
-} from "react-native";
+import { View, Image, TouchableOpacity, Platform } from "react-native";
 import Video from "react-native-video";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -92,11 +86,6 @@ function OnboardingScreen(props) {
   };
   return (
     <View style={styles.container}>
-      <StatusBar
-        barStyle="light-content"
-        translucent
-        backgroundColor={"rgba(0,0,0,0.0)"}
-      />
       <Video
         ref={(ref) => (player = ref)}
         source={require("../../../assets/video/video.mp4")}

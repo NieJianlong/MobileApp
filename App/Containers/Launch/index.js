@@ -1,5 +1,5 @@
 import React, { Component, useCallback, useEffect } from "react";
-import { View, StatusBar, Image } from "react-native";
+import { View, Image } from "react-native";
 import { userProfileVar } from "../../Apollo/cache";
 import { runTokenFlow } from "../../Apollo/jwt-request";
 import {
@@ -20,6 +20,7 @@ import * as storage from "../../Apollo/local-storage";
 import { useBuyerProfileByUserIdLazyQuery } from "../../../generated/graphql";
 import LottieView from "lottie-react-native";
 import { t } from "react-native-tailwindcss";
+import { StatusBar } from "expo-status-bar";
 
 export default function LaunchScreen() {
   const [getBuyerId] = useBuyerProfileByUserIdLazyQuery({

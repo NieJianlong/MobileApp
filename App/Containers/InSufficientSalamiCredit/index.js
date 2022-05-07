@@ -6,7 +6,6 @@ import {
   Text,
   Image,
   SafeAreaView,
-  StatusBar,
   FlatList,
 } from "react-native";
 import AppConfig from "../../Config/AppConfig";
@@ -58,7 +57,6 @@ function InSufficientSalamiCredit(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}

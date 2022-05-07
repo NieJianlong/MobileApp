@@ -1,11 +1,5 @@
 import React, { Component, useEffect, useMemo, useState } from "react";
-import {
-  View,
-  StatusBar,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "./styles";
 import { AppBar } from "../../../../Components";
@@ -81,14 +75,7 @@ class OldChooseCategoriesScreen extends Component {
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-          {this.renderBody()}
-        </SafeAreaView>
-      </View>
-    );
+    return <View style={styles.container}>{this.renderBody()}</View>;
   }
 }
 export default function ChooseCategoriesScreen() {

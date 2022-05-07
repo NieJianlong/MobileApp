@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { View, StatusBar, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import styles from "./styles";
@@ -23,7 +23,6 @@ function ProductSearch(props) {
         searchText,
       }) => (
         <View style={[styles.container, theme.bgWhite]}>
-          <StatusBar barStyle="dark-content" />
           <SafeAreaView
             style={styles.container}
             edges={["top", "left", "right"]}
@@ -151,20 +150,13 @@ export default function Index() {
         <ProductSearch />
       ) : (
         <View style={[t.bgWhite]}>
-          <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
-
-          <SafeAreaView
-            style={[t.flex, t.hFull]}
-            edges={["top", "left", "right"]}
-          >
-            <CategoryAndProductList
-              textToSearch={searchText}
-              recentSearches={recentSearches}
-              changeRecentSearches={changeRecentSearches}
-              onSearch={onSearch}
-              onShowSearchBox={onShowSearchBox}
-            />
-          </SafeAreaView>
+          <CategoryAndProductList
+            textToSearch={searchText}
+            recentSearches={recentSearches}
+            changeRecentSearches={changeRecentSearches}
+            onSearch={onSearch}
+            onShowSearchBox={onShowSearchBox}
+          />
         </View>
       )}
     </SearchContext.Provider>

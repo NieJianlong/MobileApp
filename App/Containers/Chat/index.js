@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { GiftedChat } from "react-native-gifted-chat";
-import { View, StatusBar, SafeAreaView } from "react-native";
+import { View, SafeAreaView } from "react-native";
 import ChatHeader from "./ChatHeader";
 import colors from "../../Themes/Colors";
 
@@ -30,7 +30,6 @@ function Chat() {
 
   return (
     <View style={{ flex: 1 }}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView style={{ backgroundColor: "white" }}>
         <ChatHeader />
       </SafeAreaView>

@@ -1,5 +1,5 @@
 import React, { Component, useCallback, useContext } from "react";
-import { View, StatusBar, Text, Keyboard } from "react-native";
+import { View, Text, Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { isIphoneX } from "react-native-iphone-x-helper";
 import { vs } from "react-native-size-matters";

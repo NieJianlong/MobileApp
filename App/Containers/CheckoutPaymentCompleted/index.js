@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ScrollView, StatusBar, Image, SafeAreaView } from "react-native";
+import { View, ScrollView, Image, SafeAreaView } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { s } from "react-native-size-matters";
 import NavigationService from "../../Navigation/NavigationService";
@@ -28,7 +28,6 @@ function CheckoutPaymentCompleted(props) {
         backgroundColor: "white",
       }}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView>
         <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
           <View style={{ width: 30, height: 30 }} />

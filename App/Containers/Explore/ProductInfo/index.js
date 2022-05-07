@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StatusBar, Text } from "react-native";
+import { View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import styles from "./styles";
@@ -30,14 +30,7 @@ function ProductInfoScreen(props) {
     );
   };
 
-  return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-        {renderBody()}
-      </SafeAreaView>
-    </View>
-  );
+  return <View style={styles.container}>{renderBody()}</View>;
 }
 
 export default ProductInfoScreen;

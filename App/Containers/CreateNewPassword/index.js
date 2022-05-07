@@ -1,5 +1,5 @@
 import React, { Component, useCallback, useContext } from "react";
-import { View, StatusBar, Text, Keyboard } from "react-native";
+import { View, Text, Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { isIphoneX } from "react-native-iphone-x-helper";
 import { vs } from "react-native-size-matters";
@@ -98,42 +98,36 @@ class CreateNewPassword extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView
-          style={styles.safeArea}
-          edges={["top", "right", "left", "bottom"]}
-        >
-          <View style={styles.bodyContainer}>
-            <Text style={styles.heading2Bold}>Create your new password</Text>
-            <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
-              Choose a new password
-            </Text>
+        <View style={styles.bodyContainer}>
+          <Text style={styles.heading2Bold}>Create your new password</Text>
+          <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
+            Choose a new password
+          </Text>
 
-            <PasswordInput
-              style={{ marginTop: vs(18) }}
-              placeholder={"New password"}
-              onChangeText={(text) => {
-                this.setState({ password: text }, () =>
-                  console.log(this.state.password)
-                );
-              }}
-            />
+          <PasswordInput
+            style={{ marginTop: vs(18) }}
+            placeholder={"New password"}
+            onChangeText={(text) => {
+              this.setState({ password: text }, () =>
+                console.log(this.state.password)
+              );
+            }}
+          />
 
-            <PasswordInput
-              style={{ marginTop: vs(18) }}
-              placeholder={"Repeat your new password"}
-              onChangeText={(text) => {
-                this.setState({ confirmPassword: text });
-              }}
-              showError={!this.validateConfirmPassword()}
-              errorMessage={"Password does not match"}
-            />
+          <PasswordInput
+            style={{ marginTop: vs(18) }}
+            placeholder={"Repeat your new password"}
+            onChangeText={(text) => {
+              this.setState({ confirmPassword: text });
+            }}
+            showError={!this.validateConfirmPassword()}
+            errorMessage={"Password does not match"}
+          />
 
-            <View style={{ flex: 1 }} />
+          <View style={{ flex: 1 }} />
 
-            {this.renderAction()}
-          </View>
-        </SafeAreaView>
+          {this.renderAction()}
+        </View>
       </View>
     );
   }

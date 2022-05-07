@@ -513,7 +513,7 @@ function PrimaryNav() {
         options={{
           headerShown: true,
           headerTitleAlign: "center",
-          title: "",
+          title: "Support",
           headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
         }}
       />

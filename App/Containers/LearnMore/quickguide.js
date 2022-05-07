@@ -1,12 +1,5 @@
 import React, { useRef, useState, useContext } from "react";
-import {
-  View,
-  StatusBar,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs, s } from "react-native-size-matters";
 import { AppBar, BottomSheet, Button } from "../../Components";

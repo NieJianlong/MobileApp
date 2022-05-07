@@ -3,7 +3,6 @@ import {
   View,
   ScrollView,
   SafeAreaView,
-  StatusBar,
   Image,
   Text,
   TouchableOpacity,
@@ -256,7 +255,6 @@ function CheckoutResume(props) {
         bottom: 0,
       }}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <SafeAreaView
         style={{ flex: 1 }}
         edges={["top", "right", "left", "bottom"]}

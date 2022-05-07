@@ -85,7 +85,7 @@ import ReturnStatus from "../Containers/Orders/ReturnStatus/index";
 import LearnMore from "../Containers/LearnMore/index";
 import NavigationLeftButton from "../Components/NavigationLeftButton";
 import { t } from "react-native-tailwindcss";
-import { ApplicationStyles } from "../Themes";
+import { ApplicationStyles, Colors } from "../Themes";
 // import ReturnInformation from "../..";
 const Stack = createStackNavigator();
 
@@ -131,6 +131,12 @@ function PrimaryNav() {
           headerLeft: ({ canGoBack }) => {
             return canGoBack ? <NavigationLeftButton /> : null;
           },
+          headerStyle: {
+            backgroundColor: Colors.background,
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          // headerTransparent: true,
           // headerTintColor: "#21c064",
           // headerTitleStyle: styles.headerTitleStyle,
           gestureEnabled: false,

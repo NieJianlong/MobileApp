@@ -91,6 +91,7 @@ function UserInfo(props) {
   return (
     <AlertContext.Provider value={{ dispatch }}>
       {showSheet && renderSheet(sheetEl, dispatch)}
+
       <View style={styles.container}>
         <View style={{ marginBottom: vs(15) }}>
           <UserHeader needEdit islogin={true} />

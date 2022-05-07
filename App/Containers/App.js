@@ -16,12 +16,23 @@ import useStatusBar from "../hooks/useStatusBar";
 /// ReactNativeFlipperDatabases - START
 
 const App = () => {
-  const { hidden } = useStatusBar();
+  const { hidden, color, setStatusBar } = useStatusBar();
   useEffect(() => {
-    const hideSplash = async () => {
-      await SplashScreen.hideAsync();
-    };
-    hideSplash();
+    async function prepare() {
+      setStatusBar({ hidden: true, color: color });
+      try {
+        // Keep the splash screen visible while we fetch resources
+        await SplashScreen.preventAutoHideAsync();
+        // Pre-load fonts, make any API calls you need to do here
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        // Tell the application to render
+        setStatusBar({ hidden: false, color: color });
+      }
+    }
+
+    prepare();
   }, []);
 
   // const realm = useRealm();
@@ -70,7 +81,7 @@ const App = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ApolloProvider client={client}>
         <FlipperAsyncStorage />
-        <StatusBar hidden={hidden} />
+        <StatusBar hidden={hidden} backgroundColor={color} translucent={true} />
         <RootContainer />
       </ApolloProvider>
     </GestureHandlerRootView>

@@ -51,7 +51,7 @@ function TrackOrder(props) {
       const eventsArray: ITrackItemProps[] = [];
       trackData.trackOrderItem.events?.map((item, index) => {
         eventsArray.push({
-          title: capitalize(item?.eventType.replaceAll("_", " ")),
+          title: capitalize(item?.eventType.replace(/_/g, " ")),
           subtitle: moment(item?.eventDateTime).format("DD MMM, YYYY h:mm a"),
           status: 0,
           hasline: index !== trackData?.trackOrderItem?.events?.length - 1,

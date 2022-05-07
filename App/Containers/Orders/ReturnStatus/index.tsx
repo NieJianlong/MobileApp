@@ -46,7 +46,7 @@ function ReturnStatus(props) {
       const eventsArray: ITrackItemProps[] = [];
       trackData.getOrderReturnStatus.events?.map((item, index) => {
         eventsArray.push({
-          title: capitalize(item?.eventType.replaceAll("_", " ")),
+          title: capitalize(item?.eventType.replace(/_/g, " ")),
           subtitle: moment(item?.eventDateTime).format("DD MMM, YYYY h:mm a"),
           status: 0,
           hasline:

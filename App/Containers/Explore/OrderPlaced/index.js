@@ -9,30 +9,47 @@ import { Colors, Images } from "../../../Themes";
 import NavigationService from "../../../Navigation/NavigationService";
 import Share from "react-native-share";
 import { shareOptions } from "../../Explore/Components/ShareOptionList";
+import { t } from "react-native-tailwindcss";
+import { useNavigation } from "@react-navigation/native";
+import { useBuyerProfileQuery } from "../../../../generated/graphql";
 
 function OrderPlaced(props) {
   console.log("props?.route?.params?.items =====", props?.route?.params?.items);
-  const renderHeader = () => {
-    return (
-      <View style={styles.header}>
-        <View style={styles.icSearch} />
+  const navigation = useNavigation();
+  const { loading, error, data, refetch } = useBuyerProfileQuery({
+    variables: { buyerId: global.buyerId },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    nextFetchPolicy: "network-only",
+    onCompleted: (res) => {},
+    onError: (res) => {},
+  });
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      header: () => (
+        <View style={styles.header}>
+          <View style={styles.icSearch} />
 
-        <Image
-          source={Images.logo3}
-          style={styles.logo}
-          resizeMode={"contain"}
-        />
+          <Image
+            source={Images.logo3}
+            style={styles.logo}
+            resizeMode={"contain"}
+          />
 
-        <TouchableOpacity
-          onPress={() => {
-            NavigationService.navigate("PackageScreen");
-          }}
-        >
-          <Image source={Images.crossMedium} style={styles.icSearch} />
-        </TouchableOpacity>
-      </View>
-    );
-  };
+          <TouchableOpacity
+            onPress={() => {
+              NavigationService.navigate("PackageScreen");
+            }}
+          >
+            <Image source={Images.crossMedium} style={styles.icSearch} />
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
 
   const renderBody = () => {
     return (
@@ -61,10 +78,14 @@ function OrderPlaced(props) {
               />
 
               <View>
-                <Text style={styles.heading5Bold}>
-                  {props?.route?.params?.items?.longName}
+                <Text style={[styles.heading5Bold, t.pR16]}>
+                  {props?.route?.params?.items?.shortName}
                 </Text>
-                <Text style={styles.heading6Regular}>User name</Text>
+                <Text style={styles.heading6Regular}>
+                  {data
+                    ? `${data?.buyerProfile?.firstName} ${data?.buyerProfile?.lastName}`
+                    : ""}
+                </Text>
               </View>
             </View>
           ) : (
@@ -79,8 +100,12 @@ function OrderPlaced(props) {
                   />
 
                   <View>
-                    <Text style={styles.heading5Bold}>{item?.longName}</Text>
-                    <Text style={styles.heading6Regular}>User name</Text>
+                    <Text style={styles.heading5Bold}>{item?.shortName}</Text>
+                    <Text style={styles.heading6Regular}>
+                      {data
+                        ? `${data?.buyerProfile?.firstName} ${data?.buyerProfile?.lastName}`
+                        : ""}
+                    </Text>
                   </View>
                 </View>
               );
@@ -164,11 +189,9 @@ function OrderPlaced(props) {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-        {renderHeader()}
-
-        {renderBody()}
-      </SafeAreaView>
+      {/* <SafeAreaView style={styles.container} edges={["top", "left", "right"]}> */}
+      {renderBody()}
+      {/* </SafeAreaView> */}
     </View>
   );
 }

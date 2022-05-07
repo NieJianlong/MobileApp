@@ -102,7 +102,7 @@ function ReturnProductStep1() {
         </View>
       ),
     });
-  }, [navigation]);
+  }, [navigation, prefer, returnReasonPolicyId, submit]);
   return (
     <View
       style={{

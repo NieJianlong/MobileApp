@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useContext } from "react";
-import { View, TouchableOpacity, Text } from "react-native";
+import { View, TouchableOpacity, Text, SafeAreaView } from "react-native";
 
 import BaseScreen from "../BaseScreen";
 import { AppBar, Button, Switch } from "../../Components";
@@ -170,22 +170,22 @@ function CheckoutGuestOrderDetail(props) {
       });
     }
   };
-  const navigation = useNavigation();
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <View style={[t.mR6]}>
-          <TouchableOpacity
-            onPress={() => {
-              onPressNext();
-            }}
-          >
-            <Text style={styles.rightButton}>Next</Text>
-          </TouchableOpacity>
-        </View>
-      ),
-    });
-  }, [navigation]);
+  // const navigation = useNavigation();
+  // React.useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: () => (
+  //       <View style={[t.mR6]}>
+  //         <TouchableOpacity
+  //           onPress={() => {
+  //             onPressNext();
+  //           }}
+  //         >
+  //           <Text style={styles.rightButton}>Next</Text>
+  //         </TouchableOpacity>
+  //       </View>
+  //     ),
+  //   });
+  // }, [navigation]);
   return (
     <BaseScreen {...props}>
       <View style={styles.container}>
@@ -335,9 +335,11 @@ function CheckoutGuestOrderDetail(props) {
               label="Billing address is the same as delivery"
             />
           </View>
-          <View style={styles.button}>
-            <Button text="NEXT" onPress={handleSubmit(onSubmit)} />
-          </View>
+          <SafeAreaView>
+            <View style={[styles.button, t.mB6]}>
+              <Button text="NEXT" onPress={handleSubmit(onSubmit)} />
+            </View>
+          </SafeAreaView>
         </View>
       </View>
     </BaseScreen>

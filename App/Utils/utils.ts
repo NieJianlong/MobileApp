@@ -73,14 +73,13 @@ export function usePaymentConfigration() {
       amount: amount,
       order_id: orderId, //Replace this with an order_id created using Orders API.
       prefill: {
-        email: userProfile?.email,
-        contact: userProfile?.isAuth
-          ? userProfile?.phone
-          : userProfile?.billingDetails?.phoneNumber,
-        name: userProfile?.firstName + userProfile.lastName,
+        email: global.billingDetails.email,
+        contact: global.billingDetails.phoneNumber,
+        name: global.billingDetails?.firstName + global.billingDetails.lastName,
       },
       theme: { color: colors.primary },
     };
+    debugger;
     RazorpayCheckout.open(options)
       .then((data) => {
         razorOrderPaymentVar({

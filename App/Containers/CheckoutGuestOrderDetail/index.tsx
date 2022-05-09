@@ -28,10 +28,13 @@ import UseBillingDetail from "../../hooks/useBillingDetail";
 import { get, isEmpty, trimStart } from "lodash";
 import { t } from "react-native-tailwindcss";
 import { vs } from "react-native-size-matters";
+import useLoading from "../../hooks/useLoading";
+import { ActivityIndicator } from "react-native-paper";
 
 function CheckoutGuestOrderDetail(props) {
   const userProfile = useReactiveVar(userProfileVar);
   const [billingAddress, setBillingAddress] = useState([]);
+  const { setLoading } = useLoading();
 
   const { addBilling } = UseBillingDetail();
 
@@ -54,8 +57,12 @@ function CheckoutGuestOrderDetail(props) {
     variables: {
       guestBuyerId: global.buyerId,
     },
+    onError: () => {
+      setLoading({ show: false });
+    },
 
     onCompleted: (result) => {
+      setLoading({ show: false });
       if (result.billingDetailsByGuestBuyerId.length > 0) {
         const billingDetails = result.billingDetailsByGuestBuyerId[0];
         setValue(
@@ -82,6 +89,7 @@ function CheckoutGuestOrderDetail(props) {
   });
   useFocusEffect(
     React.useCallback(() => {
+      setLoading({ show: true });
       getBillingAddress();
     }, [])
   );
@@ -188,6 +196,15 @@ function CheckoutGuestOrderDetail(props) {
   //     ),
   //   });
   // }, [navigation]);
+  // if (loading) {
+  //   return (
+  //     <ActivityIndicator
+  //       style={{ top: "50%" }}
+  //       animating={true}
+  //       color={"#F36B7F"}
+  //     />
+  //   );
+  // }
   return (
     <BaseScreen {...props}>
       <View style={styles.container}>

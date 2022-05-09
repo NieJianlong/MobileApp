@@ -68,6 +68,7 @@ function BillingDetails(props) {
             <Switch
               onSwitch={(b) => setIsSameAsDelivery(b)}
               active={isSameAsDelivery}
+              disabled={true}
               label="Billing address is the same as delivery"
             />
           </View>

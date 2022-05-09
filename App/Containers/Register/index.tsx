@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import { View, Text, TouchableOpacity, Platform } from "react-native";
+import { View, Text, TouchableOpacity, Platform, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SmsRetriever from "react-native-sms-retriever";
 import {
@@ -19,7 +19,7 @@ import {
 import * as jwt from "../../Apollo/jwt-request";
 import * as storage from "../../Apollo/local-storage";
 import { userProfileVar } from "../../Apollo/cache";
-import { Colors } from "../../Themes";
+import { Colors, Images } from "../../Themes";
 import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
 import { AlertContext } from "../Root/GlobalContext";
@@ -36,6 +36,7 @@ import { t } from "react-native-tailwindcss";
 import { trimStart } from "lodash";
 import useAlert from "../../hooks/useAlert";
 import useLoading from "../../hooks/useLoading";
+import useRegister from "../../hooks/useRegister";
 
 function RegisterScreen(props) {
   const { dispatch } = useContext(AlertContext);
@@ -116,6 +117,7 @@ function RegisterScreen(props) {
       global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
     },
   });
+  const { setRegister } = useRegister();
 
   const autoSignIn = useCallback(async () => {
     //get username and possword from localStorage
@@ -279,8 +281,30 @@ function RegisterScreen(props) {
   };
 
   return (
-    <View style={styles.container}>
-      <KeyboardAwareScrollView style={styles.bodyContainer}>
+    <View style={[styles.container, props.style]}>
+      {props.style && (
+        <SafeAreaView style={[t.wFull, t.flexRow, t.flexRowReverse]}>
+          <TouchableOpacity
+            onPress={() => {
+              setRegister({ visibleRegister: false });
+            }}
+            style={[t.pX6]}
+          >
+            <Image
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: Colors.grey60,
+              }}
+              source={Images.crossMedium}
+            />
+          </TouchableOpacity>
+        </SafeAreaView>
+      )}
+      <KeyboardAwareScrollView
+        style={styles.bodyContainer}
+        showsVerticalScrollIndicator={false}
+      >
         <Text style={styles.heading2Bold}>Register</Text>
         <Text style={styles.heading4Regular}>
           Create an account to have access to the best promos in your area!

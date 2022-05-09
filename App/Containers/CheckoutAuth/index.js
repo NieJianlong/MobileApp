@@ -13,8 +13,10 @@ import {
   Page_BillingDetails,
   Page_CheckoutGuestOrderDetail,
 } from "../../Navigation/const";
+import useRegister from "../../hooks/useRegister";
 
 function CheckoutAuth(props) {
+  const { setRegister } = useRegister();
   console.log("props?.route?.params?.product", props?.route?.params?.product);
   return (
     <BaseScreen {...props}>
@@ -39,7 +41,8 @@ function CheckoutAuth(props) {
 
         <TouchableOpacity
           onPress={() => {
-            NavigationService.navigate(Page_BillingDetails);
+            // NavigationService.navigate(Page_BillingDetails);
+            setRegister({ visibleRegister: true });
           }}
         >
           <View style={{ ...styles.item_container, borderWidth: s(2) }}>

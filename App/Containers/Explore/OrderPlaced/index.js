@@ -81,11 +81,7 @@ function OrderPlaced(props) {
                 <Text style={[styles.heading5Bold, t.pR16]}>
                   {props?.route?.params?.items?.shortName}
                 </Text>
-                <Text style={styles.heading6Regular}>
-                  {data
-                    ? `${data?.buyerProfile?.firstName} ${data?.buyerProfile?.lastName}`
-                    : ""}
-                </Text>
+                <Text style={styles.heading6Regular}>User name</Text>
               </View>
             </View>
           ) : (
@@ -101,11 +97,7 @@ function OrderPlaced(props) {
 
                   <View>
                     <Text style={styles.heading5Bold}>{item?.shortName}</Text>
-                    <Text style={styles.heading6Regular}>
-                      {data
-                        ? `${data?.buyerProfile?.firstName} ${data?.buyerProfile?.lastName}`
-                        : ""}
-                    </Text>
+                    <Text style={styles.heading6Regular}></Text>
                   </View>
                 </View>
               );

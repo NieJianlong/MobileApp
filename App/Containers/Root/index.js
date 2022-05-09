@@ -20,6 +20,9 @@ import LoginScreen from "../Login";
 import useLogin from "../../hooks/useLogin";
 import MapScreen from "../MapScreen";
 import useMapScreen from "../../hooks/useMapScreen";
+import useRegister from "../../hooks/useRegister";
+import RegisterScreen from "../Register";
+import { t } from "react-native-tailwindcss";
 
 const initialState = {
   alert: {
@@ -70,6 +73,7 @@ function RootContainer() {
     dispatch,
   ] = useReducer(reducer, initialState);
   const { setShowMap } = useMapScreen();
+  const { visibleRegister } = useRegister();
   const {
     showSheet,
     children,
@@ -125,6 +129,9 @@ function RootContainer() {
       <View style={{ flex: 1 }}>
         <AppNavigation />
       </View>
+      <Modal visible={visibleRegister} transparent={true}>
+        <RegisterScreen style={[t.pX0]} />
+      </Modal>
       {showSheet && (
         <TouchableWithoutFeedback
           disabled={true}

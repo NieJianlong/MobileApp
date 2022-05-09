@@ -40,6 +40,7 @@ import {
 import { ComeFromType, usePaymentConfigration } from "../../../Utils/utils";
 import { isEmpty } from "lodash";
 import UseBillingDetail from "../../../hooks/useBillingDetail";
+import { t } from "react-native-tailwindcss";
 export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { dispatch } = useContext(AlertContext);
   const getPaymentConfigration = usePaymentConfigration();
@@ -245,6 +246,9 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       PubSub.publish("show-pick-up-sheet", addToCart);
     }
   };
+  const disabled = useMemo(() => {
+    return currentVariant?.itemsSold === currentVariant?.itemsAvailable;
+  }, [currentVariant]);
 
   return (
     <SafeAreaView style={styles.footerSafeArea} edges={["bottom"]}>
@@ -261,29 +265,34 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
 
       <View style={styles.rowSpaceBetween}>
         <TouchableOpacity
-          style={styles.row}
+          style={[styles.row, t.mR6]}
           onPress={toggleAddToCartSheet}
-          disabled={
-            currentVariant?.itemsSold === currentVariant?.itemsAvailable
-          }
+          disabled={disabled}
         >
           <Image source={Images.cartMed} style={styles.icCart} />
-          <Text style={[styles.txtBold, { color: Colors.primary }]}>
+          <Text
+            style={[
+              styles.txtBold,
+              { color: Colors.primary },
+              disabled ? t.opacity50 : t.opacity100,
+            ]}
+          >
             ADD TO CART
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={toggleConfirmOrderSheet}
-          style={styles.btnBuyNow}
-          disabled={
-            currentVariant?.itemsSold === currentVariant?.itemsAvailable
-          }
+          style={[
+            styles.btnBuyNow,
+            t.flexGrow,
+            t.justifyAround,
+            disabled ? t.opacity50 : t.opacity100,
+          ]}
+          disabled={disabled}
         >
           <Text style={[styles.txtBold, { color: Colors.white }]}>
-            {currentVariant?.itemsSold === currentVariant?.itemsAvailable
-              ? "you missed product 100/100 sold.."
-              : "BUY NOW"}
+            {disabled ? "100/100 sold" : "BUY NOW"}
           </Text>
 
           <View style={styles.priceContainer}>

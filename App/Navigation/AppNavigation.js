@@ -156,7 +156,11 @@ function PrimaryNav() {
         component={TabNav}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={"OnboardingScreen"} component={OnboardingScreen} />
+      <Stack.Screen
+        name={"OnboardingScreen"}
+        component={OnboardingScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name={"ProductDetailScreen"}
         component={ProductDetailScreen}

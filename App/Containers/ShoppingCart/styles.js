@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
 import AppConfig from "../../Config/AppConfig";
 import { ApplicationStyles, Colors, Fonts } from "../../Themes";
@@ -10,6 +11,7 @@ export default ScaledSheet.create({
   },
   mainContainer: {
     flex: 1,
+    paddingTop: Platform.OS === "android" ? 30 : 0,
     //paddingHorizontal: AppConfig.paddingHorizontal,
   },
   greyBackground: {

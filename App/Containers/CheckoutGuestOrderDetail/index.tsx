@@ -25,7 +25,7 @@ import {
   useBillingDetailsByGuestBuyerIdLazyQuery,
 } from "../../../generated/graphql";
 import UseBillingDetail from "../../hooks/useBillingDetail";
-import { get, trimStart } from "lodash";
+import { get, isEmpty, trimStart } from "lodash";
 import { t } from "react-native-tailwindcss";
 import { vs } from "react-native-size-matters";
 
@@ -60,7 +60,9 @@ function CheckoutGuestOrderDetail(props) {
         const billingDetails = result.billingDetailsByGuestBuyerId[0];
         setValue(
           "phoneNumber",
-          trimStart(billingDetails?.phoneNumber, "+91") ?? ""
+          !isEmpty(billingDetails?.phoneNumber)
+            ? billingDetails?.phoneNumber?.replace("+91", "")
+            : ""
         );
         setValue("email", billingDetails?.email ?? "");
         setValue("firstName", billingDetails?.firstName ?? "");
@@ -331,7 +333,8 @@ function CheckoutGuestOrderDetail(props) {
           <View style={styles.switch}>
             <Switch
               onSwitch={(b) => setIsSameAsDelivery(b)}
-              active={isSameAsDelivery}
+              disabled={true}
+              active={true}
               label="Billing address is the same as delivery"
             />
           </View>

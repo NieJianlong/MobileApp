@@ -8,6 +8,7 @@ import {
 import { ScaledSheet } from "react-native-size-matters";
 import { Fonts, Colors } from "../Themes";
 import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
+import { t } from "react-native-tailwindcss";
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
 
@@ -41,9 +42,15 @@ function Switch(props) {
   } else {
     return (
       <View style={styles.row}>
-        <View style={styles.disabledContainer}>
-          <View style={styles.disabledCircle} />
-        </View>
+        {active ? (
+          <View style={[styles.activeContainer, t.opacity50]}>
+            <View style={styles.activeCircle} />
+          </View>
+        ) : (
+          <View style={styles.inactiveContainer}>
+            <View style={styles.inactiveCircle} />
+          </View>
+        )}
         <Text style={styles.label}>{label}</Text>
       </View>
     );

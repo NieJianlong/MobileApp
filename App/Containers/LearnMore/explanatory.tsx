@@ -23,10 +23,9 @@ function listHeader() {
     <View style={styles.bodyContainer}>
       <View style={styles.tipContainer}>
         <Video
-          ref={(ref) => (player = ref)}
+          // ref={(ref) => (player = ref)}
           source={require("../../../assets/video/video.mp4")}
           style={{
-            backgroundColor: "yellow",
             width: "100%",
             height: "40%",
           }}

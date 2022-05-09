@@ -1,5 +1,12 @@
 import React, { useRef, useState, useContext } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  useWindowDimensions,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs, s } from "react-native-size-matters";
 import { AppBar, BottomSheet, Button } from "../../Components";
@@ -12,6 +19,8 @@ import NumberFormat from "react-number-format";
 import { StarRating, Progress } from "../../Components";
 import AppConfig from "../../Config/AppConfig";
 import { Images } from "../../Themes";
+import { t } from "react-native-tailwindcss";
+import { List } from "react-native-paper";
 
 const SECTIONS = [
   {
@@ -39,10 +48,11 @@ const SECTIONS = [
 const QuickGuide = () => {
   const [activeSections, setActiveSections] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const { width } = useWindowDimensions();
 
   const renderHeader = (section) => {
     return (
-      <View style={styles.header}>
+      <View style={[styles.header, { width: width - 32 }]}>
         <Text style={styles.headerText}>{section.title}</Text>
       </View>
     );
@@ -50,7 +60,7 @@ const QuickGuide = () => {
 
   const renderContent = (section) => {
     return (
-      <View style={styles.subContent}>
+      <View style={[styles.subContent, { width: width - 32 }, t.pX2]}>
         <Text style={styles.contentText}>{section.content}</Text>
       </View>
     );
@@ -66,8 +76,14 @@ const QuickGuide = () => {
         horizontal={false}
         directionalLockEnabled={true}
         showsHorizontalScrollIndicator={false}
+        contentContainerStyle={[t.pX4, t.pT4, t.pB24]}
       >
-        <View style={styles.bodyContainer}>
+        <Image
+          source={require("../../Images/introduce.png")}
+          style={[{ height: 1.7 * width, width: width - 32 }]}
+          resizeMode="contain"
+        />
+        {/* <View style={styles.bodyContainer}>
           <View style={styles.tipContainer}>
             <View style={styles.content}>
               <Text style={[styles.balanceTipTxt, { fontSize: s(24) }]}>
@@ -181,7 +197,7 @@ const QuickGuide = () => {
               <View style={styles.row}>
                 {/* <TouchableOpacity>
                   <Image source={Images.likeMed} style={styles.icShare} />
-                </TouchableOpacity> */}
+                </TouchableOpacity> *
                 <TouchableOpacity>
                   <Image source={Images.share} style={styles.icShare} />
                 </TouchableOpacity>
@@ -298,7 +314,7 @@ const QuickGuide = () => {
             <View style={styles.row}>
               {/* <TouchableOpacity>
                   <Image source={Images.likeMed} style={styles.icShare} />
-                </TouchableOpacity> */}
+                </TouchableOpacity> 
               <TouchableOpacity>
                 <Image source={Images.share} style={styles.icShare} />
               </TouchableOpacity>
@@ -337,9 +353,10 @@ const QuickGuide = () => {
               </View>
             </View>
           </View>
-        </View>
-        <View style={{ marginTop: 20 }}>
+        </View> */}
+        <View style={[t.mT8, { width: width - 32 }]}>
           <Accordion
+            sectionContainerStyle={{ width: width - 32 }}
             sections={SECTIONS}
             activeSections={activeSections}
             renderHeader={renderHeader}

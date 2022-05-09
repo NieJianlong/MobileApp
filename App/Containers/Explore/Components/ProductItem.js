@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Text,
   View,
@@ -19,7 +19,8 @@ import {
 } from "../../../../generated/graphql";
 import { t } from "react-native-tailwindcss";
 import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
-
+import Share from "react-native-share";
+import { shareOptions } from "./ShareOptionList";
 const defultUrl = "";
 
 const TouchableOpacity =
@@ -36,6 +37,22 @@ function ProductItem(props) {
     goFirst,
     notShowBottom,
   } = props;
+  const toggleShareSheet = useCallback(() => {
+    Share.open(shareOptions);
+    // dispatch({
+    //   type: "changSheetState",
+    //   payload: {
+    //     showSheet: true,
+    //     height: 250,
+    //     children: () => (
+    //       <View style={{ flex: 1, justifyContent: "flex-end" }}>
+    //         <ShareOptionList />
+    //       </View>
+    //     ),
+    //     sheetTitle: "Share to",
+    //   },
+    // });
+  }, []);
   const isMissing =
     product.status === ProductListingStatus.Accepted ||
     product.status === ProductListingStatus.Successful;
@@ -225,7 +242,7 @@ function ProductItem(props) {
                 {/* <TouchableOpacity>
                   <Image source={Images.likeMed} style={styles.icShare} />
                 </TouchableOpacity> */}
-                <TouchableOpacity onPress={onPressShare}>
+                <TouchableOpacity onPress={toggleShareSheet}>
                   <Image source={Images.share} style={styles.icShare} />
                 </TouchableOpacity>
               </View>

@@ -1,16 +1,9 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { View, Image, TouchableOpacity, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import NumberFormat from "react-number-format";
 import { QuantitySelector } from "../../../Components";
-
 import { Images, Colors } from "../../../Themes";
 import styles from "./styles";
 import { AlertContext } from "../../Root/GlobalContext";
@@ -18,41 +11,23 @@ import "react-native-get-random-values";
 import useRealm from "../../../hooks/useRealm";
 import colors from "../../../Themes/Colors";
 import PubSub from "pubsub-js";
-import { useQuery, useReactiveVar } from "@apollo/client";
-import { GET_LOCAL_CART, userProfileVar } from "../../../Apollo/cache";
+import { useQuery } from "@apollo/client";
+import { GET_LOCAL_CART } from "../../../Apollo/cache";
 import { nanoid } from "nanoid";
 import BigNumber from "bignumber.js";
 import NavigationService from "../../../Navigation/NavigationService";
-import { ItemProps, useCreateOrder } from "../../../hooks/useCreateOrder";
-import { useCreateRazorOrder } from "../../../hooks/razorOrder";
-import {
-  DeliveryOption,
-  useGetBuyerSalamiWalletBalanceQuery,
-} from "../../../../generated/graphql";
-
-import { ComeFromType, usePaymentConfigration } from "../../../Utils/utils";
-import { isEmpty } from "lodash";
-import UseBillingDetail from "../../../hooks/useBillingDetail";
+import { useCreateOrder } from "../../../hooks/useCreateOrder";
+import { DeliveryOption } from "../../../../generated/graphql";
+import { ComeFromType } from "../../../Utils/utils";
 import { t } from "react-native-tailwindcss";
 import useOrderInfo from "../../../hooks/useOrderInfo";
 export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { dispatch } = useContext(AlertContext);
-  const getPaymentConfigration = usePaymentConfigration();
   const { realm } = useRealm();
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
-
-  const userProfile = useReactiveVar(userProfileVar);
-  const { addBilling } = UseBillingDetail();
-  const { orderInfo, setOrderInfo } = useOrderInfo();
-  const { data } = useGetBuyerSalamiWalletBalanceQuery({
-    context: {
-      headers: {
-        isPrivate: true,
-      },
-    },
-  });
+  const { orderInfo, updateMoneyInfo } = useOrderInfo();
 
   const info = realm
     .objects("ShoppingCart")
@@ -61,42 +36,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
   const [cartInfo, setCartInfo] = useState(info);
   const [quantity, setQuantity] = useState(info?.quantity || 1);
-  const { createOrderFromCart, createOrder } = useCreateOrder();
-  // const [createOrderFromCart, { loading, error, data: dataaa }] =
-  //   useMutation(CreateOrderFromCart);
-
-  let walletBalance = parseFloat(
-    new BigNumber(
-      data?.getBuyerSalamiWalletBalance?.walletBalance +
-        data?.getBuyerSalamiWalletBalance?.giftBalance
-    ).toFixed(2)
-  );
-
-  const orderCreate = (type: string, billingDetailsId: string) => {
-    const productBuyNow: ItemProps = {
-      listingId: product.listingId,
-      quantity,
-      variantId: currentVariant?.variantId,
-      productDetails: product,
-      variant: currentVariant,
-    };
-    if (type === "InSufficient") {
-      NavigationService.navigate("InSufficientSalamiCreditScreen", {
-        walletBalance: walletBalance,
-        productPrice: new BigNumber(quantity * product.wholeSalePrice).toFixed(
-          2
-        ),
-        product: [productBuyNow],
-      });
-      return;
-    }
-    console.log("type", type);
-    dispatch({
-      type: "changLoading",
-      payload: true,
-    });
-    createOrder({ items: [productBuyNow], comeFromType: ComeFromType.Buynow });
-  };
+  const { createOrder } = useCreateOrder();
 
   const addToCart = () => {
     const shoppingCartId = nanoid();
@@ -149,28 +89,12 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       comeFromType: ComeFromType.Buynow,
       availbleList: [],
     };
-    debugger;
-    setOrderInfo(newInfo);
-
+    updateMoneyInfo(newInfo);
     if (!global.access_token) {
       NavigationService.navigate("Page_CheckoutAuth");
       return;
     } else {
-      if (data !== undefined && !isNaN(walletBalance)) {
-        const billingDetailsId = await addBilling();
-        if (
-          walletBalance >=
-          parseFloat(
-            new BigNumber(quantity * product.wholeSalePrice).toFixed(2)
-          )
-        ) {
-          orderCreate("sufficient", billingDetailsId ?? "");
-        } else if (walletBalance === 0 || walletBalance < 0) {
-          orderCreate("zero", billingDetailsId ?? "");
-        } else {
-          orderCreate("InSufficient", billingDetailsId ?? "");
-        }
-      }
+      createOrder({ data: undefined });
     }
   };
 

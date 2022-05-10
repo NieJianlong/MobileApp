@@ -19,7 +19,6 @@ function index(props) {
     product: { product, variant },
     onPress,
   } = props;
-  console.log("product.shortName", product.picture);
 
   return (
     <TouchableOpacity
@@ -34,10 +33,7 @@ function index(props) {
           { maxWidth: "66%", justifyContent: "space-between" },
         ]}
       >
-        <Image
-          source={{ uri: product.photoUrls ? product.photoUrls[0] : defultUrl }}
-          style={styles.productImage}
-        />
+        <Image source={{ uri: product.photo }} style={styles.productImage} />
         <View
           style={[styles.v2, { maxWidth: "90%", justifyContent: "center" }]}
         >

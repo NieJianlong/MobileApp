@@ -1,6 +1,10 @@
 import { createModel } from "hox";
+import { isEmpty } from "lodash";
 import { useState } from "react";
-import { IsListingAvailableFieldFragment } from "../../generated/graphql";
+import {
+  DeliveryOption,
+  IsListingAvailableFieldFragment,
+} from "../../generated/graphql";
 import { ComeFromType } from "../Utils/utils";
 import { ItemProps } from "./useCreateOrder";
 
@@ -14,6 +18,7 @@ interface OrderInfoProps {
   comeFromType: ComeFromType;
   availbleList: IsListingAvailableFieldFragment[];
 }
+
 const useOrderInfo = () => {
   const [orderInfo, setOrderInfo] = useState<OrderInfoProps>({
     currentBilling: 0,
@@ -25,7 +30,61 @@ const useOrderInfo = () => {
     comeFromType: ComeFromType.Buynow,
     availbleList: [],
   });
+  const updateMoneyInfo = ({
+    itemsForRequest,
+    allItems,
+    availbleList,
+    comeFromType,
+  }: OrderInfoProps) => {
+    let currentBilling = 0;
+    let originalBilling = 0;
+    let deliveryFess = 0;
 
+    for (let index = 0; index < allItems.length; index++) {
+      const element = allItems[index];
+      let itemAvailble: boolean = true;
+      if (!isEmpty(availbleList) && !availbleList) {
+        const i = availbleList[index];
+        itemAvailble = i?.isAvailable;
+      }
+      const courierShippingFee =
+        element?.productDetails?.courierShippingFee ?? 0;
+      const variantRetailPrice = element.variant.retailPrice ?? 0;
+      const variantWholeSalePrice = element.variant.wholeSalePrice ?? 0;
+      const productRetailPrice = element.productDetails.retailPrice ?? 0;
+      const productWholeSalePrice = element.productDetails.wholeSalePrice ?? 0;
+      if (itemAvailble) {
+        if (
+          element?.productDetails?.deliveryOption ===
+          DeliveryOption.CourierDelivery
+        ) {
+          deliveryFess = courierShippingFee + deliveryFess;
+        }
+        if (element.variant) {
+          originalBilling = originalBilling + variantRetailPrice;
+          0 * element.quantity;
+          currentBilling =
+            currentBilling + variantWholeSalePrice * element.quantity;
+        } else {
+          originalBilling =
+            originalBilling + productRetailPrice * element.quantity;
+          currentBilling =
+            currentBilling + productWholeSalePrice * element.quantity;
+        }
+      }
+    }
+
+    setOrderInfo({
+      ...orderInfo,
+      itemsForRequest: itemsForRequest,
+      allItems,
+      comeFromType: comeFromType,
+      availbleList: availbleList,
+      currentBilling,
+      originalBilling,
+      deliveryFess,
+    });
+  };
   const {
     currentBilling,
     originalBilling,
@@ -45,6 +104,7 @@ const useOrderInfo = () => {
     comeFromType,
     setOrderInfo,
     orderInfo,
+    updateMoneyInfo,
   };
 };
 export default createModel(useOrderInfo);

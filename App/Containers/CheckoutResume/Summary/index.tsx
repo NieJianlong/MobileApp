@@ -1,51 +1,43 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Text,
-  Image,
-  TextInput,
-} from "react-native";
+import { View, Text } from "react-native";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
 import colors from "../../../Themes/Colors";
-import { AppBar, Button, Switch } from "../../../Components";
 
 import fonts from "../../../Themes/Fonts";
-import images from "../../../Themes/Images";
+
 import { ApplicationStyles } from "../../../Themes";
+import useOrderInfo from "../../../hooks/useOrderInfo";
 
 function index(props) {
-  const { orderStatus, subTotal, saving, deliveryFess } = props;
-  const [promoCode, setPromoCode] = useState("");
-  const [promoStatus, setPromoStatus] = useState("");
+  const { orderInfo } = useOrderInfo();
+
   const [summaries, setSummaries] = useState([
     {
       title: "Subtotal product(s)",
-      value: subTotal,
+      value: orderInfo.currentBilling,
       type: "normal",
     },
     {
       title: "Delivery",
-      value: `${deliveryFess}`,
+      value: orderInfo.deliveryFess,
       type: "normal",
     },
     {
       title: "Total savings",
-      value: `-${saving}`,
+      value: `-${orderInfo.originalBilling - orderInfo.currentBilling}`,
       type: "normal",
     },
     {
       title: "Total",
-      value: subTotal,
+      value: orderInfo.currentBilling + orderInfo.deliveryFess,
       type: "bold",
     },
   ]);
-  useEffect(() => {
-    if (promoStatus == "success") {
-      setPromoCode("10% Discount applied successfully!");
-    }
-  }, [promoStatus]);
+  // useEffect(() => {
+  //   if (promoStatus == "success") {
+  //     setPromoCode("10% Discount applied successfully!");
+  //   }
+  // }, [promoStatus]);
   return (
     <View
       style={{
@@ -54,81 +46,7 @@ function index(props) {
       }}
     >
       <Text style={ApplicationStyles.screen.heading4Bold}>Order Summary</Text>
-      {/* {orderStatus != 1 && (
-        <View
-          style={
-            promoStatus == "success"
-              ? styles.promoSuccess
-              : promoStatus == "failure"
-              ? styles.promoCodeFailure
-              : styles.promoCode
-          }
-        >
-          <TextInput
-            editable={promoStatus != "success"}
-            onFocus={() => {
-              setPromoStatus("");
-            }}
-            style={[
-              ApplicationStyles.screen.txtRegular,
-              promoStatus == "success"
-                ? styles.promoInputSuccess
-                : promoStatus == "failure"
-                ? styles.promoInputFailure
-                : styles.promoInput,
-            ]}
-            onChangeText={(text) => setPromoCode(text)}
-            value={promoCode}
-            placeholder="Add a Promo Code"
-          />
-          {promoCode.length > 0 && promoStatus != "success" && (
-            <TouchableOpacity
-              onPress={() => {
-                if (promoCode == "1111") {
-                  setPromoStatus("success");
-                } else {
-                  setPromoStatus("failure");
-                }
-              }}
-              style={{
-                width: s(112),
-                backgroundColor: colors.grey80,
-                height: vs(48),
-                borderRadius: s(40),
-              }}
-            >
-              <Text
-                style={[
-                  ApplicationStyles.screen.heading4Bold,
-                  {
-                    color: "white",
 
-                    lineHeight: vs(48),
-                    textAlign: "center",
-                  },
-                ]}
-              >
-                APPLY
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      )} */}
-
-      {/* {promoStatus === "failure" && (
-        <Text
-          style={
-            (ApplicationStyles.screen.heading6Bold,
-            {
-              margin: s(15),
-              marginVertical: s(8),
-              color: colors.error,
-            })
-          }
-        >
-          Error Message
-        </Text>
-      )} */}
       {summaries.map((item, index) => {
         return (
           <View

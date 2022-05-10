@@ -22,12 +22,7 @@ function AddCheckoutPaymentMethod(props) {
         });
       },
     },
-    {
-      image: images.userPayMethod6Image,
-      onPress: () => {
-        Nav.navigate("InSufficientSalamiCreditScreen");
-      },
-    },
+
     {
       image: images.userPayMethod1Image,
       onPress: () => {

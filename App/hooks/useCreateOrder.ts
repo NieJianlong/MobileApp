@@ -50,6 +50,7 @@ export const useCreateOrder = () => {
       },
     }
   );
+
   const moneyInfo = ({
     data,
     walletBalance = 0,
@@ -107,6 +108,7 @@ export const useCreateOrder = () => {
       deliveryFess,
       walletBalance,
     });
+    debugger;
     let orderType = OrderType.zero;
     if (walletBalance >= total) {
       orderType = OrderType.sufficient;
@@ -131,8 +133,10 @@ export const useCreateOrder = () => {
 
   const createOrder = async ({
     data,
+    isFromInSufficientSalamiCreditScreen = false,
   }: {
     data?: BillingDetailsRequestForCreate;
+    isFromInSufficientSalamiCreditScreen: boolean;
   }) => {
     setLoading({ show: true });
     let walletBalance = 0;
@@ -152,10 +156,16 @@ export const useCreateOrder = () => {
       availbleList: orderInfo.availbleList,
       comeFromType: orderInfo.comeFromType,
     });
-    if (info.orderType === OrderType.inSufficient) {
+    // if (info.orderType === OrderType.inSufficient) {
+    if (
+      !isFromInSufficientSalamiCreditScreen &&
+      info.orderType === OrderType.inSufficient
+    ) {
       NavigationService.navigate("InSufficientSalamiCreditScreen");
       return;
     }
+
+    // }
     debugger;
     const billingDetailsId = await addBilling(data ?? undefined);
     const cart = {
@@ -179,8 +189,6 @@ export const useCreateOrder = () => {
       },
       onCompleted: (res) => {
         setLoading({ show: false });
-        NavigationService.navigate("OrderPlacedScreen");
-        return;
         if (info.orderType === OrderType.sufficient) {
           if (res?.createOrderFromCart?.orderId) {
             NavigationService.navigate("OrderPlacedScreen");
@@ -214,5 +222,6 @@ export const useCreateOrder = () => {
     createOrderFromCart,
     createOrder,
     order,
+    moneyInfo,
   };
 };

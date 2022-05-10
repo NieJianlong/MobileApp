@@ -1,50 +1,39 @@
-import React, { useContext } from "react";
-import {
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Text,
-  Image,
-  SafeAreaView,
-  FlatList,
-} from "react-native";
+import React, { useMemo } from "react";
+import { View, TouchableOpacity, Text, SafeAreaView } from "react-native";
 import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
 import colors from "../../Themes/Colors";
-import { AppBar, Button } from "../../Components";
-import NavigationService from "../../Navigation/NavigationService";
-import images from "../../Themes/Images";
+import { Button } from "../../Components";
 import { ApplicationStyles } from "../../Themes";
-import metrics from "../../Themes/Metrics";
-import {
-  cartOrderVar,
-  GET_LOCAL_CART,
-  localBuyNowVar,
-  razorOrderPaymentVar,
-  userProfileVar,
-} from "../../Apollo/cache";
-import RazorpayCheckout from "react-native-razorpay";
 import { useCreateOrder } from "../../hooks/useCreateOrder";
-import { useCreateRazorOrder } from "../../hooks/razorOrder";
-import { useRazorVerifyPayment } from "../../hooks/verifyPayment";
-import { useQuery, useReactiveVar } from "@apollo/client";
+import { useGetBuyerSalamiWalletBalanceQuery } from "../../../generated/graphql";
 import BigNumber from "bignumber.js";
-import { AlertContext } from "../Root/GlobalContext";
-import { ComeFromType, usePaymentConfigration } from "../../Utils/utils";
+import useOrderInfo from "../../hooks/useOrderInfo";
 
 function InSufficientSalamiCredit(props) {
-  const params = props?.route?.params;
-  const { createOrderFromCart, order } = useCreateOrder();
-  const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
-  const userProfile = useReactiveVar(userProfileVar);
-
-  const {
-    data: { localCartVar },
-  } = useQuery(GET_LOCAL_CART);
-  const { dispatch } = useContext(AlertContext);
-  const getPaymentConfigration = usePaymentConfigration();
-
+  const { createOrder } = useCreateOrder();
+  const { orderInfo } = useOrderInfo();
+  const { data } = useGetBuyerSalamiWalletBalanceQuery({
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+  });
+  const balance = useMemo(() => {
+    if (data) {
+      const remoteBalance =
+        data?.getBuyerSalamiWalletBalance?.walletBalance ?? 0;
+      const remoteGiftBalance =
+        data?.getBuyerSalamiWalletBalance?.giftBalance ?? 0;
+      const walletBalance = parseFloat(
+        new BigNumber(remoteBalance + remoteGiftBalance).toFixed(2)
+      );
+      return walletBalance;
+    }
+    return 0.0;
+  }, [data]);
   return (
     <View
       style={{
@@ -85,9 +74,7 @@ function InSufficientSalamiCredit(props) {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={styles.itemSubTitle}>
-                      {"₹ " + `${params.walletBalance}`}
-                    </Text>
+                    <Text style={styles.itemSubTitle}>{"₹ " + balance}</Text>
                   </View>
                 </View>
               </View>
@@ -98,9 +85,7 @@ function InSufficientSalamiCredit(props) {
                     ApplicationStyles.screen.subtitle,
                     { color: colors.grey60 },
                   ]}
-                >
-                  DESELECT
-                </Text>
+                ></Text>
               </TouchableOpacity>
             </View>
             <View
@@ -114,7 +99,12 @@ function InSufficientSalamiCredit(props) {
               <Text style={styles.title}>Add a payment</Text>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Text style={ApplicationStyles.screen.heading2Bold}>
-                  {"₹ " + `${params.productPrice - params.walletBalance}`}
+                  {"₹ " +
+                    `${
+                      orderInfo.currentBilling +
+                      orderInfo.deliveryFess -
+                      balance
+                    }`}
                 </Text>
                 <Text
                   style={[
@@ -137,60 +127,9 @@ function InSufficientSalamiCredit(props) {
           >
             <Button
               onPress={() => {
-                dispatch({
-                  type: "changLoading",
-                  payload: true,
-                });
-                createOrderFromCart({
-                  variables: {
-                    cart: {
-                      buyerId: userProfile.buyerId,
-                      shippingAddressId: localCartVar.deliverAddress,
-                      billingDetailsId: userProfile.billingDetailsId,
-                      useSalamiWallet: true,
-                      cartItems: params.product,
-                    },
-                  },
-                  context: {
-                    headers: {
-                      isPrivate: true,
-                    },
-                  },
-                  onCompleted: (res) => {
-                    dispatch({
-                      type: "changLoading",
-                      payload: false,
-                    });
-
-                    const order = res?.createOrderFromCart;
-                    if (res?.createOrderFromCart?.orderId) {
-                      cartOrderVar({
-                        orderNumber: order?.orderNumber,
-                        orderId: order?.orderId,
-                        amount: order?.subTotal,
-                      });
-                      razorpayCreateOrder().then((res) => {
-                        if (res?.data) {
-                          const razorId =
-                            res?.data?.razorpayCreateOrder?.razorpayOrderId;
-                          getPaymentConfigration(
-                            razorId,
-                            params.product,
-                            ComeFromType.Buynow,
-                            order?.paymentDetails.balanceToPay
-                          );
-                        }
-                      });
-                    }
-                    return res?.createOrderFromCart;
-                  },
-                  onError: (res) => {
-                    dispatch({
-                      type: "changLoading",
-                      payload: false,
-                    });
-                    alert(JSON.stringify(res.message));
-                  },
+                createOrder({
+                  data: undefined,
+                  isFromInSufficientSalamiCreditScreen: true,
                 });
               }}
               text={"Pay"}

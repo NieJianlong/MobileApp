@@ -35,6 +35,7 @@ function ShoppingCart(props) {
   // const { addBilling } = AddBillingDetail();
   const [mydatas, setMydatas] = useState([]);
   const { orderInfo, setOrderInfo } = useOrderInfo();
+  const { updateMoneyInfo } = useOrderInfo();
 
   useEffect(() => {
     const query1 = realm
@@ -172,12 +173,13 @@ function ShoppingCart(props) {
           variantId: item.variantId,
           quantity: item.quantity,
         });
+
         allItems.push({
           listingId: item.product.listingId,
           variantId: item.variantId,
           quantity: item.quantity,
-          productDetails: item?.product,
-          variant: item.variant,
+          productDetails: Object.assign({}, item?.product),
+          variant: Object.assign({}, item.variant),
         });
       }
     });
@@ -186,13 +188,17 @@ function ShoppingCart(props) {
       ...localCart,
       items: itemArray,
     });
-    setOrderInfo({
+    updateMoneyInfo({
       ...orderInfo,
       itemsForRequest: itemArray,
       allItems,
       comeFromType: ComeFromType.checkout,
       availbleList: availbleList?.isListingAvailable ?? [],
     });
+    // updateMoneyInfo({
+    //   data: allItems,
+    //   availbleList: availbleList?.isListingAvailable ?? [],
+    // });
 
     if (global.access_token === "" || !global.access_token) {
       NavigationService.navigate("Page_CheckoutAuth");

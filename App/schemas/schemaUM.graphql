@@ -174,6 +174,8 @@ type BuyerProfileResponse {
   lastName: String
   email: String
   phoneNumber: String
+  emailVerified: Boolean
+  phoneNumberVerified: Boolean
   userType: UserType
   createdAt: DateTime
   updatedAt: DateTime
@@ -867,6 +869,8 @@ type SellerProfileResponse {
   lastName: String
   email: String
   phoneNumber: String
+  emailVerified: Boolean
+  phoneNumberVerified: Boolean
   userType: UserType
   createdAt: DateTime
   updatedAt: DateTime

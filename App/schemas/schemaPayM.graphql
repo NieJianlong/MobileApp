@@ -8,9 +8,17 @@ scalar DateTime
 
 """MUTATIONS"""
 type Mutation {
+  processOrderPaymentStatus: ProcessOrderPaymentStatusResponse!
   razorpayCreateOrder(request: RazorpayOrderRequest!): RazorpayOrderResponse!
   razorpayVerifyPaymentSignature(request: RazorpayVerifyPaymentSignatureRequest!): RazorpayVerifyPaymentSignatureResponse!
   razorpayCreateRefund(request: RazorpayRefundRequest!): RazorpayRefundResponse!
+}
+
+enum OrderItemHistoryEventType {
+  WAITING_FOR_PAYMENT
+  PAID
+  FAILED_PAYMENT
+  AUTHORIZED_PAYMENT
 }
 
 """TYPES"""
@@ -23,6 +31,12 @@ type PaymentResponse {
   gatewayOrderStatus: String
   paymentAmount: Float
   refundedAmount: Float
+}
+
+type ProcessOrderPaymentStatusResponse {
+  recordsWithError: Int!
+  recordsProcessedSuccessful: Int!
+  message: String!
 }
 
 """QUERIES"""
@@ -71,10 +85,12 @@ input RazorpayVerifyPaymentSignatureRequest {
 }
 
 type RazorpayVerifyPaymentSignatureResponse {
-  valid: Boolean
-  razorpayPaymentId: String
-  razorpayPaymentStatus: String
-  razorpayOrderId: String
-  razorpayOrderStatus: String
+  valid: Boolean!
+  razorpayPaymentId: String!
+  razorpayPaymentStatus: String!
+  razorpayOrderId: String!
+  razorpayOrderStatus: String!
+  orderId: ID!
+  orderPaymentStatus: OrderItemHistoryEventType!
 }
 

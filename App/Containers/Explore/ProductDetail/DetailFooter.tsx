@@ -19,18 +19,11 @@ import useRealm from "../../../hooks/useRealm";
 import colors from "../../../Themes/Colors";
 import PubSub from "pubsub-js";
 import { useQuery, useReactiveVar } from "@apollo/client";
-import {
-  cartOrderVar,
-  GET_LOCAL_CART,
-  localBuyNowVar,
-  userProfileVar,
-} from "../../../Apollo/cache";
+import { GET_LOCAL_CART, userProfileVar } from "../../../Apollo/cache";
 import { nanoid } from "nanoid";
 import BigNumber from "bignumber.js";
 import NavigationService from "../../../Navigation/NavigationService";
-import { useCreateOrder } from "../../../hooks/order";
-
-import { useRazorVerifyPayment } from "../../../hooks/verifyPayment";
+import { ItemProps, useCreateOrder } from "../../../hooks/useCreateOrder";
 import { useCreateRazorOrder } from "../../../hooks/razorOrder";
 import {
   DeliveryOption,
@@ -41,6 +34,7 @@ import { ComeFromType, usePaymentConfigration } from "../../../Utils/utils";
 import { isEmpty } from "lodash";
 import UseBillingDetail from "../../../hooks/useBillingDetail";
 import { t } from "react-native-tailwindcss";
+import useOrderInfo from "../../../hooks/useOrderInfo";
 export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { dispatch } = useContext(AlertContext);
   const getPaymentConfigration = usePaymentConfigration();
@@ -49,9 +43,9 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
 
-  const { razorpayCreateOrder } = useCreateRazorOrder();
   const userProfile = useReactiveVar(userProfileVar);
   const { addBilling } = UseBillingDetail();
+  const { orderInfo, setOrderInfo } = useOrderInfo();
   const { data } = useGetBuyerSalamiWalletBalanceQuery({
     context: {
       headers: {
@@ -67,7 +61,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
   const [cartInfo, setCartInfo] = useState(info);
   const [quantity, setQuantity] = useState(info?.quantity || 1);
-  const { createOrderFromCart, order } = useCreateOrder();
+  const { createOrderFromCart, createOrder } = useCreateOrder();
   // const [createOrderFromCart, { loading, error, data: dataaa }] =
   //   useMutation(CreateOrderFromCart);
 
@@ -79,10 +73,12 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   );
 
   const orderCreate = (type: string, billingDetailsId: string) => {
-    const productBuyNow = {
+    const productBuyNow: ItemProps = {
       listingId: product.listingId,
       quantity,
       variantId: currentVariant?.variantId,
+      productDetails: product,
+      variant: currentVariant,
     };
     if (type === "InSufficient") {
       NavigationService.navigate("InSufficientSalamiCreditScreen", {
@@ -99,71 +95,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       type: "changLoading",
       payload: true,
     });
-    createOrderFromCart({
-      variables: {
-        cart: {
-          buyerId: userProfile.buyerId,
-          shippingAddressId: localCartVar.deliverAddress,
-          billingDetailsId: isEmpty(billingDetailsId)
-            ? userProfile.billingDetailsId
-            : billingDetailsId,
-          useSalamiWallet: true,
-          cartItems: [productBuyNow],
-        },
-      },
-      context: {
-        headers: {
-          isPrivate: true,
-        },
-      },
-      onCompleted: (res) => {
-        console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
-        dispatch({
-          type: "changLoading",
-          payload: false,
-        });
-        if (type === "sufficient") {
-          if (res?.createOrderFromCart?.orderId) {
-            localBuyNowVar({
-              items: [],
-            });
-            NavigationService.navigate("OrderPlacedScreen", {
-              items: product,
-              from: ComeFromType.Buynow,
-            });
-          }
-        } else if (type === "zero") {
-          const order = res?.createOrderFromCart;
-          if (res?.createOrderFromCart?.orderId) {
-            cartOrderVar({
-              orderNumber: order?.orderNumber,
-              orderId: order?.orderId,
-              amount: order?.subTotal,
-            });
-            razorpayCreateOrder().then((res) => {
-              if (res?.data) {
-                const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
-                getPaymentConfigration(
-                  razorId,
-                  product,
-                  ComeFromType.Buynow,
-                  order.paymentDetails.balanceToPay
-                );
-              }
-            });
-          }
-          return res?.createOrderFromCart;
-        }
-      },
-      onError: (res) => {
-        dispatch({
-          type: "changLoading",
-          payload: false,
-        });
-        // alert(JSON.stringify(res.message));
-        console.log(`Explore useCreateOrder onError ${JSON.stringify(res)}`);
-      },
-    });
+    createOrder({ items: [productBuyNow], comeFromType: ComeFromType.Buynow });
   };
 
   const addToCart = () => {
@@ -205,16 +137,23 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   };
 
   const toggleConfirmOrderSheet = async () => {
+    const item = {
+      listingId: product.listingId,
+      quantity,
+      variantId: currentVariant.variantId,
+    };
+    const newInfo = {
+      ...orderInfo,
+      itemsForRequest: [item],
+      allItems: [{ ...item, productDetails: product, variant: currentVariant }],
+      comeFromType: ComeFromType.Buynow,
+      availbleList: [],
+    };
+    debugger;
+    setOrderInfo(newInfo);
+
     if (!global.access_token) {
-      NavigationService.navigate("Page_CheckoutAuth", {
-        product: {
-          listingId: product.listingId,
-          quantity,
-          variantId: currentVariant.variantId,
-        },
-        items: product,
-        from: "Buynow",
-      });
+      NavigationService.navigate("Page_CheckoutAuth");
       return;
     } else {
       if (data !== undefined && !isNaN(walletBalance)) {

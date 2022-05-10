@@ -1,3 +1,8 @@
+fragment IsListingAvailableField on IsListingAvailableResponse {
+  listingId
+  variantId
+  isAvailable
+}
 fragment KeyValuePairField on KeyValuePair {
   key
   value
@@ -299,5 +304,10 @@ query GetPreferredCategories($buyerId: ID!) {
     categoryId
     name
     description
+  }
+}
+query IsListingAvailable($listings: [IsListingAvailableInput!]!) {
+  isListingAvailable(listings: $listings) {
+    ...IsListingAvailableField
   }
 }

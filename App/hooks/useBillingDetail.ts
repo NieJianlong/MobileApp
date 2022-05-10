@@ -3,6 +3,7 @@ import { useReactiveVar } from "@apollo/client";
 import { localCartVar, userProfileVar } from "../Apollo/cache";
 import {
   AddressType,
+  BillingDetailsRequestForCreate,
   useCreateBillingDetailsForGuestBuyerMutation,
   useCreateBillingDetailsMutation,
   useUpdateBillingDetailsForGuestBuyerMutation,
@@ -111,7 +112,7 @@ const UseBillingDetail = () => {
       return err;
     },
   });
-  async function addBilling(data) {
+  async function addBilling(data: BillingDetailsRequestForCreate | undefined) {
     let result;
     let resultTemp1;
     if (isEmpty(userProfile.billingDetailsId)) {

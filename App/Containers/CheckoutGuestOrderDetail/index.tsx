@@ -1,25 +1,20 @@
 import React, { useState, useMemo, useContext } from "react";
-import { View, TouchableOpacity, Text, SafeAreaView } from "react-native";
+import { View, Text, SafeAreaView } from "react-native";
 
 import BaseScreen from "../BaseScreen";
-import { AppBar, Button, Switch } from "../../Components";
+import { Button, Switch } from "../../Components";
 import { MaterialTextInput } from "../../Components";
 import { useReactiveVar } from "@apollo/client";
-import {
-  userProfileVar,
-  localBuyNowVar,
-  localCartVar,
-  cartOrderVar,
-} from "../../Apollo/cache";
+import { localCartVar, userProfileVar } from "../../Apollo/cache";
 import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
-import { useCreateOrder } from "../../hooks/order";
+import { useCreateOrder } from "../../hooks/useCreateOrder";
 import { AlertContext } from "../Root/GlobalContext";
 import { useCreateRazorOrder } from "../../hooks/razorOrder";
-import { usePaymentConfigration } from "../../Utils/utils";
+import { ComeFromType, usePaymentConfigration } from "../../Utils/utils";
 import { Controller, useForm } from "react-hook-form";
 
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   BillingDetailsRequestForCreate,
   useBillingDetailsByGuestBuyerIdLazyQuery,
@@ -29,22 +24,18 @@ import { get, isEmpty, trimStart } from "lodash";
 import { t } from "react-native-tailwindcss";
 import { vs } from "react-native-size-matters";
 import useLoading from "../../hooks/useLoading";
-import { ActivityIndicator } from "react-native-paper";
+
+import useOrderInfo from "../../hooks/useOrderInfo";
 
 function CheckoutGuestOrderDetail(props) {
   const userProfile = useReactiveVar(userProfileVar);
   const [billingAddress, setBillingAddress] = useState([]);
   const { setLoading } = useLoading();
+  const { orderInfo } = useOrderInfo();
+  const { createOrder } = useCreateOrder();
 
-  const { addBilling } = UseBillingDetail();
-
-  const [isSameAsDelivery, setIsSameAsDelivery] = useState(true);
-  const { createOrderFromCart } = useCreateOrder();
-  const { razorpayCreateOrder } = useCreateRazorOrder();
   const localCart = useReactiveVar(localCartVar);
-  const { dispatch } = useContext(AlertContext);
-  const isAuth = useMemo(() => userProfile.isAuth, [userProfile.isAuth]);
-  const getPaymentConfigration = usePaymentConfigration();
+
   const {
     control,
     handleSubmit,
@@ -96,115 +87,13 @@ function CheckoutGuestOrderDetail(props) {
 
   const onSubmit = async (data: BillingDetailsRequestForCreate) => {
     const data1 = { ...data, phoneNumber: "+91" + data.phoneNumber };
-
-    dispatch({ type: "loading" });
-    const billingDetailsId = await addBilling(data1);
-    dispatch({
-      type: "changLoading",
-      payload: true,
-    });
-    if (props?.route?.params?.from === "checkout") {
-      dispatch({
-        type: "changLoading",
-        payload: false,
-      });
-      NavigationService.navigate("CheckoutResumeScreen", {
-        orderStatus: 0,
-        data: props?.route?.params?.items,
-        availbleList: props?.route?.params?.availbleList,
-      });
+    if (orderInfo.comeFromType === ComeFromType.checkout) {
+      NavigationService.navigate("CheckoutResumeScreen");
     } else {
-      const productBuyNow = {
-        listingId: props?.route?.params?.product?.listingId,
-        quantity: props?.route?.params?.product?.quantity,
-        variantId: props?.route?.params?.product?.variantId,
-      };
-      localBuyNowVar({
-        items: [productBuyNow],
-      });
-      // createUpdateBillingAddress();
-      createOrderFromCart({
-        variables: {
-          cart: {
-            buyerId: global.buyerId,
-            shippingAddressId: localCart?.deliverAddress,
-            billingDetailsId: billingDetailsId,
-            useSalamiWallet: false,
-            cartItems:
-              localBuyNowVar().items.length > 0
-                ? localBuyNowVar().items
-                : localCartVar().items,
-          },
-        },
-        context: {
-          headers: {
-            isPrivate: isAuth,
-          },
-        },
-        onCompleted: (res) => {
-          console.log(`Explore useCreateOrder res ${JSON.stringify(res)}`);
-          dispatch({
-            type: "changLoading",
-            payload: false,
-          });
-          const order = res?.createOrderFromCart;
-          if (order?.orderId) {
-            cartOrderVar({
-              orderNumber: order?.orderNumber,
-              orderId: order?.orderId,
-              amount: order?.subTotal,
-            });
-            razorpayCreateOrder().then((result) => {
-              if (result?.data) {
-                const razorId =
-                  result?.data?.razorpayCreateOrder?.razorpayOrderId;
-                getPaymentConfigration(
-                  razorId,
-                  props?.route?.params?.items,
-                  props?.route?.params?.from,
-                  order.paymentDetails.balanceToPay
-                );
-              }
-            });
-          }
-          return res?.createOrderFromCart;
-        },
-        onError: (err) => {
-          console.log("Here createOrder", err);
-          dispatch({
-            type: "changLoading",
-            payload: false,
-          });
-          // alert(err.message);
-        },
-      });
+      createOrder({ data: data1 });
     }
   };
-  // const navigation = useNavigation();
-  // React.useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerRight: () => (
-  //       <View style={[t.mR6]}>
-  //         <TouchableOpacity
-  //           onPress={() => {
-  //             onPressNext();
-  //           }}
-  //         >
-  //           <Text style={styles.rightButton}>Next</Text>
-  //         </TouchableOpacity>
-  //       </View>
-  //     ),
-  //   });
-  // }, [navigation]);
-  // if (loading) {
-  //   return (
-  //     <ActivityIndicator
-  //       style={{ top: "50%" }}
-  //       animating={true}
-  //       color={"#F36B7F"}
-  //     />
-  //   );
-  // }
+
   return (
     <BaseScreen {...props}>
       <View style={styles.container}>
@@ -349,7 +238,7 @@ function CheckoutGuestOrderDetail(props) {
 
           <View style={styles.switch}>
             <Switch
-              onSwitch={(b) => setIsSameAsDelivery(b)}
+              // onSwitch={(b) => setIsSameAsDelivery(b)}
               disabled={true}
               active={true}
               label="Billing address is the same as delivery"

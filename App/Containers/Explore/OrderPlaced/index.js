@@ -29,25 +29,7 @@ function OrderPlaced(props) {
   });
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      header: () => (
-        <View style={styles.header}>
-          <View style={styles.icSearch} />
-
-          <Image
-            source={Images.logo3}
-            style={styles.logo}
-            resizeMode={"contain"}
-          />
-
-          <TouchableOpacity
-            onPress={() => {
-              NavigationService.navigate("PackageScreen");
-            }}
-          >
-            <Image source={Images.crossMedium} style={styles.icSearch} />
-          </TouchableOpacity>
-        </View>
-      ),
+      header: () => null,
     });
   }, [navigation]);
 
@@ -181,7 +163,25 @@ function OrderPlaced(props) {
 
   return (
     <View style={styles.container}>
-      {/* <SafeAreaView style={styles.container} edges={["top", "left", "right"]}> */}
+      <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
+        <View style={styles.header}>
+          <View style={styles.icSearch} />
+
+          <Image
+            source={Images.logo3}
+            style={styles.logo}
+            resizeMode={"contain"}
+          />
+
+          <TouchableOpacity
+            onPress={() => {
+              NavigationService.navigate("PackageScreen");
+            }}
+          >
+            <Image source={Images.crossMedium} style={styles.icSearch} />
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
       {renderBody()}
       {/* </SafeAreaView> */}
     </View>

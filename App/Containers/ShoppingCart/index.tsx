@@ -22,7 +22,10 @@ import PubSub from "pubsub-js";
 import useRealm from "../../hooks/useRealm";
 import { useLazyQuery } from "@apollo/client";
 import { localCartVar } from "../../Apollo/cache";
-import { IsListingAvailable } from "../Explore/gql/explore_queries";
+import { useIsListingAvailableLazyQuery } from "../../../generated/graphql";
+import useOrderInfo from "../../hooks/useOrderInfo";
+import { ItemProps } from "../../hooks/useCreateOrder";
+import { ComeFromType } from "../../Utils/utils";
 
 export const CartContext = React.createContext({});
 
@@ -31,6 +34,7 @@ function ShoppingCart(props) {
   const localCart = localCartVar();
   // const { addBilling } = AddBillingDetail();
   const [mydatas, setMydatas] = useState([]);
+  const { orderInfo, setOrderInfo } = useOrderInfo();
 
   useEffect(() => {
     const query1 = realm
@@ -138,12 +142,10 @@ function ShoppingCart(props) {
     });
   }, [mydatas]);
   console.log("isAvailableList", isAvailableList);
-  const [queryAvailble, { data: availbleList }] = useLazyQuery(
-    IsListingAvailable,
-    {
+  const [queryAvailble, { data: availbleList }] =
+    useIsListingAvailableLazyQuery({
       variables: { listings: isAvailableList },
-    }
-  );
+    });
   useEffect(() => {
     if (isAvailableList.length > 0) {
       queryAvailble();
@@ -157,6 +159,7 @@ function ShoppingCart(props) {
     // await addBilling();
     console.log("global.access_token", global.access_token);
     const itemArray = [];
+    const allItems: ItemProps[] = [];
     mydatas.map((item, index) => {
       let itemAvailble = true;
       if (availbleList) {
@@ -169,6 +172,13 @@ function ShoppingCart(props) {
           variantId: item.variantId,
           quantity: item.quantity,
         });
+        allItems.push({
+          listingId: item.product.listingId,
+          variantId: item.variantId,
+          quantity: item.quantity,
+          productDetails: item?.product,
+          variant: item.variant,
+        });
       }
     });
     console.log("itemArray", itemArray);
@@ -176,34 +186,18 @@ function ShoppingCart(props) {
       ...localCart,
       items: itemArray,
     });
+    setOrderInfo({
+      ...orderInfo,
+      itemsForRequest: itemArray,
+      allItems,
+      comeFromType: ComeFromType.checkout,
+      availbleList: availbleList?.isListingAvailable ?? [],
+    });
 
-    // if (userProfile?.isAuth && global.buyerId !== AppConfig.guestId) {
-    //   if (userProfile.phone) {
-    //   } else {
-    //   }
-    //
-    //   const params = {
-    //     title: "Please enter your billing details",
-    //
-    //     actionButtonText: Action_Type.NEXT,
-    //     actionType: Billing_Type.BILLING,
-    //   };
-    //   NavigationService.navigate("AddBillingDetailsScreen", params);
-    // } else {
-    //   NavigationService.navigate("CheckoutNoAuthScreen");
-    // }
     if (global.access_token === "" || !global.access_token) {
-      NavigationService.navigate("Page_CheckoutAuth", {
-        items: mydatas,
-        availbleList: availbleList,
-        from: "checkout",
-      });
+      NavigationService.navigate("Page_CheckoutAuth");
     } else {
-      NavigationService.navigate("CheckoutResumeScreen", {
-        orderStatus: 0,
-        data: mydatas,
-        availbleList: availbleList,
-      });
+      NavigationService.navigate("CheckoutResumeScreen");
     }
   };
 

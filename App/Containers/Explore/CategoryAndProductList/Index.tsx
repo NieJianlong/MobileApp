@@ -66,7 +66,11 @@ export default function Index(props) {
   );
   return loading ? (
     <SafeAreaView>
-      <ActivityIndicator color={colors.primary} />
+      <ActivityIndicator
+        color={"red"}
+        style={{ top: "50%" }}
+        animating={true}
+      />
     </SafeAreaView>
   ) : (
     <View style={{ height, width }}>
@@ -140,7 +144,7 @@ export default function Index(props) {
           filter={
             textToSearch.length > 0
               ? FilterType.ActiveByAddressIdAndFullTextSearch
-              : FilterType.ActiveByAddressId
+              : FilterType.Active
           }
           tabLabel="All"
         />

@@ -14,6 +14,7 @@ import { useContext, useState } from "react";
 import { AlertContext } from "../Containers/Root/GlobalContext";
 import useRealm from "../hooks/useRealm";
 import PubSub from "pubsub-js";
+import useOrderInfo from "../hooks/useOrderInfo";
 export enum ComeFromType {
   checkout = "checkout",
   Buynow = "Buynow",
@@ -22,6 +23,7 @@ export enum ComeFromType {
 export function usePaymentConfigration() {
   const userProfile = useReactiveVar(userProfileVar);
   const localCart = useReactiveVar(localCartVar);
+  const { orderInfo } = useOrderInfo();
   const { dispatch } = useContext(AlertContext);
   const { realm } = useRealm();
   const [mydatas, setMydatas] = useState(
@@ -50,19 +52,10 @@ export function usePaymentConfigration() {
       }
       index--;
     }
-
-    localCartVar({
-      items: [],
-    });
   };
 
   const { razorpayVerifyPaymentSignature } = useRazorVerifyPayment();
-  const getPaymentConfigration = (
-    orderId: string,
-    items: any[],
-    comefrom: ComeFromType,
-    amount: number
-  ) => {
+  const getPaymentConfigration = (orderId: string, amount: number) => {
     const options = {
       description: "Wholesale Marketplace",
       image:
@@ -92,14 +85,11 @@ export function usePaymentConfigration() {
           type: "changLoading",
           payload: false,
         });
-        if (comefrom === ComeFromType.checkout) {
+        if (orderInfo.comeFromType === ComeFromType.checkout) {
           clearData();
         }
 
-        NavigationService.navigate("OrderPlacedScreen", {
-          items: items,
-          from: comefrom,
-        });
+        NavigationService.navigate("OrderPlacedScreen");
       })
       .catch((error) => {});
   };

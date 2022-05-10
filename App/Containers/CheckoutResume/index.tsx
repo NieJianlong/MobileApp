@@ -17,7 +17,7 @@ import DeliverInfo from "./DeliverInfo";
 import NavigationService from "../../Navigation/NavigationService";
 import { useRoute } from "@react-navigation/native";
 import BigNumber from "bignumber.js";
-import { useCreateOrder } from "../../hooks/order";
+import { useCreateOrder } from "../../hooks/useCreateOrder";
 import PaymentOptions from "./PaymentOptions";
 import { useCreateRazorOrder } from "../../hooks/razorOrder";
 import {

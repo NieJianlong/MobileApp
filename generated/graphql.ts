@@ -4430,6 +4430,8 @@ export type TrackOrderItemQueryVariables = Exact<{
 
 export type TrackOrderItemQuery = { __typename?: 'Query', trackOrderItem: { __typename?: 'TrackOrderItemResponse', orderItemId: string, deliveryOption: DeliveryOption, latestEventStatus: OrderItemHistoryEventType, orderNumber: string, dateDelivered?: any | null | undefined, qrCodeAsBase64?: string | null | undefined, events?: Array<{ __typename?: 'OrderItemHistoryResponse', eventId: string, eventDateTime: any, eventType: OrderItemHistoryEventType, notes?: string | null | undefined }> | null | undefined, shippingDetails?: { __typename?: 'ShippingDetailsResponse', shippingStatus?: ShippingStatus | null | undefined, shippingDate?: any | null | undefined, carrier?: string | null | undefined, carrierUrl?: string | null | undefined, trackingNumber?: string | null | undefined, expectedDeliveryDate?: any | null | undefined, shippingInstructions?: string | null | undefined, deliveryDate?: any | null | undefined, failedDeliveryReason?: string | null | undefined, events?: Array<{ __typename?: 'ShippingEventResponse', eventType?: string | null | undefined, eventDateTime?: any | null | undefined } | null | undefined> | null | undefined } | null | undefined, collectionPoint?: { __typename?: 'CollectionPointPickupResponse', collectionPointId?: string | null | undefined, microHubId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, openingHours?: Array<string | null | undefined> | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined, collectionDate?: any | null | undefined } | null | undefined, sellerLocation?: { __typename?: 'SellerLocationPickupResponse', collectionPointId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined, collectionDate?: any | null | undefined } | null | undefined, sellerDirectDelivery?: { __typename?: 'SellerDirectDeliveryResponse', announcementId?: string | null | undefined, deliveryDate?: any | null | undefined } | null | undefined } };
 
+export type IsListingAvailableFieldFragment = { __typename?: 'IsListingAvailableResponse', listingId?: string | null | undefined, variantId?: string | null | undefined, isAvailable?: boolean | null | undefined };
+
 export type KeyValuePairFieldFragment = { __typename?: 'KeyValuePair', key: string, value: string };
 
 export type ProductReturnPolicyFieldFragment = { __typename?: 'ProductReturnPolicy', returnPolicyId: string, name: string, value: string };
@@ -4504,6 +4506,13 @@ export type GetPreferredCategoriesQueryVariables = Exact<{
 
 
 export type GetPreferredCategoriesQuery = { __typename?: 'Query', getPreferredCategories: Array<{ __typename?: 'CategoryView', categoryId?: string | null | undefined, name?: string | null | undefined, description?: string | null | undefined } | null | undefined> };
+
+export type IsListingAvailableQueryVariables = Exact<{
+  listings: Array<IsListingAvailableInput> | IsListingAvailableInput;
+}>;
+
+
+export type IsListingAvailableQuery = { __typename?: 'Query', isListingAvailable: Array<{ __typename?: 'IsListingAvailableResponse', listingId?: string | null | undefined, variantId?: string | null | undefined, isAvailable?: boolean | null | undefined }> };
 
 export type BillingDetailsFieldsFragment = { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined };
 
@@ -4820,6 +4829,13 @@ export const OrderItemDetailFieldFragmentDoc = gql`
     ${AddressOrderFiledFragmentDoc}
 ${CollectionPointFragmentDoc}
 ${SellerLocationFragmentDoc}`;
+export const IsListingAvailableFieldFragmentDoc = gql`
+    fragment IsListingAvailableField on IsListingAvailableResponse {
+  listingId
+  variantId
+  isAvailable
+}
+    `;
 export const SellerProductPriceFieldFragmentDoc = gql`
     fragment SellerProductPriceField on SellerProductPrice {
   priceId
@@ -6121,6 +6137,41 @@ export function useGetPreferredCategoriesLazyQuery(baseOptions?: Apollo.LazyQuer
 export type GetPreferredCategoriesQueryHookResult = ReturnType<typeof useGetPreferredCategoriesQuery>;
 export type GetPreferredCategoriesLazyQueryHookResult = ReturnType<typeof useGetPreferredCategoriesLazyQuery>;
 export type GetPreferredCategoriesQueryResult = Apollo.QueryResult<GetPreferredCategoriesQuery, GetPreferredCategoriesQueryVariables>;
+export const IsListingAvailableDocument = gql`
+    query IsListingAvailable($listings: [IsListingAvailableInput!]!) {
+  isListingAvailable(listings: $listings) {
+    ...IsListingAvailableField
+  }
+}
+    ${IsListingAvailableFieldFragmentDoc}`;
+
+/**
+ * __useIsListingAvailableQuery__
+ *
+ * To run a query within a React component, call `useIsListingAvailableQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsListingAvailableQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsListingAvailableQuery({
+ *   variables: {
+ *      listings: // value for 'listings'
+ *   },
+ * });
+ */
+export function useIsListingAvailableQuery(baseOptions: Apollo.QueryHookOptions<IsListingAvailableQuery, IsListingAvailableQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IsListingAvailableQuery, IsListingAvailableQueryVariables>(IsListingAvailableDocument, options);
+      }
+export function useIsListingAvailableLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IsListingAvailableQuery, IsListingAvailableQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IsListingAvailableQuery, IsListingAvailableQueryVariables>(IsListingAvailableDocument, options);
+        }
+export type IsListingAvailableQueryHookResult = ReturnType<typeof useIsListingAvailableQuery>;
+export type IsListingAvailableLazyQueryHookResult = ReturnType<typeof useIsListingAvailableLazyQuery>;
+export type IsListingAvailableQueryResult = Apollo.QueryResult<IsListingAvailableQuery, IsListingAvailableQueryVariables>;
 export const BuyerProfileByUserIdDocument = gql`
     query BuyerProfileByUserId($userProfileId: ID!) {
   buyerProfileByUserId(userProfileId: $userProfileId) {

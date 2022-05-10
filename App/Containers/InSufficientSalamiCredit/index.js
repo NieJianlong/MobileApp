@@ -25,7 +25,7 @@ import {
   userProfileVar,
 } from "../../Apollo/cache";
 import RazorpayCheckout from "react-native-razorpay";
-import { useCreateOrder } from "../../hooks/order";
+import { useCreateOrder } from "../../hooks/useCreateOrder";
 import { useCreateRazorOrder } from "../../hooks/razorOrder";
 import { useRazorVerifyPayment } from "../../hooks/verifyPayment";
 import { useQuery, useReactiveVar } from "@apollo/client";

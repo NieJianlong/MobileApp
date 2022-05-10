@@ -67,8 +67,8 @@ export const useCreateOrder = () => {
 
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
-      let itemAvailble = true;
-      if (availbleList) {
+      let itemAvailble: boolean = true;
+      if (!isEmpty(availbleList)) {
         const i = availbleList[index];
         itemAvailble = i?.isAvailable;
       }
@@ -179,6 +179,8 @@ export const useCreateOrder = () => {
       },
       onCompleted: (res) => {
         setLoading({ show: false });
+        NavigationService.navigate("OrderPlacedScreen");
+        return;
         if (info.orderType === OrderType.sufficient) {
           if (res?.createOrderFromCart?.orderId) {
             NavigationService.navigate("OrderPlacedScreen");
@@ -186,11 +188,13 @@ export const useCreateOrder = () => {
         } else if (info.orderType === OrderType.zero) {
           const order1 = res?.createOrderFromCart;
           if (res?.createOrderFromCart?.orderId) {
-            razorpayCreateOrder().then((res) => {
-              if (res?.data) {
-                const razorId = res?.data?.razorpayCreateOrder?.razorpayOrderId;
+            razorpayCreateOrder(order1).then((res1) => {
+              debugger;
+              if (res1?.data) {
+                const razorId =
+                  res1?.data?.razorpayCreateOrder?.razorpayOrderId;
                 getPaymentConfigration(
-                  razorId,
+                  razorId ?? "",
                   order1.paymentDetails.balanceToPay
                 );
               }

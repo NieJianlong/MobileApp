@@ -260,11 +260,7 @@ function PrimaryNav() {
         name={"OrderPlacedScreen"}
         component={OrderPlacedScreen}
         options={{
-          headerShown: true,
-          headerLeft: null,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
+          headerShown: false,
         }}
       />
       <Stack.Screen

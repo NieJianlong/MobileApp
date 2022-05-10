@@ -1,3 +1,28 @@
+fragment OrderResponseFields on OrderResponse {
+  orderId
+  buyerId
+  orderNumber
+  subTotal
+  discount
+  serviceFees
+  shippingFees
+  taxes
+  totalSavings
+  orderTotal
+  orderItems {
+    orderItemId
+    listingId
+    variantId
+    sellerId
+    quantity
+    itemPrice
+  }
+  paymentDetails {
+    balanceToPay
+    usedGiftAmount
+    usedWalletAmount
+  }
+}
 mutation CancelOrderItem($request: CancelOrderItemRequest) {
   cancelOrderItem(request: $request)
 }
@@ -73,29 +98,7 @@ mutation SubmitOrderReturnRequest($request: OrderReturnRequest!) {
 
 mutation CreateOrderFromCart($cart: CartInput!) {
   createOrderFromCart(request: $cart) {
-    orderId
-    buyerId
-    orderNumber
-    subTotal
-    discount
-    serviceFees
-    shippingFees
-    taxes
-    totalSavings
-    orderTotal
-    orderItems {
-      orderItemId
-      listingId
-      variantId
-      sellerId
-      quantity
-      itemPrice
-    }
-    paymentDetails {
-      balanceToPay
-      usedGiftAmount
-      usedWalletAmount
-    }
+    ...OrderResponseFields
   }
 }
 

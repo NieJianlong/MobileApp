@@ -86,6 +86,7 @@ import LearnMore from "../Containers/LearnMore/index";
 import NavigationLeftButton from "../Components/NavigationLeftButton";
 import { t } from "react-native-tailwindcss";
 import { ApplicationStyles, Colors } from "../Themes";
+import RegisterGuestBuyerToBuyerScreen from "../Containers/RegisterGuestBuyerToBuyer";
 // import ReturnInformation from "../..";
 const Stack = createStackNavigator();
 
@@ -150,7 +151,12 @@ function PrimaryNav() {
         screenOptions={{ gesturesEnabled: false }}
         options={{ headerShown: false }}
       />
-
+      <Stack.Screen
+        name={"RegisterGuestBuyerToBuyer"}
+        component={RegisterGuestBuyerToBuyerScreen}
+        screenOptions={{ gesturesEnabled: false }}
+        options={{ headerShown: true, title: "" }}
+      />
       <Stack.Screen
         name={"MainScreen"}
         component={TabNav}

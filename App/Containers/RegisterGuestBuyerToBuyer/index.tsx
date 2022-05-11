@@ -1,35 +1,19 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-  useRef,
-} from "react";
+import React, { useState, useRef } from "react";
 import { View, Text, TouchableOpacity, Platform, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SmsRetriever from "react-native-sms-retriever";
-import {
-  TextInput,
-  Button,
-  PasswordInput,
-  Switch,
-  Alert,
-} from "../../Components";
+import { TextInput, Button, PasswordInput, Switch } from "../../Components";
 import * as jwt from "../../Apollo/jwt-request";
 import * as storage from "../../Apollo/local-storage";
-import { userProfileVar } from "../../Apollo/cache";
 import { Colors, Images } from "../../Themes";
 import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
-import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
-import jwt_decode from "jwt-decode";
 import { Controller, useForm } from "react-hook-form";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
-  BuyerProfileRequestForCreate,
-  useBuyerProfileByUserIdLazyQuery,
-  useRegisterBuyerMutation,
+  BuyerProfileRequest,
+  useRegisterGuestBuyerToBuyerMutation,
 } from "../../../generated/graphql";
 import { t } from "react-native-tailwindcss";
 import { trimStart } from "lodash";
@@ -37,8 +21,7 @@ import useAlert from "../../hooks/useAlert";
 import useLoading from "../../hooks/useLoading";
 import useRegister from "../../hooks/useRegister";
 
-function RegisterScreen(props) {
-  const { dispatch } = useContext(AlertContext);
+function RegisterGuestBuyerToBuyerScreen(props) {
   const { setAlert } = useAlert();
   const nameInput = useRef();
   const lastNameInput = useRef();
@@ -52,156 +35,35 @@ function RegisterScreen(props) {
     getValues,
     setValue,
     formState: { errors },
-  } = useForm<BuyerProfileRequestForCreate>();
-
-  // validation
-  let [validationDisplay, setValidationDisplay] = useState("");
-  let [showValidationAlert, setShowValidationAlert] = useState(false);
-  let [validationMessage, setValidationMessage] = useState("");
+  } = useForm<BuyerProfileRequest>();
   const { setLoading } = useLoading();
-  // because of the way the switch component is set up this is the opposite of what you would expect
+
   let [termsAccepted, setTermsAccepted] = useState(false);
-  useEffect(() => {
-    // let phoneNumber = "+918247278755";
-    // setValue("phoneNumber", trimStart(phoneNumber, "+91"));
-
-    return () => {
-      // Anything in here is fired on component unmount.
-    };
-  }, [setValue]);
-  const [getBuyerId] = useBuyerProfileByUserIdLazyQuery({
-    variables: { userProfileId: global.userProfileId },
-    context: {
-      headers: {
-        isPrivate: true,
-      },
-    },
-    onCompleted: (res) => {
-      dispatch({
-        type: "changLoading",
-        payload: false,
-      });
-      dispatch({
-        type: "changAlertState",
-        payload: {
-          visible: true,
-          message:
-            "A confirmation email has been sent to your registered email address",
-          color: colors.success,
-          title: "Congratulations on your successful registration",
-        },
-      });
-      //server often breakon，we should use a constant for testing
-      const { buyerProfileByUserId } = res;
-
-      userProfileVar({
-        userId: res?.buyerProfileByUserId?.userId ?? "",
-        buyerId: res?.buyerProfileByUserId?.buyerId ?? "",
-        userName: res?.buyerProfileByUserId?.userName ?? "",
-        email: res?.buyerProfileByUserId?.email ?? "",
-        phone: res?.buyerProfileByUserId?.phoneNumber ?? "",
-        isAuth: true,
-        billingDetails: res?.buyerProfileByUserId?.billingDetails,
-        billingDetailsId:
-          res.buyerProfileByUserId?.billingDetails?.billingDetailsId,
-        isAuth: true,
-        firstName: res.buyerProfileByUserId?.firstName ?? "",
-        lastName: res.buyerProfileByUserId?.lastName ?? "",
-      });
-
-      global.buyerId = buyerProfileByUserId.buyerId;
-    },
-    onError: (res) => {
-      //server often breakon，we should use a constant for testing
-      global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
-    },
-  });
   const { setRegister } = useRegister();
 
-  const autoSignIn = useCallback(async () => {
-    //get username and possword from localStorage
-    const username = getValues("email");
-    const password = getValues("password");
-
-    console.log("hello ========================>");
-
-    //if username && password exits,we can login auto
-    if (username && password) {
-      const { data } = await jwt.runTokenFlow({ username, password });
-      let access_token = data.access_token;
-
-      if (access_token === "undefined") {
-        console.log("no access token");
-      }
-      userProfileVar({
-        email: username,
-        isAuth: true,
-      });
-      let decoded = jwt_decode(access_token);
-      console.log("====================================");
-      console.log();
-      console.log("====================================");
-      global.access_token = access_token;
-      global.userProfileId = decoded.sub;
-
-      storage.setLocalStorageValue(
-        storage.LOCAL_STORAGE_TOKEN_KEY,
-        access_token
-      );
-      global.access_token = access_token;
-      storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_NAME, username);
-      storage.setLocalStorageValue(
-        storage.LOCAL_STORAGE_USER_PASSWORD,
-        password
-      );
-      getBuyerId();
-
-      storage.setLocalStorageValue(
-        storage.LOCAL_STORAGE_TOKEN_KEY,
-        access_token
-      );
-    }
-  }, [getBuyerId, getValues]);
-  //when app open,when can do auto login
-  // useEffect(() => {
-  //   autoSignIn();
-  // }, [autoSignIn]);
-  /**
-   * REGISTER_BUYER(registerBuyer) mutation is a public api endpoint
-   * see  ./gql/register_mutations
-   * collect state variable and run the mutation
-   * on call back update local storage
-   */
-  const [registerBuyer, { data }] = useRegisterBuyerMutation({
+  const [registerBuyer, { data }] = useRegisterGuestBuyerToBuyerMutation({
     onError: (error) => {
       setLoading({ show: false });
-      dispatch({
-        type: "changAlertState",
-        payload: {
-          visible: true,
-          message: error.message,
-          color: colors.error,
-          title: "register failed",
+      setAlert({
+        color: colors.error,
+        title: "register failed",
+        message: error.message,
+        visible: true,
+        onDismiss: () => {
+          setAlert({ visible: false });
         },
       });
     },
     onCompleted: async (result) => {
       setLoading({ show: false });
-      if (typeof result.registerBuyer !== "undefined") {
-        let buyerId = result.registerBuyer.buyerId;
+      if (typeof result.registerGuestBuyerToBuyer !== "undefined") {
+        let buyerId = result.registerGuestBuyerToBuyer?.buyerId;
 
         console.log(`registerBuyer buyerId=${buyerId}`);
         if (buyerId) {
           global.buyerId = buyerId;
           storage.setLocalStorageValue(getValues("phoneNumber"), buyerId);
-          dispatch({
-            type: "changLoading",
-            payload: false,
-          });
-          // 56alert(result.registerBuyer.userId);
-          // sendVerifyEmail({
-          //   variables: { userId: result.registerBuyer.userId },
-          // });
+          setLoading({ show: false });
           const username = getValues("email");
           const password = getValues("password");
           const { data } = await jwt.runTokenFlow({
@@ -215,24 +77,16 @@ function RegisterScreen(props) {
             fromScreen: "RegisterScreen",
             phone: "+91" + getValues("phoneNumber"),
             email: getValues("email"),
-            userId: result.registerBuyer.userId,
+            userId: result.registerGuestBuyerToBuyer?.userId,
             password: getValues("password"),
           });
-
-          // NavigationService.navigate("");
-          // login here for private api jwt initial getDefaultBuyerAdress
-          // autoSignIn();
         }
       } else {
         setLoading({ show: false });
-        dispatch({
-          type: "changLoading",
-          payload: false,
-        });
       }
     },
   });
-  const onSubmit = (data: BuyerProfileRequestForCreate) => {
+  const onSubmit = (data: BuyerProfileRequest) => {
     if (termsAccepted) {
       setLoading({ show: true });
       registerBuyer({
@@ -259,24 +113,8 @@ function RegisterScreen(props) {
     }
   };
 
-  const toggleResetValidationAlert = () => {
-    setShowValidationAlert(!showValidationAlert);
-  };
-
   const toggleTermsAccepted = () => {
     setTermsAccepted(!termsAccepted);
-  };
-
-  const renderValidationAlert = () => {
-    return (
-      <Alert
-        visible={showValidationAlert}
-        title={"One or more input(s) are not correct"}
-        message={validationMessage}
-        color={Colors.warning}
-        onDismiss={toggleResetValidationAlert}
-      />
-    );
   };
 
   return (
@@ -362,11 +200,6 @@ function RegisterScreen(props) {
           control={control}
           rules={{
             required: "Field is required.",
-            // pattern: {
-            //   value:
-            //     /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
-            //   message: "invalid email address",
-            // },
           }}
           render={({ field: { onChange, value } }) => (
             <TextInput
@@ -490,22 +323,11 @@ function RegisterScreen(props) {
           </TouchableOpacity>
         </View>
 
-        <View style={{ flex: 1 }} />
-        <Text style={styles.txtValidate}>{validationDisplay} </Text>
-
+        <View style={[t.mT8]} />
         <Button onPress={handleSubmit(onSubmit)} text={"REGISTER"} />
-
-        <TouchableOpacity
-          onPress={() => props.navigation.goBack()}
-          style={styles.btnSignin}
-        >
-          <Text style={styles.txtAction}>SIGN IN</Text>
-        </TouchableOpacity>
       </KeyboardAwareScrollView>
-
-      {/* {renderValidationAlert()} */}
     </View>
   );
 }
 
-export default RegisterScreen;
+export default RegisterGuestBuyerToBuyerScreen;

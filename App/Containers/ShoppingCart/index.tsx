@@ -20,7 +20,6 @@ import images from "../../Themes/Images";
 import NavigationService from "../../Navigation/NavigationService";
 import PubSub from "pubsub-js";
 import useRealm from "../../hooks/useRealm";
-import { useLazyQuery } from "@apollo/client";
 import { localCartVar } from "../../Apollo/cache";
 import { useIsListingAvailableLazyQuery } from "../../../generated/graphql";
 import useOrderInfo from "../../hooks/useOrderInfo";
@@ -183,11 +182,7 @@ function ShoppingCart(props) {
         });
       }
     });
-    console.log("itemArray", itemArray);
-    localCartVar({
-      ...localCart,
-      items: itemArray,
-    });
+
     updateMoneyInfo({
       ...orderInfo,
       itemsForRequest: itemArray,

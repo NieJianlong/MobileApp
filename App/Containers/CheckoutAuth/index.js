@@ -41,8 +41,8 @@ function CheckoutAuth(props) {
 
         <TouchableOpacity
           onPress={() => {
-            // NavigationService.navigate(Page_BillingDetails);
-            setRegister({ visibleRegister: true });
+            NavigationService.navigate("RegisterGuestBuyerToBuyer");
+            // setRegister({ visibleRegister: true });
           }}
         >
           <View style={{ ...styles.item_container, borderWidth: s(2) }}>

@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { useMutation, useReactiveVar } from "@apollo/client";
-import { CreateOrderFromCart } from "./gql";
+import { useReactiveVar } from "@apollo/client";
 import { localCartVar, userProfileVar } from "../Apollo/cache";
-import { isEmpty, omit } from "lodash";
+import { isEmpty } from "lodash";
 import NavigationService from "../Navigation/NavigationService";
 import useLoading from "./useLoading";
 import { ComeFromType, usePaymentConfigration } from "../Utils/utils";
@@ -13,6 +12,7 @@ import {
   IsListingAvailableFieldFragment,
   ListingVariantViewFieldFragment,
   ProductListingViewFieldFragment,
+  useCreateOrderFromCartMutation,
   useGetBuyerSalamiWalletBalanceLazyQuery,
 } from "../../generated/graphql";
 import BigNumber from "bignumber.js";
@@ -34,7 +34,7 @@ export enum OrderType {
 export const useCreateOrder = () => {
   const [order, setOrder] = useState();
   const { addBilling } = UseBillingDetail();
-  const [createOrderFromCart] = useMutation(CreateOrderFromCart);
+  const [createOrderFromCart] = useCreateOrderFromCartMutation();
   const userProfile = useReactiveVar(userProfileVar);
   const localCart = useReactiveVar(localCartVar);
   const { setLoading } = useLoading();

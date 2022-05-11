@@ -11,18 +11,23 @@ import { Images } from "../../../Themes";
 import styles from "../styles";
 import { AlertContext } from "../../Root/GlobalContext";
 import CheckBox from "./CheckBox";
+import { SortDirection, SortType } from "../../../../generated/graphql";
 
 const sortOptions = [
-  { title: "Last added", sortDirection: "DESCENDING", sortType: "DATE" },
+  {
+    title: "Last added",
+    sortDirection: SortDirection.Descending,
+    sortType: SortType.Date,
+  },
   {
     title: "Price: low to high",
-    sortDirection: "ASCENDING",
-    sortType: "PRICE",
+    sortDirection: SortDirection.Ascending,
+    sortType: SortType.Price,
   },
   {
     title: "Price: high to low",
-    sortDirection: "DESCENDING",
-    sortType: "PRICE",
+    sortDirection: SortDirection.Descending,
+    sortType: SortType.Price,
   },
 ];
 
@@ -52,16 +57,16 @@ export default function ExploreSortBar({ onChange, refresh, option }) {
   const [showProductAsRows, setShowProductAsRows] = useState(true);
   const { dispatch } = useContext(AlertContext);
   const [currentOption, setCurrentOption] = useState(option || sortOptions[1]);
-  const toggleSortBySheet = useCallback(() => {
+  const toggleSortBySheet = () => {
     dispatch({
       type: "changSheetState",
       payload: {
         showSheet: true,
         height: 320,
         enabledGestureInteraction: true,
-        onCloseEnd: () => {
-          refresh && refresh(currentOption);
-        },
+        // onCloseEnd: () => {
+        //   refresh && refresh(currentOption);
+        // },
         children: () => (
           <SortSheetContent
             option={currentOption}
@@ -81,7 +86,7 @@ export default function ExploreSortBar({ onChange, refresh, option }) {
         sheetTitle: "Sort by",
       },
     });
-  }, [currentOption, dispatch, refresh]);
+  };
   return (
     <View style={styles.sortBarContainer}>
       <TouchableOpacity onPress={toggleSortBySheet} style={styles.row}>

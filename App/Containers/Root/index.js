@@ -23,6 +23,9 @@ import useMapScreen from "../../hooks/useMapScreen";
 import useRegister from "../../hooks/useRegister";
 import RegisterScreen from "../Register";
 import { t } from "react-native-tailwindcss";
+import RegisterGuestBuyerToBuyerScreen from "../RegisterGuestBuyerToBuyer";
+import { Portal, Text } from "react-native-paper";
+import LoginModalForm from "../LoginModalForm";
 
 const initialState = {
   alert: {
@@ -129,9 +132,9 @@ function RootContainer() {
       <View style={{ flex: 1 }}>
         <AppNavigation />
       </View>
-      <Modal visible={visibleRegister} transparent={true}>
-        <RegisterScreen style={[t.pX0]} />
-      </Modal>
+      {/* <Modal visible={visibleRegister} transparent={true}>
+        <RegisterGuestBuyerToBuyerScreen style={[t.pX0]} />
+      </Modal> */}
       {showSheet && (
         <TouchableWithoutFeedback
           disabled={true}
@@ -203,6 +206,11 @@ function RootContainer() {
           }}
         />
       </Modal>
+
+      {/* <Modal visible={true}>
+        <LoginModalForm />
+      </Modal> */}
+
       {/* {loginVisible && <LoginScreen />} */}
 
       {visible && (

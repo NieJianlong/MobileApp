@@ -236,6 +236,15 @@ type IsListingAvailableResponse {
   variantId: ID
   isAvailable: Boolean
   reason: String
+  productId: ID
+  defaultVariant: Boolean
+  retailPrice: Float
+  wholeSalePrice: Float
+  fullPath: String
+  itemsInStock: Int
+  itemsAvailable: Int
+  itemsSold: Int
+  options: [KeyValuePair]
 }
 
 type KeyValuePair {

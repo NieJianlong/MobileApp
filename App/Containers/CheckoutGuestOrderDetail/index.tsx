@@ -8,9 +8,6 @@ import { useReactiveVar } from "@apollo/client";
 import { localCartVar, userProfileVar } from "../../Apollo/cache";
 import styles from "./styles";
 import NavigationService from "../../Navigation/NavigationService";
-import { useCreateOrder } from "../../hooks/useCreateOrder";
-import { AlertContext } from "../Root/GlobalContext";
-import { useCreateRazorOrder } from "../../hooks/razorOrder";
 import { ComeFromType, usePaymentConfigration } from "../../Utils/utils";
 import { Controller, useForm } from "react-hook-form";
 
@@ -19,13 +16,13 @@ import {
   BillingDetailsRequestForCreate,
   useBillingDetailsByGuestBuyerIdLazyQuery,
 } from "../../../generated/graphql";
-import UseBillingDetail from "../../hooks/useBillingDetail";
-import { get, isEmpty, trimStart } from "lodash";
+import { get, isEmpty } from "lodash";
 import { t } from "react-native-tailwindcss";
 import { vs } from "react-native-size-matters";
 import useLoading from "../../hooks/useLoading";
 
 import useOrderInfo from "../../hooks/useOrderInfo";
+import { useCreateOrder } from "../../hooks/useCreateOrder";
 
 function CheckoutGuestOrderDetail(props) {
   const userProfile = useReactiveVar(userProfileVar);

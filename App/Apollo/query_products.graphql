@@ -2,6 +2,19 @@ fragment IsListingAvailableField on IsListingAvailableResponse {
   listingId
   variantId
   isAvailable
+  reason
+  productId
+  defaultVariant
+  retailPrice
+  wholeSalePrice
+  fullPath
+  itemsInStock
+  itemsAvailable
+  itemsSold
+  options {
+    key
+    value
+  }
 }
 fragment KeyValuePairField on KeyValuePair {
   key

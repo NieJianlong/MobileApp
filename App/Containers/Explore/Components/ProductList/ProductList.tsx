@@ -133,7 +133,6 @@ export default function ProductList(props) {
             option={sortItem}
             refresh={(item) => {
               setSortItem(item);
-              refetch();
             }}
           />
         }

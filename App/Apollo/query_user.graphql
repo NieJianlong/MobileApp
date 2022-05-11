@@ -37,6 +37,8 @@ fragment BuyerProfileResponseFields on BuyerProfileResponse {
   lastName
   email
   phoneNumber
+  emailVerified
+  phoneNumberVerified
   userType
   createdAt
   updatedAt

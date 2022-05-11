@@ -37,7 +37,12 @@ import ActionSheet from "react-native-actionsheet";
 import { useQuery } from "@apollo/client";
 import { AlertContext } from "../Root/GlobalContext";
 import { FIND_BUYER_PROFILE } from "../../Apollo/queries/queries_user";
-import { useUpdateBuyerProfileMutation } from "../../../generated/graphql";
+import {
+  useUpdateBuyerProfileMutation,
+  BuyerProfileByUserIdQuery,
+  BuyerProfileByUserIdDocument,
+  BuyerProfileDocument,
+} from "../../../generated/graphql";
 import { isEmpty, omit } from "lodash";
 import {
   getLocalStorageValue,
@@ -49,7 +54,7 @@ import { runTokenFlow } from "../../Apollo/jwt-request";
 import jwt_decode from "jwt-decode";
 import { useNavigation } from "@react-navigation/native";
 import { t } from "react-native-tailwindcss";
-
+import PubSub from "pubsub-js";
 /**
  * @description:User edit page
  * @param {*} props
@@ -135,8 +140,20 @@ function UserEditProfile(props) {
         isPrivate: true,
       },
     },
+    refetchQueries: [
+      {
+        query: BuyerProfileByUserIdDocument,
+        variables: { userProfileId: global.userProfileId },
+        context: {
+          headers: {
+            isPrivate: true,
+          },
+        },
+      },
+    ],
     onCompleted: (res) => {
       console.log("=====Res edit========", res);
+      PubSub.publish("refresh-buyer-profile");
       dispatch({ type: "hideloading" });
       if (res) {
         dispatch({

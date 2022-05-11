@@ -6,7 +6,7 @@
  * @Description: User center header layout
  * @FilePath: /MobileApp/App/Containers/UserCenter/UserHeader.js
  */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScaledSheet, s, vs } from "react-native-size-matters";
@@ -20,10 +20,14 @@ import images from "../../Themes/Images";
 import { ApplicationStyles } from "../../Themes";
 import { userProfileVar } from "../../Apollo/cache";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useBuyerProfileQuery } from "../../../generated/graphql";
+import {
+  useBuyerProfileByUserIdQuery,
+  useBuyerProfileQuery,
+} from "../../../generated/graphql";
 import useLogin from "../../hooks/useLogin";
 import { isEmpty, trimStart } from "lodash";
 import { useReactiveVar } from "@apollo/client";
+import PubSub from "pubsub-js";
 
 /**
  * @description:The user header component, which contains basic user information
@@ -79,14 +83,14 @@ function UserHeader(props) {
 }
 
 function UserInfo() {
-  const { loading, error, data, refetch } = useBuyerProfileQuery({
-    variables: { buyerId: global.buyerId },
+  // useBuyerProfileByUserIdLazyQuery
+  const { loading, error, data, refetch } = useBuyerProfileByUserIdQuery({
+    variables: { userProfileId: global.userProfileId },
     context: {
       headers: {
         isPrivate: true,
       },
     },
-    nextFetchPolicy: "network-only",
     onCompleted: (res) => {},
     onError: (res) => {},
   });
@@ -95,6 +99,17 @@ function UserInfo() {
       refetch && refetch();
     }, [refetch])
   );
+  useEffect(() => {
+    let refresh = PubSub.subscribe("refresh-buyer-profile", () => {
+      refetch();
+    });
+    return () => {
+      if (refresh) {
+        PubSub.unsubscribe(refresh);
+      }
+    };
+  }, []);
+
   return (
     <TouchableOpacity
       onPress={() => {
@@ -109,7 +124,7 @@ function UserInfo() {
           >
             <Text style={ApplicationStyles.screen.heading3Bold}>
               {data
-                ? `${data?.buyerProfile?.firstName} ${data?.buyerProfile?.lastName}`
+                ? `${data?.buyerProfileByUserId?.firstName} ${data?.buyerProfileByUserId?.lastName}`
                 : ""}
             </Text>
 
@@ -132,7 +147,9 @@ function UserInfo() {
               style={styles.email}
               source={require("../../Images/usercenter/email.png")}
             ></Image>
-            <Text style={styles.emailtext}>{data?.buyerProfile.email}</Text>
+            <Text style={styles.emailtext}>
+              {data?.buyerProfileByUserId.email}
+            </Text>
           </View>
           <View style={styles.emailContainer}>
             <Image
@@ -140,9 +157,9 @@ function UserInfo() {
               source={require("../../Images/usercenter/phone.png")}
             ></Image>
             <Text style={styles.emailtext}>
-              {isEmpty(data?.buyerProfile.phoneNumber)
+              {isEmpty(data?.buyerProfileByUserId.phoneNumber)
                 ? ""
-                : data?.buyerProfile.phoneNumber.replace("+91", "")}
+                : data?.buyerProfileByUserId.phoneNumber.replace("+91", "")}
             </Text>
           </View>
         </View>

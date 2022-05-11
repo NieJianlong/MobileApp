@@ -125,3 +125,15 @@ mutation DeleteAddressForGuestBuyer($addressId: ID!, $guestBuyerId: ID!) {
 }
 # deleteAddressForGuestBuyer(addressId: ID!, guestBuyerId: ID!): Boolean
 #  updateAddressForGuestBuyer(request: AddressRequest!): AddressResponse
+
+mutation ChangePassword(
+  $oldPassword: String!
+  $newPassword: String!
+  $userId: ID!
+) {
+  changePassword(
+    oldPassword: $oldPassword
+    newPassword: $newPassword
+    userId: $userId
+  )
+}

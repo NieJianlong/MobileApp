@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, TouchableOpacity, Text } from "react-native";
 
 import BaseScreen from "../BaseScreen";
@@ -18,6 +18,15 @@ import useRegister from "../../hooks/useRegister";
 function CheckoutAuth(props) {
   const { setRegister } = useRegister();
   console.log("props?.route?.params?.product", props?.route?.params?.product);
+  useEffect(() => {
+    NavigationService.navigate(Page_CheckoutGuestOrderDetail, {
+      product: props?.route?.params?.product,
+      items: props?.route?.params?.items,
+      from: props?.route?.params?.from,
+      availbleList: props?.route?.params?.availbleList,
+    });
+  }, []);
+  return <View />;
   return (
     <BaseScreen {...props}>
       <View style={styles.item_wrapper}>

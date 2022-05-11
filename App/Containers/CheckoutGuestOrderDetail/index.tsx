@@ -144,7 +144,7 @@ function CheckoutGuestOrderDetail(props) {
               render={({ field: { onChange, onBlur, value } }) => (
                 <View>
                   <MaterialTextInput
-                    placeholder="phone number*"
+                    placeholder="Phone Number*"
                     style={{ marginTop: vs(18) }}
                     onChangeText={onChange}
                     onBlur={onBlur}

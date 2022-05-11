@@ -21,6 +21,7 @@ import { DeliveryOption } from "../../../../generated/graphql";
 import { ComeFromType } from "../../../Utils/utils";
 import { t } from "react-native-tailwindcss";
 import useOrderInfo from "../../../hooks/useOrderInfo";
+import { Page_CheckoutGuestOrderDetail } from "../../../Navigation/const";
 export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { dispatch } = useContext(AlertContext);
   const { realm } = useRealm();
@@ -91,7 +92,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     };
     updateMoneyInfo(newInfo);
     if (!global.access_token) {
-      NavigationService.navigate("Page_CheckoutAuth");
+      NavigationService.navigate(Page_CheckoutGuestOrderDetail);
       return;
     } else {
       createOrder({ data: undefined });

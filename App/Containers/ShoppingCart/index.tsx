@@ -25,6 +25,7 @@ import { useIsListingAvailableLazyQuery } from "../../../generated/graphql";
 import useOrderInfo from "../../hooks/useOrderInfo";
 import { ItemProps } from "../../hooks/useCreateOrder";
 import { ComeFromType } from "../../Utils/utils";
+import { Page_CheckoutGuestOrderDetail } from "../../Navigation/const";
 
 export const CartContext = React.createContext({});
 
@@ -196,7 +197,7 @@ function ShoppingCart(props) {
     // });
 
     if (global.access_token === "" || !global.access_token) {
-      NavigationService.navigate("Page_CheckoutAuth");
+      NavigationService.navigate(Page_CheckoutGuestOrderDetail);
     } else {
       NavigationService.navigate("CheckoutResumeScreen");
     }

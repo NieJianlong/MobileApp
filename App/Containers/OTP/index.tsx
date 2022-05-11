@@ -36,6 +36,7 @@ import { isEmpty, split } from "lodash";
 import { isValidEmail } from "../../Validation";
 import * as validator from "../../Validation";
 import useLoading from "../../hooks/useLoading";
+import { t } from "react-native-tailwindcss";
 
 function OTPScreen(props) {
   const { dispatch } = useContext(AlertContext);
@@ -470,8 +471,7 @@ function OTPScreen(props) {
         />
         <View
           style={{
-            height:
-              keyboardHeight > 0 ? keyboardHeight : isIphoneX() ? 0 : vs(15),
+            height: 80,
           }}
         />
       </View>
@@ -479,7 +479,7 @@ function OTPScreen(props) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, t.pX8]}>
       <View style={styles.bodyContainer}>
         <Text style={styles.heading2Bold}>{`Validate your ${
           isEmail ? "email" : "phone no"

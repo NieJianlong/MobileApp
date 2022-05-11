@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   Keyboard,
-  Image,
   useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -166,42 +165,42 @@ function LoginScreen(props) {
               let decoded = jwt_decode(access_token);
               // phone_number_verified
               //&& !decoded.email_verified
-              if (!decoded.phone_number_verified && !decoded.email_verified) {
-                resendCode({
-                  variables: {
-                    sendCodeRequest: {
-                      userId: decoded?.sub,
-                      validationType: validator.isValidEmail(loginInput?.trim())
-                        ? ValidationType.Email
-                        : ValidationType.Sms,
-                    },
-                  },
-                  context: {
-                    headers: {
-                      isPrivate: true,
-                    },
-                  },
-                  onCompleted: () => {
-                    dispatch({
-                      type: "changLoading",
-                      payload: false,
-                    });
-                    NavigationService.navigate("OTPScreen", {
-                      fromScreen: "RegisterScreen",
-                      phone: ret.isPhone ? "+91" + loginInput : loginInput,
-                      password: psswd?.trim(),
-                      userId: decoded?.sub,
-                    });
-                  },
-                  onError: () => {
-                    dispatch({
-                      type: "changLoading",
-                      payload: false,
-                    });
-                  },
-                });
-                return;
-              }
+              // if (!decoded.phone_number_verified && !decoded.email_verified) {
+              //   resendCode({
+              //     variables: {
+              //       sendCodeRequest: {
+              //         userId: decoded?.sub,
+              //         validationType: validator.isValidEmail(loginInput?.trim())
+              //           ? ValidationType.Email
+              //           : ValidationType.Sms,
+              //       },
+              //     },
+              //     context: {
+              //       headers: {
+              //         isPrivate: true,
+              //       },
+              //     },
+              //     onCompleted: () => {
+              //       dispatch({
+              //         type: "changLoading",
+              //         payload: false,
+              //       });
+              //       NavigationService.navigate("OTPScreen", {
+              //         fromScreen: "RegisterScreen",
+              //         phone: ret.isPhone ? "+91" + loginInput : loginInput,
+              //         password: psswd?.trim(),
+              //         userId: decoded?.sub,
+              //       });
+              //     },
+              //     onError: () => {
+              //       dispatch({
+              //         type: "changLoading",
+              //         payload: false,
+              //       });
+              //     },
+              //   });
+              //   return;
+              // }
               if (access_token === "undefined") {
                 console.log("no access token");
               }

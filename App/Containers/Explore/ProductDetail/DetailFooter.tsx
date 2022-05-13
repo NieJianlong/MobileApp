@@ -96,7 +96,15 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       NavigationService.navigate(Page_CheckoutGuestOrderDetail);
       return;
     } else {
-      createOrder({ data: undefined, itemsForRequest: [item] });
+      createOrder({
+        data: undefined,
+        itemsForRequest: [item],
+        allItems: [
+          { ...item, productDetails: product, variant: currentVariant },
+        ],
+        comeFromType: ComeFromType.Buynow,
+        availbleList: [],
+      });
     }
   };
 

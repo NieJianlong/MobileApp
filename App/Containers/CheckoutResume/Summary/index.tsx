@@ -24,7 +24,7 @@ function index(props) {
     },
     {
       title: "Total savings",
-      value: `-${orderInfo.originalBilling - orderInfo.currentBilling}`,
+      value: `${orderInfo.originalBilling - orderInfo.currentBilling}`,
       type: "normal",
     },
     {

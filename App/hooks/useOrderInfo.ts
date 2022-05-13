@@ -1,6 +1,6 @@
 import { createModel } from "hox";
 import { isEmpty } from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DeliveryOption,
   IsListingAvailableFieldFragment,
@@ -73,8 +73,7 @@ const useOrderInfo = () => {
         }
       }
     }
-
-    setOrderInfo({
+    const newItem = {
       ...orderInfo,
       itemsForRequest: itemsForRequest,
       allItems,
@@ -83,7 +82,10 @@ const useOrderInfo = () => {
       currentBilling,
       originalBilling,
       deliveryFess,
-    });
+    };
+
+    setOrderInfo(newItem);
+    debugger;
   };
   const {
     currentBilling,
@@ -94,6 +96,11 @@ const useOrderInfo = () => {
     walletBalance,
     comeFromType,
   } = orderInfo;
+  useEffect(() => {
+    console.log("orderInfo changed====================================");
+    console.log(orderInfo);
+    console.log("====================================");
+  }, [orderInfo]);
   return {
     currentBilling,
     originalBilling,

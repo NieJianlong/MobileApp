@@ -3,6 +3,8 @@ import { Text, View, TouchableOpacity, Image } from "react-native";
 import { ScaledSheet, s, vs } from "react-native-size-matters";
 import { Fonts, Colors, ApplicationStyles, Images } from "../../../Themes";
 import { StarRating } from "../../../Components";
+import BigNumber from "bignumber.js";
+import { isEmpty } from "lodash";
 
 const getMax = (ratingDetail) => {
   return Math.max(
@@ -110,8 +112,13 @@ function Review(props) {
       </View>
 
       <View style={styles.ratingContainer}>
-        <Text style={ApplicationStyles.screen.txtHeroBold}>{rating}</Text>
-        <StarRating style={{ marginBottom: vs(5) }} rating={rating} />
+        <Text style={ApplicationStyles.screen.txtHeroBold}>
+          {!rating ? 0 : new BigNumber(rating).toFixed(2)}
+        </Text>
+        <StarRating
+          style={{ marginBottom: vs(5) }}
+          rating={!rating ? 0 : new BigNumber(rating).toFixed(2)}
+        />
         <Text style={ApplicationStyles.screen.txtRegular}>
           {ratingCount} Reviews
         </Text>

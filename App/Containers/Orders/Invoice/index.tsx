@@ -7,7 +7,11 @@ import { AppBar } from "../../../Components";
 import { vs } from "react-native-size-matters";
 import { useRoute } from "@react-navigation/native";
 import moment from "moment";
-import { DeliveryOption } from "../../../../generated/graphql";
+import {
+  DeliveryOption,
+  useBuyerProfileQuery,
+  useSellerProfileBasicDetailsQuery,
+} from "../../../../generated/graphql";
 import { trimEnd } from "lodash";
 
 class Invoice extends Component {
@@ -65,7 +69,9 @@ class Invoice extends Component {
         <View>
           <Text style={styles.txtOrder}>{order.orderNumber}</Text>
           <View style={{ height: vs(10) }} />
-          <Text style={styles.txtName}>User Name</Text>
+          <Text
+            style={styles.txtName}
+          >{`${order.buyer.firstName} ${order.buyer.lastName}`}</Text>
           <Text style={styles.txtAddress}>{addressDetail}</Text>
         </View>
         <View style={styles.totalContainer}>
@@ -85,7 +91,7 @@ class Invoice extends Component {
       <View style={styles.sellerContainer}>
         <Text style={styles.heading4Bold}>Sold by</Text>
         <Text style={[styles.txtRegular, { marginVertical: vs(10) }]}>
-          Seller Name, Streetname 00/Apt 404 - 00000 County, City - Country
+          {this.props.sellerName}
         </Text>
       </View>
     );
@@ -173,7 +179,21 @@ class Invoice extends Component {
 
 function InvoiceScreen(props) {
   const { params } = useRoute();
-  return <Invoice data={params?.data} product={params.product} />;
+  const { data } = useSellerProfileBasicDetailsQuery({
+    variables: { sellerId: params?.data.sellerId },
+  });
+
+  return (
+    <Invoice
+      data={params?.data}
+      product={params.product}
+      sellerName={
+        data
+          ? `${data.sellerProfileBasicDetails?.firstName} ${data.sellerProfileBasicDetails?.lastName}`
+          : ""
+      }
+    />
+  );
 }
 
 export default InvoiceScreen;

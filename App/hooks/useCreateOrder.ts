@@ -101,13 +101,13 @@ export const useCreateOrder = () => {
     }
     const total = currentBilling;
     const saving = originalBilling - currentBilling;
-    setOrderInfo({
-      ...orderInfo,
-      currentBilling,
-      originalBilling,
-      deliveryFess,
-      walletBalance,
-    });
+    // setOrderInfo({
+    //   ...orderInfo,
+    //   currentBilling,
+    //   originalBilling,
+    //   deliveryFess,
+    //   walletBalance,
+    // });
     let orderType = OrderType.zero;
     if (walletBalance >= total) {
       orderType = OrderType.sufficient;
@@ -133,12 +133,19 @@ export const useCreateOrder = () => {
     data,
     isFromInSufficientSalamiCreditScreen = false,
     itemsForRequest,
+    comeFromType,
+    allItems,
+    availbleList,
   }: {
     data?: BillingDetailsRequestForCreate;
     isFromInSufficientSalamiCreditScreen?: boolean;
     itemsForRequest?: any[];
+    comeFromType?: ComeFromType;
+    allItems?: ItemProps[];
+    availbleList?: IsListingAvailableFieldFragment[];
   }) => {
     setLoading({ show: true });
+    debugger;
     let walletBalance = 0;
     if (userProfile.isAuth) {
       const { data: balanceData } = await getBuyerSalamiWalletBalance();
@@ -151,10 +158,12 @@ export const useCreateOrder = () => {
       );
     }
     const info = moneyInfo({
-      data: orderInfo.allItems,
+      data: isEmpty(orderInfo.allItems) ? allItems : orderInfo.allItems,
       walletBalance,
-      availbleList: orderInfo.availbleList,
-      comeFromType: orderInfo.comeFromType,
+      availbleList: isEmpty(orderInfo.availbleList)
+        ? availbleList
+        : orderInfo.availbleList,
+      comeFromType: comeFromType ? comeFromType : orderInfo.comeFromType,
     });
     // if (info.orderType === OrderType.inSufficient) {
     if (

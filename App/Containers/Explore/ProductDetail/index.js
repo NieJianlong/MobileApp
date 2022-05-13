@@ -92,6 +92,19 @@ function ProductDetail(props) {
         ) ?? null
       : null
   );
+  useEffect(() => {
+    let variant =
+      oldProduct?.listingVariants?.length > 0
+        ? oldProduct?.listingVariants?.find(
+            (item) => item.defaultVariant === true
+          ) ?? null
+        : null;
+    if (variant) {
+      setCurrentVariant(variant);
+    } else {
+      setCurrentVariant(oldProduct?.listingVariants[0]);
+    }
+  }, [oldProduct?.listingVariants]);
 
   //control whether to show the hearder (display and navigation to sections)
   const [showHeaderTabs, setShowHeaderTabs] = useState(false);

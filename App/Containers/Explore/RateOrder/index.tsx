@@ -274,6 +274,7 @@ function RateOrderScreen() {
         <View style={[t.mR6]}>
           <TouchableOpacity
             onPress={() => {
+              debugger;
               handleSubmit((data) => {
                 setLoading({ show: true });
                 if (params.title) {
@@ -316,7 +317,7 @@ function RateOrderScreen() {
         </View>
       ),
     });
-  }, [navigation]);
+  }, [navigation, stars]);
   // const onSubmit = (data) => {
   //   addProductReview({
   //     variables: {

@@ -45,7 +45,7 @@ export default function ColorItem({ item, currentVariant, onChangeVariant }) {
               selected ? [t.textSuccess, t.textSm] : [t.fontPrimary, t.textSm]
             }
           >
-            {selected ? "In sctock." : "options"}
+            {selected ? "In Stock." : "options"}
           </Text>
         </View>
       </View>

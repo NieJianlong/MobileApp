@@ -157,7 +157,7 @@ const UseBillingDetail = () => {
         result = resultTemp1?.data?.updateBillingDetailsForGuestBuyer;
       }
     }
-    debugger;
+
     global.billingDetails = result;
 
     userProfileVar({

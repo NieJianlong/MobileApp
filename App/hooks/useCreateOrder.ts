@@ -108,7 +108,6 @@ export const useCreateOrder = () => {
       deliveryFess,
       walletBalance,
     });
-    debugger;
     let orderType = OrderType.zero;
     if (walletBalance >= total) {
       orderType = OrderType.sufficient;
@@ -117,7 +116,6 @@ export const useCreateOrder = () => {
     } else {
       orderType = OrderType.inSufficient;
     }
-    debugger;
     return {
       total: currentBilling,
       orderType,
@@ -134,9 +132,11 @@ export const useCreateOrder = () => {
   const createOrder = async ({
     data,
     isFromInSufficientSalamiCreditScreen = false,
+    itemsForRequest,
   }: {
     data?: BillingDetailsRequestForCreate;
-    isFromInSufficientSalamiCreditScreen: boolean;
+    isFromInSufficientSalamiCreditScreen?: boolean;
+    itemsForRequest?: any[];
   }) => {
     setLoading({ show: true });
     let walletBalance = 0;
@@ -166,7 +166,7 @@ export const useCreateOrder = () => {
     }
 
     // }
-    debugger;
+
     const billingDetailsId = await addBilling(data ?? undefined);
     const cart = {
       buyerId: global.buyerId,
@@ -175,9 +175,11 @@ export const useCreateOrder = () => {
         ? userProfile.billingDetailsId
         : billingDetailsId,
       useSalamiWallet: true,
-      cartItems: orderInfo.itemsForRequest,
+      cartItems: isEmpty(orderInfo.itemsForRequest)
+        ? itemsForRequest
+        : orderInfo.itemsForRequest,
     };
-    debugger;
+
     createOrderFromCart({
       variables: {
         cart,
@@ -197,7 +199,6 @@ export const useCreateOrder = () => {
           const order1 = res?.createOrderFromCart;
           if (res?.createOrderFromCart?.orderId) {
             razorpayCreateOrder(order1).then((res1) => {
-              debugger;
               if (res1?.data) {
                 const razorId =
                   res1?.data?.razorpayCreateOrder?.razorpayOrderId;
@@ -212,7 +213,6 @@ export const useCreateOrder = () => {
         }
       },
       onError: (res) => {
-        debugger;
         setLoading({ show: false });
       },
     });

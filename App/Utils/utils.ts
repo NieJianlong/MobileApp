@@ -72,7 +72,7 @@ export function usePaymentConfigration() {
       },
       theme: { color: colors.primary },
     };
-    debugger;
+
     RazorpayCheckout.open(options)
       .then((data) => {
         razorOrderPaymentVar({

@@ -274,7 +274,6 @@ function RateOrderScreen() {
         <View style={[t.mR6]}>
           <TouchableOpacity
             onPress={() => {
-              debugger;
               handleSubmit((data) => {
                 setLoading({ show: true });
                 if (params.title) {

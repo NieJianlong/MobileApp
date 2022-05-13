@@ -72,7 +72,7 @@ export default function ExploreSortBar({ onChange, refresh, option }) {
             option={currentOption}
             callback={(item) => {
               setCurrentOption(item);
-              debugger;
+
               refresh && refresh(item);
               dispatch({
                 type: "changSheetState",

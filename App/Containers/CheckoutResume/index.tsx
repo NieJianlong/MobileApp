@@ -83,7 +83,7 @@ function CheckoutResume(props) {
                   const i = orderInfo.availbleList[index];
                   itemAvailble = i?.isAvailable;
                 }
-                debugger;
+
                 console.log("Itemm", item);
                 if (itemAvailble) {
                   return (

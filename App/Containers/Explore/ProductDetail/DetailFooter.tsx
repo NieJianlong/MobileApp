@@ -78,6 +78,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   };
 
   const toggleConfirmOrderSheet = async () => {
+    debugger;
     const item = {
       listingId: product.listingId,
       quantity,
@@ -95,7 +96,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       NavigationService.navigate(Page_CheckoutGuestOrderDetail);
       return;
     } else {
-      createOrder({ data: undefined });
+      createOrder({ data: undefined, itemsForRequest: [item] });
     }
   };
 

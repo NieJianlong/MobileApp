@@ -119,7 +119,7 @@ const MapScreen = () => {
               longitude: results?.location?.longitude,
             },
           };
-          debugger;
+
           setLocation(newLocation);
         }
         // setLocation({ location: place.location, address: place.address });

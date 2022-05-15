@@ -39,6 +39,14 @@ function ReturnProductStep1() {
       ) ?? [],
     [params.product]
   );
+  const isSupportReplace = useMemo(
+    () =>
+      params.product.returnPolicies?.find(
+        (item) => item.name === "replacement_accepted"
+      ) ?? null,
+    [params.product]
+  );
+  debugger;
   const [returnReasonPolicyId, setReturnReasonPolicyId] = useState<string>("");
   const [submitOrderReturnRequest] = useSubmitOrderReturnRequestMutation({
     onCompleted: (res) => {
@@ -84,11 +92,7 @@ function ReturnProductStep1() {
           <TouchableOpacity
             disabled={isEmpty(returnReasonPolicyId)}
             onPress={() => {
-              if (prefer == ReturnOption.GetRefund) {
-                submit();
-              } else {
-                NavigationService.navigate("AskForReplacementScreen");
-              }
+              submit();
             }}
           >
             <Text
@@ -181,16 +185,19 @@ function ReturnProductStep1() {
             label={"Return the product and get a refund"}
           />
         </View>
-        <View>
-          <View style={{ height: vs(12) }} />
-          <CheckBox
-            defaultValue={prefer === ReturnOption.GetReplacement}
-            onSwitch={(t) => {
-              setPrefer(ReturnOption.GetReplacement);
-            }}
-            label={"Ask for a replacement"}
-          />
-        </View>
+        {isSupportReplace?.value === "true" && (
+          <View>
+            <View style={{ height: vs(12) }} />
+            <CheckBox
+              defaultValue={prefer === ReturnOption.GetReplacement}
+              onSwitch={(t) => {
+                setPrefer(ReturnOption.GetReplacement);
+              }}
+              label={"Ask for a replacement"}
+            />
+          </View>
+        )}
+
         {/* <SelectPrefer
             onChangeValue={(item) => {
               setPrefer(item);

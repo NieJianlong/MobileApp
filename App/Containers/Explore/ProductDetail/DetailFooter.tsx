@@ -173,7 +173,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
               thousandSeparator={true}
               prefix={"₹"}
               value={`${new BigNumber(
-                quantity * product.wholeSalePrice
+                quantity * currentVariant.wholeSalePrice
               ).toFixed(2)}`}
               displayType={"text"}
               renderText={(text) => (

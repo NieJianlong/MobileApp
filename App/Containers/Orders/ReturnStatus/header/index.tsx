@@ -1,9 +1,10 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { vs, s } from "react-native-size-matters";
 import colors from "../../../../Themes/Colors";
 import AppConfig from "../../../../Config/AppConfig";
 import { ApplicationStyles } from "../../../../Themes";
+import NavigationService from "../../../../Navigation/NavigationService";
 interface HeaderProps {
   orderNumber: string;
 }
@@ -33,14 +34,20 @@ function Header({ orderNumber }: HeaderProps) {
           {orderNumber}
         </Text>
       </View>
-      <Text
-        style={[
-          ApplicationStyles.screen.heading3Bold,
-          { fontSize: s(14), color: colors.primary },
-        ]}
+      <TouchableOpacity
+        onPress={() => {
+          NavigationService.navigate("LearnMoreScreen");
+        }}
       >
-        GET HELP
-      </Text>
+        <Text
+          style={[
+            ApplicationStyles.screen.heading3Bold,
+            { fontSize: s(14), color: colors.primary },
+          ]}
+        >
+          GET HELP
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }

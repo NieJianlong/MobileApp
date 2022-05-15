@@ -3,17 +3,8 @@ fragment IsListingAvailableField on IsListingAvailableResponse {
   variantId
   isAvailable
   reason
-  productId
-  defaultVariant
-  retailPrice
-  wholeSalePrice
-  fullPath
-  itemsInStock
-  itemsAvailable
-  itemsSold
-  options {
-    key
-    value
+  listing {
+    ...ProductListingViewField
   }
 }
 fragment KeyValuePairField on KeyValuePair {

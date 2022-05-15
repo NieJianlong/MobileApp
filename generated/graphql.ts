@@ -359,7 +359,7 @@ export type CartInput = {
 export type CartItemInput = {
   listingId: Scalars['ID'];
   quantity?: InputMaybe<Scalars['Int']>;
-  variantId: Scalars['ID'];
+  variantId?: InputMaybe<Scalars['ID']>;
 };
 
 export type Category = {
@@ -683,19 +683,11 @@ export type IsListingAvailableInput = {
 
 export type IsListingAvailableResponse = {
   __typename?: 'IsListingAvailableResponse';
-  defaultVariant?: Maybe<Scalars['Boolean']>;
-  fullPath?: Maybe<Scalars['String']>;
   isAvailable?: Maybe<Scalars['Boolean']>;
-  itemsAvailable?: Maybe<Scalars['Int']>;
-  itemsInStock?: Maybe<Scalars['Int']>;
-  itemsSold?: Maybe<Scalars['Int']>;
+  listing?: Maybe<ProductListingView>;
   listingId?: Maybe<Scalars['ID']>;
-  options?: Maybe<Array<Maybe<KeyValuePair>>>;
-  productId?: Maybe<Scalars['ID']>;
   reason?: Maybe<Scalars['String']>;
-  retailPrice?: Maybe<Scalars['Float']>;
   variantId?: Maybe<Scalars['ID']>;
-  wholeSalePrice?: Maybe<Scalars['Float']>;
 };
 
 export type KeyValuePair = {
@@ -4269,7 +4261,7 @@ export type VariantPriceAndQuantityUpdateInput = {
 export type VariantSoldQuantityInput = {
   listingId: Scalars['String'];
   quantity: Scalars['Int'];
-  variantId: Scalars['String'];
+  variantId?: InputMaybe<Scalars['String']>;
 };
 
 export enum WalletTransactionType {
@@ -4457,7 +4449,7 @@ export type TrackOrderItemQueryVariables = Exact<{
 
 export type TrackOrderItemQuery = { __typename?: 'Query', trackOrderItem: { __typename?: 'TrackOrderItemResponse', orderItemId: string, deliveryOption: DeliveryOption, latestEventStatus: OrderItemHistoryEventType, orderNumber: string, dateDelivered?: any | null | undefined, qrCodeAsBase64?: string | null | undefined, events?: Array<{ __typename?: 'OrderItemHistoryResponse', eventId: string, eventDateTime: any, eventType: OrderItemHistoryEventType, notes?: string | null | undefined }> | null | undefined, shippingDetails?: { __typename?: 'ShippingDetailsResponse', shippingStatus?: ShippingStatus | null | undefined, shippingDate?: any | null | undefined, carrier?: string | null | undefined, carrierUrl?: string | null | undefined, trackingNumber?: string | null | undefined, expectedDeliveryDate?: any | null | undefined, shippingInstructions?: string | null | undefined, deliveryDate?: any | null | undefined, failedDeliveryReason?: string | null | undefined, events?: Array<{ __typename?: 'ShippingEventResponse', eventType?: string | null | undefined, eventDateTime?: any | null | undefined } | null | undefined> | null | undefined } | null | undefined, collectionPoint?: { __typename?: 'CollectionPointPickupResponse', collectionPointId?: string | null | undefined, microHubId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, openingHours?: Array<string | null | undefined> | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined, collectionDate?: any | null | undefined } | null | undefined, sellerLocation?: { __typename?: 'SellerLocationPickupResponse', collectionPointId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined, collectionDate?: any | null | undefined } | null | undefined, sellerDirectDelivery?: { __typename?: 'SellerDirectDeliveryResponse', announcementId?: string | null | undefined, deliveryDate?: any | null | undefined } | null | undefined } };
 
-export type IsListingAvailableFieldFragment = { __typename?: 'IsListingAvailableResponse', listingId?: string | null | undefined, variantId?: string | null | undefined, isAvailable?: boolean | null | undefined, reason?: string | null | undefined, productId?: string | null | undefined, defaultVariant?: boolean | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, fullPath?: string | null | undefined, itemsInStock?: number | null | undefined, itemsAvailable?: number | null | undefined, itemsSold?: number | null | undefined, options?: Array<{ __typename?: 'KeyValuePair', key: string, value: string } | null | undefined> | null | undefined };
+export type IsListingAvailableFieldFragment = { __typename?: 'IsListingAvailableResponse', listingId?: string | null | undefined, variantId?: string | null | undefined, isAvailable?: boolean | null | undefined, reason?: string | null | undefined, listing?: { __typename?: 'ProductListingView', photo?: string | null | undefined, photoUrls?: Array<string | null | undefined> | null | undefined, shortName?: string | null | undefined, numberOfStars?: number | null | undefined, numberOfReviews?: number | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, salePercentage?: number | null | undefined, percentOff?: number | null | undefined, amountSaved?: number | null | undefined, openUntil?: string | null | undefined, noOfOrderedItems?: number | null | undefined, noOfItemsInStock?: number | null | undefined, description?: string | null | undefined, technicalDetails?: string | null | undefined, highlightBullets?: Array<string | null | undefined> | null | undefined, relatedProducts?: string | null | undefined, listingId?: string | null | undefined, productId?: string | null | undefined, storeId?: string | null | undefined, storeName?: string | null | undefined, status?: string | null | undefined, rating?: number | null | undefined, closedDate?: string | null | undefined, productListingType?: string | null | undefined, progressBarValue?: number | null | undefined, numberOfItemsAvailable?: number | null | undefined, qtyAvailable?: number | null | undefined, minSoldQuantity?: number | null | undefined, itemSold?: number | null | undefined, createOn?: string | null | undefined, returnAddressId?: string | null | undefined, longName?: string | null | undefined, announcementId?: string | null | undefined, sellerId?: string | null | undefined, deliveryOption?: DeliveryOption | null | undefined, courierName?: string | null | undefined, courierShippingFee?: number | null | undefined, courierShippingFeeTax?: number | null | undefined, announcementDeliveryDate?: any | null | undefined, seller?: { __typename?: 'SellerView', id?: string | null | undefined, brandName?: string | null | undefined, avatarUrl?: string | null | undefined, usersRating?: number | null | undefined, name?: string | null | undefined, description?: string | null | undefined, ratingCount?: number | null | undefined } | null | undefined, returnPolicies?: Array<{ __typename?: 'ProductReturnPolicyView', id?: string | null | undefined, productId?: string | null | undefined, name?: string | null | undefined, description?: string | null | undefined, value?: string | null | undefined } | null | undefined> | null | undefined, listingVariants?: Array<{ __typename?: 'ListingVariantView', listingId: string, variantId?: string | null | undefined, productId?: string | null | undefined, defaultVariant?: boolean | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, fullPath?: string | null | undefined, itemsInStock?: number | null | undefined, itemsAvailable?: number | null | undefined, itemsSold?: number | null | undefined, isAvailable?: boolean | null | undefined, options?: Array<{ __typename?: 'KeyValuePair', key: string, value: string } | null | undefined> | null | undefined } | null | undefined> | null | undefined, reviews?: Array<{ __typename?: 'ReviewView', id?: string | null | undefined, productId?: string | null | undefined, sellerId?: string | null | undefined, title?: string | null | undefined, description?: string | null | undefined, ratingVote?: number | null | undefined, helpfulCount?: number | null | undefined, postedBy?: string | null | undefined, postedByName?: string | null | undefined } | null | undefined> | null | undefined, returnAddress?: { __typename?: 'AddressView', addressId?: string | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, landmark?: string | null | undefined, pinCode?: string | null | undefined, addressFloor?: string | null | undefined } | null | undefined, ratingDetail?: { __typename?: 'RatingDetail', zeroStar?: number | null | undefined, oneStar?: number | null | undefined, twoStar?: number | null | undefined, threeStar?: number | null | undefined, fourStar?: number | null | undefined, fiveStar?: number | null | undefined, sixAndMoreStar?: number | null | undefined } | null | undefined, categories?: Array<{ __typename?: 'ProductCategoryView', categoryId?: string | null | undefined, productId?: string | null | undefined, name?: string | null | undefined, description?: string | null | undefined } | null | undefined> | null | undefined, images?: Array<{ __typename?: 'Images', id: string, referenceId?: string | null | undefined, imageName?: string | null | undefined, imageType?: ImageType | null | undefined, description?: string | null | undefined, fullPath?: string | null | undefined } | null | undefined> | null | undefined, pickupAddress?: { __typename?: 'AddressView', addressId?: string | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, landmark?: string | null | undefined, pinCode?: string | null | undefined, addressFloor?: string | null | undefined } | null | undefined } | null | undefined };
 
 export type KeyValuePairFieldFragment = { __typename?: 'KeyValuePair', key: string, value: string };
 
@@ -4539,7 +4531,7 @@ export type IsListingAvailableQueryVariables = Exact<{
 }>;
 
 
-export type IsListingAvailableQuery = { __typename?: 'Query', isListingAvailable: Array<{ __typename?: 'IsListingAvailableResponse', listingId?: string | null | undefined, variantId?: string | null | undefined, isAvailable?: boolean | null | undefined, reason?: string | null | undefined, productId?: string | null | undefined, defaultVariant?: boolean | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, fullPath?: string | null | undefined, itemsInStock?: number | null | undefined, itemsAvailable?: number | null | undefined, itemsSold?: number | null | undefined, options?: Array<{ __typename?: 'KeyValuePair', key: string, value: string } | null | undefined> | null | undefined }> };
+export type IsListingAvailableQuery = { __typename?: 'Query', isListingAvailable: Array<{ __typename?: 'IsListingAvailableResponse', listingId?: string | null | undefined, variantId?: string | null | undefined, isAvailable?: boolean | null | undefined, reason?: string | null | undefined, listing?: { __typename?: 'ProductListingView', photo?: string | null | undefined, photoUrls?: Array<string | null | undefined> | null | undefined, shortName?: string | null | undefined, numberOfStars?: number | null | undefined, numberOfReviews?: number | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, salePercentage?: number | null | undefined, percentOff?: number | null | undefined, amountSaved?: number | null | undefined, openUntil?: string | null | undefined, noOfOrderedItems?: number | null | undefined, noOfItemsInStock?: number | null | undefined, description?: string | null | undefined, technicalDetails?: string | null | undefined, highlightBullets?: Array<string | null | undefined> | null | undefined, relatedProducts?: string | null | undefined, listingId?: string | null | undefined, productId?: string | null | undefined, storeId?: string | null | undefined, storeName?: string | null | undefined, status?: string | null | undefined, rating?: number | null | undefined, closedDate?: string | null | undefined, productListingType?: string | null | undefined, progressBarValue?: number | null | undefined, numberOfItemsAvailable?: number | null | undefined, qtyAvailable?: number | null | undefined, minSoldQuantity?: number | null | undefined, itemSold?: number | null | undefined, createOn?: string | null | undefined, returnAddressId?: string | null | undefined, longName?: string | null | undefined, announcementId?: string | null | undefined, sellerId?: string | null | undefined, deliveryOption?: DeliveryOption | null | undefined, courierName?: string | null | undefined, courierShippingFee?: number | null | undefined, courierShippingFeeTax?: number | null | undefined, announcementDeliveryDate?: any | null | undefined, seller?: { __typename?: 'SellerView', id?: string | null | undefined, brandName?: string | null | undefined, avatarUrl?: string | null | undefined, usersRating?: number | null | undefined, name?: string | null | undefined, description?: string | null | undefined, ratingCount?: number | null | undefined } | null | undefined, returnPolicies?: Array<{ __typename?: 'ProductReturnPolicyView', id?: string | null | undefined, productId?: string | null | undefined, name?: string | null | undefined, description?: string | null | undefined, value?: string | null | undefined } | null | undefined> | null | undefined, listingVariants?: Array<{ __typename?: 'ListingVariantView', listingId: string, variantId?: string | null | undefined, productId?: string | null | undefined, defaultVariant?: boolean | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, fullPath?: string | null | undefined, itemsInStock?: number | null | undefined, itemsAvailable?: number | null | undefined, itemsSold?: number | null | undefined, isAvailable?: boolean | null | undefined, options?: Array<{ __typename?: 'KeyValuePair', key: string, value: string } | null | undefined> | null | undefined } | null | undefined> | null | undefined, reviews?: Array<{ __typename?: 'ReviewView', id?: string | null | undefined, productId?: string | null | undefined, sellerId?: string | null | undefined, title?: string | null | undefined, description?: string | null | undefined, ratingVote?: number | null | undefined, helpfulCount?: number | null | undefined, postedBy?: string | null | undefined, postedByName?: string | null | undefined } | null | undefined> | null | undefined, returnAddress?: { __typename?: 'AddressView', addressId?: string | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, landmark?: string | null | undefined, pinCode?: string | null | undefined, addressFloor?: string | null | undefined } | null | undefined, ratingDetail?: { __typename?: 'RatingDetail', zeroStar?: number | null | undefined, oneStar?: number | null | undefined, twoStar?: number | null | undefined, threeStar?: number | null | undefined, fourStar?: number | null | undefined, fiveStar?: number | null | undefined, sixAndMoreStar?: number | null | undefined } | null | undefined, categories?: Array<{ __typename?: 'ProductCategoryView', categoryId?: string | null | undefined, productId?: string | null | undefined, name?: string | null | undefined, description?: string | null | undefined } | null | undefined> | null | undefined, images?: Array<{ __typename?: 'Images', id: string, referenceId?: string | null | undefined, imageName?: string | null | undefined, imageType?: ImageType | null | undefined, description?: string | null | undefined, fullPath?: string | null | undefined } | null | undefined> | null | undefined, pickupAddress?: { __typename?: 'AddressView', addressId?: string | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, landmark?: string | null | undefined, pinCode?: string | null | undefined, addressFloor?: string | null | undefined } | null | undefined } | null | undefined }> };
 
 export type BillingDetailsFieldsFragment = { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined };
 
@@ -4899,141 +4891,6 @@ export const OrderItemDetailFieldFragmentDoc = gql`
     ${AddressOrderFiledFragmentDoc}
 ${CollectionPointFragmentDoc}
 ${SellerLocationFragmentDoc}`;
-export const IsListingAvailableFieldFragmentDoc = gql`
-    fragment IsListingAvailableField on IsListingAvailableResponse {
-  listingId
-  variantId
-  isAvailable
-  reason
-  productId
-  defaultVariant
-  retailPrice
-  wholeSalePrice
-  fullPath
-  itemsInStock
-  itemsAvailable
-  itemsSold
-  options {
-    key
-    value
-  }
-}
-    `;
-export const SellerProductPriceFieldFragmentDoc = gql`
-    fragment SellerProductPriceField on SellerProductPrice {
-  priceId
-  currency
-  retailPrice
-  wholeSalePrice
-  salePercentage
-  totalQuantityPrice
-  taxPercentage
-}
-    `;
-export const SellerProductImageFieldFragmentDoc = gql`
-    fragment SellerProductImageField on SellerProductImage {
-  photoUrl
-  imageName
-  description
-  imageType
-}
-    `;
-export const SellerProductVariantFieldFragmentDoc = gql`
-    fragment SellerProductVariantField on SellerProductVariant {
-  variantId
-  priceId
-  photoUrl
-  itemsInStock
-  defaultVariant
-  retailPrice
-  wholeSalePrice
-  options {
-    optionId
-    valueId
-    name
-    value
-  }
-}
-    `;
-export const AddressFieldFragmentDoc = gql`
-    fragment AddressField on AddressView {
-  addressId
-  flat
-  block
-  building
-  houseNumber
-  streetAddress1
-  streetAddress2
-  streetAddress3
-  townCity
-  villageArea
-  district
-  provinceState
-  country
-  areaCode
-  landmark
-  pinCode
-  addressFloor
-}
-    `;
-export const ProductReturnPolicyFieldFragmentDoc = gql`
-    fragment ProductReturnPolicyField on ProductReturnPolicy {
-  returnPolicyId
-  name
-  value
-}
-    `;
-export const SellerReturnPolicyFieldFragmentDoc = gql`
-    fragment SellerReturnPolicyField on SellerReturnPolicy {
-  returnAddress {
-    ...AddressField
-  }
-  returnLabel {
-    ...SellerProductImageField
-  }
-  policies {
-    ...ProductReturnPolicyField
-  }
-}
-    ${AddressFieldFragmentDoc}
-${SellerProductImageFieldFragmentDoc}
-${ProductReturnPolicyFieldFragmentDoc}`;
-export const SellerProductDetailViewFieldFragmentDoc = gql`
-    fragment SellerProductDetailViewField on SellerProductDetailView {
-  productId
-  shortName
-  longName
-  description
-  mainPhotoUrl
-  vendorSku
-  sellerSku
-  brand
-  productType
-  productStatus
-  vendorName
-  price {
-    ...SellerProductPriceField
-  }
-  images {
-    ...SellerProductImageField
-  }
-  variants {
-    ...SellerProductVariantField
-  }
-  categories {
-    categoryId
-    name
-    description
-  }
-  itemsInStock
-  returnPolicy {
-    ...SellerReturnPolicyField
-  }
-}
-    ${SellerProductPriceFieldFragmentDoc}
-${SellerProductImageFieldFragmentDoc}
-${SellerProductVariantFieldFragmentDoc}
-${SellerReturnPolicyFieldFragmentDoc}`;
 export const SellerViewFieldFragmentDoc = gql`
     fragment SellerViewField on SellerView {
   id
@@ -5089,6 +4946,27 @@ export const ReviewViewFieldFragmentDoc = gql`
   helpfulCount
   postedBy
   postedByName
+}
+    `;
+export const AddressFieldFragmentDoc = gql`
+    fragment AddressField on AddressView {
+  addressId
+  flat
+  block
+  building
+  houseNumber
+  streetAddress1
+  streetAddress2
+  streetAddress3
+  townCity
+  villageArea
+  district
+  provinceState
+  country
+  areaCode
+  landmark
+  pinCode
+  addressFloor
 }
     `;
 export const RatingDetailFieldFragmentDoc = gql`
@@ -5198,6 +5076,111 @@ ${AddressFieldFragmentDoc}
 ${RatingDetailFieldFragmentDoc}
 ${ProductCategoryViewFieldFragmentDoc}
 ${ImagesFieldFragmentDoc}`;
+export const IsListingAvailableFieldFragmentDoc = gql`
+    fragment IsListingAvailableField on IsListingAvailableResponse {
+  listingId
+  variantId
+  isAvailable
+  reason
+  listing {
+    ...ProductListingViewField
+  }
+}
+    ${ProductListingViewFieldFragmentDoc}`;
+export const SellerProductPriceFieldFragmentDoc = gql`
+    fragment SellerProductPriceField on SellerProductPrice {
+  priceId
+  currency
+  retailPrice
+  wholeSalePrice
+  salePercentage
+  totalQuantityPrice
+  taxPercentage
+}
+    `;
+export const SellerProductImageFieldFragmentDoc = gql`
+    fragment SellerProductImageField on SellerProductImage {
+  photoUrl
+  imageName
+  description
+  imageType
+}
+    `;
+export const SellerProductVariantFieldFragmentDoc = gql`
+    fragment SellerProductVariantField on SellerProductVariant {
+  variantId
+  priceId
+  photoUrl
+  itemsInStock
+  defaultVariant
+  retailPrice
+  wholeSalePrice
+  options {
+    optionId
+    valueId
+    name
+    value
+  }
+}
+    `;
+export const ProductReturnPolicyFieldFragmentDoc = gql`
+    fragment ProductReturnPolicyField on ProductReturnPolicy {
+  returnPolicyId
+  name
+  value
+}
+    `;
+export const SellerReturnPolicyFieldFragmentDoc = gql`
+    fragment SellerReturnPolicyField on SellerReturnPolicy {
+  returnAddress {
+    ...AddressField
+  }
+  returnLabel {
+    ...SellerProductImageField
+  }
+  policies {
+    ...ProductReturnPolicyField
+  }
+}
+    ${AddressFieldFragmentDoc}
+${SellerProductImageFieldFragmentDoc}
+${ProductReturnPolicyFieldFragmentDoc}`;
+export const SellerProductDetailViewFieldFragmentDoc = gql`
+    fragment SellerProductDetailViewField on SellerProductDetailView {
+  productId
+  shortName
+  longName
+  description
+  mainPhotoUrl
+  vendorSku
+  sellerSku
+  brand
+  productType
+  productStatus
+  vendorName
+  price {
+    ...SellerProductPriceField
+  }
+  images {
+    ...SellerProductImageField
+  }
+  variants {
+    ...SellerProductVariantField
+  }
+  categories {
+    categoryId
+    name
+    description
+  }
+  itemsInStock
+  returnPolicy {
+    ...SellerReturnPolicyField
+  }
+}
+    ${SellerProductPriceFieldFragmentDoc}
+${SellerProductImageFieldFragmentDoc}
+${SellerProductVariantFieldFragmentDoc}
+${SellerReturnPolicyFieldFragmentDoc}`;
 export const BillingDetailsFieldsFragmentDoc = gql`
     fragment BillingDetailsFields on BillingDetailsResponse {
   billingDetailsId

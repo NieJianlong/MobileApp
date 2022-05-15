@@ -30,27 +30,32 @@ export default function ProductInfo({
   onSetPickUp,
 }) {
   const { dispatch } = useContext(AlertContext);
-  const togglePickupFromSellerSheet = useCallback(() => {
-    dispatch({
-      type: "changSheetState",
-      payload: {
-        showSheet: true,
-        height: 290,
-        children: () => (
-          <PickupFromSellerSheetContent
-            address={product.pickupAddress}
-            onCallback={() => {
-              onSetPickUp(true);
-            }}
-          />
-        ),
-        sheetTitle: "Pick up location",
-      },
-    });
-  }, [dispatch, onSetPickUp, product.pickupAddress]);
+  const togglePickupFromSellerSheet = useCallback(
+    (callback) => {
+      dispatch({
+        type: "changSheetState",
+        payload: {
+          showSheet: true,
+          height: 290,
+          children: () => (
+            <PickupFromSellerSheetContent
+              address={product.pickupAddress}
+              onCallback={() => {
+                onSetPickUp(true);
+                callback && callback();
+              }}
+            />
+          ),
+          sheetTitle: "Pick up location",
+        },
+      });
+    },
+    [dispatch, onSetPickUp, product.pickupAddress]
+  );
   useEffect(() => {
     let refresh = PubSub.subscribe("show-pick-up-sheet", (msg, callback) => {
-      togglePickupFromSellerSheet();
+      togglePickupFromSellerSheet(callback);
+      debugger;
       if (callback && pickUp) {
         callback && callback();
       }

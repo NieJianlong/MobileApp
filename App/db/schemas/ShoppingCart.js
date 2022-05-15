@@ -5,7 +5,7 @@ export const ShoppingCart = {
     id: "string",
     listingId: { type: "string", default: "" },
     productId: { type: "string", default: "" },
-    variantId: { type: "string", default: "" },
+    variantId: { type: "string?", default: null },
     quantity: "int",
     variant: { type: "ListingVariantView?", default: null },
     isDraft: { type: "bool", default: true },

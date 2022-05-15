@@ -236,15 +236,7 @@ type IsListingAvailableResponse {
   variantId: ID
   isAvailable: Boolean
   reason: String
-  productId: ID
-  defaultVariant: Boolean
-  retailPrice: Float
-  wholeSalePrice: Float
-  fullPath: String
-  itemsInStock: Int
-  itemsAvailable: Int
-  itemsSold: Int
-  options: [KeyValuePair]
+  listing: ProductListingView
 }
 
 type KeyValuePair {
@@ -1169,7 +1161,7 @@ input VariantPriceAndQuantityUpdateInput {
 
 input VariantSoldQuantityInput {
   listingId: String!
-  variantId: String!
+  variantId: String
   quantity: Int!
 }
 

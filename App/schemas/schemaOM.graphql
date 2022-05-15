@@ -79,7 +79,7 @@ input CartInput {
 input CartItemInput {
   listingId: ID!
   quantity: Int
-  variantId: ID!
+  variantId: ID
 }
 
 type CollectionPointPickupResponse {

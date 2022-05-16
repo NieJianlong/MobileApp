@@ -21,6 +21,7 @@ import {
 } from "../../../../generated/graphql";
 import PubSub from "pubsub-js";
 import { t } from "react-native-tailwindcss";
+import { trim } from "lodash";
 
 export default function ProductInfo({
   product,
@@ -233,9 +234,11 @@ export default function ProductInfo({
 
           {product?.highlightBullets &&
             product?.highlightBullets.map((bul, index) => (
-              <View key={index} style={styles.row}>
-                <Text style={styles.txtDot}>•</Text>
-                <Text style={styles.txtRegular}>{bul}</Text>
+              <View key={index} style={[styles.row, t.itemsCenter]}>
+                <View
+                  style={[t.w1, t.h1, t.roundedFull, t.bgBlack, t.mR4, t.mT1]}
+                />
+                <Text style={styles.txtRegular}>{trim(bul)}</Text>
               </View>
             ))}
 

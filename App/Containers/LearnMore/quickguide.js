@@ -36,7 +36,7 @@ const SECTIONS = [
   {
     title: "What happens if some slices are not sold?",
     content:
-      "In this case, the seller has two options:\n 1.They can accept the offer & sell the slices sold \n 2.they can reject the offer & you will receive a full refund",
+      "In this case, the seller has two options:\n 1.They can accept the offer & sell the slices sold \n2.They can reject the offer & you will receive a full refund",
   },
   {
     title: "Can I change my delivery address?",

@@ -4,9 +4,10 @@ const EMAIL_REG =
   /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/;
 const PHONE_REG = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 
-const INTNTL_PHONE_REG =
-  /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/;
+// const INTNTL_PHONE_REG =
+//   /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/;
 
+const INTNTL_PHONE_REG = /^[6-9]\d{9}$/;
 /**
  *  at least 1 lowercase alphabetical character
  *  at least 1 uppercase alphabetical character

@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
-import { useRoute } from "@react-navigation/native";
 
 import { TextInput, Button, PasswordInput } from "../../Components";
 import styles from "./styles";
@@ -26,21 +25,31 @@ import jwt_decode from "jwt-decode";
 
 import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
-import {
-  useBuyerProfileByUserIdLazyQuery,
-  useSendOtpCodeMutation,
-  ValidationType,
-} from "../../../generated/graphql";
+import { useBuyerProfileByUserIdLazyQuery } from "../../../generated/graphql";
 import { Images } from "../../Themes";
 import { t } from "react-native-tailwindcss";
 import useLogin from "../../hooks/useLogin";
-import { isEmpty } from "lodash";
+import { Controller, useForm } from "react-hook-form";
 
 function LoginScreen(props) {
   // refs
   // let passwordInput = null;
   const passwordInput = useRef();
   const { showCloseButton, setLogin, onDismiss } = useLogin();
+  const {
+    control,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{
+    username: string;
+    password: string;
+  }>({
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
 
   const [getBuerIdProfile] = useBuyerProfileByUserIdLazyQuery({
     onError: (err) => {
@@ -97,27 +106,26 @@ function LoginScreen(props) {
   const { dispatch } = useContext(AlertContext);
 
   let [keyboardHeight, setKeyboardHeight] = useState(0);
-  let [loginInput, setLoginInput] = useState("");
-  let [psswd, setPsswd] = useState("");
+
   const loginRequestMemo = useMemo(() => {
-    let ret = validator.loginDifferentiator(loginInput);
+    let ret = validator.loginDifferentiator(getValues("username"));
     if (ret.isValid) {
       // we are good so we can test for email or phone
       if (ret.isEmail || ret.isPhone) {
         let loginRequest = {
           username: ret.isPhone
-            ? "+91" + loginInput?.trim()
-            : loginInput?.trim(),
-          password: psswd?.trim(),
+            ? "+91" + getValues("username")
+            : getValues("username")?.trim(),
+          password: getValues("password")?.trim(),
         };
         return loginRequest;
       }
     }
     return {
-      username: loginInput?.trim(),
-      password: psswd?.trim(),
+      username: getValues("username")?.trim(),
+      password: getValues("password")?.trim(),
     };
-  }, [loginInput, psswd]);
+  }, [getValues]);
   useEffect(() => {
     storage.setLocalStorageEmpty();
   }, []);
@@ -132,23 +140,18 @@ function LoginScreen(props) {
       Keyboard.removeListener("keyboardWillHide", _keyboardWillHide);
     };
   }, [props]);
-  const [resendCode] = useSendOtpCodeMutation();
 
-  // useEffect(() => {
-  //   if (isBillingLoaded) NavigationService.navigate("MainScreen");
-  // }, [isBillingLoaded]);
-
-  const onSignIn = async () => {
+  const onSignIn = async (data: { username: string; password: string }) => {
     // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
-    let ret = validator.loginDifferentiator(loginInput);
+    let ret = validator.loginDifferentiator(data.username);
     if (ret.isValid) {
       // we are good so we can test for email or phone
       if (ret.isEmail || ret.isPhone) {
         let loginRequest = {
           username: ret.isPhone
-            ? "+91" + loginInput?.trim()
-            : loginInput?.trim(),
-          password: psswd?.trim(),
+            ? "+91" + data.username?.trim()
+            : data.username?.trim(),
+          password: data.password?.trim(),
         };
         // console.log(profile.data.userProfileVar.email)// to-do remove
         dispatch({
@@ -211,11 +214,11 @@ function LoginScreen(props) {
               global.access_token = access_token;
               storage.setLocalStorageValue(
                 storage.LOCAL_STORAGE_USER_NAME,
-                ret.isPhone ? "+91" + loginInput : loginInput
+                ret.isPhone ? "+91" + data.username : data.username
               );
               storage.setLocalStorageValue(
                 storage.LOCAL_STORAGE_USER_PASSWORD,
-                psswd
+                data.password
               );
 
               console.log("decoded====================================");
@@ -294,50 +297,100 @@ function LoginScreen(props) {
     setKeyboardHeight(0);
   };
   const { width, height } = useWindowDimensions();
+
   return (
     <View style={[t.absolute, t.left0, t.top0, { width, height }, t.bgWhite]}>
       <SafeAreaView
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        {/* <TouchableOpacity
-          style={[{ marginLeft: width - 50 }, t.mT4]}
-          onPress={() => {
-            NavigationService.goBack();
-          }}
-        >
-          <Image style={[t.h6, t.w6]} source={Images.crossMedium} />
-        </TouchableOpacity> */}
-
         <View style={styles.bodyContainer}>
           <Text style={styles.txt1}>Sign In</Text>
 
           <Text style={styles.txt2}>
             Join purchases to get what{"\n"}you want with great discounts
           </Text>
-
-          <TextInput
-            style={styles.emailInput}
-            placeholder={"Email or phone number"}
-            onSubmitEditing={() => passwordInput?.current.getInnerRef().focus()}
-            returnKeyType={"next"}
-            onChangeText={(text) => setLoginInput(text)}
-          />
-
-          <PasswordInput
-            style={styles.passwordInput}
-            placeholder={"Enter your password"}
-            ref={passwordInput}
-            onSubmitEditing={onSignIn}
-            returnKeyType={"done"}
-            onChangeText={(text) => setPsswd(text)}
-          />
+          <View>
+            <Controller
+              control={control}
+              rules={{
+                required: "Please input your email or phone number.",
+                // pattern: {
+                //   value: /^[6-9]\d{9}$/,
+                //   message: "Invalid phone number or email",
+                // },
+                validate: {
+                  positive: (v) => {
+                    let ret = validator.loginDifferentiator(v);
+                    if (ret.isValid) {
+                      return true;
+                    }
+                    return "Invalid email or phone number";
+                  },
+                },
+              }}
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  style={styles.emailInput}
+                  placeholder={"Email or phone number"}
+                  onSubmitEditing={() =>
+                    passwordInput?.current.getInnerRef().focus()
+                  }
+                  value={value}
+                  returnKeyType={"next"}
+                  onChangeText={onChange}
+                />
+              )}
+              name="username"
+            />
+            {errors.username && (
+              <Text style={[t.textRed900, t._mT6, t.mB4, t.mL4]}>
+                {errors.username.message}
+              </Text>
+            )}
+          </View>
+          <View>
+            <Controller
+              control={control}
+              rules={{
+                required: "Please input your password.",
+                minLength: {
+                  value: 8,
+                  message: "Length must be 8 or more",
+                },
+                validate: {
+                  positive: (v) => {
+                    if (v.indexOf(" ") !== -1)
+                      return "Passwords should not contain Spaces";
+                    return true;
+                  },
+                },
+              }}
+              render={({ field: { onChange, value } }) => (
+                <PasswordInput
+                  style={styles.passwordInput}
+                  placeholder={"Enter your password"}
+                  ref={passwordInput}
+                  value={value}
+                  onSubmitEditing={handleSubmit(onSignIn)}
+                  returnKeyType={"done"}
+                  onChangeText={onChange}
+                />
+              )}
+              name="password"
+            />
+            {errors.password && (
+              <Text style={[t.textRed900, t._mT6, t.mB6, t.mL4]}>
+                {errors.password.message}
+              </Text>
+            )}
+          </View>
 
           <View style={{ height: keyboardHeight - vs(100) }} />
 
           <Button
             //onPress={onDebugSignIn}
-            onPress={onSignIn}
+            onPress={handleSubmit(onSignIn)}
             text={"SIGN IN"}
           />
 

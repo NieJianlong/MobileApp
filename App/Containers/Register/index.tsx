@@ -396,7 +396,7 @@ function RegisterScreen(props) {
             required: "Field is required.",
             pattern: {
               value: /^[6-9]\d{9}$/,
-              message: "invalid phone number",
+              message: "Invalid phone number",
             },
           }}
           render={({ field: { onChange, value } }) => (

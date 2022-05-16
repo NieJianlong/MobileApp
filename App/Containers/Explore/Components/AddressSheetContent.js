@@ -12,11 +12,15 @@ import {
   FIND_GUEST_ADDRESS_BY_ID_AND_TPYE,
 } from "../../../Apollo/queries/queries_user";
 import { userProfileVar } from "../../../Apollo/cache";
-import { setLocalStorageValue } from "../../../Apollo/local-storage";
+import {
+  getLocalStorageValue,
+  setLocalStorageValue,
+} from "../../../Apollo/local-storage";
 import PubSub from "pubsub-js";
 import useAlert from "../../../hooks/useAlert";
 import colors from "../../../Themes/Colors";
 import useMapScreen from "../../../hooks/useMapScreen";
+import { isEmpty } from "lodash";
 
 export default function AddressSheetContent(props) {
   const { dispatch, actionSheet } = useContext(AlertContext);
@@ -77,6 +81,27 @@ export default function AddressSheetContent(props) {
     //   },
     // });
   }, []);
+  useEffect(() => {
+    let refresh = PubSub.subscribe("delete-address", (name, item) => {
+      debugger;
+      getLocalStorageValue(global.buyerId + "Address").then(async (res) => {
+        debugger;
+        if (!isEmpty(res)) {
+          const result = JSON.parse(res);
+          //如果当前选中的被删除，怎需要重新获取
+          if (result.addressId === item.addressId) {
+            await setLocalStorageValue(global.buyerId + "Address", "");
+            PubSub.publish("refresh-address", "");
+          }
+        }
+      });
+    });
+    return () => {
+      if (refresh) {
+        PubSub.unsubscribe(refresh);
+      }
+    };
+  });
   return (
     <View style={[{ flex: 1, justifyContent: "flex-start" }]}>
       <View style={{ height: vs(30) }} />

@@ -58,7 +58,8 @@ export default function AddressItem({ item, refetch, isCheckout, onPress }) {
       },
       onCompleted: (res) => {
         dispatch({ type: "hideloading" });
-        PubSub.publish("refresh-address", "");
+        // PubSub.publish("refresh-address", "");
+        PubSub.publish("delete-address", item);
         if (res.deleteAddress || res.deleteAddressForGuestBuyer) {
           refetch();
           dispatch({
@@ -103,6 +104,10 @@ export default function AddressItem({ item, refetch, isCheckout, onPress }) {
         dispatch({ type: "hideloading" });
         PubSub.publish("refresh-address", "");
         refetch();
+        if (onPress) {
+          onPress(item);
+          return;
+        }
         dispatch({
           type: "changAlertState",
           payload: {
@@ -119,6 +124,9 @@ export default function AddressItem({ item, refetch, isCheckout, onPress }) {
       },
     }
   );
+  let addressDetail = `${item.houseNumber ?? ""} ${item.flat ?? ""} ${
+    item.villageArea ?? ""
+  } ${item.townCity} ${item.provinceState} ${item.country} ${item.pinCode}`;
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -135,11 +143,7 @@ export default function AddressItem({ item, refetch, isCheckout, onPress }) {
           )}
         </View>
         <View>
-          <Text style={styles.itemSubTitle}>{`${item.houseNumber ?? ""}${
-            item.flat ?? ""
-          }${item.villageArea ?? ""}${item.townCity}${item.provinceState}${
-            item.country
-          } ${item.pinCode}`}</Text>
+          <Text style={styles.itemSubTitle}>{addressDetail.trim()}</Text>
         </View>
 
         <View style={[styles.itemBottom]}>

@@ -84,6 +84,10 @@ export default function AddressBar() {
       },
       onError: (err) => {
         setError(err);
+        if (err.message === "Buyer does not have Delivery address") {
+          setShowMap({ mapVisible: true });
+        }
+        debugger;
         handleError();
       },
       onCompleted: (result) => {
@@ -153,6 +157,14 @@ export default function AddressBar() {
         if (!isEmpty(res)) {
           const result = JSON.parse(res);
           handleData(result);
+        } else {
+          localCartVar({
+            ...localCartVar(),
+            deliverAddress: "",
+            callBackAddress: null,
+          });
+          setAddrLine1("");
+          setAddrLine2("");
         }
       });
     });
@@ -162,6 +174,7 @@ export default function AddressBar() {
       }
     };
   });
+
   return (
     <TouchableOpacity onPress={toggleAddressSheet}>
       <View style={styles.addressBarContainer}>

@@ -289,15 +289,17 @@ function AddNewAddress() {
             })}
           </View>
         </KeyboardAwareScrollView>
-        <View style={{ marginTop: 20 }}>
-          <Switch
-            onSwitch={(res) => {
-              setAsDefault(res);
-            }}
-            active={asDefault}
-            label="Set as default address"
-          />
-        </View>
+        <SafeAreaView>
+          <View style={[{ marginTop: 20 }, t.mB8]}>
+            <Switch
+              onSwitch={(res) => {
+                setAsDefault(res);
+              }}
+              active={asDefault}
+              label="Set as default address"
+            />
+          </View>
+        </SafeAreaView>
       </View>
     </View>
   );

@@ -35,9 +35,7 @@ function CustomerSupport(props) {
       <View style={[t.itemsCenter, t.pT12]}>
         <TouchableOpacity
           onPress={() =>
-            Linking.openURL(
-              "mailto:somethingemail@gmail.com?subject=abcdefg&body=body"
-            )
+            Linking.openURL("mailto:vk@gmail.com?subject=&body=")
               .then((res) => {
                 console.log("RESSSSSSSSSSSS OPEN ", res);
               })

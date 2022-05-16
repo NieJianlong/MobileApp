@@ -227,7 +227,7 @@ const MapScreen = () => {
               payload: {
                 showSheet: true,
                 height: 600,
-                children: () => <AddLocationSheetContent {...location} />,
+                children: () => <AddLocationSheetContent {...location} locationDetails = {location} />,
                 sheetTitle: "",
               },
             });

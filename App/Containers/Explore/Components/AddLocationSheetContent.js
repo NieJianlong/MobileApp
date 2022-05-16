@@ -57,6 +57,7 @@ function AddLocationSheetContent(props) {
       setValue("townCity", props.city);
       setValue("pinCode", props.post_code);
       setValue("streetAddress1", props.street);
+      setValue("building", props.locationDetails.houseNo);
     }
   }, [data, props]);
   const [open, setOpen] = useState(false);
@@ -141,6 +142,7 @@ function AddLocationSheetContent(props) {
       keyboardType: "default",
       type: "normal",
       name: "building",
+      location: props.locationDetails.houseNo, 
     },
     {
       placeholder: "Street / Colony Name*",
@@ -148,6 +150,7 @@ function AddLocationSheetContent(props) {
       errorMessage: null,
       type: "normal",
       name: "streetAddress1",
+      location: props.locationDetails.street,
     },
 
     {
@@ -157,6 +160,7 @@ function AddLocationSheetContent(props) {
       keyboardType: "default",
       type: "normal",
       name: "townCity",
+      location: props.locationDetails.city,
     },
     {
       placeholder: "Pincode*",
@@ -166,6 +170,7 @@ function AddLocationSheetContent(props) {
       // type: "short",
       type: "normal",
       name: "pinCode",
+      location: props.locationDetails.post_code,
     },
     {
       placeholder: "State*",
@@ -174,6 +179,7 @@ function AddLocationSheetContent(props) {
       keyboardType: "selector",
       type: "normal",
       name: "provinceState",
+      location: props.locationDetails.state,
     },
   ];
   return (
@@ -279,7 +285,7 @@ function AddLocationSheetContent(props) {
                               {...item}
                               onChangeText={onChange}
                               onBlur={onBlur}
-                              value={value}
+                              value={value === "" ? value : item.location}
                             />
                             {lodash.get(errors, item.name) && (
                               <Text style={[{ color: "red" }, t.mL2, t.mT1]}>

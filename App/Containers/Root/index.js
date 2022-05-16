@@ -5,6 +5,11 @@ import {
   TouchableWithoutFeedback,
   Modal,
   BackHandler,
+  SafeAreaView,
+  Image,
+  TouchableOpacity,
+  useWindowDimensions,
+  Platform,
 } from "react-native";
 import { Alert, BottomSheet } from "../../Components";
 import AppNavigation from "../../Navigation/AppNavigation";
@@ -26,6 +31,7 @@ import { t } from "react-native-tailwindcss";
 import RegisterGuestBuyerToBuyerScreen from "../RegisterGuestBuyerToBuyer";
 import { Portal, Text } from "react-native-paper";
 import LoginModalForm from "../LoginModalForm";
+import { Images } from "../../Themes";
 
 const initialState = {
   alert: {
@@ -127,6 +133,7 @@ function RootContainer() {
   } = useImageViewer();
   const { loginVisible } = useLogin();
   const { mapVisible } = useMapScreen();
+  const { width, height: windowHeight } = useWindowDimensions();
   return (
     <AlertContext.Provider value={{ dispatch, actionSheet }}>
       <View style={{ flex: 1 }}>
@@ -199,12 +206,30 @@ function RootContainer() {
       )}
 
       <Modal visible={imageViewerVisible} transparent={true}>
-        <ImageViewer
-          imageUrls={images}
-          onClick={() => {
-            setImageViewer({ visible: false, images: [] });
-          }}
-        />
+        <View style={[{ width, height: windowHeight }]}>
+          <ImageViewer
+            imageUrls={images}
+            onClick={() => {
+              setImageViewer({ visible: false, images: [] });
+            }}
+          />
+          <SafeAreaView
+            style={[t.absolute, Platform.OS === "android" ? t.mT8 : t.mT0]}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                setImageViewer({ visible: false, images: [] });
+              }}
+            >
+              <View style={[t.h12, t.w12, t.mL4]}>
+                <Image
+                  source={Images.arrow_left}
+                  style={[t.w8, t.h8, { tintColor: "#ffffff" }]}
+                />
+              </View>
+            </TouchableOpacity>
+          </SafeAreaView>
+        </View>
       </Modal>
 
       {/* <Modal visible={true}>

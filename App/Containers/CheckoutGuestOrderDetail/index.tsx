@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useContext } from "react";
-import { View, Text, SafeAreaView } from "react-native";
+import { View, Text, SafeAreaView, ScrollView } from "react-native";
 
 import BaseScreen from "../BaseScreen";
 import { Button, Switch } from "../../Components";
@@ -23,6 +23,7 @@ import useLoading from "../../hooks/useLoading";
 
 import useOrderInfo from "../../hooks/useOrderInfo";
 import { useCreateOrder } from "../../hooks/useCreateOrder";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 function CheckoutGuestOrderDetail(props) {
   const userProfile = useReactiveVar(userProfileVar);
@@ -93,161 +94,163 @@ function CheckoutGuestOrderDetail(props) {
 
   return (
     <BaseScreen {...props}>
-      <View style={styles.container}>
-        <View style={styles.horizontalCenter}>
-          <Text style={styles.title}>Please enter details for the order</Text>
-          <Text style={styles.description}>
-            All guests receive confirmation through email only.
-          </Text>
-          <Text style={styles.boldDescription}>
-            Please make sure your email is correct!
-          </Text>
-        </View>
+      <KeyboardAwareScrollView contentContainerStyle={[t.pB48]}>
+        <View style={styles.container}>
+          <View style={styles.horizontalCenter}>
+            <Text style={styles.title}>Please enter details for the order</Text>
+            <Text style={styles.description}>
+              All guests receive confirmation through email only.
+            </Text>
+            <Text style={styles.boldDescription}>
+              Please make sure your email is correct!
+            </Text>
+          </View>
 
-        <View style={styles.inputsWrapper}>
-          <Controller
-            control={control}
-            rules={{
-              required: true,
-              pattern:
-                /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
-              minLength: 10,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <View>
-                <MaterialTextInput
-                  placeholder="Email*"
-                  style={{ marginTop: vs(18) }}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                />
-                {get(errors, "email") && (
-                  <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
-                    {get(errors, "email.type") === "pattern"
-                      ? "Invalid email"
-                      : "This is required."}
-                  </Text>
-                )}
-              </View>
-            )}
-            name={"email"}
-          />
-
-          <View style={styles.inputWrapper3}>
+          <View style={styles.inputsWrapper}>
             <Controller
               control={control}
               rules={{
                 required: true,
-                pattern: /^[6-9]\d{9}$/,
+                pattern:
+                  /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
+                minLength: 10,
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <View>
                   <MaterialTextInput
-                    placeholder="Phone Number*"
+                    placeholder="Email*"
                     style={{ marginTop: vs(18) }}
                     onChangeText={onChange}
                     onBlur={onBlur}
                     value={value}
                   />
-                  {get(errors, "phoneNumber") && (
+                  {get(errors, "email") && (
                     <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
-                      {get(errors, "phoneNumber.type") === "pattern"
-                        ? "Invalid phone number"
+                      {get(errors, "email.type") === "pattern"
+                        ? "Invalid email"
                         : "This is required."}
                     </Text>
                   )}
                 </View>
               )}
-              name={"phoneNumber"}
+              name={"email"}
             />
-          </View>
-          <View style={styles.inputsWrapper2}>
-            <View style={styles.inputName}>
+
+            <View style={styles.inputWrapper3}>
               <Controller
                 control={control}
                 rules={{
                   required: true,
+                  pattern: /^[6-9]\d{9}$/,
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <View>
                     <MaterialTextInput
-                      placeholder="FirstName*"
+                      placeholder="Phone Number*"
                       style={{ marginTop: vs(18) }}
                       onChangeText={onChange}
                       onBlur={onBlur}
                       value={value}
                     />
-                    {get(errors, "firstName") && (
+                    {get(errors, "phoneNumber") && (
                       <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
-                        This is required.
+                        {get(errors, "phoneNumber.type") === "pattern"
+                          ? "Invalid phone number"
+                          : "This is required."}
                       </Text>
                     )}
                   </View>
                 )}
-                name={"firstName"}
+                name={"phoneNumber"}
               />
             </View>
+            <View style={styles.inputsWrapper2}>
+              <View style={styles.inputName}>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View>
+                      <MaterialTextInput
+                        placeholder="FirstName*"
+                        style={{ marginTop: vs(18) }}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                      />
+                      {get(errors, "firstName") && (
+                        <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
+                          This is required.
+                        </Text>
+                      )}
+                    </View>
+                  )}
+                  name={"firstName"}
+                />
+              </View>
 
-            <View style={styles.inputName}>
-              <Controller
-                control={control}
-                rules={{
-                  required: true,
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View>
-                    <MaterialTextInput
-                      placeholder="LastName*"
-                      style={{ marginTop: vs(18) }}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                    />
-                    {get(errors, "lastName") && (
-                      <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
-                        This is required.
-                      </Text>
-                    )}
-                  </View>
-                )}
-                name={"lastName"}
+              <View style={styles.inputName}>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View>
+                      <MaterialTextInput
+                        placeholder="LastName*"
+                        style={{ marginTop: vs(18) }}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                      />
+                      {get(errors, "lastName") && (
+                        <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
+                          This is required.
+                        </Text>
+                      )}
+                    </View>
+                  )}
+                  name={"lastName"}
+                />
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.deliveryAddressSection}>
+            <Text style={styles.deliveryAddressSectionTitle}>
+              Current Delivery Address
+            </Text>
+            <View style={styles.deliveryDescriptionBox}>
+              <Text style={styles.deliveryDescriptionText}>
+                {`${localCart?.callBackAddress?.building + "," || ""}`}
+              </Text>
+              <Text style={styles.deliveryDescriptionText}>
+                {billingAddress.length > 0
+                  ? `${billingAddress.billingAddress?.pinCode} , ${billingAddress.billingAddress?.provinceState}`
+                  : `${localCart?.callBackAddress?.pinCode} , ${localCart?.callBackAddress?.provinceState}`}
+              </Text>
+              <Text style={styles.deliveryDescriptionText}>India</Text>
+            </View>
+
+            <View style={styles.switch}>
+              <Switch
+                // onSwitch={(b) => setIsSameAsDelivery(b)}
+                disabled={true}
+                active={true}
+                label="Billing address is the same as delivery"
               />
             </View>
+            <SafeAreaView>
+              <View style={[styles.button, t.mB6]}>
+                <Button text="NEXT" onPress={handleSubmit(onSubmit)} />
+              </View>
+            </SafeAreaView>
           </View>
         </View>
-
-        <View style={styles.deliveryAddressSection}>
-          <Text style={styles.deliveryAddressSectionTitle}>
-            Current Delivery Address
-          </Text>
-          <View style={styles.deliveryDescriptionBox}>
-            <Text style={styles.deliveryDescriptionText}>
-              {`${localCart?.callBackAddress?.building + "," || ""}`}
-            </Text>
-            <Text style={styles.deliveryDescriptionText}>
-              {billingAddress.length > 0
-                ? `${billingAddress.billingAddress?.pinCode} , ${billingAddress.billingAddress?.provinceState}`
-                : `${localCart?.callBackAddress?.pinCode} , ${localCart?.callBackAddress?.provinceState}`}
-            </Text>
-            <Text style={styles.deliveryDescriptionText}>India</Text>
-          </View>
-
-          <View style={styles.switch}>
-            <Switch
-              // onSwitch={(b) => setIsSameAsDelivery(b)}
-              disabled={true}
-              active={true}
-              label="Billing address is the same as delivery"
-            />
-          </View>
-          <SafeAreaView>
-            <View style={[styles.button, t.mB6]}>
-              <Button text="NEXT" onPress={handleSubmit(onSubmit)} />
-            </View>
-          </SafeAreaView>
-        </View>
-      </View>
+      </KeyboardAwareScrollView>
     </BaseScreen>
   );
 }

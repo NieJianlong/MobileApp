@@ -224,13 +224,11 @@ function ProductDetail(props) {
               />
             )} */}
 
-        {showFooter && (
-          <DetailFooter
-            product={products?.getListings.content[0]}
-            currentVariant={currentVariant}
-            pickUp={pickUp}
-          />
-        )}
+        <DetailFooter
+          product={products?.getListings.content[0]}
+          currentVariant={currentVariant}
+          pickUp={pickUp}
+        />
       </SafeAreaView>
     </View>
   ) : (

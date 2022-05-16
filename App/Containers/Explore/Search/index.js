@@ -8,6 +8,7 @@ import { Images } from "../../../Themes";
 import * as storage from "../../../Apollo/local-storage";
 import CategoryAndProductList from "../CategoryAndProductList/Index";
 import { t, theme } from "react-native-tailwindcss";
+import NavigationService from "../../../Navigation/NavigationService";
 
 const SearchContext = React.createContext({});
 
@@ -35,6 +36,7 @@ function ProductSearch(props) {
                 changeRecentSearches={changeRecentSearches}
                 onSelect={(item) => {
                   onSearch(item);
+                  // NavigationService.goBack();
                 }}
                 onShowSearchBox={onShowSearchBox}
               />

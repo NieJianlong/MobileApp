@@ -221,6 +221,9 @@ function PrimaryNav() {
       <Stack.Screen
         name={"ProductSearchScreen"}
         component={ProductSearchScreen}
+        options={{
+          headerShown: false,
+        }}
       />
       <Stack.Screen
         name={"EditCategoriesScreen"}

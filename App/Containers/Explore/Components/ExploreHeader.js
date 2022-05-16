@@ -44,7 +44,10 @@ export default function ExploreHeader(props) {
             onPressDelete={() => {
               setKeyword("");
               NavigationService.navigate("ProductSearchScreen", {
-                onSearch: onSearch,
+                onSearch: () => {
+                  onSearch();
+                  setKeyword("");
+                },
               });
             }}
             onPressBack={() => NavigationService.goBack()}

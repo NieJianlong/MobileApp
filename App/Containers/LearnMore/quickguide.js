@@ -31,12 +31,12 @@ const SECTIONS = [
   {
     title: "How can I help the slices sell quickly?",
     content:
-      "By sharing the deal with your friends and family, they can buy their own slices which will help close the order sooner \n\nPlease note: this is not obligatory! SalamiSlicing allows you to buy slices together with other users of the site. This is just an option to share interesting slices with people you know.",
+      "By sharing the deal with your friends and family, they can buy their own slices which will help close the order sooner \n\nPlease note: This is not obligatory! SalamiSlicing allows you to buy slices together with other users of the site. This is just an option to share interesting slices with people you know.",
   },
   {
     title: "What happens if some slices are not sold?",
     content:
-      "In this case, the seller has two options:\n 1.they can accept the offer & sell the slices sold \n 2.they can reject the offer & you will receive a full refund",
+      "In this case, the seller has two options:\n 1.They can accept the offer & sell the slices sold \n 2.they can reject the offer & you will receive a full refund",
   },
   {
     title: "Can I change my delivery address?",

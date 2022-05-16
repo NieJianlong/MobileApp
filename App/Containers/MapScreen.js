@@ -178,6 +178,7 @@ const MapScreen = () => {
     <View style={[{ width, height }, t.bgBlue300]}>
       <View style={[styles.container]}>
         <MapView
+          key={JSON.stringify(location)}
           ref={mapRef}
           showsUserLocation
           userLocationUpdateInterval={2000}

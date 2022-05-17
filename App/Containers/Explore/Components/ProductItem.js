@@ -20,7 +20,7 @@ import {
 import { t } from "react-native-tailwindcss";
 import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
 import Share from "react-native-share";
-import { shareOptions } from "./ShareOptionList";
+import { shareOptionsDetails } from "./ShareOptionList";
 const defultUrl = "";
 
 const TouchableOpacity =
@@ -38,7 +38,7 @@ function ProductItem(props) {
     notShowBottom,
   } = props;
   const toggleShareSheet = useCallback(() => {
-    Share.open(shareOptions);
+    shareOptionsDetails(product.photoUrls);
     // dispatch({
     //   type: "changSheetState",
     //   payload: {

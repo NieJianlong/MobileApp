@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useMemo, useState, useEffect } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DraggableFlatList from "react-native-draggable-flatlist";
@@ -19,6 +19,7 @@ import { t } from "react-native-tailwindcss";
 export default function EditCategoriesScreen() {
   const [removed, setRemoved] = useState([]);
   const { dispatch } = useContext(AlertContext);
+  const [categoryData, setCategoryData] = useState([]);
   const { data: categories, refetch } = useQuery(aQM.GET_PREFERRED_CATEGORIES, {
     variables: {
       buyerId: global.buyerId,
@@ -29,11 +30,16 @@ export default function EditCategoriesScreen() {
       },
     },
   });
+
+  useEffect(()=>{
+    setCategoryData(categories.getPreferredCategories);
+  }, []);
+
   const selected = useMemo(() => {
-    return categories?.getPreferredCategories.filter(
+    return categoryData.filter(
       (item) => removed.indexOf(item) < 0
     );
-  }, [categories?.getPreferredCategories, removed]);
+  }, [categoryData, removed]);
   const selectedIds = useMemo(() => {
     return selected.map((item) => item.categoryId);
   }, [selected]);
@@ -110,10 +116,10 @@ export default function EditCategoriesScreen() {
           To reorder categories, hold down and move
         </Text>
         <DraggableFlatList
-          data={categories?.getPreferredCategories || []}
+          data={categoryData || []}
           renderItem={renderItem}
           keyExtractor={(item, index) => `draggable-item-${index}`}
-          onDragEnd={({ data }) => {}}
+          onDragEnd={({ data }) => {setCategoryData(data)}}
         />
       </View>
       <TouchableOpacity

@@ -96,7 +96,9 @@ function ProductDetail(props) {
     let variant =
       oldProduct?.listingVariants?.length > 0
         ? oldProduct?.listingVariants?.find(
-            (item) => item.defaultVariant === true
+            (item) =>
+              item.defaultVariant === true &&
+              item?.itemsSold !== item?.itemsAvailable
           ) ?? null
         : null;
     if (variant) {
@@ -190,6 +192,7 @@ function ProductDetail(props) {
               <ProductVariants
                 variants={products?.getListings.content[0].listingVariants}
                 product={products?.getListings.content[0]}
+                currentVariant={currentVariant}
                 onChange={(variant) => {
                   setCurrentVariant(variant);
                 }}

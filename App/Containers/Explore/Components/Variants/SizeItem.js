@@ -9,8 +9,11 @@ export default function SizeItem({ item, currentVariant, onChangeVariant }) {
   });
 
   const selected = selectedItem?.value === item.value;
+  //
+  const disabled = item?.itemsSold === item?.itemsAvailable;
   return (
     <TouchableOpacity
+      disabled={disabled}
       onPress={() => {
         if (selected) {
           return;
@@ -39,6 +42,8 @@ export default function SizeItem({ item, currentVariant, onChangeVariant }) {
           <Text style={selected ? [t.textLg] : [t.textSm]}>
             {selected
               ? `₹${BigNumber(currentVariant.wholeSalePrice).toFixed(2)}`
+              : disabled
+              ? `${item?.itemsSold}/${item?.itemsAvailable} sold`
               : "See available"}
           </Text>
           <Text
@@ -46,7 +51,7 @@ export default function SizeItem({ item, currentVariant, onChangeVariant }) {
               selected ? [t.textSuccess, t.textSm] : [t.fontPrimary, t.textSm]
             }
           >
-            {selected ? "In Stock." : "options"}
+            {selected ? "In Stock." : disabled ? "" : "options"}
           </Text>
         </View>
       </View>

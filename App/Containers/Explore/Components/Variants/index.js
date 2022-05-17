@@ -126,18 +126,13 @@ class AccordionView extends React.Component {
  *  props.product.prodVariants
  *  array of variants for this product
  */
-const ProductVariants = ({ product, variants, onChange }) => {
+const ProductVariants = ({ product, variants, onChange, currentVariant }) => {
   // to do reduce number props if possible
   const { realm } = useRealm();
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
 
-  const [currentVariant, setCurrentVariant] = useState(
-    variants.length > 0
-      ? variants.find((item) => item.defaultVariant === true) ?? null
-      : null
-  );
   const info = useMemo(() => {
     return realm
       .objects("ShoppingCart")
@@ -169,7 +164,6 @@ const ProductVariants = ({ product, variants, onChange }) => {
   }, [info, currentVariant, realm, localCartVar, product]);
   const onChangeVariant = (value) => {
     onChange(value);
-    setCurrentVariant(value);
   };
   if (variants.length === 0) {
     return null;

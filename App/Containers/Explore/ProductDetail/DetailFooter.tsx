@@ -162,10 +162,12 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
             t.justifyAround,
             disabled ? t.opacity50 : t.opacity100,
           ]}
-          disabled={disabled}
+          disabled={false}
         >
           <Text style={[styles.txtBold, { color: Colors.white }]}>
-            {disabled ? "100/100 sold" : "BUY NOW"}
+            {disabled
+              ? `${product?.noOfOrderedItems}/${product?.noOfItemsInStock} sold`
+              : "BUY NOW"}
           </Text>
 
           <View style={styles.priceContainer}>

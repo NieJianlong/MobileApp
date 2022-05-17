@@ -18,7 +18,8 @@ import { Images, Colors } from "../../../Themes";
 import styles from "./styles";
 import NavigationService from "../../../Navigation/NavigationService";
 import { AlertContext } from "../../Root/GlobalContext";
-import { shareOptions } from "../Components/ShareOptionList";
+// import { shareOptions } from "../Components/ShareOptionList";
+import { shareOptionsDetails } from "../Components/ShareOptionList";
 import metrics from "../../../Themes/Metrics";
 import { useQuery, useReactiveVar } from "@apollo/client";
 
@@ -111,20 +112,8 @@ export default function ProductCarousel({ product }) {
     data?.isListingInWishlist ? deleteFromWishList() : addToWishList();
   }, [addToWishList, data?.isListingInWishlist, deleteFromWishList]);
   const toggleShareSheet = useCallback(() => {
-    Share.open(shareOptions);
-    // dispatch({
-    //   type: "changSheetState",
-    //   payload: {
-    //     showSheet: true,
-    //     height: 250,
-    //     children: () => (
-    //       <View style={{ flex: 1, justifyContent: "flex-end" }}>
-    //         <ShareOptionList />
-    //       </View>
-    //     ),
-    //     sheetTitle: "Share to",
-    //   },
-    // });
+    // Share.open(shareOptions);
+    shareOptionsDetails(product.photoUrls);
   }, [dispatch]);
   /**
    * when we add an item to the cart we need to update the local cart

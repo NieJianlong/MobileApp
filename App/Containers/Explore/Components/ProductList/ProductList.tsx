@@ -57,6 +57,7 @@ export default function ProductList(props) {
   const { width, height } = useWindowDimensions();
   const [isRereshing, setIsRereshing] = useState(false);
   const [showProductAsRows, setShowProductAsRows] = useState(true);
+  const [isCalled, setIsCalled] = useState(false);
   const toggleShareSheet = useCallback(() => {
     Share.open(shareOptions);
     // dispatch({
@@ -96,9 +97,14 @@ export default function ProductList(props) {
       // add missing fields for product review
       // update for name changes in data from server
       setNoMore(false);
-      setServerData(res.getListings.content);
+      if (isCalled === false) {
+        setServerData(res.getListings.content);
+      }
+      setIsCalled(true);
     },
   });
+
+  console.log("seee the props product", props.product);
 
   //Pull up the load layout
   const LoadMoreView = useMemo(

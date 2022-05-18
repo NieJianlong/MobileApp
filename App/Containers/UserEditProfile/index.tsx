@@ -104,7 +104,7 @@ function UserEditProfile(props) {
   );
   useEffect(() => {
     if (userProfile) {
-      setNewLastName(userProfile?.buyerProfile?.firstName ?? "");
+      setNewFirstName(userProfile?.buyerProfile?.firstName ?? "");
       setNewLastName(userProfile?.buyerProfile?.lastName ?? "");
       setNewEmail(userProfile?.buyerProfile?.email ?? "");
       setNewPhoneNumber(

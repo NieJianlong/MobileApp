@@ -90,7 +90,9 @@ export default function ProductList(props) {
         isPrivate: global.access_token ? true : false,
       },
     },
-    onError: () => {},
+    onError: () => {
+      setServerData([]);
+    },
     onCompleted: (res) => {
       // map data from server for now
       // add missing fields for product review

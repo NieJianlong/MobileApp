@@ -23,6 +23,7 @@ import images from "../../Themes/Images";
 import { ApplicationStyles } from "../../Themes";
 import { useReactiveVar } from "@apollo/client";
 import useOrderInfo from "../../hooks/useOrderInfo";
+import { useRoute } from "@react-navigation/native";
 
 //orderStatus：1,completed
 function CheckoutResume(props) {
@@ -30,6 +31,7 @@ function CheckoutResume(props) {
   const { createOrder } = useCreateOrder();
   const userProfile = useReactiveVar(userProfileVar);
   const { orderInfo } = useOrderInfo();
+  const { params } = useRoute();
 
   return (
     <View
@@ -192,7 +194,8 @@ function CheckoutResume(props) {
                 alert("Please accept privacy and policy");
                 return;
               }
-              createOrder({ data: undefined });
+              debugger;
+              createOrder({ data: params?.data });
             }}
             text={"PROCEED"}
           />

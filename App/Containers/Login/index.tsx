@@ -69,10 +69,10 @@ function LoginScreen(props) {
           console.log("found null GuestBuyer buyerId");
         } else {
           global.buyerId = buyerProfileByUserId?.buyerId;
-          storage.setLocalStorageValue(
-            loginRequestMemo.username,
-            buyerProfileByUserId.buyerId
-          );
+          // storage.setLocalStorageValue(
+          //   loginRequestMemo.username,
+          //   buyerProfileByUserId.buyerId
+          // );
 
           storage.setLocalStorageValue(
             storage.LOCAL_STORAGE_USER_PROFILE,

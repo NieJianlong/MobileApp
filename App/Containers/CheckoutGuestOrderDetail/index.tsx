@@ -85,8 +85,9 @@ function CheckoutGuestOrderDetail(props) {
 
   const onSubmit = async (data: BillingDetailsRequestForCreate) => {
     const data1 = { ...data, phoneNumber: "+91" + data.phoneNumber };
+    debugger;
     if (orderInfo.comeFromType === ComeFromType.checkout) {
-      NavigationService.navigate("CheckoutResumeScreen");
+      NavigationService.navigate("CheckoutResumeScreen", { data: data1 });
     } else {
       createOrder({ data: data1 });
     }

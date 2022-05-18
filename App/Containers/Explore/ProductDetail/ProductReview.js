@@ -11,6 +11,7 @@ import { useIncrementHelpfulCountMutation } from "../../../../generated/graphql"
 import useAlert from "../../../hooks/useAlert";
 import useLoading from "../../../hooks/useLoading";
 import colors from "../../../Themes/Colors";
+import { useRoute } from "@react-navigation/native";
 //render users' reviews for the product
 const renderUserReview = () => {
   return (
@@ -39,6 +40,7 @@ export default function ProductReview({
 }) {
   const { setAlert } = useAlert();
   const { setLoading } = useLoading();
+  const { params } = useRoute();
   const [incrementHelpfulCount] = useIncrementHelpfulCountMutation();
   return (
     <View style={styles.productReviewContainer}>
@@ -100,7 +102,7 @@ export default function ProductReview({
               </View>
             )} */}
             <View style={[styles.row, { marginTop: vs(15) }]}>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.btnGrey}
                 onPress={() => {
                   setLoading({ show: true });
@@ -154,7 +156,7 @@ export default function ProductReview({
                 <Text style={[styles.heading5Bold, { color: Colors.grey60 }]}>
                   REPORT
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             {/* 
             {comment.comment.reply.length > 0 && (
@@ -208,59 +210,3 @@ export default function ProductReview({
     </View>
   );
 }
-const comments = [
-  {
-    user: {
-      name: "Asley",
-      avatar:
-        "https://pbs.twimg.com/profile_images/631366930960551936/MswTZv39_400x400.png",
-    },
-    comment: {
-      title: "Absolutely love it!",
-      content:
-        "At vero eoset accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas mol.",
-      createdDate: "2019-09-12",
-      rating: 4.5,
-      photos: [],
-      like: 123,
-      reply: [],
-    },
-  },
-  {
-    user: {
-      name: "Brian",
-      avatar:
-        "https://pbs.twimg.com/profile_images/631366930960551936/MswTZv39_400x400.png",
-    },
-    comment: {
-      title: "Absolutely love it!",
-      content:
-        "At vero eoset accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas mol.",
-      createdDate: "2020-12-12",
-      rating: 4.5,
-      like: 13,
-      photos: [
-        "https://www.europeanceo.com/wp-content/uploads/2019/09/Private-islands.jpg",
-        "https://cdn.britannica.com/15/162615-131-0CBB2CBE/island-Caribbean.jpg",
-        "https://thumbor.thedailymeal.com/ZZtexrWGOq6hJ7jOzleSrg9P_1Q=/870x565/https://www.theactivetimes.com/sites/default/files/2019/07/15/shutterstock_526092568.jpg",
-        "https://a0.muscache.com/im/pictures/3d554f6c-6efa-422a-a5d6-6c442abe81a4.jpg?aki_policy=x_large",
-      ],
-      reply: [
-        {
-          user: {
-            name: "Apple",
-            avatar:
-              "https://pbs.twimg.com/profile_images/631366930960551936/MswTZv39_400x400.png",
-          },
-          comment: {
-            title: "",
-            content:
-              "At vero eoset accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas mol.",
-            createdDate: "2020-18-1",
-            like: 3,
-          },
-        },
-      ],
-    },
-  },
-];

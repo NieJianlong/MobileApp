@@ -26,6 +26,10 @@ import { t } from "react-native-tailwindcss";
 import RegisterGuestBuyerToBuyerScreen from "../RegisterGuestBuyerToBuyer";
 import { Portal, Text } from "react-native-paper";
 import LoginModalForm from "../LoginModalForm";
+import { TouchableOpacity, Image } from "react-native";
+import { Images, Colors } from "../../../App/Themes";
+import styles from "./styles";
+import NavigationService from "../../../App/Navigation/NavigationService";
 
 const initialState = {
   alert: {
@@ -199,6 +203,16 @@ function RootContainer() {
       )}
 
       <Modal visible={imageViewerVisible} transparent={true}>
+        <View style={styles.backContainer}>
+          <TouchableOpacity
+            style={styles.btnRoundContainer}
+            onPress={() => {
+              setImageViewer({ visible: false, images: [] });
+            }}
+          >
+            <Image style={styles.backIcon} source={Images.arrow_left} />
+          </TouchableOpacity>
+        </View>
         <ImageViewer
           imageUrls={images}
           onClick={() => {

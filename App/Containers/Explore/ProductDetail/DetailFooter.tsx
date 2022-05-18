@@ -130,7 +130,9 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     <SafeAreaView style={styles.footerSafeArea} edges={["bottom"]}>
       <QuantitySelector
         minimumValue={1}
-        maximumValue={currentVariant?.itemsAvailable}
+        maximumValue={
+          currentVariant?.itemsAvailable - currentVariant?.itemsSold
+        }
         value={quantity}
         onChange={(value) => {
           setQuantity(value);

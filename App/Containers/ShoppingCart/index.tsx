@@ -219,21 +219,30 @@ function ShoppingCart(props) {
                 return <Empty />;
               }}
               contentContainerStyle={{ paddingBottom: 60 }}
-              renderSectionHeader={() => (
-                <View
-                  style={{
-                    paddingHorizontal: AppConfig.paddingHorizontal,
-                    backgroundColor: "white",
-                    height: 80,
-                  }}
-                >
-                  <Button
-                    disabledColor={"grey"}
-                    onPress={onProceed}
-                    text="PROCEED TO CHECKOUT"
-                  />
-                </View>
-              )}
+              renderSectionHeader={() => {
+                let disabled = false;
+                if (finalData.find((sditem) => sditem.isAvailable)) {
+                  disabled = false;
+                } else {
+                  disabled = true;
+                }
+                return (
+                  <View
+                    style={{
+                      paddingHorizontal: AppConfig.paddingHorizontal,
+                      backgroundColor: "white",
+                      height: 80,
+                    }}
+                  >
+                    <Button
+                      disabled={disabled}
+                      disabledColor={"grey"}
+                      onPress={onProceed}
+                      text="PROCEED TO CHECKOUT"
+                    />
+                  </View>
+                );
+              }}
               renderSectionFooter={() => (
                 <View
                   style={{

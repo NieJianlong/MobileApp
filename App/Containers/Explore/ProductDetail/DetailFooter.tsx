@@ -22,6 +22,7 @@ import { ComeFromType } from "../../../Utils/utils";
 import { t } from "react-native-tailwindcss";
 import useOrderInfo from "../../../hooks/useOrderInfo";
 import { Page_CheckoutGuestOrderDetail } from "../../../Navigation/const";
+import { isEmpty } from "lodash";
 export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { dispatch } = useContext(AlertContext);
   const { realm } = useRealm();
@@ -41,9 +42,11 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
 
   const addToCart = () => {
     const shoppingCartId = nanoid();
-    if (!currentVariant.defaultVariant) {
-      currentVariant.defaultVariant = false;
-    }
+    debugger;
+    // if (isEmpty(currentVariant.defaultVariant)) {
+    //   currentVariant.defaultVariant = false;
+    // }
+
     realm.write(() => {
       if (cartInfo) {
         cartInfo.quantity = quantity;

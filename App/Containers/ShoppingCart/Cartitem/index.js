@@ -24,26 +24,8 @@ function Index(props) {
   const { realm } = useRealm();
   // Alert and AlertContext are not correct semantic names, very confusing,  @nsavage
   const Alert = useContext(AlertContext);
-  const {
-    product: { product, variant },
-    availble,
-    onPress,
-  } = props;
-  const [quantity, setQuantity] = useState(props.product.quantity);
-
-  useEffect(() => {
-    setQuantity(props.product.quantity);
-  }, [props.product.quantity]);
-  const tempProduct = realm
-    .objects("ShoppingCart")
-    .filtered("id == $0", props.product.id)[0];
-  console.log("currentProduct====================================");
-  console.log(tempProduct?.id);
-  console.log("====================================");
-
-  console.log("props.product.id====================================");
-  console.log(props.product.id);
-  console.log("====================================");
+  const { product, availble, onPress, variant, quantity, onChangeQuanlity } =
+    props;
 
   return (
     <TouchableOpacity
@@ -114,6 +96,7 @@ function Index(props) {
               disabled={!availble}
               onPress={() => {
                 if (quantity === 1) {
+                  onChangeQuanlity(0);
                   //dispatch({ type: "revomeCartCount", payload: product.id });
                   Alert.dispatch({
                     type: "changAlertState",
@@ -125,11 +108,7 @@ function Index(props) {
                     },
                   });
                 } else {
-                  realm.write(() => {
-                    tempProduct.quantity = quantity - 1;
-                  });
-                  setQuantity(quantity - 1);
-                  PubSub.publish("refresh-shoppingcart");
+                  onChangeQuanlity(quantity - 1);
                 }
               }}
             >
@@ -146,11 +125,7 @@ function Index(props) {
             <TouchableOpacity
               disabled={!availble}
               onPress={() => {
-                realm.write(() => {
-                  tempProduct.quantity = quantity + 1;
-                });
-                setQuantity(quantity + 1);
-                PubSub.publish("refresh-shoppingcart");
+                onChangeQuanlity(quantity + 1);
               }}
             >
               <Image style={styles.cartadd} source={images.shopcartAddImage} />
@@ -184,14 +159,9 @@ function Index(props) {
             style={styles.removebtn}
             // disabled={!availble}
             onPress={() => {
-              console.log("props.product=============", props.product);
-              realm.write(() => {
-                // Delete the task from the realm.
-                realm.delete(tempProduct);
-                // Discard the reference.
-                PubSub.publish("refresh-shoppingcart");
-                // props.product = null;
-              });
+              onChangeQuanlity(0);
+              // props.product = null;
+
               Alert.dispatch({
                 type: "changAlertState",
                 payload: {

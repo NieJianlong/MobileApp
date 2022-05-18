@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Text,
   Image,
+  ScrollView,
 } from "react-native";
 import Empty from "./Empty";
 import AddressBar from "../Explore/Components/AddressBar";
@@ -21,7 +22,10 @@ import NavigationService from "../../Navigation/NavigationService";
 import PubSub from "pubsub-js";
 import useRealm from "../../hooks/useRealm";
 import { localCartVar } from "../../Apollo/cache";
-import { useIsListingAvailableLazyQuery } from "../../../generated/graphql";
+import {
+  useIsListingAvailableLazyQuery,
+  IsListingAvailableInput,
+} from "../../../generated/graphql";
 import useOrderInfo from "../../hooks/useOrderInfo";
 import { ItemProps } from "../../hooks/useCreateOrder";
 import { ComeFromType } from "../../Utils/utils";
@@ -33,8 +37,11 @@ function ShoppingCart(props) {
   const { realm } = useRealm();
   const localCart = localCartVar();
   // const { addBilling } = AddBillingDetail();
-  const [mydatas, setMydatas] = useState([]);
+  const [requestArray, setRequestArray] = useState<IsListingAvailableInput[]>(
+    []
+  );
   const { orderInfo, setOrderInfo } = useOrderInfo();
+  const [finalData, setFinalData] = useState([]);
   const { updateMoneyInfo } = useOrderInfo();
 
   useEffect(() => {
@@ -47,23 +54,15 @@ function ShoppingCart(props) {
     if (query1) {
       query1.map((item) => {
         const newItem = {
-          id: item.id,
           listingId: item.listingId,
-          productId: item.productId,
           variantId: item.variantId,
           quantity: item.quantity,
-          variant: item.variant,
-          isDraft: item.isDraft,
-          addressId: item.addressId,
-          product: item.product,
-          created: item.created,
-          updated: item.updated,
         };
 
         datas.push(newItem);
       });
     } else {
-      setMydatas(datas);
+      setRequestArray(datas);
     }
     props.navigation.addListener("focus", () => {
       const query1 = realm
@@ -75,23 +74,15 @@ function ShoppingCart(props) {
       if (query1) {
         query1.map((item) => {
           const newItem = {
-            id: item.id,
             listingId: item.listingId,
-            productId: item.productId,
             variantId: item.variantId,
             quantity: item.quantity,
-            variant: item.variant,
-            isDraft: item.isDraft,
-            addressId: item.addressId,
-            product: item.product,
-            created: item.created,
-            updated: item.updated,
           };
           datas.push(newItem);
         });
-        setMydatas(datas);
+        setRequestArray(datas);
       } else {
-        setMydatas([]);
+        setRequestArray([]);
       }
     });
   }, []);
@@ -107,23 +98,15 @@ function ShoppingCart(props) {
       if (query1) {
         query1.map((item) => {
           const newItem = {
-            id: item.id,
             listingId: item.listingId,
-            productId: item.productId,
             variantId: item.variantId,
             quantity: item.quantity,
-            variant: item.variant,
-            isDraft: item.isDraft,
-            addressId: item.addressId,
-            product: item.product,
-            created: item.created,
-            updated: item.updated,
           };
           datas.push(newItem);
         });
-        setMydatas(datas);
+        setRequestArray(datas);
       } else {
-        setMydatas([]);
+        setRequestArray([]);
       }
     });
     return () => {
@@ -133,26 +116,36 @@ function ShoppingCart(props) {
     };
   }, [localCart.deliverAddress]);
 
-  const isAvailableList = useMemo(() => {
-    return mydatas?.map((item) => {
-      return {
-        listingId: item?.product?.listingId,
-        variantId: item.variantId ?? "",
-        quantity: item.quantity,
-      };
-    });
-  }, [mydatas]);
-  console.log("isAvailableList", isAvailableList);
-  const [queryAvailble, { data: availbleList }] =
+  console.log("isAvailableList", requestArray);
+  const [queryAvailble, { data: availbleList, loading }] =
     useIsListingAvailableLazyQuery({
-      variables: { listings: isAvailableList },
+      variables: { listings: requestArray },
     });
   useEffect(() => {
-    if (isAvailableList.length > 0) {
+    if (requestArray.length > 0) {
       queryAvailble();
     }
-  }, [isAvailableList]);
+  }, [requestArray]);
+  useEffect(() => {
+    setInterval(() => {
+      queryAvailble();
+    }, 3000);
+  }, []);
+  useEffect(() => {
+    if (availbleList) {
+      setFinalData(availbleList.isListingAvailable);
+    }
+  }, [availbleList]);
 
+  // const finalData = useMemo(() => {
+  //   if (availbleList?.isListingAvailable) {
+  //     return availbleList?.isListingAvailable ?? [];
+  //   } else {
+  //     return [];
+  //   }
+  // }, [availbleList?.isListingAvailable]);
+
+  // const finalData = availbleList?.isListingAvailable ?? [];
   /** nasavge thnks we should put the blocks of view code below into functions
    * to make the code more readable
    */
@@ -161,25 +154,22 @@ function ShoppingCart(props) {
     console.log("global.access_token", global.access_token);
     const itemArray = [];
     const allItems: ItemProps[] = [];
-    mydatas.map((item, index) => {
-      let itemAvailble = true;
-      if (availbleList) {
-        const i = availbleList.isListingAvailable[index];
-        itemAvailble = i?.isAvailable;
-      }
-      if (itemAvailble) {
+    finalData.map((item, index) => {
+      if (item.isAvailable) {
         itemArray.push({
-          listingId: item.product.listingId,
+          listingId: item.listingId,
           variantId: item.variantId,
-          quantity: item.quantity,
+          quantity: requestArray[index].quantity,
         });
 
         allItems.push({
-          listingId: item.product.listingId,
+          listingId: item.listingId,
           variantId: item.variantId,
-          quantity: item.quantity,
-          productDetails: Object.assign({}, item?.product),
-          variant: Object.assign({}, item.variant),
+          quantity: requestArray[index].quantity,
+          productDetails: item?.listing,
+          variant: item.listing?.listingVariants?.find(
+            (variantItem) => variantItem?.variantId === item.variantId
+          ),
         });
       }
     });
@@ -203,6 +193,10 @@ function ShoppingCart(props) {
     }
   };
 
+  console.log("finalData====================================");
+  console.log(finalData);
+  console.log("====================================");
+
   return (
     <CartContext.Provider>
       <View style={styles.container}>
@@ -210,102 +204,133 @@ function ShoppingCart(props) {
           style={styles.mainContainer}
           edges={["top", "left", "right"]}
         >
-          <SectionList
-            sections={mydatas.length > 0 ? [{ title: "", data: mydatas }] : []}
-            ListEmptyComponent={() => {
-              return <Empty />;
-            }}
-            contentContainerStyle={{ paddingBottom: 60 }}
-            renderSectionHeader={() => (
-              <View
-                style={{
-                  paddingHorizontal: AppConfig.paddingHorizontal,
-                  backgroundColor: "white",
-                  height: 80,
-                }}
-              >
-                <Button
-                  disabledColor={"grey"}
-                  onPress={onProceed}
-                  text="PROCEED TO CHECKOUT"
-                />
+          <ScrollView>
+            {finalData.length > 0 ? (
+              <View style={{ backgroundColor: "white" }}>
+                <AddressBar />
+                <CartSummary availbleList={availbleList} />
               </View>
-            )}
-            renderSectionFooter={() => (
-              <View
-                style={{
-                  paddingHorizontal: AppConfig.paddingHorizontal,
-                  backgroundColor: "white",
-                  height: 80,
-                }}
-              >
+            ) : null}
+            <SectionList
+              sections={
+                finalData.length > 0 ? [{ title: "", data: finalData }] : []
+              }
+              ListEmptyComponent={() => {
+                return <Empty />;
+              }}
+              contentContainerStyle={{ paddingBottom: 60 }}
+              renderSectionHeader={() => (
                 <View
                   style={{
-                    marginTop: 30,
-                    flexDirection: "row",
-                    alignItems: "center",
+                    paddingHorizontal: AppConfig.paddingHorizontal,
+                    backgroundColor: "white",
+                    height: 80,
                   }}
                 >
-                  <Image
-                    style={{
-                      width: s(28),
-                      height: s(28),
-                      resizeMode: "contain",
-                      marginRight: s(10),
-                    }}
-                    source={images.shopcartInfoImage}
+                  <Button
+                    disabledColor={"grey"}
+                    onPress={onProceed}
+                    text="PROCEED TO CHECKOUT"
                   />
-                  <View>
-                    <Text style={[styles.txtRegular, { color: colors.grey80 }]}>
-                      Remember that you will get your product once the
-                    </Text>
-                    <View style={styles.row}>
+                </View>
+              )}
+              renderSectionFooter={() => (
+                <View
+                  style={{
+                    paddingHorizontal: AppConfig.paddingHorizontal,
+                    backgroundColor: "white",
+                    height: 80,
+                  }}
+                >
+                  <View
+                    style={{
+                      marginTop: 30,
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Image
+                      style={{
+                        width: s(28),
+                        height: s(28),
+                        resizeMode: "contain",
+                        marginRight: s(10),
+                      }}
+                      source={images.shopcartInfoImage}
+                    />
+                    <View>
                       <Text
                         style={[styles.txtRegular, { color: colors.grey80 }]}
                       >
-                        number of slices has been reached
+                        Remember that you will get your product once the
                       </Text>
-                      <TouchableOpacity
-                        onPress={() => {
-                          props.navigation.navigate("LearnMoreScreen");
-                        }}
-                      >
+                      <View style={styles.row}>
                         <Text
-                          style={[
-                            styles.txtRegular,
-                            { color: colors.secondary00, paddingLeft: 6 },
-                          ]}
+                          style={[styles.txtRegular, { color: colors.grey80 }]}
                         >
-                          Learn more
+                          number of slices has been reached
                         </Text>
-                      </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => {
+                            props.navigation.navigate("LearnMoreScreen");
+                          }}
+                        >
+                          <Text
+                            style={[
+                              styles.txtRegular,
+                              { color: colors.secondary00, paddingLeft: 6 },
+                            ]}
+                          >
+                            Learn more
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
-            )}
-            stickySectionHeadersEnabled={true}
-            stickyHeaderIndices={0}
-            ListHeaderComponent={() => {
-              return mydatas.length > 0 ? (
-                <View style={{ backgroundColor: "white" }}>
-                  <AddressBar />
-                  <CartSummary availbleList={availbleList} />
-                </View>
-              ) : null;
-            }}
-            renderItem={({ item, index }) => {
-              let itemAvailble = true;
-              if (availbleList) {
-                const i = availbleList.isListingAvailable[index];
-                itemAvailble = i?.isAvailable;
-              }
-              return (
-                <CartItem key={index} product={item} availble={itemAvailble} />
-              );
-            }}
-            keyExtractor={(item, index) => `lll${index}`}
-          />
+              )}
+              stickySectionHeadersEnabled={true}
+              stickyHeaderIndices={0}
+              renderItem={({ item, index }) => {
+                let variant = null;
+                if (item.listing?.listingVariants?.length === 0) {
+                  variant = item.listing?.listingVariants[0];
+                } else {
+                  variant = item.listing?.listingVariants?.find(
+                    (variantItem) => variantItem?.variantId === item.variantId
+                  );
+                }
+                const requsetItem = requestArray[index];
+                return (
+                  <CartItem
+                    key={index}
+                    product={item.listing}
+                    variant={variant}
+                    availble={item.isAvailable}
+                    quantity={requsetItem?.quantity ?? 0}
+                    onChangeQuanlity={(quantity) => {
+                      // Open a transaction.
+                      realm.write(() => {
+                        const queryItems = realm
+                          .objects("ShoppingCart")
+                          .filtered("addressId == $0", localCart.deliverAddress)
+                          .filtered("listingId == $0", item.listingId)
+                          .filtered("variantId == $0", item.variantId)
+                          .filtered("quantity > 0")
+                          .filtered("isDraft == false");
+                        const queryItem = queryItems[0];
+                        // Update some properties on the instance.
+                        // These changes are saved to the realm.
+                        queryItem.quantity = quantity;
+                      });
+                      PubSub.publish("refresh-shoppingcart");
+                    }}
+                  />
+                );
+              }}
+              keyExtractor={(item, index) => `lll${index}`}
+            />
+          </ScrollView>
         </SafeAreaView>
       </View>
     </CartContext.Provider>

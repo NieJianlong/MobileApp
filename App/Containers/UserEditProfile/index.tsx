@@ -55,6 +55,7 @@ import jwt_decode from "jwt-decode";
 import { useNavigation } from "@react-navigation/native";
 import { t } from "react-native-tailwindcss";
 import PubSub from "pubsub-js";
+import useAlert from "../../hooks/useAlert";
 /**
  * @description:User edit page
  * @param {*} props
@@ -81,6 +82,7 @@ function UserEditProfile(props) {
   useEffect(() => {
     refetch && refetch();
   }, []);
+  const { setAlert } = useAlert();
 
   const { dispatch } = useContext(AlertContext);
 
@@ -100,6 +102,18 @@ function UserEditProfile(props) {
       ? ""
       : userProfile?.buyerProfile?.phoneNumber.replace("+91", "")
   );
+  useEffect(() => {
+    if (userProfile) {
+      setNewLastName(userProfile?.buyerProfile?.firstName ?? "");
+      setNewLastName(userProfile?.buyerProfile?.lastName ?? "");
+      setNewEmail(userProfile?.buyerProfile?.email ?? "");
+      setNewPhoneNumber(
+        isEmpty(userProfile?.buyerProfile?.phoneNumber)
+          ? ""
+          : userProfile?.buyerProfile?.phoneNumber.replace("+91", "")
+      );
+    }
+  }, [userProfile]);
   const inputs = [
     {
       placeholder: "First Name",
@@ -170,6 +184,15 @@ function UserEditProfile(props) {
     onError: (err) => {
       console.log("=====Res edit err========", err);
       dispatch({ type: "hideloading" });
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: err.message,
+          color: colors.error,
+          title: "Faild",
+        },
+      });
     },
   });
   const sheetRef = useRef();

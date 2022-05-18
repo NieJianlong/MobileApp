@@ -161,7 +161,7 @@ export default function ProductCarousel({ product }) {
         sliderWidth={metrics.screenWidth}
         itemWidth={metrics.screenWidth}
         onSnapToItem={onSnapToItem}
-        enableMomentum={false}
+        enableMomentum={true}
         decelerationRate={0}
        
       />

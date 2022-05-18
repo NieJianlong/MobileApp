@@ -125,13 +125,15 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   const disabled = useMemo(() => {
     return currentVariant?.itemsSold === currentVariant?.itemsAvailable;
   }, [currentVariant]);
-
+  debugger;
   return (
     <SafeAreaView style={styles.footerSafeArea} edges={["bottom"]}>
       <QuantitySelector
         minimumValue={1}
         maximumValue={
-          currentVariant?.itemsAvailable - currentVariant?.itemsSold
+          currentVariant?.itemsAvailable - currentVariant?.itemsSold > 1
+            ? currentVariant?.itemsAvailable - currentVariant?.itemsSold
+            : 100
         }
         value={quantity}
         onChange={(value) => {

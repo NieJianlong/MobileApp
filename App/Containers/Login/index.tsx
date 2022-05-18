@@ -322,6 +322,7 @@ function LoginScreen(props) {
             onSubmitEditing={() => passwordInput?.current.getInnerRef().focus()}
             returnKeyType={"next"}
             onChangeText={(text) => setLoginInput(text)}
+            textAlignVertical={'center'}
           />
 
           <PasswordInput

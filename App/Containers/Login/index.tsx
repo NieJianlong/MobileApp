@@ -321,8 +321,14 @@ function LoginScreen(props) {
             placeholder={"Email or phone number"}
             onSubmitEditing={() => passwordInput?.current.getInnerRef().focus()}
             returnKeyType={"next"}
-            onChangeText={(text) => setLoginInput(text)}
-            textAlignVertical={'center'}
+            onChangeText={(text) => {
+              setLoginInput(text);
+            }}
+            onBlur={() => {
+              setLoginInput(loginInput.trim());
+            }}
+            textAlignVertical={"center"}
+            value={loginInput ? loginInput : ""}
           />
 
           <PasswordInput

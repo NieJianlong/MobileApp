@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Keyboard,
   useWindowDimensions,
+  ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -322,6 +323,7 @@ function LoginScreen(props) {
             onSubmitEditing={() => passwordInput?.current.getInnerRef().focus()}
             returnKeyType={"next"}
             onChangeText={(text) => setLoginInput(text)}
+            blurOnSubmit={false}
           />
 
           <PasswordInput

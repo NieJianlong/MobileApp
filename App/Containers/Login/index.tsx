@@ -331,6 +331,7 @@ function LoginScreen(props) {
             onSubmitEditing={onSignIn}
             returnKeyType={"done"}
             onChangeText={(text) => setPsswd(text)}
+            autoCapitalize = 'none'
           />
 
           <View style={{ height: keyboardHeight - vs(100) }} />

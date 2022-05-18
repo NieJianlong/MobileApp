@@ -195,10 +195,10 @@ function RateOrderScreen() {
   const { dispatch } = useContext(AlertContext);
   const [stars, setStars] = useState(0);
   const [addProductReview] = useAddProductReviewMutation({
-    onError: () => {
+    onError: (res) => {
       setAlert({
         color: colors.error,
-        title: "Review about the prodcut Failed",
+        title: String(res),
 
         visible: true,
         onDismiss: () => {

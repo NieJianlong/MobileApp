@@ -56,7 +56,7 @@ export default function ProductInfo({
   useEffect(() => {
     let refresh = PubSub.subscribe("show-pick-up-sheet", (msg, callback) => {
       togglePickupFromSellerSheet(callback);
-      debugger;
+      
       if (callback && pickUp) {
         callback && callback();
       }

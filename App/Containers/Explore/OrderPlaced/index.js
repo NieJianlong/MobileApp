@@ -50,7 +50,7 @@ function OrderPlaced(props) {
   }, [data]);
 
   const renderBody = () => {
-    debugger;
+    
     return (
       <ScrollView style={styles.body}>
         <View style={styles.textArea}>

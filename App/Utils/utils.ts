@@ -56,7 +56,7 @@ export function usePaymentConfigration() {
 
   const { razorpayVerifyPaymentSignature } = useRazorVerifyPayment();
   const getPaymentConfigration = (orderId: string, amount: number) => {
-    debugger;
+    
     const options = {
       description: "Wholesale Marketplace",
       image:

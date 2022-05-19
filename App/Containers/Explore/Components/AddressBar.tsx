@@ -87,7 +87,7 @@ export default function AddressBar() {
         if (err.message === "Buyer does not have Delivery address") {
           setShowMap({ mapVisible: true });
         }
-        debugger;
+        
         handleError();
       },
       onCompleted: (result) => {

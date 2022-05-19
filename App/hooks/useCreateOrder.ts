@@ -65,7 +65,7 @@ export const useCreateOrder = () => {
     let currentBilling = 0;
     let originalBilling = 0;
     let deliveryFess = 0;
-    debugger;
+    
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
       let itemAvailble: boolean = true;
@@ -145,7 +145,7 @@ export const useCreateOrder = () => {
     availbleList?: IsListingAvailableFieldFragment[];
   }) => {
     setLoading({ show: true });
-    debugger;
+    
     let walletBalance = 0;
     if (userProfile.isAuth) {
       const { data: balanceData } = await getBuyerSalamiWalletBalance();

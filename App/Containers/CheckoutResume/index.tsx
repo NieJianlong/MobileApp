@@ -194,7 +194,7 @@ function CheckoutResume(props) {
                 alert("Please accept privacy and policy");
                 return;
               }
-              debugger;
+              
               createOrder({ data: params?.data });
             }}
             text={"PROCEED"}

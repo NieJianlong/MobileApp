@@ -83,9 +83,9 @@ export default function AddressSheetContent(props) {
   }, []);
   useEffect(() => {
     let refresh = PubSub.subscribe("delete-address", (name, item) => {
-      debugger;
+      
       getLocalStorageValue(global.buyerId + "Address").then(async (res) => {
-        debugger;
+        
         if (!isEmpty(res)) {
           const result = JSON.parse(res);
           //如果当前选中的被删除，怎需要重新获取

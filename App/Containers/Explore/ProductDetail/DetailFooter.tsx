@@ -42,7 +42,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
 
   const addToCart = () => {
     const shoppingCartId = nanoid();
-    debugger;
+    
     // if (isEmpty(currentVariant.defaultVariant)) {
     //   currentVariant.defaultVariant = false;
     // }
@@ -81,7 +81,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   };
 
   const toggleConfirmOrderSheet = async () => {
-    debugger;
+    
     const item = {
       listingId: product.listingId,
       quantity,
@@ -125,7 +125,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   const disabled = useMemo(() => {
     return currentVariant?.itemsSold === currentVariant?.itemsAvailable;
   }, [currentVariant]);
-  debugger;
+  
   return (
     <SafeAreaView style={styles.footerSafeArea} edges={["bottom"]}>
       <QuantitySelector

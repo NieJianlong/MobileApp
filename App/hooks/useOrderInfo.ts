@@ -85,7 +85,7 @@ const useOrderInfo = () => {
     };
 
     setOrderInfo(newItem);
-    debugger;
+    
   };
   const {
     currentBilling,

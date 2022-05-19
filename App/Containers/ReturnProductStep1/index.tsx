@@ -46,7 +46,7 @@ function ReturnProductStep1() {
       ) ?? null,
     [params.product]
   );
-  debugger;
+  
   const [returnReasonPolicyId, setReturnReasonPolicyId] = useState<string>("");
   const [submitOrderReturnRequest] = useSubmitOrderReturnRequestMutation({
     onCompleted: (res) => {

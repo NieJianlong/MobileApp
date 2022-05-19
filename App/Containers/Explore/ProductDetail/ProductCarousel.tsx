@@ -161,6 +161,9 @@ export default function ProductCarousel({ product }) {
         sliderWidth={metrics.screenWidth}
         itemWidth={metrics.screenWidth}
         onSnapToItem={onSnapToItem}
+        enableMomentum={true}
+        decelerationRate={0}
+       
       />
       <View style={styles.row1}>
         <TouchableOpacity

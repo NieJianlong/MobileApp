@@ -14,7 +14,6 @@ import { vs } from "react-native-size-matters";
 
 import { TextInput, Button, PasswordInput } from "../../Components";
 import styles from "./styles";
-import useEmailList from "../../hooks/useEmailList";
 
 /**
  * validation and jwt modules
@@ -38,9 +37,7 @@ import { Controller, useForm } from "react-hook-form";
 function LoginScreen(props) {
   // refs
   // let passwordInput = null;
-  const { setEmailList } = useEmailList();
   const [fetchedEmail, setFetchedEmail] = useState([]);
-  const hoxEmailList = useEmailList();
   const passwordInput = useRef();
   const [savedEmail, setSavedEmail] = useState();
   const [showEmailList, setShowEmailList] = useState(false);
@@ -63,7 +60,6 @@ function LoginScreen(props) {
   const emailRetrieve = async () => {
     try {
       const value = await AsyncStorage.getItem("emailList");
-      console.log("see async storage", value);
       setFetchedEmail(JSON.parse(value));
     } catch (error) {
       console.log("error retrieve");
@@ -328,11 +324,14 @@ function LoginScreen(props) {
   const sampleData = ["jonathan@gmail.com"];
 
   const storeEmail = async () => {
-    const val = [...fetchedEmail, savedEmail];
-    try {
-      await AsyncStorage.setItem("emailList", JSON.stringify(val));
-    } catch (error) {
-      console.log("error saving data");
+    const isExisting = fetchedEmail.find((data) => data === savedEmail);
+    if (isExisting === undefined) {
+      const val = [...fetchedEmail, savedEmail];
+      try {
+        await AsyncStorage.setItem("emailList", JSON.stringify(val));
+      } catch (error) {
+        console.log("error saving data");
+      }
     }
   };
 
@@ -342,8 +341,8 @@ function LoginScreen(props) {
     } catch (error) {
       console.log("error deleting email", error);
     }
-  }
-  
+  };
+
   const deleteEmail = (valTodelete) => {
     const filteredData = fetchedEmail.filter((item) => item !== valTodelete);
     setFetchedEmail(filteredData);
@@ -369,7 +368,7 @@ function LoginScreen(props) {
           style={styles.deleteBtn}
           onPress={() => deleteEmail(item)}
         >
-          <Image source={Images.likeMed} style={styles.icShare} />
+          <Image source={Images.trash} style={styles.icDelete} />
         </TouchableOpacity>
       </View>
     );
@@ -395,12 +394,13 @@ function LoginScreen(props) {
                   setShowEmailList(false);
                 }}
               >
-                <Image source={Images.likeMed} style={styles.icShare} />
+                <Image source={Images.crossMedium} style={styles.icClose} />
               </TouchableOpacity>
               <FlatList
                 style={styles.flatListstyle}
                 data={fetchedEmail}
                 renderItem={renderItem}
+                showsVerticalScrollIndicator={false}
               />
             </View>
           )}
@@ -440,7 +440,7 @@ function LoginScreen(props) {
                   }}
                   textAlignVertical={"center"}
                   onFocus={() => {
-                    console.log("see the async emaillilst", fetchedEmail);
+                    onChange(savedEmail);
                     if (fetchedEmail.length !== 0) {
                       setShowEmailList(true);
                     }

@@ -215,7 +215,6 @@ const MapScreen = () => {
           style={[
             t.bgPrimary,
             t.h12,
-
             { borderRadius: 16 },
             t.itemsCenter,
             t.justifyCenter,
@@ -227,7 +226,12 @@ const MapScreen = () => {
               payload: {
                 showSheet: true,
                 height: 600,
-                children: () => <AddLocationSheetContent {...location} locationDetails = {location} />,
+                children: () => (
+                  <AddLocationSheetContent
+                    {...location}
+                    locationDetails={location}
+                  />
+                ),
                 sheetTitle: "",
               },
             });

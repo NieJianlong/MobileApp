@@ -25,7 +25,10 @@ import jwt_decode from "jwt-decode";
 
 import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
-import { useBuyerProfileByUserIdLazyQuery } from "../../../generated/graphql";
+import {
+  useBuyerProfileByUserIdLazyQuery,
+  useSendOtpCodeMutation,
+} from "../../../generated/graphql";
 import { Images } from "../../Themes";
 import { t } from "react-native-tailwindcss";
 import useLogin from "../../hooks/useLogin";
@@ -106,6 +109,7 @@ function LoginScreen(props) {
   const { dispatch } = useContext(AlertContext);
 
   let [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [resendCode] = useSendOtpCodeMutation();
 
   const loginRequestMemo = useMemo(() => {
     let ret = validator.loginDifferentiator(getValues("username"));

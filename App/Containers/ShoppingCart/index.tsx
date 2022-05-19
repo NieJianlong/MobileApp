@@ -127,9 +127,13 @@ function ShoppingCart(props) {
     }
   }, [requestArray]);
   useEffect(() => {
-    setInterval(() => {
+    let timer = setInterval(() => {
       queryAvailble();
     }, 3000);
+    // props.navigation.addListener("blur", () => {});
+    return () => {
+      clearInterval(timer);
+    };
   }, []);
   useEffect(() => {
     if (availbleList) {

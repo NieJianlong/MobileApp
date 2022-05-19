@@ -42,6 +42,8 @@ import {
   BuyerProfileByUserIdQuery,
   BuyerProfileByUserIdDocument,
   BuyerProfileDocument,
+  useSendOtpCodeMutation,
+  ValidationType,
 } from "../../../generated/graphql";
 import { isEmpty, omit } from "lodash";
 import {
@@ -85,6 +87,7 @@ function UserEditProfile(props) {
   const { setAlert } = useAlert();
 
   const { dispatch } = useContext(AlertContext);
+  const [resendCode] = useSendOtpCodeMutation();
 
   const [showBottom, setShowBottom] = useState(true);
   const [newAvatar, setNewAvatar] = useState(null);
@@ -166,6 +169,7 @@ function UserEditProfile(props) {
       },
     ],
     onCompleted: (res) => {
+      debugger;
       console.log("=====Res edit========", res);
       PubSub.publish("refresh-buyer-profile");
       dispatch({ type: "hideloading" });
@@ -179,6 +183,46 @@ function UserEditProfile(props) {
             title: "Profile Changed!",
           },
         });
+      }
+      if (
+        !res.updateBuyerProfile?.phoneNumberVerified ||
+        !res.updateBuyerProfile?.emailVerified
+      ) {
+        resendCode({
+          variables: {
+            sendCodeRequest: {
+              userId: res?.updateBuyerProfile?.userId ?? "",
+              validationType: !res.updateBuyerProfile?.phoneNumberVerified
+                ? ValidationType.Email
+                : ValidationType.Sms,
+            },
+          },
+          context: {
+            headers: {
+              isPrivate: true,
+            },
+          },
+          onCompleted: async () => {
+            dispatch({
+              type: "changLoading",
+              payload: false,
+            });
+            getLocalStorageValue;
+            NavigationService.navigate("OTPScreen", {
+              fromScreen: "RegisterScreen",
+              phone: res.updateBuyerProfile?.phoneNumber,
+              password: psswd?.trim(),
+              userId: decoded?.sub,
+            });
+          },
+          onError: () => {
+            dispatch({
+              type: "changLoading",
+              payload: false,
+            });
+          },
+        });
+        return;
       }
     },
     onError: (err) => {

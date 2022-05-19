@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Keyboard,
   useWindowDimensions,
+  ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -329,6 +330,7 @@ function LoginScreen(props) {
             }}
             textAlignVertical={"center"}
             value={loginInput ? loginInput : ""}
+            blurOnSubmit={false}
           />
 
           <PasswordInput

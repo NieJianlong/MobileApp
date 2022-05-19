@@ -33,6 +33,7 @@ class CustomTextInput extends Component {
       returnKeyType,
       textAlignVertical,
       isPhoneNo,
+      blurOnSubmit,
     } = this.props;
 
     return (
@@ -70,6 +71,7 @@ class CustomTextInput extends Component {
               onSubmitEditing={onSubmitEditing}
               returnKeyType={returnKeyType}
               textAlignVertical={textAlignVertical ?? "top"}
+              blurOnSubmit={blurOnSubmit ?? false}
             />
           </View>
         </View>

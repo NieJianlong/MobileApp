@@ -353,7 +353,11 @@ function LoginScreen(props) {
                   }
                   value={value}
                   returnKeyType={"next"}
-                  onChangeText={onChange}
+                  onChangeText={(text) => {
+                    text = text.trim();
+                    onChange(text);
+                  }}
+                  textAlignVertical={"center"}
                 />
               )}
               name="username"

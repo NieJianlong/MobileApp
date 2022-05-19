@@ -28,7 +28,7 @@ const App = () => {
         console.warn(e);
       } finally {
         // Tell the application to render
-        setStatusBar({ hidden: false, color: color });
+        setStatusBar({ hidden: false, color: "#CC0000" });
       }
     }
 

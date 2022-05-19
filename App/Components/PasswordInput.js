@@ -24,7 +24,8 @@ class PasswordInput extends Component {
       onChangeText,
       onSubmitEditing,
       returnKeyType,
-      autoCapitalize
+      autoCapitalize,
+      onFocus,
     } = this.props;
 
     return (
@@ -42,6 +43,7 @@ class PasswordInput extends Component {
             onSubmitEditing={onSubmitEditing}
             returnKeyType={returnKeyType}
             autoCapitalize={autoCapitalize}
+            onFocus={onFocus ? onFocus : ""}
           />
           <TouchableOpacity
             style={styles.btnView}

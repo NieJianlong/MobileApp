@@ -23,6 +23,7 @@ import { t } from "react-native-tailwindcss";
 import useOrderInfo from "../../../hooks/useOrderInfo";
 import { Page_CheckoutGuestOrderDetail } from "../../../Navigation/const";
 import { isEmpty } from "lodash";
+import useAlert from "../../../hooks/useAlert";
 export default function DetailFooter({ product, currentVariant, pickUp }) {
   const { dispatch } = useContext(AlertContext);
   const { realm } = useRealm();
@@ -30,6 +31,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
   const { orderInfo, updateMoneyInfo } = useOrderInfo();
+  useAlert();
 
   const info = realm
     .objects("ShoppingCart")
@@ -37,12 +39,15 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     .filtered("addressId == $0", localCartVar.deliverAddress)
     .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
   const [cartInfo, setCartInfo] = useState(info);
-  const [quantity, setQuantity] = useState(info?.quantity || 1);
+  const initQuanlity =
+    product.minSoldQuantity !== null ? product.minSoldQuantity : 1;
+  // debugger;
+  const [quantity, setQuantity] = useState(info?.quantity || initQuanlity);
   const { createOrder } = useCreateOrder();
 
   const addToCart = () => {
     const shoppingCartId = nanoid();
-    
+
     // if (isEmpty(currentVariant.defaultVariant)) {
     //   currentVariant.defaultVariant = false;
     // }
@@ -81,7 +86,6 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   };
 
   const toggleConfirmOrderSheet = async () => {
-    
     const item = {
       listingId: product.listingId,
       quantity,
@@ -125,10 +129,11 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   const disabled = useMemo(() => {
     return currentVariant?.itemsSold === currentVariant?.itemsAvailable;
   }, [currentVariant]);
-  
+
   return (
     <SafeAreaView style={styles.footerSafeArea} edges={["bottom"]}>
       <QuantitySelector
+        minSoldQuantity={initQuanlity}
         minimumValue={1}
         maximumValue={
           currentVariant?.itemsAvailable - currentVariant?.itemsSold > 1

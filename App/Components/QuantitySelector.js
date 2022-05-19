@@ -1,21 +1,41 @@
 import React, { useState } from "react";
 import { Text, View, TouchableOpacity, Image } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
+import useAlert from "../hooks/useAlert";
 import { Fonts, Colors, Images, ApplicationStyles } from "../Themes";
+import colors from "../Themes/Colors";
 import Slider from "./CustomSlider";
 
 function QuantitySelector(props) {
   const [currentValue, setCurrentValue] = useState(props.value);
+  const { setAlert, visible } = useAlert();
 
-  const { disabled, label, minimumValue, maximumValue, onChange } = props;
+  const {
+    disabled,
+    label,
+    minimumValue,
+    maximumValue,
+    onChange,
+    minSoldQuantity,
+  } = props;
 
   return (
     <View style={styles.row}>
       <TouchableOpacity
         onPress={() => {
-          if (currentValue > minimumValue) {
+          if (currentValue > minSoldQuantity) {
             setCurrentValue(currentValue - 1);
             onChange(currentValue - 1);
+          } else {
+            !visible &&
+              setAlert({
+                color: colors.warning,
+                title: `Purchase a minimum of ${minSoldQuantity} units of this product`,
+                visible: true,
+                onDismiss: () => {
+                  setAlert({ visible: false });
+                },
+              });
           }
         }}
         style={styles.btnRoundContainer}
@@ -26,14 +46,16 @@ function QuantitySelector(props) {
       <Text style={styles.txtMinimumValue}>{minimumValue}</Text>
 
       <Slider
-        minimumValue={minimumValue}
+        minimumValue={minSoldQuantity}
         maximumValue={maximumValue}
         value={currentValue}
         step={1}
         style={styles.sliderContainer}
         onValueChange={(t) => {
-          setCurrentValue(t);
-          onChange(t);
+          if (t >= minSoldQuantity) {
+            setCurrentValue(t);
+            onChange(t);
+          }
         }}
         minimumTrackTintColor={Colors.grey10}
         maximumTrackTintColor={Colors.grey10}

@@ -69,6 +69,10 @@ export default function LaunchScreen() {
         const { data } = await runTokenFlow({ username, password });
         let access_token = data.access_token;
         let decoded = jwt_decode(access_token);
+        console.log("====================================");
+        console.log(decoded.realm_access.roles);
+        console.log("====================================");
+
         global.access_token = access_token;
         global.userProfileId = decoded.sub;
         getBuyerId();

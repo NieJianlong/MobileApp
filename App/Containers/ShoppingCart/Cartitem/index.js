@@ -18,10 +18,12 @@ import { AlertContext } from "../../Root/GlobalContext";
 import useRealm from "../../../hooks/useRealm";
 import BigNumber from "bignumber.js";
 import { t } from "react-native-tailwindcss";
+import useAlert from "../../../hooks/useAlert";
 const defultUrl =
   "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000";
 function Index(props) {
   const { realm } = useRealm();
+  const { setAlert, visible } = useAlert();
   // Alert and AlertContext are not correct semantic names, very confusing,  @nsavage
   const Alert = useContext(AlertContext);
   const { product, availble, onPress, variant, quantity, onChangeQuanlity } =
@@ -108,6 +110,18 @@ function Index(props) {
                     },
                   });
                 } else {
+                  if (quantity - 1 < product.minSoldQuantity) {
+                    !visible &&
+                      setAlert({
+                        color: colors.warning,
+                        title: `Purchase a minimum of ${product.minSoldQuantity} units of this product`,
+                        visible: true,
+                        onDismiss: () => {
+                          setAlert({ visible: false });
+                        },
+                      });
+                    return;
+                  }
                   onChangeQuanlity(quantity - 1);
                 }
               }}

@@ -166,6 +166,21 @@ function LoginScreen(props) {
               global.access_token = access_token;
               // global.userProfileId = decoded.sub;
               let decoded = jwt_decode(access_token);
+              console.log("====================================");
+              console.log(decoded.realm_access.roles);
+              console.log("====================================");
+              if (decoded.realm_access.roles.indexOf("buyer") < 0) {
+                dispatch({
+                  type: "changAlertState",
+                  payload: {
+                    visible: true,
+                    message: "Check Credentials",
+                    color: colors.error,
+                    title: "This is not a buyer account",
+                  },
+                });
+                return;
+              }
               // phone_number_verified
               //&& !decoded.email_verified
               // if (!decoded.phone_number_verified && !decoded.email_verified) {

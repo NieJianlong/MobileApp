@@ -5,7 +5,10 @@ import {
   TouchableOpacity,
   Keyboard,
   useWindowDimensions,
+  FlatList,
+  Image,
 } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 
@@ -37,7 +40,10 @@ import { Controller, useForm } from "react-hook-form";
 function LoginScreen(props) {
   // refs
   // let passwordInput = null;
+  const [fetchedEmail, setFetchedEmail] = useState([]);
   const passwordInput = useRef();
+  const [savedEmail, setSavedEmail] = useState();
+  const [showEmailList, setShowEmailList] = useState(false);
   const { showCloseButton, setLogin, onDismiss } = useLogin();
   const {
     control,
@@ -53,6 +59,19 @@ function LoginScreen(props) {
       password: "",
     },
   });
+
+  const emailRetrieve = async () => {
+    try {
+      const value = await AsyncStorage.getItem("emailList");
+      setFetchedEmail(JSON.parse(value));
+    } catch (error) {
+      console.log("error retrieve");
+    }
+  };
+
+  useEffect(() => {
+    emailRetrieve();
+  }, []);
 
   const [getBuerIdProfile] = useBuyerProfileByUserIdLazyQuery({
     onError: (err) => {
@@ -148,7 +167,10 @@ function LoginScreen(props) {
   const onSignIn = async (data: { username: string; password: string }) => {
     // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
     let ret = validator.loginDifferentiator(data.username);
+    // setEmailList({ emailListed: sampleData });
+    storeEmail();
     if (ret.isValid) {
+      // setEmailList({ emailListed: sampleData });
       // we are good so we can test for email or phone
       if (ret.isEmail || ret.isPhone) {
         let loginRequest = {
@@ -157,6 +179,7 @@ function LoginScreen(props) {
             : data.username?.trim(),
           password: data.password?.trim(),
         };
+
         // console.log(profile.data.userProfileVar.email)// to-do remove
         dispatch({
           type: "changLoading",
@@ -317,6 +340,59 @@ function LoginScreen(props) {
   };
   const { width, height } = useWindowDimensions();
 
+  const sampleData = ["jonathan@gmail.com"];
+
+  const storeEmail = async () => {
+    const isExisting = fetchedEmail.find((data) => data === savedEmail);
+    if (isExisting === undefined) {
+      const val = [...fetchedEmail, savedEmail];
+      try {
+        await AsyncStorage.setItem("emailList", JSON.stringify(val));
+      } catch (error) {
+        console.log("error saving data");
+      }
+    }
+  };
+
+  const deleteEmailAsync = async (data) => {
+    try {
+      await AsyncStorage.setItem("emailList", JSON.stringify(data));
+    } catch (error) {
+      console.log("error deleting email", error);
+    }
+  };
+
+  const deleteEmail = (valTodelete) => {
+    const filteredData = fetchedEmail.filter((item) => item !== valTodelete);
+    setFetchedEmail(filteredData);
+    deleteEmailAsync(filteredData);
+    if (filteredData.length === 0) {
+      setShowEmailList(false);
+    }
+  };
+
+  const renderItem = ({ item }) => {
+    return (
+      <View style={styles.btnContainer}>
+        <TouchableOpacity
+          style={styles.emailListBtn}
+          onPress={() => {
+            setSavedEmail(item);
+            setShowEmailList(false);
+          }}
+        >
+          <Text>{item}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.deleteBtn}
+          onPress={() => deleteEmail(item)}
+        >
+          <Image source={Images.trash} style={styles.icDelete} />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View style={[t.absolute, t.left0, t.top0, { width, height }, t.bgWhite]}>
       <SafeAreaView
@@ -329,6 +405,25 @@ function LoginScreen(props) {
           <Text style={styles.txt2}>
             Join purchases to get what{"\n"}you want with great discounts
           </Text>
+          {showEmailList && (
+            <View style={styles.emailListContainer}>
+              <TouchableOpacity
+                style={styles.btnClose}
+                onPress={() => {
+                  setShowEmailList(false);
+                }}
+              >
+                <Image source={Images.crossMedium} style={styles.icClose} />
+              </TouchableOpacity>
+              <FlatList
+                style={styles.flatListstyle}
+                data={fetchedEmail}
+                renderItem={renderItem}
+                showsVerticalScrollIndicator={false}
+              />
+            </View>
+          )}
+
           <View>
             <Controller
               control={control}
@@ -355,13 +450,20 @@ function LoginScreen(props) {
                   onSubmitEditing={() =>
                     passwordInput?.current.getInnerRef().focus()
                   }
-                  value={value}
+                  value={savedEmail ? savedEmail : value}
                   returnKeyType={"next"}
                   onChangeText={(text) => {
                     text = text.trim();
                     onChange(text);
+                    setSavedEmail(text);
                   }}
                   textAlignVertical={"center"}
+                  onFocus={() => {
+                    onChange(savedEmail);
+                    if (fetchedEmail.length !== 0) {
+                      setShowEmailList(true);
+                    }
+                  }}
                 />
               )}
               name="username"
@@ -398,6 +500,10 @@ function LoginScreen(props) {
                   onSubmitEditing={handleSubmit(onSignIn)}
                   returnKeyType={"done"}
                   onChangeText={onChange}
+                  autoCapitalize="none"
+                  onFocus={() => {
+                    setShowEmailList(false);
+                  }}
                 />
               )}
               name="password"

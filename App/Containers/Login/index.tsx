@@ -441,10 +441,8 @@ function LoginScreen(props) {
                   textAlignVertical={"center"}
                   onFocus={() => {
                     onChange(savedEmail);
-                    if (fetchedEmail) {
-                      if (fetchedEmail.length !== 0) {
-                        setShowEmailList(true);
-                      }
+                    if (fetchedEmail && fetchedEmail.length !== 0) {
+                      setShowEmailList(true);
                     }
                   }}
                 />

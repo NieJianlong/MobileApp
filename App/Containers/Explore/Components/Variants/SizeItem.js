@@ -3,14 +3,22 @@ import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { t } from "react-native-tailwindcss";
 
-export default function SizeItem({ item, currentVariant, onChangeVariant }) {
+export default function SizeItem({
+  item,
+  currentVariant,
+  onChangeVariant,
+  product,
+}) {
+  debugger;
   const selectedItem = currentVariant.options.find((jtem) => {
     return jtem.value === item.value;
   });
 
   const selected = selectedItem?.value === item.value;
   //
-  const disabled = item?.itemsSold === item?.itemsAvailable;
+  const disabled =
+    item?.itemsSold === item?.itemsAvailable ||
+    item?.itemsAvailable - item?.itemsSold < product.minSoldQuantity;
   return (
     <TouchableOpacity
       disabled={disabled}

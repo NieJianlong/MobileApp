@@ -98,13 +98,20 @@ function ProductDetail(props) {
         ? oldProduct?.listingVariants?.find(
             (item) =>
               item.defaultVariant === true &&
-              item?.itemsSold !== item?.itemsAvailable
+              item?.itemsSold !== item?.itemsAvailable &&
+              item?.itemsAvailable - item?.itemsSold >=
+                oldProduct.minSoldQuantity
           ) ?? null
         : null;
     if (variant) {
       setCurrentVariant(variant);
     } else {
-      setCurrentVariant(oldProduct?.listingVariants[0]);
+      setCurrentVariant(
+        oldProduct?.listingVariants.find(
+          (item) =>
+            item?.itemsAvailable - item?.itemsSold >= oldProduct.minSoldQuantity
+        )
+      );
     }
   }, [oldProduct?.listingVariants]);
 

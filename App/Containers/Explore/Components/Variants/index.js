@@ -94,6 +94,7 @@ class AccordionView extends React.Component {
               <SizeItem
                 key={index}
                 item={item}
+                product={this.props.product}
                 currentVariant={this.props.currentVariant}
                 onChangeVariant={this.props.onChangeVariant}
               />
@@ -189,6 +190,7 @@ const ProductVariants = ({ product, variants, onChange, currentVariant }) => {
   return (
     <AccordionView
       sections={sections}
+      product={product}
       currentVariant={currentVariant}
       onChangeVariant={onChangeVariant}
     />

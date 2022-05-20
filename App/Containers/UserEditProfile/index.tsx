@@ -51,6 +51,7 @@ import {
   LOCAL_STORAGE_USER_NAME,
   LOCAL_STORAGE_USER_PASSWORD,
   LOCAL_STORAGE_USER_PROFILE,
+  setLocalStorageValue,
 } from "../../Apollo/local-storage";
 import { runTokenFlow } from "../../Apollo/jwt-request";
 import jwt_decode from "jwt-decode";
@@ -184,17 +185,12 @@ function UserEditProfile(props) {
           },
         });
       }
-      if (
-        !res.updateBuyerProfile?.phoneNumberVerified ||
-        !res.updateBuyerProfile?.emailVerified
-      ) {
+      if (!res.updateBuyerProfile?.phoneNumberVerified) {
         resendCode({
           variables: {
             sendCodeRequest: {
               userId: res?.updateBuyerProfile?.userId ?? "",
-              validationType: !res.updateBuyerProfile?.phoneNumberVerified
-                ? ValidationType.Email
-                : ValidationType.Sms,
+              validationType: ValidationType.Sms,
             },
           },
           context: {
@@ -207,12 +203,18 @@ function UserEditProfile(props) {
               type: "changLoading",
               payload: false,
             });
-            getLocalStorageValue;
+            const password = await getLocalStorageValue(
+              LOCAL_STORAGE_USER_PASSWORD
+            );
+            await setLocalStorageValue(
+              LOCAL_STORAGE_USER_NAME,
+              res?.updateBuyerProfile?.phoneNumber
+            );
             NavigationService.navigate("OTPScreen", {
               fromScreen: "RegisterScreen",
               phone: res.updateBuyerProfile?.phoneNumber,
-              password: psswd?.trim(),
-              userId: decoded?.sub,
+              password: password?.trim(),
+              userId: res?.updateBuyerProfile?.userId,
             });
           },
           onError: () => {

@@ -10,15 +10,24 @@ import { useCreateOrder } from "../../hooks/useCreateOrder";
 import { useGetBuyerSalamiWalletBalanceQuery } from "../../../generated/graphql";
 import BigNumber from "bignumber.js";
 import useOrderInfo from "../../hooks/useOrderInfo";
+import useAlert from "../../hooks/useAlert";
+import useLoading from "../../hooks/useLoading";
 
 function InSufficientSalamiCredit(props) {
   const { createOrder } = useCreateOrder();
   const { orderInfo } = useOrderInfo();
+  const { setLoading } = useLoading();
   const { data } = useGetBuyerSalamiWalletBalanceQuery({
     context: {
       headers: {
         isPrivate: true,
       },
+    },
+    onCompleted: () => {
+      setLoading({ show: false });
+    },
+    onError: () => {
+      setLoading({ show: false });
     },
   });
   const balance = useMemo(() => {

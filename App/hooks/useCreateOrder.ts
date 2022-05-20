@@ -65,7 +65,7 @@ export const useCreateOrder = () => {
     let currentBilling = 0;
     let originalBilling = 0;
     let deliveryFess = 0;
-    
+
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
       let itemAvailble: boolean = true;
@@ -145,7 +145,7 @@ export const useCreateOrder = () => {
     availbleList?: IsListingAvailableFieldFragment[];
   }) => {
     setLoading({ show: true });
-    
+
     let walletBalance = 0;
     if (userProfile.isAuth) {
       const { data: balanceData } = await getBuyerSalamiWalletBalance();
@@ -204,7 +204,10 @@ export const useCreateOrder = () => {
           if (res?.createOrderFromCart?.orderId) {
             NavigationService.navigate("OrderPlacedScreen");
           }
-        } else if (info.orderType === OrderType.zero) {
+        } else if (
+          info.orderType === OrderType.zero ||
+          info.orderType === OrderType.inSufficient
+        ) {
           const order1 = res?.createOrderFromCart;
           if (res?.createOrderFromCart?.orderId) {
             razorpayCreateOrder(order1).then((res1) => {

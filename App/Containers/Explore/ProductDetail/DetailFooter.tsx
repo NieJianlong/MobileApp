@@ -126,20 +126,24 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       PubSub.publish("show-pick-up-sheet", addToCart);
     }
   };
-  const disabled = useMemo(() => {
-    return currentVariant?.itemsSold === currentVariant?.itemsAvailable;
-  }, [currentVariant]);
 
+  const maximumValue = useMemo(() => {
+    return currentVariant?.itemsAvailable - currentVariant?.itemsSold > 1
+      ? currentVariant?.itemsAvailable - currentVariant?.itemsSold
+      : 100;
+  }, [currentVariant]);
+  const disabled = useMemo(() => {
+    return (
+      currentVariant?.itemsSold === currentVariant?.itemsAvailable ||
+      maximumValue < initQuanlity
+    );
+  }, [currentVariant, initQuanlity, maximumValue]);
   return (
     <SafeAreaView style={styles.footerSafeArea} edges={["bottom"]}>
       <QuantitySelector
         minSoldQuantity={initQuanlity}
         minimumValue={1}
-        maximumValue={
-          currentVariant?.itemsAvailable - currentVariant?.itemsSold > 1
-            ? currentVariant?.itemsAvailable - currentVariant?.itemsSold
-            : 100
-        }
+        maximumValue={maximumValue < initQuanlity ? initQuanlity : maximumValue}
         value={quantity}
         onChange={(value) => {
           setQuantity(value);
@@ -174,7 +178,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
             t.justifyAround,
             disabled ? t.opacity50 : t.opacity100,
           ]}
-          disabled={false}
+          disabled={disabled}
         >
           <Text style={[styles.txtBold, { color: Colors.white }]}>
             {disabled

@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useContext, useMemo } from "react";
+import React, {
+  useState,
+  useCallback,
+  useContext,
+  useMemo,
+  useEffect,
+} from "react";
 import {
   FlatList,
   View,
@@ -18,6 +24,7 @@ import {
   GetListingsDocument,
   SortDirection,
   SortType,
+  useGetListingsLazyQuery,
   useGetListingsQuery,
 } from "../../../../../generated/graphql";
 import { shareOptions } from "../ShareOptionList";
@@ -74,37 +81,46 @@ export default function ProductList(props) {
     //   },
     // });
   }, []);
-  let searchOptions = {
-    filter: filter,
-    filterParams: filterParams,
-    sortBy: sortItem.sortType,
-    sortDirection: sortItem.sortDirection,
-    pageSize,
-  };
 
-  const { loading, error, data, refetch, fetchMore } = useGetListingsQuery({
-    variables: {
-      searchOptions: searchOptions,
-    },
-    context: {
-      headers: {
-        isPrivate: global.access_token ? true : false,
+  const searchOptions = useMemo(() => {
+    return {
+      filter: filter,
+      filterParams: filterParams,
+      sortBy: sortItem.sortType,
+      sortDirection: sortItem.sortDirection,
+      pageSize,
+    };
+  }, [filter, filterParams, sortItem]);
+
+  const [queryListings, { loading, error, data, refetch, fetchMore }] =
+    useGetListingsLazyQuery({
+      context: {
+        headers: {
+          isPrivate: global.access_token ? true : false,
+        },
       },
-    },
-    onError: () => {
-      setServerData([]);
-    },
-    onCompleted: (res) => {
-      // map data from server for now
-      // add missing fields for product review
-      // update for name changes in data from server
-      setNoMore(false);
-      if (isCalled === false) {
-        setServerData(res.getListings.content);
-      }
-      setIsCalled(true);
-    },
-  });
+      onError: () => {
+        setServerData([]);
+      },
+      onCompleted: (res) => {
+        // map data from server for now
+        // add missing fields for product review
+        // update for name changes in data from server
+        setNoMore(false);
+        if (isCalled === false) {
+          setServerData(res.getListings.content);
+        }
+        setIsCalled(true);
+      },
+    });
+  useEffect(() => {
+    setIsCalled(false);
+    queryListings({
+      variables: {
+        searchOptions: searchOptions,
+      },
+    });
+  }, [searchOptions]);
 
   console.log("seee the props product", props.product);
 
@@ -141,6 +157,21 @@ export default function ProductList(props) {
             option={sortItem}
             refresh={(item) => {
               setSortItem(item);
+              // const newFilter = {
+              //   filter: filter,
+              //   filterParams: filterParams,
+              //   sortBy: item.sortType,
+              //   sortDirection: item.sortDirection,
+              //   pageSize,
+              // };
+              // console.log("newFilter====================================");
+              // console.log(newFilter);
+              // console.log("====================================");
+              // refetch({
+              //   variables: {
+              //     searchOptions: newFilter,
+              //   },
+              // });
             }}
           />
         }

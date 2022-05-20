@@ -64,9 +64,6 @@ export default function ExploreSortBar({ onChange, refresh, option }) {
         showSheet: true,
         height: 320,
         enabledGestureInteraction: true,
-        // onCloseEnd: () => {
-        //   refresh && refresh(currentOption);
-        // },
         children: () => (
           <SortSheetContent
             option={currentOption}

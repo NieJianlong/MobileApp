@@ -82,24 +82,27 @@ export default function Index(props) {
         renderTabBar={(mprops) => {
           return (
             <View style={{ flex: 1, backgroundColor: "white" }}>
-              <ScrollableTabBar
-                {...mprops}
-                underlineStyle={{
-                  backgroundColor: colors.primary,
-                }}
-                inactiveTextColor={colors.grey60}
-                activeTextColor={colors.primary}
-                style={{ borderWidth: 0 }}
-                tabsContainerStyle={{ paddingRight: 60 }}
-                textStyle={{
-                  fontFamily: fonts.primary,
-                  width: "100%",
-                  fontWeight: "bold",
-                  fontSize: 14,
-                }}
-              />
+              {!textToSearch && (
+                <ScrollableTabBar
+                  {...mprops}
+                  underlineStyle={{
+                    backgroundColor: colors.primary,
+                  }}
+                  inactiveTextColor={colors.grey60}
+                  activeTextColor={colors.primary}
+                  style={{ borderWidth: 0 }}
+                  tabsContainerStyle={{ paddingRight: 60 }}
+                  textStyle={{
+                    fontFamily: fonts.primary,
+                    width: "100%",
+                    fontWeight: "bold",
+                    fontSize: 14,
+                  }}
+                />
+              )}
+
               <AddressBar />
-              {categories?.getPreferredCategories && isAuth && (
+              {!textToSearch && categories?.getPreferredCategories && isAuth && (
                 <View
                   style={{
                     backgroundColor: "white",

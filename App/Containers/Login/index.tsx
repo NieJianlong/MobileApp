@@ -51,6 +51,19 @@ function LoginScreen(props) {
     },
   });
 
+  const emailRetrieve = async () => {
+    try {
+      const value = await AsyncStorage.getItem("emailList");
+      setFetchedEmail(JSON.parse(value));
+    } catch (error) {
+       ("error retrieve");
+    }
+  };
+
+  useEffect(() => {
+    emailRetrieve();
+  }, []);
+
   const [getBuerIdProfile] = useBuyerProfileByUserIdLazyQuery({
     onError: (err) => {
       dispatch({

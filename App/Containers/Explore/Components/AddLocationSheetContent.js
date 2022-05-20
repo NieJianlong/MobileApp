@@ -142,7 +142,7 @@ function AddLocationSheetContent(props) {
       keyboardType: "default",
       type: "normal",
       name: "building",
-      location: props.locationDetails.houseNo, 
+      location: props.locationDetails.houseNo,
     },
     {
       placeholder: "Street / Colony Name*",
@@ -241,7 +241,7 @@ function AddLocationSheetContent(props) {
                           render={({ field: { onChange, value } }) => (
                             <DropDownPicker
                               listMode="MODAL"
-                              placeholder="State (Province)*"
+                              placeholder={props.locationDetails.state ? props.locationDetails.state : "State (Province)*"}
                               value={value}
                               searchPlaceholder="Search……"
                               open={open}
@@ -251,7 +251,7 @@ function AddLocationSheetContent(props) {
                               setValue={onChange}
                               onChangeValue={onChange}
                               placeholderStyle={[
-                                { color: colors.grey40, fontSize: 16 },
+                                { color: props.locationDetails.state ? colors.black : colors.grey40, fontSize: 16 },
                               ]}
                               // containerStyle={[t.bgBlue300]}
                               style={[

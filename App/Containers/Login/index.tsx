@@ -165,7 +165,6 @@ function LoginScreen(props) {
   }, [props]);
 
   const onSignIn = async (data: { username: string; password: string }) => {
-    console.log("hindi natawag?");
     // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
     let ret = validator.loginDifferentiator(data.username);
     // setEmailList({ emailListed: sampleData });
@@ -345,9 +344,7 @@ function LoginScreen(props) {
 
   const storeEmail = async () => {
     if (fetchedEmail) {
-      console.log("meron laman fetchhed");
       const isExisting = fetchedEmail.find((data) => data === savedEmail);
-      console.log("see the existing", isExisting);
       if (isExisting === undefined) {
         const val = [...fetchedEmail, savedEmail];
         try {
@@ -357,11 +354,9 @@ function LoginScreen(props) {
         }
       }
     } else {
-      console.log("walang laman fetchhed", savedEmail);
       const val = [savedEmail];
       try {
         await AsyncStorage.setItem("emailList", JSON.stringify(val));
-        console.log("success saveddd")
       } catch (error) {
         console.log("error saving data");
       }

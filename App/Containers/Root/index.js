@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   useWindowDimensions,
   Platform,
+  PermissionsAndroid
 } from "react-native";
 import { Alert, BottomSheet } from "../../Components";
 import AppNavigation from "../../Navigation/AppNavigation";
@@ -124,6 +125,29 @@ function RootContainer() {
       setShowMap({ mapVisible: false });
       return false;
     });
+
+    const requestLocationPermission = async () => {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: "Location Permission",
+            message: "This app requires location permission.",
+            buttonNeutral: "Ask Me Later",
+            buttonNegative: "Cancel",
+            buttonPositive: "OK",
+          }
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log("You can use location services");
+        } else {
+          console.log("Location permission denied");
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    };
+    requestLocationPermission();
   }, []);
 
   const {

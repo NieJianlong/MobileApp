@@ -107,7 +107,7 @@ export default function ProductList(props) {
         // add missing fields for product review
         // update for name changes in data from server
         setNoMore(false);
-        if (isCalled === false) {
+        if (res && isCalled === false) {
           setServerData(res.getListings.content);
         }
         setIsCalled(true);
@@ -120,9 +120,7 @@ export default function ProductList(props) {
         searchOptions: searchOptions,
       },
     });
-  }, [searchOptions]);
-
-  console.log("seee the props product", props.product);
+  }, [searchOptions]);  
 
   //Pull up the load layout
   const LoadMoreView = useMemo(

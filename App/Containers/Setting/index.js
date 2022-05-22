@@ -21,12 +21,12 @@ export const MenuConfig = [
     // screen: NoPurchase,
     key: "Country",
   },
-  {
-    title: "Notifications",
-    icon: images.userNotiImage,
-    selectedIcon: images.userNotiSImage,
-    key: "Notifications",
-  },
+  // {
+  //   title: "Notifications",
+  //   icon: images.userNotiImage,
+  //   selectedIcon: images.userNotiSImage,
+  //   key: "Notifications",
+  // },
   // {
   //   title: "Permissions",
   //   icon: images.userFilledImage,

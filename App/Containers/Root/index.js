@@ -147,7 +147,7 @@ function RootContainer() {
         console.warn(err);
       }
     };
-    requestLocationPermission();
+    //requestLocationPermission();
   }, []);
 
   const {

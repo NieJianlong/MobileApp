@@ -17,7 +17,7 @@ export default function SizeItem({
   //
   const disabled =
     item?.itemsSold === item?.itemsAvailable ||
-    item?.itemsAvailable - item?.itemsSold < product.minSoldQuantity;
+    item?.itemsAvailable - item?.itemsSold < product.minQtyPerCart;
   return (
     <TouchableOpacity
       disabled={disabled}

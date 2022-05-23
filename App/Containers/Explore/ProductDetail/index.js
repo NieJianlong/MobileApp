@@ -99,8 +99,7 @@ function ProductDetail(props) {
             (item) =>
               item.defaultVariant === true &&
               item?.itemsSold !== item?.itemsAvailable &&
-              item?.itemsAvailable - item?.itemsSold >=
-                oldProduct.minSoldQuantity
+              item?.itemsAvailable - item?.itemsSold >= oldProduct.minQtyPerCart
           ) ?? null
         : null;
     if (variant) {
@@ -108,7 +107,7 @@ function ProductDetail(props) {
     } else {
       variant = oldProduct?.listingVariants.find(
         (item) =>
-          item?.itemsAvailable - item?.itemsSold >= oldProduct.minSoldQuantity
+          item?.itemsAvailable - item?.itemsSold >= oldProduct.minQtyPerCart
       );
       if (variant) {
         setCurrentVariant(variant);

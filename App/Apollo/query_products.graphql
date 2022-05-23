@@ -232,6 +232,7 @@ fragment ProductListingViewField on ProductListingView {
   # minQuantityPerCart
   # maxQuantityPerCart
   qtyAvailable
+  minQtyPerCart
   minSoldQuantity
   itemSold
   createOn

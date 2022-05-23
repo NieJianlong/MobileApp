@@ -16,21 +16,21 @@ function QuantitySelector(props) {
     minimumValue,
     maximumValue,
     onChange,
-    minSoldQuantity,
+    minQtyPerCart,
   } = props;
 
   return (
     <View style={styles.row}>
       <TouchableOpacity
         onPress={() => {
-          if (currentValue > minSoldQuantity) {
+          if (currentValue > minQtyPerCart) {
             setCurrentValue(currentValue - 1);
             onChange(currentValue - 1);
           } else {
             !visible &&
               setAlert({
                 color: colors.warning,
-                title: `Purchase a minimum of ${minSoldQuantity} units of this product`,
+                title: `Purchase a minimum of ${minQtyPerCart} units of this product`,
                 visible: true,
                 onDismiss: () => {
                   setAlert({ visible: false });
@@ -46,13 +46,13 @@ function QuantitySelector(props) {
       <Text style={styles.txtMinimumValue}>{minimumValue}</Text>
 
       <Slider
-        minimumValue={minSoldQuantity}
+        minimumValue={minQtyPerCart}
         maximumValue={maximumValue}
         value={currentValue}
         step={1}
         style={styles.sliderContainer}
         onValueChange={(t) => {
-          if (t >= minSoldQuantity) {
+          if (t >= minQtyPerCart) {
             setCurrentValue(t);
             onChange(t);
           }

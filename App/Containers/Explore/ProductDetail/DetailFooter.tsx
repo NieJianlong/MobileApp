@@ -40,7 +40,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
   const [cartInfo, setCartInfo] = useState(info);
   const initQuanlity =
-    product.minSoldQuantity !== null ? product.minSoldQuantity : 1;
+    product.minQtyPerCart !== null ? product.minQtyPerCart : 1;
   // debugger;
   const [quantity, setQuantity] = useState(info?.quantity || initQuanlity);
   const { createOrder } = useCreateOrder();
@@ -141,7 +141,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   return (
     <SafeAreaView style={styles.footerSafeArea} edges={["bottom"]}>
       <QuantitySelector
-        minSoldQuantity={initQuanlity}
+        minQtyPerCart={initQuanlity}
         minimumValue={1}
         maximumValue={maximumValue < initQuanlity ? initQuanlity : maximumValue}
         value={quantity}

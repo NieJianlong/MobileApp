@@ -49,6 +49,7 @@ export const ProductSchema = {
     maxQuantityPerCart: { type: "int?", default: null },
     qtyAvailable: { type: "int?", default: null },
     minSoldQuantity: { type: "int?", default: null },
+    minQtyPerCart: { type: "int?", default: null },
     itemSold: { type: "int?", default: null },
     createOn: { type: "string?", default: null },
     collectionPointAddressId: { type: "string?", default: null },

@@ -42,6 +42,21 @@ const MapScreen = () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         Alert.alert("Permission to access location was denied");
+        setShowMap({ mapVisible: false });
+        dispatch({
+          type: "changSheetState",
+          payload: {
+            showSheet: true,
+            height: 600,
+            children: () => (
+              <AddLocationSheetContent
+                {...location}
+                locationDetails={location}
+              />
+            ),
+            sheetTitle: "",
+          },
+        });
         return;
       }
 

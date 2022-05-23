@@ -106,12 +106,15 @@ function ProductDetail(props) {
     if (variant) {
       setCurrentVariant(variant);
     } else {
-      setCurrentVariant(
-        oldProduct?.listingVariants.find(
-          (item) =>
-            item?.itemsAvailable - item?.itemsSold >= oldProduct.minSoldQuantity
-        )
+      variant = oldProduct?.listingVariants.find(
+        (item) =>
+          item?.itemsAvailable - item?.itemsSold >= oldProduct.minSoldQuantity
       );
+      if (variant) {
+        setCurrentVariant(variant);
+      } else {
+        setCurrentVariant(oldProduct?.listingVariants[0]);
+      }
     }
   }, [oldProduct?.listingVariants]);
 

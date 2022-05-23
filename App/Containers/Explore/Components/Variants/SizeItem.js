@@ -9,8 +9,7 @@ export default function SizeItem({
   onChangeVariant,
   product,
 }) {
-  debugger;
-  const selectedItem = currentVariant.options.find((jtem) => {
+  const selectedItem = currentVariant?.options?.find((jtem) => {
     return jtem.value === item.value;
   });
 

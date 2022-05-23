@@ -78,7 +78,7 @@ function RegisterScreen(props) {
 
   useEffect(() => {
     emailRetrieve();
-  }, []);
+  }, [savedEmail]);
 
   console.log("see email retrieved", fetchedEmail);
 
@@ -365,7 +365,7 @@ function RegisterScreen(props) {
               <View style={styles.emailListContainer}>
                 <Text style={styles.continueText}>Continue With</Text>
                 <FlatList
-                  // keyboardShouldPersistTaps="handled"
+                  keyboardShouldPersistTaps="handled"
                   style={styles.flatListstyle}
                   data={fetchedEmail}
                   renderItem={renderItem}
@@ -481,9 +481,11 @@ function RegisterScreen(props) {
                 setSavedEmail(text);
               }}
               value={savedEmail}
-              onFocus={() => {
+              onBlur={()=>{
                 onChange(savedEmail);
-                if (savedEmail) {
+              }}
+              onFocus={() => {
+                if (fetchedEmail.length === 0 || savedEmail) {
                   setShowEmailList(false);
                 } else {
                   setShowEmailList(true);

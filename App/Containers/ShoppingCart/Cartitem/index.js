@@ -110,11 +110,11 @@ function Index(props) {
                     },
                   });
                 } else {
-                  if (quantity - 1 < product.minSoldQuantity) {
+                  if (quantity - 1 < product.minQtyPerCart) {
                     !visible &&
                       setAlert({
                         color: colors.warning,
-                        title: `Purchase a minimum of ${product.minSoldQuantity} units of this product`,
+                        title: `Purchase a minimum of ${product.minQtyPerCart} units of this product`,
                         visible: true,
                         onDismiss: () => {
                           setAlert({ visible: false });

@@ -72,7 +72,7 @@ function LoginScreen(props) {
 
   useEffect(() => {
     emailRetrieve();
-  }, []);
+  }, [savedEmail]);
 
   const [getBuerIdProfile] = useBuyerProfileByUserIdLazyQuery({
     onError: (err) => {
@@ -366,45 +366,6 @@ function LoginScreen(props) {
     }
   };
 
-  const deleteEmailAsync = async (data) => {
-    try {
-      await AsyncStorage.setItem("emailList", JSON.stringify(data));
-    } catch (error) {
-      console.log("error deleting email", error);
-    }
-  };
-
-  const deleteEmail = (valTodelete) => {
-    const filteredData = fetchedEmail.filter((item) => item !== valTodelete);
-    setFetchedEmail(filteredData);
-    deleteEmailAsync(filteredData);
-    if (filteredData.length === 0) {
-      setShowEmailList(false);
-    }
-  };
-
-  const renderItem = ({ item }) => {
-    return (
-      <View style={styles.btnContainer}>
-        <TouchableOpacity
-          style={styles.emailListBtn}
-          onPress={() => {
-            setSavedEmail(item);
-            setShowEmailList(false);
-          }}
-        >
-          <Text>{item}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.deleteBtn}
-          onPress={() => deleteEmail(item)}
-        >
-          <Image source={Images.trash} style={styles.icDelete} />
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
   return (
     <View style={[t.absolute, t.left0, t.top0, { width, height }, t.bgWhite]}>
       <SafeAreaView
@@ -417,24 +378,6 @@ function LoginScreen(props) {
           <Text style={styles.txt2}>
             Join purchases to get what{"\n"}you want with great discounts
           </Text>
-          {showEmailList && (
-            <View style={styles.emailListContainer}>
-              <TouchableOpacity
-                style={styles.btnClose}
-                onPress={() => {
-                  setShowEmailList(false);
-                }}
-              >
-                <Image source={Images.crossMedium} style={styles.icClose} />
-              </TouchableOpacity>
-              <FlatList
-                style={styles.flatListstyle}
-                data={fetchedEmail}
-                renderItem={renderItem}
-                showsVerticalScrollIndicator={false}
-              />
-            </View>
-          )}
 
           <View>
             <Controller

@@ -153,6 +153,7 @@ function ProductItem(props) {
             <Image
               source={{ uri: product.photo ? product.photo : defultUrl }}
               style={styles.productImageBig}
+              resizeMode={"contain"}
             />
             <View style={styles.v2}>
               <View>

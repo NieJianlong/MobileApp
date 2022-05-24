@@ -445,6 +445,7 @@ function RegisterScreen(props) {
               returnKeyType={"next"}
               onChangeText={onChange}
               value={value}
+              textAlignVertical={"center"}
             />
           )}
           name="firstName"
@@ -470,6 +471,7 @@ function RegisterScreen(props) {
               onChangeText={onChange}
               autoFocus={true}
               value={value}
+              textAlignVertical={"center"}
             />
           )}
           name="lastName"
@@ -516,6 +518,7 @@ function RegisterScreen(props) {
                   }
                 }
               }}
+              textAlignVertical={"center"}
             />
           )}
           name="email"
@@ -572,6 +575,7 @@ function RegisterScreen(props) {
               isPhoneNo={true}
               onChangeText={onChange}
               value={value}
+              textAlignVertical={"center"}
             />
           )}
           name="phoneNumber"

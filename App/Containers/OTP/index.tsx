@@ -72,17 +72,19 @@ function OTPScreen(props) {
   });
 
   useEffect(() => {
-    let interval = setInterval(() => {
-      setCount((prev) => {
-        if (prev <= 1) {
-          setAllowToResendCode(false);
-        }
-        prev <= 1 && clearInterval(interval);
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+    if (allowToResendCode === true) {
+      let interval = setInterval(() => {
+        setCount((prev) => {
+          if (prev <= 1) {
+            setAllowToResendCode(false);
+          }
+          prev <= 1 && clearInterval(interval);
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [allowToResendCode]);
 
   const [resetPasswordStep2] = useMutation(ForgotPasswordStep2VerifyTokenEmail);
   const [resetPasswordStep2Sms] =
@@ -341,11 +343,14 @@ function OTPScreen(props) {
           disabled={allowToResendCode}
           onPress={() => {
             setLoading({ show: true });
+          
             if (params.fromScreen === "ForgotPasswordScreen") {
               forgetPasswordResendCode({
                 variables: { email: params?.phone ?? "" },
                 onCompleted: (res) => {
                   setLoading({ show: false });
+                  setCount(60);
+                  setAllowToResendCode(true);
                   dispatch({
                     type: "changAlertState",
                     payload: {
@@ -384,6 +389,8 @@ function OTPScreen(props) {
                 },
                 onCompleted: (res) => {
                   setLoading({ show: false });
+                  setCount(60);
+                  setAllowToResendCode(true);
                   dispatch({
                     type: "changAlertState",
                     payload: {

@@ -50,6 +50,7 @@ function LoginScreen(props) {
     control,
     getValues,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<{
     username: string;
@@ -390,6 +391,7 @@ function LoginScreen(props) {
           style={styles.emailListBtn}
           onPress={() => {
             setSavedEmail(item);
+            setValue("username", item);
             setShowEmailList(false);
           }}
         >
@@ -462,7 +464,7 @@ function LoginScreen(props) {
                   onSubmitEditing={() =>
                     passwordInput?.current.getInnerRef().focus()
                   }
-                  value={savedEmail ? savedEmail : value}
+                  value={value}
                   returnKeyType={"next"}
                   onChangeText={(text) => {
                     text = text.trim();

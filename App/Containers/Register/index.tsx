@@ -481,14 +481,16 @@ function RegisterScreen(props) {
                 setSavedEmail(text);
               }}
               value={savedEmail}
-              onBlur={()=>{
+              onBlur={() => {
                 onChange(savedEmail);
               }}
               onFocus={() => {
-                if (fetchedEmail.length === 0 || savedEmail) {
-                  setShowEmailList(false);
-                } else {
-                  setShowEmailList(true);
+                if (fetchedEmail) {
+                  if (savedEmail || fetchedEmail.length === 0) {
+                    setShowEmailList(false);
+                  } else {
+                    setShowEmailList(true);
+                  }
                 }
               }}
             />

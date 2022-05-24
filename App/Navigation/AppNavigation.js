@@ -85,8 +85,11 @@ import ReturnStatus from "../Containers/Orders/ReturnStatus/index";
 import LearnMore from "../Containers/LearnMore/index";
 import NavigationLeftButton from "../Components/NavigationLeftButton";
 import { t } from "react-native-tailwindcss";
-import { ApplicationStyles, Colors } from "../Themes";
+import { ApplicationStyles, Colors, Images } from "../Themes";
 import RegisterGuestBuyerToBuyerScreen from "../Containers/RegisterGuestBuyerToBuyer";
+import { Image, SafeAreaView, View } from "react-native";
+import styles from "../Containers/Explore/styles";
+import colors from "../Themes/Colors";
 // import ReturnInformation from "../..";
 const Stack = createStackNavigator();
 
@@ -335,10 +338,26 @@ function PrimaryNav() {
         name={"RegisterScreen"}
         component={RegisterScreen}
         options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
+          header: () => (
+            <View
+              style={[
+                t.bgWhite,
+                t.flexRow,
+                t.justifyBetween,
+                t.h24,
+                t.itemsEnd,
+                { backgroundColor: colors.background },
+              ]}
+            >
+              <NavigationLeftButton style={[t.mB2]} />
+              <Image
+                source={Images.logo4}
+                style={[styles.logo, t.mT4]}
+                resizeMode={"contain"}
+              />
+              <View style={{ width: 36, height: 36 }} />
+            </View>
+          ),
         }}
       />
       <Stack.Screen

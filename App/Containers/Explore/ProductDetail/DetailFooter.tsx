@@ -38,52 +38,12 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     .filtered("product.listingId == $0", product.listingId)
     .filtered("addressId == $0", localCartVar.deliverAddress)
     .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
-  const [cartInfo, setCartInfo] = useState(info);
+  // const [cartInfo, setCartInfo] = useState(info);
   const initQuanlity =
     product.minQtyPerCart !== null ? product.minQtyPerCart : 1;
   // debugger;
   const [quantity, setQuantity] = useState(info?.quantity || initQuanlity);
   const { createOrder } = useCreateOrder();
-
-  const addToCart = () => {
-    const shoppingCartId = nanoid();
-
-    // if (isEmpty(currentVariant.defaultVariant)) {
-    //   currentVariant.defaultVariant = false;
-    // }
-
-    realm.write(() => {
-      if (cartInfo) {
-        cartInfo.quantity = quantity;
-        cartInfo.isDraft = false;
-      } else {
-        realm.create("ShoppingCart", {
-          id: shoppingCartId,
-          quantity,
-          variantId: currentVariant ? currentVariant.variantId : "",
-          variant: currentVariant,
-          isDraft: false,
-          addressId: localCartVar.deliverAddress,
-          productId: product.productId,
-          listingId: product.listingId,
-          product,
-          created: new Date(),
-          updated: new Date(),
-        });
-      }
-      dispatch({
-        type: "changAlertState",
-        payload: {
-          visible: true,
-          message: "",
-          color: colors.success,
-          title: "Added to Shopping Cart Success",
-          onDismiss: () => {},
-        },
-      });
-      PubSub.publish("refresh-shoppingcart");
-    });
-  };
 
   const toggleConfirmOrderSheet = async () => {
     const item = {
@@ -138,6 +98,62 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
       maximumValue < initQuanlity
     );
   }, [currentVariant, initQuanlity, maximumValue]);
+  const addToCart = () => {
+    const shoppingCartId = nanoid();
+
+    // if (isEmpty(currentVariant.defaultVariant)) {
+    //   currentVariant.defaultVariant = false;
+    // }
+
+    realm.write(() => {
+      const queryItems = realm
+        .objects("ShoppingCart")
+        .filtered("addressId == $0", localCartVar.deliverAddress)
+        .filtered("listingId == $0", product.listingId)
+        .filtered(
+          "variantId == $0",
+          currentVariant ? currentVariant.variantId : ""
+        )
+        .filtered("quantity > 0")
+        .filtered("isDraft == false");
+
+      // Update some properties on the instance.
+      // These changes are saved to the realm.
+      // queryItem.quantity = quantity;
+
+      if (!isEmpty(queryItems)) {
+        const queryItem = queryItems[0];
+        const newQuantity = queryItem.quantity + quantity;
+        queryItem.quantity = newQuantity;
+        queryItem.isDraft = false;
+      } else {
+        realm.create("ShoppingCart", {
+          id: shoppingCartId,
+          quantity,
+          variantId: currentVariant ? currentVariant.variantId : "",
+          variant: currentVariant,
+          isDraft: false,
+          addressId: localCartVar.deliverAddress,
+          productId: product.productId,
+          listingId: product.listingId,
+          product,
+          created: new Date(),
+          updated: new Date(),
+        });
+      }
+      dispatch({
+        type: "changAlertState",
+        payload: {
+          visible: true,
+          message: "",
+          color: colors.success,
+          title: "Added to Shopping Cart Success",
+          onDismiss: () => {},
+        },
+      });
+      PubSub.publish("refresh-shoppingcart");
+    });
+  };
   return (
     <SafeAreaView style={styles.footerSafeArea} edges={["bottom"]}>
       <QuantitySelector

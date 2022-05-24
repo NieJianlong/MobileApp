@@ -29,7 +29,7 @@ import {
 } from "../../../../../generated/graphql";
 import { shareOptions } from "../ShareOptionList";
 import { t } from "react-native-tailwindcss";
-const pageSize = 5;
+const pageSize = 20;
 
 const sortOptions = [
   {
@@ -120,7 +120,7 @@ export default function ProductList(props) {
         searchOptions: searchOptions,
       },
     });
-  }, [searchOptions]);  
+  }, [searchOptions]);
 
   //Pull up the load layout
   const LoadMoreView = useMemo(

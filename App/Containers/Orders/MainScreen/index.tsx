@@ -148,7 +148,7 @@ class Order extends Component {
     detail =
       statusText?.substring(0, 1) +
       statusText?.substring(1, statusText.length).toLowerCase() +
-      " at " +
+      " on " +
       moment(item.orderDatetime).format("DD/MM/YYYY");
     return (
       <TouchableOpacity

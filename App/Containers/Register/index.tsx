@@ -82,6 +82,28 @@ function RegisterScreen(props) {
 
   console.log("see email retrieved", fetchedEmail);
 
+  
+  const storeEmail = async () => {
+    if (fetchedEmail) {
+      const isExisting = fetchedEmail.find((data) => data === savedEmail);
+      if (isExisting === undefined) {
+        const val = [...fetchedEmail, savedEmail];
+        try {
+          await AsyncStorage.setItem("emailList", JSON.stringify(val));
+        } catch (error) {
+          console.log("error saving data");
+        }
+      }
+    } else {
+      const val = [savedEmail];
+      try {
+        await AsyncStorage.setItem("emailList", JSON.stringify(val));
+      } catch (error) {
+        console.log("error saving data");
+      }
+    }
+  };
+
   // validation
   let [validationDisplay, setValidationDisplay] = useState("");
   let [showValidationAlert, setShowValidationAlert] = useState(false);
@@ -262,6 +284,7 @@ function RegisterScreen(props) {
   });
   const onSubmit = (data: BuyerProfileRequestForCreate) => {
     if (termsAccepted) {
+      storeEmail();
       setLoading({ show: true });
       registerBuyer({
         variables: {
@@ -481,14 +504,16 @@ function RegisterScreen(props) {
                 setSavedEmail(text);
               }}
               value={savedEmail}
-              onBlur={()=>{
+              onBlur={() => {
                 onChange(savedEmail);
               }}
               onFocus={() => {
-                if (fetchedEmail.length === 0 || savedEmail) {
-                  setShowEmailList(false);
-                } else {
-                  setShowEmailList(true);
+                if (fetchedEmail) {
+                  if (savedEmail || fetchedEmail.length === 0) {
+                    setShowEmailList(false);
+                  } else {
+                    setShowEmailList(true);
+                  }
                 }
               }}
             />

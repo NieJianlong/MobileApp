@@ -5,7 +5,16 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import { View, Text, TouchableOpacity, Platform, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Platform,
+  Image,
+  FlatList,
+  Modal,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SmsRetriever from "react-native-sms-retriever";
 import {
@@ -36,6 +45,7 @@ import { trimStart } from "lodash";
 import useAlert from "../../hooks/useAlert";
 import useLoading from "../../hooks/useLoading";
 import useRegister from "../../hooks/useRegister";
+import AsyncStorage from "@react-native-community/async-storage";
 
 function RegisterScreen(props) {
   const { dispatch } = useContext(AlertContext);
@@ -45,6 +55,9 @@ function RegisterScreen(props) {
   const emailInput = useRef();
   const phonenumInput = useRef();
   const passwordInput = useRef();
+  const [showEmailList, setShowEmailList] = useState(false);
+  const [fetchedEmail, setFetchedEmail] = useState([]);
+  const [savedEmail, setSavedEmail] = useState();
 
   const {
     control,
@@ -53,6 +66,43 @@ function RegisterScreen(props) {
     setValue,
     formState: { errors },
   } = useForm<BuyerProfileRequestForCreate>();
+
+  const emailRetrieve = async () => {
+    try {
+      const value = await AsyncStorage.getItem("emailList");
+      setFetchedEmail(JSON.parse(value));
+    } catch (error) {
+      console.log("error retrieve");
+    }
+  };
+
+  useEffect(() => {
+    emailRetrieve();
+  }, [savedEmail]);
+
+  console.log("see email retrieved", fetchedEmail);
+
+  
+  const storeEmail = async () => {
+    if (fetchedEmail) {
+      const isExisting = fetchedEmail.find((data) => data === savedEmail);
+      if (isExisting === undefined) {
+        const val = [...fetchedEmail, savedEmail];
+        try {
+          await AsyncStorage.setItem("emailList", JSON.stringify(val));
+        } catch (error) {
+          console.log("error saving data");
+        }
+      }
+    } else {
+      const val = [savedEmail];
+      try {
+        await AsyncStorage.setItem("emailList", JSON.stringify(val));
+      } catch (error) {
+        console.log("error saving data");
+      }
+    }
+  };
 
   // validation
   let [validationDisplay, setValidationDisplay] = useState("");
@@ -234,6 +284,7 @@ function RegisterScreen(props) {
   });
   const onSubmit = (data: BuyerProfileRequestForCreate) => {
     if (termsAccepted) {
+      storeEmail();
       setLoading({ show: true });
       registerBuyer({
         variables: {
@@ -267,6 +318,46 @@ function RegisterScreen(props) {
     setTermsAccepted(!termsAccepted);
   };
 
+  const deleteEmailAsync = async (data) => {
+    try {
+      await AsyncStorage.setItem("emailList", JSON.stringify(data));
+    } catch (error) {
+      console.log("error deleting email", error);
+    }
+  };
+
+  const deleteEmail = (valTodelete) => {
+    const filteredData = fetchedEmail.filter((item) => item !== valTodelete);
+    setFetchedEmail(filteredData);
+    deleteEmailAsync(filteredData);
+    if (filteredData.length === 0) {
+      setShowEmailList(false);
+    }
+  };
+
+  const renderItem = ({ item }) => {
+    return (
+      <View style={styles.btnContainer}>
+        <TouchableOpacity
+          style={styles.emailListBtn}
+          onPress={() => {
+            setSavedEmail(item);
+            setShowEmailList(false);
+            emailInput.current.getInnerRef().focus();
+          }}
+        >
+          <Text style={styles.emailListText}>{item}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.deleteBtn}
+          onPress={() => deleteEmail(item)}
+        >
+          <Image source={Images.trash} style={styles.icDelete} />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   const renderValidationAlert = () => {
     return (
       <Alert
@@ -281,6 +372,36 @@ function RegisterScreen(props) {
 
   return (
     <View style={[styles.container, props.style]}>
+      <Modal
+        animationType="fade"
+        statusBarTranslucent={true}
+        visible={showEmailList}
+        transparent={true}
+      >
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setShowEmailList(false);
+          }}
+        >
+          <View style={styles.emailListMainContainer}>
+            <TouchableWithoutFeedback onPress={() => {}}>
+              <View style={styles.emailListContainer}>
+                <Text style={styles.continueText}>Continue With</Text>
+                <FlatList
+                  keyboardShouldPersistTaps="handled"
+                  style={styles.flatListstyle}
+                  data={fetchedEmail}
+                  renderItem={renderItem}
+                  showsVerticalScrollIndicator={false}
+                />
+                <TouchableOpacity onPress={() => setShowEmailList(false)}>
+                  <Text style={styles.noneText}>NONE OF THE ABOVE</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
       {props.style && (
         <SafeAreaView style={[t.wFull, t.flexRow, t.flexRowReverse]}>
           <TouchableOpacity
@@ -324,6 +445,7 @@ function RegisterScreen(props) {
               returnKeyType={"next"}
               onChangeText={onChange}
               value={value}
+              textAlignVertical={"center"}
             />
           )}
           name="firstName"
@@ -347,7 +469,9 @@ function RegisterScreen(props) {
               onSubmitEditing={() => emailInput?.current.getInnerRef().focus()}
               returnKeyType={"next"}
               onChangeText={onChange}
+              autoFocus={true}
               value={value}
+              textAlignVertical={"center"}
             />
           )}
           name="lastName"
@@ -377,8 +501,24 @@ function RegisterScreen(props) {
                 phonenumInput.current.getInnerRef().focus();
               }}
               returnKeyType={"next"}
-              onChangeText={onChange}
-              value={value}
+              onChangeText={(text) => {
+                onChange(text);
+                setSavedEmail(text);
+              }}
+              value={savedEmail}
+              onBlur={() => {
+                onChange(savedEmail);
+              }}
+              onFocus={() => {
+                if (fetchedEmail) {
+                  if (savedEmail || fetchedEmail.length === 0) {
+                    setShowEmailList(false);
+                  } else {
+                    setShowEmailList(true);
+                  }
+                }
+              }}
+              textAlignVertical={"center"}
             />
           )}
           name="email"
@@ -435,6 +575,7 @@ function RegisterScreen(props) {
               isPhoneNo={true}
               onChangeText={onChange}
               value={value}
+              textAlignVertical={"center"}
             />
           )}
           name="phoneNumber"

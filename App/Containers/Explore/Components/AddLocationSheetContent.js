@@ -57,7 +57,7 @@ function AddLocationSheetContent(props) {
       setValue("townCity", props.city);
       setValue("pinCode", props.post_code);
       setValue("streetAddress1", props.street);
-      setValue("building", props.locationDetails.houseNo);
+      setValue("building", props.houseNo);
     }
   }, [data, props]);
   const [open, setOpen] = useState(false);
@@ -142,7 +142,8 @@ function AddLocationSheetContent(props) {
       keyboardType: "default",
       type: "normal",
       name: "building",
-      location: props.locationDetails.houseNo,
+      location:
+        props.locationDetails === null ? "" : props.locationDetails.houseNo,
     },
     {
       placeholder: "Street / Colony Name*",
@@ -150,7 +151,8 @@ function AddLocationSheetContent(props) {
       errorMessage: null,
       type: "normal",
       name: "streetAddress1",
-      location: props.locationDetails.street,
+      location:
+        props.locationDetails === null ? "" : props.locationDetails.street,
     },
 
     {
@@ -160,7 +162,8 @@ function AddLocationSheetContent(props) {
       keyboardType: "default",
       type: "normal",
       name: "townCity",
-      location: props.locationDetails.city,
+      location:
+        props.locationDetails === null ? "" : props.locationDetails.city,
     },
     {
       placeholder: "Pincode*",
@@ -170,7 +173,8 @@ function AddLocationSheetContent(props) {
       // type: "short",
       type: "normal",
       name: "pinCode",
-      location: props.locationDetails.post_code,
+      location:
+        props.locationDetails === null ? "" : props.locationDetails.post_code,
     },
     {
       placeholder: "State*",
@@ -179,7 +183,8 @@ function AddLocationSheetContent(props) {
       keyboardType: "selector",
       type: "normal",
       name: "provinceState",
-      location: props.locationDetails.state,
+      location:
+        props.locationDetails === null ? "" : props.locationDetails.state,
     },
   ];
   return (
@@ -241,7 +246,13 @@ function AddLocationSheetContent(props) {
                           render={({ field: { onChange, value } }) => (
                             <DropDownPicker
                               listMode="MODAL"
-                              placeholder={props.locationDetails.state ? props.locationDetails.state : "State (Province)*"}
+                              placeholder={
+                                props.locationDetails
+                                  ? props.locationDetails.state
+                                    ? props.locationDetails.state
+                                    : "State (Province)*"
+                                  : "State (Province)*"
+                              }
                               value={value}
                               searchPlaceholder="Search……"
                               open={open}
@@ -251,7 +262,14 @@ function AddLocationSheetContent(props) {
                               setValue={onChange}
                               onChangeValue={onChange}
                               placeholderStyle={[
-                                { color: props.locationDetails.state ? colors.black : colors.grey40, fontSize: 16 },
+                                props.locationDetails
+                                  ? {
+                                      color: props.locationDetails.state
+                                        ? colors.black
+                                        : colors.grey40,
+                                      fontSize: 16,
+                                    }
+                                  : { color: colors.grey40, fontSize: 16 },
                               ]}
                               // containerStyle={[t.bgBlue300]}
                               style={[

@@ -45,6 +45,8 @@ function OTPScreen(props) {
     ? ValidationType.Email
     : ValidationType.Sms;
   const { setLoading } = useLoading();
+  const [count, setCount] = useState(60);
+  const [allowToResendCode, setAllowToResendCode] = useState(true);
   // refs
   let field1Input,
     field2Input,
@@ -69,6 +71,21 @@ function OTPScreen(props) {
     },
   });
 
+  useEffect(() => {
+    if (allowToResendCode === true) {
+      let interval = setInterval(() => {
+        setCount((prev) => {
+          if (prev <= 1) {
+            setAllowToResendCode(false);
+          }
+          prev <= 1 && clearInterval(interval);
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [allowToResendCode]);
+
   const [resetPasswordStep2] = useMutation(ForgotPasswordStep2VerifyTokenEmail);
   const [resetPasswordStep2Sms] =
     useForgotPasswordStep2VerifyTokenSmsMutation();
@@ -76,7 +93,6 @@ function OTPScreen(props) {
     useForgotPasswordStep1SendNotificationEmailMutation();
   const [resendCode] = useSendOtpCodeMutation();
   let [keyboardHeight, setKeyboardHeight] = useState(0);
-  let [allowToResendCode, setAllowToResendCode] = useState(false);
   let [onFocus, setOnFocus] = useState(1);
   let [field1, setField1] = useState("");
   let [field2, setField2] = useState("");
@@ -169,9 +185,9 @@ function OTPScreen(props) {
   useEffect(() => {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
     Keyboard.addListener("keyboardWillHide", _keyboardWillHide);
-    setTimeout(() => {
-      setAllowToResendCode(true);
-    }, 3000);
+    // setTimeout(() => {
+    //   setAllowToResendCode(true);
+    // }, 3000);
 
     return () => {
       // Anything in here is fired on component unmount.
@@ -324,13 +340,17 @@ function OTPScreen(props) {
     return (
       <View>
         <TouchableOpacity
+          disabled={allowToResendCode}
           onPress={() => {
             setLoading({ show: true });
+          
             if (params.fromScreen === "ForgotPasswordScreen") {
               forgetPasswordResendCode({
                 variables: { email: params?.phone ?? "" },
                 onCompleted: (res) => {
                   setLoading({ show: false });
+                  setCount(60);
+                  setAllowToResendCode(true);
                   dispatch({
                     type: "changAlertState",
                     payload: {
@@ -369,6 +389,8 @@ function OTPScreen(props) {
                 },
                 onCompleted: (res) => {
                   setLoading({ show: false });
+                  setCount(60);
+                  setAllowToResendCode(true);
                   dispatch({
                     type: "changAlertState",
                     payload: {
@@ -397,10 +419,10 @@ function OTPScreen(props) {
           <Text
             style={[
               styles.txtAction,
-              !allowToResendCode && { color: Colors.grey80 },
+              allowToResendCode && { color: Colors.grey80 },
             ]}
           >
-            I DIDN{"'"}T RECEIVE A CODE,RESEND
+            {count === 0 ? "RESEND" : "RESEND CODE IN " + "(" + count + ")"}
           </Text>
         </TouchableOpacity>
         <Button

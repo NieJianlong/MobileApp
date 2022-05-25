@@ -52,6 +52,9 @@ function AddLocationSheetContent(props) {
   const state = props.locationDetails.address.split(",")[5];
   const count = props.locationDetails.address.split(",").length - 1;
 
+  console.log("see the location details", props.locationDetails);
+  console.log("see the houseNumber", houseNumber),
+  console.log("has number", hasNumber.test(houseNumber));
   const {
     control,
     handleSubmit,
@@ -59,7 +62,7 @@ function AddLocationSheetContent(props) {
     formState: { errors },
   } = useForm();
   useEffect(() => {
-    if (count < 6) {
+    if (count < 4) {
       if (data) {
         setValue("provinceState", props.state);
         setValue("townCity", props.city);
@@ -174,7 +177,7 @@ function AddLocationSheetContent(props) {
       type: "normal",
       name: "building",
       location:
-        count < 6
+        count < 4
           ? props.locationDetails === null
             ? ""
             : props.locationDetails.houseNo
@@ -193,7 +196,7 @@ function AddLocationSheetContent(props) {
       type: "normal",
       name: "streetAddress1",
       location:
-        count < 6
+        count < 4
           ? props.locationDetails === null
             ? ""
             : props.locationDetails.street
@@ -212,7 +215,7 @@ function AddLocationSheetContent(props) {
       type: "normal",
       name: "townCity",
       location:
-        count < 6
+        count < 4
           ? props.locationDetails === null
             ? ""
             : props.locationDetails.city
@@ -231,7 +234,7 @@ function AddLocationSheetContent(props) {
       type: "normal",
       name: "pinCode",
       location:
-        count < 6
+        count < 4
           ? props.locationDetails === null
             ? ""
             : props.locationDetails.post_code

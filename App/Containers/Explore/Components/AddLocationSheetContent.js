@@ -52,9 +52,6 @@ function AddLocationSheetContent(props) {
   const state = props.locationDetails.address.split(",")[5];
   const count = props.locationDetails.address.split(",").length - 1;
 
-  console.log("see the location details", props.locationDetails);
-  console.log("see the houseNumber", houseNumber),
-  console.log("has number", hasNumber.test(houseNumber));
   const {
     control,
     handleSubmit,

@@ -24,10 +24,12 @@ import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-han
 import DropDownPicker from "react-native-dropdown-picker";
 import { t } from "react-native-tailwindcss";
 import { Controller, useForm } from "react-hook-form";
-import lodash from "lodash";
+import lodash, { isNumber } from "lodash";
 import { GetStatesByCountryId } from "../gql/explore_queries";
 import NavigationService from "../../../Navigation/NavigationService";
 import { setLocalStorageValue } from "../../../Apollo/local-storage";
+import { Images } from "../../../Themes";
+import useMapScreen from "../../../hooks/useMapScreen";
 
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
@@ -35,7 +37,7 @@ const TouchableOpacity =
 function AddLocationSheetContent(props) {
   //123e4567-e89b-12d3-a456-556642440000
   // const [selectedState, setSelectedState] = useState();
-
+  const { setShowMap } = useMapScreen();
   const { data } = useQuery(GetStatesByCountryId, {
     variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
   });
@@ -44,6 +46,13 @@ function AddLocationSheetContent(props) {
     () => userProfileVarReactive.isAuth,
     [userProfileVarReactive.isAuth]
   );
+  const hasNumber = /\d/;
+  const houseNumber = props.locationDetails.address.split(",")[0];
+  const street = props.locationDetails.address.split(",")[1];
+  const city = props.locationDetails.address.split(",")[2];
+  const postalCode = props.locationDetails.address.split(",")[4];
+  const state = props.locationDetails.address.split(",")[5];
+  const count = props.locationDetails.address.split(",").length - 1;
 
   const {
     control,
@@ -52,12 +61,36 @@ function AddLocationSheetContent(props) {
     formState: { errors },
   } = useForm();
   useEffect(() => {
-    if (data) {
-      setValue("provinceState", props.state);
-      setValue("townCity", props.city);
-      setValue("pinCode", props.post_code);
-      setValue("streetAddress1", props.street);
-      setValue("building", props.houseNo);
+    if (count < 4) {
+      if (data) {
+        setValue("provinceState", props.state);
+        setValue("townCity", props.city);
+        setValue("pinCode", props.post_code);
+        setValue("streetAddress1", props.street);
+        setValue("building", props.houseNo);
+      }
+    } else {
+      if (data) {
+        setValue("provinceState", props.state);
+        setValue("townCity", props.city ? props.city : city);
+        setValue(
+          "pinCode",
+          props.post_code
+            ? props.post_code
+            : hasNumber.test(postalCode)
+            ? postalCode
+            : props.post_code
+        );
+        setValue("streetAddress1", props.street ? props.street : street);
+        setValue(
+          "building",
+          props.houseNo
+            ? props.houseNo
+            : hasNumber.test(houseNumber)
+            ? houseNumber
+            : props.houseNo
+        );
+      }
     }
   }, [data, props]);
   const [open, setOpen] = useState(false);
@@ -143,7 +176,17 @@ function AddLocationSheetContent(props) {
       type: "normal",
       name: "building",
       location:
-        props.locationDetails === null ? "" : props.locationDetails.houseNo,
+        count < 4
+          ? props.locationDetails === null
+            ? ""
+            : props.locationDetails.houseNo
+          : props.locationDetails === null
+          ? ""
+          : props.locationDetails.houseNo === ""
+          ? hasNumber.test(props.locationDetails.address.split(",")[0])
+            ? props.locationDetails.address.split(",")[0]
+            : props.locationDetails.houseNo
+          : props.locationDetails.houseNo,
     },
     {
       placeholder: "Street / Colony Name*",
@@ -152,7 +195,15 @@ function AddLocationSheetContent(props) {
       type: "normal",
       name: "streetAddress1",
       location:
-        props.locationDetails === null ? "" : props.locationDetails.street,
+        count < 4
+          ? props.locationDetails === null
+            ? ""
+            : props.locationDetails.street
+          : props.locationDetails === null
+          ? ""
+          : props.locationDetails.street === ""
+          ? street
+          : props.locationDetails.street,
     },
 
     {
@@ -163,7 +214,15 @@ function AddLocationSheetContent(props) {
       type: "normal",
       name: "townCity",
       location:
-        props.locationDetails === null ? "" : props.locationDetails.city,
+        count < 4
+          ? props.locationDetails === null
+            ? ""
+            : props.locationDetails.city
+          : props.locationDetails.city === null
+          ? ""
+          : props.locationDetails.city === ""
+          ? city
+          : props.locationDetails.city,
     },
     {
       placeholder: "Pincode*",
@@ -174,7 +233,15 @@ function AddLocationSheetContent(props) {
       type: "normal",
       name: "pinCode",
       location:
-        props.locationDetails === null ? "" : props.locationDetails.post_code,
+        count < 4
+          ? props.locationDetails === null
+            ? ""
+            : props.locationDetails.post_code
+          : props.locationDetails.post_code === null
+          ? ""
+          : props.locationDetails.post_code === ""
+          ? postalCode
+          : props.locationDetails.post_code,
     },
     {
       placeholder: "State*",
@@ -184,7 +251,15 @@ function AddLocationSheetContent(props) {
       type: "normal",
       name: "provinceState",
       location:
-        props.locationDetails === null ? "" : props.locationDetails.state,
+        count < 4
+          ? props.locationDetails === null
+            ? ""
+            : props.locationDetails.state
+          : props.locationDetails === null
+          ? ""
+          : props.locationDetails.state === ""
+          ? state
+          : props.locationDetails.post_code,
     },
   ];
   return (
@@ -193,25 +268,32 @@ function AddLocationSheetContent(props) {
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        <View style={[t.itemsCenter, t.h16, t.mT4, t.flexCol]}>
-          {/* <Text style={[styles.txtSave, { color: "transparent" }]}>SAVE</Text> */}
-          <Text style={styles.popupTitle}>Add your delivery address</Text>
-          <TouchableOpacity
-            style={[t.flexRow, t.itemsCenter]}
-            onPress={() => {
-              setShowInfo(!showInfo);
-              setTimeout(() => {
-                setShowInfo(false);
-              }, 2000);
-            }}
-          >
-            <Text style={[{ color: colors.grey80, marginTop: 8 }]}>
-              Please separate your address with commas
-            </Text>
-            <Image
-              source={require("../../../Images/info.png")}
-              style={[t.mT2]}
-            />
+        <View style={styles.titleContainer}>
+          <View style={[t.itemsCenter, t.h16, t.mT4, t.flexCol]}>
+            {/* <Text style={[styles.txtSave, { color: "transparent" }]}>SAVE</Text> */}
+            <Text style={styles.popupTitle}>Add your delivery address</Text>
+            <TouchableOpacity
+              style={[t.flexRow, t.itemsCenter]}
+              onPress={() => {
+                setShowInfo(!showInfo);
+                setTimeout(() => {
+                  setShowInfo(false);
+                }, 2000);
+              }}
+            >
+              <Text style={[{ color: colors.grey80, marginTop: 8 }]}>
+                Please separate your address with commas
+              </Text>
+              <Image
+                source={require("../../../Images/info.png")}
+                style={[t.mT2]}
+              />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity onPress={()=>{
+            setShowMap({ mapVisible: true });
+          }}>
+            <Image style={styles.closeImage} source={Images.ic_close }/>
           </TouchableOpacity>
         </View>
 

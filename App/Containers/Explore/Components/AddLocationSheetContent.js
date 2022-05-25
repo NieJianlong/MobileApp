@@ -28,6 +28,8 @@ import lodash, { isNumber } from "lodash";
 import { GetStatesByCountryId } from "../gql/explore_queries";
 import NavigationService from "../../../Navigation/NavigationService";
 import { setLocalStorageValue } from "../../../Apollo/local-storage";
+import { Images } from "../../../Themes";
+import useMapScreen from "../../../hooks/useMapScreen";
 
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
@@ -35,7 +37,7 @@ const TouchableOpacity =
 function AddLocationSheetContent(props) {
   //123e4567-e89b-12d3-a456-556642440000
   // const [selectedState, setSelectedState] = useState();
-
+  const { setShowMap } = useMapScreen();
   const { data } = useQuery(GetStatesByCountryId, {
     variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
   });
@@ -248,9 +250,16 @@ function AddLocationSheetContent(props) {
       keyboardType: "selector",
       type: "normal",
       name: "provinceState",
-      location: count < 4 ? 
-        (props.locationDetails === null ? "" : props.locationDetails.state) :
-        (props.locationDetails === null ? "" : props.locationDetails.state === "" ? state : props.locationDetails.post_code),
+      location:
+        count < 4
+          ? props.locationDetails === null
+            ? ""
+            : props.locationDetails.state
+          : props.locationDetails === null
+          ? ""
+          : props.locationDetails.state === ""
+          ? state
+          : props.locationDetails.post_code,
     },
   ];
   return (
@@ -259,25 +268,32 @@ function AddLocationSheetContent(props) {
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        <View style={[t.itemsCenter, t.h16, t.mT4, t.flexCol]}>
-          {/* <Text style={[styles.txtSave, { color: "transparent" }]}>SAVE</Text> */}
-          <Text style={styles.popupTitle}>Add your delivery address</Text>
-          <TouchableOpacity
-            style={[t.flexRow, t.itemsCenter]}
-            onPress={() => {
-              setShowInfo(!showInfo);
-              setTimeout(() => {
-                setShowInfo(false);
-              }, 2000);
-            }}
-          >
-            <Text style={[{ color: colors.grey80, marginTop: 8 }]}>
-              Please separate your address with commas
-            </Text>
-            <Image
-              source={require("../../../Images/info.png")}
-              style={[t.mT2]}
-            />
+        <View style={styles.titleContainer}>
+          <View style={[t.itemsCenter, t.h16, t.mT4, t.flexCol]}>
+            {/* <Text style={[styles.txtSave, { color: "transparent" }]}>SAVE</Text> */}
+            <Text style={styles.popupTitle}>Add your delivery address</Text>
+            <TouchableOpacity
+              style={[t.flexRow, t.itemsCenter]}
+              onPress={() => {
+                setShowInfo(!showInfo);
+                setTimeout(() => {
+                  setShowInfo(false);
+                }, 2000);
+              }}
+            >
+              <Text style={[{ color: colors.grey80, marginTop: 8 }]}>
+                Please separate your address with commas
+              </Text>
+              <Image
+                source={require("../../../Images/info.png")}
+                style={[t.mT2]}
+              />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity onPress={()=>{
+            setShowMap({ mapVisible: true });
+          }}>
+            <Image style={styles.closeImage} source={Images.ic_close }/>
           </TouchableOpacity>
         </View>
 

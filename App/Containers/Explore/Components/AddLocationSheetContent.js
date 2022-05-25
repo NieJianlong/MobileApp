@@ -251,7 +251,7 @@ function AddLocationSheetContent(props) {
       keyboardType: "selector",
       type: "normal",
       name: "provinceState",
-      location: count < 6 ? 
+      location: count < 4 ? 
         (props.locationDetails === null ? "" : props.locationDetails.state) :
         (props.locationDetails === null ? "" : props.locationDetails.state === "" ? state : props.locationDetails.post_code),
     },

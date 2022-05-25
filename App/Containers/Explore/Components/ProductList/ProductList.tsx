@@ -25,7 +25,6 @@ import {
   SortDirection,
   SortType,
   useGetListingsLazyQuery,
-  useGetListingsQuery,
 } from "../../../../../generated/graphql";
 import { shareOptions } from "../ShareOptionList";
 import { t } from "react-native-tailwindcss";

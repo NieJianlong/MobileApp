@@ -2,6 +2,18 @@
   "name": "Salami Slicing",
   "displayName": "Salami Slicing",
   "expo": {
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "1b065ebfa68b",
+            "project": "salamislicing",
+            "authToken": "3c3c1324e4124c3da89a72eb1b230501d8d701a3970343c499c6adb92597a103"
+          }
+        }
+      ]
+    },
     "scheme": "salami-slicing",
     "name": "Salami Slicing",
     "owner": "salamislicing",
@@ -9,7 +21,6 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -41,7 +52,6 @@
       ],
       "package": "com.apollo"
     },
-
     "packagerOpts": {
       "config": "metro.config.js",
       "sourceExts": [
@@ -58,7 +68,7 @@
         "svg"
       ]
     },
-
-    "jsEngine": "jsc"
+    "jsEngine": "jsc",
+    "plugins": ["sentry-expo"]
   }
 }

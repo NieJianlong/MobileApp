@@ -2,8 +2,8 @@
 name: Deploy Pilab Dev
 on:
   push:
-    # branches:
-    #   - piLab-dev
+    branches:
+      - develop_0428
 
 jobs:
   ci-test:

@@ -163,6 +163,7 @@ type OrderItemDetailResponse {
   orderTotal: Float!
   buyerId: ID!
   orderItemId: ID!
+  orderItemNumber: String
   quantity: Int!
   itemPrice: Float!
   itemDiscount: Float!
@@ -174,14 +175,16 @@ type OrderItemDetailResponse {
   longName: String
   mainImagePath: String
   productId: ID!
+  productNumber: String
   sellerId: ID!
   vendorSku: String
   sellerSku: String
-  variantId: ID!
-  priceId: ID!
-  retailPrice: Float!
-  wholeSalePrice: Float!
+  variantId: ID
+  priceId: ID
+  retailPrice: Float
+  wholeSalePrice: Float
   listingId: ID!
+  listingNumber: String
   listingStatus: ProductListingStatus!
   storeId: ID!
   deliveryOption: DeliveryOption!
@@ -338,6 +341,7 @@ enum ProductListingStatus {
 """QUERIES"""
 type Query {
   searchBuyerOrders(options: BuyerOrderOption!): BuyerOrderResponse!
+  validateBuyerHasAnyOrder(buyerId: ID!): Boolean!
   getSellerOrders(options: SellerOrderOption!): SellerOrderResponse!
   getSellerListingOrders(options: ListingOrderOptions!): SellerListingOrderResponse!
   getOrderItemDetails(orderItemId: ID!): OrderItemDetailResponse!
@@ -375,12 +379,14 @@ type SellerListingOrder {
   longName: String
   mainImagePath: String
   productId: ID!
+  productNumber: String
   sellerId: ID!
   retailPrice: Float!
   wholeSalePrice: Float!
   defaultVariantId: ID!
   defaultVariantPriceId: ID!
   listingId: ID!
+  listingNumber: String
   listingStatus: ProductListingStatus!
   storeId: ID!
   total: Int!
@@ -434,10 +440,14 @@ type SellerOrderReturn {
   returnId: ID
   returnOption: ReturnOption
   orderItemId: ID
+  orderItemNumber: String
   orderId: ID
+  orderNumber: String
   listingId: ID
+  listingNumber: String
   itemPrice: Float
   productId: ID
+  productNumber: String
   shortName: String
   longName: String
   mainImagePath: String
@@ -485,6 +495,7 @@ enum ShippingStatus {
 
 type TrackOrderItemResponse {
   orderItemId: ID!
+  orderItemNumber: String
   deliveryOption: DeliveryOption!
   latestEventStatus: OrderItemHistoryEventType!
   orderNumber: String!

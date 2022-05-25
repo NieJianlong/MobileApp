@@ -136,6 +136,13 @@ enum BusinessType {
   INDIVIDUAL_SELLER
 }
 
+type BuyerProfileBasicDetailsResponse {
+  buyerId: ID
+  firstName: String
+  lastName: String
+  phoneNumber: String
+}
+
 input BuyerProfileRequest {
   buyerId: ID!
   firstName: String
@@ -363,6 +370,11 @@ type GenericResponse {
   message: String
 }
 
+input GuestBuyerProfileRequest {
+  buyerId: ID!
+  password: String!
+}
+
 type MicroHubResponse {
   microHubId: ID
   address: AddressResponse
@@ -372,7 +384,7 @@ type MicroHubResponse {
 }
 
 type Mutation {
-  registerGuestBuyerToBuyer(request: BuyerProfileRequest!): BuyerProfileResponse
+  registerGuestBuyerToBuyer(request: GuestBuyerProfileRequest!): BuyerProfileResponse
   registerBuyer(request: BuyerProfileRequestForCreate!): BuyerProfileResponse
   deleteBuyerProfile(buyerId: ID!): Boolean
   updateBuyerProfile(request: BuyerProfileRequest!): BuyerProfileResponse
@@ -581,6 +593,7 @@ type Query {
   oneClickBuy(buyerId: ID!): OneClickBuyResponse
   buyerProfileByUserId(userProfileId: ID!): BuyerProfileResponse
   getRefundSalamiCredit(buyerId: ID!): Float
+  buyerProfileBasicDetails(buyerId: ID!): BuyerProfileBasicDetailsResponse!
   getBuyerSalamiWalletBalance: SalamiWalletResponse
   sellerProfilesPaginated(pageable: SellerProfilePageable): SellerProfileResponsePaginated!
   sellerProfile(sellerId: ID!): SellerProfileResponse

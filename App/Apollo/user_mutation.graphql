@@ -50,7 +50,7 @@ mutation RegisterBuyer($request: BuyerProfileRequestForCreate!) {
     userId
   }
 }
-mutation RegisterGuestBuyerToBuyer($request: BuyerProfileRequest!) {
+mutation RegisterGuestBuyerToBuyer($request: GuestBuyerProfileRequest!) {
   registerGuestBuyerToBuyer(request: $request) {
     buyerId
     userId

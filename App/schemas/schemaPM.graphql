@@ -513,7 +513,9 @@ type ProductListingView {
   relatedProducts: String
   reviews: [ReviewView]
   listingId: String
+  listingNumber: String
   productId: String
+  productNumber: String
   storeId: String
   storeName: String
   status: String
@@ -878,6 +880,7 @@ type SellerListingGroupResponse {
 
 type SellerListingGroupView {
   productId: ID!
+  productNumber: String
   shortName: String
   mainImageUrl: String
   ended: Int!
@@ -922,6 +925,7 @@ type SellerListingView {
   listingNumber: String
   listingStatus: ProductListingStatus!
   productId: ID!
+  productNumber: String
   shortName: String!
   mainPhotoUrl: String
   startDate: DateTime

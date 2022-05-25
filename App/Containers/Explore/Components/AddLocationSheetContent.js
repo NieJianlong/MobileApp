@@ -24,7 +24,7 @@ import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-han
 import DropDownPicker from "react-native-dropdown-picker";
 import { t } from "react-native-tailwindcss";
 import { Controller, useForm } from "react-hook-form";
-import lodash from "lodash";
+import lodash, { isNumber } from "lodash";
 import { GetStatesByCountryId } from "../gql/explore_queries";
 import NavigationService from "../../../Navigation/NavigationService";
 import { setLocalStorageValue } from "../../../Apollo/local-storage";
@@ -44,6 +44,13 @@ function AddLocationSheetContent(props) {
     () => userProfileVarReactive.isAuth,
     [userProfileVarReactive.isAuth]
   );
+  const hasNumber = /\d/;
+  const houseNumber = props.locationDetails.address.split(",")[0];
+  const street = props.locationDetails.address.split(",")[1];
+  const city = props.locationDetails.address.split(",")[2];
+  const postalCode = props.locationDetails.address.split(",")[4];
+  const state = props.locationDetails.address.split(",")[5];
+  const count = props.locationDetails.address.split(",").length - 1;
 
   const {
     control,
@@ -52,12 +59,36 @@ function AddLocationSheetContent(props) {
     formState: { errors },
   } = useForm();
   useEffect(() => {
-    if (data) {
-      setValue("provinceState", props.state);
-      setValue("townCity", props.city);
-      setValue("pinCode", props.post_code);
-      setValue("streetAddress1", props.street);
-      setValue("building", props.houseNo);
+    if (count < 4) {
+      if (data) {
+        setValue("provinceState", props.state);
+        setValue("townCity", props.city);
+        setValue("pinCode", props.post_code);
+        setValue("streetAddress1", props.street);
+        setValue("building", props.houseNo);
+      }
+    } else {
+      if (data) {
+        setValue("provinceState", props.state);
+        setValue("townCity", props.city ? props.city : city);
+        setValue(
+          "pinCode",
+          props.post_code
+            ? props.post_code
+            : hasNumber.test(postalCode)
+            ? postalCode
+            : props.post_code
+        );
+        setValue("streetAddress1", props.street ? props.street : street);
+        setValue(
+          "building",
+          props.houseNo
+            ? props.houseNo
+            : hasNumber.test(houseNumber)
+            ? houseNumber
+            : props.houseNo
+        );
+      }
     }
   }, [data, props]);
   const [open, setOpen] = useState(false);
@@ -143,7 +174,17 @@ function AddLocationSheetContent(props) {
       type: "normal",
       name: "building",
       location:
-        props.locationDetails === null ? "" : props.locationDetails.houseNo,
+        count < 4
+          ? props.locationDetails === null
+            ? ""
+            : props.locationDetails.houseNo
+          : props.locationDetails === null
+          ? ""
+          : props.locationDetails.houseNo === ""
+          ? hasNumber.test(props.locationDetails.address.split(",")[0])
+            ? props.locationDetails.address.split(",")[0]
+            : props.locationDetails.houseNo
+          : props.locationDetails.houseNo,
     },
     {
       placeholder: "Street / Colony Name*",
@@ -152,7 +193,15 @@ function AddLocationSheetContent(props) {
       type: "normal",
       name: "streetAddress1",
       location:
-        props.locationDetails === null ? "" : props.locationDetails.street,
+        count < 4
+          ? props.locationDetails === null
+            ? ""
+            : props.locationDetails.street
+          : props.locationDetails === null
+          ? ""
+          : props.locationDetails.street === ""
+          ? street
+          : props.locationDetails.street,
     },
 
     {
@@ -163,7 +212,15 @@ function AddLocationSheetContent(props) {
       type: "normal",
       name: "townCity",
       location:
-        props.locationDetails === null ? "" : props.locationDetails.city,
+        count < 4
+          ? props.locationDetails === null
+            ? ""
+            : props.locationDetails.city
+          : props.locationDetails.city === null
+          ? ""
+          : props.locationDetails.city === ""
+          ? city
+          : props.locationDetails.city,
     },
     {
       placeholder: "Pincode*",
@@ -174,7 +231,15 @@ function AddLocationSheetContent(props) {
       type: "normal",
       name: "pinCode",
       location:
-        props.locationDetails === null ? "" : props.locationDetails.post_code,
+        count < 4
+          ? props.locationDetails === null
+            ? ""
+            : props.locationDetails.post_code
+          : props.locationDetails.post_code === null
+          ? ""
+          : props.locationDetails.post_code === ""
+          ? postalCode
+          : props.locationDetails.post_code,
     },
     {
       placeholder: "State*",
@@ -183,8 +248,9 @@ function AddLocationSheetContent(props) {
       keyboardType: "selector",
       type: "normal",
       name: "provinceState",
-      location:
-        props.locationDetails === null ? "" : props.locationDetails.state,
+      location: count < 4 ? 
+        (props.locationDetails === null ? "" : props.locationDetails.state) :
+        (props.locationDetails === null ? "" : props.locationDetails.state === "" ? state : props.locationDetails.post_code),
     },
   ];
   return (

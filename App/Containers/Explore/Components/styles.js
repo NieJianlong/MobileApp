@@ -2,9 +2,19 @@ import { ScaledSheet } from "react-native-size-matters";
 import { ApplicationStyles, Colors, Fonts } from "../../../Themes";
 import { isIphoneX } from "react-native-iphone-x-helper";
 import AppConfig from "../../../Config/AppConfig";
+import { colors } from "react-native-tailwindcss";
 
 export default ScaledSheet.create({
   ...ApplicationStyles.screen,
+  closeImage: {
+    height: '15@s',
+    width: '15@s',
+    tintColor: colors.black,
+  },
+  titleContainer: {
+    flexDirection: "row",
+    justifyContent: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.background,

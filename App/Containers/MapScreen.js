@@ -36,6 +36,7 @@ const MapScreen = () => {
   const { setLoading } = useLoading();
   const { dispatch } = useContext(AlertContext);
   const { setShowMap } = useMapScreen();
+  const [isTapable, setIsTapable] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -73,7 +74,6 @@ const MapScreen = () => {
         .then((results) => {
           console.log("getCurrentPlace", results[0]);
           setLoading({ show: false });
-
           // setLocation(
           //   results && results[0] && { location: results[0].location, address: results[0].address }
           // );
@@ -180,6 +180,8 @@ const MapScreen = () => {
         location: { latitude: region.latitude, longitude: region.longitude },
       });
     }
+
+    setIsTapable(false);
   };
 
   const INITIAL_REGION = location && {
@@ -234,6 +236,7 @@ const MapScreen = () => {
             t.itemsCenter,
             t.justifyCenter,
           ]}
+          disabled={isTapable}
           onPress={() => {
             setShowMap({ mapVisible: false });
             dispatch({

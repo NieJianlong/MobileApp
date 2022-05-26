@@ -20,15 +20,15 @@ function PickInfo({
 }: PickInfoProps) {
   const isPickFromSeller =
     deliveryOption === DeliveryOption.SellerLocationPickup;
-  const collectAddress = `${collectionPoint?.streetAddress1 ?? ""}${
+  const collectAddress = `${collectionPoint?.streetAddress1 ?? ""} ${
     collectionPoint?.streetAddress2 ?? ""
-  }${collectionPoint?.townCity}${collectionPoint?.provinceState}${
-    collectionPoint?.country
-  } ${collectionPoint?.areaCode ?? ""}`;
-  const sellerAddress = `${sellerLocation?.streetAddress1 ?? ""}${
+  } ${collectionPoint?.townCity ?? ""} ${
+    collectionPoint?.provinceState ?? ""
+  } ${collectionPoint?.country} ${collectionPoint?.areaCode ?? ""}`;
+  const sellerAddress = `${sellerLocation?.streetAddress1 ?? ""} ${
     sellerLocation?.streetAddress2 ?? ""
-  }${sellerLocation?.townCity}${sellerLocation?.provinceState}${
-    sellerLocation?.country
+  } ${sellerLocation?.townCity ?? ""} ${sellerLocation?.provinceState ?? ""} ${
+    sellerLocation?.country ?? ""
   } ${sellerLocation?.areaCode ?? ""}`;
   const address = isPickFromSeller ? sellerAddress : collectAddress;
   return (

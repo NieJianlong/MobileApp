@@ -12,9 +12,10 @@ import { ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
 import * as storage from "../../Apollo/local-storage";
 import NavigationService from "../../Navigation/NavigationService";
-import { useReactiveVar } from "@apollo/client";
+import { useMutation, useReactiveVar } from "@apollo/client";
 import { localCartVar, userProfileVar } from "../../Apollo/cache";
 import { useNavigation } from "@react-navigation/core";
+import { CREATE_GUEST_BUYER } from "../Onboarding/gql/onboard_mutations";
 
 /**
  * @description:tab menu item
@@ -26,6 +27,14 @@ function ListItem(props) {
   const localCartVarReactive = useReactiveVar(localCartVar);
   const userProfileVarReactive = useReactiveVar(userProfileVar);
   const { lefticon, text, righticon, onPress, hasline, leftStyle } = props;
+  const [guestBuyerId, { data, error }] = useMutation(CREATE_GUEST_BUYER, {
+    onCompleted: async (data) => {
+      let buyerId = data.createGuestBuyer.buyerId;
+      await storage.setLocalStorageValue(storage.GUEST_BUYER_ID_KEY, buyerId);
+      global.buyerId = buyerId;
+    },
+    onError: (error) => console.error("Error creating a guest Id", error),
+  });
   return (
     <TouchableOpacity
       onPress={async () => {
@@ -47,6 +56,7 @@ function ListItem(props) {
             storage.REGISTERED_USER_LOGOUT,
             "true"
           );
+          guestBuyerId();
           userProfileVar({
             ...userProfileVarReactive,
             isAuth: false,

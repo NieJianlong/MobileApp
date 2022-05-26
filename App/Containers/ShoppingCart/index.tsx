@@ -88,6 +88,27 @@ function ShoppingCart(props) {
   }, []);
 
   useEffect(() => {
+    const query1 = realm
+      .objects("ShoppingCart")
+      .filtered("addressId == $0", localCart.deliverAddress)
+      .filtered("quantity > 0")
+      .filtered("isDraft == false");
+    const datas = [];
+    debugger;
+    if (query1) {
+      query1.map((item) => {
+        debugger;
+        const newItem = {
+          listingId: item.listingId,
+          variantId: item.variantId,
+          quantity: item.quantity,
+        };
+        datas.push(newItem);
+      });
+      setRequestArray(datas);
+    } else {
+      setRequestArray([]);
+    }
     let refresh = PubSub.subscribe("refresh-shoppingcart", () => {
       const query1 = realm
         .objects("ShoppingCart")
@@ -95,8 +116,10 @@ function ShoppingCart(props) {
         .filtered("quantity > 0")
         .filtered("isDraft == false");
       const datas = [];
+      debugger;
       if (query1) {
         query1.map((item) => {
+          debugger;
           const newItem = {
             listingId: item.listingId,
             variantId: item.variantId,

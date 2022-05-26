@@ -11,6 +11,7 @@ import * as jwt from "../Apollo/jwt-request";
 import jwt_decode from "jwt-decode";
 import NavigationService from "../Navigation/NavigationService";
 import {
+  GUEST_BUYER_ID_KEY,
   LOCAL_STORAGE_TOKEN_KEY,
   LOCAL_STORAGE_USER_NAME,
   LOCAL_STORAGE_USER_PASSWORD,
@@ -102,6 +103,7 @@ function RegisterGuestBuyerToBuyerForm({
           username: res?.registerGuestBuyerToBuyer?.phoneNumber,
           password: data.password,
         });
+        setLocalStorageValue(GUEST_BUYER_ID_KEY, "");
       },
       onError: () => {
         setLoading({ show: false });

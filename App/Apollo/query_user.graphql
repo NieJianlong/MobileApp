@@ -82,6 +82,10 @@ query GetBuyerSalamiWalletBalance {
     giftBalance
   }
 }
+query ValidateBuyerHasAnyOrder($buyerId: ID!) {
+  validateBuyerHasAnyOrder(buyerId: $buyerId)
+}
+
 query SellerProfileBasicDetails($sellerId: ID!) {
   sellerProfileBasicDetails(sellerId: $sellerId) {
     sellerId

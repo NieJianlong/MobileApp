@@ -11,6 +11,7 @@ import { SendVerifyEmail } from "../Register/gql/register_mutations";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { userProfileVar } from "../../Apollo/cache";
 import useStatusBar from "../../hooks/useStatusBar";
+import { useValidateBuyerHasAnyOrderLazyQuery } from "../../../generated/graphql";
 const SearchBarContext = React.createContext({});
 
 function Explore(props) {
@@ -20,6 +21,7 @@ function Explore(props) {
     showAccountActivatedSuccessfullyAlert,
     setShowAccountActivatedSuccessfullyAlert,
   ] = useState(false);
+
   // const [sendVerifyEmail] = useMutation(SendVerifyEmail);
   //Fixed a bug that accidentally triggered onclick when swiping
   // to show an alert to users that they need to activate their accounts

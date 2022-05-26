@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   useWindowDimensions,
   Platform,
-  PermissionsAndroid
+  PermissionsAndroid,
 } from "react-native";
 import { Alert, BottomSheet } from "../../Components";
 import AppNavigation from "../../Navigation/AppNavigation";
@@ -33,6 +33,9 @@ import RegisterGuestBuyerToBuyerScreen from "../RegisterGuestBuyerToBuyer";
 import { Portal, Text } from "react-native-paper";
 import LoginModalForm from "../LoginModalForm";
 import { Images } from "../../Themes";
+import CheckoutPaymentCompletedGuest from "../CheckoutPaymentCompletedGuest";
+import useRegisterGuest from "../../hooks/useRegisterGuest";
+import { useValidateBuyerHasAnyOrderLazyQuery } from "../../../generated/graphql";
 
 const initialState = {
   alert: {
@@ -83,7 +86,19 @@ function RootContainer() {
     dispatch,
   ] = useReducer(reducer, initialState);
   const { setShowMap } = useMapScreen();
-  const { visibleRegister } = useRegister();
+  const { visibleRegister, setRegister } = useRegisterGuest();
+  const [validateBuyerHasAnyOrder] = useValidateBuyerHasAnyOrderLazyQuery({
+    onCompleted: (res) => {
+      if (res.validateBuyerHasAnyOrder) {
+        setRegister({ visibleRegister: res.validateBuyerHasAnyOrder });
+      }
+    },
+  });
+  useEffect(() => {
+    if (!global.access_token && global.buyerId) {
+      validateBuyerHasAnyOrder({ variables: { buyerId: global.buyerId } });
+    }
+  }, [global.access_token, global.buyerId]);
   const {
     showSheet,
     children,
@@ -228,6 +243,10 @@ function RootContainer() {
           )}
         </BottomSheet>
       )}
+
+      <Modal visible={visibleRegister} transparent={true}>
+        <CheckoutPaymentCompletedGuest />
+      </Modal>
 
       <Modal visible={imageViewerVisible} transparent={true}>
         <View style={[{ width, height: windowHeight }]}>

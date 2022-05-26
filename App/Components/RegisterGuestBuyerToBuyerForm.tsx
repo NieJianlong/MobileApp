@@ -26,6 +26,7 @@ import { t } from "react-native-tailwindcss";
 import Button from "./Button";
 import PasswordInput from "./PasswordInput";
 import useRegisterGuest from "../hooks/useRegisterGuest";
+import Button1 from "./Button1";
 export interface RegisterGuestBuyerToBuyerFormProps {
   style?: StyleProp<TextStyle>;
 }
@@ -171,7 +172,7 @@ function RegisterGuestBuyerToBuyerForm({
             marginTop: 35,
           }}
         >
-          <Button text="REGISTER" onPress={handleSubmit(onRegister)} />
+          <Button1 text="REGISTER" onPress={handleSubmit(onRegister)} />
         </View>
       </KeyboardAwareScrollView>
     </View>

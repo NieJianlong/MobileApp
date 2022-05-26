@@ -56,7 +56,6 @@ export function usePaymentConfigration() {
 
   const { razorpayVerifyPaymentSignature } = useRazorVerifyPayment();
   const getPaymentConfigration = (orderId: string, amount: number) => {
-    
     const options = {
       description: "Wholesale Marketplace",
       image:
@@ -89,8 +88,11 @@ export function usePaymentConfigration() {
         if (orderInfo.comeFromType === ComeFromType.checkout) {
           clearData();
         }
-
-        NavigationService.navigate("OrderPlacedScreen");
+        if (global.access_token) {
+          NavigationService.navigate("OrderPlacedScreen");
+        } else {
+          NavigationService.navigate("CheckoutPaymentCompletedGuestScreen");
+        }
       })
       .catch((error) => {});
   };

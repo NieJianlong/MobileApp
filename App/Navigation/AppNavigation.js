@@ -652,6 +652,9 @@ function PrimaryNav() {
       <Stack.Screen
         name={"CheckoutPaymentCompletedGuestScreen"}
         component={CheckoutPaymentCompletedGuestScreen}
+        options={{
+          headerShown: false,
+        }}
       />
       <Stack.Screen name={"ChatScreen"} component={ChatScreen} />
       {/* <Stack.Screen

@@ -52,8 +52,7 @@ mutation RegisterBuyer($request: BuyerProfileRequestForCreate!) {
 }
 mutation RegisterGuestBuyerToBuyer($request: GuestBuyerProfileRequest!) {
   registerGuestBuyerToBuyer(request: $request) {
-    buyerId
-    userId
+    ...BuyerProfileResponseFields
   }
 }
 mutation UpdateBillingDetails($request: BillingDetailsRequest!) {

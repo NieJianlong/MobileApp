@@ -14,7 +14,7 @@ import * as Sentry from "sentry-expo";
 Sentry.init({
   dsn: "https://908e7b35c4824794aecc2e070deccf59@o1261296.ingest.sentry.io/6438866",
   enableInExpoDevelopment: true,
-  debug: false, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
+  debug: true, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
 });
 // Sentry.Native.nativeCrash();
 // Instruct SplashScreen not to hide yet, we want to do this manually

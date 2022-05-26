@@ -4688,7 +4688,7 @@ export type RegisterGuestBuyerToBuyerMutationVariables = Exact<{
 }>;
 
 
-export type RegisterGuestBuyerToBuyerMutation = { __typename?: 'Mutation', registerGuestBuyerToBuyer?: { __typename?: 'BuyerProfileResponse', buyerId?: string | null | undefined, userId?: string | null | undefined } | null | undefined };
+export type RegisterGuestBuyerToBuyerMutation = { __typename?: 'Mutation', registerGuestBuyerToBuyer?: { __typename?: 'BuyerProfileResponse', userId?: string | null | undefined, buyerId?: string | null | undefined, userName?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, emailVerified?: boolean | null | undefined, phoneNumberVerified?: boolean | null | undefined, userType?: UserType | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, oneClickPurchaseOn?: boolean | null | undefined, guestBuyer?: boolean | null | undefined, geoLocation?: string | null | undefined, country?: string | null | undefined, languages?: Array<string | null | undefined> | null | undefined, currencies?: Array<string | null | undefined> | null | undefined, applicationSettings?: string | null | undefined, categoryPreferences?: Array<string | null | undefined> | null | undefined, productPreferences?: Array<string | null | undefined> | null | undefined, sellerPreferences?: Array<string | null | undefined> | null | undefined, refundSalamiCredit?: number | null | undefined, bonusSalamiCredit?: number | null | undefined, bonusSalamiCreditExpire?: any | null | undefined, walletId?: string | null | undefined, billingDetails?: { __typename?: 'BillingDetailsResponse', billingDetailsId?: string | null | undefined, buyerId?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, companyName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, taxCode?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, billingAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined };
 
 export type UpdateBillingDetailsMutationVariables = Exact<{
   request: BillingDetailsRequest;
@@ -6782,11 +6782,10 @@ export type RegisterBuyerMutationOptions = Apollo.BaseMutationOptions<RegisterBu
 export const RegisterGuestBuyerToBuyerDocument = gql`
     mutation RegisterGuestBuyerToBuyer($request: GuestBuyerProfileRequest!) {
   registerGuestBuyerToBuyer(request: $request) {
-    buyerId
-    userId
+    ...BuyerProfileResponseFields
   }
 }
-    `;
+    ${BuyerProfileResponseFieldsFragmentDoc}`;
 export type RegisterGuestBuyerToBuyerMutationFn = Apollo.MutationFunction<RegisterGuestBuyerToBuyerMutation, RegisterGuestBuyerToBuyerMutationVariables>;
 
 /**

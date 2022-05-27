@@ -46,6 +46,9 @@ import useAlert from "../../hooks/useAlert";
 import useLoading from "../../hooks/useLoading";
 import useRegister from "../../hooks/useRegister";
 import AsyncStorage from "@react-native-community/async-storage";
+import RNUserIdentity, {
+  ICLOUD_ACCESS_ERROR,
+} from "react-native-user-identity";
 
 function RegisterScreen(props) {
   const { dispatch } = useContext(AlertContext);
@@ -67,42 +70,41 @@ function RegisterScreen(props) {
     formState: { errors },
   } = useForm<BuyerProfileRequestForCreate>();
 
-  const emailRetrieve = async () => {
-    try {
-      const value = await AsyncStorage.getItem("emailList");
-      setFetchedEmail(JSON.parse(value));
-    } catch (error) {
-      console.log("error retrieve");
-    }
-  };
+  // const emailRetrieve = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem("emailList");
+  //     setFetchedEmail(JSON.parse(value));
+  //   } catch (error) {
+  //     console.log("error retrieve");
+  //   }
+  // };
 
-  useEffect(() => {
-    emailRetrieve();
-  }, [savedEmail]);
+  // useEffect(() => {
+  //   emailRetrieve();
+  // }, [savedEmail]);
 
   console.log("see email retrieved", fetchedEmail);
 
-  
-  const storeEmail = async () => {
-    if (fetchedEmail) {
-      const isExisting = fetchedEmail.find((data) => data === savedEmail);
-      if (isExisting === undefined) {
-        const val = [...fetchedEmail, savedEmail];
-        try {
-          await AsyncStorage.setItem("emailList", JSON.stringify(val));
-        } catch (error) {
-          console.log("error saving data");
-        }
-      }
-    } else {
-      const val = [savedEmail];
-      try {
-        await AsyncStorage.setItem("emailList", JSON.stringify(val));
-      } catch (error) {
-        console.log("error saving data");
-      }
-    }
-  };
+  // const storeEmail = async () => {
+  //   if (fetchedEmail) {
+  //     const isExisting = fetchedEmail.find((data) => data === savedEmail);
+  //     if (isExisting === undefined) {
+  //       const val = [...fetchedEmail, savedEmail];
+  //       try {
+  //         await AsyncStorage.setItem("emailList", JSON.stringify(val));
+  //       } catch (error) {
+  //         console.log("error saving data");
+  //       }
+  //     }
+  //   } else {
+  //     const val = [savedEmail];
+  //     try {
+  //       await AsyncStorage.setItem("emailList", JSON.stringify(val));
+  //     } catch (error) {
+  //       console.log("error saving data");
+  //     }
+  //   }
+  // };
 
   // validation
   let [validationDisplay, setValidationDisplay] = useState("");
@@ -284,7 +286,7 @@ function RegisterScreen(props) {
   });
   const onSubmit = (data: BuyerProfileRequestForCreate) => {
     if (termsAccepted) {
-      storeEmail();
+      // storeEmail();
       setLoading({ show: true });
       registerBuyer({
         variables: {
@@ -343,7 +345,6 @@ function RegisterScreen(props) {
           onPress={() => {
             setSavedEmail(item);
             setShowEmailList(false);
-            emailInput.current.getInnerRef().focus();
           }}
         >
           <Text style={styles.emailListText}>{item}</Text>
@@ -369,6 +370,20 @@ function RegisterScreen(props) {
       />
     );
   };
+
+  const fetchUserIdentity = async () => {
+    try {
+      const result = await RNUserIdentity.getUserId()
+      setSavedEmail(result);
+      if (result === null) {
+        // alert('User canceled UI flow')
+      } 
+    } catch(error) {
+      if (error === ICLOUD_ACCESS_ERROR) {
+        alert('Please set up an iCloud account in settings')
+      }
+    }
+  }
 
   return (
     <View style={[styles.container, props.style]}>
@@ -510,13 +525,15 @@ function RegisterScreen(props) {
                 onChange(savedEmail);
               }}
               onFocus={() => {
-                if (fetchedEmail) {
-                  if (savedEmail || fetchedEmail.length === 0) {
-                    setShowEmailList(false);
-                  } else {
-                    setShowEmailList(true);
-                  }
-                }
+                // if (fetchedEmail) {
+                //   if (savedEmail || fetchedEmail.length === 0) {
+                //     setShowEmailList(false);
+                //   } else {
+                //     setShowEmailList(true);
+                //   }
+                // }
+
+                fetchUserIdentity();
               }}
               textAlignVertical={"center"}
             />

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop_0428
+      - sellerScan
 
 jobs:
   ci-test:

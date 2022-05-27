@@ -41,7 +41,7 @@ import { Controller, useForm } from "react-hook-form";
 function LoginScreen(props) {
   // refs
   // let passwordInput = null;
-  const [fetchedEmail, setFetchedEmail] = useState([]);
+  // const [fetchedEmail, setFetchedEmail] = useState([]);
   const passwordInput = useRef();
   const [savedEmail, setSavedEmail] = useState();
   const [showEmailList, setShowEmailList] = useState(false);
@@ -62,18 +62,18 @@ function LoginScreen(props) {
     },
   });
 
-  const emailRetrieve = async () => {
-    try {
-      const value = await AsyncStorage.getItem("emailList");
-      setFetchedEmail(JSON.parse(value));
-    } catch (error) {
-      console.log("error retrieve");
-    }
-  };
+  // const emailRetrieve = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem("emailList");
+  //     setFetchedEmail(JSON.parse(value));
+  //   } catch (error) {
+  //     console.log("error retrieve");
+  //   }
+  // };
 
-  useEffect(() => {
-    emailRetrieve();
-  }, [savedEmail]);
+  // useEffect(() => {
+  //   emailRetrieve();
+  // }, [savedEmail]);
 
   const [getBuerIdProfile] = useBuyerProfileByUserIdLazyQuery({
     onError: (err) => {
@@ -170,7 +170,7 @@ function LoginScreen(props) {
     // see /home/ubu5/vk-dev/MobileApp/__tests__/v_tests.js  'test determine user input'
     let ret = validator.loginDifferentiator(data.username);
     // setEmailList({ emailListed: sampleData });
-    storeEmail();
+    // storeEmail();
     if (ret.isValid) {
       // setEmailList({ emailListed: sampleData });
       // we are good so we can test for email or phone
@@ -346,26 +346,26 @@ function LoginScreen(props) {
 
   const sampleData = ["jonathan@gmail.com"];
 
-  const storeEmail = async () => {
-    if (fetchedEmail) {
-      const isExisting = fetchedEmail.find((data) => data === savedEmail);
-      if (isExisting === undefined) {
-        const val = [...fetchedEmail, savedEmail];
-        try {
-          await AsyncStorage.setItem("emailList", JSON.stringify(val));
-        } catch (error) {
-          console.log("error saving data");
-        }
-      }
-    } else {
-      const val = [savedEmail];
-      try {
-        await AsyncStorage.setItem("emailList", JSON.stringify(val));
-      } catch (error) {
-        console.log("error saving data");
-      }
-    }
-  };
+  // const storeEmail = async () => {
+  //   if (fetchedEmail) {
+  //     const isExisting = fetchedEmail.find((data) => data === savedEmail);
+  //     if (isExisting === undefined) {
+  //       const val = [...fetchedEmail, savedEmail];
+  //       try {
+  //         await AsyncStorage.setItem("emailList", JSON.stringify(val));
+  //       } catch (error) {
+  //         console.log("error saving data");
+  //       }
+  //     }
+  //   } else {
+  //     const val = [savedEmail];
+  //     try {
+  //       await AsyncStorage.setItem("emailList", JSON.stringify(val));
+  //     } catch (error) {
+  //       console.log("error saving data");
+  //     }
+  //   }
+  // };
 
   return (
     <View style={[t.absolute, t.left0, t.top0, { width, height }, t.bgWhite]}>
@@ -414,12 +414,12 @@ function LoginScreen(props) {
                     setSavedEmail(text);
                   }}
                   textAlignVertical={"center"}
-                  onFocus={() => {
-                    onChange(savedEmail);
-                    if (fetchedEmail && fetchedEmail.length !== 0) {
-                      setShowEmailList(true);
-                    }
-                  }}
+                  // onFocus={() => {
+                  //   onChange(savedEmail);
+                  //   if (fetchedEmail && fetchedEmail.length !== 0) {
+                  //     setShowEmailList(true);
+                  //   }
+                  // }}
                 />
               )}
               name="username"

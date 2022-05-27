@@ -1,11 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Image, TouchableOpacity, Platform } from "react-native";
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  Platform,
+  useWindowDimensions,
+  Text,
+} from "react-native";
 import Video from "react-native-video";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import Button from "../../Components/Button";
 
-import { Colors, Images } from "../../Themes";
+import { Colors, Fonts, Images } from "../../Themes";
 import styles from "./styles";
 import { vs } from "react-native-size-matters";
 import NavigationService from "../../Navigation/NavigationService";
@@ -14,6 +21,8 @@ import * as aQM from "./gql/onboard_mutations";
 import * as storage from "../../Apollo/local-storage";
 
 import { AlertContext } from "../Root/GlobalContext";
+import { t } from "react-native-tailwindcss";
+import AppConfig from "../../Config/AppConfig";
 
 function OnboardingScreen(props) {
   const [bIdExists, setBIdExists] = useState(false);
@@ -69,6 +78,7 @@ function OnboardingScreen(props) {
       // unmount here
     };
   }, [props]);
+  const { width, height } = useWindowDimensions();
 
   /**
    * call back for the onCompleted CREATE_GUEST_BUYER mutation
@@ -110,17 +120,52 @@ function OnboardingScreen(props) {
               source={isPlaying ? Images.pause : Images.play}
             />
           </TouchableOpacity>
+          <View style={[t.flexRow, t.wFull, t.justifyCenter]}>
+            <Button
+              text={"Sign in"}
+              onPress={() => NavigationService.navigate("LoginScreen")}
+              style={[{ width: width / 2 - 60 }]}
+            />
+            <Text
+              style={[
+                t.textWhite,
+                t.mL6,
+                t.mT4,
+                {
+                  fontSize: AppConfig.fontSize,
+                  fontFamily: Fonts.semibold,
+                },
+              ]}
+            >
+              or
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                NavigationService.navigate("RegisterScreen");
+              }}
+            >
+              <Text
+                style={[
+                  t.textPrimary,
+                  t.mL6,
+                  t.mT4,
+                  {
+                    fontSize: AppConfig.fontSize,
+                    fontFamily: Fonts.semibold,
+                    textDecorationLine: "underline",
+                  },
+                ]}
+              >
+                Register
+              </Text>
+            </TouchableOpacity>
+          </View>
 
+          <View style={{ height: vs(32) }} />
           <Button
-            text={"SIGN IN"}
-            onPress={() => NavigationService.navigate("LoginScreen")}
-          />
-
-          <View style={{ height: vs(12) }} />
-          <Button
-            text={"CONTINUE"}
-            backgroundColor={Colors.white}
-            textColor={Colors.black}
+            text={"Continue as guest"}
+            backgroundColor={"transparent"}
+            textColor={Colors.white}
             onPress={async () => {
               // call the CREATE_GUEST_BUYER mutation see onGetGuestBuyerId callback
               let bid = await storage.getLocalStorageValue(

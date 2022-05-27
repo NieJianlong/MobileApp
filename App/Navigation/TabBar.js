@@ -21,11 +21,11 @@ function TabBar(props) {
       case "ExploreScreen":
         return Images.logo1;
       case "PackageScreen":
-        return isFocused ? Images.packageFilled : Images.packageMed;
+        return Images.packageFilled;
       case "CartScreen":
-        return isFocused ? Images.cartFilled : Images.cartMed;
+        return Images.cartFilled;
       case "FollowScreen":
-        return isFocused ? Images.likeFilled : Images.likeMed;
+        return Images.likeFilled;
       case "MenuScreen":
         return Images.dots;
     }

@@ -82,7 +82,6 @@ function RegisterScreen(props) {
 
   console.log("see email retrieved", fetchedEmail);
 
-  
   const storeEmail = async () => {
     if (fetchedEmail) {
       const isExisting = fetchedEmail.find((data) => data === savedEmail);
@@ -486,11 +485,11 @@ function RegisterScreen(props) {
           control={control}
           rules={{
             required: "Field is required.",
-            // pattern: {
-            //   value:
-            //     /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
-            //   message: "invalid email address",
-            // },
+            pattern: {
+              value:
+                /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
+              message: "invalid email address",
+            },
           }}
           render={({ field: { onChange, value } }) => (
             <TextInput
@@ -554,10 +553,10 @@ function RegisterScreen(props) {
                           resph
                         );
                         if (resph.startsWith("+91")) {
-                          setValue("phoneNumber", trimStart(resph, "+91"));
+                          setValue("phoneNumber", resph.replace("+91", ""));
                         }
                         if (resph.startsWith("+86")) {
-                          setValue("phoneNumber", trimStart(resph, "+86"));
+                          setValue("phoneNumber", resph.replace("+86", ""));
                         }
                       })
                       .catch((err) => {

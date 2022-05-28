@@ -343,7 +343,7 @@ function OTPScreen(props) {
           disabled={allowToResendCode}
           onPress={() => {
             setLoading({ show: true });
-          
+
             if (params.fromScreen === "ForgotPasswordScreen") {
               forgetPasswordResendCode({
                 variables: { email: params?.phone ?? "" },

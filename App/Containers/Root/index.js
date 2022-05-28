@@ -22,7 +22,6 @@ import useAlert from "../../hooks/useAlert";
 import useLoading from "../../hooks/useLoading";
 import ImageViewer from "react-native-image-zoom-viewer";
 import useImageViewer from "../../hooks/useImageViewer";
-import LoginScreen from "../Login";
 import useLogin from "../../hooks/useLogin";
 import MapScreen from "../MapScreen";
 import useMapScreen from "../../hooks/useMapScreen";

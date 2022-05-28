@@ -218,7 +218,7 @@ function LoginScreen(props) {
                     sendCodeRequest: {
                       userId: decoded?.sub,
                       validationType: validator.isValidEmail(
-                        loginRequestMemo.username?.trim()
+                        data.username?.trim()
                       )
                         ? ValidationType.Email
                         : ValidationType.Sms,
@@ -234,10 +234,13 @@ function LoginScreen(props) {
                       type: "changLoading",
                       payload: false,
                     });
+                    debugger;
                     NavigationService.navigate("OTPScreen", {
                       fromScreen: "RegisterScreen",
-                      phone: ret.isPhone ? "+91" + loginInput : loginInput,
-                      password: psswd?.trim(),
+                      phone: ret.isEmail
+                        ? data.username
+                        : "+91" + data.username,
+                      password: data.password?.trim(),
                       userId: decoded?.sub,
                     });
                   },

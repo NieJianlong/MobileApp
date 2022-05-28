@@ -59,19 +59,12 @@ function UserHeader(props) {
           <View style={styles.signbtn}>
             <Button
               onPress={() => {
+                debugger;
                 NavigationService.navigate("LoginScreen");
                 // navigation.reset({
                 //   index: 0,
                 //   routes: [{ name: "OnboardingScreen" }],
                 // });
-                setLoginAction({
-                  loginVisible: true,
-                  showCloseButton: true,
-                  onDismiss: () => {
-                    NavigationService.navigate("ExploreScreen");
-                    setLoginAction({ onDismiss: () => {} });
-                  },
-                });
               }}
               text="SIGN IN"
             />

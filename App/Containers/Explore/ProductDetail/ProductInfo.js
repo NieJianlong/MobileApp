@@ -82,13 +82,17 @@ export default function ProductInfo({
       <View style={styles.infoContainer}>
         <View style={styles.v2}>
           <View>
-            <Text style={styles.heading2Bold}>{product.longName}</Text>
-            <TouchableOpacity onPress={() => scrollSectionIntoView(3)}>
-              <StarRating
-                rating={product.numberOfStars}
-                ratingCount={product.numberOfReviews}
-              />
-            </TouchableOpacity>
+            <Text style={[styles.heading2Bold, t.flexRow]}>
+              {product.longName}
+            </Text>
+            <View style={[t.flexRow, t.flexRowReverse]}>
+              <TouchableOpacity onPress={() => scrollSectionIntoView(3)}>
+                <StarRating
+                  rating={product.numberOfStars}
+                  ratingCount={product.numberOfReviews}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
           <View style={[styles.row, { marginTop: vs(8) }]}>
             <View style={styles.v3}>

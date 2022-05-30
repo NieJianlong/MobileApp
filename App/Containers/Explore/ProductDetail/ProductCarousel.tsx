@@ -163,7 +163,6 @@ export default function ProductCarousel({ product }) {
         onSnapToItem={onSnapToItem}
         enableMomentum={true}
         decelerationRate={0}
-       
       />
       <View style={styles.row1}>
         <TouchableOpacity
@@ -182,6 +181,20 @@ export default function ProductCarousel({ product }) {
       </View>
 
       <View style={styles.row2}>
+        <TouchableOpacity
+          onPress={() => {
+            const imageUrls =
+              product.photoUrls?.map((item: string) => {
+                return { url: item };
+              }) ?? [];
+            setImageViewer({ visible: true, images: imageUrls });
+          }}
+          style={styles.photoNumberContainer}
+        >
+          <Text style={styles.photoNumberTxt}>
+            {photoIndex + 1}/{product?.photoUrls?.length}
+          </Text>
+        </TouchableOpacity>
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             onPress={onLikeProduct}
@@ -205,21 +218,6 @@ export default function ProductCarousel({ product }) {
             <Image style={styles.btnRoundIcon} source={Images.share} />
           </TouchableOpacity>
         </View>
-
-        <TouchableOpacity
-          onPress={() => {
-            const imageUrls =
-              product.photoUrls?.map((item: string) => {
-                return { url: item };
-              }) ?? [];
-            setImageViewer({ visible: true, images: imageUrls });
-          }}
-          style={styles.photoNumberContainer}
-        >
-          <Text style={styles.photoNumberTxt}>
-            {photoIndex + 1}/{product?.photoUrls?.length}
-          </Text>
-        </TouchableOpacity>
       </View>
       {mydatas.length > 0 && (
         <View

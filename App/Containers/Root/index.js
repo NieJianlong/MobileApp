@@ -31,7 +31,7 @@ import { t } from "react-native-tailwindcss";
 import RegisterGuestBuyerToBuyerScreen from "../RegisterGuestBuyerToBuyer";
 import { Portal, Text } from "react-native-paper";
 import LoginModalForm from "../LoginModalForm";
-import { Images } from "../../Themes";
+import { Colors, Images } from "../../Themes";
 import CheckoutPaymentCompletedGuest from "../CheckoutPaymentCompletedGuest";
 import useRegisterGuest from "../../hooks/useRegisterGuest";
 import { useValidateBuyerHasAnyOrderLazyQuery } from "../../../generated/graphql";
@@ -251,6 +251,7 @@ function RootContainer() {
         <View style={[{ width, height: windowHeight }]}>
           <ImageViewer
             imageUrls={images}
+            backgroundColor={Colors.white}
             onClick={() => {
               setImageViewer({ visible: false, images: [] });
             }}
@@ -266,7 +267,7 @@ function RootContainer() {
               <View style={[t.h12, t.w12, t.mL4]}>
                 <Image
                   source={Images.arrow_left}
-                  style={[t.w8, t.h8, { tintColor: "#ffffff" }]}
+                  style={[t.w8, t.h8, { tintColor: "#000000" }]}
                 />
               </View>
             </TouchableOpacity>

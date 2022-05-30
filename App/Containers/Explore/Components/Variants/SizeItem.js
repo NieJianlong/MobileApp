@@ -50,7 +50,7 @@ export default function SizeItem({
             {selected
               ? `₹${BigNumber(currentVariant.wholeSalePrice).toFixed(2)}`
               : disabled
-              ? `Unavailable`
+              ? ``
               : "See available"}
           </Text>
           <Text
@@ -58,7 +58,7 @@ export default function SizeItem({
               selected ? [t.textSuccess, t.textSm] : [t.fontPrimary, t.textSm]
             }
           >
-            {selected ? "In Stock." : disabled ? "" : "options"}
+            {disabled ? "Out of stock" : selected ? "In Stock." : "options"}
           </Text>
         </View>
       </View>

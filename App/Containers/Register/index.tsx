@@ -524,7 +524,6 @@ function RegisterScreen(props) {
               onBlur={() => {
                 onChange(savedEmail);
               }}
-              autoCapitalize="none"
               onFocus={() => {
                 // if (fetchedEmail) {
                 //   if (savedEmail || fetchedEmail.length === 0) {

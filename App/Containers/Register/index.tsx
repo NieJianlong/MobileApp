@@ -617,6 +617,7 @@ function RegisterScreen(props) {
               defaultValue={""}
               returnKeyType={"done"}
               onChangeText={onChange}
+              autoCapitalize="none"
               value={value}
             />
           )}

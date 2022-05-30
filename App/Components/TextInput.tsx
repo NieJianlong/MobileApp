@@ -34,6 +34,7 @@ class CustomTextInput extends Component {
       textAlignVertical,
       isPhoneNo,
       blurOnSubmit,
+      autoCapitalize,
     } = this.props;
 
     return (
@@ -67,7 +68,7 @@ class CustomTextInput extends Component {
               placeholderTextColor="gray"
               numberOfLines={multiline ? 5 : 1}
               value={value}
-              autoCapitalize="none"
+              autoCapitalize={autoCapitalize ?? "none"}
               onSubmitEditing={onSubmitEditing}
               returnKeyType={returnKeyType}
               textAlignVertical={textAlignVertical ?? "top"}

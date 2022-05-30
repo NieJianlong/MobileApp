@@ -37,7 +37,7 @@ import UserInfoScreen from "../Containers/UserInfo";
 import UserEditProfileScreen from "../Containers/UserEditProfile";
 import DeleteAccountMessageScreen from "../Containers/DeleteAccountMessage";
 import AddNewAddressScreen from "../Containers/AddNewAddress";
-import NavigationService from "./NavigationService";
+import NavigationService, { _navigator } from "./NavigationService";
 import ChangePasswordScreen from "../Containers/ChangePassword";
 import AddPaymentMethodScreen from "../Containers/AddPaymentMethod";
 import AddCreditScreen from "../Containers/AddCredit";
@@ -90,6 +90,7 @@ import RegisterGuestBuyerToBuyerScreen from "../Containers/RegisterGuestBuyerToB
 import { Image, SafeAreaView, View } from "react-native";
 import styles from "../Containers/Explore/styles";
 import colors from "../Themes/Colors";
+import useCurrentRoute from "../hooks/useCurrentRoute";
 // import ReturnInformation from "../..";
 const Stack = createStackNavigator();
 
@@ -108,10 +109,15 @@ function TabNav() {
 }
 
 function PrimaryNav() {
+  const { setCurrentRoute } = useCurrentRoute();
   return (
     <Stack.Navigator
       initialRouteName={"LaunchScreen"}
       mode={"card"}
+      onStateChange={() => {
+        const routeName = _navigator.current?.getCurrentRoute()?.name;
+        setCurrentRoute({ currentPage: routeName });
+      }}
       // screenOptions={({ route, navigation }) => {
       //   let cardStyleInterpolator = CardStyleInterpolators.forHorizontalIOS;
       //   return {

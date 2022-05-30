@@ -47,7 +47,7 @@ function Review(props) {
             maximumValue={totalRating}
             currentValue={ratingDetail.fiveStar}
             barWidth={MAX_WIDTH}
-            barHeight={vs(12)}
+            barHeight={vs(6)}
           />
         </View>
 
@@ -59,7 +59,7 @@ function Review(props) {
             maximumValue={totalRating}
             currentValue={ratingDetail?.fourStar}
             barWidth={MAX_WIDTH}
-            barHeight={vs(12)}
+            barHeight={vs(6)}
           />
         </View>
 
@@ -71,7 +71,7 @@ function Review(props) {
             maximumValue={totalRating}
             currentValue={ratingDetail?.threeStar}
             barWidth={MAX_WIDTH}
-            barHeight={vs(12)}
+            barHeight={vs(6)}
           />
         </View>
 
@@ -83,7 +83,7 @@ function Review(props) {
             maximumValue={totalRating}
             currentValue={ratingDetail?.twoStar}
             barWidth={MAX_WIDTH}
-            barHeight={vs(12)}
+            barHeight={vs(6)}
           />
         </View>
 
@@ -95,7 +95,7 @@ function Review(props) {
             maximumValue={totalRating}
             currentValue={ratingDetail?.oneStar}
             barWidth={MAX_WIDTH}
-            barHeight={vs(12)}
+            barHeight={vs(6)}
           />
         </View>
 
@@ -107,7 +107,7 @@ function Review(props) {
             maximumValue={totalRating}
             currentValue={ratingDetail?.zeroStar}
             barWidth={MAX_WIDTH}
-            barHeight={vs(12)}
+            barHeight={vs(6)}
           />
         </View>
       </View>

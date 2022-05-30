@@ -290,10 +290,12 @@ function AddLocationSheetContent(props) {
               />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={()=>{
-            setShowMap({ mapVisible: true });
-          }}>
-            <Image style={styles.closeImage} source={Images.ic_close }/>
+          <TouchableOpacity
+            onPress={() => {
+              setShowMap({ mapVisible: true });
+            }}
+          >
+            <Image style={styles.closeImage} source={Images.ic_close} />
           </TouchableOpacity>
         </View>
 

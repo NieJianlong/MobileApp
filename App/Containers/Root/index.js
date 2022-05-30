@@ -35,6 +35,7 @@ import { Colors, Images } from "../../Themes";
 import CheckoutPaymentCompletedGuest from "../CheckoutPaymentCompletedGuest";
 import useRegisterGuest from "../../hooks/useRegisterGuest";
 import { useValidateBuyerHasAnyOrderLazyQuery } from "../../../generated/graphql";
+import LoginScreen from "../Login";
 
 const initialState = {
   alert: {

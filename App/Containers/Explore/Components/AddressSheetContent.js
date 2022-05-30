@@ -21,6 +21,7 @@ import useAlert from "../../../hooks/useAlert";
 import colors from "../../../Themes/Colors";
 import useMapScreen from "../../../hooks/useMapScreen";
 import { isEmpty } from "lodash";
+import NavigationService from "../../../Navigation/NavigationService";
 
 export default function AddressSheetContent(props) {
   const { dispatch, actionSheet } = useContext(AlertContext);
@@ -50,6 +51,13 @@ export default function AddressSheetContent(props) {
         let height = isAuth
           ? res?.getBuyerAddressByType.length * 115
           : res?.getGuestBuyerAddressByType.length * 115;
+        const data = isAuth
+          ? res?.getBuyerAddressByType
+          : res?.getGuestBuyerAddressByType;
+
+        if (isEmpty(data) && !isAuth) {
+          height = 160;
+        }
         if (height > windowHeight - 500) {
           height = windowHeight - 500;
         }
@@ -83,9 +91,7 @@ export default function AddressSheetContent(props) {
   }, []);
   useEffect(() => {
     let refresh = PubSub.subscribe("delete-address", (name, item) => {
-      
       getLocalStorageValue(global.buyerId + "Address").then(async (res) => {
-        
         if (!isEmpty(res)) {
           const result = JSON.parse(res);
           //如果当前选中的被删除，怎需要重新获取
@@ -111,6 +117,23 @@ export default function AddressSheetContent(props) {
         onPress={toggleAddressSheet}
         text={"ADD ADDRESS"}
       />
+      {!global.access_token && (
+        <View>
+          <View style={{ height: vs(20) }} />
+          <Button
+            onPress={() => {
+              NavigationService.navigate("LoginScreen");
+              dispatch({
+                type: "changSheetState",
+                payload: {
+                  showSheet: false,
+                },
+              });
+            }}
+            text={"SIGN IN"}
+          />
+        </View>
+      )}
       <View style={{ height: vs(20) }} />
 
       <Addresses

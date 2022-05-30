@@ -8,7 +8,7 @@
  */
 import { NavigationActions, StackActions } from "@react-navigation/native";
 
-let _navigator;
+export let _navigator;
 
 function setTopLevelNavigator(navigatorRef) {
   _navigator = navigatorRef;

@@ -26,11 +26,14 @@ import {
   DeliveryAddressForGuestBuyerDocument,
 } from "../../../../generated/graphql";
 import useMapScreen from "../../../hooks/useMapScreen";
+import useCurrentRoute from "../../../hooks/useCurrentRoute";
+import AddLocationSheetContent from "./AddLocationSheetContent";
 
 export default function AddressBar() {
   const userProfileVarReactive = useReactiveVar(userProfileVar);
   const [addrLine1, setAddrLine1] = useState("");
   const [addrLine2, setAddrLine2] = useState("");
+  const { currentRoute } = useCurrentRoute();
   const [error, setError] = useState("");
   const { dispatch } = useContext(AlertContext);
   const isAuth = useMemo(
@@ -85,9 +88,13 @@ export default function AddressBar() {
       onError: (err) => {
         setError(err);
         if (err.message === "Buyer does not have Delivery address") {
-          setShowMap({ mapVisible: true });
+          if (currentRoute?.currentPage !== "LoginScreen") {
+            global.access_token
+              ? setShowMap({ mapVisible: true })
+              : toggleAddressSheet();
+          }
         }
-        
+
         handleError();
       },
       onCompleted: (result) => {
@@ -108,7 +115,12 @@ export default function AddressBar() {
             }
           });
         } else {
-          setShowMap({ mapVisible: true });
+          if (currentRoute?.currentPage !== "LoginScreen") {
+            global.access_token
+              ? setShowMap({ mapVisible: true })
+              : toggleAddressSheet();
+          }
+
           // toggleAddressSheet();
         }
       },
@@ -133,7 +145,19 @@ export default function AddressBar() {
     setAddrLine1(aL1);
     setAddrLine2(aL2);
     if (aL1.length === 0) {
-      setShowMap({ mapVisible: true });
+      if (currentRoute?.currentPage !== "LoginScreen") {
+        setShowMap({ mapVisible: true });
+        dispatch({
+          type: "changSheetState",
+          payload: {
+            showSheet: true,
+            height: 600,
+            children: () => <AddLocationSheetContent />,
+            sheetTitle: "",
+          },
+        });
+      }
+
       // toggleAddressSheet();
     }
   }

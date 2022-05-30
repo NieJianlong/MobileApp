@@ -43,14 +43,14 @@ export default function SizeItem({
           style={[t.wFull, t.h10, t.bgRed100, t.justifyCenter, t.pX4]}
           resizeMode="contain"
         >
-          <Text style={[t.fontSemibold, t.textLg]}>{item.value}</Text>
+          <Text style={[t.fontSemibold, t.textSm]}>{item.value}</Text>
         </View>
         <View style={[t.w32, t.pY2]}>
           <Text style={selected ? [t.textLg] : [t.textSm]}>
             {selected
               ? `₹${BigNumber(currentVariant.wholeSalePrice).toFixed(2)}`
               : disabled
-              ? `${item?.itemsSold}/${item?.itemsAvailable} sold`
+              ? `Unavailable`
               : "See available"}
           </Text>
           <Text

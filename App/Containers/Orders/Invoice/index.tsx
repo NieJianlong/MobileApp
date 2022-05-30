@@ -30,34 +30,35 @@ class Invoice extends Component {
     // const sellerLocation = this.props.data.sellerLocation;
     let addressDetail = "";
     let title = "Delivered to";
+    debugger;
     switch (deliveryOption) {
       case DeliveryOption.CourierDelivery:
-        addressDetail = `${deliverAddress?.houseNumber ?? ""}${
+        addressDetail = `${deliverAddress?.houseNumber ?? ""} ${
           deliverAddress?.flat ?? ""
-        }${deliverAddress?.villageArea ?? ""}${deliverAddress?.townCity}${
+        } ${deliverAddress?.villageArea ?? ""} ${deliverAddress?.townCity} ${
           deliverAddress?.provinceState
-        }${deliverAddress?.country} ${deliverAddress?.pinCode}`;
+        } ${deliverAddress?.country} ${deliverAddress?.pinCode}`;
         break;
       case DeliveryOption.CollectionPointPickup:
         title = "Pick up location";
-        addressDetail = `${pickupAddress?.streetAddress1 ?? ""}${
+        addressDetail = `${pickupAddress?.streetAddress1 ?? ""} ${
           pickupAddress?.streetAddress2 ?? ""
-        }${pickupAddress?.townCity ?? ""}${pickupAddress?.provinceState}${
+        } ${pickupAddress?.townCity ?? ""} ${pickupAddress?.provinceState} ${
           pickupAddress?.country
         } ${pickupAddress?.areaCode}`;
         break;
       case DeliveryOption.SellerDirectDelivery:
-        addressDetail = `${deliverAddress?.houseNumber ?? ""}${
+        addressDetail = `${deliverAddress?.houseNumber ?? ""} ${
           deliverAddress?.flat ?? ""
-        }${deliverAddress?.villageArea ?? ""}${deliverAddress?.townCity}${
+        } ${deliverAddress?.villageArea ?? ""} ${deliverAddress?.townCity}${
           deliverAddress?.provinceState
-        }${deliverAddress?.country} ${deliverAddress?.pinCode}`;
+        } ${deliverAddress?.country} ${deliverAddress?.pinCode}`;
         break;
       case DeliveryOption.SellerLocationPickup:
         title = "Pick up location";
-        addressDetail = `${pickupAddress?.streetAddress1 ?? ""}${
+        addressDetail = `${pickupAddress?.streetAddress1 ?? ""} ${
           pickupAddress?.streetAddress2 ?? ""
-        }${pickupAddress?.townCity ?? ""}${pickupAddress?.provinceState}${
+        } ${pickupAddress?.townCity ?? ""} ${pickupAddress?.provinceState} ${
           pickupAddress?.country
         } ${pickupAddress?.areaCode}`;
         break;

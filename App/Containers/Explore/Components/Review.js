@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Text, View, TouchableOpacity, Image } from "react-native";
 import { ScaledSheet, s, vs } from "react-native-size-matters";
 import { Fonts, Colors, ApplicationStyles, Images } from "../../../Themes";
-import { StarRating } from "../../../Components";
+import { Progress, StarRating } from "../../../Components";
 import BigNumber from "bignumber.js";
 import { isEmpty } from "lodash";
+import { t } from "react-native-tailwindcss";
 
 const getMax = (ratingDetail) => {
   return Math.max(
@@ -12,7 +13,19 @@ const getMax = (ratingDetail) => {
     ratingDetail?.twoStar,
     ratingDetail?.threeStar,
     ratingDetail?.fourStar,
-    ratingDetail?.fiveStar
+    ratingDetail?.fiveStar,
+    ratingDetail?.zeroStar
+  );
+};
+
+const getTotal = (ratingDetail) => {
+  return (
+    ratingDetail?.oneStar +
+    ratingDetail?.twoStar +
+    ratingDetail?.threeStar +
+    ratingDetail?.fourStar +
+    ratingDetail?.fiveStar +
+    ratingDetail?.zeroStar
   );
 };
 
@@ -22,91 +35,79 @@ function Review(props) {
   const [active, setActive] = useState(props.defaultValue ?? false);
   const { ratingDetail, rating, ratingCount } = props;
   const maxRating = getMax(ratingDetail);
+  const totalRating = getTotal(ratingDetail);
   return (
     <View style={styles.container}>
       <View>
         <View style={styles.row}>
-          <Text style={styles.txt}>5</Text>
-          <View
-            style={[
-              styles.bar,
-              {
-                width:
-                  ratingCount > 0
-                    ? maxRating > 0
-                      ? s((ratingDetail.fiveStar / maxRating) * MAX_WIDTH)
-                      : 100
-                    : 0,
-              },
-            ]}
+          <Text style={[styles.txt, t.mR6, { color: Colors.secondary00 }]}>
+            5 star
+          </Text>
+          <Progress
+            maximumValue={totalRating}
+            currentValue={ratingDetail.fiveStar}
+            barWidth={MAX_WIDTH}
+            barHeight={vs(12)}
           />
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.txt}>4</Text>
-          <View
-            style={[
-              styles.bar,
-              {
-                width:
-                  ratingCount > 0
-                    ? maxRating > 0
-                      ? s((ratingDetail.fourStar / maxRating) * MAX_WIDTH)
-                      : 100
-                    : 0,
-              },
-            ]}
+          <Text style={[styles.txt, t.mR6, { color: Colors.secondary00 }]}>
+            4 star
+          </Text>
+          <Progress
+            maximumValue={totalRating}
+            currentValue={ratingDetail?.fourStar}
+            barWidth={MAX_WIDTH}
+            barHeight={vs(12)}
           />
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.txt}>3</Text>
-          <View
-            style={[
-              styles.bar,
-              {
-                width:
-                  ratingCount > 0
-                    ? maxRating > 0
-                      ? s((ratingDetail.threeStar / maxRating) * MAX_WIDTH)
-                      : 100
-                    : 0,
-              },
-            ]}
+          <Text style={[styles.txt, t.mR6, { color: Colors.secondary00 }]}>
+            3 star
+          </Text>
+          <Progress
+            maximumValue={totalRating}
+            currentValue={ratingDetail?.threeStar}
+            barWidth={MAX_WIDTH}
+            barHeight={vs(12)}
           />
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.txt}>2</Text>
-          <View
-            style={[
-              styles.bar,
-              {
-                width:
-                  ratingCount > 0
-                    ? maxRating > 0
-                      ? s((ratingDetail.twoStar / maxRating) * MAX_WIDTH)
-                      : 100
-                    : 0,
-              },
-            ]}
+          <Text style={[styles.txt, t.mR6, { color: Colors.secondary00 }]}>
+            2 star
+          </Text>
+          <Progress
+            maximumValue={totalRating}
+            currentValue={ratingDetail?.twoStar}
+            barWidth={MAX_WIDTH}
+            barHeight={vs(12)}
           />
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.txt}>1</Text>
-          <View
-            style={[
-              styles.bar,
-              {
-                width:
-                  ratingCount > 0
-                    ? maxRating > 0
-                      ? s((ratingDetail.oneStar / maxRating) * MAX_WIDTH)
-                      : 100
-                    : 0,
-              },
-            ]}
+          <Text style={[styles.txt, t.mR6, { color: Colors.secondary00 }]}>
+            1 star
+          </Text>
+          <Progress
+            maximumValue={totalRating}
+            currentValue={ratingDetail?.oneStar}
+            barWidth={MAX_WIDTH}
+            barHeight={vs(12)}
+          />
+        </View>
+
+        <View style={styles.row}>
+          <Text style={[styles.txt, t.mR6, { color: Colors.secondary00 }]}>
+            0 star
+          </Text>
+          <Progress
+            maximumValue={totalRating}
+            currentValue={ratingDetail?.zeroStar}
+            barWidth={MAX_WIDTH}
+            barHeight={vs(12)}
           />
         </View>
       </View>

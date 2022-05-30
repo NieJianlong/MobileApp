@@ -56,7 +56,7 @@ export default function ProductInfo({
   useEffect(() => {
     let refresh = PubSub.subscribe("show-pick-up-sheet", (msg, callback) => {
       togglePickupFromSellerSheet(callback);
-      
+
       if (callback && pickUp) {
         callback && callback();
       }
@@ -177,7 +177,7 @@ export default function ProductInfo({
           </View>
         </View>
 
-        <View style={styles.v4}>
+        <View style={[styles.v4, t.flexRow, t.justifyBetween, t.pR8]}>
           <View style={{ marginRight: s(10) }}>
             {/* <Text style={styles.heading6Regular}>Order closes on:</Text> */}
             <Text style={styles.heading6Regular}>
@@ -192,18 +192,13 @@ export default function ProductInfo({
             </Text>
           </View>
 
-          <View style={styles.row}>
+          <View style={[styles.row]}>
             <Progress
               maximumValue={isMissing ? "100" : product.noOfItemsInStock}
               currentValue={isMissing ? "100" : product.noOfOrderedItems}
-              barWidth={s(60)}
+              barWidth={s(130)}
               barHeight={vs(6)}
             />
-            {/* <Progress
-              currentValue={24}
-              maximumValue={100}
-              style={{ marginHorizontal: s(10) }}
-            /> */}
 
             <Image source={Images.stock} style={styles.icStock} />
             <Text style={styles.txtOrderNumber}>

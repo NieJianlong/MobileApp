@@ -45,6 +45,18 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   const [quantity, setQuantity] = useState(info?.quantity || initQuanlity);
   const { createOrder } = useCreateOrder();
 
+  const buyNow = () => {
+    if (
+      pickUp ||
+      product.deliveryOption === DeliveryOption.CourierDelivery ||
+      product.deliveryOption === DeliveryOption.SellerDirectDelivery
+    ) {
+      toggleConfirmOrderSheet();
+    } else {
+      PubSub.publish("show-pick-up-sheet", toggleConfirmOrderSheet);
+    }
+  };
+
   const toggleConfirmOrderSheet = async () => {
     const item = {
       listingId: product.listingId,
@@ -187,7 +199,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={toggleConfirmOrderSheet}
+          onPress={buyNow}
           style={[
             styles.btnBuyNow,
             t.flexGrow,

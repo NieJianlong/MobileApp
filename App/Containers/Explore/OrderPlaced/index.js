@@ -50,7 +50,6 @@ function OrderPlaced(props) {
   }, [data]);
 
   const renderBody = () => {
-    
     return (
       <ScrollView style={styles.body}>
         <View style={styles.textArea}>
@@ -63,7 +62,7 @@ function OrderPlaced(props) {
           </Text>
         </View>
 
-        <Text style={styles.txt3}>Inform your group</Text>
+        <Text style={styles.txt3}></Text>
 
         <View style={styles.informContainer}>
           {orderInfo.allItems.map((item, index) => {

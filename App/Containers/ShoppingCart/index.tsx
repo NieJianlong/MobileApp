@@ -232,12 +232,13 @@ function ShoppingCart(props) {
           edges={["top", "left", "right"]}
         >
           <ScrollView>
-            {finalData.length > 0 ? (
-              <View style={{ backgroundColor: "white" }}>
-                <AddressBar />
+            <View style={{ backgroundColor: "white" }}>
+              <AddressBar />
+              {finalData.length > 0 && (
                 <CartSummary availbleList={availbleList} />
-              </View>
-            ) : null}
+              )}
+            </View>
+
             <SectionList
               sections={
                 finalData.length > 0 ? [{ title: "", data: finalData }] : []

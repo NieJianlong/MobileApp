@@ -231,8 +231,14 @@ function GroupInfoScreen(props) {
         {/* when order status is uncompleted,user can cancel the order */}
         {orderData?.getOrderItemDetails.listingStatus ===
           ProductListingStatus.Active &&
-          orderData?.getOrderItemDetails.latestEventStatus !==
-            OrderItemHistoryEventType.CanceledByBuyer &&
+          (orderData?.getOrderItemDetails.latestEventStatus ===
+            OrderItemHistoryEventType.WaitingForPayment ||
+            orderData?.getOrderItemDetails.latestEventStatus ===
+              OrderItemHistoryEventType.AuthorizedPayment ||
+            orderData?.getOrderItemDetails.latestEventStatus ===
+              OrderItemHistoryEventType.FailedPayment ||
+            orderData?.getOrderItemDetails.latestEventStatus ===
+              OrderItemHistoryEventType.Paid) &&
           renderAction(Images.orderCancelImage, "Cancel order", () =>
             NavigationService.navigate("CancelOrderScreen", {
               orderItemId: data.orderItemId,

@@ -23,6 +23,13 @@ function CartSummary(props) {
       .filtered("isDraft == false")
   );
   useEffect(() => {
+    setMydatas(
+      realm
+        .objects("ShoppingCart")
+        .filtered("addressId == $0", localCartVar.deliverAddress)
+        .filtered("quantity > 0")
+        .filtered("isDraft == false")
+    );
     let refresh = PubSub.subscribe("refresh-shoppingcart", () => {
       setMydatas(
         realm

@@ -170,7 +170,6 @@ function UserEditProfile(props) {
       },
     ],
     onCompleted: (res) => {
-      debugger;
       console.log("=====Res edit========", res);
       PubSub.publish("refresh-buyer-profile");
       dispatch({ type: "hideloading" });

@@ -43,7 +43,7 @@ class OldChooseCategoriesScreen extends Component {
     this.props.onChanged(categories);
     this.setState({ categories });
   };
-  debugger;
+
   renderBody() {
     return (
       <View style={styles.body}>
@@ -98,9 +98,7 @@ export default function ChooseCategoriesScreen() {
   const { data: allCategories } = useQuery(aQM.GET_ALL_CATEGORIES);
   const [selected, setSelected] = useState([]);
   useEffect(() => {
-    debugger;
     if (categories) {
-      debugger;
       setSelected(categories?.getPreferredCategories);
     }
   }, [categories]);

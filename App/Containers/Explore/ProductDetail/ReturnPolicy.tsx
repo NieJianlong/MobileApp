@@ -38,7 +38,7 @@ function ReturnPolicy({ returnPolices }: ReturnPolicyProps) {
       ? "No returns"
       : `Allowed return period:${return_period?.value} days`;
   const allItems = [{ value: firstLine }, ...items];
-  debugger;
+
   return (
     <View>
       <Text style={[styles.heading3Bold, t.textLeft, t.pX4]}>

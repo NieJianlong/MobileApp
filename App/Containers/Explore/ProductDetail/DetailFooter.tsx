@@ -41,7 +41,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   // const [cartInfo, setCartInfo] = useState(info);
   const initQuanlity =
     product.minQtyPerCart !== null ? product.minQtyPerCart : 1;
-  // debugger;
+  //
   const [quantity, setQuantity] = useState(info?.quantity || initQuanlity);
   const { createOrder } = useCreateOrder();
 

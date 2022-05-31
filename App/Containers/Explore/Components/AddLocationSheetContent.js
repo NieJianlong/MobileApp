@@ -110,7 +110,6 @@ function AddLocationSheetContent(props) {
           )
         ).then(() => {
           PubSub.publish("refresh-address", "");
-          PubSub.publish("refresh-address", "");
           dispatch({
             type: "changAlertState",
             payload: {

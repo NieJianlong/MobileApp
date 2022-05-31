@@ -70,6 +70,7 @@ function ShoppingCart(props) {
         .filtered("addressId == $0", localCart.deliverAddress)
         .filtered("quantity > 0")
         .filtered("isDraft == false");
+      debugger;
       const datas = [];
       if (query1) {
         query1.map((item) => {
@@ -85,19 +86,19 @@ function ShoppingCart(props) {
         setRequestArray([]);
       }
     });
-  }, []);
+  }, [localCart.deliverAddress]);
 
   useEffect(() => {
+    debugger;
     const query1 = realm
       .objects("ShoppingCart")
       .filtered("addressId == $0", localCart.deliverAddress)
       .filtered("quantity > 0")
       .filtered("isDraft == false");
     const datas = [];
-    debugger;
+
     if (query1) {
       query1.map((item) => {
-        debugger;
         const newItem = {
           listingId: item.listingId,
           variantId: item.variantId,
@@ -116,10 +117,9 @@ function ShoppingCart(props) {
         .filtered("quantity > 0")
         .filtered("isDraft == false");
       const datas = [];
-      debugger;
+
       if (query1) {
         query1.map((item) => {
-          debugger;
           const newItem = {
             listingId: item.listingId,
             variantId: item.variantId,

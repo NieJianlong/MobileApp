@@ -13,7 +13,6 @@ import MaterialTextInput from "./MaterialTextInput";
 import StarRating from "./StarRating";
 import Picker from "./Picker";
 import QuantitySelector from "./QuantitySelector";
-
 import Progress from "./Progress";
 import BottomSheetBackground from "./BottomSheetBackground";
 import SegmentedControl from "./SegmentedControl";

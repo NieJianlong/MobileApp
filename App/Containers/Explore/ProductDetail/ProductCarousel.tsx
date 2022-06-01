@@ -34,6 +34,7 @@ import {
 } from "../../../../generated/graphql";
 import Share from "react-native-share";
 import useImageViewer from "../../../hooks/useImageViewer";
+import Swiper from "react-native-swiper";
 //render product images
 export default function ProductCarousel({ product }) {
   const { realm } = useRealm();
@@ -128,11 +129,8 @@ export default function ProductCarousel({ product }) {
   const { setImageViewer } = useImageViewer();
   return (
     <View style={styles.imagesContainer}>
-      <Carousel
-        ref={_carousel}
-        data={product.photoUrls}
-        renderItem={({ item, index }) => {
-          //render product image item
+      <Swiper>
+        {product?.photoUrls?.map((item, index) => {
           return (
             <TouchableOpacity
               key={`{index}`}
@@ -157,13 +155,9 @@ export default function ProductCarousel({ product }) {
               />
             </TouchableOpacity>
           );
-        }}
-        sliderWidth={metrics.screenWidth}
-        itemWidth={metrics.screenWidth}
-        onSnapToItem={onSnapToItem}
-        enableMomentum={true}
-        decelerationRate={0}
-      />
+        })}
+      </Swiper>
+
       <View style={styles.row1}>
         <TouchableOpacity
           onPress={() => NavigationService.goBack()}

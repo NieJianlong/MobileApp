@@ -29,7 +29,7 @@ const getTotal = (ratingDetail) => {
   );
 };
 
-const MAX_WIDTH = 150;
+const MAX_WIDTH = 120;
 
 function Review(props) {
   const [active, setActive] = useState(props.defaultValue ?? false);
@@ -40,7 +40,7 @@ function Review(props) {
     <View style={styles.container}>
       <View>
         <View style={styles.row}>
-          <Text style={[styles.txt, t.mR6, { color: Colors.secondary00 }]}>
+          <Text style={[styles.txt, t.mR4, { color: Colors.secondary00 }]}>
             5 star
           </Text>
           <Progress
@@ -49,10 +49,13 @@ function Review(props) {
             barWidth={MAX_WIDTH}
             barHeight={vs(6)}
           />
+          <Text style={[styles.txt, t.mL4, { color: Colors.secondary00 }]}>
+            {(ratingDetail.fiveStar / totalRating) * 100}%
+          </Text>
         </View>
 
         <View style={styles.row}>
-          <Text style={[styles.txt, t.mR6, { color: Colors.secondary00 }]}>
+          <Text style={[styles.txt, t.mR4, { color: Colors.secondary00 }]}>
             4 star
           </Text>
           <Progress
@@ -61,10 +64,13 @@ function Review(props) {
             barWidth={MAX_WIDTH}
             barHeight={vs(6)}
           />
+          <Text style={[styles.txt, t.mL4, { color: Colors.secondary00 }]}>
+            {(ratingDetail.fourStar / totalRating) * 100}%
+          </Text>
         </View>
 
         <View style={styles.row}>
-          <Text style={[styles.txt, t.mR6, { color: Colors.secondary00 }]}>
+          <Text style={[styles.txt, t.mR4, { color: Colors.secondary00 }]}>
             3 star
           </Text>
           <Progress
@@ -73,10 +79,13 @@ function Review(props) {
             barWidth={MAX_WIDTH}
             barHeight={vs(6)}
           />
+          <Text style={[styles.txt, t.mL4, { color: Colors.secondary00 }]}>
+            {(ratingDetail.threeStar / totalRating) * 100}%
+          </Text>
         </View>
 
         <View style={styles.row}>
-          <Text style={[styles.txt, t.mR6, { color: Colors.secondary00 }]}>
+          <Text style={[styles.txt, t.mR4, { color: Colors.secondary00 }]}>
             2 star
           </Text>
           <Progress
@@ -85,10 +94,13 @@ function Review(props) {
             barWidth={MAX_WIDTH}
             barHeight={vs(6)}
           />
+          <Text style={[styles.txt, t.mL4, { color: Colors.secondary00 }]}>
+            {(ratingDetail.twoStar / totalRating) * 100}%
+          </Text>
         </View>
 
         <View style={styles.row}>
-          <Text style={[styles.txt, t.mR6, { color: Colors.secondary00 }]}>
+          <Text style={[styles.txt, t.mR4, { color: Colors.secondary00 }]}>
             1 star
           </Text>
           <Progress
@@ -97,10 +109,13 @@ function Review(props) {
             barWidth={MAX_WIDTH}
             barHeight={vs(6)}
           />
+          <Text style={[styles.txt, t.mL4, { color: Colors.secondary00 }]}>
+            {(ratingDetail.oneStar / totalRating) * 100}%
+          </Text>
         </View>
 
         <View style={styles.row}>
-          <Text style={[styles.txt, t.mR6, { color: Colors.secondary00 }]}>
+          <Text style={[styles.txt, t.mR4, { color: Colors.secondary00 }]}>
             0 star
           </Text>
           <Progress
@@ -109,6 +124,9 @@ function Review(props) {
             barWidth={MAX_WIDTH}
             barHeight={vs(6)}
           />
+          <Text style={[styles.txt, t.mL4, { color: Colors.secondary00 }]}>
+            {(ratingDetail.zeroStar / totalRating) * 100}%
+          </Text>
         </View>
       </View>
 

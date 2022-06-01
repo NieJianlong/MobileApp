@@ -82,7 +82,18 @@ export default function ProductInfo({
       <View style={styles.infoContainer}>
         <View style={styles.v2}>
           <View>
-            <Text style={[styles.heading2Bold, t.flexRow]}>
+            <Text
+              style={[
+                {
+                  fontSize: s(14),
+                  fontFamily: Fonts.primary,
+                  color: Colors.black,
+
+                  lineHeight: s(20),
+                },
+                t.flexRow,
+              ]}
+            >
               {product.longName}
             </Text>
             <View style={[t.flexRow, t.flexRowReverse]}>

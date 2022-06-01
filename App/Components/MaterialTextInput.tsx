@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ScaledSheet, vs } from "react-native-size-matters";
-import { TextField, OutlinedTextField } from "react-native-material-textfield";
-
-import { Fonts, Colors, Images } from "../Themes";
+import { TextField } from "react-native-material-textfield";
+import { Fonts, Colors } from "../Themes";
 import colors from "../Themes/Colors";
 
 function MaterialTextInput(props) {

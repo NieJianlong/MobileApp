@@ -36,6 +36,7 @@ import CheckoutPaymentCompletedGuest from "../CheckoutPaymentCompletedGuest";
 import useRegisterGuest from "../../hooks/useRegisterGuest";
 import { useValidateBuyerHasAnyOrderLazyQuery } from "../../../generated/graphql";
 import LoginScreen from "../Login";
+import { _navigator } from "../../Navigation/NavigationService";
 
 const initialState = {
   alert: {
@@ -99,6 +100,10 @@ function RootContainer() {
       validateBuyerHasAnyOrder({ variables: { buyerId: global.buyerId } });
     }
   }, [global.access_token, global.buyerId]);
+
+  // useEffect(() => {
+
+  // }, []);
   const {
     showSheet,
     children,

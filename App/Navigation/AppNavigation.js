@@ -109,15 +109,10 @@ function TabNav() {
 }
 
 function PrimaryNav() {
-  const { setCurrentRoute } = useCurrentRoute();
   return (
     <Stack.Navigator
       initialRouteName={"LaunchScreen"}
       mode={"card"}
-      onStateChange={() => {
-        const routeName = _navigator.current?.getCurrentRoute()?.name;
-        setCurrentRoute({ currentPage: routeName });
-      }}
       // screenOptions={({ route, navigation }) => {
       //   let cardStyleInterpolator = CardStyleInterpolators.forHorizontalIOS;
       //   return {
@@ -785,16 +780,27 @@ function PrimaryNav() {
 //     </LoginStack.Navigator>
 //   );
 // }
-export default class AppRouter extends React.Component {
-  render() {
-    return (
-      <NavigationContainer
-        ref={(navigatorRef) => {
-          NavigationService.setTopLevelNavigator(navigatorRef);
-        }}
-      >
-        <PrimaryNav />
-      </NavigationContainer>
-    );
-  }
+
+function AppRouter(props) {
+  const { setCurrentRoute } = useCurrentRoute();
+  return (
+    <NavigationContainer
+      onStateChange={() => {
+        debugger;
+        const routeName = _navigator?.getCurrentRoute()?.name;
+        setCurrentRoute({ currentPage: routeName });
+      }}
+      ref={(navigatorRef) => {
+        NavigationService.setTopLevelNavigator(navigatorRef);
+        // navigatorRef?.current?.addListener("state", (e) => {
+        //   debugger;
+        //   const state = e.data.state; //works
+        // });
+      }}
+    >
+      <PrimaryNav />
+    </NavigationContainer>
+  );
 }
+
+export default AppRouter;

@@ -88,6 +88,7 @@ export default function AddressBar() {
       onError: (err) => {
         setError(err);
         if (err.message === "Buyer does not have Delivery address") {
+          debugger;
           if (currentRoute?.currentPage !== "LoginScreen") {
             global.access_token
               ? setShowMap({ mapVisible: true })
@@ -115,6 +116,7 @@ export default function AddressBar() {
             }
           });
         } else {
+          debugger;
           if (currentRoute?.currentPage !== "LoginScreen") {
             global.access_token
               ? setShowMap({ mapVisible: true })

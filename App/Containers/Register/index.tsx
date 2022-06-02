@@ -112,7 +112,7 @@ function RegisterScreen(props) {
   let [validationMessage, setValidationMessage] = useState("");
   const { setLoading } = useLoading();
   // because of the way the switch component is set up this is the opposite of what you would expect
-  let [termsAccepted, setTermsAccepted] = useState(false);
+  let [termsAccepted, setTermsAccepted] = useState(true);
   useEffect(() => {
     // let phoneNumber = "+918247278755";
     // setValue("phoneNumber", trimStart(phoneNumber, "+91"));

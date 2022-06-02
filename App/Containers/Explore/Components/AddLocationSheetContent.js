@@ -47,12 +47,12 @@ function AddLocationSheetContent(props) {
     [userProfileVarReactive.isAuth]
   );
   const hasNumber = /\d/;
-  const houseNumber = props.locationDetails.address.split(",")[0];
-  const street = props.locationDetails.address.split(",")[1];
-  const city = props.locationDetails.address.split(",")[2];
-  const postalCode = props.locationDetails.address.split(",")[4];
-  const state = props.locationDetails.address.split(",")[5];
-  const count = props.locationDetails.address.split(",").length - 1;
+  const houseNumber =  props.locationDetails ? props.locationDetails.address.split(",")[0] : "";
+  const street = props.locationDetails ? props.locationDetails.address.split(",")[1] : "";
+  const city = props.locationDetails ? props.locationDetails.address.split(",")[2] : "";
+  const postalCode = props.locationDetails ? props.locationDetails.address.split(",")[4] : "";
+  const state = props.locationDetails ? props.locationDetails.address.split(",")[5] : "";
+  const count = props.locationDetails ? props.locationDetails.address.split(",").length - 1 : "";
 
   const {
     control,

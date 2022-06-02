@@ -395,7 +395,7 @@ type Mutation {
   addProductRefundToWallet(buyerId: ID!, transactionReference: ID!, amount: Float!): SalamiWalletTransactionResponse
   refillSalamiCredit(amount: Float!, transactionReference: ID!): SalamiWalletTransactionResponse
   grantGiftPromotion(buyerId: ID!, amount: Float!, expiryDate: Date): SalamiWalletGiftTransactionResponse
-  reduceOrderAmountFromWallet(amount: Float!, transactionReference: ID!): ReduceWalletResponse
+  reduceOrderAmountFromWallet(buyerId: ID!, amount: Float!, transactionReference: ID!): ReduceWalletResponse
   rateSeller(sellerId: ID!, rating: Float!, buyerId: ID!): Boolean
   changePassword(oldPassword: String!, newPassword: String!, userId: ID!): Boolean
   forgotPasswordStep1SendNotificationEmail(email: String!): ForgotPasswordStep1Response
@@ -793,6 +793,7 @@ type SellerProfileBasicDetailsResponse {
   firstName: String
   lastName: String
   storeName: String
+  phoneNumber: String
 }
 
 input SellerProfilePageable {

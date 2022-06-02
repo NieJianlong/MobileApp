@@ -145,9 +145,9 @@ export default function ProductInfo({
               </Text>
             </View>
 
-            {/* <Text style={[styles.heading5Regular, { marginLeft: s(8) }]}>
-                                Save ${product.retailPrice - product.wholesalePrice}
-                            </Text> */}
+            <Text style={[styles.heading5Regular, { marginLeft: s(8) }]}>
+              Save ₹{product.retailPrice - product.wholeSalePrice}
+            </Text>
           </View>
 
           <View style={[styles.row, { marginVertical: vs(10) }]}>

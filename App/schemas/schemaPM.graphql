@@ -95,11 +95,16 @@ type BuyerListingResponse {
   totalElements: Int!
 }
 
-type Category {
-  id: ID!
-  name: String
+input CategoryInput {
+  categoryId: ID
+  name: String!
   description: String
-  parentCategory: Category
+}
+
+type CategoryResponse {
+  categoryId: ID!
+  name: String!
+  description: String
 }
 
 type CategoryView {
@@ -288,9 +293,8 @@ type Mutation {
   deleteOption(optionId: String!): Boolean
 
   """categories"""
-  addParentCategory(name: String!, description: String!): Category!
-  addSubCategory(name: String!, description: String!, parentCategoryId: String!): Category!
-  updateCategory(name: String!, description: String!, categoryId: String!): Category!
+  addParentCategory(input: CategoryInput!): CategoryResponse!
+  updateParentCategory(input: CategoryInput!): CategoryResponse!
   savePreferredCategories(buyerId: ID!, categories: [ID]): String
   createProductListings(input: ProductListingsInput!): [ProductListing!]!
   updateProductListing(input: ProductListingUpdateInput!): ProductListing!
@@ -692,6 +696,7 @@ type Query {
   findReviews(options: ReviewSearchOptions!): FindReviewResponse!
   getProductReviewSummaryResponse(productId: ID!): ReviewSummaryResponse!
   getSellerReviewSummaryResponse(sellerId: ID!): ReviewSummaryResponse!
+  getBuyerProductReview(productId: ID!): ReviewResponse!
 }
 
 type RatingDetail {
@@ -993,6 +998,10 @@ type SellerProductDetailView {
   itemsInStock: Int!
   availableInventory: Int!
   inventoryLocation: String
+  weight: Float
+  weightUnit: String
+  size: String
+  sizeUnit: String
   returnPolicy: SellerReturnPolicy!
 }
 

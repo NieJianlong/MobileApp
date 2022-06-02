@@ -212,6 +212,7 @@ function GroupInfoScreen(props) {
           })}
         {/* when order status is received,user can return product */}
         {finalData?.latestEventStatus === OrderItemHistoryEventType.Delivered &&
+          finalData?.itemReturnPolicy?.isReturnAllowed &&
           renderAction(Images.orderReturnImage, "Return product", () => {
             if (
               finalData?.deliveryOption === DeliveryOption.SellerDirectDelivery

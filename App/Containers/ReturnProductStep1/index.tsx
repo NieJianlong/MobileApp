@@ -46,7 +46,7 @@ function ReturnProductStep1() {
       ) ?? null,
     [params.product]
   );
-  
+
   const [returnReasonPolicyId, setReturnReasonPolicyId] = useState<string>("");
   const [submitOrderReturnRequest] = useSubmitOrderReturnRequestMutation({
     onCompleted: (res) => {
@@ -158,6 +158,7 @@ function ReturnProductStep1() {
             height: vs(160),
             backgroundColor: colors.white,
             borderRadius: s(20),
+            textAlign: "left",
             borderWidth: 1,
             borderColor: colors.grey20,
             justifyContent: "space-between",

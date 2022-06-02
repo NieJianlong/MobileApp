@@ -134,7 +134,7 @@ const MapScreen = () => {
               longitude: results?.location?.longitude,
             },
           };
-
+          setIsTapable(false);
           setLocation(newLocation);
         }
         // setLocation({ location: place.location, address: place.address });

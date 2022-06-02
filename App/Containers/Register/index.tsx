@@ -570,8 +570,13 @@ function RegisterScreen(props) {
                           "SmsRetriever==request===PhoneNumber",
                           resph
                         );
+                        // resph = "+9109176476145";
+                        // alert(resph);
                         if (resph.startsWith("+91")) {
-                          setValue("phoneNumber", resph.replace("+91", ""));
+                          setValue(
+                            "phoneNumber",
+                            resph.substring(resph.length - 10, resph.length)
+                          );
                         }
                         if (resph.startsWith("+86")) {
                           setValue("phoneNumber", resph.replace("+86", ""));

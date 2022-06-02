@@ -44,7 +44,7 @@ const styles = ScaledSheet.create({
     width: MAX_WIDTH,
     height: BAR_HEIGHT,
     borderRadius: "3@vs",
-    backgroundColor: Colors.secondary01,
+    backgroundColor: Colors.grey20,
     flexDirection: "row",
   },
   bar: {

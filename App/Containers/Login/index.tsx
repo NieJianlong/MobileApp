@@ -234,7 +234,7 @@ function LoginScreen(props) {
                       type: "changLoading",
                       payload: false,
                     });
-                    debugger;
+
                     NavigationService.navigate("OTPScreen", {
                       fromScreen: "RegisterScreen",
                       phone: ret.isEmail

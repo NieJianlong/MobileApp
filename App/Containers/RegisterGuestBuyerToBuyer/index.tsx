@@ -315,11 +315,11 @@ function RegisterGuestBuyerToBuyerScreen(props) {
             }
           >
             <Text style={styles.txtAccept}>
-              I accept
+              By registering you agree
               <Text style={styles.txtPrivacy}> Privacy Policy </Text>
               and
-              <Text style={styles.txtPrivacy}> Terms of use</Text>
             </Text>
+            <Text style={styles.txtPrivacy}>Terms of use</Text>
           </TouchableOpacity>
         </View>
 

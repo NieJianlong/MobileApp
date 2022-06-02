@@ -373,17 +373,17 @@ function RegisterScreen(props) {
 
   const fetchUserIdentity = async () => {
     try {
-      const result = await RNUserIdentity.getUserId()
+      const result = await RNUserIdentity.getUserId();
       setSavedEmail(result);
       if (result === null) {
         // alert('User canceled UI flow')
-      } 
-    } catch(error) {
+      }
+    } catch (error) {
       if (error === ICLOUD_ACCESS_ERROR) {
-        alert('Please set up an iCloud account in settings')
+        alert("Please set up an iCloud account in settings");
       }
     }
-  }
+  };
 
   return (
     <View style={[styles.container, props.style]}>
@@ -635,18 +635,20 @@ function RegisterScreen(props) {
             onSwitch={() => {
               toggleTermsAccepted();
             }}
+            active={true}
+            disabled={true}
           />
           <TouchableOpacity
             onPress={() =>
               props.navigation.navigate("LegalScreen", { tabIndex: 0 })
             }
           >
-            <Text style={styles.txtAccept}>
-              I accept
+            <Text style={[styles.txtAccept, t.flexNoWrap]}>
+              By registering you agree
               <Text style={styles.txtPrivacy}> Privacy Policy </Text>
               and
-              <Text style={styles.txtPrivacy}> Terms of use</Text>
             </Text>
+            <Text style={styles.txtPrivacy}>Terms of use</Text>
           </TouchableOpacity>
         </View>
 

@@ -41,9 +41,21 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   // const [cartInfo, setCartInfo] = useState(info);
   const initQuanlity =
     product.minQtyPerCart !== null ? product.minQtyPerCart : 1;
-  // debugger;
+  //
   const [quantity, setQuantity] = useState(info?.quantity || initQuanlity);
   const { createOrder } = useCreateOrder();
+
+  const buyNow = () => {
+    if (
+      pickUp ||
+      product.deliveryOption === DeliveryOption.CourierDelivery ||
+      product.deliveryOption === DeliveryOption.SellerDirectDelivery
+    ) {
+      toggleConfirmOrderSheet();
+    } else {
+      PubSub.publish("show-pick-up-sheet", toggleConfirmOrderSheet);
+    }
+  };
 
   const toggleConfirmOrderSheet = async () => {
     const item = {
@@ -187,7 +199,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={toggleConfirmOrderSheet}
+          onPress={buyNow}
           style={[
             styles.btnBuyNow,
             t.flexGrow,

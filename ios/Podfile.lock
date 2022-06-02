@@ -426,6 +426,8 @@ PODS:
     - React
   - react-native-safe-area-context (3.4.1):
     - React-Core
+  - react-native-user-identity (1.5.2):
+    - React
   - react-native-video (5.2.0):
     - React-Core
     - react-native-video/Video (= 5.2.0)
@@ -610,6 +612,7 @@ DEPENDENCIES:
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-razorpay (from `../node_modules/react-native-razorpay`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-user-identity (from `../node_modules/react-native-user-identity`)
   - react-native-video (from `../node_modules/react-native-video`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -756,6 +759,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-razorpay"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-user-identity:
+    :path: "../node_modules/react-native-user-identity"
   react-native-video:
     :path: "../node_modules/react-native-video"
   React-perflogger:
@@ -879,6 +884,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: 7f00d63688f7df9fad86dfb0154814419cc5eb8d
   react-native-razorpay: 6796178680164b4716b9cbdacdda5da98781fb0a
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
+  react-native-user-identity: c46a6cfbfb03710abc0ca3b841dc308201105f5b
   react-native-video: a4c2635d0802f983594b7057e1bce8f442f0ad28
   React-perflogger: 93075d8931c32cd1fce8a98c15d2d5ccc4d891bd
   React-RCTActionSheet: 7d3041e6761b4f3044a37079ddcb156575fb6d89

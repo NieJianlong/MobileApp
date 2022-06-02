@@ -93,6 +93,9 @@ function TabBar(props) {
                   resizeMode={"contain"}
                   source={getIconSource(route.name, isFocused)}
                   style={[
+                    route.name === "FollowScreen" && {
+                      transform: [{ rotateY: "180deg" }],
+                    },
                     styles.icon,
                     isFocused && { tintColor: Colors.primary },
                   ]}

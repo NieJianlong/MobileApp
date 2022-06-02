@@ -6,21 +6,23 @@ import { Fonts, Colors, ApplicationStyles } from "../Themes";
 
 //description text component which can expand and collapse
 function DescriptionText(props) {
-  const [active, setActive] = useState(true);
+  const [active, setActive] = useState(false);
 
   const { text, style, previewLength } = props;
 
   return (
     <TouchableOpacity onPress={() => setActive(!active)} style={style}>
-      <Text style={styles.text}>
-        {active ? text : text.substring(0, previewLength ?? 105) + "..."}
+      {text && (
+        <Text style={styles.text}>
+          {active ? text : text.substring(0, previewLength ?? 105) + "..."}
 
-        {text && text.length > 104 && (
-          <Text style={{ color: Colors.secondary00 }}>
-            {active ? " Less" : " Read more"}
-          </Text>
-        )}
-      </Text>
+          {text && text.length > 104 && (
+            <Text style={{ color: Colors.secondary00 }}>
+              {active ? " Less" : " Read more"}
+            </Text>
+          )}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 }

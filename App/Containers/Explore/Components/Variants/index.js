@@ -46,8 +46,8 @@ class AccordionView extends React.Component {
         ]}
       >
         <View>
-          <Text style={[t.textLg, t.fontPrimary]}>{content.title}:</Text>
-          <Text style={[t.textLg, t.fontSemibold]}>{valueItem?.value}</Text>
+          <Text style={[t.textSm, t.fontPrimary]}>{content.title}:</Text>
+          <Text style={[t.textSm, t.fontSemibold]}>{valueItem?.value}</Text>
         </View>
         <View style={[t.flexRow, t.itemsCenter]}>
           {index === 0 && (

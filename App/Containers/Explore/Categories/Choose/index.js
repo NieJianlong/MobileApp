@@ -10,6 +10,7 @@ import * as aQM from "../../gql/explore_queries";
 import { SAVE_PREFERRED_CATEGORIES } from "../../../../Apollo/mutations/mutations_product";
 import { t } from "react-native-tailwindcss";
 import { useNavigation } from "@react-navigation/native";
+import { findIndex } from "lodash";
 
 class OldChooseCategoriesScreen extends Component {
   constructor(props) {
@@ -23,7 +24,12 @@ class OldChooseCategoriesScreen extends Component {
   componentDidMount() {}
 
   checkSelected = (item) => {
-    return this.state.categories.includes(item);
+    return (
+      findIndex(
+        this.state.categories ?? [],
+        (item1) => item1.categoryId === item.categoryId
+      ) >= 0
+    );
   };
 
   onPress = (item, selected) => {
@@ -96,6 +102,7 @@ export default function ChooseCategoriesScreen() {
       setSelected(categories?.getPreferredCategories);
     }
   }, [categories]);
+
   const selectedIds = useMemo(() => {
     return selected.map((item) => item.categoryId);
   }, [selected]);

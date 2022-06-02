@@ -37,7 +37,7 @@ import UserInfoScreen from "../Containers/UserInfo";
 import UserEditProfileScreen from "../Containers/UserEditProfile";
 import DeleteAccountMessageScreen from "../Containers/DeleteAccountMessage";
 import AddNewAddressScreen from "../Containers/AddNewAddress";
-import NavigationService from "./NavigationService";
+import NavigationService, { _navigator } from "./NavigationService";
 import ChangePasswordScreen from "../Containers/ChangePassword";
 import AddPaymentMethodScreen from "../Containers/AddPaymentMethod";
 import AddCreditScreen from "../Containers/AddCredit";
@@ -90,6 +90,7 @@ import RegisterGuestBuyerToBuyerScreen from "../Containers/RegisterGuestBuyerToB
 import { Image, SafeAreaView, View } from "react-native";
 import styles from "../Containers/Explore/styles";
 import colors from "../Themes/Colors";
+import useCurrentRoute from "../hooks/useCurrentRoute";
 // import ReturnInformation from "../..";
 const Stack = createStackNavigator();
 
@@ -779,16 +780,26 @@ function PrimaryNav() {
 //     </LoginStack.Navigator>
 //   );
 // }
-export default class AppRouter extends React.Component {
-  render() {
-    return (
-      <NavigationContainer
-        ref={(navigatorRef) => {
-          NavigationService.setTopLevelNavigator(navigatorRef);
-        }}
-      >
-        <PrimaryNav />
-      </NavigationContainer>
-    );
-  }
+
+function AppRouter(props) {
+  const { setCurrentRoute } = useCurrentRoute();
+  return (
+    <NavigationContainer
+      onStateChange={() => {
+        const routeName = _navigator?.getCurrentRoute()?.name;
+        setCurrentRoute({ currentPage: routeName });
+      }}
+      ref={(navigatorRef) => {
+        NavigationService.setTopLevelNavigator(navigatorRef);
+        // navigatorRef?.current?.addListener("state", (e) => {
+        //
+        //   const state = e.data.state; //works
+        // });
+      }}
+    >
+      <PrimaryNav />
+    </NavigationContainer>
+  );
 }
+
+export default AppRouter;

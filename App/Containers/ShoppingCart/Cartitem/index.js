@@ -31,11 +31,12 @@ function Index(props) {
 
   return (
     <TouchableOpacity
-      disabled={!availble}
+      // disabled={!availble}
       onPress={() =>
         NavigationService.navigate("ProductDetailScreen", { product })
       }
-      style={[styles.productContainer, { opacity: availble ? 1 : 0.6 }]}
+      // { opacity: availble ? 1 : 0.6 }
+      style={[styles.productContainer]}
     >
       <View
         style={[styles.row, { paddingHorizontal: AppConfig.paddingHorizontal }]}
@@ -92,60 +93,59 @@ function Index(props) {
       </View>
 
       <View style={styles.v4}>
-        {availble ? (
-          <View style={styles.counter}>
-            <TouchableOpacity
-              disabled={!availble}
-              onPress={() => {
-                if (quantity === 1) {
-                  onChangeQuanlity(0);
-                  //dispatch({ type: "revomeCartCount", payload: product.id });
-                  Alert.dispatch({
-                    type: "changAlertState",
-                    payload: {
+        <View style={styles.counter}>
+          <TouchableOpacity
+            // disabled={!availble}
+            onPress={() => {
+              if (quantity === 1) {
+                onChangeQuanlity(0);
+                //dispatch({ type: "revomeCartCount", payload: product.id });
+                Alert.dispatch({
+                  type: "changAlertState",
+                  payload: {
+                    visible: true,
+                    message: "",
+                    color: colors.secondary00,
+                    title: "Removed item",
+                  },
+                });
+              } else {
+                if (quantity - 1 < product.minQtyPerCart) {
+                  !visible &&
+                    setAlert({
+                      color: colors.warning,
+                      title: `Purchase a minimum of ${product.minQtyPerCart} units of this product`,
                       visible: true,
-                      message: "",
-                      color: colors.secondary00,
-                      title: "Removed item",
-                    },
-                  });
-                } else {
-                  if (quantity - 1 < product.minQtyPerCart) {
-                    !visible &&
-                      setAlert({
-                        color: colors.warning,
-                        title: `Purchase a minimum of ${product.minQtyPerCart} units of this product`,
-                        visible: true,
-                        onDismiss: () => {
-                          setAlert({ visible: false });
-                        },
-                      });
-                    return;
-                  }
-                  onChangeQuanlity(quantity - 1);
+                      onDismiss: () => {
+                        setAlert({ visible: false });
+                      },
+                    });
+                  return;
                 }
-              }}
-            >
-              <Image
-                style={styles.cartadd}
-                source={
-                  product?.count === 1
-                    ? images.shopcartRemoveImage
-                    : images.shopcartSubImage
-                }
-              />
-            </TouchableOpacity>
-            <TextInput style={styles.cartinput} value={quantity + ""} />
-            <TouchableOpacity
-              disabled={!availble}
-              onPress={() => {
-                onChangeQuanlity(quantity + 1);
-              }}
-            >
-              <Image style={styles.cartadd} source={images.shopcartAddImage} />
-            </TouchableOpacity>
-          </View>
-        ) : (
+                onChangeQuanlity(quantity - 1);
+              }
+            }}
+          >
+            <Image
+              style={styles.cartadd}
+              source={
+                product?.count === 1
+                  ? images.shopcartRemoveImage
+                  : images.shopcartSubImage
+              }
+            />
+          </TouchableOpacity>
+          <TextInput style={styles.cartinput} value={quantity + ""} />
+          <TouchableOpacity
+            // disabled={!availble}
+            onPress={() => {
+              onChangeQuanlity(quantity + 1);
+            }}
+          >
+            <Image style={styles.cartadd} source={images.shopcartAddImage} />
+          </TouchableOpacity>
+        </View>
+        {/* : (
           <View>
             <TouchableOpacity
               style={{
@@ -166,8 +166,7 @@ function Index(props) {
               </Text>
             </TouchableOpacity>
           </View>
-        )}
-
+        )} */}
         <View style={styles.row}>
           <TouchableOpacity
             style={styles.removebtn}
@@ -211,6 +210,28 @@ function Index(props) {
           </TouchableOpacity>
         </View>
       </View>
+      {!availble && (
+        <View style={[t.pX4, t.mT4, { width: 174 }, t.justifyCenter]}>
+          <TouchableOpacity
+            style={{
+              height: s(32),
+              borderRadius: s(40),
+              backgroundColor: colors.grey60,
+              justifyContent: "center",
+              paddingHorizontal: 10,
+            }}
+          >
+            <Text
+              style={[
+                ApplicationStyles.screen.heading6Regular,
+                { color: "white", fontSize: s(10) },
+              ]}
+            >
+              Units/Slices not available
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </TouchableOpacity>
   );
 }

@@ -35,12 +35,12 @@ export default function StoreInfo({ tabIndex, product }) {
       <View style={styles.storeInfoContainer}>
         <View style={styles.rowSpaceBetween}>
           <View style={styles.row}>
-            <View style={styles.sellerAvatarContainer}>
+            {/* <View style={styles.sellerAvatarContainer}>
               <Image
                 source={{ uri: product.seller.avatar }}
                 style={styles.sellerAvatar}
               />
-            </View>
+            </View> */}
             <Text style={styles.heading5Bold}>
               {data?.sellerProfileBasicDetails?.storeName ?? ""}
             </Text>

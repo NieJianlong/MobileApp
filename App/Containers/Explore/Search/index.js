@@ -67,7 +67,6 @@ function ProductSearch(props) {
 
                     <TouchableOpacity
                       onPress={() => {
-                        debugger;
                         recentSearches.splice(index, 1);
                         storage.setLocalStorageValue(
                           storage.LOCAL_SEARCH_ITEM,

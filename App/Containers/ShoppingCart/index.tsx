@@ -70,6 +70,7 @@ function ShoppingCart(props) {
         .filtered("addressId == $0", localCart.deliverAddress)
         .filtered("quantity > 0")
         .filtered("isDraft == false");
+
       const datas = [];
       if (query1) {
         query1.map((item) => {
@@ -85,7 +86,7 @@ function ShoppingCart(props) {
         setRequestArray([]);
       }
     });
-  }, []);
+  }, [localCart.deliverAddress]);
 
   useEffect(() => {
     const query1 = realm
@@ -94,10 +95,9 @@ function ShoppingCart(props) {
       .filtered("quantity > 0")
       .filtered("isDraft == false");
     const datas = [];
-    debugger;
+
     if (query1) {
       query1.map((item) => {
-        debugger;
         const newItem = {
           listingId: item.listingId,
           variantId: item.variantId,
@@ -116,10 +116,9 @@ function ShoppingCart(props) {
         .filtered("quantity > 0")
         .filtered("isDraft == false");
       const datas = [];
-      debugger;
+
       if (query1) {
         query1.map((item) => {
-          debugger;
           const newItem = {
             listingId: item.listingId,
             variantId: item.variantId,
@@ -232,12 +231,13 @@ function ShoppingCart(props) {
           edges={["top", "left", "right"]}
         >
           <ScrollView>
-            {finalData.length > 0 ? (
-              <View style={{ backgroundColor: "white" }}>
-                <AddressBar />
+            <View style={{ backgroundColor: "white" }}>
+              <AddressBar />
+              {finalData.length > 0 && (
                 <CartSummary availbleList={availbleList} />
-              </View>
-            ) : null}
+              )}
+            </View>
+
             <SectionList
               sections={
                 finalData.length > 0 ? [{ title: "", data: finalData }] : []

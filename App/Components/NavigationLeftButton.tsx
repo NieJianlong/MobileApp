@@ -1,7 +1,6 @@
 import React from "react";
 import { Image, TouchableOpacity, ViewStyle } from "react-native";
 import { t } from "react-native-tailwindcss";
-
 import NavigationService from "../Navigation/NavigationService";
 import { Colors, Images } from "../Themes";
 

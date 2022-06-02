@@ -160,11 +160,14 @@ function CheckoutResume(props) {
                 </View>
               </View>
               <View style={{ marginTop: 20 }}>
-                <Switch
-                  onSwitch={(b) => setOnSwitch(b)}
-                  active={on}
-                  label="I accept Privacy Policy and Terms of use"
-                />
+                {!global.access_token && (
+                  <Switch
+                    onSwitch={(b) => setOnSwitch(b)}
+                    active={true}
+                    disabled={true}
+                    label="By placing order you agree Privacy Policy and Terms of use"
+                  />
+                )}
               </View>
             </View>
           </ScrollView>
@@ -194,7 +197,7 @@ function CheckoutResume(props) {
                 alert("Please accept privacy and policy");
                 return;
               }
-              
+
               createOrder({ data: params?.data });
             }}
             text={"PROCEED"}

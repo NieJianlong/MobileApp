@@ -34,6 +34,7 @@ import {
 } from "../../../../generated/graphql";
 import Share from "react-native-share";
 import useImageViewer from "../../../hooks/useImageViewer";
+import Swiper from "react-native-swiper";
 //render product images
 export default function ProductCarousel({ product }) {
   const { realm } = useRealm();
@@ -128,11 +129,8 @@ export default function ProductCarousel({ product }) {
   const { setImageViewer } = useImageViewer();
   return (
     <View style={styles.imagesContainer}>
-      <Carousel
-        ref={_carousel}
-        data={product.photoUrls}
-        renderItem={({ item, index }) => {
-          //render product image item
+      <Swiper>
+        {product?.photoUrls?.map((item, index) => {
           return (
             <TouchableOpacity
               key={`{index}`}
@@ -157,14 +155,9 @@ export default function ProductCarousel({ product }) {
               />
             </TouchableOpacity>
           );
-        }}
-        sliderWidth={metrics.screenWidth}
-        itemWidth={metrics.screenWidth}
-        onSnapToItem={onSnapToItem}
-        enableMomentum={true}
-        decelerationRate={0}
-       
-      />
+        })}
+      </Swiper>
+
       <View style={styles.row1}>
         <TouchableOpacity
           onPress={() => NavigationService.goBack()}
@@ -182,6 +175,20 @@ export default function ProductCarousel({ product }) {
       </View>
 
       <View style={styles.row2}>
+        <TouchableOpacity
+          onPress={() => {
+            const imageUrls =
+              product.photoUrls?.map((item: string) => {
+                return { url: item };
+              }) ?? [];
+            setImageViewer({ visible: true, images: imageUrls });
+          }}
+          style={styles.photoNumberContainer}
+        >
+          <Text style={styles.photoNumberTxt}>
+            {photoIndex + 1}/{product?.photoUrls?.length}
+          </Text>
+        </TouchableOpacity>
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             onPress={onLikeProduct}
@@ -190,6 +197,7 @@ export default function ProductCarousel({ product }) {
             <Image
               style={[
                 styles.btnRoundIcon,
+                { transform: [{ rotateY: "180deg" }] },
                 data?.isListingInWishlist && { tintColor: Colors.primary },
               ]}
               source={
@@ -205,21 +213,6 @@ export default function ProductCarousel({ product }) {
             <Image style={styles.btnRoundIcon} source={Images.share} />
           </TouchableOpacity>
         </View>
-
-        <TouchableOpacity
-          onPress={() => {
-            const imageUrls =
-              product.photoUrls?.map((item: string) => {
-                return { url: item };
-              }) ?? [];
-            setImageViewer({ visible: true, images: imageUrls });
-          }}
-          style={styles.photoNumberContainer}
-        >
-          <Text style={styles.photoNumberTxt}>
-            {photoIndex + 1}/{product?.photoUrls?.length}
-          </Text>
-        </TouchableOpacity>
       </View>
       {mydatas.length > 0 && (
         <View

@@ -31,14 +31,12 @@ export default function EditCategoriesScreen() {
     },
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     setCategoryData(categories.getPreferredCategories);
-  }, []);
+  }, [categories]);
 
   const selected = useMemo(() => {
-    return categoryData.filter(
-      (item) => removed.indexOf(item) < 0
-    );
+    return categoryData.filter((item) => removed.indexOf(item) < 0);
   }, [categoryData, removed]);
   const selectedIds = useMemo(() => {
     return selected.map((item) => item.categoryId);
@@ -118,8 +116,11 @@ export default function EditCategoriesScreen() {
         <DraggableFlatList
           data={categoryData || []}
           renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
           keyExtractor={(item, index) => `draggable-item-${index}`}
-          onDragEnd={({ data }) => {setCategoryData(data)}}
+          onDragEnd={({ data }) => {
+            setCategoryData(data);
+          }}
         />
       </View>
       <TouchableOpacity

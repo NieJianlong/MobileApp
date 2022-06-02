@@ -12,6 +12,7 @@ import useAlert from "../../../hooks/useAlert";
 import useLoading from "../../../hooks/useLoading";
 import colors from "../../../Themes/Colors";
 import { useRoute } from "@react-navigation/native";
+import { t } from "react-native-tailwindcss";
 //render users' reviews for the product
 const renderUserReview = () => {
   return (
@@ -51,7 +52,9 @@ export default function ProductReview({
           }
         }}
       >
-        <Text style={styles.heading3Bold}>Product Reviews</Text>
+        <Text style={[styles.heading3Bold, t.textLeft, t.mB4]}>
+          Product Reviews
+        </Text>
         <Review
           rating={product.numberOfStars}
           ratingCount={product.numberOfReviews}
@@ -65,12 +68,12 @@ export default function ProductReview({
         product.reviews.map((comment, index) => (
           <View key={index.toString()} style={styles.commentContainer}>
             <View style={[styles.row, { marginBottom: vs(5) }]}>
-              <View style={styles.sellerAvatarContainer}>
-                {/* <Image
+              {/* <View style={styles.sellerAvatarContainer}>
+                <Image
                   source={{ uri: comment.user.avatar }}
                   style={styles.sellerAvatar}
-                /> */}
-              </View>
+                />
+              </View> */}
               <Text style={styles.heading5Bold}>{comment.postedByName}</Text>
             </View>
             <View style={styles.row}>

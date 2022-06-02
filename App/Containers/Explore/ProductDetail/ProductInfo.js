@@ -56,7 +56,7 @@ export default function ProductInfo({
   useEffect(() => {
     let refresh = PubSub.subscribe("show-pick-up-sheet", (msg, callback) => {
       togglePickupFromSellerSheet(callback);
-      
+
       if (callback && pickUp) {
         callback && callback();
       }
@@ -82,13 +82,28 @@ export default function ProductInfo({
       <View style={styles.infoContainer}>
         <View style={styles.v2}>
           <View>
-            <Text style={styles.heading2Bold}>{product.longName}</Text>
-            <TouchableOpacity onPress={() => scrollSectionIntoView(3)}>
-              <StarRating
-                rating={product.numberOfStars}
-                ratingCount={product.numberOfReviews}
-              />
-            </TouchableOpacity>
+            <Text
+              style={[
+                {
+                  fontSize: s(14),
+                  fontFamily: Fonts.primary,
+                  color: Colors.black,
+
+                  lineHeight: s(20),
+                },
+                t.flexRow,
+              ]}
+            >
+              {product.longName}
+            </Text>
+            <View style={[t.flexRow, t.flexRowReverse]}>
+              <TouchableOpacity onPress={() => scrollSectionIntoView(3)}>
+                <StarRating
+                  rating={product.numberOfStars}
+                  ratingCount={product.numberOfReviews}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
           <View style={[styles.row, { marginTop: vs(8) }]}>
             <View style={styles.v3}>
@@ -144,6 +159,14 @@ export default function ProductInfo({
                 </Text>
               </Text>
             )}
+
+            {product.deliveryOption === DeliveryOption.SellerDirectDelivery && (
+              <View style={[styles.row, { marginLeft: s(10) }]}>
+                <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
+                  Seller will deliver to address
+                </Text>
+              </View>
+            )}
             {(product.deliveryOption === DeliveryOption.SellerLocationPickup ||
               product.deliveryOption ===
                 DeliveryOption.CollectionPointPickup) && (
@@ -177,7 +200,7 @@ export default function ProductInfo({
           </View>
         </View>
 
-        <View style={styles.v4}>
+        <View style={[styles.v4, t.flexRow, t.justifyBetween, t.pR8]}>
           <View style={{ marginRight: s(10) }}>
             {/* <Text style={styles.heading6Regular}>Order closes on:</Text> */}
             <Text style={styles.heading6Regular}>
@@ -192,18 +215,13 @@ export default function ProductInfo({
             </Text>
           </View>
 
-          <View style={styles.row}>
+          <View style={[styles.row]}>
             <Progress
               maximumValue={isMissing ? "100" : product.noOfItemsInStock}
               currentValue={isMissing ? "100" : product.noOfOrderedItems}
-              barWidth={s(60)}
+              barWidth={s(130)}
               barHeight={vs(6)}
             />
-            {/* <Progress
-              currentValue={24}
-              maximumValue={100}
-              style={{ marginHorizontal: s(10) }}
-            /> */}
 
             <Image source={Images.stock} style={styles.icStock} />
             <Text style={styles.txtOrderNumber}>

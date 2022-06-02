@@ -68,7 +68,7 @@ class CustomTextInput extends Component {
               placeholderTextColor="gray"
               numberOfLines={multiline ? 5 : 1}
               value={value}
-              autoCapitalize={autoCapitalize ?? "none"}
+              autoCapitalize="sentences"
               onSubmitEditing={onSubmitEditing}
               returnKeyType={returnKeyType}
               textAlignVertical={textAlignVertical ?? "top"}

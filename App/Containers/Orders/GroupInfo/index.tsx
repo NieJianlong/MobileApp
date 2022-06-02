@@ -160,6 +160,7 @@ function GroupInfoScreen(props) {
     );
   }
   function renderActions() {
+    const finalData = orderData?.getOrderItemDetails;
     return (
       <View>
         {renderAction(Images.packageMed, "Order details", () => {
@@ -195,14 +196,11 @@ function GroupInfoScreen(props) {
           })
         )}
         {/* when order status is reached,user can track order */}
-        {(orderData?.getOrderItemDetails.latestEventStatus ===
-          OrderItemHistoryEventType.Paid ||
-          orderData?.getOrderItemDetails.latestEventStatus ===
+        {(finalData?.latestEventStatus === OrderItemHistoryEventType.Paid ||
+          finalData?.latestEventStatus ===
             OrderItemHistoryEventType.Delivered) &&
-          (orderData?.getOrderItemDetails.listingStatus ===
-            ProductListingStatus.Accepted ||
-            orderData?.getOrderItemDetails.listingStatus ===
-              ProductListingStatus.Successful) &&
+          (finalData?.listingStatus === ProductListingStatus.Accepted ||
+            finalData?.listingStatus === ProductListingStatus.Successful) &&
           renderAction(Images.orderTrackImage, "Track order", () => {
             // if (data.deliveryOption === DeliveryOption.CourierDelivery) {
             NavigationService.navigate("TrackOrderScreen", {
@@ -213,12 +211,10 @@ function GroupInfoScreen(props) {
             // }
           })}
         {/* when order status is received,user can return product */}
-        {orderData?.getOrderItemDetails.latestEventStatus ===
-          OrderItemHistoryEventType.Delivered &&
+        {finalData?.latestEventStatus === OrderItemHistoryEventType.Delivered &&
           renderAction(Images.orderReturnImage, "Return product", () => {
             if (
-              orderData?.getOrderItemDetails.deliveryOption ===
-              DeliveryOption.SellerDirectDelivery
+              finalData?.deliveryOption === DeliveryOption.SellerDirectDelivery
             ) {
               NavigationService.navigate("ReturnsUnavailable", { data });
               return;
@@ -229,10 +225,14 @@ function GroupInfoScreen(props) {
             });
           })}
         {/* when order status is uncompleted,user can cancel the order */}
-        {orderData?.getOrderItemDetails.listingStatus ===
-          ProductListingStatus.Active &&
-          orderData?.getOrderItemDetails.latestEventStatus !==
-            OrderItemHistoryEventType.CanceledByBuyer &&
+        {finalData?.listingStatus === ProductListingStatus.Active &&
+          (finalData?.latestEventStatus ===
+            OrderItemHistoryEventType.WaitingForPayment ||
+            finalData?.latestEventStatus ===
+              OrderItemHistoryEventType.AuthorizedPayment ||
+            finalData?.latestEventStatus ===
+              OrderItemHistoryEventType.FailedPayment ||
+            finalData?.latestEventStatus === OrderItemHistoryEventType.Paid) &&
           renderAction(Images.orderCancelImage, "Cancel order", () =>
             NavigationService.navigate("CancelOrderScreen", {
               orderItemId: data.orderItemId,
@@ -240,9 +240,9 @@ function GroupInfoScreen(props) {
               product: product?.getListings?.content[0],
             })
           )}
-        {(orderData?.getOrderItemDetails.latestEventStatus ===
+        {(finalData?.latestEventStatus ===
           OrderItemHistoryEventType.ReplacementRequest ||
-          orderData?.getOrderItemDetails.latestEventStatus ===
+          finalData?.latestEventStatus ===
             OrderItemHistoryEventType.RefundRequest) &&
           renderAction(Images.orderTrackImage, "Return status", () =>
             NavigationService.navigate("ReturnStatus", {

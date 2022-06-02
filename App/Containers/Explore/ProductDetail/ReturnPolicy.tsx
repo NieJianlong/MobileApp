@@ -5,6 +5,7 @@ import { ProductReturnPolicyViewFieldFragment } from "../../../../generated/grap
 import ReturnPolicy1 from "../../../Components/SvgComponents/ReturnPolicy1";
 import ReturnPolicy2 from "../../../Components/SvgComponents/ReturnPolicy2";
 import ReturnPolicy3 from "../../../Components/SvgComponents/ReturnPolicy3";
+import styles from "../styles";
 
 interface ReturnPolicyProps {
   returnPolices: ProductReturnPolicyViewFieldFragment[];
@@ -32,29 +33,26 @@ function ReturnPolicy({ returnPolices }: ReturnPolicyProps) {
   );
   const { width } = useWindowDimensions();
   const width1 = width - 64;
+  const firstLine =
+    Number(return_period?.value) === 0 || return_period?.value === "0"
+      ? "No returns"
+      : `Allowed return period:${return_period?.value} days`;
+  const allItems = [{ value: firstLine }, ...items];
+
   return (
-    <View style={[t.pX4]}>
-      <View
-        style={[
-          { backgroundColor: "#EEEFF1" },
-          t.roundedLg,
-          t.p4,
-          t.itemsCenter,
-        ]}
-      >
-        <Text>
-          {Number(return_period?.value) === 0 || return_period?.value === "0"
-            ? "No returns"
-            : `Covered by seller ${return_period?.value} days return policy, for:`}
-        </Text>
-        <View style={[t.wFull, t.flexRow, t.justifyAround, t.mY4, t.flexWrap]}>
-          {items.map((title, index) => {
+    <View>
+      <Text style={[styles.heading3Bold, t.textLeft, t.pX4]}>
+        Return Policy
+      </Text>
+      <View style={[t.roundedLg, t.pX4, t.itemsCenter]}>
+        <View style={[t.wFull, t.justifyAround, t.mB4, t.mT2]}>
+          {allItems.map((title, index) => {
             return (
-              <View style={[t.itemsCenter, t.mT2]}>
-                {icons[index]}
-                <Text style={[{ width: width1 / 3 }, t.textCenter, t.mT2]}>
-                  {title.value}
-                </Text>
+              <View key={index} style={[styles.row, t.itemsCenter]}>
+                <View
+                  style={[t.w1, t.h1, t.roundedFull, t.bgBlack, t.mR4, t.mT1]}
+                />
+                <Text style={styles.txtRegular}> {title.value}</Text>
               </View>
             );
           })}

@@ -59,7 +59,6 @@ function UserHeader(props) {
           <View style={styles.signbtn}>
             <Button
               onPress={() => {
-                debugger;
                 NavigationService.navigate("LoginScreen");
                 // navigation.reset({
                 //   index: 0,

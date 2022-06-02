@@ -159,6 +159,14 @@ export default function ProductInfo({
                 </Text>
               </Text>
             )}
+
+            {product.deliveryOption === DeliveryOption.SellerDirectDelivery && (
+              <View style={[styles.row, { marginLeft: s(10) }]}>
+                <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
+                  Seller will deliver to address
+                </Text>
+              </View>
+            )}
             {(product.deliveryOption === DeliveryOption.SellerLocationPickup ||
               product.deliveryOption ===
                 DeliveryOption.CollectionPointPickup) && (

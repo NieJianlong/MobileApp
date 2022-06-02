@@ -786,14 +786,13 @@ function AppRouter(props) {
   return (
     <NavigationContainer
       onStateChange={() => {
-        debugger;
         const routeName = _navigator?.getCurrentRoute()?.name;
         setCurrentRoute({ currentPage: routeName });
       }}
       ref={(navigatorRef) => {
         NavigationService.setTopLevelNavigator(navigatorRef);
         // navigatorRef?.current?.addListener("state", (e) => {
-        //   debugger;
+        //
         //   const state = e.data.state; //works
         // });
       }}

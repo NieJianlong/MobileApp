@@ -197,6 +197,7 @@ export default function ProductCarousel({ product }) {
             <Image
               style={[
                 styles.btnRoundIcon,
+                { transform: [{ rotateY: "180deg" }] },
                 data?.isListingInWishlist && { tintColor: Colors.primary },
               ]}
               source={

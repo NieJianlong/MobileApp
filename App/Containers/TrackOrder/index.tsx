@@ -98,7 +98,7 @@ function TrackOrder(props) {
             <Text
               style={[
                 ApplicationStyles.screen.heading2Bold,
-                { fontSize: s(32), paddingTop: 10 },
+                { fontSize: s(20), paddingTop: 10 },
               ]}
             >
               {moment(

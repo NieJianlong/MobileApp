@@ -70,7 +70,7 @@ function ShoppingCart(props) {
         .filtered("addressId == $0", localCart.deliverAddress)
         .filtered("quantity > 0")
         .filtered("isDraft == false");
-      debugger;
+
       const datas = [];
       if (query1) {
         query1.map((item) => {
@@ -89,7 +89,6 @@ function ShoppingCart(props) {
   }, [localCart.deliverAddress]);
 
   useEffect(() => {
-    debugger;
     const query1 = realm
       .objects("ShoppingCart")
       .filtered("addressId == $0", localCart.deliverAddress)

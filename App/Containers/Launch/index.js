@@ -58,6 +58,7 @@ export default function LaunchScreen() {
   });
 
   const autoSignIn = useCallback(async () => {
+    debugger;
     //get username and possword from localStorage
     const username = await getLocalStorageValue(LOCAL_STORAGE_USER_NAME);
     const password = await getLocalStorageValue(LOCAL_STORAGE_USER_PASSWORD);
@@ -81,6 +82,13 @@ export default function LaunchScreen() {
       } catch (error) {
         storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_NAME, "");
         storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_PASSWORD, "");
+        const isLogedOut = await getLocalStorageValue(
+          storage.REGISTERED_USER_LOGOUT
+        );
+        if (isLogedOut) {
+          NavigationService.navigate("LoginScreen");
+          return;
+        }
         const result = await checkBuyerIdExists();
         if (result) {
           setTimeout(() => {
@@ -96,6 +104,13 @@ export default function LaunchScreen() {
         }
       }
     } else {
+      const isLogedOut = await getLocalStorageValue(
+        storage.REGISTERED_USER_LOGOUT
+      );
+      if (isLogedOut) {
+        NavigationService.navigate("LoginScreen");
+        return;
+      }
       const result = await checkBuyerIdExists();
       if (result) {
         setTimeout(() => {

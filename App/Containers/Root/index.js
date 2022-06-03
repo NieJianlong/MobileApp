@@ -95,11 +95,11 @@ function RootContainer() {
       }
     },
   });
-  useEffect(() => {
-    if (!global.access_token && global.buyerId) {
-      validateBuyerHasAnyOrder({ variables: { buyerId: global.buyerId } });
-    }
-  }, [global.access_token, global.buyerId]);
+  // useEffect(() => {
+  //   if (!global.access_token && global.buyerId) {
+  //     validateBuyerHasAnyOrder({ variables: { buyerId: global.buyerId } });
+  //   }
+  // }, [global.access_token, global.buyerId]);
 
   // useEffect(() => {
 

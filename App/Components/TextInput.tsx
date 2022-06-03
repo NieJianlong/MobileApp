@@ -34,6 +34,7 @@ class CustomTextInput extends Component {
       textAlignVertical,
       isPhoneNo,
       blurOnSubmit,
+      autoCapitalize,
     } = this.props;
 
     return (

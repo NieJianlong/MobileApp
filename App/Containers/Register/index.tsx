@@ -457,6 +457,7 @@ function RegisterScreen(props) {
               onSubmitEditing={() =>
                 lastNameInput.current.getInnerRef().focus()
               }
+              autoCapitalize = 'words'
               returnKeyType={"next"}
               onChangeText={onChange}
               value={value}
@@ -622,6 +623,7 @@ function RegisterScreen(props) {
               defaultValue={""}
               returnKeyType={"done"}
               onChangeText={onChange}
+              autoCapitalize="none"
               value={value}
             />
           )}

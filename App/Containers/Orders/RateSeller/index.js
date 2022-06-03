@@ -13,10 +13,11 @@ import ImagePicker from "react-native-image-crop-picker";
 
 import styles from "./styles";
 
-import { StarRating, TextInput } from "../../../Components";
+import { StarRating } from "../../../Components";
 import { Images } from "../../../Themes";
 import NavigationService from "../../../Navigation/NavigationService";
 import { s } from "react-native-size-matters";
+import TextInput from "../../../Components/MultilineTextInput/MultilineTextInput";
 
 class RateSellerScreen extends Component {
   constructor(props) {
@@ -103,7 +104,7 @@ class RateSellerScreen extends Component {
         <TextInput
           style={styles.reviewInput}
           multiline
-          placeholder={"Write here your review"}
+          placeholder={"Write here your review是的是的所"}
         />
       </View>
     );

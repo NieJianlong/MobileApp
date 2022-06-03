@@ -12,7 +12,11 @@ import ImagePicker from "react-native-image-crop-picker";
 
 import styles from "./styles";
 
-import { AppBar, StarRating, TextInput } from "../../../Components";
+import {
+  AppBar,
+  StarRating,
+  TextInput as OneLineTextInput,
+} from "../../../Components";
 import { Images } from "../../../Themes";
 import NavigationService from "../../../Navigation/NavigationService";
 import { s } from "react-native-size-matters";
@@ -28,6 +32,7 @@ import { AlertContext } from "../../Root/GlobalContext";
 import useAlert from "../../../hooks/useAlert";
 import useLoading from "../../../hooks/useLoading";
 import { t } from "react-native-tailwindcss";
+import TextInput from "../../../Components/MultilineTextInput/MultilineTextInput";
 
 class RateOrder extends Component {
   constructor(props) {
@@ -116,7 +121,7 @@ class RateOrder extends Component {
             required: true,
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
+            <OneLineTextInput
               style={styles.reviewInput}
               placeholder={"Write here title"}
               textAlignVertical={"top"}
@@ -133,7 +138,7 @@ class RateOrder extends Component {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              style={styles.reviewInput}
+              style={[styles.reviewInput, t.h64, { borderRadius: 20 }]}
               multiline
               placeholder={"Write here your review"}
               textAlignVertical={"top"}

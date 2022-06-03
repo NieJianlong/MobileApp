@@ -10,8 +10,8 @@ const title = "Awesome Contents";
 const message = "Please check this out.";
 const icon = "data:<data_type>/<file_extension>;base64,<base64_data>";
 
-export const shareOptionsDetails = (productLink) => {
-   const shareOptions = Platform.select({
+export const shareOptionsDetails = (productLink, product) => {
+  const shareOptions = Platform.select({
     ios: {
       activityItemSources: [
         {
@@ -57,14 +57,26 @@ export const shareOptionsDetails = (productLink) => {
       ],
     },
     default: {
-      title,
-      subject: title,
-      message: `${message} ${productLink}`,
+      message: "This is the testing. Please check",
+      title: "Share",
+      url: productLink,
+      // activityItemSources: [
+      //   {
+      //     linkMetadata: {
+      //       image: `data:image/jpg;base64,${productLink}`,
+      //       message: "yow",
+      //     },
+      //   },
+      // ],
     },
   });
 
-  Share.open(shareOptions);
-}
+  Share.open({
+    message: String(product.photoUrls),
+    title: "Share",
+    url: productLink,
+  });
+};
 
 class ShareOptionList extends Component {
   render() {

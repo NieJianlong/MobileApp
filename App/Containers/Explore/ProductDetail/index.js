@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -22,6 +22,9 @@ import {
 } from "../../../../generated/graphql";
 import ReturnPolicy from "./ReturnPolicy";
 import useLoading from "../../../hooks/useLoading";
+import RNFetchBlob from "rn-fetch-blob";
+import { shareOptionsDetails } from "../Components/ShareOptionList";
+import Share from "react-native-share";
 
 const Sections = range(0, 4);
 // Wrap the original ScrollView
@@ -32,6 +35,20 @@ function ProductDetail(props) {
     params: { product: oldProduct },
   } = useRoute();
   const { setLoading } = useLoading();
+  const [screenShot, setScreenshot] = useState();
+
+  // useEffect(() => {
+  //   captureScreen({
+  //     format: "jpg",
+  //     quality: 0.8,
+  //   }).then(
+  //     (uri) => {
+  //       console.log("Image saved to", uri);
+  //       setScreenshot(uri);
+  //     },
+  //     (error) => console.error("Oops, snapshot failed", error)
+  //   );
+  // }, []);
   // const { data, loading } = useGetProductByProductIdQuery({
   //   variables: { productId: oldProduct.productId },
   //   onCompleted: () => {
@@ -68,6 +85,7 @@ function ProductDetail(props) {
       },
     },
   });
+
   useFocusEffect(
     React.useCallback(() => {
       refetch();
@@ -172,6 +190,15 @@ function ProductDetail(props) {
     setShowFooter(true);
   };
 
+  console.log("seee the product", products?.getListings.content[0]);
+
+  const shareOptions = {
+    title: "Title",
+    message: "Message to share", // Note that according to the documentation at least one of "message" or "url" fields is required
+    url: "www.example.com",
+    subject: "Subject",
+  };
+
   return products ? (
     <View style={styles.container}>
       <SafeAreaView
@@ -194,6 +221,7 @@ function ProductDetail(props) {
               pickUp={pickUp}
               onSetPickUp={onSetPickUp}
             />
+
             <ReturnPolicy
               returnPolices={products?.getListings.content[0].returnPolicies}
             />

@@ -35,8 +35,11 @@ import {
 import Share from "react-native-share";
 import useImageViewer from "../../../hooks/useImageViewer";
 import Swiper from "react-native-swiper";
+import ViewShot, { captureRef, captureScreen } from "react-native-view-shot";
+import RNFetchBlob from "rn-fetch-blob";
+
 //render product images
-export default function ProductCarousel({ product }) {
+export default function ProductCarousel({ product, onPress }) {
   const { realm } = useRealm();
   const userProfileVarReactive = useReactiveVar(userProfileVar);
   const {
@@ -50,6 +53,17 @@ export default function ProductCarousel({ product }) {
       .filtered("isDraft == false")
   );
   const { width } = useWindowDimensions();
+  const viewShotRef = useRef(null);
+  const [screenShot, setScreenshot] = useState();
+
+  // useEffect(() => {
+  //   viewShotRef.current.capture().then((uri) => {
+  //     console.log("do something with ", uri);
+  //     setScreenshot(uri);
+  //     console.log("seee the screenshot", uri);
+  //   });
+  // }, []);
+
   useEffect(() => {
     let refresh = PubSub.subscribe("refresh-shoppingcart", () => {
       setMydatas(
@@ -114,7 +128,39 @@ export default function ProductCarousel({ product }) {
   }, [addToWishList, data?.isListingInWishlist, deleteFromWishList]);
   const toggleShareSheet = useCallback(() => {
     // Share.open(shareOptions);
-    shareOptionsDetails(product.photoUrls);
+    // var base64Data = `data:image/png;base64,` + screenShot;
+    // shareOptionsDetails(base64Data);
+    // console.log("seee the screenshot2", base64Data);
+    // let imagePath = null;
+    // RNFetchBlob.config({
+    //   fileCache: true,
+    // })
+    // .fetch('GET', screenShot)
+    // .then((resp) => {
+    //   imagePath = resp.path();
+    //   return resp.readFile('base64');
+    // })
+    // .then((base64Data) => {
+    //   var imageUrl = 'data:image/png;base64,' + base64Data;
+    //   shareOptionsDetails(imageUrl);
+
+    captureRef(viewShotRef, {
+      format: "png",
+      quality: 0.8,
+      result: "base64",
+    }).then(
+      (uri) => {
+        console.log("seee the uri", uri);
+        Share.open({
+          title: "Title",
+          message: "Message to share", // Note that according to the documentation at least one of "message" or "url" fields is required
+          url: "data:image/png;base64," + uri,
+          subject: "Subject",
+        });
+      },
+      (error) => console.error("Oops, snapshot failed", error)
+    );
+    // })
   }, [dispatch]);
   /**
    * when we add an item to the cart we need to update the local cart
@@ -128,106 +174,111 @@ export default function ProductCarousel({ product }) {
   };
   const { setImageViewer } = useImageViewer();
   return (
-    <View style={styles.imagesContainer}>
-      <Swiper>
-        {product?.photoUrls?.map((item, index) => {
-          return (
-            <TouchableOpacity
-              key={`{index}`}
-              onPress={
-                () => {
-                  const imageUrls =
-                    product.photoUrls?.map((item: string) => {
-                      return { url: item };
-                    }) ?? [];
-                  setImageViewer({ visible: true, images: imageUrls });
+    <ViewShot
+      ref={viewShotRef}
+      options={{ format: "png", quality: 0.4, result: "base64" }}
+    >
+      <View style={styles.imagesContainer}>
+        <Swiper>
+          {product?.photoUrls?.map((item, index) => {
+            return (
+              <TouchableOpacity
+                key={`{index}`}
+                onPress={
+                  () => {
+                    const imageUrls =
+                      product.photoUrls?.map((item: string) => {
+                        return { url: item };
+                      }) ?? [];
+                    setImageViewer({ visible: true, images: imageUrls });
+                  }
+                  // NavigationService.navigate("ProductGalleryScreen", {
+                  //   fullscreenMode: true,
+                  //   urls: product.photoUrls,
+                  // })
                 }
-                // NavigationService.navigate("ProductGalleryScreen", {
-                //   fullscreenMode: true,
-                //   urls: product.photoUrls,
-                // })
-              }
-            >
-              <Image
-                resizeMode={"contain"}
-                source={{ uri: item }}
-                style={styles.prodImage}
-              />
-            </TouchableOpacity>
-          );
-        })}
-      </Swiper>
+              >
+                <Image
+                  resizeMode={"contain"}
+                  source={{ uri: item }}
+                  style={styles.prodImage}
+                />
+              </TouchableOpacity>
+            );
+          })}
+        </Swiper>
 
-      <View style={styles.row1}>
-        <TouchableOpacity
-          onPress={() => NavigationService.goBack()}
-          style={styles.btnRoundContainer}
-        >
-          <Image style={styles.btnRoundIcon} source={Images.arrow_left} />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => onAddItemAndNavigateToCart()}
-          style={[styles.btnRoundContainer, t.justifyCenter, t.itemsCenter]}
-        >
-          <Image style={styles.btnRoundIcon} source={Images.cartMed} />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.row2}>
-        <TouchableOpacity
-          onPress={() => {
-            const imageUrls =
-              product.photoUrls?.map((item: string) => {
-                return { url: item };
-              }) ?? [];
-            setImageViewer({ visible: true, images: imageUrls });
-          }}
-          style={styles.photoNumberContainer}
-        >
-          <Text style={styles.photoNumberTxt}>
-            {photoIndex + 1}/{product?.photoUrls?.length}
-          </Text>
-        </TouchableOpacity>
-        <View style={{ flexDirection: "row" }}>
+        <View style={styles.row1}>
           <TouchableOpacity
-            onPress={onLikeProduct}
+            onPress={() => NavigationService.goBack()}
             style={styles.btnRoundContainer}
           >
-            <Image
-              style={[
-                styles.btnRoundIcon,
-                { transform: [{ rotateY: "180deg" }] },
-                data?.isListingInWishlist && { tintColor: Colors.primary },
-              ]}
-              source={
-                data?.isListingInWishlist ? Images.likeFilled : Images.likeMed
-              }
-            />
+            <Image style={styles.btnRoundIcon} source={Images.arrow_left} />
           </TouchableOpacity>
-          <View style={{ width: s(12) }} />
+
           <TouchableOpacity
-            onPress={toggleShareSheet}
-            style={styles.btnRoundContainer}
+            onPress={() => onAddItemAndNavigateToCart()}
+            style={[styles.btnRoundContainer, t.justifyCenter, t.itemsCenter]}
           >
-            <Image style={styles.btnRoundIcon} source={Images.share} />
+            <Image style={styles.btnRoundIcon} source={Images.cartMed} />
           </TouchableOpacity>
         </View>
+
+        <View style={styles.row2}>
+          <TouchableOpacity
+            onPress={() => {
+              const imageUrls =
+                product.photoUrls?.map((item: string) => {
+                  return { url: item };
+                }) ?? [];
+              setImageViewer({ visible: true, images: imageUrls });
+            }}
+            style={styles.photoNumberContainer}
+          >
+            <Text style={styles.photoNumberTxt}>
+              {photoIndex + 1}/{product?.photoUrls?.length}
+            </Text>
+          </TouchableOpacity>
+          <View style={{ flexDirection: "row" }}>
+            <TouchableOpacity
+              onPress={onLikeProduct}
+              style={styles.btnRoundContainer}
+            >
+              <Image
+                style={[
+                  styles.btnRoundIcon,
+                  { transform: [{ rotateY: "180deg" }] },
+                  data?.isListingInWishlist && { tintColor: Colors.primary },
+                ]}
+                source={
+                  data?.isListingInWishlist ? Images.likeFilled : Images.likeMed
+                }
+              />
+            </TouchableOpacity>
+            <View style={{ width: s(12) }} />
+            <TouchableOpacity
+              onPress={toggleShareSheet}
+              style={styles.btnRoundContainer}
+            >
+              <Image style={styles.btnRoundIcon} source={Images.share} />
+            </TouchableOpacity>
+          </View>
+        </View>
+        {mydatas.length > 0 && (
+          <View
+            style={[
+              t.bgPrimary,
+              t.w3,
+              t.h3,
+              t.roundedFull,
+              t.absolute,
+              t.right0,
+              { marginLeft: width - 30 },
+              t.mT6,
+            ]}
+          />
+        )}
       </View>
-      {mydatas.length > 0 && (
-        <View
-          style={[
-            t.bgPrimary,
-            t.w3,
-            t.h3,
-            t.roundedFull,
-            t.absolute,
-            t.right0,
-            { marginLeft: width - 30 },
-            t.mT6,
-          ]}
-        />
-      )}
-    </View>
+    </ViewShot>
   );
 }

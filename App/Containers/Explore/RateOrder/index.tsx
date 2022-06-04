@@ -33,6 +33,7 @@ import useAlert from "../../../hooks/useAlert";
 import useLoading from "../../../hooks/useLoading";
 import { t } from "react-native-tailwindcss";
 import TextInput from "../../../Components/MultilineTextInput/MultilineTextInput";
+import { trim } from "lodash";
 
 class RateOrder extends Component {
   constructor(props) {
@@ -135,6 +136,22 @@ class RateOrder extends Component {
           control={this.props.control}
           rules={{
             required: true,
+            minLength: {
+              value: 5,
+              message: "Length must be 6 or more",
+            },
+            maxLength: {
+              value: 250,
+              message: "Length must be less than  250",
+            },
+            validate: {
+              positive: (v) => {
+                const v1 = trim(v);
+                if (v1.length === 0)
+                  return "Content should not contain Spaces only";
+                return true;
+              },
+            },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
@@ -148,6 +165,11 @@ class RateOrder extends Component {
           )}
           name="description"
         />
+        {this.props.errors?.description && (
+          <Text style={[t.textRed900, t.mT1, t.mL4]}>
+            {this.props.errors?.description.message}
+          </Text>
+        )}
 
         {/* <View style={styles.center}>
           <Text style={styles.txt1}>Upload pictures to your review</Text>
@@ -344,6 +366,7 @@ function RateOrderScreen() {
       register={register}
       title={params.title ?? "Rate Order"}
       control={control}
+      errors={errors}
       onChange={(stars1) => {
         setStars(stars1);
       }}

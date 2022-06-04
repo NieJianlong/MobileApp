@@ -210,6 +210,7 @@ function GroupInfoScreen(props) {
             // } else {
             // }
           })}
+
         {/* when order status is received,user can return product */}
         {finalData?.latestEventStatus === OrderItemHistoryEventType.Delivered &&
           finalData?.itemReturnPolicy?.isReturnAllowed &&

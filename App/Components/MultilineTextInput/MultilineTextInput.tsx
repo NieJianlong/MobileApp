@@ -13,7 +13,6 @@ const TextInput: React.FC<InputProps> = (props) => {
       style={[
         { backgroundColor: "white" },
         t.borderSolid,
-
         t.borderGray200,
         t.border,
         t.textBase,

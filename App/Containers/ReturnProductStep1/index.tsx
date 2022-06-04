@@ -24,6 +24,7 @@ import CheckBox from "../Explore/Components/CheckBox";
 import { t } from "react-native-tailwindcss";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { isEmpty } from "lodash";
+import TextInput from "../../Components/MultilineTextInput/MultilineTextInput";
 
 function ReturnProductStep1() {
   const { params } = useRoute();
@@ -147,7 +148,8 @@ function ReturnProductStep1() {
             // setShowPrefer(true);
           }}
         />
-        <RNTextInput
+
+        <TextInput
           multiline={true}
           placeholder="Message"
           onChangeText={(value) => {

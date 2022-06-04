@@ -19,7 +19,7 @@ import {
 } from "../Apollo/local-storage";
 import { Image, StyleProp, Text, TextStyle, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { ApplicationStyles } from "../Themes";
+import { ApplicationStyles, Colors } from "../Themes";
 import colors from "../Themes/Colors";
 import { s } from "react-native-size-matters";
 import AppConfig from "../Config/AppConfig";
@@ -28,6 +28,7 @@ import Button from "./Button";
 import PasswordInput from "./PasswordInput";
 import useRegisterGuest from "../hooks/useRegisterGuest";
 import Button1 from "./Button1";
+import useAlert from "../hooks/useAlert";
 export interface RegisterGuestBuyerToBuyerFormProps {
   style?: StyleProp<TextStyle>;
 }
@@ -44,6 +45,7 @@ function RegisterGuestBuyerToBuyerForm({
 
   const [registerGuestBuyerToBuyer] = useRegisterGuestBuyerToBuyerMutation();
   const { setLoading } = useLoading();
+  const { setAlert } = useAlert();
   const { setRegister } = useRegisterGuest();
   const [resendCode] = useSendOtpCodeMutation();
   const onSignIn = async (data: { username: string; password: string }) => {
@@ -93,6 +95,7 @@ function RegisterGuestBuyerToBuyerForm({
       variables: {
         request: { buyerId: global.buyerId, password: data.password },
       },
+      fetchPolicy: "network-only",
       onCompleted: async (res) => {
         await setLocalStorageValue(
           LOCAL_STORAGE_USER_NAME,
@@ -105,7 +108,14 @@ function RegisterGuestBuyerToBuyerForm({
         });
         setLocalStorageValue(GUEST_BUYER_ID_KEY, "");
       },
-      onError: () => {
+      onError: (res) => {
+        debugger;
+        setAlert({
+          visible: true,
+          message: res.message,
+          title: "Register Failded",
+          color: Colors.error,
+        });
         setLoading({ show: false });
       },
     });

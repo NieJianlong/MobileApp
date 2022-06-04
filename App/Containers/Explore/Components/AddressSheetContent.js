@@ -49,8 +49,8 @@ export default function AddressSheetContent(props) {
       },
       onCompleted: (res) => {
         let height = isAuth
-          ? res?.getBuyerAddressByType.length * 115
-          : res?.getGuestBuyerAddressByType.length * 115;
+          ? res?.getBuyerAddressByType.length * 115 + 100
+          : res?.getGuestBuyerAddressByType.length * 115 + 100;
         const data = isAuth
           ? res?.getBuyerAddressByType
           : res?.getGuestBuyerAddressByType;

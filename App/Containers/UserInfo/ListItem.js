@@ -56,7 +56,7 @@ function ListItem(props) {
             storage.REGISTERED_USER_LOGOUT,
             "true"
           );
-          guestBuyerId();
+          // guestBuyerId();
           userProfileVar({
             ...userProfileVarReactive,
             isAuth: false,

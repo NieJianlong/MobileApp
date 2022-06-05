@@ -58,7 +58,6 @@ export default function LaunchScreen() {
   });
 
   const autoSignIn = useCallback(async () => {
-    debugger;
     //get username and possword from localStorage
     const username = await getLocalStorageValue(LOCAL_STORAGE_USER_NAME);
     const password = await getLocalStorageValue(LOCAL_STORAGE_USER_PASSWORD);
@@ -85,7 +84,7 @@ export default function LaunchScreen() {
         const isLogedOut = await getLocalStorageValue(
           storage.REGISTERED_USER_LOGOUT
         );
-        debugger;
+
         if (isLogedOut) {
           NavigationService.navigate("LoginScreen");
           return;
@@ -108,7 +107,7 @@ export default function LaunchScreen() {
       const isLogedOut = await getLocalStorageValue(
         storage.REGISTERED_USER_LOGOUT
       );
-      debugger;
+
       if (isLogedOut) {
         NavigationService.navigate("LoginScreen");
         return;

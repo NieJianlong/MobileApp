@@ -28,7 +28,7 @@ function Index(props) {
   const Alert = useContext(AlertContext);
   const { product, availble, onPress, variant, quantity, onChangeQuanlity } =
     props;
-  debugger;
+
   return (
     <TouchableOpacity
       // disabled={!availble}

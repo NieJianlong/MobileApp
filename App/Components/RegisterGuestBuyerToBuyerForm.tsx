@@ -109,7 +109,6 @@ function RegisterGuestBuyerToBuyerForm({
         setLocalStorageValue(GUEST_BUYER_ID_KEY, "");
       },
       onError: (res) => {
-        debugger;
         setAlert({
           visible: true,
           message: res.message,

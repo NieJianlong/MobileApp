@@ -28,7 +28,7 @@ function Index(props) {
   const Alert = useContext(AlertContext);
   const { product, availble, onPress, variant, quantity, onChangeQuanlity } =
     props;
-
+  debugger;
   return (
     <TouchableOpacity
       // disabled={!availble}
@@ -197,7 +197,9 @@ function Index(props) {
             disabled={!availble}
             onPress={() => {
               NavigationService.navigate("EditShoppingCartScreen", {
-                product: JSON.parse(JSON.stringify(props.product)),
+                listingId: product.listingId,
+                variantId: variant.variantId,
+                productId: product.productId,
               });
             }}
             style={[styles.removebtn, { width: s(60) }]}

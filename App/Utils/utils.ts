@@ -94,7 +94,9 @@ export function usePaymentConfigration() {
           NavigationService.navigate("CheckoutPaymentCompletedGuestScreen");
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        debugger;
+      });
   };
 
   return getPaymentConfigration;

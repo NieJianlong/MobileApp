@@ -88,7 +88,10 @@ export default function AddressBar() {
       onError: (err) => {
         setError(err);
         if (err.message === "Buyer does not have Delivery address") {
-          if (currentRoute?.currentPage !== "LoginScreen") {
+          if (
+            currentRoute?.currentPage !== "LoginScreen" &&
+            currentRoute?.currentPage !== "RegisterScreen"
+          ) {
             global.access_token
               ? setShowMap({ mapVisible: true })
               : toggleAddressSheet();
@@ -115,7 +118,10 @@ export default function AddressBar() {
             }
           });
         } else {
-          if (currentRoute?.currentPage !== "LoginScreen") {
+          if (
+            currentRoute?.currentPage !== "LoginScreen" &&
+            currentRoute?.currentPage !== "RegisterScreen"
+          ) {
             global.access_token
               ? setShowMap({ mapVisible: true })
               : toggleAddressSheet();

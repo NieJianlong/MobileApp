@@ -66,41 +66,43 @@ class ForgotPassword extends Component {
 
   renderAction() {
     return (
-      <View>
-        <Button
-          disabled={this.state.email.length === 0 || this.state.disable}
-          onPress={() => {
-            if (validateEmail(this.state.email)) {
-              /**
-               * add router parameter here for Login screen to show EMS alert
-               */
-              // this.props.navigation.navigate('LoginScreen')
-              this.props.onGetCode(this.state.email, true);
-              //NavigationService.navigate("LoginScreen", { showEms: true });
-            } else if (validatePhone(this.state.email)) {
-              /**
-               * To-Do need clarity for OTP flow
-               */
-              this.props.onGetCode(this.state.email, false);
-              // NavigationService.navigate("OTPScreen", {
-              //   fromScreen: "ForgotPasswordScreen",
-              // });
-            }
-          }}
-          text={"RESET PASSWORD"}
-        />
+      <SafeAreaView>
+        <View>
+          <Button
+            disabled={this.state.email.length === 0 || this.state.disable}
+            onPress={() => {
+              if (validateEmail(this.state.email)) {
+                /**
+                 * add router parameter here for Login screen to show EMS alert
+                 */
+                // this.props.navigation.navigate('LoginScreen')
+                this.props.onGetCode(this.state.email, true);
+                //NavigationService.navigate("LoginScreen", { showEms: true });
+              } else if (validatePhone(this.state.email)) {
+                /**
+                 * To-Do need clarity for OTP flow
+                 */
+                this.props.onGetCode(this.state.email, false);
+                // NavigationService.navigate("OTPScreen", {
+                //   fromScreen: "ForgotPasswordScreen",
+                // });
+              }
+            }}
+            text={"RESET PASSWORD"}
+          />
 
-        <View
-          style={{
-            height:
-              this.state.keyboardHeight > 0
-                ? this.state.keyboardHeight
-                : isIphoneX()
-                ? 0
-                : vs(15),
-          }}
-        />
-      </View>
+          <View
+            style={{
+              height:
+                this.state.keyboardHeight > 0
+                  ? this.state.keyboardHeight
+                  : isIphoneX()
+                  ? 0
+                  : vs(15),
+            }}
+          />
+        </View>
+      </SafeAreaView>
     );
   }
 

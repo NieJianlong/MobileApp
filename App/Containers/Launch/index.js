@@ -58,6 +58,7 @@ export default function LaunchScreen() {
   });
 
   const autoSignIn = useCallback(async () => {
+    debugger;
     //get username and possword from localStorage
     const username = await getLocalStorageValue(LOCAL_STORAGE_USER_NAME);
     const password = await getLocalStorageValue(LOCAL_STORAGE_USER_PASSWORD);
@@ -84,8 +85,9 @@ export default function LaunchScreen() {
         const isLogedOut = await getLocalStorageValue(
           storage.REGISTERED_USER_LOGOUT
         );
+        debugger;
         if (isLogedOut) {
-          NavigationService;
+          NavigationService.navigate("LoginScreen");
           return;
         }
         const result = await checkBuyerIdExists();
@@ -103,6 +105,14 @@ export default function LaunchScreen() {
         }
       }
     } else {
+      const isLogedOut = await getLocalStorageValue(
+        storage.REGISTERED_USER_LOGOUT
+      );
+      debugger;
+      if (isLogedOut) {
+        NavigationService.navigate("LoginScreen");
+        return;
+      }
       const result = await checkBuyerIdExists();
       if (result) {
         setTimeout(() => {
@@ -134,7 +144,7 @@ export default function LaunchScreen() {
   //when app open,when can do auto login
   useEffect(() => {
     autoSignIn();
-  }, [autoSignIn]);
+  }, []);
 
   return (
     <LottieView

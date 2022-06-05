@@ -80,6 +80,7 @@ export default function Index(props) {
         makeHeaderHeight={() => vs(50)}
         tabBarActiveTextColor={colors.primary}
         renderTabBar={(mprops) => {
+          debugger;
           return (
             <View style={{ flex: 1, backgroundColor: "white" }}>
               {!textToSearch && (
@@ -102,7 +103,7 @@ export default function Index(props) {
               )}
 
               <AddressBar />
-              {!textToSearch && categories?.getPreferredCategories && isAuth && (
+              {!textToSearch && categories && isAuth && (
                 <View
                   style={{
                     backgroundColor: "white",
@@ -115,7 +116,7 @@ export default function Index(props) {
                   }}
                 >
                   <TouchableOpacity
-                    // activeOpacity={1}
+                    activeOpacity={1}
                     onPress={() => {
                       NavigationService.navigate(
                         "EditCategoriesScreen",

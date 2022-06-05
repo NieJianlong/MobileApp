@@ -170,31 +170,36 @@ export default function ProductInfo({
             {(product.deliveryOption === DeliveryOption.SellerLocationPickup ||
               product.deliveryOption ===
                 DeliveryOption.CollectionPointPickup) && (
-              <View style={[styles.row, { marginLeft: s(10) }]}>
-                <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
-                  Pick up location
+              <View style={[styles.row, t.justifyBetween, t.wFull]}>
+                <Text style={styles.heading5Regular}>
+                  No Delivery Available
                 </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    // setPickUp(!pickUp);
-                    if (!pickUp) {
-                      togglePickupFromSellerSheet();
-                    } else {
-                      onSetPickUp(false);
-                      // setPickUp(false);
-                    }
-                  }}
-                >
-                  {pickUp ? (
-                    <View style={styles1.activeContainer}>
-                      <View style={styles1.activeCircle} />
-                    </View>
-                  ) : (
-                    <View style={styles1.inactiveContainer}>
-                      <View style={styles1.inactiveCircle} />
-                    </View>
-                  )}
-                </TouchableOpacity>
+                <View style={[t.flexRow]}>
+                  <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
+                    Pick up location
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      // setPickUp(!pickUp);
+                      if (!pickUp) {
+                        togglePickupFromSellerSheet();
+                      } else {
+                        onSetPickUp(false);
+                        // setPickUp(false);
+                      }
+                    }}
+                  >
+                    {pickUp ? (
+                      <View style={styles1.activeContainer}>
+                        <View style={styles1.activeCircle} />
+                      </View>
+                    ) : (
+                      <View style={styles1.inactiveContainer}>
+                        <View style={styles1.inactiveCircle} />
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                </View>
               </View>
             )}
           </View>

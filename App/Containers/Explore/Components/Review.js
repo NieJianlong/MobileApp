@@ -50,7 +50,10 @@ function Review(props) {
             barHeight={vs(6)}
           />
           <Text style={[styles.txt, t.mL4, { color: Colors.secondary00 }]}>
-            {(ratingDetail.fiveStar / totalRating) * 100}%
+            {totalRating === 0
+              ? "0"
+              : (ratingDetail.fiveStar / totalRating) * 100}
+            %
           </Text>
         </View>
 
@@ -65,7 +68,10 @@ function Review(props) {
             barHeight={vs(6)}
           />
           <Text style={[styles.txt, t.mL4, { color: Colors.secondary00 }]}>
-            {(ratingDetail.fourStar / totalRating) * 100}%
+            {totalRating === 0
+              ? "0"
+              : (ratingDetail.fourStar / totalRating) * 100}
+            %
           </Text>
         </View>
 
@@ -80,7 +86,10 @@ function Review(props) {
             barHeight={vs(6)}
           />
           <Text style={[styles.txt, t.mL4, { color: Colors.secondary00 }]}>
-            {(ratingDetail.threeStar / totalRating) * 100}%
+            {totalRating === 0
+              ? "0"
+              : (ratingDetail.threeStar / totalRating) * 100}
+            %
           </Text>
         </View>
 
@@ -95,7 +104,10 @@ function Review(props) {
             barHeight={vs(6)}
           />
           <Text style={[styles.txt, t.mL4, { color: Colors.secondary00 }]}>
-            {(ratingDetail.twoStar / totalRating) * 100}%
+            {totalRating === 0
+              ? "0"
+              : (ratingDetail.twoStar / totalRating) * 100}
+            %
           </Text>
         </View>
 
@@ -110,7 +122,10 @@ function Review(props) {
             barHeight={vs(6)}
           />
           <Text style={[styles.txt, t.mL4, { color: Colors.secondary00 }]}>
-            {(ratingDetail.oneStar / totalRating) * 100}%
+            {totalRating === 0
+              ? "0"
+              : (ratingDetail.oneStar / totalRating) * 100}
+            %
           </Text>
         </View>
 
@@ -125,7 +140,10 @@ function Review(props) {
             barHeight={vs(6)}
           />
           <Text style={[styles.txt, t.mL4, { color: Colors.secondary00 }]}>
-            {(ratingDetail.zeroStar / totalRating) * 100}%
+            {totalRating === 0
+              ? "0"
+              : (ratingDetail.zeroStar / totalRating) * 100}
+            %
           </Text>
         </View>
       </View>

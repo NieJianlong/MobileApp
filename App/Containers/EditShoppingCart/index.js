@@ -66,9 +66,16 @@ function EditShoppingCart(props) {
     });
   }, [navigation]);
 
-  // useEffect(() => {
-
-  // }, [products]);
+  useEffect(() => {
+    if (products?.getListings?.content[0]?.listingVariants) {
+      const variant = products?.getListings?.content[0]?.listingVariants.find(
+        (item) => item.variantId === params.variantId
+      );
+      if (variant) {
+        setCurrentVariant(variant);
+      }
+    }
+  }, [products]);
   return (
     <View
       style={{

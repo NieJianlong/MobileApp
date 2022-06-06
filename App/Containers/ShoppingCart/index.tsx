@@ -344,6 +344,23 @@ function ShoppingCart(props) {
                     variant={variant}
                     availble={item.isAvailable}
                     quantity={requsetItem?.quantity ?? 0}
+                    onEditVariant={(variantId) => {
+                      // Open a transaction.
+                      realm.write(() => {
+                        const queryItems = realm
+                          .objects("ShoppingCart")
+                          .filtered("addressId == $0", localCart.deliverAddress)
+                          .filtered("listingId == $0", item.listingId)
+                          .filtered("variantId == $0", item.variantId)
+                          .filtered("quantity > 0")
+                          .filtered("isDraft == false");
+                        const queryItem = queryItems[0];
+                        // Update some properties on the instance.
+                        // These changes are saved to the realm.
+                        queryItem.variantId = variantId;
+                      });
+                      PubSub.publish("refresh-shoppingcart");
+                    }}
                     onChangeQuanlity={(quantity) => {
                       // Open a transaction.
                       realm.write(() => {

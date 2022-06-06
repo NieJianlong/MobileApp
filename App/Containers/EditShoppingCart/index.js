@@ -58,13 +58,14 @@ function EditShoppingCart(props) {
           <RightButton
             title="SAVE"
             onPress={() => {
+              params.onEditVariant(currentVariant.variantId);
               NavigationService.goBack();
             }}
           />
         </View>
       ),
     });
-  }, [navigation]);
+  }, [navigation, currentVariant]);
 
   useEffect(() => {
     if (products?.getListings?.content[0]?.listingVariants) {

@@ -80,7 +80,6 @@ export default function Index(props) {
         makeHeaderHeight={() => vs(50)}
         tabBarActiveTextColor={colors.primary}
         renderTabBar={(mprops) => {
-          debugger;
           return (
             <View style={{ flex: 1, backgroundColor: "white" }}>
               {!textToSearch && (

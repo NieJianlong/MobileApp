@@ -150,7 +150,44 @@ export default function ProductInfo({
             </Text>
           </View>
 
-          <View style={[styles.row, { marginVertical: vs(10) }]}>
+        
+        </View>
+
+        <View style={[styles.v4, t.flexRow, t.justifyBetween, t.pR8]}>
+          <View style={{ marginRight: s(10) }}>
+            {/* <Text style={styles.heading6Regular}>Order closes on:</Text> */}
+            <Text style={styles.heading6Regular}>
+              {product.deliveryOption === DeliveryOption.SellerDirectDelivery
+                ? "Delivery Date:"
+                : "Order closes on:"}
+            </Text>
+            <Text style={styles.heading6Regular}>
+              {product.deliveryOption === DeliveryOption.SellerDirectDelivery
+                ? product.announcementDeliveryDate
+                : product.openUntil}
+            </Text>
+          </View>
+
+          <View style={[styles.row]}>
+            <Progress
+              maximumValue={isMissing ? "100" : product.noOfItemsInStock}
+              currentValue={isMissing ? "100" : product.noOfOrderedItems}
+              barWidth={s(130)}
+              barHeight={vs(6)}
+            />
+
+            <Image source={Images.stock} style={styles.icStock} />
+            <Text style={styles.txtOrderNumber}>
+              {product.noOfOrderedItems}/{product.noOfItemsInStock}
+            </Text>
+            <TouchableOpacity
+              onPress={() => NavigationService.navigate("LearnMoreScreen")}
+            >
+              <Image source={Images.info2} style={styles.icInfo} />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={[styles.row, { marginVertical: vs(10) },t.pX4]}>
             {product.deliveryOption === DeliveryOption.CourierDelivery && (
               <Text style={styles.heading5Regular}>
                 Delivery fee:{" "}
@@ -203,43 +240,6 @@ export default function ProductInfo({
               </View>
             )}
           </View>
-        </View>
-
-        <View style={[styles.v4, t.flexRow, t.justifyBetween, t.pR8]}>
-          <View style={{ marginRight: s(10) }}>
-            {/* <Text style={styles.heading6Regular}>Order closes on:</Text> */}
-            <Text style={styles.heading6Regular}>
-              {product.deliveryOption === DeliveryOption.SellerDirectDelivery
-                ? "Delivery Date:"
-                : "Order closes on:"}
-            </Text>
-            <Text style={styles.heading6Regular}>
-              {product.deliveryOption === DeliveryOption.SellerDirectDelivery
-                ? product.announcementDeliveryDate
-                : product.openUntil}
-            </Text>
-          </View>
-
-          <View style={[styles.row]}>
-            <Progress
-              maximumValue={isMissing ? "100" : product.noOfItemsInStock}
-              currentValue={isMissing ? "100" : product.noOfOrderedItems}
-              barWidth={s(130)}
-              barHeight={vs(6)}
-            />
-
-            <Image source={Images.stock} style={styles.icStock} />
-            <Text style={styles.txtOrderNumber}>
-              {product.noOfOrderedItems}/{product.noOfItemsInStock}
-            </Text>
-            <TouchableOpacity
-              onPress={() => NavigationService.navigate("LearnMoreScreen")}
-            >
-              <Image source={Images.info2} style={styles.icInfo} />
-            </TouchableOpacity>
-          </View>
-        </View>
-
         <View style={[styles.v2, { paddingTop: vs(15) }]}>
           <Text style={[styles.heading3Bold, t.textLeft]}>
             Product Description

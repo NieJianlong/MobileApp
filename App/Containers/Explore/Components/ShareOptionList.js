@@ -10,7 +10,7 @@ const title = "Awesome Contents";
 const message = "Please check this out.";
 const icon = "data:<data_type>/<file_extension>;base64,<base64_data>";
 
-export const shareOptionsDetails = (productLink, product) => {
+export const shareOptionsDetails = (productLink, productWebLink) => {
   const shareOptions = Platform.select({
     ios: {
       activityItemSources: [
@@ -57,25 +57,14 @@ export const shareOptionsDetails = (productLink, product) => {
       ],
     },
     default: {
-      message: "This is the testing. Please check",
-      title: "Share",
-      url: productLink,
-      // activityItemSources: [
-      //   {
-      //     linkMetadata: {
-      //       image: `data:image/jpg;base64,${productLink}`,
-      //       message: "yow",
-      //     },
-      //   },
-      // ],
+      title: "Title",
+      message: `${message} ${productWebLink}`, // Note that according to the documentation at least one of "message" or "url" fields is required
+      url: "data:image/png;base64," + productLink,
+      subject: "Subject",
     },
   });
 
-  Share.open({
-    message: String(product.photoUrls),
-    title: "Share",
-    url: productLink,
-  });
+  Share.open(shareOptions);
 };
 
 class ShareOptionList extends Component {

@@ -127,23 +127,6 @@ export default function ProductCarousel({ product, onPress }) {
     data?.isListingInWishlist ? deleteFromWishList() : addToWishList();
   }, [addToWishList, data?.isListingInWishlist, deleteFromWishList]);
   const toggleShareSheet = useCallback(() => {
-    // Share.open(shareOptions);
-    // var base64Data = `data:image/png;base64,` + screenShot;
-    // shareOptionsDetails(base64Data);
-    // console.log("seee the screenshot2", base64Data);
-    // let imagePath = null;
-    // RNFetchBlob.config({
-    //   fileCache: true,
-    // })
-    // .fetch('GET', screenShot)
-    // .then((resp) => {
-    //   imagePath = resp.path();
-    //   return resp.readFile('base64');
-    // })
-    // .then((base64Data) => {
-    //   var imageUrl = 'data:image/png;base64,' + base64Data;
-    //   shareOptionsDetails(imageUrl);
-
     captureRef(viewShotRef, {
       format: "png",
       quality: 0.8,
@@ -151,12 +134,7 @@ export default function ProductCarousel({ product, onPress }) {
     }).then(
       (uri) => {
         console.log("seee the uri", uri);
-        Share.open({
-          title: "Title",
-          message: "Message to share", // Note that according to the documentation at least one of "message" or "url" fields is required
-          url: "data:image/png;base64," + uri,
-          subject: "Subject",
-        });
+        shareOptionsDetails(uri, product.photo);
       },
       (error) => console.error("Oops, snapshot failed", error)
     );

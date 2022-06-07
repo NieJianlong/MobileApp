@@ -1,10 +1,12 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 import {
   View,
   ScrollView,
   Text,
   SafeAreaView,
   useWindowDimensions,
+  TouchableOpacity,
+  Image,
 } from "react-native";
 import AppConfig from "../../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
@@ -25,8 +27,15 @@ import QRCode from "react-native-qrcode-svg";
 import { t } from "react-native-tailwindcss";
 import PickInfo from "../../../Components/PickInfo";
 import { useNavigation } from "@react-navigation/native";
+import ViewShot, { captureRef, captureScreen } from "react-native-view-shot";
+import Share from "react-native-share";
+const url = "https://www.google.com/";
+const title = "Awesome Contents";
+const message = "Please check this out.";
+const icon = "data:<data_type>/<file_extension>;base64,<base64_data>";
 
 function ReturnStatus(props) {
+  const viewShotRef = useRef(null);
   const {
     params: { type, data },
   } = useRoute();
@@ -58,6 +67,71 @@ function ReturnStatus(props) {
     return [];
   }, [trackData]);
 
+  const toggleShareSheet = () => {
+    captureRef(viewShotRef, {
+      format: "png",
+      quality: 0.8,
+      result: "base64",
+    }).then(
+      (uri) => {
+        const shareOptions = Platform.select({
+          ios: {
+            activityItemSources: [
+              {
+                // For sharing url with custom title.
+                placeholderItem: { type: "url", content: url },
+                item: {
+                  default: { type: "url", content: url },
+                },
+                subject: {
+                  default: title,
+                },
+                linkMetadata: { originalUrl: url, url, title },
+              },
+              {
+                // For sharing text.
+                placeholderItem: { type: "text", content: message },
+                item: {
+                  default: { type: "text", content: message },
+                  message: null, // Specify no text to share via Messages app.
+                },
+                linkMetadata: {
+                  // For showing app icon on share preview.
+                  title: message,
+                },
+              },
+              {
+                // For using custom icon instead of default text icon at share preview when sharing with message.
+                placeholderItem: {
+                  type: "url",
+                  content: icon,
+                },
+                item: {
+                  default: {
+                    type: "text",
+                    content: `${message} ${url}`,
+                  },
+                },
+                linkMetadata: {
+                  title: message,
+                  icon: icon,
+                },
+              },
+            ],
+          },
+          default: {
+            title: "Title",
+            url: "data:image/png;base64," + uri,
+            subject: "Subject",
+          },
+        });
+        Share.open(shareOptions);
+      },
+      (error) => console.error("Oops, snapshot failed", error)
+    );
+    // })
+  };
+
   const lastEvent = useMemo(() => {
     if (trackData) {
       return last(trackData.getOrderReturnStatus.events);
@@ -72,7 +146,7 @@ function ReturnStatus(props) {
     });
   }, [navigation]);
   return (
-    <View
+    <ViewShot
       style={{
         flex: 1,
         backgroundColor: colors.background,
@@ -82,6 +156,8 @@ function ReturnStatus(props) {
         right: 0,
         bottom: 0,
       }}
+      ref={viewShotRef}
+      options={{ format: "png", quality: 0.4, result: "base64" }}
     >
       <ScrollView contentContainerStyle={{ paddingBottom: vs(64) }}>
         <View>
@@ -135,6 +211,17 @@ function ReturnStatus(props) {
               )}
             </View>
           </View>
+
+          <TouchableOpacity
+            style={styles.whatssAppbtn}
+            onPress={toggleShareSheet}
+          >
+            <Text style={styles.textStyle}>Share code on WhatApp</Text>
+            <Image
+              source={require("../../../Images/whatsappgreen.png")}
+              style={styles.whatsAppIcon}
+            />
+          </TouchableOpacity>
           {lastEvent?.eventType === ReturnEventType.WaitingBuyerReturn && (
             <PickInfo
               deliveryOption={data.deliveryOption}
@@ -144,7 +231,7 @@ function ReturnStatus(props) {
           )}
         </View>
       </ScrollView>
-    </View>
+    </ViewShot>
   );
 }
 
@@ -155,5 +242,18 @@ const styles = ScaledSheet.create({
     fontSize: "16@s",
     color: colors.black,
     fontWeight: "600",
+  },
+  whatssAppbtn: {
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    flexDirection: "row",
+  },
+  whatsAppIcon: {
+    height: "31@s",
+    width: "31@s",
+  },
+  textStyle: {
+    marginRight: "120@s",
   },
 });

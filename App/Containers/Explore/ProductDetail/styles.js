@@ -88,7 +88,7 @@ export default ScaledSheet.create({
   },
   percentOffContainer: {
     backgroundColor: Colors.secondary01,
-    paddingHorizontal: "10@s",
+    paddingHorizontal: "5@s",
     paddingVertical: "2@s",
     borderRadius: "30@s",
   },

@@ -370,12 +370,17 @@ export type CartItemInput = {
   variantId?: InputMaybe<Scalars['ID']>;
 };
 
-export type Category = {
-  __typename?: 'Category';
+export type CategoryInput = {
+  categoryId?: InputMaybe<Scalars['ID']>;
+  description?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
+export type CategoryResponse = {
+  __typename?: 'CategoryResponse';
+  categoryId: Scalars['ID'];
   description?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-  parentCategory?: Maybe<Category>;
+  name: Scalars['String'];
 };
 
 export type CategoryView = {
@@ -770,7 +775,7 @@ export type Mutation = {
   addListingToWishlist: Wishlist;
   addOptionValue?: Maybe<Option>;
   /** categories */
-  addParentCategory: Category;
+  addParentCategory: CategoryResponse;
   addProductRefundToWallet?: Maybe<SalamiWalletTransactionResponse>;
   addProductReview: AddReviewResponse;
   addRefundSalamiCredit?: Maybe<Scalars['Float']>;
@@ -778,7 +783,6 @@ export type Mutation = {
   addRequestForProduct: RequestForProductResponse;
   addSellerReview: AddReviewResponse;
   addShareInformation: ShareInformation;
-  addSubCategory: Category;
   approveOrRejectOrderReturnRequest?: Maybe<Scalars['Boolean']>;
   cancelOrderItem?: Maybe<Scalars['Boolean']>;
   cancelOrderItemByListingId?: Maybe<Scalars['Boolean']>;
@@ -880,7 +884,6 @@ export type Mutation = {
   updateBillingDetails?: Maybe<BillingDetailsResponse>;
   updateBillingDetailsForGuestBuyer?: Maybe<BillingDetailsResponse>;
   updateBuyerProfile?: Maybe<BuyerProfileResponse>;
-  updateCategory: Category;
   updateChat?: Maybe<ChatResponse>;
   updateChatMessage?: Maybe<ChatMessageResponse>;
   updateChatSubscriber?: Maybe<ChatSubscriberResponse>;
@@ -889,6 +892,7 @@ export type Mutation = {
   updateListingStatus: ProductListing;
   updateNotification?: Maybe<NotificationResponse>;
   updateOrderPaymentStatus: Scalars['Boolean'];
+  updateParentCategory: CategoryResponse;
   updatePaymentDetail?: Maybe<PaymentDetailResponse>;
   updatePreference?: Maybe<PreferenceResponse>;
   updateProduct: SellerProductDetailView;
@@ -944,8 +948,7 @@ export type MutationAddOptionValueArgs = {
 
 /** MUTATIONS */
 export type MutationAddParentCategoryArgs = {
-  description: Scalars['String'];
-  name: Scalars['String'];
+  input: CategoryInput;
 };
 
 
@@ -991,14 +994,6 @@ export type MutationAddSellerReviewArgs = {
 /** MUTATIONS */
 export type MutationAddShareInformationArgs = {
   input: ShareInformationInput;
-};
-
-
-/** MUTATIONS */
-export type MutationAddSubCategoryArgs = {
-  description: Scalars['String'];
-  name: Scalars['String'];
-  parentCategoryId: Scalars['String'];
 };
 
 
@@ -1444,6 +1439,7 @@ export type MutationRazorpayVerifyPaymentSignatureArgs = {
 /** MUTATIONS */
 export type MutationReduceOrderAmountFromWalletArgs = {
   amount: Scalars['Float'];
+  buyerId: Scalars['ID'];
   transactionReference: Scalars['ID'];
 };
 
@@ -1613,14 +1609,6 @@ export type MutationUpdateBuyerProfileArgs = {
 
 
 /** MUTATIONS */
-export type MutationUpdateCategoryArgs = {
-  categoryId: Scalars['String'];
-  description: Scalars['String'];
-  name: Scalars['String'];
-};
-
-
-/** MUTATIONS */
 export type MutationUpdateChatArgs = {
   request: ChatRequest;
 };
@@ -1665,6 +1653,12 @@ export type MutationUpdateNotificationArgs = {
 /** MUTATIONS */
 export type MutationUpdateOrderPaymentStatusArgs = {
   request: UpdateOrderPaymentStatusRequest;
+};
+
+
+/** MUTATIONS */
+export type MutationUpdateParentCategoryArgs = {
+  input: CategoryInput;
 };
 
 
@@ -1864,6 +1858,7 @@ export type OrderItemDetailResponse = {
   inventoryLocation?: Maybe<Scalars['String']>;
   itemDiscount: Scalars['Float'];
   itemPrice: Scalars['Float'];
+  itemReturnPolicy?: Maybe<ValidateReturnPolicyResponse>;
   latestEventStatus: OrderItemHistoryEventType;
   listingId: Scalars['ID'];
   listingNumber?: Maybe<Scalars['String']>;
@@ -2489,6 +2484,7 @@ export type Query = {
   getBuyerAddressByType?: Maybe<Array<Maybe<AddressResponse>>>;
   getBuyerAddressesById?: Maybe<Array<Maybe<AddressResponse>>>;
   getBuyerDefaultAddressByBuyerId?: Maybe<AddressResponse>;
+  getBuyerProductReview: ReviewResponse;
   getBuyerSalamiWalletBalance?: Maybe<SalamiWalletResponse>;
   getBuyerWishlistListing: BuyerListingResponse;
   getCountries?: Maybe<Array<Maybe<CountryResponse>>>;
@@ -2718,6 +2714,12 @@ export type QueryGetBuyerAddressesByIdArgs = {
 /** QUERIES */
 export type QueryGetBuyerDefaultAddressByBuyerIdArgs = {
   buyerId: Scalars['ID'];
+};
+
+
+/** QUERIES */
+export type QueryGetBuyerProductReviewArgs = {
+  productId: Scalars['ID'];
 };
 
 
@@ -3631,13 +3633,15 @@ export type SellerLocationPickupResponse = {
 export enum SellerOrderFilterType {
   EventStatus = 'EVENT_STATUS',
   None = 'NONE',
-  OrderDate = 'ORDER_DATE'
+  OrderDate = 'ORDER_DATE',
+  OrderNumber = 'ORDER_NUMBER'
 }
 
 export type SellerOrderOption = {
   eventStatus?: InputMaybe<OrderItemHistoryEventType>;
   filterType: SellerOrderFilterType;
   orderDate?: InputMaybe<OrderDateParameter>;
+  orderNumber?: InputMaybe<Scalars['String']>;
   pageOption: PageOption;
 };
 
@@ -3706,10 +3710,14 @@ export type SellerProductDetailView = {
   returnPolicy: SellerReturnPolicy;
   sellerSku?: Maybe<Scalars['String']>;
   shortName: Scalars['String'];
+  size?: Maybe<Scalars['String']>;
+  sizeUnit?: Maybe<Scalars['String']>;
   validationStatus?: Maybe<ProductValidationStatus>;
   variants: Array<SellerProductVariant>;
   vendorName?: Maybe<Scalars['String']>;
   vendorSku?: Maybe<Scalars['String']>;
+  weight?: Maybe<Scalars['Float']>;
+  weightUnit?: Maybe<Scalars['String']>;
 };
 
 export type SellerProductImage = {
@@ -3754,6 +3762,7 @@ export type SellerProfileBasicDetailsResponse = {
   __typename?: 'SellerProfileBasicDetailsResponse';
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
+  phoneNumber?: Maybe<Scalars['String']>;
   sellerId?: Maybe<Scalars['ID']>;
   storeName?: Maybe<Scalars['String']>;
 };
@@ -4278,6 +4287,12 @@ export type ValidateCodeResponse = {
   status?: Maybe<Scalars['Boolean']>;
 };
 
+export type ValidateReturnPolicyResponse = {
+  __typename?: 'ValidateReturnPolicyResponse';
+  isReturnAllowed: Scalars['Boolean'];
+  reason?: Maybe<Scalars['String']>;
+};
+
 export enum ValidationType {
   Email = 'EMAIL',
   Sms = 'SMS'
@@ -4460,14 +4475,14 @@ export type SellerLocationFragment = { __typename?: 'SellerLocationPickupRespons
 
 export type AddressOrderFiledFragment = { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined };
 
-export type OrderItemDetailFieldFragment = { __typename?: 'OrderItemDetailResponse', orderId: string, orderNumber: string, orderDatetime: any, orderSubTotal: number, orderReturnId?: string | null | undefined, orderDiscount: number, orderServiceFees: number, totalSavings: number, orderTotal: number, buyerId: string, orderItemId: string, quantity: number, itemPrice: number, itemDiscount: number, latestEventStatus: OrderItemHistoryEventType, paymentStatus?: OrderItemHistoryEventType | null | undefined, shortName: string, longName?: string | null | undefined, mainImagePath?: string | null | undefined, productId: string, sellerId: string, vendorSku?: string | null | undefined, sellerSku?: string | null | undefined, variantId?: string | null | undefined, priceId?: string | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, listingId: string, listingStatus: ProductListingStatus, storeId: string, deliveryOption: DeliveryOption, deliveryDate?: any | null | undefined, shippingDate?: any | null | undefined, deliveryAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined, pickupAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined, buyer?: { __typename?: 'BuyerDetailsResponse', buyerId: string, firstName?: string | null | undefined, lastName?: string | null | undefined, phoneNumber?: string | null | undefined } | null | undefined, shippingDetails?: { __typename?: 'ShippingDetailsResponse', shippingStatus?: ShippingStatus | null | undefined, shippingDate?: any | null | undefined, carrier?: string | null | undefined, carrierUrl?: string | null | undefined, trackingNumber?: string | null | undefined, expectedDeliveryDate?: any | null | undefined, shippingInstructions?: string | null | undefined, deliveryDate?: any | null | undefined, failedDeliveryReason?: string | null | undefined, events?: Array<{ __typename?: 'ShippingEventResponse', eventType?: string | null | undefined, eventDateTime?: any | null | undefined } | null | undefined> | null | undefined } | null | undefined, collectionPoint?: { __typename?: 'CollectionPointPickupResponse', collectionPointId?: string | null | undefined, microHubId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, openingHours?: Array<string | null | undefined> | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined } | null | undefined, sellerLocation?: { __typename?: 'SellerLocationPickupResponse', collectionPointId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined, collectionDate?: any | null | undefined } | null | undefined, sellerDirectDelivery?: { __typename?: 'SellerDirectDeliveryResponse', announcementId?: string | null | undefined, deliveryDate?: any | null | undefined } | null | undefined };
+export type OrderItemDetailFieldFragment = { __typename?: 'OrderItemDetailResponse', orderId: string, orderNumber: string, orderDatetime: any, orderSubTotal: number, orderReturnId?: string | null | undefined, orderDiscount: number, orderServiceFees: number, totalSavings: number, orderTotal: number, buyerId: string, orderItemId: string, quantity: number, itemPrice: number, itemDiscount: number, latestEventStatus: OrderItemHistoryEventType, paymentStatus?: OrderItemHistoryEventType | null | undefined, shortName: string, longName?: string | null | undefined, mainImagePath?: string | null | undefined, productId: string, sellerId: string, vendorSku?: string | null | undefined, sellerSku?: string | null | undefined, variantId?: string | null | undefined, priceId?: string | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, listingId: string, listingStatus: ProductListingStatus, storeId: string, deliveryOption: DeliveryOption, deliveryDate?: any | null | undefined, shippingDate?: any | null | undefined, deliveryAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined, pickupAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined, buyer?: { __typename?: 'BuyerDetailsResponse', buyerId: string, firstName?: string | null | undefined, lastName?: string | null | undefined, phoneNumber?: string | null | undefined } | null | undefined, shippingDetails?: { __typename?: 'ShippingDetailsResponse', shippingStatus?: ShippingStatus | null | undefined, shippingDate?: any | null | undefined, carrier?: string | null | undefined, carrierUrl?: string | null | undefined, trackingNumber?: string | null | undefined, expectedDeliveryDate?: any | null | undefined, shippingInstructions?: string | null | undefined, deliveryDate?: any | null | undefined, failedDeliveryReason?: string | null | undefined, events?: Array<{ __typename?: 'ShippingEventResponse', eventType?: string | null | undefined, eventDateTime?: any | null | undefined } | null | undefined> | null | undefined } | null | undefined, collectionPoint?: { __typename?: 'CollectionPointPickupResponse', collectionPointId?: string | null | undefined, microHubId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, openingHours?: Array<string | null | undefined> | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined } | null | undefined, sellerLocation?: { __typename?: 'SellerLocationPickupResponse', collectionPointId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined, collectionDate?: any | null | undefined } | null | undefined, sellerDirectDelivery?: { __typename?: 'SellerDirectDeliveryResponse', announcementId?: string | null | undefined, deliveryDate?: any | null | undefined } | null | undefined, itemReturnPolicy?: { __typename?: 'ValidateReturnPolicyResponse', isReturnAllowed: boolean, reason?: string | null | undefined } | null | undefined };
 
 export type SearchBuyerOrdersQueryVariables = Exact<{
   options: BuyerOrderOption;
 }>;
 
 
-export type SearchBuyerOrdersQuery = { __typename?: 'Query', searchBuyerOrders: { __typename?: 'BuyerOrderResponse', pageNo: number, pageSize: number, totalPages: number, totalElements: number, content: Array<{ __typename?: 'OrderItemDetailResponse', orderId: string, orderNumber: string, orderDatetime: any, orderSubTotal: number, orderReturnId?: string | null | undefined, orderDiscount: number, orderServiceFees: number, totalSavings: number, orderTotal: number, buyerId: string, orderItemId: string, quantity: number, itemPrice: number, itemDiscount: number, latestEventStatus: OrderItemHistoryEventType, paymentStatus?: OrderItemHistoryEventType | null | undefined, shortName: string, longName?: string | null | undefined, mainImagePath?: string | null | undefined, productId: string, sellerId: string, vendorSku?: string | null | undefined, sellerSku?: string | null | undefined, variantId?: string | null | undefined, priceId?: string | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, listingId: string, listingStatus: ProductListingStatus, storeId: string, deliveryOption: DeliveryOption, deliveryDate?: any | null | undefined, shippingDate?: any | null | undefined, deliveryAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined, pickupAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined, buyer?: { __typename?: 'BuyerDetailsResponse', buyerId: string, firstName?: string | null | undefined, lastName?: string | null | undefined, phoneNumber?: string | null | undefined } | null | undefined, shippingDetails?: { __typename?: 'ShippingDetailsResponse', shippingStatus?: ShippingStatus | null | undefined, shippingDate?: any | null | undefined, carrier?: string | null | undefined, carrierUrl?: string | null | undefined, trackingNumber?: string | null | undefined, expectedDeliveryDate?: any | null | undefined, shippingInstructions?: string | null | undefined, deliveryDate?: any | null | undefined, failedDeliveryReason?: string | null | undefined, events?: Array<{ __typename?: 'ShippingEventResponse', eventType?: string | null | undefined, eventDateTime?: any | null | undefined } | null | undefined> | null | undefined } | null | undefined, collectionPoint?: { __typename?: 'CollectionPointPickupResponse', collectionPointId?: string | null | undefined, microHubId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, openingHours?: Array<string | null | undefined> | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined } | null | undefined, sellerLocation?: { __typename?: 'SellerLocationPickupResponse', collectionPointId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined, collectionDate?: any | null | undefined } | null | undefined, sellerDirectDelivery?: { __typename?: 'SellerDirectDeliveryResponse', announcementId?: string | null | undefined, deliveryDate?: any | null | undefined } | null | undefined }> } };
+export type SearchBuyerOrdersQuery = { __typename?: 'Query', searchBuyerOrders: { __typename?: 'BuyerOrderResponse', pageNo: number, pageSize: number, totalPages: number, totalElements: number, content: Array<{ __typename?: 'OrderItemDetailResponse', orderId: string, orderNumber: string, orderDatetime: any, orderSubTotal: number, orderReturnId?: string | null | undefined, orderDiscount: number, orderServiceFees: number, totalSavings: number, orderTotal: number, buyerId: string, orderItemId: string, quantity: number, itemPrice: number, itemDiscount: number, latestEventStatus: OrderItemHistoryEventType, paymentStatus?: OrderItemHistoryEventType | null | undefined, shortName: string, longName?: string | null | undefined, mainImagePath?: string | null | undefined, productId: string, sellerId: string, vendorSku?: string | null | undefined, sellerSku?: string | null | undefined, variantId?: string | null | undefined, priceId?: string | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, listingId: string, listingStatus: ProductListingStatus, storeId: string, deliveryOption: DeliveryOption, deliveryDate?: any | null | undefined, shippingDate?: any | null | undefined, deliveryAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined, pickupAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined, buyer?: { __typename?: 'BuyerDetailsResponse', buyerId: string, firstName?: string | null | undefined, lastName?: string | null | undefined, phoneNumber?: string | null | undefined } | null | undefined, shippingDetails?: { __typename?: 'ShippingDetailsResponse', shippingStatus?: ShippingStatus | null | undefined, shippingDate?: any | null | undefined, carrier?: string | null | undefined, carrierUrl?: string | null | undefined, trackingNumber?: string | null | undefined, expectedDeliveryDate?: any | null | undefined, shippingInstructions?: string | null | undefined, deliveryDate?: any | null | undefined, failedDeliveryReason?: string | null | undefined, events?: Array<{ __typename?: 'ShippingEventResponse', eventType?: string | null | undefined, eventDateTime?: any | null | undefined } | null | undefined> | null | undefined } | null | undefined, collectionPoint?: { __typename?: 'CollectionPointPickupResponse', collectionPointId?: string | null | undefined, microHubId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, openingHours?: Array<string | null | undefined> | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined } | null | undefined, sellerLocation?: { __typename?: 'SellerLocationPickupResponse', collectionPointId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined, collectionDate?: any | null | undefined } | null | undefined, sellerDirectDelivery?: { __typename?: 'SellerDirectDeliveryResponse', announcementId?: string | null | undefined, deliveryDate?: any | null | undefined } | null | undefined, itemReturnPolicy?: { __typename?: 'ValidateReturnPolicyResponse', isReturnAllowed: boolean, reason?: string | null | undefined } | null | undefined }> } };
 
 export type GetOrderReturnStatusQueryVariables = Exact<{
   orderReturnId: Scalars['String'];
@@ -4481,7 +4496,7 @@ export type GetOrderItemDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetOrderItemDetailsQuery = { __typename?: 'Query', getOrderItemDetails: { __typename?: 'OrderItemDetailResponse', orderId: string, orderNumber: string, orderDatetime: any, orderSubTotal: number, orderReturnId?: string | null | undefined, orderDiscount: number, orderServiceFees: number, totalSavings: number, orderTotal: number, buyerId: string, orderItemId: string, quantity: number, itemPrice: number, itemDiscount: number, latestEventStatus: OrderItemHistoryEventType, paymentStatus?: OrderItemHistoryEventType | null | undefined, shortName: string, longName?: string | null | undefined, mainImagePath?: string | null | undefined, productId: string, sellerId: string, vendorSku?: string | null | undefined, sellerSku?: string | null | undefined, variantId?: string | null | undefined, priceId?: string | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, listingId: string, listingStatus: ProductListingStatus, storeId: string, deliveryOption: DeliveryOption, deliveryDate?: any | null | undefined, shippingDate?: any | null | undefined, deliveryAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined, pickupAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined, buyer?: { __typename?: 'BuyerDetailsResponse', buyerId: string, firstName?: string | null | undefined, lastName?: string | null | undefined, phoneNumber?: string | null | undefined } | null | undefined, shippingDetails?: { __typename?: 'ShippingDetailsResponse', shippingStatus?: ShippingStatus | null | undefined, shippingDate?: any | null | undefined, carrier?: string | null | undefined, carrierUrl?: string | null | undefined, trackingNumber?: string | null | undefined, expectedDeliveryDate?: any | null | undefined, shippingInstructions?: string | null | undefined, deliveryDate?: any | null | undefined, failedDeliveryReason?: string | null | undefined, events?: Array<{ __typename?: 'ShippingEventResponse', eventType?: string | null | undefined, eventDateTime?: any | null | undefined } | null | undefined> | null | undefined } | null | undefined, collectionPoint?: { __typename?: 'CollectionPointPickupResponse', collectionPointId?: string | null | undefined, microHubId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, openingHours?: Array<string | null | undefined> | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined } | null | undefined, sellerLocation?: { __typename?: 'SellerLocationPickupResponse', collectionPointId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined, collectionDate?: any | null | undefined } | null | undefined, sellerDirectDelivery?: { __typename?: 'SellerDirectDeliveryResponse', announcementId?: string | null | undefined, deliveryDate?: any | null | undefined } | null | undefined } };
+export type GetOrderItemDetailsQuery = { __typename?: 'Query', getOrderItemDetails: { __typename?: 'OrderItemDetailResponse', orderId: string, orderNumber: string, orderDatetime: any, orderSubTotal: number, orderReturnId?: string | null | undefined, orderDiscount: number, orderServiceFees: number, totalSavings: number, orderTotal: number, buyerId: string, orderItemId: string, quantity: number, itemPrice: number, itemDiscount: number, latestEventStatus: OrderItemHistoryEventType, paymentStatus?: OrderItemHistoryEventType | null | undefined, shortName: string, longName?: string | null | undefined, mainImagePath?: string | null | undefined, productId: string, sellerId: string, vendorSku?: string | null | undefined, sellerSku?: string | null | undefined, variantId?: string | null | undefined, priceId?: string | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, listingId: string, listingStatus: ProductListingStatus, storeId: string, deliveryOption: DeliveryOption, deliveryDate?: any | null | undefined, shippingDate?: any | null | undefined, deliveryAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined, pickupAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined, buyer?: { __typename?: 'BuyerDetailsResponse', buyerId: string, firstName?: string | null | undefined, lastName?: string | null | undefined, phoneNumber?: string | null | undefined } | null | undefined, shippingDetails?: { __typename?: 'ShippingDetailsResponse', shippingStatus?: ShippingStatus | null | undefined, shippingDate?: any | null | undefined, carrier?: string | null | undefined, carrierUrl?: string | null | undefined, trackingNumber?: string | null | undefined, expectedDeliveryDate?: any | null | undefined, shippingInstructions?: string | null | undefined, deliveryDate?: any | null | undefined, failedDeliveryReason?: string | null | undefined, events?: Array<{ __typename?: 'ShippingEventResponse', eventType?: string | null | undefined, eventDateTime?: any | null | undefined } | null | undefined> | null | undefined } | null | undefined, collectionPoint?: { __typename?: 'CollectionPointPickupResponse', collectionPointId?: string | null | undefined, microHubId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, openingHours?: Array<string | null | undefined> | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined } | null | undefined, sellerLocation?: { __typename?: 'SellerLocationPickupResponse', collectionPointId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined, collectionDate?: any | null | undefined } | null | undefined, sellerDirectDelivery?: { __typename?: 'SellerDirectDeliveryResponse', announcementId?: string | null | undefined, deliveryDate?: any | null | undefined } | null | undefined, itemReturnPolicy?: { __typename?: 'ValidateReturnPolicyResponse', isReturnAllowed: boolean, reason?: string | null | undefined } | null | undefined } };
 
 export type TrackOrderItemQueryVariables = Exact<{
   orderItemId: Scalars['ID'];
@@ -4934,6 +4949,10 @@ export const OrderItemDetailFieldFragmentDoc = gql`
   sellerDirectDelivery {
     announcementId
     deliveryDate
+  }
+  itemReturnPolicy {
+    isReturnAllowed
+    reason
   }
 }
     ${AddressOrderFiledFragmentDoc}

@@ -33,6 +33,10 @@ function CustomerSupport(props) {
       }}
     >
       <View style={[t.itemsCenter, t.pT12]}>
+        <Text style={[t.textXl, t.pX4, t.mB6]}>
+          Please send queries to below email address. In case of Order issues,
+          please include Order no, Product information, buyer register phone no
+        </Text>
         <TouchableOpacity
           onPress={() =>
             Linking.openURL("mailto:vk@gmail.com?subject=&body=")
@@ -44,7 +48,7 @@ function CustomerSupport(props) {
               })
           }
         >
-          <Text>{"support mail: vk@gmail.com"}</Text>
+          <Text style={[t.textXl]}>support@SalamiSlicing.in</Text>
         </TouchableOpacity>
       </View>
 

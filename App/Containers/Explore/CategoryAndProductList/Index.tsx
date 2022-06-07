@@ -102,7 +102,7 @@ export default function Index(props) {
               )}
 
               <AddressBar />
-              {!textToSearch && categories?.getPreferredCategories && isAuth && (
+              {!textToSearch && categories && isAuth && (
                 <View
                   style={{
                     backgroundColor: "white",
@@ -115,7 +115,7 @@ export default function Index(props) {
                   }}
                 >
                   <TouchableOpacity
-                    // activeOpacity={1}
+                    activeOpacity={1}
                     onPress={() => {
                       NavigationService.navigate(
                         "EditCategoriesScreen",

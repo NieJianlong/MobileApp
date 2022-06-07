@@ -18,6 +18,8 @@ import {
 import BigNumber from "bignumber.js";
 import UseBillingDetail from "./useBillingDetail";
 import useOrderInfo from "./useOrderInfo";
+import useAlert from "./useAlert";
+import { Colors } from "../Themes";
 export interface ItemProps {
   listingId: string;
   quantity: number;
@@ -33,6 +35,7 @@ export enum OrderType {
 
 export const useCreateOrder = () => {
   const [order, setOrder] = useState();
+  const { setAlert } = useAlert();
   const { addBilling } = UseBillingDetail();
   const [createOrderFromCart] = useCreateOrderFromCartMutation();
   const userProfile = useReactiveVar(userProfileVar);
@@ -226,6 +229,7 @@ export const useCreateOrder = () => {
       },
       onError: (res) => {
         setLoading({ show: false });
+        setAlert({ visible: true, message: res.message, color: Colors.error });
       },
     });
   };

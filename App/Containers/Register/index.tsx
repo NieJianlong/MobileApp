@@ -112,7 +112,7 @@ function RegisterScreen(props) {
   let [validationMessage, setValidationMessage] = useState("");
   const { setLoading } = useLoading();
   // because of the way the switch component is set up this is the opposite of what you would expect
-  let [termsAccepted, setTermsAccepted] = useState(false);
+  let [termsAccepted, setTermsAccepted] = useState(true);
   useEffect(() => {
     // let phoneNumber = "+918247278755";
     // setValue("phoneNumber", trimStart(phoneNumber, "+91"));
@@ -571,8 +571,13 @@ function RegisterScreen(props) {
                           "SmsRetriever==request===PhoneNumber",
                           resph
                         );
+                        // resph = "+9109176476145";
+                        // alert(resph);
                         if (resph.startsWith("+91")) {
-                          setValue("phoneNumber", resph.replace("+91", ""));
+                          setValue(
+                            "phoneNumber",
+                            resph.substring(resph.length - 10, resph.length)
+                          );
                         }
                         if (resph.startsWith("+86")) {
                           setValue("phoneNumber", resph.replace("+86", ""));

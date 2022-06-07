@@ -15,6 +15,8 @@ import * as ecM from "./editCartMappers.js";
 import { lowerFirst } from "lodash";
 import useRealm from "../../hooks/useRealm";
 import { t } from "react-native-tailwindcss";
+import { FilterType, useGetListingsQuery } from "../../../generated/graphql";
+import ProductVariants from "../Explore/Components/Variants";
 
 /**
  * we are coming here from a navigation event
@@ -22,32 +24,31 @@ import { t } from "react-native-tailwindcss";
 function EditShoppingCart(props) {
   const { params } = useRoute();
   const { realm } = useRealm();
-  const [product, setProductFromProps] = useState(params.product);
-  const [selected, setSelected] = useState(product.variant);
-  const sections = [];
-  for (
-    let index = 0;
-    index < product.product?.listingVariants?.length;
-    index++
-  ) {
-    const variant = product.product?.listingVariants[index];
-    const options = variant.options;
-    for (let jndex = 0; jndex < options.length; jndex++) {
-      const option = options[jndex];
-      const currentValue = {
-        ...JSON.parse(JSON.stringify(variant)),
-        value: option.value,
-      };
-      const item = sections.find((i) => i.title === option.key);
-      if (!item) {
-        sections.push({ title: option.key, data: [currentValue] });
-      } else {
-        if (!item.data.find((j) => j.value === currentValue.value)) {
-          item.data.push(currentValue);
-        }
-      }
-    }
-  }
+
+  const [currentVariant, setCurrentVariant] = useState();
+  const {
+    data: products,
+    refetch,
+    loading,
+  } = useGetListingsQuery({
+    nextFetchPolicy: "standby",
+    fetchPolicy: "network-only",
+    variables: {
+      searchOptions: {
+        filter: FilterType.ByListingId,
+        filterParams: {
+          listingId: params.listingId,
+          productId: params.productId,
+        },
+      },
+    },
+    context: {
+      headers: {
+        isPrivate: global.access_token ? true : false,
+      },
+    },
+  });
+
   const navigation = useNavigation();
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -57,17 +58,25 @@ function EditShoppingCart(props) {
           <RightButton
             title="SAVE"
             onPress={() => {
+              params.onEditVariant(currentVariant.variantId);
               NavigationService.goBack();
             }}
           />
         </View>
       ),
     });
-  }, [navigation]);
-  if (!product.product?.listingVariants || sections.length === 0) {
-    return null;
-  }
+  }, [navigation, currentVariant]);
 
+  useEffect(() => {
+    if (products?.getListings?.content[0]?.listingVariants) {
+      const variant = products?.getListings?.content[0]?.listingVariants.find(
+        (item) => item.variantId === params.variantId
+      );
+      if (variant) {
+        setCurrentVariant(variant);
+      }
+    }
+  }, [products]);
   return (
     <View
       style={{
@@ -80,71 +89,16 @@ function EditShoppingCart(props) {
         bottom: 0,
       }}
     >
-      <View style={{ height: metrics.screenHeight - vs(64) }}>
-        <SectionList
-          contentContainerStyle={{ paddingBottom: vs(44) }}
-          sections={sections}
-          renderSectionHeader={({ section: { title } }) => (
-            <View
-              style={{
-                paddingHorizontal: s(18),
-                height: 50,
-                justifyContent: "center",
-                backgroundColor: "#F8F9FA",
-              }}
-            >
-              <Text
-                style={[
-                  ApplicationStyles.screen.heading4Bold,
-                  { marginTop: 20 },
-                ]}
-              >
-                {title}
-              </Text>
-            </View>
-          )}
-          renderItem={({ item, section, separators }, index) => {
-            const optionValue = item.options.find(
-              (i) => i.key === section.title
-            );
-            const selectedOption =
-              selected.options?.find((i) => i.key === section.title) ?? null;
-            return (
-              <View
-                style={{
-                  paddingHorizontal: AppConfig.paddingHorizontal,
-                }}
-              >
-                <View style={{ height: vs(12) }} />
-                <CheckBox
-                  defaultValue={selectedOption?.value === optionValue.value}
-                  onSwitch={(t) => {
-                    setSelected(item);
-                  }}
-                  hasIcon={false}
-                  iconColor={item.color}
-                  label={optionValue.value}
-                />
-                {selectedOption?.value !== optionValue.value && (
-                  <Text
-                    style={[
-                      { position: "absolute", top: vs(25), right: 40 },
-                      {
-                        color: colors.grey40,
-                        fontSize: vs(14),
-                        fontFamily: fonts.primary,
-                      },
-                    ]}
-                  >
-                    {item.price}
-                  </Text>
-                )}
-              </View>
-            );
+      {products?.getListings.content[0].listingVariants && (
+        <ProductVariants
+          variants={products?.getListings.content[0].listingVariants}
+          product={products?.getListings.content[0]}
+          currentVariant={currentVariant}
+          onChange={(variant) => {
+            setCurrentVariant(variant);
           }}
-          keyExtractor={(item, index) => `ass${index}`}
         />
-      </View>
+      )}
     </View>
   );
 }

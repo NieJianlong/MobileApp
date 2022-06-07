@@ -72,10 +72,12 @@ const styles = ScaledSheet.create({
   activeText: {
     ...ApplicationStyles.screen.heading5Bold,
     color: Colors.white,
+    fontSize: 12,
   },
   inactiveText: {
     ...ApplicationStyles.screen.heading5Bold,
     color: Colors.grey40,
+    fontSize: 12,
   },
 });
 

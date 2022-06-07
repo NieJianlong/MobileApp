@@ -26,8 +26,15 @@ function Index(props) {
   const { setAlert, visible } = useAlert();
   // Alert and AlertContext are not correct semantic names, very confusing,  @nsavage
   const Alert = useContext(AlertContext);
-  const { product, availble, onPress, variant, quantity, onChangeQuanlity } =
-    props;
+  const {
+    product,
+    availble,
+    onPress,
+    variant,
+    quantity,
+    onChangeQuanlity,
+    onEditVariant,
+  } = props;
 
   return (
     <TouchableOpacity
@@ -197,7 +204,10 @@ function Index(props) {
             disabled={!availble}
             onPress={() => {
               NavigationService.navigate("EditShoppingCartScreen", {
-                product: JSON.parse(JSON.stringify(props.product)),
+                listingId: product.listingId,
+                variantId: variant.variantId,
+                productId: product.productId,
+                onEditVariant: onEditVariant,
               });
             }}
             style={[styles.removebtn, { width: s(60) }]}

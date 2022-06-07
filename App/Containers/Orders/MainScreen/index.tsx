@@ -119,7 +119,7 @@ class Order extends Component {
         </View>
         <View style={[t.pX6]}>
           <Button
-            onPress={() => NavigationService.goBack()}
+            onPress={() => NavigationService.navigate("ExploreScreen")}
             text={"EXPLORE PRODUCTS"}
           />
         </View>

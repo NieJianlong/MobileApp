@@ -200,6 +200,7 @@ type OrderItemDetailResponse {
   collectionPoint: CollectionPointPickupResponse
   sellerLocation: SellerLocationPickupResponse
   sellerDirectDelivery: SellerDirectDeliveryResponse
+  itemReturnPolicy: ValidateReturnPolicyResponse
 }
 
 enum OrderItemHistoryEventType {
@@ -419,12 +420,14 @@ enum SellerOrderFilterType {
   NONE
   EVENT_STATUS
   ORDER_DATE
+  ORDER_NUMBER
 }
 
 input SellerOrderOption {
   filterType: SellerOrderFilterType!
   orderDate: OrderDateParameter
   eventStatus: OrderItemHistoryEventType
+  orderNumber: String
   pageOption: PageOption!
 }
 
@@ -512,5 +515,10 @@ type TrackOrderItemResponse {
 input UpdateOrderPaymentStatusRequest {
   orderId: ID!
   paymentStatus: OrderItemHistoryEventType!
+}
+
+type ValidateReturnPolicyResponse {
+  isReturnAllowed: Boolean!
+  reason: String
 }
 

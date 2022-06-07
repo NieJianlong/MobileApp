@@ -33,6 +33,7 @@ function index(props) {
       type: "bold",
     },
   ]);
+
   // useEffect(() => {
   //   if (promoStatus == "success") {
   //     setPromoCode("10% Discount applied successfully!");

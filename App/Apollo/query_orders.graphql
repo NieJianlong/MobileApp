@@ -113,6 +113,10 @@ fragment OrderItemDetailField on OrderItemDetailResponse {
     announcementId
     deliveryDate
   }
+  itemReturnPolicy {
+    isReturnAllowed
+    reason
+  }
 }
 
 # fragment SimpleOrderItemViewField on SimpleOrderItemView {

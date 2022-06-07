@@ -27,7 +27,7 @@ import { useRoute } from "@react-navigation/native";
 
 //orderStatus：1,completed
 function CheckoutResume(props) {
-  const [on, setOnSwitch] = useState(false);
+  const [on, setOnSwitch] = useState(true);
   const { createOrder } = useCreateOrder();
   const userProfile = useReactiveVar(userProfileVar);
   const { orderInfo } = useOrderInfo();

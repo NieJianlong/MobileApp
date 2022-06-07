@@ -38,6 +38,9 @@ import Swiper from "react-native-swiper";
 import ViewShot, { captureRef, captureScreen } from "react-native-view-shot";
 import RNFetchBlob from "rn-fetch-blob";
 
+import useLoading from "../../../hooks/useLoading";
+import useAlert from "../../../hooks/useAlert";
+import colors from "../../../Themes/Colors";
 //render product images
 export default function ProductCarousel({ product, onPress }) {
   const { realm } = useRealm();
@@ -45,6 +48,8 @@ export default function ProductCarousel({ product, onPress }) {
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
+  const { setLoading } = useLoading();
+  const { setAlert } = useAlert();
   const [mydatas, setMydatas] = useState(
     realm
       .objects("ShoppingCart")
@@ -100,8 +105,12 @@ export default function ProductCarousel({ product, onPress }) {
     },
     onCompleted: (res) => {
       refetch();
+      setLoading({ show: false });
     },
-    onError: (res) => {},
+    onError: (res) => {
+      setLoading({ show: false });
+      setAlert({ visible: true, message: res.message, color: colors.error });
+    },
   });
   const [deleteFromWishList] = useDeleteListingFromWishlistMutation({
     variables: { buyerId: global.buyerId, listingId: product.listingId },
@@ -112,8 +121,12 @@ export default function ProductCarousel({ product, onPress }) {
     },
     onCompleted: (res) => {
       refetch();
+      setLoading({ show: false });
     },
-    onError: (res) => {},
+    onError: (res) => {
+      setLoading({ show: false });
+      setAlert({ visible: true, message: res.message, color: colors.error });
+    },
   });
 
   //hold the index of the current product's photo
@@ -124,6 +137,7 @@ export default function ProductCarousel({ product, onPress }) {
     setPhotoIndex(index);
   }, []);
   const onLikeProduct = useCallback(() => {
+    setLoading({ show: true });
     data?.isListingInWishlist ? deleteFromWishList() : addToWishList();
   }, [addToWishList, data?.isListingInWishlist, deleteFromWishList]);
   const toggleShareSheet = useCallback(() => {

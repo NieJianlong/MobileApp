@@ -24,6 +24,7 @@ import CheckBox from "../Explore/Components/CheckBox";
 import { t } from "react-native-tailwindcss";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { isEmpty } from "lodash";
+import TextInput from "../../Components/MultilineTextInput/MultilineTextInput";
 
 function ReturnProductStep1() {
   const { params } = useRoute();
@@ -46,7 +47,7 @@ function ReturnProductStep1() {
       ) ?? null,
     [params.product]
   );
-  
+
   const [returnReasonPolicyId, setReturnReasonPolicyId] = useState<string>("");
   const [submitOrderReturnRequest] = useSubmitOrderReturnRequestMutation({
     onCompleted: (res) => {
@@ -147,7 +148,8 @@ function ReturnProductStep1() {
             // setShowPrefer(true);
           }}
         />
-        <RNTextInput
+
+        <TextInput
           multiline={true}
           placeholder="Message"
           onChangeText={(value) => {
@@ -158,6 +160,7 @@ function ReturnProductStep1() {
             height: vs(160),
             backgroundColor: colors.white,
             borderRadius: s(20),
+            textAlign: "left",
             borderWidth: 1,
             borderColor: colors.grey20,
             justifyContent: "space-between",

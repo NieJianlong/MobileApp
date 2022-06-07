@@ -38,7 +38,7 @@ function RegisterGuestBuyerToBuyerScreen(props) {
   } = useForm<BuyerProfileRequest>();
   const { setLoading } = useLoading();
 
-  let [termsAccepted, setTermsAccepted] = useState(false);
+  let [termsAccepted, setTermsAccepted] = useState(true);
   const { setRegister } = useRegister();
 
   const [registerBuyer, { data }] = useRegisterGuestBuyerToBuyerMutation({

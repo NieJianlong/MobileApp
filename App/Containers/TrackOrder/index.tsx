@@ -58,8 +58,6 @@ function TrackOrder(props) {
 
   );
 
-  console.log("see the props", trackData);
-
   const toggleShareSheet = () => {
     captureRef(viewShotRef, {
       format: "png",

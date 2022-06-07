@@ -11,7 +11,6 @@ const message = "Please check this out.";
 const icon = "data:<data_type>/<file_extension>;base64,<base64_data>";
 
 export const shareOptionsDetails = (productLink, product) => {
-  console.log("see the product details", product);
   const shareOptions = Platform.select({
     ios: {
       activityItemSources: [

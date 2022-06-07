@@ -55,8 +55,6 @@ function AddLocationSheetContent(props) {
   const state = props.locationDetails ? props.locationDetails.address.split(",")[5] : "";
   const count = props.locationDetails ? props.locationDetails.address.split(",").length - 1 : "";
 
-    console.log("seee the permission dito", stopPermission);
-
   const {
     control,
     handleSubmit,

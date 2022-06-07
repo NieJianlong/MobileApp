@@ -38,8 +38,6 @@ const MapScreen = (props) => {
   const { setShowMap } = useMapScreen();
   const [isTapable, setIsTapable] = useState(true);
 
-  console.log("see the permission", props);
-
   useEffect(() => {
     (async () => {
       if (props.stopPermission === false) {

@@ -146,8 +146,6 @@ function RootContainer() {
       return false;
     });
 
-    console.log("patingin nga ng permission!", stopPermission, mapVisible);
-
     const requestLocationPermission = async () => {
       try {
         const granted = await PermissionsAndroid.request(

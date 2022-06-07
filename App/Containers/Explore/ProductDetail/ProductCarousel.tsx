@@ -148,7 +148,7 @@ export default function ProductCarousel({ product, onPress }) {
     }).then(
       (uri) => {
         console.log("seee the uri", uri);
-        shareOptionsDetails(uri, product.photo);
+        shareOptionsDetails(uri, product);
       },
       (error) => console.error("Oops, snapshot failed", error)
     );

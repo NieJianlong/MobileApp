@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useRef } from "react";
 import {
   Text,
   View,
@@ -21,6 +21,7 @@ import { t } from "react-native-tailwindcss";
 import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
 import Share from "react-native-share";
 import { shareOptionsDetails } from "./ShareOptionList";
+import ViewShot, { captureRef, captureScreen } from "react-native-view-shot";
 const defultUrl = "";
 
 const TouchableOpacity =
@@ -37,21 +38,20 @@ function ProductItem(props) {
     goFirst,
     notShowBottom,
   } = props;
+  const viewShotRef = useRef(null);
   const toggleShareSheet = useCallback(() => {
-    shareOptionsDetails(product.photoUrls);
-    // dispatch({
-    //   type: "changSheetState",
-    //   payload: {
-    //     showSheet: true,
-    //     height: 250,
-    //     children: () => (
-    //       <View style={{ flex: 1, justifyContent: "flex-end" }}>
-    //         <ShareOptionList />
-    //       </View>
-    //     ),
-    //     sheetTitle: "Share to",
-    //   },
-    // });
+    // shareOptionsDetails(product);
+    captureRef(viewShotRef, {
+      format: "png",
+      quality: 0.8,
+      result: "base64",
+    }).then(
+      (uri) => {
+        console.log("seee the uri", uri);
+        shareOptionsDetails(uri, product);
+      },
+      (error) => console.error("Oops, snapshot failed", error)
+    );
   }, []);
   const isMissing =
     product.status === ProductListingStatus.Accepted ||
@@ -93,14 +93,18 @@ function ProductItem(props) {
               { paddingHorizontal: AppConfig.paddingHorizontal },
             ]}
           >
-            <Image
-              source={{
-                uri: product.photo || defultUrl,
-              }}
-              resizeMode="contain"
-              style={[styles.productImage, t.mR2]}
-            />
-
+            <ViewShot
+              ref={viewShotRef}
+              options={{ format: "png", quality: 0.4, result: "base64" }}
+            >
+              <Image
+                source={{
+                  uri: product.photo || defultUrl,
+                }}
+                resizeMode="contain"
+                style={[styles.productImage, t.mR2]}
+              />
+            </ViewShot>
             <View style={styles.v2}>
               <View>
                 <Text style={styles.heading4Bold}>{product.shortName}</Text>

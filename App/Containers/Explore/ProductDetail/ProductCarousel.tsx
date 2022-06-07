@@ -143,17 +143,6 @@ export default function ProductCarousel({ product, onPress }) {
   }, [addToWishList, data?.isListingInWishlist, deleteFromWishList]);
 
   const toggleShareSheet = useCallback(() => {
-    // captureRef(viewShotRef, {
-    //   format: "png",
-    //   quality: 0.8,
-    //   result: "base64",
-    // }).then(
-    //   (uri) => {
-    //     console.log("seee the uri", uri);
-    //     shareOptionsDetails(uri, product);
-    //   },
-    //   (error) => console.error("Oops, snapshot failed", error)
-    // );
     const fs = RNFetchBlob.fs;
     let imagePath = null;
     RNFetchBlob.config({

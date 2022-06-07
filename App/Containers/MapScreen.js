@@ -27,7 +27,7 @@ import useMapScreen from "../hooks/useMapScreen";
 
 Geocoder.init("AIzaSyBfDTs1ejBI3MIVhrPeXgpvDNkTovWkIuU");
 
-const MapScreen = () => {
+const MapScreen = (props) => {
   const mapRef = useRef();
   const [location, setLocation] = useState(null);
   const [additionalInfoModal, setAdditionalInfoModal] = useState(false);
@@ -38,28 +38,32 @@ const MapScreen = () => {
   const { setShowMap } = useMapScreen();
   const [isTapable, setIsTapable] = useState(true);
 
+  console.log("see the permission", props);
+
   useEffect(() => {
     (async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert("Permission to access location was denied");
-        setShowMap({ mapVisible: false });
-        dispatch({
-          type: "changSheetState",
-          payload: {
-            showSheet: true,
-            height: 600,
-            children: () => (
-              <AddLocationSheetContent
-                {...location}
-                locationDetails={location}
-              />
-            ),
-            sheetTitle: "",
-          },
-        });
-        return;
-      }
+      if (props.stopPermission === false) {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          Alert.alert("Permission to access location was denied");
+          setShowMap({ mapVisible: false, stopPermission: true });
+          dispatch({
+            type: "changSheetState",
+            payload: {
+              showSheet: true,
+              height: 600,
+              children: () => (
+                <AddLocationSheetContent
+                  {...location}
+                  locationDetails={location}
+                />
+              ),
+              sheetTitle: "",
+            },
+          });
+          return;
+        }
+      } 
 
       _getCurrentLocation();
     })();

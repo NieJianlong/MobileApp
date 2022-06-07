@@ -212,7 +212,21 @@ function GroupInfoScreen(props) {
           })}
 
         {/* when order status is received,user can return product */}
-        {finalData?.latestEventStatus === OrderItemHistoryEventType.Delivered &&
+
+        {/* use this to bypass the track order */}
+        {/* {renderAction(Images.orderTrackImage, "Track order", () => {
+            // if (data.deliveryOption === DeliveryOption.CourierDelivery) {
+            NavigationService.navigate("TrackOrderScreen", {
+              type: "track",
+              data: orderData?.getOrderItemDetails,
+            });
+            // } else {
+            // }
+          })} */}
+
+        
+        
+        {/* {finalData?.latestEventStatus === OrderItemHistoryEventType.Delivered &&
           finalData?.itemReturnPolicy?.isReturnAllowed &&
           renderAction(Images.orderReturnImage, "Return product", () => {
             if (
@@ -227,7 +241,7 @@ function GroupInfoScreen(props) {
             });
           })}
         {/* when order status is uncompleted,user can cancel the order */}
-        {finalData?.listingStatus === ProductListingStatus.Active &&
+       {finalData?.listingStatus === ProductListingStatus.Active &&
           (finalData?.latestEventStatus ===
             OrderItemHistoryEventType.WaitingForPayment ||
             finalData?.latestEventStatus ===
@@ -251,7 +265,7 @@ function GroupInfoScreen(props) {
               type: "return",
               data: orderData?.getOrderItemDetails,
             })
-          )}
+          )} 
       </View>
     );
   }

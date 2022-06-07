@@ -41,6 +41,7 @@ import RNFetchBlob from "rn-fetch-blob";
 import useLoading from "../../../hooks/useLoading";
 import useAlert from "../../../hooks/useAlert";
 import colors from "../../../Themes/Colors";
+
 //render product images
 export default function ProductCarousel({ product, onPress }) {
   const { realm } = useRealm();
@@ -140,18 +141,41 @@ export default function ProductCarousel({ product, onPress }) {
     setLoading({ show: true });
     data?.isListingInWishlist ? deleteFromWishList() : addToWishList();
   }, [addToWishList, data?.isListingInWishlist, deleteFromWishList]);
+
   const toggleShareSheet = useCallback(() => {
-    captureRef(viewShotRef, {
-      format: "png",
-      quality: 0.8,
-      result: "base64",
-    }).then(
-      (uri) => {
-        console.log("seee the uri", uri);
-        shareOptionsDetails(uri, product);
-      },
-      (error) => console.error("Oops, snapshot failed", error)
-    );
+    // captureRef(viewShotRef, {
+    //   format: "png",
+    //   quality: 0.8,
+    //   result: "base64",
+    // }).then(
+    //   (uri) => {
+    //     console.log("seee the uri", uri);
+    //     shareOptionsDetails(uri, product);
+    //   },
+    //   (error) => console.error("Oops, snapshot failed", error)
+    // );
+    const fs = RNFetchBlob.fs;
+    let imagePath = null;
+    RNFetchBlob.config({
+      fileCache: true
+    })
+      .fetch("GET", product.photo)
+      // the image is now dowloaded to device's storage
+      .then(resp => {
+        // the image path you can use it directly with Image component
+        imagePath = resp.path();
+        return resp.readFile("base64");
+      })
+      .then(base64Data => {
+        // here's base64 encoded image
+        console.log(base64Data);
+        // remove the file from storage
+        shareOptionsDetails(base64Data, product);
+        return fs.unlink(imagePath);
+      });
+
+
+
     // })
   }, [dispatch]);
   /**

@@ -223,10 +223,7 @@ function GroupInfoScreen(props) {
             // } else {
             // }
           })} */}
-
-        
-        
-        {/* {finalData?.latestEventStatus === OrderItemHistoryEventType.Delivered &&
+       {finalData?.latestEventStatus === OrderItemHistoryEventType.Delivered &&
           finalData?.itemReturnPolicy?.isReturnAllowed &&
           renderAction(Images.orderReturnImage, "Return product", () => {
             if (

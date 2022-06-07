@@ -233,16 +233,9 @@ function TrackOrder(props) {
                 ) : (
                   <Trackers events={events} />
                 ))}
-              {!isEmpty(trackData?.trackOrderItem.qrCodeAsBase64) && <Footer />}
+              {!isEmpty(trackData?.trackOrderItem.qrCodeAsBase64) && <Footer onPress={toggleShareSheet}/>}
             </View>
           </View>
-          <TouchableOpacity style={styles.whatssAppbtn} onPress={toggleShareSheet}>
-            <Text style={styles.textStyle}>Share code on WhatApp</Text>
-            <Image
-              source={require("../../Images/whatsappgreen.png")}
-              style={styles.whatsAppIcon}
-            />
-          </TouchableOpacity>
           {data.deliveryOption === DeliveryOption.SellerDirectDelivery && (
             <View style={[t.p4]}>
               <Text style={[t.fontBold, t.textGray800]}>

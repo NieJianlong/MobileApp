@@ -4,12 +4,10 @@ import { t } from "react-native-tailwindcss";
 import Share from "react-native-share";
 import { shareOptions } from "../../Explore/Components/ShareOptionList";
 
-function index() {
+function index(props) {
   return (
     <TouchableOpacity
-      onPress={() => {
-        Share.open(shareOptions);
-      }}
+      onPress={props.onPress}
     >
       <View style={[t.p3, t.pY4, t.justifyBetween, t.flexRow, t.itemsCenter]}>
         <Text>Share code on WhatsApp</Text>

@@ -250,8 +250,8 @@ const styles = ScaledSheet.create({
     flexDirection: "row",
   },
   whatsAppIcon: {
-    height: "31@s",
-    width: "31@s",
+    height: "40@s",
+    width: "40@s",
   },
   textStyle: {
     marginRight: "120@s",

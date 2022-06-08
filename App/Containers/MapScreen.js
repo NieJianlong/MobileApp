@@ -24,10 +24,12 @@ import useLoading from "../hooks/useLoading";
 import { AlertContext } from "./Root/GlobalContext";
 import AddLocationSheetContent from "./Explore/Components/AddLocationSheetContent";
 import useMapScreen from "../hooks/useMapScreen";
+import { ScaledSheet, vs } from "react-native-size-matters";
+import colors from "../Themes/Colors";
 
 Geocoder.init("AIzaSyBfDTs1ejBI3MIVhrPeXgpvDNkTovWkIuU");
 
-const MapScreen = () => {
+const MapScreen = (props) => {
   const mapRef = useRef();
   const [location, setLocation] = useState(null);
   const [additionalInfoModal, setAdditionalInfoModal] = useState(false);
@@ -37,28 +39,31 @@ const MapScreen = () => {
   const { dispatch } = useContext(AlertContext);
   const { setShowMap } = useMapScreen();
   const [isTapable, setIsTapable] = useState(true);
+  const [changeIsPressed, setChangeIsPressed] = useState(false);
 
   useEffect(() => {
     (async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert("Permission to access location was denied");
-        setShowMap({ mapVisible: false });
-        dispatch({
-          type: "changSheetState",
-          payload: {
-            showSheet: true,
-            height: 600,
-            children: () => (
-              <AddLocationSheetContent
-                {...location}
-                locationDetails={location}
-              />
-            ),
-            sheetTitle: "",
-          },
-        });
-        return;
+      if (props.stopPermission === false) {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          Alert.alert("Permission to access location was denied");
+          setShowMap({ mapVisible: false, stopPermission: true });
+          dispatch({
+            type: "changSheetState",
+            payload: {
+              showSheet: true,
+              height: 600,
+              children: () => (
+                <AddLocationSheetContent
+                  {...location}
+                  locationDetails={location}
+                />
+              ),
+              sheetTitle: "",
+            },
+          });
+          return;
+        }
       }
 
       _getCurrentLocation();
@@ -134,9 +139,11 @@ const MapScreen = () => {
               longitude: results?.location?.longitude,
             },
           };
+          setChangeIsPressed(true);
           setIsTapable(false);
           setLocation(newLocation);
         }
+        setChangeIsPressed(false);
         // setLocation({ location: place.location, address: place.address });
       })
       .catch((error) => console.log(error.message)); // error is a Javascript Error object
@@ -181,6 +188,7 @@ const MapScreen = () => {
       });
     }
 
+    setChangeIsPressed(false);
     setIsTapable(false);
   };
 
@@ -195,7 +203,7 @@ const MapScreen = () => {
     <View style={[{ width, height }, t.bgBlue300]}>
       <View style={[styles.container]}>
         <MapView
-          key={JSON.stringify(location)}
+          key={changeIsPressed ? JSON.stringify(location) : ""}
           ref={mapRef}
           showsUserLocation
           userLocationUpdateInterval={2000}
@@ -204,8 +212,17 @@ const MapScreen = () => {
           initialRegion={INITIAL_REGION}
           onRegionChangeComplete={_onChangeRegion}
         >
-          {location && <Marker coordinate={location.location} draggable />}
+          {/* {location && <Marker coordinate={location.location} draggable />} */}
         </MapView>
+        <View style={styles.customMarkerContainer}>
+          <View style={styles.textContainer}>
+            <Text style={styles.itemText}>
+              Your item will be delivered here
+            </Text>
+          </View>
+          <View style={[styles.triangle, styles.arrowDown]}></View>
+          <View style={styles.mapCustomMarker}></View>
+        </View>
 
         {/* <View style={styles.centerPin} /> */}
       </View>
@@ -262,7 +279,46 @@ const MapScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
+  triangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: 'transparent',
+    borderStyle: 'solid',
+},
+arrowDown: {
+    borderTopWidth: 10,
+    borderRightWidth: 10,
+    borderBottomWidth: 0,
+    borderLeftWidth: 10,
+    borderTopColor: colors.primary01,
+    borderRightColor: 'transparent',
+    borderBottomColor: 'transparent',
+    borderLeftColor: 'transparent',
+},
+  itemText: {
+    color: "white",
+  },
+  textContainer: {
+    borderRadius: '20@s',
+    height: "30@s",
+    width: "220@s",
+    backgroundColor: colors.primary01,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  customMarkerContainer: {
+    top: "163@vs",
+    position: "absolute",
+    alignItems: "center",
+  },
+  mapCustomMarker: {
+    marginTop: '5@vs',
+    height: "8@s",
+    width: "8@s",
+    backgroundColor: colors.whatsapp,
+    borderRadius: "20@s",
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",

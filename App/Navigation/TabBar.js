@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { View, TouchableOpacity, Image } from "react-native";
-import { s, ScaledSheet } from "react-native-size-matters";
+import { ScaledSheet } from "react-native-size-matters";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { isIphoneX } from "react-native-iphone-x-helper";
 
@@ -19,7 +19,7 @@ function TabBar(props) {
   const getIconSource = (routeName, isFocused) => {
     switch (routeName) {
       case "ExploreScreen":
-        return isFocused ? Images.homelogo : Images.homelogogrey;
+        return Images.logo1;
       case "PackageScreen":
         return Images.packageFilled;
       case "CartScreen":
@@ -97,15 +97,7 @@ function TabBar(props) {
                       transform: [{ rotateY: "180deg" }],
                     },
                     styles.icon,
-
-                    route.name !== "ExploreScreen" && {
-                      tintColor: isFocused ? Colors.primary : Colors.grey20,
-                    },
-                    route.name === "ExploreScreen" && {
-                      width: s(20),
-                      height: s(20),
-                      margin: s(6),
-                    },
+                    isFocused && { tintColor: Colors.primary },
                   ]}
                 />
                 {route.name === "CartScreen" && quantity > 0 && (
@@ -149,5 +141,6 @@ const styles = ScaledSheet.create({
   icon: {
     width: "30@s",
     height: "30@s",
+    tintColor: Colors.grey60,
   },
 });

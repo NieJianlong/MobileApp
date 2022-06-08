@@ -65,6 +65,13 @@ const items = [
     },
   },
   {
+    title: "How SalamiSlicing works",
+    icon: null,
+    onPress: () => {
+      NavigationService.navigate("LearnMoreScreen", { tab: 1 });
+    },
+  },
+  {
     title: "",
     icon: null,
     onPress: () => {

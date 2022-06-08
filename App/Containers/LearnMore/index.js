@@ -5,9 +5,11 @@ import { Colors } from "../../Themes";
 import Explanatory from "./explanatory";
 import QuickGuide from "./quickguide";
 import { t } from "react-native-tailwindcss";
+import { useRoute } from "@react-navigation/native";
 
 export default function LearnMore(props) {
-  const [index, setIndex] = useState(0);
+  const { params } = useRoute();
+  const [index, setIndex] = useState(params?.tab ?? 0);
   console.log("index===1", index === 1);
   return (
     <View style={styles.container}>

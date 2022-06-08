@@ -149,8 +149,6 @@ export default function ProductInfo({
               Save ₹{product.retailPrice - product.wholeSalePrice}
             </Text>
           </View>
-
-        
         </View>
 
         <View style={[styles.v4, t.flexRow, t.justifyBetween, t.pR8]}>
@@ -167,79 +165,75 @@ export default function ProductInfo({
                 : product.openUntil}
             </Text>
           </View>
-
+          <Progress
+            maximumValue={isMissing ? "100" : product.noOfItemsInStock}
+            currentValue={isMissing ? "100" : product.noOfOrderedItems}
+            barWidth={s(65)}
+            barHeight={vs(6)}
+          />
           <View style={[styles.row]}>
-            <Progress
-              maximumValue={isMissing ? "100" : product.noOfItemsInStock}
-              currentValue={isMissing ? "100" : product.noOfOrderedItems}
-              barWidth={s(130)}
-              barHeight={vs(6)}
-            />
-
             <Image source={Images.stock} style={styles.icStock} />
             <Text style={styles.txtOrderNumber}>
               {product.noOfOrderedItems}/{product.noOfItemsInStock}
             </Text>
-            <TouchableOpacity
-              onPress={() => NavigationService.navigate("LearnMoreScreen")}
-            >
-              <Image source={Images.info2} style={styles.icInfo} />
-            </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            onPress={() => NavigationService.navigate("LearnMoreScreen")}
+          >
+            <Image source={Images.info2} style={styles.icInfo} />
+          </TouchableOpacity>
         </View>
-        <View style={[styles.row, { marginVertical: vs(10) },t.pX4]}>
-            {product.deliveryOption === DeliveryOption.CourierDelivery && (
-              <Text style={styles.heading5Regular}>
-                Delivery fee:{" "}
-                <Text style={{ color: Colors.primary }}>
-                  ₹{product.courierShippingFee}
-                </Text>
+        <View style={[styles.row, { marginVertical: vs(10) }, t.pX4]}>
+          {product.deliveryOption === DeliveryOption.CourierDelivery && (
+            <Text style={styles.heading5Regular}>
+              Delivery fee:{" "}
+              <Text style={{ color: Colors.primary }}>
+                ₹{product.courierShippingFee}
               </Text>
-            )}
+            </Text>
+          )}
 
-            {product.deliveryOption === DeliveryOption.SellerDirectDelivery && (
-              <View style={[styles.row, { marginLeft: s(10) }]}>
+          {product.deliveryOption === DeliveryOption.SellerDirectDelivery && (
+            <View style={[styles.row, t.justifyEnd, t.wFull]}>
+              <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
+                Seller will deliver to address
+              </Text>
+            </View>
+          )}
+          {(product.deliveryOption === DeliveryOption.SellerLocationPickup ||
+            product.deliveryOption ===
+              DeliveryOption.CollectionPointPickup) && (
+            <View style={[styles.row, t.justifyBetween, t.wFull]}>
+              <Text style={styles.heading5Regular}>No Delivery Available</Text>
+              <View style={[t.flexRow]}>
                 <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
-                  Seller will deliver to address
+                  Pick up location
                 </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    // setPickUp(!pickUp);
+                    if (!pickUp) {
+                      togglePickupFromSellerSheet();
+                    } else {
+                      onSetPickUp(false);
+                      // setPickUp(false);
+                    }
+                  }}
+                >
+                  {pickUp ? (
+                    <View style={styles1.activeContainer}>
+                      <View style={styles1.activeCircle} />
+                    </View>
+                  ) : (
+                    <View style={styles1.inactiveContainer}>
+                      <View style={styles1.inactiveCircle} />
+                    </View>
+                  )}
+                </TouchableOpacity>
               </View>
-            )}
-            {(product.deliveryOption === DeliveryOption.SellerLocationPickup ||
-              product.deliveryOption ===
-                DeliveryOption.CollectionPointPickup) && (
-              <View style={[styles.row, t.justifyBetween, t.wFull]}>
-                <Text style={styles.heading5Regular}>
-                  No Delivery Available
-                </Text>
-                <View style={[t.flexRow]}>
-                  <Text style={[styles.heading5Regular, { marginRight: s(5) }]}>
-                    Pick up location
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      // setPickUp(!pickUp);
-                      if (!pickUp) {
-                        togglePickupFromSellerSheet();
-                      } else {
-                        onSetPickUp(false);
-                        // setPickUp(false);
-                      }
-                    }}
-                  >
-                    {pickUp ? (
-                      <View style={styles1.activeContainer}>
-                        <View style={styles1.activeCircle} />
-                      </View>
-                    ) : (
-                      <View style={styles1.inactiveContainer}>
-                        <View style={styles1.inactiveCircle} />
-                      </View>
-                    )}
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
-          </View>
+            </View>
+          )}
+        </View>
         <View style={[styles.v2, { paddingTop: vs(15) }]}>
           <Text style={[styles.heading3Bold, t.textLeft]}>
             Product Description

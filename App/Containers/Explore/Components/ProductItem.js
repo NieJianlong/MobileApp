@@ -210,7 +210,7 @@ function ProductItem(props) {
 
         <View>
           {!notShowBottom ? (
-            <View style={styles.v4}>
+            <View style={[styles.v4, t.justifyBetween]}>
               <View>
                 <Text style={styles.txtOrderClose}>
                   {product.deliveryOption ===
@@ -236,12 +236,12 @@ function ProductItem(props) {
                 <Text style={styles.txtOrderNumber}>
                   {product.noOfOrderedItems}/{product.noOfItemsInStock}
                 </Text>
-                <TouchableOpacity
-                  onPress={() => NavigationService.navigate("LearnMoreScreen")}
-                >
-                  <Image source={Images.info2} style={styles.icInfo} />
-                </TouchableOpacity>
               </View>
+              <TouchableOpacity
+                onPress={() => NavigationService.navigate("LearnMoreScreen")}
+              >
+                <Image source={Images.info2} style={[styles.icInfo]} />
+              </TouchableOpacity>
 
               <View style={styles.row}>
                 {/* <TouchableOpacity>

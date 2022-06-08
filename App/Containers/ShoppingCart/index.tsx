@@ -30,6 +30,7 @@ import useOrderInfo from "../../hooks/useOrderInfo";
 import { ItemProps } from "../../hooks/useCreateOrder";
 import { ComeFromType } from "../../Utils/utils";
 import { Page_CheckoutGuestOrderDetail } from "../../Navigation/const";
+import { t } from "react-native-tailwindcss";
 
 export const CartContext = React.createContext({});
 
@@ -148,15 +149,15 @@ function ShoppingCart(props) {
       queryAvailble();
     }
   }, [requestArray]);
-  useEffect(() => {
-    let timer = setInterval(() => {
-      queryAvailble();
-    }, 3000);
-    // props.navigation.addListener("blur", () => {});
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+  // useEffect(() => {
+  //   let timer = setInterval(() => {
+  //     queryAvailble();
+  //   }, 3000);
+  //   // props.navigation.addListener("blur", () => {});
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, []);
   useEffect(() => {
     if (availbleList) {
       setFinalData(availbleList.isListingAvailable);

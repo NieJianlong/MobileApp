@@ -1,6 +1,8 @@
 // leave off @2x/@3x
 const images = {
   ic_close: require("../Images/ic_close.png"),
+  homelogo: require("../Images/logo-123.png"),
+  homelogogrey: require("../Images/logo-13.png"),
   logo1: require("../Images/logo-1.png"),
   logo2: require("../Images/logo-2.png"),
   logo3: require("../Images/logo-3.png"),

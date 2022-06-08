@@ -223,7 +223,7 @@ function GroupInfoScreen(props) {
             // } else {
             // }
           })} */}
-       {finalData?.latestEventStatus === OrderItemHistoryEventType.Delivered &&
+        {finalData?.latestEventStatus === OrderItemHistoryEventType.Delivered &&
           finalData?.itemReturnPolicy?.isReturnAllowed &&
           renderAction(Images.orderReturnImage, "Return product", () => {
             if (
@@ -238,7 +238,7 @@ function GroupInfoScreen(props) {
             });
           })}
         {/* when order status is uncompleted,user can cancel the order */}
-       {finalData?.listingStatus === ProductListingStatus.Active &&
+        {finalData?.listingStatus === ProductListingStatus.Active &&
           (finalData?.latestEventStatus ===
             OrderItemHistoryEventType.WaitingForPayment ||
             finalData?.latestEventStatus ===
@@ -262,7 +262,7 @@ function GroupInfoScreen(props) {
               type: "return",
               data: orderData?.getOrderItemDetails,
             })
-          )} 
+          )}
       </View>
     );
   }

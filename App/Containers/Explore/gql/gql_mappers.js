@@ -128,15 +128,36 @@ export const mapProductListingDTO = (data) => {
  */
 export const mapGQLAddressToDelivery = (data) => {
   let address = "";
-  if (data?.provinceState) {
-    address = data.provinceState;
-  } else if (data?.townCity) {
+
+  if (data.building) {
+    address = data.building;
+  }
+  if (data?.streetAddress1) {
+    address = address + " " + data.streetAddress1;
+  }
+  if (data?.streetAddress2) {
+    address = address + " " + data.streetAddress2;
+  }
+  if (data?.streetAddress3) {
+    address = address + " " + data.streetAddress3;
+  }
+  if (data?.townCity) {
     address = address + " " + data.townCity;
   }
+  if (data?.provinceState) {
+    address = address + " " + data.provinceState;
+  }
+  if (data?.country) {
+    address = address + " " + data.country;
+  }
+
   if (data?.pinCode) {
     address = address + " " + data.pinCode;
   }
 
+  if (address.length > 32) {
+    address = address.substring(0, 30) + "...";
+  }
   return address;
 };
 
@@ -178,7 +199,6 @@ export const mapGQLAddressToLine2 = (data) => {
  *
  */
 export const mapGQLAddressResponseToCache = (data) => {
-
   let addressForCache = {
     pinCode: data?.pinCode,
     provinceState: data?.provinceState,

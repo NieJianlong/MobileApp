@@ -38,6 +38,7 @@ function AddLocationSheetContent(props) {
   //123e4567-e89b-12d3-a456-556642440000
   // const [selectedState, setSelectedState] = useState();
   const { setShowMap } = useMapScreen();
+  const { stopPermission} = useMapScreen();
   const { data } = useQuery(GetStatesByCountryId, {
     variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
   });
@@ -291,7 +292,25 @@ function AddLocationSheetContent(props) {
           </View>
           <TouchableOpacity
             onPress={() => {
-              setShowMap({ mapVisible: true });
+              if(stopPermission === true) {
+                dispatch({
+                  type: "changSheetState",
+                  payload: {
+                    showSheet: false,
+                    height: 600,
+                    children: () => (
+                      <AddLocationSheetContent
+                        {...location}
+                        locationDetails={location}
+                      />
+                    ),
+                    sheetTitle: "",
+                  },
+                });
+              } else {
+                setShowMap({ mapVisible: true, stopPermission: true });
+              }
+            
             }}
           >
             <Image style={styles.closeImage} source={Images.ic_close} />

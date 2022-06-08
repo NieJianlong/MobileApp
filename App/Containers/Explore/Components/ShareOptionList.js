@@ -5,8 +5,8 @@ import { Fonts, Colors, Images, ApplicationStyles } from "../../../Themes";
 import { Button } from "../../../Components";
 import Share from "react-native-share";
 
-const url = "https://www.google.com/";
-const title = "Awesome Contents";
+const url = "";
+const title = "";
 const message = "Please check this out.";
 const icon = "data:<data_type>/<file_extension>;base64,<base64_data>";
 
@@ -57,10 +57,10 @@ export const shareOptionsDetails = (productLink, product) => {
       ],
     },
     default: {
-      title: "Title",
+      title: "",
       message: `${product.longName}${"\n\n"}Retail Price: ${product.retailPrice} ${'\n'}Whole Sale Price: ${product.wholeSalePrice}${"\n\n"}Please check this deal of the day! ${"\n"} ${product.photo}`,
       url: "data:image/png;base64," + productLink,
-      subject: "Subject",
+      subject: "",
     },
   });
 

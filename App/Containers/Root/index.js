@@ -142,7 +142,7 @@ function RootContainer() {
           sheetTitle: "",
         },
       });
-      setShowMap({ mapVisible: false });
+      setShowMap({ mapVisible: false, stopPermission: true });
       return false;
     });
 
@@ -177,6 +177,7 @@ function RootContainer() {
   } = useImageViewer();
   const { loginVisible } = useLogin();
   const { mapVisible } = useMapScreen();
+  const { stopPermission} = useMapScreen();
   const { width, height: windowHeight } = useWindowDimensions();
   return (
     <AlertContext.Provider value={{ dispatch, actionSheet }}>
@@ -306,7 +307,7 @@ function RootContainer() {
         />
       )}
       <Modal visible={mapVisible} transparent={true}>
-        <MapScreen />
+        <MapScreen stopPermission={stopPermission} />
       </Modal>
       <Modal visible={spinner || show} transparent={true}>
         <Spinner

@@ -18,9 +18,9 @@ import { useNavigation } from "@react-navigation/native";
 import { useBuyerProfileQuery } from "../../../../generated/graphql";
 import useOrderInfo from "../../../hooks/useOrderInfo";
 import ViewShot, { captureRef } from "react-native-view-shot";
-const url = "https://www.google.com/";
-const title = "Awesome Contents";
-const message = "Please check this out.";
+const url = "";
+const title = "";
+const message = "";
 const icon = "data:<data_type>/<file_extension>;base64,<base64_data>";
 
 function OrderPlaced(props) {
@@ -108,9 +108,9 @@ function OrderPlaced(props) {
             ],
           },
           default: {
-            title: "Title",
+            title: "",
             url: "data:image/png;base64," + uri,
-            subject: "Subject",
+            subject: "",
           },
         });
         Share.open(shareOptions);

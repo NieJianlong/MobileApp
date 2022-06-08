@@ -37,6 +37,7 @@ const MapScreen = (props) => {
   const { dispatch } = useContext(AlertContext);
   const { setShowMap } = useMapScreen();
   const [isTapable, setIsTapable] = useState(true);
+  const [changeIsPressed, setChangeIsPressed] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -136,6 +137,7 @@ const MapScreen = (props) => {
               longitude: results?.location?.longitude,
             },
           };
+          setChangeIsPressed(true);
           setIsTapable(false);
           setLocation(newLocation);
         }
@@ -183,6 +185,7 @@ const MapScreen = (props) => {
       });
     }
 
+     setChangeIsPressed(false);
     setIsTapable(false);
   };
 
@@ -197,7 +200,7 @@ const MapScreen = (props) => {
     <View style={[{ width, height }, t.bgBlue300]}>
       <View style={[styles.container]}>
         <MapView
-          key={JSON.stringify(location)}
+          key={changeIsPressed ? JSON.stringify(location) : ""}
           ref={mapRef}
           showsUserLocation
           userLocationUpdateInterval={2000}

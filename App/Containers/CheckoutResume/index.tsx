@@ -115,7 +115,6 @@ function CheckoutResume(props) {
                   alignItems: "center",
                 }}
               >
-                二位热无热无热翁翁r'w'w'er
                 <Image
                   style={{
                     width: s(28),

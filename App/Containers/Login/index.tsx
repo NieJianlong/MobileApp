@@ -37,6 +37,7 @@ import { Images } from "../../Themes";
 import { t } from "react-native-tailwindcss";
 import useLogin from "../../hooks/useLogin";
 import { Controller, useForm } from "react-hook-form";
+import { useNavigation } from "@react-navigation/native";
 
 function LoginScreen(props) {
   // refs
@@ -154,6 +155,41 @@ function LoginScreen(props) {
   useEffect(() => {
     storage.setLocalStorageEmpty();
   }, []);
+  const navigaiton = useNavigation();
+  React.useEffect(() => {
+    const unsubscribe = navigaiton.addListener("focus", () => {
+      navigaiton.setOptions({
+        headerShown: true,
+        header: () => (
+          <View
+            style={[t.bgWhite, t.flexRow, t.justifyBetween, t.h24, t.itemsEnd]}
+          >
+            <View style={{ width: 36, height: 36 }} />
+            {/* <Image
+            source={Images.logo4}
+            style={[styles.logo, t.mT4]}
+            resizeMode={"contain"}
+          /> */}
+            <View style={{ width: 36, height: 36 }} />
+          </View>
+        ),
+      });
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigaiton]);
+
+  React.useEffect(() => {
+    const unsubscribe = navigaiton.addListener("blur", () => {
+      navigaiton.setOptions({
+        headerShown: false,
+      });
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigaiton]);
 
   useEffect(() => {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
@@ -337,6 +373,7 @@ function LoginScreen(props) {
       });
     }
   };
+  const navigation = useNavigation();
 
   const _keyboardWillShow = (e) => {
     setKeyboardHeight(e.endCoordinates.height);
@@ -371,7 +408,16 @@ function LoginScreen(props) {
   // };
 
   return (
-    <View style={[t.absolute, t.left0, t.top0, { width, height }, t.bgWhite]}>
+    <View
+      style={[
+        t.absolute,
+        t.left0,
+        t.top0,
+        { width, height },
+        t.bgWhite,
+        t.pB24,
+      ]}
+    >
       <SafeAreaView
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}

@@ -49,6 +49,10 @@ import AsyncStorage from "@react-native-community/async-storage";
 import RNUserIdentity, {
   ICLOUD_ACCESS_ERROR,
 } from "react-native-user-identity";
+import { useNavigation } from "@react-navigation/native";
+import NavigationLeftButton from "../../Components/NavigationLeftButton";
+import images from "../../Themes/Images";
+import { s } from "react-native-size-matters";
 
 function RegisterScreen(props) {
   const { dispatch } = useContext(AlertContext);
@@ -284,6 +288,42 @@ function RegisterScreen(props) {
       }
     },
   });
+  const navigation = useNavigation();
+
+  // React.useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     header: () => (
+  //       <View
+  //         style={[
+  //           t.bgWhite,
+  //           t.flexRow,
+  //           t.justifyBetween,
+  //           t.h24,
+  //           t.itemsEnd,
+  //           { backgroundColor: colors.background },
+  //         ]}
+  //       >
+  //         <NavigationLeftButton style={[t.mB2]} />
+  //         <Image
+  //           source={images.logo4}
+  //           style={[
+  //             {
+  //               height: s(40),
+  //               width: s(140),
+  //               tintColor: Colors.primary,
+  //             },
+  //             t.mT4,
+  //           ]}
+  //           resizeMode={"contain"}
+  //         />
+  //         <View style={{ width: 36, height: 36 }} />
+  //       </View>
+  //     ),
+  //   });
+  //   // return navigation.setOptions({
+  //   //   header: () => null,
+  //   // });
+  // }, [navigation]);
   const onSubmit = (data: BuyerProfileRequestForCreate) => {
     if (termsAccepted) {
       // storeEmail();
@@ -311,6 +351,51 @@ function RegisterScreen(props) {
       });
     }
   };
+  const navigaiton = useNavigation();
+  React.useEffect(() => {
+    const unsubscribe = navigaiton.addListener("focus", () => {
+      navigaiton.setOptions({
+        headerShown: true,
+        header: () => (
+          <View
+            style={[
+              t.bgWhite,
+              t.flexRow,
+              t.justifyBetween,
+              t.h24,
+              t.itemsEnd,
+              { backgroundColor: colors.background },
+            ]}
+          >
+            <NavigationLeftButton style={[t.mB2]} />
+            <Image
+              source={Images.logo4}
+              style={[
+                { height: s(40), width: s(140), tintColor: Colors.primary },
+                t.mT4,
+              ]}
+              resizeMode={"contain"}
+            />
+            <View style={{ width: 36, height: 36 }} />
+          </View>
+        ),
+      });
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigaiton]);
+
+  React.useEffect(() => {
+    const unsubscribe = navigaiton.addListener("blur", () => {
+      navigaiton.setOptions({
+        headerShown: false,
+      });
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigaiton]);
 
   const toggleResetValidationAlert = () => {
     setShowValidationAlert(!showValidationAlert);
@@ -457,7 +542,7 @@ function RegisterScreen(props) {
               onSubmitEditing={() =>
                 lastNameInput.current.getInnerRef().focus()
               }
-              autoCapitalize = 'words'
+              autoCapitalize="words"
               returnKeyType={"next"}
               onChangeText={onChange}
               value={value}
@@ -663,7 +748,7 @@ function RegisterScreen(props) {
         <Button onPress={handleSubmit(onSubmit)} text={"REGISTER"} />
 
         <TouchableOpacity
-          onPress={() => props.navigation.goBack()}
+          onPress={() => props.navigation.navigate("LoginScreen")}
           style={styles.btnSignin}
         >
           <Text style={styles.txtAction}>SIGN IN</Text>

@@ -327,7 +327,28 @@ function PrimaryNav() {
       <Stack.Screen
         name={"LoginScreen"}
         component={LoginScreen}
-        options={{ gesturesEnabled: false, headerShown: false }}
+        options={{
+          gesturesEnabled: false,
+          header: () => (
+            <View
+              style={[
+                t.bgWhite,
+                t.flexRow,
+                t.justifyBetween,
+                t.h24,
+                t.itemsEnd,
+              ]}
+            >
+              <View style={{ width: 36, height: 36 }} />
+              {/* <Image
+                source={Images.logo4}
+                style={[styles.logo, t.mT4]}
+                resizeMode={"contain"}
+              /> */}
+              <View style={{ width: 36, height: 36 }} />
+            </View>
+          ),
+        }}
       />
       <Stack.Screen
         name={"RegisterScreen"}

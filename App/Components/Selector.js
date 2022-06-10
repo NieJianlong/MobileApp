@@ -10,6 +10,9 @@ import { ScaledSheet } from "react-native-size-matters";
 import { Fonts, Colors, Images, ApplicationStyles } from "../Themes";
 
 import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-handler";
+import { t } from "react-native-tailwindcss";
+import { SimpleLineIcons } from "@expo/vector-icons";
+
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
 //selector component, or picker to select from a list
@@ -35,12 +38,12 @@ function Selector(props) {
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => setActive(!active)}>
-          <Image
-            source={Images.arrow_left}
-            style={styles.icArrow}
-            resizeMode={"contain"}
-          />
+        <TouchableOpacity
+          onPress={() => setActive(!active)}
+          style={[t.bgBlue200]}
+        >
+          {/* ../Images/arrow_medium_left.png */}
+          <SimpleLineIcons name="arrow-down" size={24} color="black" />
         </TouchableOpacity>
       </View>
 

@@ -32,11 +32,11 @@ function Explore(props) {
     },
   });
 
-  // useEffect(() => {
-  //   if (!global.access_token && global.buyerId) {
-  //     validateBuyerHasAnyOrder({ variables: { buyerId: global.buyerId } });
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (!global.access_token && global.buyerId) {
+      validateBuyerHasAnyOrder({ variables: { buyerId: global.buyerId } });
+    }
+  }, []);
 
   // const [sendVerifyEmail] = useMutation(SendVerifyEmail);
   //Fixed a bug that accidentally triggered onclick when swiping

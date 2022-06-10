@@ -272,13 +272,26 @@ function GroupInfoScreen(props) {
       return null;
     }
     if (data) {
+      const finalData = orderData?.getOrderItemDetails;
       return (
         <ScrollView showsVerticalScrollIndicator={false} style={styles.body}>
           <ProductItem
             isAnnouncement={false}
             product={product?.getListings.content[0]}
             size={"M"}
-            notShowBottom={true}
+            notShowBottom={
+              !(
+                finalData?.listingStatus === ProductListingStatus.Active &&
+                (finalData?.latestEventStatus ===
+                  OrderItemHistoryEventType.WaitingForPayment ||
+                  finalData?.latestEventStatus ===
+                    OrderItemHistoryEventType.AuthorizedPayment ||
+                  finalData?.latestEventStatus ===
+                    OrderItemHistoryEventType.FailedPayment ||
+                  finalData?.latestEventStatus ===
+                    OrderItemHistoryEventType.Paid)
+              )
+            }
           />
           {renderActions()}
         </ScrollView>

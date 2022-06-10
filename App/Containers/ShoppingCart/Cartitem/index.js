@@ -19,6 +19,7 @@ import useRealm from "../../../hooks/useRealm";
 import BigNumber from "bignumber.js";
 import { t } from "react-native-tailwindcss";
 import useAlert from "../../../hooks/useAlert";
+import { isEmpty } from "lodash";
 const defultUrl =
   "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000";
 function Index(props) {
@@ -35,7 +36,16 @@ function Index(props) {
     onChangeQuanlity,
     onEditVariant,
   } = props;
-
+  let selectedVariant = "";
+  if (!isEmpty(variant?.options)) {
+    variant?.options.map((item) => {
+      selectedVariant = selectedVariant + item.key + ":" + item.value + ",";
+    });
+    selectedVariant.trimEnd(",");
+  }
+  if (selectedVariant.length > 34) {
+    selectedVariant = selectedVariant.substring(0, 34) + "...";
+  }
   return (
     <TouchableOpacity
       // disabled={!availble}
@@ -63,7 +73,7 @@ function Index(props) {
                 { fontSize: s(12), fontWeight: "normal", color: colors.grey80 },
               ]}
             >
-              Selected product options goes here
+              {selectedVariant}
             </Text>
           </View>
           <View style={styles.row}>

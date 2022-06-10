@@ -75,21 +75,16 @@ class AccordionView extends React.Component {
 
   _renderContent = (section) => {
     const currentArray = [];
+
     return (
       <ScrollView horizontal contentContainerStyle={[t.flexRow, t.pL4]}>
         {section.content.map((item, index) => {
           //防止显示重复
           if (currentArray.indexOf(item.value) < 0) {
             currentArray.push(item.value);
-            // if (section.title === "Color") {
-            //   return (
-            //     <ColorItem
-            //       item={item}
-            //       currentVariant={this.props.currentVariant ?? null}
-            //       onChangeVariant={this.props.onChangeVariant}
-            //     />
-            //   );
-            // }
+            console.log("currentArray====================================");
+            console.log(currentArray);
+            console.log("====================================");
             return (
               <SizeItem
                 key={index}

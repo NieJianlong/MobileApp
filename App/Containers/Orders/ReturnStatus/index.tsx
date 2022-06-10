@@ -29,9 +29,9 @@ import PickInfo from "../../../Components/PickInfo";
 import { useNavigation } from "@react-navigation/native";
 import ViewShot, { captureRef, captureScreen } from "react-native-view-shot";
 import Share from "react-native-share";
-const url = "https://www.google.com/";
-const title = "Awesome Contents";
-const message = "Please check this out.";
+const url = "";
+const title = "";
+const message = "";
 const icon = "data:<data_type>/<file_extension>;base64,<base64_data>";
 
 function ReturnStatus(props) {

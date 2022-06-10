@@ -78,7 +78,7 @@ export default function AddressSheetContent(props) {
     }
   }, [actionSheet.showSheet, refetch]);
   const toggleAddressSheet = useCallback(() => {
-    setShowMap({ mapVisible: true });
+    setShowMap({ mapVisible: true, stopPermission: false });
     // dispatch({
     //   type: "changSheetState",
     //   payload: {

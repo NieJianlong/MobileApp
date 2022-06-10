@@ -87,7 +87,7 @@ import NavigationLeftButton from "../Components/NavigationLeftButton";
 import { t } from "react-native-tailwindcss";
 import { ApplicationStyles, Colors, Images } from "../Themes";
 import RegisterGuestBuyerToBuyerScreen from "../Containers/RegisterGuestBuyerToBuyer";
-import { Image, SafeAreaView, View } from "react-native";
+import { Image, SafeAreaView, TouchableOpacity, View } from "react-native";
 import styles from "../Containers/Explore/styles";
 import colors from "../Themes/Colors";
 import useCurrentRoute from "../hooks/useCurrentRoute";
@@ -269,13 +269,7 @@ function PrimaryNav() {
           headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
         }}
       />
-      <Stack.Screen
-        name={"OrderPlacedScreen"}
-        component={OrderPlacedScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
+      <Stack.Screen name={"OrderPlacedScreen"} component={OrderPlacedScreen} />
       <Stack.Screen
         name={"OrderDetailScreen"}
         component={OrderDetailScreen}

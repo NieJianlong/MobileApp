@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Platform,
+  useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "./styles";
@@ -14,10 +15,11 @@ import NavigationService from "../../../Navigation/NavigationService";
 import Share from "react-native-share";
 import { shareOptions } from "../../Explore/Components/ShareOptionList";
 import { t } from "react-native-tailwindcss";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useBuyerProfileQuery } from "../../../../generated/graphql";
 import useOrderInfo from "../../../hooks/useOrderInfo";
 import ViewShot, { captureRef } from "react-native-view-shot";
+import colors from "../../../Themes/Colors";
 const url = "";
 const title = "";
 const message = "";
@@ -27,6 +29,7 @@ function OrderPlaced(props) {
   const viewShotRef = useRef(null);
   console.log("props?.route?.params?.items =====", props?.route?.params?.items);
   const navigation = useNavigation();
+  const { params } = useRoute();
 
   const { orderInfo, setOrderInfo } = useOrderInfo();
   const { loading, error, data, refetch } = useBuyerProfileQuery({
@@ -40,11 +43,41 @@ function OrderPlaced(props) {
     onCompleted: (res) => {},
     onError: (res) => {},
   });
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      header: () => null,
+      header: () => (
+        <View
+          style={[
+            t.bgWhite,
+            t.flexRow,
+            t.justifyBetween,
+            t.h24,
+            t.itemsEnd,
+            t.pX4,
+            { backgroundColor: colors.background },
+          ]}
+        >
+          <View style={{ width: 36, height: 36 }} />
+          <Image
+            source={Images.logo4}
+            style={[styles.logo, t.mT4]}
+            resizeMode={"contain"}
+          />
+          <TouchableOpacity
+            onPress={() => {
+              NavigationService.navigate(
+                params?.error ? "ExploreScreen" : "PackageScreen"
+              );
+            }}
+            style={[t.bgBlue200]}
+          >
+            <Image source={Images.crossMedium} style={styles.icSearch} />
+          </TouchableOpacity>
+        </View>
+      ),
     });
-  }, [navigation]);
+  }, [navigation, params]);
   const userName = useMemo(() => {
     if (global.access_token) {
       return data
@@ -125,11 +158,14 @@ function OrderPlaced(props) {
       <ScrollView style={styles.body}>
         <View style={styles.textArea}>
           <Text style={styles.txt1}>
-            Your order has been{"\n"}processed sucessfully
+            {params?.error
+              ? params?.error.description
+              : " Your order has been processed sucessfully"}
           </Text>
           <Text style={styles.txt2}>
-            Remember that you will not receive your order until the number of
-            people required to make the purchase has been reached.
+            {params?.error
+              ? ""
+              : "Remember that you will not receive your order until the number of people required to make the purchase has been reached."}
           </Text>
         </View>
 
@@ -179,41 +215,33 @@ function OrderPlaced(props) {
       </View>
     );
   };
-
+  const { width, height } = useWindowDimensions();
   return (
-    <ViewShot
-      ref={viewShotRef}
-      options={{ format: "png", quality: 0.4, result: "base64" }}
-      style={styles.container}
-    >
-      <SafeAreaView
-        style={[
-          styles.container,
-          { marginTop: Platform.OS === "android" ? 30 : 0 },
-        ]}
-        edges={["top", "left", "right"]}
+    <View style={{ width, height }}>
+      <TouchableOpacity
+        onPress={() => {
+          NavigationService.navigate("ExploreScreen");
+        }}
+        style={[t.z100, { marginLeft: width - 60 }, t.w32, t.z100]}
       >
-        <View style={styles.header}>
-          <View style={styles.icSearch} />
-
-          <Image
-            source={Images.logo3}
-            style={styles.logo}
-            resizeMode={"contain"}
-          />
-
-          <TouchableOpacity
-            onPress={() => {
-              NavigationService.navigate("PackageScreen");
-            }}
-          >
-            <Image source={Images.crossMedium} style={styles.icSearch} />
-          </TouchableOpacity>
-        </View>
-
-        {renderBody()}
-      </SafeAreaView>
-    </ViewShot>
+        <Image source={Images.crossMedium} style={styles.icSearch} />
+      </TouchableOpacity>
+      <ViewShot
+        ref={viewShotRef}
+        options={{ format: "png", quality: 0.4, result: "base64" }}
+        style={styles.container}
+      >
+        <SafeAreaView
+          style={[
+            styles.container,
+            { marginTop: Platform.OS === "android" ? 30 : 0 },
+          ]}
+          edges={["top", "left", "right"]}
+        >
+          {renderBody()}
+        </SafeAreaView>
+      </ViewShot>
+    </View>
   );
 }
 

@@ -15,6 +15,8 @@ import { AlertContext } from "../Containers/Root/GlobalContext";
 import useRealm from "../hooks/useRealm";
 import PubSub from "pubsub-js";
 import useOrderInfo from "../hooks/useOrderInfo";
+import useAlert from "../hooks/useAlert";
+import { Colors } from "../Themes";
 export enum ComeFromType {
   checkout = "checkout",
   Buynow = "Buynow",
@@ -24,6 +26,7 @@ export function usePaymentConfigration() {
   const userProfile = useReactiveVar(userProfileVar);
   const localCart = useReactiveVar(localCartVar);
   const { orderInfo } = useOrderInfo();
+  const { setAlert } = useAlert();
   const { dispatch } = useContext(AlertContext);
   const { realm } = useRealm();
   const [mydatas, setMydatas] = useState(
@@ -94,7 +97,15 @@ export function usePaymentConfigration() {
           NavigationService.navigate("CheckoutPaymentCompletedGuestScreen");
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        // setAlert({
+        //   visible: true,
+        //   title: "Payment failed",
+        //   message: error.description,
+        //   color: Colors.error,
+        // });
+        NavigationService.navigate("OrderPlacedScreen", { error });
+      });
   };
 
   return getPaymentConfigration;

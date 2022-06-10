@@ -5,7 +5,7 @@ import { gql } from "@apollo/client";
  *
  */
 export const SAVE_PREFERRED_CATEGORIES = gql`
-  mutation SavePreferredCategories($buyerId: ID!, $categories: [ID]) {
+  mutation SavePreferredCategories($buyerId: ID!, $categories: [ID!]!) {
     savePreferredCategories(buyerId: $buyerId, categories: $categories)
   }
 `;

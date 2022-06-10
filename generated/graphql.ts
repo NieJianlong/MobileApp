@@ -766,6 +766,11 @@ export type MicroHubResponse = {
   openingHours?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
+export type MinimumSoldQuantityInput = {
+  listingId: Scalars['ID'];
+  minSoldQuantity: Scalars['Int'];
+};
+
 /** MUTATIONS */
 export type Mutation = {
   __typename?: 'Mutation';
@@ -773,7 +778,7 @@ export type Mutation = {
   acceptSellerRegistrationDocuments?: Maybe<GenericResponse>;
   addBonusSalamiCredit?: Maybe<Scalars['Float']>;
   addListingToWishlist: Wishlist;
-  addOptionValue?: Maybe<Option>;
+  addOptionValue: Option;
   /** categories */
   addParentCategory: CategoryResponse;
   addProductRefundToWallet?: Maybe<SalamiWalletTransactionResponse>;
@@ -800,7 +805,7 @@ export type Mutation = {
   createGuestBuyer?: Maybe<BuyerProfileResponse>;
   createNotification?: Maybe<NotificationResponse>;
   /** options */
-  createOption?: Maybe<Option>;
+  createOption: Option;
   createOrderFromCart?: Maybe<OrderResponse>;
   createPaymentDetail?: Maybe<PaymentDetailResponse>;
   createPreference?: Maybe<PreferenceResponse>;
@@ -827,7 +832,8 @@ export type Mutation = {
   deleteDeliveryAddressToOnlineStore?: Maybe<Scalars['Boolean']>;
   deleteListingFromWishlist: Scalars['Boolean'];
   deleteNotification?: Maybe<Scalars['Boolean']>;
-  deleteOption?: Maybe<Scalars['Boolean']>;
+  deleteOption: Scalars['Boolean'];
+  deleteOptionValue: Scalars['Boolean'];
   deletePaymentDetail?: Maybe<Scalars['Boolean']>;
   deletePreference?: Maybe<Scalars['Boolean']>;
   deleteProduct: Scalars['Boolean'];
@@ -870,7 +876,7 @@ export type Mutation = {
   saveListingSellerDirectDelivery: SellerDirectDeliveryResponse;
   saveListingSellerLocation: CollectionPoint;
   saveListingVariants: Array<ProductListingVariant>;
-  savePreferredCategories?: Maybe<Scalars['String']>;
+  savePreferredCategories: Scalars['String'];
   sellerBillingDetailsForSeller?: Maybe<SellerBillingDetailsResponse>;
   sellerContactForSeller?: Maybe<Array<Maybe<SellerContactResponse>>>;
   sendOTPCode?: Maybe<SendCodeResponse>;
@@ -889,8 +895,10 @@ export type Mutation = {
   updateChatSubscriber?: Maybe<ChatSubscriberResponse>;
   updateDeliveryAddressGeoCoordinate?: Maybe<DeliveryAddressGeoCoordinateResponse>;
   updateDeliveryAddressToOnlineStore?: Maybe<DeliveryAddressToOnlineStoreResponse>;
+  updateListingMinimumSoldQuantity: ProductListing;
   updateListingStatus: ProductListing;
   updateNotification?: Maybe<NotificationResponse>;
+  updateOptionValues: Option;
   updateOrderPaymentStatus: Scalars['Boolean'];
   updateParentCategory: CategoryResponse;
   updatePaymentDetail?: Maybe<PaymentDetailResponse>;
@@ -1092,7 +1100,7 @@ export type MutationCreateNotificationArgs = {
 
 /** MUTATIONS */
 export type MutationCreateOptionArgs = {
-  option?: InputMaybe<OptionInput>;
+  option: OptionInput;
 };
 
 
@@ -1253,7 +1261,14 @@ export type MutationDeleteNotificationArgs = {
 
 /** MUTATIONS */
 export type MutationDeleteOptionArgs = {
-  optionId: Scalars['String'];
+  optionId: Scalars['ID'];
+};
+
+
+/** MUTATIONS */
+export type MutationDeleteOptionValueArgs = {
+  optionId: Scalars['ID'];
+  valueId: Scalars['ID'];
 };
 
 
@@ -1522,7 +1537,7 @@ export type MutationSaveListingVariantsArgs = {
 /** MUTATIONS */
 export type MutationSavePreferredCategoriesArgs = {
   buyerId: Scalars['ID'];
-  categories?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  categories: Array<Scalars['ID']>;
 };
 
 
@@ -1639,6 +1654,12 @@ export type MutationUpdateDeliveryAddressToOnlineStoreArgs = {
 
 
 /** MUTATIONS */
+export type MutationUpdateListingMinimumSoldQuantityArgs = {
+  input: MinimumSoldQuantityInput;
+};
+
+
+/** MUTATIONS */
 export type MutationUpdateListingStatusArgs = {
   input: ListingStatusInput;
 };
@@ -1647,6 +1668,13 @@ export type MutationUpdateListingStatusArgs = {
 /** MUTATIONS */
 export type MutationUpdateNotificationArgs = {
   request: NotificationRequest;
+};
+
+
+/** MUTATIONS */
+export type MutationUpdateOptionValuesArgs = {
+  optionId: Scalars['ID'];
+  values: Array<Scalars['String']>;
 };
 
 
@@ -2516,6 +2544,7 @@ export type Query = {
   getSellerListingDetails: SellerListingDetailView;
   getSellerListingForAcceptOrReject: SellerListingResponse;
   getSellerListingGroupByProduct: SellerListingGroupResponse;
+  getSellerListingOrderAddresses: SellerListingOrderAddressResponse;
   getSellerListingOrders: SellerListingOrderResponse;
   getSellerOrderReturns: SellerOrderReturnResponse;
   getSellerOrders: SellerOrderResponse;
@@ -2860,6 +2889,12 @@ export type QueryGetSellerListingForAcceptOrRejectArgs = {
 
 /** QUERIES */
 export type QueryGetSellerListingGroupByProductArgs = {
+  options: SellerFilterOptions;
+};
+
+
+/** QUERIES */
+export type QueryGetSellerListingOrderAddressesArgs = {
   options: SellerFilterOptions;
 };
 
@@ -3453,12 +3488,14 @@ export type SellerDocumentResponse = {
 
 export type SellerFilterOptions = {
   filterType: SellerFilterType;
+  listingId?: InputMaybe<Scalars['ID']>;
   listingStatus?: InputMaybe<ProductListingStatus>;
   pageOption: SellerPageOption;
   storeIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
 
 export enum SellerFilterType {
+  ListingId = 'LISTING_ID',
   ListingStatus = 'LISTING_STATUS',
   None = 'NONE',
   Store = 'STORE',
@@ -3523,6 +3560,35 @@ export type SellerListingOrder = {
   storeId: Scalars['ID'];
   total: Scalars['Int'];
   wholeSalePrice: Scalars['Float'];
+};
+
+export type SellerListingOrderAddressResponse = {
+  __typename?: 'SellerListingOrderAddressResponse';
+  content: Array<SellerListingOrderAddressView>;
+  pageNo: Scalars['Int'];
+  pageSize: Scalars['Int'];
+  totalElements: Scalars['Int'];
+  totalPages: Scalars['Int'];
+};
+
+export type SellerListingOrderAddressView = {
+  __typename?: 'SellerListingOrderAddressView';
+  buyerDeliveryAddress?: Maybe<AddressView>;
+  buyerFirstName?: Maybe<Scalars['String']>;
+  buyerId: Scalars['ID'];
+  buyerLastName?: Maybe<Scalars['String']>;
+  listingId: Scalars['ID'];
+  listingNumber?: Maybe<Scalars['String']>;
+  orderId: Scalars['ID'];
+  orderItemId: Scalars['ID'];
+  orderItemNumber?: Maybe<Scalars['String']>;
+  orderNumber?: Maybe<Scalars['String']>;
+  productId: Scalars['ID'];
+  productNumber?: Maybe<Scalars['String']>;
+  sellerBusinessAddress?: Maybe<AddressView>;
+  sellerBusinessName?: Maybe<Scalars['String']>;
+  sellerId: Scalars['ID'];
+  sellerStoreName?: Maybe<Scalars['String']>;
 };
 
 export type SellerListingOrderResponse = {
@@ -3632,6 +3698,7 @@ export type SellerLocationPickupResponse = {
 
 export enum SellerOrderFilterType {
   EventStatus = 'EVENT_STATUS',
+  ListingId = 'LISTING_ID',
   None = 'NONE',
   OrderDate = 'ORDER_DATE',
   OrderNumber = 'ORDER_NUMBER'
@@ -3640,6 +3707,7 @@ export enum SellerOrderFilterType {
 export type SellerOrderOption = {
   eventStatus?: InputMaybe<OrderItemHistoryEventType>;
   filterType: SellerOrderFilterType;
+  listingId?: InputMaybe<Scalars['ID']>;
   orderDate?: InputMaybe<OrderDateParameter>;
   orderNumber?: InputMaybe<Scalars['String']>;
   pageOption: PageOption;

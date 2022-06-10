@@ -421,6 +421,7 @@ enum SellerOrderFilterType {
   EVENT_STATUS
   ORDER_DATE
   ORDER_NUMBER
+  LISTING_ID
 }
 
 input SellerOrderOption {
@@ -428,6 +429,7 @@ input SellerOrderOption {
   orderDate: OrderDateParameter
   eventStatus: OrderItemHistoryEventType
   orderNumber: String
+  listingId: ID
   pageOption: PageOption!
 }
 

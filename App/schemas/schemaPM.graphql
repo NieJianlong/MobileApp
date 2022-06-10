@@ -280,6 +280,11 @@ type ListingVariantView {
   isAvailable: Boolean
 }
 
+input MinimumSoldQuantityInput {
+  listingId: ID!
+  minSoldQuantity: Int!
+}
+
 """MUTATIONS"""
 type Mutation {
   """stores"""
@@ -288,14 +293,16 @@ type Mutation {
   deleteStoreById(storeId: String!): Boolean
 
   """options"""
-  createOption(option: OptionInput): Option
-  addOptionValue(optionId: ID!, value: String!): Option
-  deleteOption(optionId: String!): Boolean
+  createOption(option: OptionInput!): Option!
+  updateOptionValues(optionId: ID!, values: [String!]!): Option!
+  addOptionValue(optionId: ID!, value: String!): Option!
+  deleteOption(optionId: ID!): Boolean!
+  deleteOptionValue(optionId: ID!, valueId: ID!): Boolean!
 
   """categories"""
   addParentCategory(input: CategoryInput!): CategoryResponse!
   updateParentCategory(input: CategoryInput!): CategoryResponse!
-  savePreferredCategories(buyerId: ID!, categories: [ID]): String
+  savePreferredCategories(buyerId: ID!, categories: [ID!]!): String!
   createProductListings(input: ProductListingsInput!): [ProductListing!]!
   updateProductListing(input: ProductListingUpdateInput!): ProductListing!
   saveListingVariants(input: ProductListingVariantInput!): [ProductListingVariant!]!
@@ -304,6 +311,7 @@ type Mutation {
   saveListingSellerDirectDelivery(input: SellerDirectDeliveryInput!): SellerDirectDeliveryResponse!
   saveListingCourierDeliveryDetails(input: CourierDeliveryDetailsInput!): CourierDeliveryDetails!
   updateListingStatus(input: ListingStatusInput!): ProductListing!
+  updateListingMinimumSoldQuantity(input: MinimumSoldQuantityInput!): ProductListing!
   deleteProductListing(listingId: String!): Boolean!
   cloneListing(listingIds: [String!]!, startDate: DateTime): [ProductListing!]!
   createRecurringListings(input: RecurringListingInput!): [ProductListing!]!
@@ -686,6 +694,7 @@ type Query {
   getSellerListingDetails(listingId: String!): SellerListingDetailView!
   getSellerListingGroupByProduct(options: SellerFilterOptions!): SellerListingGroupResponse!
   getSellerListingForAcceptOrReject(options: SellerFilterOptions!): SellerListingResponse!
+  getSellerListingOrderAddresses(options: SellerFilterOptions!): SellerListingOrderAddressResponse!
   isListingAvailable(listings: [IsListingAvailableInput!]!): [IsListingAvailableResponse!]!
   getBuyerWishlistListing(options: WishlistOption!): BuyerListingResponse!
   isListingInWishlist(buyerId: ID!, listingId: ID!): Boolean!
@@ -846,6 +855,7 @@ type SellerDirectDeliveryResponse {
 input SellerFilterOptions {
   filterType: SellerFilterType!
   listingStatus: ProductListingStatus
+  listingId: ID
   storeIds: [ID]
   pageOption: SellerPageOption!
 }
@@ -855,6 +865,7 @@ enum SellerFilterType {
   LISTING_STATUS
   STORE
   STORE_AND_LISTING_STATUS
+  LISTING_ID
 }
 
 type SellerListingDetailView {
@@ -891,6 +902,33 @@ type SellerListingGroupView {
   ended: Int!
   active: Int!
   total: Int!
+}
+
+type SellerListingOrderAddressResponse {
+  content: [SellerListingOrderAddressView!]!
+  pageNo: Int!
+  pageSize: Int!
+  totalPages: Int!
+  totalElements: Int!
+}
+
+type SellerListingOrderAddressView {
+  orderId: ID!
+  orderNumber: String
+  orderItemId: ID!
+  orderItemNumber: String
+  productId: ID!
+  productNumber: String
+  listingId: ID!
+  listingNumber: String
+  sellerId: ID!
+  sellerBusinessName: String
+  sellerStoreName: String
+  sellerBusinessAddress: AddressView
+  buyerId: ID!
+  buyerFirstName: String
+  buyerLastName: String
+  buyerDeliveryAddress: AddressView
 }
 
 type SellerListingResponse {

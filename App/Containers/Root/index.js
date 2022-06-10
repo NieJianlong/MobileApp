@@ -36,10 +36,13 @@ import CheckoutPaymentCompletedGuest from "../CheckoutPaymentCompletedGuest";
 import useRegisterGuest from "../../hooks/useRegisterGuest";
 import { useValidateBuyerHasAnyOrderLazyQuery } from "../../../generated/graphql";
 import LoginScreen from "../Login";
-import { _navigator } from "../../Navigation/NavigationService";
+import NavigationService, {
+  _navigator,
+} from "../../Navigation/NavigationService";
 import { localCartVar } from "../../Apollo/cache";
 import { useReactiveVar } from "@apollo/client";
 import { isEmpty } from "lodash";
+import useCurrentRoute from "../../hooks/useCurrentRoute";
 
 const initialState = {
   alert: {
@@ -91,6 +94,7 @@ function RootContainer() {
   ] = useReducer(reducer, initialState);
   const { setShowMap } = useMapScreen();
   const { visibleRegister, setRegister } = useRegisterGuest();
+  const { currentRoute } = useCurrentRoute();
 
   const localCart = useReactiveVar(localCartVar);
 
@@ -138,7 +142,18 @@ function RootContainer() {
         });
         setShowMap({ mapVisible: false, stopPermission: true });
       }
-      return false;
+      if (currentRoute === undefined) {
+        return true;
+      }
+      if (currentRoute?.currentPage !== "LoginScreeen") {
+        NavigationService.goBack();
+        /**
+         * When true is returned the event will not be bubbled up
+         * & no other back action will execute
+         */
+        return true;
+      }
+      return true;
     });
 
     const requestLocationPermission = async () => {

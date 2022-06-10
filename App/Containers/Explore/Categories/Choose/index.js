@@ -8,9 +8,11 @@ import { useMutation, useQuery } from "@apollo/client";
 import * as aQM from "../../gql/explore_queries";
 
 import { SAVE_PREFERRED_CATEGORIES } from "../../../../Apollo/mutations/mutations_product";
-import { t } from "react-native-tailwindcss";
+import { colors, t } from "react-native-tailwindcss";
 import { useNavigation } from "@react-navigation/native";
 import { findIndex } from "lodash";
+import useAlert from "../../../../hooks/useAlert";
+import { Colors } from "../../../../Themes";
 
 class OldChooseCategoriesScreen extends Component {
   constructor(props) {
@@ -85,6 +87,7 @@ class OldChooseCategoriesScreen extends Component {
   }
 }
 export default function ChooseCategoriesScreen() {
+  const { setAlert } = useAlert();
   const { data: categories } = useQuery(aQM.GET_PREFERRED_CATEGORIES, {
     variables: {
       buyerId: global.buyerId,
@@ -116,7 +119,9 @@ export default function ChooseCategoriesScreen() {
         isPrivate: true,
       },
     },
-    onError: (res) => {},
+    onError: (res) => {
+      setAlert({ message: res.message, color: Colors.error, visible: true });
+    },
   });
   const navigation = useNavigation();
   React.useLayoutEffect(() => {

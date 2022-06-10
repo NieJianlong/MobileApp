@@ -37,6 +37,9 @@ import useRegisterGuest from "../../hooks/useRegisterGuest";
 import { useValidateBuyerHasAnyOrderLazyQuery } from "../../../generated/graphql";
 import LoginScreen from "../Login";
 import { _navigator } from "../../Navigation/NavigationService";
+import { localCartVar } from "../../Apollo/cache";
+import { useReactiveVar } from "@apollo/client";
+import { isEmpty } from "lodash";
 
 const initialState = {
   alert: {
@@ -88,18 +91,8 @@ function RootContainer() {
   ] = useReducer(reducer, initialState);
   const { setShowMap } = useMapScreen();
   const { visibleRegister, setRegister } = useRegisterGuest();
-  const [validateBuyerHasAnyOrder] = useValidateBuyerHasAnyOrderLazyQuery({
-    onCompleted: (res) => {
-      if (res.validateBuyerHasAnyOrder) {
-        setRegister({ visibleRegister: res.validateBuyerHasAnyOrder });
-      }
-    },
-  });
-  // useEffect(() => {
-  //   if (!global.access_token && global.buyerId) {
-  //     validateBuyerHasAnyOrder({ variables: { buyerId: global.buyerId } });
-  //   }
-  // }, [global.access_token, global.buyerId]);
+
+  const localCart = useReactiveVar(localCartVar);
 
   // useEffect(() => {
 
@@ -132,17 +125,20 @@ function RootContainer() {
 
   useEffect(() => {
     BackHandler.addEventListener("hardwareBackPress", function () {
-      dispatch({
-        type: "changSheetState",
-        payload: {
-          showSheet: false,
-          height: 380,
-          children: () => null,
-          onCloseEnd: () => {},
-          sheetTitle: "",
-        },
-      });
-      setShowMap({ mapVisible: false });
+      if (!isEmpty(localCart.deliverAddress)) {
+        dispatch({
+          type: "changSheetState",
+          payload: {
+            showSheet: false,
+            height: 380,
+            children: () => null,
+            onCloseEnd: () => {},
+            sheetTitle: "",
+          },
+        });
+        setShowMap({ mapVisible: false });
+      }
+
       return false;
     });
 

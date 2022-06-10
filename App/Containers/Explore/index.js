@@ -11,16 +11,32 @@ import { SendVerifyEmail } from "../Register/gql/register_mutations";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { userProfileVar } from "../../Apollo/cache";
 import useStatusBar from "../../hooks/useStatusBar";
+
 import { useValidateBuyerHasAnyOrderLazyQuery } from "../../../generated/graphql";
+import useRegisterGuest from "../../hooks/useRegisterGuest";
 const SearchBarContext = React.createContext({});
 
 function Explore(props) {
   const { setStatusBar } = useStatusBar();
+  const { visibleRegister, setRegister } = useRegisterGuest();
   //to show an alert to users that their accounts have been activated
   const [
     showAccountActivatedSuccessfullyAlert,
     setShowAccountActivatedSuccessfullyAlert,
   ] = useState(false);
+  const [validateBuyerHasAnyOrder] = useValidateBuyerHasAnyOrderLazyQuery({
+    onCompleted: (res) => {
+      if (res.validateBuyerHasAnyOrder) {
+        setRegister({ visibleRegister: res.validateBuyerHasAnyOrder });
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (!global.access_token && global.buyerId) {
+      validateBuyerHasAnyOrder({ variables: { buyerId: global.buyerId } });
+    }
+  }, []);
 
   // const [sendVerifyEmail] = useMutation(SendVerifyEmail);
   //Fixed a bug that accidentally triggered onclick when swiping

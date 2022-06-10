@@ -24,28 +24,31 @@ function Selector(props) {
   const { style, showError, title, data, placeholder } = props;
   return (
     <View>
-      <View
-        style={[styles.container, style, showError && styles.errorContainer]}
-      >
-        <TouchableOpacity onPress={() => setActive(!active)}>
-          <Text
-            style={[
-              styles.txtPlaceholder,
-              value !== "" && { color: Colors.black },
-            ]}
-          >
-            {value !== "" ? value : placeholder}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => setActive(!active)}
-          style={[t.bgBlue200]}
+      <TouchableOpacity onPress={() => setActive(!active)}>
+        <View
+          style={[styles.container, style, showError && styles.errorContainer]}
         >
-          {/* ../Images/arrow_medium_left.png */}
-          <SimpleLineIcons name="arrow-down" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity onPress={() => setActive(!active)}>
+            <Text
+              style={[
+                styles.txtPlaceholder,
+                value !== "" && { color: Colors.black },
+              ]}
+            >
+              {value !== "" ? value : placeholder}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => setActive(!active)}>
+            {/* ../Images/arrow_medium_left.png */}
+            <SimpleLineIcons
+              name={active ? "arrow-up" : "arrow-down"}
+              size={24}
+              color="black"
+            />
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
 
       {active &&
         data.map((item, index) => (

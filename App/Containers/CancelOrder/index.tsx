@@ -26,7 +26,7 @@ import { t } from "react-native-tailwindcss";
 
 function CancelOrder(props) {
   const [showPrefer, setShowPrefer] = useState(false);
-  const [reason, setReason] = useState<string>("Mistake order");
+  const [reason, setReason] = useState<string>("");
   const { setLoading } = useLoading();
   const [message, setMessage] = useState<string>("");
   const { setAlert } = useAlert();
@@ -102,7 +102,7 @@ function CancelOrder(props) {
         </View>
       ),
     });
-  }, [navigation]);
+  }, [navigation, reason]);
   return (
     <View
       style={{
@@ -142,7 +142,7 @@ function CancelOrder(props) {
         <Selector
           style={{ marginTop: vs(15), marginBottom: vs(10) }}
           placeholder={"Problem reason goes here"}
-          value={"Mistake order"}
+          value={""}
           data={[
             "Mistake order",
             "Not able to wait for listing completion",

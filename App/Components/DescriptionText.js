@@ -9,14 +9,22 @@ function DescriptionText(props) {
   const [active, setActive] = useState(false);
 
   const { text, style, previewLength } = props;
+  const isNeedReadMore = text && text.length > 104;
+  const newContent = isNeedReadMore
+    ? text.substring(0, previewLength ?? 104) + "..."
+    : text;
 
   return (
-    <TouchableOpacity onPress={() => setActive(!active)} style={style}>
+    <TouchableOpacity
+      disabled={!isNeedReadMore}
+      onPress={() => setActive(!active)}
+      style={style}
+    >
       {text && (
         <Text style={styles.text}>
-          {active ? text : text.substring(0, previewLength ?? 105) + "..."}
+          {active ? text : newContent}
 
-          {text && text.length > 104 && (
+          {isNeedReadMore && (
             <Text style={{ color: Colors.secondary00 }}>
               {active ? " Less" : " Read more"}
             </Text>

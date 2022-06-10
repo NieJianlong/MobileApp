@@ -6,6 +6,7 @@ import { Button } from "../../../../Components";
 
 import { Images } from "../../../../Themes";
 import { AlertContext } from "../../../Root/GlobalContext";
+import { mapGQLAddressToDelivery } from "../../gql/gql_mappers";
 import styles from "../styles";
 
 export default function PickupFromSellerSheetContent({ address, onCallback }) {
@@ -32,11 +33,9 @@ export default function PickupFromSellerSheetContent({ address, onCallback }) {
           <Text style={styles.heading5Bold}>{`${address?.streetAddress1} ${
             address?.streetAddress2 ?? ""
           }`}</Text>
-          <Text style={styles.txtRegular}>{`${address?.houseNumber ?? ""}${
-            address?.flat ?? ""
-          }${address?.villageArea ?? ""}${address?.townCity}${
-            address?.provinceState ?? ""
-          }${address?.country ?? ""} ${address?.pinCode ?? ""}`}</Text>
+          <Text style={styles.txtRegular}>
+            {mapGQLAddressToDelivery(address, true)}
+          </Text>
         </View>
       </View>
 

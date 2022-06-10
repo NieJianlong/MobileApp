@@ -126,7 +126,7 @@ export const mapProductListingDTO = (data) => {
 /**
  *  pinCode  provinceState townCity villageArea houseNumber flat landMark
  */
-export const mapGQLAddressToDelivery = (data) => {
+export const mapGQLAddressToDelivery = (data, isfull) => {
   let address = "";
 
   if (data.building) {
@@ -155,7 +155,7 @@ export const mapGQLAddressToDelivery = (data) => {
     address = address + " " + data.pinCode;
   }
 
-  if (address.length > 32) {
+  if (address.length > 32 && !isfull) {
     address = address.substring(0, 30) + "...";
   }
   return address;

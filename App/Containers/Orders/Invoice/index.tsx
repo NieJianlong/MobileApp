@@ -13,6 +13,7 @@ import {
   useSellerProfileBasicDetailsQuery,
 } from "../../../../generated/graphql";
 import { trimEnd } from "lodash";
+import { mapGQLAddressToDelivery } from "../../Explore/gql/gql_mappers";
 
 class Invoice extends Component {
   constructor(props) {
@@ -30,37 +31,23 @@ class Invoice extends Component {
     // const sellerLocation = this.props.data.sellerLocation;
     let addressDetail = "";
     let title = "Delivered to";
-
+    debugger;
     switch (deliveryOption) {
       case DeliveryOption.CourierDelivery:
-        addressDetail = `${deliverAddress?.houseNumber ?? ""} ${
-          deliverAddress?.flat ?? ""
-        } ${deliverAddress?.villageArea ?? ""} ${deliverAddress?.townCity} ${
-          deliverAddress?.provinceState
-        } ${deliverAddress?.country} ${deliverAddress?.pinCode}`;
+        addressDetail = mapGQLAddressToDelivery(deliverAddress, true);
         break;
       case DeliveryOption.CollectionPointPickup:
         title = "Pick up location";
-        addressDetail = `${pickupAddress?.streetAddress1 ?? ""} ${
-          pickupAddress?.streetAddress2 ?? ""
-        } ${pickupAddress?.townCity ?? ""} ${pickupAddress?.provinceState} ${
-          pickupAddress?.country
-        } ${pickupAddress?.areaCode}`;
+        addressDetail = mapGQLAddressToDelivery(pickupAddress, true);
         break;
       case DeliveryOption.SellerDirectDelivery:
-        addressDetail = `${deliverAddress?.houseNumber ?? ""} ${
-          deliverAddress?.flat ?? ""
-        } ${deliverAddress?.villageArea ?? ""} ${deliverAddress?.townCity}${
-          deliverAddress?.provinceState
-        } ${deliverAddress?.country} ${deliverAddress?.pinCode}`;
+        addressDetail = mapGQLAddressToDelivery(deliverAddress, true);
+
         break;
       case DeliveryOption.SellerLocationPickup:
         title = "Pick up location";
-        addressDetail = `${pickupAddress?.streetAddress1 ?? ""} ${
-          pickupAddress?.streetAddress2 ?? ""
-        } ${pickupAddress?.townCity ?? ""} ${pickupAddress?.provinceState} ${
-          pickupAddress?.country
-        } ${pickupAddress?.areaCode}`;
+        addressDetail = mapGQLAddressToDelivery(pickupAddress, true);
+
         break;
       default:
         break;

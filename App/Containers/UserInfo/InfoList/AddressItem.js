@@ -32,6 +32,7 @@ import {
   UpdateAddressForGuestBuyerDocument,
 } from "../../../../generated/graphql";
 import { userProfileVar } from "../../../Apollo/cache";
+import { mapGQLAddressToDelivery } from "../../Explore/gql/gql_mappers";
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
 const TouchableWithoutFeedback =
@@ -124,9 +125,11 @@ export default function AddressItem({ item, refetch, isCheckout, onPress }) {
       },
     }
   );
-  let addressDetail = `${item.houseNumber ?? ""} ${item.flat ?? ""} ${
-    item.villageArea ?? ""
-  } ${item.townCity} ${item.provinceState} ${item.country} ${item.pinCode}`;
+  // let addressDetail = `${item.houseNumber ?? ""} ${item.building ?? ""} ${
+  //   item.villageArea ?? ""
+  // } ${item.townCity} ${item.provinceState} ${item.country} ${item.pinCode}`;
+
+  let addressDetail = mapGQLAddressToDelivery(item, true);
   return (
     <TouchableWithoutFeedback
       onPress={() => {

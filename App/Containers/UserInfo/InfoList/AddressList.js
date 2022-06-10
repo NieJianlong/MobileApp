@@ -13,6 +13,7 @@ import { useFocusEffect } from "@react-navigation/core";
 import Addresses from "./Addresses";
 import { AlertContext } from "../../Root/GlobalContext";
 import { t } from "react-native-tailwindcss";
+import useMapScreen from "../../../hooks/useMapScreen";
 /**
  * @description:Display my address, list of my payment methods, display bill detail
  * @param {*} item Menu Item with a special configuration
@@ -32,6 +33,7 @@ export default function AddressList({ dispatch, xIndex }) {
   //     },
   //   },
   // });
+  const { setShowMap } = useMapScreen();
   const { dispatch: globalDispatch } = useContext(AlertContext);
   const { loading, error, data, refetch } = useQuery(
     FIND_BUYER_ADDRESS_BY_ID_AND_TPYE,
@@ -87,9 +89,10 @@ export default function AddressList({ dispatch, xIndex }) {
             <Button
               text="ADD NEW ADDRESS"
               onPress={() => {
-                NavigationService.navigate("AddNewAddressScreen", {
-                  title: "Add new address",
-                });
+                // NavigationService.navigate("AddNewAddressScreen", {
+                //   title: "Add new address",
+                // });
+                setShowMap({ mapVisible: true, stopPermission: false });
               }}
             />
           </View>

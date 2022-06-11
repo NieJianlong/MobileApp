@@ -30,6 +30,7 @@ import NavigationService from "../../../Navigation/NavigationService";
 import { setLocalStorageValue } from "../../../Apollo/local-storage";
 import { Images } from "../../../Themes";
 import useMapScreen from "../../../hooks/useMapScreen";
+import useRefreshData from "../../../hooks/useRefreshData";
 
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
@@ -37,11 +38,13 @@ const TouchableOpacity =
 function AddLocationSheetContent(props) {
   //123e4567-e89b-12d3-a456-556642440000
   // const [selectedState, setSelectedState] = useState();
+  const { setRefreshaddress } = useRefreshData();
   const { setShowMap } = useMapScreen();
   const { stopPermission} = useMapScreen();
   const { data } = useQuery(GetStatesByCountryId, {
     variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
   });
+  
   const userProfileVarReactive = useReactiveVar(userProfileVar);
   const isAuth = useMemo(
     () => userProfileVarReactive.isAuth,
@@ -135,6 +138,7 @@ function AddLocationSheetContent(props) {
     }
   );
   const onSubmit = (data) => {
+    setRefreshaddress({ refreshLists: true})
     dispatch({ type: "loading" });
     addAddress({
       variables: {

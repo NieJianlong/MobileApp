@@ -19,6 +19,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { useBuyerProfileQuery } from "../../../../generated/graphql";
 import useOrderInfo from "../../../hooks/useOrderInfo";
 import ViewShot, { captureRef } from "react-native-view-shot";
+import RNFetchBlob from "rn-fetch-blob";
+import { shareOptionsDetails } from "../Components/ShareOptionList";
 import colors from "../../../Themes/Colors";
 const url = "";
 const title = "";
@@ -89,67 +91,21 @@ function OrderPlaced(props) {
   }, [data]);
 
   const toggleShareSheet = () => {
-    captureRef(viewShotRef, {
-      format: "png",
-      quality: 0.8,
-      result: "base64",
-    }).then(
-      (uri) => {
-        const shareOptions = Platform.select({
-          ios: {
-            activityItemSources: [
-              {
-                // For sharing url with custom title.
-                placeholderItem: { type: "url", content: url },
-                item: {
-                  default: { type: "url", content: url },
-                },
-                subject: {
-                  default: title,
-                },
-                linkMetadata: { originalUrl: url, url, title },
-              },
-              {
-                // For sharing text.
-                placeholderItem: { type: "text", content: message },
-                item: {
-                  default: { type: "text", content: message },
-                  message: null, // Specify no text to share via Messages app.
-                },
-                linkMetadata: {
-                  // For showing app icon on share preview.
-                  title: message,
-                },
-              },
-              {
-                // For using custom icon instead of default text icon at share preview when sharing with message.
-                placeholderItem: {
-                  type: "url",
-                  content: icon,
-                },
-                item: {
-                  default: {
-                    type: "text",
-                    content: `${message} ${url}`,
-                  },
-                },
-                linkMetadata: {
-                  title: message,
-                  icon: icon,
-                },
-              },
-            ],
-          },
-          default: {
-            title: "",
-            url: "data:image/png;base64," + uri,
-            subject: "",
-          },
-        });
-        Share.open(shareOptions);
-      },
-      (error) => console.error("Oops, snapshot failed", error)
-    );
+    const fs = RNFetchBlob.fs;
+    let imagePath = null;
+    RNFetchBlob.config({
+      fileCache: true
+    })
+      .fetch("GET", orderInfo.allItems[0].productDetails.photo)
+      .then(resp => {
+        imagePath = resp.path();
+        return resp.readFile("base64");
+      })
+      .then(base64Data => {
+        console.log(base64Data);
+        shareOptionsDetails(base64Data, orderInfo.allItems[0].productDetails);
+        return fs.unlink(imagePath);
+      });
     // })
   };
 

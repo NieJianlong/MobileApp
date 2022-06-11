@@ -26,6 +26,7 @@ import AddLocationSheetContent from "./Explore/Components/AddLocationSheetConten
 import useMapScreen from "../hooks/useMapScreen";
 import { ScaledSheet, vs } from "react-native-size-matters";
 import colors from "../Themes/Colors";
+import AsyncStorage from "@react-native-community/async-storage";
 
 Geocoder.init("AIzaSyBfDTs1ejBI3MIVhrPeXgpvDNkTovWkIuU");
 
@@ -43,10 +44,34 @@ const MapScreen = (props) => {
 
   useEffect(() => {
     (async () => {
-      if (props.stopPermission === false) {
+      const firstRun = await AsyncStorage.getItem("isFirstRun");
+      if (firstRun === null) {
         const { status } = await Location.requestForegroundPermissionsAsync();
+        AsyncStorage.setItem("isFirstRun", 'true');
         if (status !== "granted") {
           Alert.alert("Permission to access location was denied");
+          setShowMap({ mapVisible: false, stopPermission: true });
+          dispatch({
+            type: "changSheetState",
+            payload: {
+              showSheet: true,
+              height: 600,
+              children: () => (
+                <AddLocationSheetContent
+                  {...location}
+                  locationDetails={location}
+                />
+              ),
+              sheetTitle: "",
+            },
+          });
+          return;
+        }
+      } else {
+        const checkPermission = await Location.getForegroundPermissionsAsync();
+        AsyncStorage.setItem("isFirstRun", 'true');
+        if (checkPermission.status !== "granted") {
+          Alert.alert("Check your location permissions in your phone settings");
           setShowMap({ mapVisible: false, stopPermission: true });
           dispatch({
             type: "changSheetState",
@@ -283,24 +308,24 @@ const styles = ScaledSheet.create({
   triangle: {
     width: 0,
     height: 0,
-    backgroundColor: 'transparent',
-    borderStyle: 'solid',
-},
-arrowDown: {
+    backgroundColor: "transparent",
+    borderStyle: "solid",
+  },
+  arrowDown: {
     borderTopWidth: 10,
     borderRightWidth: 10,
     borderBottomWidth: 0,
     borderLeftWidth: 10,
     borderTopColor: colors.primary01,
-    borderRightColor: 'transparent',
-    borderBottomColor: 'transparent',
-    borderLeftColor: 'transparent',
-},
+    borderRightColor: "transparent",
+    borderBottomColor: "transparent",
+    borderLeftColor: "transparent",
+  },
   itemText: {
     color: "white",
   },
   textContainer: {
-    borderRadius: '20@s',
+    borderRadius: "20@s",
     height: "30@s",
     width: "220@s",
     backgroundColor: colors.primary01,
@@ -313,7 +338,7 @@ arrowDown: {
     alignItems: "center",
   },
   mapCustomMarker: {
-    marginTop: '5@vs',
+    marginTop: "5@vs",
     height: "8@s",
     width: "8@s",
     backgroundColor: colors.whatsapp,

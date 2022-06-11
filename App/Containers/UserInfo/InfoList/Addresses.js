@@ -22,12 +22,14 @@ export default function Addresses({
   onPress,
   isInBottomSheet = false,
   style,
+  extraData,
 }) {
   const { width } = useWindowDimensions();
   const CustomeFlatList = isInBottomSheet ? GHFlatList : FlatList;
   return (
     <CustomeFlatList
       data={data}
+      extraData={extraData}
       contentContainerStyle={[t.pB16, style]}
       showsVerticalScrollIndicator={false}
       style={[{ height: data ? 80 * data?.length : 200 }]}

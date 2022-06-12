@@ -196,7 +196,7 @@ function AddNewAddress() {
         </View>
       ),
     });
-  }, [navigation]);
+  }, [navigation, asDefault]);
   return (
     <View style={styles.container}>
       <View style={styles.bodyContainer}>

@@ -681,6 +681,10 @@ function RegisterScreen(props) {
               }
               returnKeyType={"next"}
               isPhoneNo={true}
+              keyboardType={
+                Platform.OS === "android" ? "phone-pad" : "number-pad"
+              }
+              // keyboardType="numeric"
               onChangeText={onChange}
               value={value}
               textAlignVertical={"center"}

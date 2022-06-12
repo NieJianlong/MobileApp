@@ -152,9 +152,9 @@ function LoginScreen(props) {
       password: getValues("password")?.trim(),
     };
   }, [getValues]);
-  useEffect(() => {
-    storage.setLocalStorageEmpty();
-  }, []);
+  // useEffect(() => {
+  //   storage.setLocalStorageEmpty();
+  // }, []);
   const navigaiton = useNavigation();
   React.useEffect(() => {
     const unsubscribe = navigaiton.addListener("focus", () => {
@@ -190,7 +190,6 @@ function LoginScreen(props) {
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [navigaiton]);
-
   useEffect(() => {
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
     Keyboard.addListener("keyboardWillHide", _keyboardWillHide);

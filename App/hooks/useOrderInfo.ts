@@ -61,8 +61,8 @@ const useOrderInfo = () => {
           deliveryFess = courierShippingFee + deliveryFess;
         }
         if (element.variant) {
-          originalBilling = originalBilling + variantRetailPrice;
-          0 * element.quantity;
+          originalBilling =
+            originalBilling + variantRetailPrice * element.quantity;
           currentBilling =
             currentBilling + variantWholeSalePrice * element.quantity;
         } else {
@@ -85,7 +85,6 @@ const useOrderInfo = () => {
     };
 
     setOrderInfo(newItem);
-    
   };
   const {
     currentBilling,

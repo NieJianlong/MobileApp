@@ -102,13 +102,14 @@ const MapScreen = (props) => {
     setTimeout(() => {
       RNGooglePlaces.getCurrentPlace(["placeID", "location", "name", "address"])
         .then((results) => {
-          console.log("getCurrentPlace", results[0]);
           setLoading({ show: false });
           // setLocation(
           //   results && results[0] && { location: results[0].location, address: results[0].address }
           // );
 
-          _onChangeRegion(results[0] && results[0].location);
+
+          handleCenter(results[0].location);
+          // _onChangeRegion(results[0] && results[0].location);
         })
         .catch((error) => {
           setLoading({ show: false });
@@ -179,6 +180,7 @@ const MapScreen = (props) => {
       latitude: region.latitude,
       longitude: region.longitude,
     });
+
     if (results && results[0]) {
       const houseNo = results[0].address_components.find((item) =>
         item.types.includes("premise")
@@ -216,6 +218,19 @@ const MapScreen = (props) => {
     setChangeIsPressed(false);
     setIsTapable(false);
   };
+
+  const handleCenter = async (location) => {
+    console.log("seee theee location", location);
+    const { latitude, longitude, latitudeDelta, longitudeDelta } = location;
+
+    let loc = await Location.getCurrentPositionAsync({});
+    mapRef.current.animateToRegion({
+      latitude: loc.coords.latitude,// + 0.0006351,
+      longitude: loc.coords.longitude,// - 0.0002,
+      latitudeDelta: 0.01756674919514367,
+      longitudeDelta: 0.012099780142307281,
+    })
+  }
 
   const INITIAL_REGION = location && {
     ...location.location,
@@ -333,9 +348,11 @@ const styles = ScaledSheet.create({
     alignItems: "center",
   },
   customMarkerContainer: {
-    top: "163@vs",
     position: "absolute",
     alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    paddingBottom: "45@s",
   },
   mapCustomMarker: {
     marginTop: "5@vs",

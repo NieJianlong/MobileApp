@@ -348,9 +348,11 @@ const styles = ScaledSheet.create({
     alignItems: "center",
   },
   customMarkerContainer: {
-    top: "163@vs",
     position: "absolute",
     alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    paddingBottom: "45@s",
   },
   mapCustomMarker: {
     marginTop: "5@vs",

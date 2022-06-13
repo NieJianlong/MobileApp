@@ -234,8 +234,8 @@ const MapScreen = (props) => {
 
   const INITIAL_REGION = location && {
     ...location.location,
-    latitudeDelta: 0.04,
-    longitudeDelta: 0.05,
+    latitudeDelta: 0.01756674919514367,
+    longitudeDelta: 0.012099780142307281,
   };
 
   const { width, height } = useWindowDimensions();

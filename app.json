@@ -50,7 +50,7 @@
         "android.permission.READ_CALENDAR",
         "android.permission.WRITE_CALENDAR"
       ],
-      "package": "com.apollo"
+      "package": "com.apolloBuyerSalamiSlicing"
     },
     "packagerOpts": {
       "config": "metro.config.js",

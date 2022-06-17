@@ -12,7 +12,8 @@ import useStatusBar from "../hooks/useStatusBar";
 import * as Sentry from "sentry-expo";
 
 Sentry.init({
-  dsn: "https://908e7b35c4824794aecc2e070deccf59@o1261296.ingest.sentry.io/6438866",
+  //dsn: "https://908e7b35c4824794aecc2e070deccf59@o1261296.ingest.sentry.io/6438866",
+  dsn: "https://f78da4265e8748798f55bb5aa00757e6@o1285889.ingest.sentry.io/6500559",
   enableInExpoDevelopment: true,
   debug: true, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
 });

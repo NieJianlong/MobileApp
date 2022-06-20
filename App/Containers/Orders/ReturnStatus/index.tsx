@@ -216,7 +216,7 @@ function ReturnStatus(props) {
             style={styles.whatssAppbtn}
             onPress={toggleShareSheet}
           >
-            <Text style={styles.textStyle}>Share code on WhatApp</Text>
+            <Text style={styles.textStyle}>Share code on WhatsApp</Text>
             <Image
               source={require("../../../Images/whatsappgreen.png")}
               style={styles.whatsAppIcon}

@@ -433,7 +433,6 @@ function PrimaryNav() {
           headerShown: true,
           headerTitleAlign: "center",
           title: "",
-          headerLeft: null,
           headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
         }}
       />

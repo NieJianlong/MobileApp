@@ -137,17 +137,18 @@ export default function ProductInfo({
                 )}
               />
             </View>
-            <View style={styles.percentOffContainer}>
-              <Text
-                style={[styles.heading6Bold, { color: Colors.secondary00 }]}
-              >
-                {product.percentOff}% OFF
+            <View style={[t.flexRow, t.mT4, t._mL12]}>
+              <View style={styles.percentOffContainer}>
+                <Text
+                  style={[styles.heading6Bold, { color: Colors.secondary00 }]}
+                >
+                  {product.percentOff}% OFF
+                </Text>
+              </View>
+              <Text style={[styles.heading5Regular, { marginLeft: s(8) }]}>
+                Save ₹{product.retailPrice - product.wholeSalePrice}
               </Text>
             </View>
-
-            <Text style={[styles.heading5Regular, { marginLeft: s(8) }]}>
-              Save ₹{product.retailPrice - product.wholeSalePrice}
-            </Text>
           </View>
         </View>
 

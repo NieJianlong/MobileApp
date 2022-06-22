@@ -143,11 +143,9 @@ function RootContainer() {
         setShowMap({ mapVisible: false, stopPermission: true });
       }
       if (currentRoute === undefined) {
-        alert("到这里111");
         return true;
       }
       if (currentRoute?.currentPage !== "LoginScreeen") {
-        alert("到这里");
         NavigationService.goBack();
         /**
          * When true is returned the event will not be bubbled up

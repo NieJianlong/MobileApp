@@ -802,6 +802,7 @@ function AppRouter(props) {
     <NavigationContainer
       onStateChange={() => {
         const routeName = _navigator?.getCurrentRoute()?.name;
+
         setCurrentRoute({ currentPage: routeName });
       }}
       ref={(navigatorRef) => {

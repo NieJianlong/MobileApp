@@ -69,37 +69,37 @@ function GroupInfoScreen(props) {
       },
     },
   });
-  const [markOrderItem] = useMarkOrderItemAsDeliveredMutation();
-  useEffect(() => {
-    markOrderItem({
-      variables: {
-        request: {
-          buyerId: global.buyerId,
-          orderItemId: data.orderItemId,
-        },
-      },
-      context: {
-        headers: {
-          isPrivate: true,
-        },
-      },
-    });
-    updateListingStatus();
-  }, [data, markOrderItem]);
+  // const [markOrderItem] = useMarkOrderItemAsDeliveredMutation();
+  // useEffect(() => {
+  //   markOrderItem({
+  //     variables: {
+  //       request: {
+  //         buyerId: global.buyerId,
+  //         orderItemId: data.orderItemId,
+  //       },
+  //     },
+  //     context: {
+  //       headers: {
+  //         isPrivate: true,
+  //       },
+  //     },
+  //   });
+  //   updateListingStatus();
+  // }, [data, markOrderItem]);
 
-  const [updateListingStatus] = useUpdateListingStatusMutation({
-    variables: {
-      input: {
-        listingId: data.listingId,
-        status: ProductListingStatus.Accepted,
-      },
-    },
-    context: {
-      headers: {
-        isPrivate: true,
-      },
-    },
-  });
+  // const [updateListingStatus] = useUpdateListingStatusMutation({
+  //   variables: {
+  //     input: {
+  //       listingId: data.listingId,
+  //       status: ProductListingStatus.Accepted,
+  //     },
+  //   },
+  //   context: {
+  //     headers: {
+  //       isPrivate: true,
+  //     },
+  //   },
+  // });
   // const { loading, error, data, refetch, fetchMore } = useGetListingsQuery({
   //   variables: {
   //     searchOptions: {

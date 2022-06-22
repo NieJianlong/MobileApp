@@ -342,17 +342,17 @@ class LegalScreen extends Component {
                   contact information to Us through the Application, You agree
                   and consent to receive calls, e-mails or SMS from Us and/or
                   any of its representatives at any time. You can report to
-                  “__________” if you find any discrepancy with regard to
-                  Application or content-related information and we will take
-                  necessary action after an investigation. The response with
-                  resolution (if any issues found) shall be dependent on the
-                  time is taken for investigation. You expressly agree that
-                  notwithstanding anything contained herein above, it may be
-                  contacted by Us relating to any services availed by You on the
-                  Application or anything pursuant thereto and You agree to
-                  indemnify Us from any harassment claims. It is expressly
-                  agreed to by Us that any information shared by Us shall be
-                  governed by the Privacy Policy.
+                  “support@salamislicing.in” if you find any discrepancy with
+                  regard to Application or content-related information and we
+                  will take necessary action after an investigation. The
+                  response with resolution (if any issues found) shall be
+                  dependent on the time is taken for investigation. You
+                  expressly agree that notwithstanding anything contained herein
+                  above, it may be contacted by Us relating to any services
+                  availed by You on the Application or anything pursuant thereto
+                  and You agree to indemnify Us from any harassment claims. It
+                  is expressly agreed to by Us that any information shared by Us
+                  shall be governed by the Privacy Policy.
                   {"\n"}
                 </Text>
                 <Text style={styles.heading3Bold}>
@@ -727,7 +727,7 @@ class LegalScreen extends Component {
                   {"\n"}• Contact Us: If you have any questions about these
                   Terms of Use, the practices of the Application, or your
                   experience, you can contact us by emailing at
-                  _________________.
+                  support@salamislicing.in.
                   {"\n"}
                 </Text>
               </View>
@@ -780,13 +780,14 @@ class LegalScreen extends Component {
                   in relation to the manner of collection or use of your
                   information, please do not use or access the Site. If you have
                   any questions or concerns regarding this Privacy Policy, you
-                  should contact our Customer Support Desk at ____________. ANY
-                  CAPITALIZED WORDS USED HENCEFORTH SHALL HAVE THE MEANING
-                  ACCORDED TO THEM UNDER THIS AGREEMENT. FURTHER, ALL HEADING
-                  USED HEREIN ARE ONLY FOR THE PURPOSE OF ARRANGING THE VARIOUS
-                  PROVISIONS OF THE AGREEMENT IN ANY MANNER. NEITHER THE USER
-                  NOR THE CREATORS OF THIS PRIVACY POLICY MAY USE THE HEADING TO
-                  INTERPRET THE PROVISIONS CONTAINED WITHIN IT IN ANY MANNER.
+                  should contact our Customer Support Desk at
+                  support@salamislicing.in. ANY CAPITALIZED WORDS USED
+                  HENCEFORTH SHALL HAVE THE MEANING ACCORDED TO THEM UNDER THIS
+                  AGREEMENT. FURTHER, ALL HEADING USED HEREIN ARE ONLY FOR THE
+                  PURPOSE OF ARRANGING THE VARIOUS PROVISIONS OF THE AGREEMENT
+                  IN ANY MANNER. NEITHER THE USER NOR THE CREATORS OF THIS
+                  PRIVACY POLICY MAY USE THE HEADING TO INTERPRET THE PROVISIONS
+                  CONTAINED WITHIN IT IN ANY MANNER.
                   {"\n"}
                 </Text>
                 <Text style={styles.heading3Bold}>INFORMATION WE COLLECT</Text>
@@ -831,17 +832,18 @@ class LegalScreen extends Component {
                   service improvement but shall immediately delete all such
                   information upon withdrawal of your consent for the same
                   through the ‘Delete Account’ button or through an email to be
-                  sent to ___________. To the extent possible, we provide You
-                  with the option of not divulging any specific information that
-                  you wish for us not to collect, store or use. You may also
-                  choose not to use a particular service or feature on the
-                  Application and opt-out of any non-essential communications
-                  from the Application. Further, transacting over the internet
-                  has inherent risks which can only be avoided by you following
-                  security practices yourself, such as not revealing
-                  account/login related information to any other person and
-                  informing our customer care team about any suspicious activity
-                  or where your account has/may have been compromised.
+                  sent to support@salamislicing.in. To the extent possible, we
+                  provide You with the option of not divulging any specific
+                  information that you wish for us not to collect, store or use.
+                  You may also choose not to use a particular service or feature
+                  on the Application and opt-out of any non-essential
+                  communications from the Application. Further, transacting over
+                  the internet has inherent risks which can only be avoided by
+                  you following security practices yourself, such as not
+                  revealing account/login related information to any other
+                  person and informing our customer care team about any
+                  suspicious activity or where your account has/may have been
+                  compromised.
                   {"\n"}
                 </Text>
                 <Text style={styles.heading3Bold}>
@@ -1175,14 +1177,14 @@ class LegalScreen extends Component {
                 <Text style={styles.txtRegular}>
                   To withdraw your consent, or to request the download or delete
                   your data with us for any or all our services at any time,
-                  please email to _____________.
+                  please email to support@salamislicing.in.
                   {"\n"}
                 </Text>
                 <Text style={styles.heading3Bold}>CONTACT US</Text>
                 <Text style={styles.txtRegular}>
                   If you have any questions or concerns regarding this privacy
                   policy, you should contact us by sending an e-mail to
-                  ____________.
+                  support@salamislicing.in.
                   {"\n"}
                 </Text>
               </View>

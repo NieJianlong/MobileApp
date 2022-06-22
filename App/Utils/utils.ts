@@ -105,6 +105,7 @@ export function usePaymentConfigration() {
           type: "changLoading",
           payload: false,
         });
+       
         setLoading({ show: false });
         // setAlert({
         //   visible: true,

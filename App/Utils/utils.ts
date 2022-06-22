@@ -17,6 +17,7 @@ import PubSub from "pubsub-js";
 import useOrderInfo from "../hooks/useOrderInfo";
 import useAlert from "../hooks/useAlert";
 import { Colors } from "../Themes";
+import useLoading from "../hooks/useLoading";
 export enum ComeFromType {
   checkout = "checkout",
   Buynow = "Buynow",
@@ -29,6 +30,7 @@ export function usePaymentConfigration() {
   const { setAlert } = useAlert();
   const { dispatch } = useContext(AlertContext);
   const { realm } = useRealm();
+  const { setLoading } = useLoading();
   const [mydatas, setMydatas] = useState(
     realm
       .objects("ShoppingCart")
@@ -88,6 +90,7 @@ export function usePaymentConfigration() {
           type: "changLoading",
           payload: false,
         });
+        setLoading({ show: false });
         if (orderInfo.comeFromType === ComeFromType.checkout) {
           clearData();
         }
@@ -98,6 +101,11 @@ export function usePaymentConfigration() {
         }
       })
       .catch((error) => {
+        dispatch({
+          type: "changLoading",
+          payload: false,
+        });
+        setLoading({ show: false });
         // setAlert({
         //   visible: true,
         //   title: "Payment failed",

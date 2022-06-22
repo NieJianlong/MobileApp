@@ -202,8 +202,8 @@ export const useCreateOrder = () => {
         },
       },
       onCompleted: (res) => {
-        setLoading({ show: false });
         if (info.orderType === OrderType.sufficient) {
+          setLoading({ show: false });
           if (res?.createOrderFromCart?.orderId) {
             NavigationService.navigate("OrderPlacedScreen");
           }
@@ -213,14 +213,19 @@ export const useCreateOrder = () => {
         ) {
           const order1 = res?.createOrderFromCart;
           if (res?.createOrderFromCart?.orderId) {
-            razorpayCreateOrder(order1).then((res1) => {
+            razorpayCreateOrder(order1).then(async (res1) => {
               if (res1?.data) {
                 const razorId =
                   res1?.data?.razorpayCreateOrder?.razorpayOrderId;
-                getPaymentConfigration(
-                  razorId ?? "",
-                  order1.paymentDetails.balanceToPay
-                );
+                try {
+                  await getPaymentConfigration(
+                    razorId ?? "",
+                    order1.paymentDetails.balanceToPay
+                  );
+                  setLoading({ show: false });
+                } catch (error) {
+                  setLoading({ show: false });
+                }
               }
             });
           }

@@ -72,7 +72,6 @@ function OrderPlaced(props) {
                 params?.error ? "ExploreScreen" : "PackageScreen"
               );
             }}
-            style={[t.bgBlue200]}
           >
             <Image source={Images.crossMedium} style={styles.icSearch} />
           </TouchableOpacity>
@@ -94,14 +93,14 @@ function OrderPlaced(props) {
     const fs = RNFetchBlob.fs;
     let imagePath = null;
     RNFetchBlob.config({
-      fileCache: true
+      fileCache: true,
     })
       .fetch("GET", orderInfo.allItems[0].productDetails.photo)
-      .then(resp => {
+      .then((resp) => {
         imagePath = resp.path();
         return resp.readFile("base64");
       })
-      .then(base64Data => {
+      .then((base64Data) => {
         console.log(base64Data);
         shareOptionsDetails(base64Data, orderInfo.allItems[0].productDetails);
         return fs.unlink(imagePath);
@@ -174,14 +173,14 @@ function OrderPlaced(props) {
   const { width, height } = useWindowDimensions();
   return (
     <View style={{ width, height }}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => {
           NavigationService.navigate("ExploreScreen");
         }}
         style={[t.z100, { marginLeft: width - 60 }, t.w32, t.z100]}
       >
         <Image source={Images.crossMedium} style={styles.icSearch} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <ViewShot
         ref={viewShotRef}
         options={{ format: "png", quality: 0.4, result: "base64" }}

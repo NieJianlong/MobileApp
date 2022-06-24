@@ -27,6 +27,7 @@ import {
   UpdateAddressForGuestBuyerDocument,
 } from "../../../generated/graphql";
 import { userProfileVar } from "../../Apollo/cache";
+import PubSub from "pubsub-js";
 
 function AddNewAddress() {
   const { dispatch } = useContext(AlertContext);
@@ -65,8 +66,14 @@ function AddNewAddress() {
           isPrivate: userProfile.isAuth,
         },
       },
-      onCompleted: () => {
+      onCompleted: (res) => {
         dispatch({ type: "hideloading" });
+        PubSub.publish(
+          "edit-address",
+          userProfile.isAuth
+            ? res.updateAddress
+            : res.updateAddressForGuestBuyer
+        );
         dispatch({
           type: "changAlertState",
           payload: {
@@ -100,6 +107,7 @@ function AddNewAddress() {
           title: "Address Added",
         },
       });
+      PubSub.publish("refresh-address", "");
       dispatch({ type: "hideloading" });
       NavigationService.goBack();
     },

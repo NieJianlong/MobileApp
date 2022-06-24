@@ -154,8 +154,20 @@ function Index(props) {
           </TouchableOpacity>
           <TextInput style={styles.cartinput} value={quantity + ""} />
           <TouchableOpacity
-            // disabled={!availble}
+            // disabled={variant?.itemsAvailable - variant?.itemsSold <= quantity}
             onPress={() => {
+              if (variant?.itemsAvailable - variant?.itemsSold <= quantity) {
+                Alert.dispatch({
+                  type: "changAlertState",
+                  payload: {
+                    visible: true,
+                    message: `Can't increase the quantity any more`,
+                    color: colors.warning,
+                    title: "Removed item",
+                  },
+                });
+                return;
+              }
               onChangeQuanlity(quantity + 1);
             }}
           >

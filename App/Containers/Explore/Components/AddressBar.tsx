@@ -204,6 +204,23 @@ export default function AddressBar() {
       }
     };
   });
+  const localCart = useReactiveVar(localCartVar);
+
+  useEffect(() => {
+    let refresh = PubSub.subscribe("edit-address", (res, data) => {
+      debugger;
+      if (localCart.deliverAddress === data.addressId) {
+      }
+      // getLocalStorageValue(global.buyerId + "Address").then((res) => {
+      //   debugger;
+      // });
+    });
+    return () => {
+      if (refresh) {
+        PubSub.unsubscribe(refresh);
+      }
+    };
+  });
 
   return (
     <TouchableOpacity onPress={toggleAddressSheet}>

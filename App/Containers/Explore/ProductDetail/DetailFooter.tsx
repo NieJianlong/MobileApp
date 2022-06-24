@@ -135,7 +135,14 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
 
       if (!isEmpty(queryItems)) {
         const queryItem = queryItems[0];
-        const newQuantity = queryItem.quantity + quantity;
+        let newQuantity = queryItem.quantity + quantity;
+        if (
+          newQuantity >
+          currentVariant?.itemsAvailable - currentVariant?.itemsSold
+        ) {
+          newQuantity =
+            currentVariant?.itemsAvailable - currentVariant?.itemsSold;
+        }
         queryItem.quantity = newQuantity;
         queryItem.isDraft = false;
       } else {

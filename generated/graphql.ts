@@ -4837,14 +4837,14 @@ export type UpdateAddressMutationVariables = Exact<{
 }>;
 
 
-export type UpdateAddressMutation = { __typename?: 'Mutation', updateAddress?: { __typename?: 'AddressResponse', addressId: string } | null | undefined };
+export type UpdateAddressMutation = { __typename?: 'Mutation', updateAddress?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined };
 
 export type UpdateAddressForGuestBuyerMutationVariables = Exact<{
   request: AddressRequest;
 }>;
 
 
-export type UpdateAddressForGuestBuyerMutation = { __typename?: 'Mutation', updateAddressForGuestBuyer?: { __typename?: 'AddressResponse', addressId: string } | null | undefined };
+export type UpdateAddressForGuestBuyerMutation = { __typename?: 'Mutation', updateAddressForGuestBuyer?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined };
 
 export type DeleteAddressMutationVariables = Exact<{
   addressId: Scalars['ID'];
@@ -7181,10 +7181,10 @@ export type UpdateBuyerProfileMutationOptions = Apollo.BaseMutationOptions<Updat
 export const UpdateAddressDocument = gql`
     mutation UpdateAddress($request: AddressRequest!) {
   updateAddress(request: $request) {
-    addressId
+    ...AddressOrderFiled
   }
 }
-    `;
+    ${AddressOrderFiledFragmentDoc}`;
 export type UpdateAddressMutationFn = Apollo.MutationFunction<UpdateAddressMutation, UpdateAddressMutationVariables>;
 
 /**
@@ -7214,10 +7214,10 @@ export type UpdateAddressMutationOptions = Apollo.BaseMutationOptions<UpdateAddr
 export const UpdateAddressForGuestBuyerDocument = gql`
     mutation UpdateAddressForGuestBuyer($request: AddressRequest!) {
   updateAddressForGuestBuyer(request: $request) {
-    addressId
+    ...AddressOrderFiled
   }
 }
-    `;
+    ${AddressOrderFiledFragmentDoc}`;
 export type UpdateAddressForGuestBuyerMutationFn = Apollo.MutationFunction<UpdateAddressForGuestBuyerMutation, UpdateAddressForGuestBuyerMutationVariables>;
 
 /**

@@ -108,12 +108,12 @@ mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
 }
 mutation UpdateAddress($request: AddressRequest!) {
   updateAddress(request: $request) {
-    addressId
+    ...AddressOrderFiled
   }
 }
 mutation UpdateAddressForGuestBuyer($request: AddressRequest!) {
   updateAddressForGuestBuyer(request: $request) {
-    addressId
+    ...AddressOrderFiled
   }
 }
 mutation DeleteAddress($addressId: ID!) {

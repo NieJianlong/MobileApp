@@ -178,7 +178,7 @@ function RootContainer() {
       }
     };
     //requestLocationPermission();
-  }, []);
+  }, [localCart]);
 
   const {
     visible: imageViewerVisible,

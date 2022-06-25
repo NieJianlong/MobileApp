@@ -34,8 +34,7 @@ import AddLocationSheetContent from "./AddLocationSheetContent";
 
 export default function AddressBar() {
   const userProfileVarReactive = useReactiveVar(userProfileVar);
-  const [addrLine1, setAddrLine1] = useState("");
-  const [addrLine2, setAddrLine2] = useState("");
+
   const { currentRoute } = useCurrentRoute();
   const [error, setError] = useState("");
   const { dispatch } = useContext(AlertContext);
@@ -44,6 +43,7 @@ export default function AddressBar() {
     [userProfileVarReactive.isAuth]
   );
   const { setShowMap } = useMapScreen();
+  const localCart = useReactiveVar(localCartVar);
 
   /**
    * we need to add comments for stuff like this
@@ -59,11 +59,11 @@ export default function AddressBar() {
         height: 380,
         children: () => <AddressSheetContent />,
         onCloseEnd: () => {},
-        enabledGestureInteraction: addrLine1.length > 0,
+        enabledGestureInteraction: !isEmpty(localCart.callBackAddress),
         sheetTitle: "Add your delivery address",
       },
     });
-  }, [addrLine1.length, dispatch]);
+  }, [localCart.callBackAddress, dispatch]);
 
   const handleError = useCallback(() => {
     if (typeof error !== "undefined") {
@@ -137,7 +137,6 @@ export default function AddressBar() {
   );
   function handleData(resultJson) {
     let aL1 = gqlMappers.mapGQLAddressToDelivery(resultJson);
-    let aL2 = gqlMappers.mapGQLAddressToLine2(resultJson);
 
     // if (aL1.length > 10) {
     //   aL1 = aL1.substring(0, 17);
@@ -147,12 +146,11 @@ export default function AddressBar() {
     // }
     // callBackAddress used for gql query to get geo co-ords see useEffect Explore
     localCartVar({
-      ...localCartVar(),
+      ...localCart,
       deliverAddress: resultJson?.addressId,
       callBackAddress: resultJson,
     });
-    setAddrLine1(aL1);
-    setAddrLine2(aL2);
+
     if (aL1.length === 0) {
       if (currentRoute?.currentPage !== "LoginScreen") {
         setShowMap({ mapVisible: true });
@@ -192,12 +190,10 @@ export default function AddressBar() {
           handleData(result);
         } else {
           localCartVar({
-            ...localCartVar(),
+            ...localCart,
             deliverAddress: "",
             callBackAddress: null,
           });
-          setAddrLine1("");
-          setAddrLine2("");
         }
       });
     });
@@ -207,7 +203,6 @@ export default function AddressBar() {
       }
     };
   });
-  const localCart = useReactiveVar(localCartVar);
 
   useEffect(() => {
     let refresh = PubSub.subscribe("edit-address", (res, data) => {
@@ -239,7 +234,12 @@ export default function AddressBar() {
       <View style={styles.addressBarContainer}>
         <View style={styles.row}>
           <Image source={Images.locationMed} style={styles.icLocation} />
-          <Text style={styles.heading5Regular}>Deliver to - {addrLine1}</Text>
+          <Text style={styles.heading5Regular}>
+            Deliver to -{" "}
+            {localCart?.callBackAddress
+              ? gqlMappers.mapGQLAddressToDelivery(localCart?.callBackAddress)
+              : ""}
+          </Text>
           {/* <View style={styles.areaContainer}>
             <Text style={styles.heading6Bold}>{addrLine2}</Text>
           </View> */}

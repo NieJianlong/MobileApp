@@ -225,6 +225,11 @@ function Index(props) {
           <TouchableOpacity
             disabled={!availble}
             onPress={() => {
+              if (isEmpty(variant.options)) {
+                NavigationService.navigate("ProductDetailScreen", { product });
+                return;
+              }
+
               NavigationService.navigate("EditShoppingCartScreen", {
                 listingId: product.listingId,
                 variantId: variant.variantId,

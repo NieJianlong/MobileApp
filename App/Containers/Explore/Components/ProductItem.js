@@ -154,11 +154,17 @@ function ProductItem(props) {
           </View>
         ) : (
           <View style={[{ paddingHorizontal: AppConfig.paddingHorizontal }]}>
-            <Image
-              source={{ uri: product.photo ? product.photo : defultUrl }}
-              style={styles.productImageBig}
-              resizeMode={"contain"}
-            />
+            <ViewShot
+              ref={viewShotRef}
+              options={{ format: "png", quality: 0.4, result: "base64" }}
+            >
+              <Image
+                source={{ uri: product.photo ? product.photo : defultUrl }}
+                style={styles.productImageBig}
+                resizeMode={"contain"}
+              />
+            </ViewShot>
+
             <View style={styles.v2}>
               <View>
                 <Text style={styles.heading4Bold}>{product.shortName}</Text>
@@ -281,7 +287,10 @@ function ProductItem(props) {
                 <Image source={Images.likeMed} style={styles.roundBtnIcon} />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.roundBtnContainer}>
+              <TouchableOpacity
+                style={styles.roundBtnContainer}
+                onPress={toggleShareSheet}
+              >
                 <Image source={Images.share} style={styles.roundBtnIcon} />
               </TouchableOpacity>
             </View>

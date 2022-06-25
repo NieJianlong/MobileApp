@@ -22,7 +22,7 @@ jobs:
 
       - name: Gen Token
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.REPO_READ_TOKEN }}" > ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
       # - name: Install
       #   run: yarn

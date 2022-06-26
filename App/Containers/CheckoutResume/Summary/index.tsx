@@ -10,7 +10,6 @@ import useOrderInfo from "../../../hooks/useOrderInfo";
 
 function index(props) {
   const { orderInfo } = useOrderInfo();
-  debugger;
 
   const [summaries, setSummaries] = useState([
     {

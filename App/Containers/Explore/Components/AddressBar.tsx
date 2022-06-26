@@ -206,7 +206,6 @@ export default function AddressBar() {
 
   useEffect(() => {
     let refresh = PubSub.subscribe("edit-address", (res, data) => {
-      debugger;
       console.log("====================================");
       console.log(localCart.deliverAddress);
       console.log("====================================");

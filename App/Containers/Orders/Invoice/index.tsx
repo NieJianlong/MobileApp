@@ -31,7 +31,6 @@ class Invoice extends Component {
     // const sellerLocation = this.props.data.sellerLocation;
     let addressDetail = "";
     let title = "Delivered to";
-    debugger;
     switch (deliveryOption) {
       case DeliveryOption.CourierDelivery:
         addressDetail = mapGQLAddressToDelivery(deliverAddress, true);

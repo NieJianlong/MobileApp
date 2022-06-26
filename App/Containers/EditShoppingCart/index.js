@@ -68,12 +68,11 @@ function EditShoppingCart(props) {
   }, [navigation, currentVariant]);
 
   useEffect(() => {
-    debugger;
     if (products?.getListings?.content[0]?.listingVariants) {
       const variant = products?.getListings?.content[0]?.listingVariants.find(
         (item) => item.variantId === params.variantId
       );
-      debugger;
+
       if (variant) {
         setCurrentVariant(variant);
       }

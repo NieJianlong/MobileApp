@@ -120,7 +120,14 @@ export default function ChooseCategoriesScreen() {
       },
     },
     onError: (res) => {
-      setAlert({ message: res.message, color: Colors.error, visible: true });
+      setAlert({
+        message: res.message,
+        color: Colors.error,
+        visible: true,
+        onDismiss: () => {
+          setAlert({ visible: false });
+        },
+      });
     },
   });
   const navigation = useNavigation();

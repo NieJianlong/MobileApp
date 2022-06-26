@@ -114,6 +114,9 @@ function RegisterGuestBuyerToBuyerForm({
           message: res.message,
           title: "Register Failded",
           color: Colors.error,
+          onDismiss: () => {
+            setAlert({ visible: false });
+          },
         });
         setLoading({ show: false });
       },

@@ -41,6 +41,7 @@ class AlertComponent extends Component {
       duration: 2000,
       useNativeDriver: true,
     }).start();
+    this.props.onDismiss && this.props.onDismiss();
   };
 
   render() {

@@ -110,7 +110,14 @@ export default function ProductCarousel({ product, onPress }) {
     },
     onError: (res) => {
       setLoading({ show: false });
-      setAlert({ visible: true, message: res.message, color: colors.error });
+      setAlert({
+        visible: true,
+        message: res.message,
+        color: colors.error,
+        onDismiss: () => {
+          setAlert({ visible: false });
+        },
+      });
     },
   });
   const [deleteFromWishList] = useDeleteListingFromWishlistMutation({
@@ -126,7 +133,14 @@ export default function ProductCarousel({ product, onPress }) {
     },
     onError: (res) => {
       setLoading({ show: false });
-      setAlert({ visible: true, message: res.message, color: colors.error });
+      setAlert({
+        visible: true,
+        message: res.message,
+        color: colors.error,
+        onDismiss: () => {
+          setAlert({ visible: false });
+        },
+      });
     },
   });
 
@@ -146,20 +160,18 @@ export default function ProductCarousel({ product, onPress }) {
     const fs = RNFetchBlob.fs;
     let imagePath = null;
     RNFetchBlob.config({
-      fileCache: true
+      fileCache: true,
     })
       .fetch("GET", product.photo)
-      .then(resp => {
+      .then((resp) => {
         imagePath = resp.path();
         return resp.readFile("base64");
       })
-      .then(base64Data => {
+      .then((base64Data) => {
         console.log(base64Data);
         shareOptionsDetails(base64Data, product);
         return fs.unlink(imagePath);
       });
-
-
 
     // })
   }, [dispatch]);

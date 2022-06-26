@@ -234,7 +234,14 @@ export const useCreateOrder = () => {
       },
       onError: (res) => {
         setLoading({ show: false });
-        setAlert({ visible: true, message: res.message, color: Colors.error });
+        setAlert({
+          visible: true,
+          message: res.message,
+          color: Colors.error,
+          onDismiss: () => {
+            setAlert({ visible: false });
+          },
+        });
       },
     });
   };

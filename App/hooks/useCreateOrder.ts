@@ -187,7 +187,7 @@ export const useCreateOrder = () => {
         ? userProfile.billingDetailsId
         : billingDetailsId,
       useSalamiWallet: true,
-      cartItems: isEmpty(orderInfo.itemsForRequest)
+      cartItems: !isEmpty(itemsForRequest)
         ? itemsForRequest
         : orderInfo.itemsForRequest,
     };

@@ -39,7 +39,7 @@ import useLogin from "../../hooks/useLogin";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/native";
 
-function LoginScreen1(props) {
+function LogOutScreen(props) {
   // refs
   // let passwordInput = null;
   // const [fetchedEmail, setFetchedEmail] = useState([]);
@@ -62,19 +62,6 @@ function LoginScreen1(props) {
       password: "",
     },
   });
-
-  // const emailRetrieve = async () => {
-  //   try {
-  //     const value = await AsyncStorage.getItem("emailList");
-  //     setFetchedEmail(JSON.parse(value));
-  //   } catch (error) {
-  //     console.log("error retrieve");
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   emailRetrieve();
-  // }, [savedEmail]);
 
   const [getBuerIdProfile] = useBuyerProfileByUserIdLazyQuery({
     onError: (err) => {
@@ -133,28 +120,6 @@ function LoginScreen1(props) {
   let [keyboardHeight, setKeyboardHeight] = useState(0);
   const [resendCode] = useSendOtpCodeMutation();
 
-  const loginRequestMemo = useMemo(() => {
-    let ret = validator.loginDifferentiator(getValues("username"));
-    if (ret.isValid) {
-      // we are good so we can test for email or phone
-      if (ret.isEmail || ret.isPhone) {
-        let loginRequest = {
-          username: ret.isPhone
-            ? "+91" + getValues("username")
-            : getValues("username")?.trim(),
-          password: getValues("password")?.trim(),
-        };
-        return loginRequest;
-      }
-    }
-    return {
-      username: getValues("username")?.trim(),
-      password: getValues("password")?.trim(),
-    };
-  }, [getValues]);
-  // useEffect(() => {
-  //   storage.setLocalStorageEmpty();
-  // }, []);
   const navigaiton = useNavigation();
   React.useEffect(() => {
     const unsubscribe = navigaiton.addListener("focus", () => {
@@ -372,8 +337,6 @@ function LoginScreen1(props) {
       });
     }
   };
-  const navigation = useNavigation();
-
   const _keyboardWillShow = (e) => {
     setKeyboardHeight(e.endCoordinates.height);
   };
@@ -382,8 +345,6 @@ function LoginScreen1(props) {
     setKeyboardHeight(0);
   };
   const { width, height } = useWindowDimensions();
-
-  const sampleData = ["jonathan@gmail.com"];
 
   // const storeEmail = async () => {
   //   if (fetchedEmail) {
@@ -546,4 +507,4 @@ function LoginScreen1(props) {
   );
 }
 
-export default LoginScreen1;
+export default LogOutScreen;

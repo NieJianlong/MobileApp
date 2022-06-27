@@ -91,6 +91,7 @@ import { Image, SafeAreaView, TouchableOpacity, View } from "react-native";
 import styles from "../Containers/Explore/styles";
 import colors from "../Themes/Colors";
 import useCurrentRoute from "../hooks/useCurrentRoute";
+import LogOutScreen from "../Containers/LogOut";
 // import ReturnInformation from "../..";
 const Stack = createStackNavigator();
 
@@ -327,6 +328,32 @@ function PrimaryNav() {
       <Stack.Screen
         name={"LoginScreen"}
         component={LoginScreen}
+        options={{
+          gesturesEnabled: false,
+          header: () => (
+            <View
+              style={[
+                t.bgWhite,
+                t.flexRow,
+                t.justifyBetween,
+                t.h24,
+                t.itemsEnd,
+              ]}
+            >
+              <View style={{ width: 36, height: 36 }} />
+              {/* <Image
+                source={Images.logo4}
+                style={[styles.logo, t.mT4]}
+                resizeMode={"contain"}
+              /> */}
+              <View style={{ width: 36, height: 36 }} />
+            </View>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name={"LogOutScreen"}
+        component={LogOutScreen}
         options={{
           gesturesEnabled: false,
           header: () => (

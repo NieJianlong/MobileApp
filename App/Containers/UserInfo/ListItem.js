@@ -50,18 +50,18 @@ function ListItem(props) {
           // userProfileVarReactive.email = "";
           // userProfileVarReactive.isAuth = false;
           // userProfileVarReactive.phone = "";
-          global.access_token = "";
+          // global.access_token = "";
           await storage.setLocalStorageEmpty();
           await storage.setLocalStorageValue(
             storage.REGISTERED_USER_LOGOUT,
             "true"
           );
           // guestBuyerId();
-          userProfileVar({
-            ...userProfileVarReactive,
-            isAuth: false,
-          });
-          NavigationService.navigate("LoginScreen");
+          // userProfileVar({
+          //   ...userProfileVarReactive,
+          //   isAuth: false,
+          // });
+          NavigationService.navigate("LogOutScreen");
           // navigation.popToTop();
           // navigation.reset({
           //   index: 0,

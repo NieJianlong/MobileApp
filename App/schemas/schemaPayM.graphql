@@ -9,6 +9,8 @@ scalar DateTime
 """MUTATIONS"""
 type Mutation {
   processOrderPaymentStatus: ProcessOrderPaymentStatusResponse!
+  processUnmatchedGatewayOrders: ProcessUnmatchedOrderResponse!
+  processPaymentRefundStatus: ProcessRefundStatusResponse!
   razorpayCreateOrder(request: RazorpayOrderRequest!): RazorpayOrderResponse!
   razorpayVerifyPaymentSignature(request: RazorpayVerifyPaymentSignatureRequest!): RazorpayVerifyPaymentSignatureResponse!
   razorpayCreateRefund(request: RazorpayRefundRequest!): RazorpayRefundResponse!
@@ -36,6 +38,19 @@ type PaymentResponse {
 type ProcessOrderPaymentStatusResponse {
   recordsWithError: Int!
   recordsProcessedSuccessful: Int!
+  message: String!
+}
+
+type ProcessRefundStatusResponse {
+  recordsWithError: Int!
+  recordsProcessedSuccessful: Int!
+  message: String!
+}
+
+type ProcessUnmatchedOrderResponse {
+  recordsWithError: Int!
+  recordsProcessedSuccessful: Int!
+  recordsWithNoPayment: Int!
   message: String!
 }
 
@@ -76,6 +91,7 @@ type RazorpayRefundResponse {
   razorpayRefundStatus: String
   refundedAmount: Float
   refundPaymentTimestamp: DateTime
+  orderRefundStatus: String
 }
 
 input RazorpayVerifyPaymentSignatureRequest {

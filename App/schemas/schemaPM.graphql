@@ -364,6 +364,13 @@ input OptionValueInput {
   optionValueId: ID!
 }
 
+input PageableOptions {
+  sortBy: SortType
+  sortDirection: SortDirection
+  pageNo: Int
+  pageSize: Int
+}
+
 type PolicyNameView {
   name: String
   values: [String]
@@ -698,6 +705,7 @@ type Query {
   isListingAvailable(listings: [IsListingAvailableInput!]!): [IsListingAvailableResponse!]!
   getBuyerWishlistListing(options: WishlistOption!): BuyerListingResponse!
   isListingInWishlist(buyerId: ID!, listingId: ID!): Boolean!
+  getShowcaseListings(options: PageableOptions): BuyerListingResponse!
   getProducts(pageable: ProductPageable): ProductResponse!
   getProductByProductId(productId: String!): SellerProductDetailView!
   getShareInformationByProductId(productId: String): [ShareInformation]

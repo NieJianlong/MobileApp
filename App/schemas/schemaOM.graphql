@@ -74,12 +74,14 @@ input CartInput {
   billingDetailsId: ID!
   useSalamiWallet: Boolean!
   cartItems: [CartItemInput]
+  paymentRetry: Boolean
 }
 
 input CartItemInput {
   listingId: ID!
   quantity: Int
   variantId: ID
+  replacedOrderItemId: ID
 }
 
 type CollectionPointPickupResponse {
@@ -102,12 +104,36 @@ scalar Date
 
 scalar DateTime
 
+input DeleteOrderItemsRequest {
+  buyerId: ID!
+  orderItemIds: [ID!]!
+}
+
 enum DeliveryOption {
   UNDEFINED
   COURIER_DELIVERY
   SELLER_DIRECT_DELIVERY
   COLLECTION_POINT_PICKUP
   SELLER_LOCATION_PICKUP
+}
+
+type InvoiceItem {
+  invoiceId: ID!
+  orderItemId: ID!
+  invoiceNumber: String
+  description: String
+  unitPrice: Float
+  quantity: Int
+  netAmount: Float
+  taxRate: Float
+  taxType: String
+  taxAmount: Float
+  totalAmount: Float
+}
+
+type InvoiceResponse {
+  orderId: ID!
+  invoices: [InvoiceItem]!
 }
 
 enum ListingOrderFilterType {
@@ -125,8 +151,10 @@ input ListingOrderOptions {
 type Mutation {
   createOrderFromCart(request: CartInput!): OrderResponse
   updateOrderPaymentStatus(request: UpdateOrderPaymentStatusRequest!): Boolean!
+  updateOrderRefundStatus(request: UpdateOrderRefundStatusRequest!): Boolean!
   cancelOrderItem(request: CancelOrderItemRequest): Boolean
   cancelOrderItemByListingId(listingId: ID!): Boolean
+  deleteOrderItems(request: DeleteOrderItemsRequest!): Boolean!
   markOrderItemAsDelivered(request: OrderItemDeliveredRequest!): Boolean
   submitOrderReturnRequest(request: OrderReturnRequest!): OrderReturnResponse
   approveOrRejectOrderReturnRequest(request: OrderReturnEventRequest!): Boolean
@@ -206,6 +234,9 @@ type OrderItemDetailResponse {
 enum OrderItemHistoryEventType {
   WAITING_FOR_PAYMENT
   PAID
+  CREATED_PAYMENT
+  FAILED_PAYMENT
+  AUTHORIZED_PAYMENT
   WAITING_FOR_SHIPMENT
   COURIER_DELIVERY
   SELLER_DELIVERY
@@ -350,6 +381,7 @@ type Query {
   getOrderReturn(orderReturnId: String!): OrderReturnResponse!
   getOrderReturnStatus(orderReturnId: String!): OrderReturnStatusResponse!
   getSellerOrderReturns(options: OrderReturnOptions!): SellerOrderReturnResponse!
+  getInvoices(orderId: String): InvoiceResponse!
 }
 
 enum ReturnEventType {
@@ -517,6 +549,11 @@ type TrackOrderItemResponse {
 input UpdateOrderPaymentStatusRequest {
   orderId: ID!
   paymentStatus: OrderItemHistoryEventType!
+}
+
+input UpdateOrderRefundStatusRequest {
+  refundReferenceId: ID!
+  refundStatus: String!
 }
 
 type ValidateReturnPolicyResponse {

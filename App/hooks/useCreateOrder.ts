@@ -139,6 +139,7 @@ export const useCreateOrder = () => {
     comeFromType,
     allItems,
     availbleList,
+    paymentRetry = false,
   }: {
     data?: BillingDetailsRequestForCreate;
     isFromInSufficientSalamiCreditScreen?: boolean;
@@ -146,6 +147,7 @@ export const useCreateOrder = () => {
     comeFromType?: ComeFromType;
     allItems?: ItemProps[];
     availbleList?: IsListingAvailableFieldFragment[];
+    paymentRetry?: boolean;
   }) => {
     setLoading({ show: true });
 
@@ -190,6 +192,7 @@ export const useCreateOrder = () => {
       cartItems: !isEmpty(itemsForRequest)
         ? itemsForRequest
         : orderInfo.itemsForRequest,
+      paymentRetry: paymentRetry ? paymentRetry : false,
     };
 
     createOrderFromCart({
@@ -246,6 +249,120 @@ export const useCreateOrder = () => {
     });
   };
 
+  const retryPayment = async ({
+    isFromInSufficientSalamiCreditScreen = false,
+    itemsForRequest,
+    comeFromType,
+    allItems,
+    availbleList,
+    paymentRetry = false,
+  }: {
+    isFromInSufficientSalamiCreditScreen?: boolean;
+    itemsForRequest?: any[];
+    comeFromType?: ComeFromType;
+    allItems?: ItemProps[];
+    availbleList?: IsListingAvailableFieldFragment[];
+    paymentRetry?: boolean;
+  }) => {
+    setLoading({ show: true });
+
+    let walletBalance = 0;
+    if (userProfile.isAuth) {
+      const { data: balanceData } = await getBuyerSalamiWalletBalance();
+      const remoteBalance =
+        balanceData?.getBuyerSalamiWalletBalance?.walletBalance ?? 0;
+      const remoteGiftBalance =
+        balanceData?.getBuyerSalamiWalletBalance?.giftBalance ?? 0;
+      walletBalance = parseFloat(
+        new BigNumber(remoteBalance + remoteGiftBalance).toFixed(2)
+      );
+    }
+    const info = moneyInfo({
+      data: isEmpty(orderInfo.allItems) ? allItems : orderInfo.allItems,
+      walletBalance,
+      availbleList: isEmpty(orderInfo.availbleList)
+        ? availbleList
+        : orderInfo.availbleList,
+      comeFromType: comeFromType ? comeFromType : orderInfo.comeFromType,
+    });
+    // if (info.orderType === OrderType.inSufficient) {
+    if (
+      !isFromInSufficientSalamiCreditScreen &&
+      info.orderType === OrderType.inSufficient
+    ) {
+      NavigationService.navigate("InSufficientSalamiCreditScreen");
+      return;
+    }
+
+    // }
+
+    const billingDetailsId = await addBilling(data ?? undefined);
+    const cart = {
+      buyerId: global.buyerId,
+      shippingAddressId: localCart.deliverAddress,
+      billingDetailsId: isEmpty(billingDetailsId)
+        ? userProfile.billingDetailsId
+        : billingDetailsId,
+      useSalamiWallet: true,
+      cartItems: !isEmpty(itemsForRequest)
+        ? itemsForRequest
+        : orderInfo.itemsForRequest,
+      paymentRetry: paymentRetry ? paymentRetry : false,
+    };
+
+    createOrderFromCart({
+      variables: {
+        cart,
+      },
+      context: {
+        headers: {
+          isPrivate: userProfile.isAuth,
+        },
+      },
+      onCompleted: (res) => {
+        if (info.orderType === OrderType.sufficient) {
+          setLoading({ show: false });
+          if (res?.createOrderFromCart?.orderId) {
+            NavigationService.navigate("OrderPlacedScreen");
+          }
+        } else if (
+          info.orderType === OrderType.zero ||
+          info.orderType === OrderType.inSufficient
+        ) {
+          const order1 = res?.createOrderFromCart;
+          if (res?.createOrderFromCart?.orderId) {
+            razorpayCreateOrder(order1).then(async (res1) => {
+              if (res1?.data) {
+                const razorId =
+                  res1?.data?.razorpayCreateOrder?.razorpayOrderId;
+                try {
+                  await getPaymentConfigration(
+                    razorId ?? "",
+                    order1.paymentDetails.balanceToPay
+                  );
+                  setLoading({ show: false });
+                } catch (error) {
+                  setLoading({ show: false });
+                }
+              }
+            });
+          }
+          return res?.createOrderFromCart;
+        }
+      },
+      onError: (res) => {
+        setLoading({ show: false });
+        setAlert({
+          visible: true,
+          message: res.message,
+          color: Colors.error,
+          onDismiss: () => {
+            setAlert({ visible: false });
+          },
+        });
+      },
+    });
+  };
   return {
     createOrderFromCart,
     createOrder,

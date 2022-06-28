@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "./styles";
@@ -14,8 +14,6 @@ import {
   ProductListingStatus,
   useGetListingsQuery,
   useGetOrderItemDetailsQuery,
-  useMarkOrderItemAsDeliveredMutation,
-  useUpdateListingStatusMutation,
 } from "../../../../generated/graphql";
 import { useFocusEffect } from "@react-navigation/native";
 import useLoading from "../../../hooks/useLoading";
@@ -69,81 +67,25 @@ function GroupInfoScreen(props) {
       },
     },
   });
-  // const [markOrderItem] = useMarkOrderItemAsDeliveredMutation();
-  // useEffect(() => {
-  //   markOrderItem({
-  //     variables: {
-  //       request: {
-  //         buyerId: global.buyerId,
-  //         orderItemId: data.orderItemId,
-  //       },
-  //     },
-  //     context: {
-  //       headers: {
-  //         isPrivate: true,
-  //       },
-  //     },
-  //   });
-  //   updateListingStatus();
-  // }, [data, markOrderItem]);
+  const isStillCanOrdered = useMemo(() => {
+    if (product?.getListings.content[0] && orderData) {
+      const variant = product?.getListings.content[0].listingVariants?.find(
+        (item) => item.variantId === orderData?.getOrderItemDetails.variantId
+      );
+      if (variant) {
+        return (
+          variant?.itemsAvailable -
+            variant?.itemsSold -
+            orderData.getOrderItemDetails.quantity >=
+          0
+        );
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }, [product, orderData]);
 
-  // const [updateListingStatus] = useUpdateListingStatusMutation({
-  //   variables: {
-  //     input: {
-  //       listingId: data.listingId,
-  //       status: ProductListingStatus.Accepted,
-  //     },
-  //   },
-  //   context: {
-  //     headers: {
-  //       isPrivate: true,
-  //     },
-  //   },
-  // });
-  // const { loading, error, data, refetch, fetchMore } = useGetListingsQuery({
-  //   variables: {
-  //     searchOptions: {
-  //       filter: FilterType.ByListingId,
-  //       filterParams: {
-  //         listingId:params?.item?.listingId
-  //       },
-  //     },
-  //   },
-  //   context: {
-  //     headers: {
-  //       isPrivate: true,
-  //     },
-  //   },
-  //   onError: () => {},
-  //   onCompleted: (res) => {
-  //     // map data from server for now
-  //     // add missing fields for product review
-  //     // update for name changes in data from server
-  //     // setNoMore(false);
-  //     // setServerData(res.getListings.content);
-  //   },
-  // });
-  // const { loading, error, data, refetch, fetchMore } = useQuery(GET_LISTINGS, {
-  //   variables: {
-  //     searchOptions: {
-  //       filter: "BY_LISTING_ID",
-  //       filterParams: {
-  //         listingId: params.item.listingId ?? "",
-  //       },
-  //     },
-  //   },
-  //   context: {
-  //     headers: {
-  //       isPrivate: true,
-  //     },
-  //   },
-  //   onError: (res) => {},
-  // });
-  // if (data) {
-  //   console.log("data====================================");
-  //   console.log(data);
-  //   console.log("====================================");
-  // }
   function renderAction(icon, text, action) {
     return (
       <TouchableOpacity onPress={action} style={styles.actionContainer}>
@@ -247,6 +189,19 @@ function GroupInfoScreen(props) {
               OrderItemHistoryEventType.FailedPayment ||
             finalData?.latestEventStatus === OrderItemHistoryEventType.Paid) &&
           renderAction(Images.orderCancelImage, "Cancel order", () =>
+            NavigationService.navigate("CancelOrderScreen", {
+              orderItemId: data.orderItemId,
+              data: orderData?.getOrderItemDetails,
+              product: product?.getListings?.content[0],
+            })
+          )}
+        {finalData?.listingStatus === ProductListingStatus.Active &&
+          (finalData?.latestEventStatus ===
+            OrderItemHistoryEventType.WaitingForPayment ||
+            finalData?.latestEventStatus ===
+              OrderItemHistoryEventType.FailedPayment) &&
+          isStillCanOrdered &&
+          renderAction(Images.orderCancelImage, "Retry payment", () =>
             NavigationService.navigate("CancelOrderScreen", {
               orderItemId: data.orderItemId,
               data: orderData?.getOrderItemDetails,

@@ -360,6 +360,7 @@ export type CartInput = {
   billingDetailsId: Scalars['ID'];
   buyerId: Scalars['ID'];
   cartItems?: InputMaybe<Array<InputMaybe<CartItemInput>>>;
+  paymentRetry?: InputMaybe<Scalars['Boolean']>;
   shippingAddressId?: InputMaybe<Scalars['ID']>;
   useSalamiWallet: Scalars['Boolean'];
 };
@@ -367,6 +368,7 @@ export type CartInput = {
 export type CartItemInput = {
   listingId: Scalars['ID'];
   quantity?: InputMaybe<Scalars['Int']>;
+  replacedOrderItemId?: InputMaybe<Scalars['ID']>;
   variantId?: InputMaybe<Scalars['ID']>;
 };
 
@@ -557,6 +559,11 @@ export type CourierDeliveryDetailsInput = {
   shippingFeesTaxes?: InputMaybe<Scalars['Float']>;
 };
 
+export type DeleteOrderItemsRequest = {
+  buyerId: Scalars['ID'];
+  orderItemIds: Array<Scalars['ID']>;
+};
+
 export type DeliveryAddressGeoCoordinateRequest = {
   addressId: Scalars['ID'];
   coordinates?: InputMaybe<PointRequest>;
@@ -690,6 +697,27 @@ export type Images = {
   imageName?: Maybe<Scalars['String']>;
   imageType?: Maybe<ImageType>;
   referenceId?: Maybe<Scalars['String']>;
+};
+
+export type InvoiceItem = {
+  __typename?: 'InvoiceItem';
+  description?: Maybe<Scalars['String']>;
+  invoiceId: Scalars['ID'];
+  invoiceNumber?: Maybe<Scalars['String']>;
+  netAmount?: Maybe<Scalars['Float']>;
+  orderItemId: Scalars['ID'];
+  quantity?: Maybe<Scalars['Int']>;
+  taxAmount?: Maybe<Scalars['Float']>;
+  taxRate?: Maybe<Scalars['Float']>;
+  taxType?: Maybe<Scalars['String']>;
+  totalAmount?: Maybe<Scalars['Float']>;
+  unitPrice?: Maybe<Scalars['Float']>;
+};
+
+export type InvoiceResponse = {
+  __typename?: 'InvoiceResponse';
+  invoices: Array<Maybe<InvoiceItem>>;
+  orderId: Scalars['ID'];
 };
 
 export type IsListingAvailableInput = {
@@ -834,6 +862,7 @@ export type Mutation = {
   deleteNotification?: Maybe<Scalars['Boolean']>;
   deleteOption: Scalars['Boolean'];
   deleteOptionValue: Scalars['Boolean'];
+  deleteOrderItems: Scalars['Boolean'];
   deletePaymentDetail?: Maybe<Scalars['Boolean']>;
   deletePreference?: Maybe<Scalars['Boolean']>;
   deleteProduct: Scalars['Boolean'];
@@ -859,6 +888,8 @@ export type Mutation = {
   markOrderItemAsDelivered?: Maybe<Scalars['Boolean']>;
   markOrderReturnAsReceived?: Maybe<Scalars['Boolean']>;
   processOrderPaymentStatus: ProcessOrderPaymentStatusResponse;
+  processPaymentRefundStatus: ProcessRefundStatusResponse;
+  processUnmatchedGatewayOrders: ProcessUnmatchedOrderResponse;
   rateSeller?: Maybe<Scalars['Boolean']>;
   razorpayCreateOrder: RazorpayOrderResponse;
   razorpayCreateRefund: RazorpayRefundResponse;
@@ -900,6 +931,7 @@ export type Mutation = {
   updateNotification?: Maybe<NotificationResponse>;
   updateOptionValues: Option;
   updateOrderPaymentStatus: Scalars['Boolean'];
+  updateOrderRefundStatus: Scalars['Boolean'];
   updateParentCategory: CategoryResponse;
   updatePaymentDetail?: Maybe<PaymentDetailResponse>;
   updatePreference?: Maybe<PreferenceResponse>;
@@ -1269,6 +1301,12 @@ export type MutationDeleteOptionArgs = {
 export type MutationDeleteOptionValueArgs = {
   optionId: Scalars['ID'];
   valueId: Scalars['ID'];
+};
+
+
+/** MUTATIONS */
+export type MutationDeleteOrderItemsArgs = {
+  request: DeleteOrderItemsRequest;
 };
 
 
@@ -1685,6 +1723,12 @@ export type MutationUpdateOrderPaymentStatusArgs = {
 
 
 /** MUTATIONS */
+export type MutationUpdateOrderRefundStatusArgs = {
+  request: UpdateOrderRefundStatusRequest;
+};
+
+
+/** MUTATIONS */
 export type MutationUpdateParentCategoryArgs = {
   input: CategoryInput;
 };
@@ -1933,6 +1977,7 @@ export enum OrderItemHistoryEventType {
   CanceledBySeller = 'CANCELED_BY_SELLER',
   Collected = 'COLLECTED',
   CourierDelivery = 'COURIER_DELIVERY',
+  CreatedPayment = 'CREATED_PAYMENT',
   Delivered = 'DELIVERED',
   FailedPayment = 'FAILED_PAYMENT',
   Paid = 'PAID',
@@ -2057,6 +2102,13 @@ export type PageOption = {
   pageSize: Scalars['Int'];
 };
 
+export type PageableOptions = {
+  pageNo?: InputMaybe<Scalars['Int']>;
+  pageSize?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<SortType>;
+  sortDirection?: InputMaybe<SortDirection>;
+};
+
 export type PaymentDetailRequest = {
   buyerId: Scalars['ID'];
   isDefaultPaymentType?: InputMaybe<Scalars['Boolean']>;
@@ -2172,6 +2224,21 @@ export type ProcessOrderPaymentStatusResponse = {
   message: Scalars['String'];
   recordsProcessedSuccessful: Scalars['Int'];
   recordsWithError: Scalars['Int'];
+};
+
+export type ProcessRefundStatusResponse = {
+  __typename?: 'ProcessRefundStatusResponse';
+  message: Scalars['String'];
+  recordsProcessedSuccessful: Scalars['Int'];
+  recordsWithError: Scalars['Int'];
+};
+
+export type ProcessUnmatchedOrderResponse = {
+  __typename?: 'ProcessUnmatchedOrderResponse';
+  message: Scalars['String'];
+  recordsProcessedSuccessful: Scalars['Int'];
+  recordsWithError: Scalars['Int'];
+  recordsWithNoPayment: Scalars['Int'];
 };
 
 /** TYPES */
@@ -2520,6 +2587,7 @@ export type Query = {
   getGuestBuyerAddressesById?: Maybe<Array<Maybe<AddressResponse>>>;
   getGuestBuyerDefaultAddressByBuyerId?: Maybe<AddressResponse>;
   getHowToVideoLink?: Maybe<GenericResponse>;
+  getInvoices: InvoiceResponse;
   getListings: BuyerListingResponse;
   getMicroHubInformation?: Maybe<Array<Maybe<MicroHubResponse>>>;
   /** options */
@@ -2550,6 +2618,7 @@ export type Query = {
   getSellerOrders: SellerOrderResponse;
   getSellerReviewSummaryResponse: ReviewSummaryResponse;
   getShareInformationByProductId?: Maybe<Array<Maybe<ShareInformation>>>;
+  getShowcaseListings: BuyerListingResponse;
   getStatesByCountryId?: Maybe<Array<Maybe<CountryStateResponse>>>;
   getStoreByName: Store;
   /** stores */
@@ -2778,6 +2847,12 @@ export type QueryGetGuestBuyerDefaultAddressByBuyerIdArgs = {
 
 
 /** QUERIES */
+export type QueryGetInvoicesArgs = {
+  orderId?: InputMaybe<Scalars['String']>;
+};
+
+
+/** QUERIES */
 export type QueryGetListingsArgs = {
   searchOptions?: InputMaybe<SearchOptions>;
 };
@@ -2926,6 +3001,12 @@ export type QueryGetSellerReviewSummaryResponseArgs = {
 /** QUERIES */
 export type QueryGetShareInformationByProductIdArgs = {
   productId?: InputMaybe<Scalars['String']>;
+};
+
+
+/** QUERIES */
+export type QueryGetShowcaseListingsArgs = {
+  options?: InputMaybe<PageableOptions>;
 };
 
 
@@ -3178,6 +3259,7 @@ export type RazorpayRefundRequest = {
 
 export type RazorpayRefundResponse = {
   __typename?: 'RazorpayRefundResponse';
+  orderRefundStatus?: Maybe<Scalars['String']>;
   razorpayRefundId?: Maybe<Scalars['String']>;
   razorpayRefundStatus?: Maybe<Scalars['String']>;
   refundPaymentTimestamp?: Maybe<Scalars['DateTime']>;
@@ -4308,6 +4390,11 @@ export type TrackOrderItemResponse = {
 export type UpdateOrderPaymentStatusRequest = {
   orderId: Scalars['ID'];
   paymentStatus: OrderItemHistoryEventType;
+};
+
+export type UpdateOrderRefundStatusRequest = {
+  refundReferenceId: Scalars['ID'];
+  refundStatus: Scalars['String'];
 };
 
 export type UserProfileResponse = {

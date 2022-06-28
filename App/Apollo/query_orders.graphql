@@ -58,6 +58,7 @@ fragment OrderItemDetailField on OrderItemDetailResponse {
   itemPrice
   itemDiscount
   latestEventStatus
+  billingDetailsId
   paymentStatus
   shortName
   longName

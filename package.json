@@ -11,6 +11,7 @@
     "buid-expo-android": "eas build -p android",
     "build-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
     "postinstall": "patch-package",
+    "prepare": "get-graphql-schema https://dev-api.salamislicing.in/pm/graphql > ./App/schemas/schemaPM.graphql && get-graphql-schema https://dev-api.salamislicing.in/um/graphql > ./App/schemas/schemaUM.graphql && get-graphql-schema https://dev-api.salamislicing.in/om/graphql > ./App/schemas/schemaOM.graphql && get-graphql-schema https://dev-api.salamislicing.in/pay/graphql > ./App/schemas/schemaPayM.graphql",
     "gen:gql": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {

@@ -39,7 +39,7 @@ const useOrderInfo = () => {
     let currentBilling = 0;
     let originalBilling = 0;
     let deliveryFess = 0;
-
+    debugger;
     for (let index = 0; index < allItems.length; index++) {
       const element = allItems[index];
       let itemAvailble: boolean = true;

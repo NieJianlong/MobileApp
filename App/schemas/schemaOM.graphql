@@ -197,6 +197,7 @@ type OrderItemDetailResponse {
   itemDiscount: Float!
   taxPercentage: Float
   inventoryLocation: String
+  billingDetailsId: ID
   latestEventStatus: OrderItemHistoryEventType!
   paymentStatus: OrderItemHistoryEventType
   shortName: String!

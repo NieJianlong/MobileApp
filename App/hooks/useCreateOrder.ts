@@ -252,17 +252,17 @@ export const useCreateOrder = () => {
   const retryPayment = async ({
     isFromInSufficientSalamiCreditScreen = false,
     itemsForRequest,
-    comeFromType,
     allItems,
     availbleList,
-    paymentRetry = false,
+    billingDetailsId,
+    shippingAddressId,
   }: {
     isFromInSufficientSalamiCreditScreen?: boolean;
     itemsForRequest?: any[];
-    comeFromType?: ComeFromType;
     allItems?: ItemProps[];
     availbleList?: IsListingAvailableFieldFragment[];
-    paymentRetry?: boolean;
+    billingDetailsId: string;
+    shippingAddressId: string;
   }) => {
     setLoading({ show: true });
 
@@ -278,12 +278,10 @@ export const useCreateOrder = () => {
       );
     }
     const info = moneyInfo({
-      data: isEmpty(orderInfo.allItems) ? allItems : orderInfo.allItems,
+      data: allItems,
       walletBalance,
-      availbleList: isEmpty(orderInfo.availbleList)
-        ? availbleList
-        : orderInfo.availbleList,
-      comeFromType: comeFromType ? comeFromType : orderInfo.comeFromType,
+      availbleList: availbleList,
+      comeFromType: ComeFromType.checkout,
     });
     // if (info.orderType === OrderType.inSufficient) {
     if (
@@ -293,21 +291,13 @@ export const useCreateOrder = () => {
       NavigationService.navigate("InSufficientSalamiCreditScreen");
       return;
     }
-
-    // }
-
-    const billingDetailsId = await addBilling(data ?? undefined);
     const cart = {
       buyerId: global.buyerId,
-      shippingAddressId: localCart.deliverAddress,
-      billingDetailsId: isEmpty(billingDetailsId)
-        ? userProfile.billingDetailsId
-        : billingDetailsId,
+      shippingAddressId: shippingAddressId,
+      billingDetailsId,
       useSalamiWallet: true,
-      cartItems: !isEmpty(itemsForRequest)
-        ? itemsForRequest
-        : orderInfo.itemsForRequest,
-      paymentRetry: paymentRetry ? paymentRetry : false,
+      cartItems: itemsForRequest,
+      paymentRetry: true,
     };
 
     createOrderFromCart({
@@ -367,6 +357,7 @@ export const useCreateOrder = () => {
     createOrderFromCart,
     createOrder,
     order,
+    retryPayment,
     moneyInfo,
   };
 };

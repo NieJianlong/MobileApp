@@ -17,11 +17,19 @@ import {
 } from "../../../../generated/graphql";
 import { useFocusEffect } from "@react-navigation/native";
 import useLoading from "../../../hooks/useLoading";
+import { useCreateOrder } from "../../../hooks/useCreateOrder";
+import { userProfileVar } from "../../../Apollo/cache";
+import { useReactiveVar } from "@apollo/client";
+import useOrderInfo from "../../../hooks/useOrderInfo";
+import { ComeFromType } from "../../../Utils/utils";
 
 function GroupInfoScreen(props) {
   const { params } = useRoute();
+  const userProfile = useReactiveVar(userProfileVar);
   const { setLoading } = useLoading();
   const data = params.item;
+  const { retryPayment } = useCreateOrder();
+  const { orderInfo, updateMoneyInfo } = useOrderInfo();
   const {
     data: orderData,
     refetch,
@@ -201,13 +209,53 @@ function GroupInfoScreen(props) {
             finalData?.latestEventStatus ===
               OrderItemHistoryEventType.FailedPayment) &&
           isStillCanOrdered &&
-          renderAction(Images.orderCancelImage, "Retry payment", () =>
-            NavigationService.navigate("CancelOrderScreen", {
-              orderItemId: data.orderItemId,
-              data: orderData?.getOrderItemDetails,
-              product: product?.getListings?.content[0],
-            })
-          )}
+          renderAction(Images.orderCancelImage, "Retry payment", () => {
+            const item = {
+              listingId: finalData.listingId,
+              quantity: finalData.quantity,
+              variantId: finalData.variantId,
+              replacedOrderItemId: finalData.orderItemId,
+            };
+            const availbleList = [
+              {
+                listingId: finalData.listingId,
+
+                variantId: finalData.variantId,
+                isAvailable: true,
+                listing: product?.getListings.content[0],
+              },
+            ];
+            const allItems = [
+              {
+                ...item,
+                productDetails: product?.getListings.content[0],
+                variant: product?.getListings.content[0]?.listingVariants?.find(
+                  (item1) => item1?.variantId === finalData.variantId
+                ),
+              },
+            ];
+            global.billingDetails = {
+              email: userProfile.email,
+              phoneNumber: userProfile.phone ?? "",
+              firstName: userProfile.firstName,
+              lastName: userProfile.lastName,
+            };
+            const newInfo = {
+              itemsForRequest: [item],
+              allItems: allItems,
+              comeFromType: ComeFromType.checkout,
+              availbleList,
+            };
+            updateMoneyInfo(newInfo);
+            retryPayment({
+              isFromInSufficientSalamiCreditScreen: false,
+              itemsForRequest: [item],
+              allItems: allItems,
+              availbleList,
+              billingDetailsId: finalData.billingDetailsId ?? "",
+              shippingAddressId: finalData?.deliveryAddress?.addressId ?? "",
+            });
+          })}
         {(finalData?.latestEventStatus ===
           OrderItemHistoryEventType.ReplacementRequest ||
           finalData?.latestEventStatus ===

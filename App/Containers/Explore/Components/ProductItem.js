@@ -240,13 +240,14 @@ function ProductItem(props) {
               <View style={styles.row}>
                 <Image source={Images.stock} style={styles.icStock} />
                 <Text style={styles.txtOrderNumber}>
-                  {product.noOfOrderedItems}/{product.noOfItemsInStock}
+                  {product.noOfOrderedItems} sold out of{" "}
+                  {product.noOfItemsInStock}
                 </Text>
               </View>
               <TouchableOpacity
                 onPress={() => NavigationService.navigate("LearnMoreScreen")}
               >
-                <Image source={Images.info2} style={[styles.icInfo]} />
+                <Image source={Images.info2} style={[styles.icInfo, t.mL0]} />
               </TouchableOpacity>
 
               <View style={styles.row}>
@@ -354,7 +355,7 @@ function ProductItem(props) {
           />
           <Image source={Images.stock} style={styles.icStockSmall} />
           <Text style={styles.heading6Regular}>
-            {product.noOfOrderedItems}/{product.noOfItemsInStock}
+            {product.noOfOrderedItems} sold out of {product.noOfItemsInStock}
           </Text>
         </View>
       </TouchableOpacity>

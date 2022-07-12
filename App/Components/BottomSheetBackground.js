@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Text, View, TouchableWithoutFeedback } from "react-native";
 import { ScaledSheet, s, vs } from "react-native-size-matters";
-import Animated from "react-native-reanimated";
 import { Fonts, Colors } from "../Themes";
 
 //component show gray background when bottom sheet apear
@@ -18,7 +17,7 @@ function BottomSheetBackground(props) {
   if (visible) {
     return (
       <TouchableWithoutFeedback onPress={onPress}>
-        <Animated.View
+        <View
           style={{
             width: "100%",
             height: "100%",
@@ -28,8 +27,7 @@ function BottomSheetBackground(props) {
             right: 0,
             bottom: 0,
             alignItems: "center",
-            backgroundColor: "rgb(29,29,29)",
-            opacity: Animated.add(0.85, Animated.multiply(-1.0, controller)),
+            backgroundColor: "rgb(0,0,0,0.5)",
           }}
         />
       </TouchableWithoutFeedback>

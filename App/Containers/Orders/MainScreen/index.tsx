@@ -2,7 +2,7 @@ import React, { Component, useEffect } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
-import Animated from "react-native-reanimated";
+
 import {
   Button,
   BottomSheet,
@@ -21,7 +21,6 @@ import useLoading from "../../../hooks/useLoading";
 import { isEmpty } from "lodash";
 
 class Order extends Component {
-  fall = new Animated.Value(0);
   constructor(props) {
     super(props);
     this.state = {
@@ -48,7 +47,7 @@ class Order extends Component {
           this.filterSheet = ref;
         }}
         onCloseEnd={() => this.setState({ showFilterSheet: false })}
-        callbackNode={this.fall}
+        // callbackNode={this.fall}
         snapPoints={[vs(380), 0]}
         initialSnap={this.state.showFilterSheet ? 0 : 1}
         title={"Sort by"}

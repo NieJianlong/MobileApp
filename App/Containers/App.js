@@ -10,6 +10,7 @@ import MapScreen from "./MapScreen";
 import { StatusBar } from "expo-status-bar";
 import useStatusBar from "../hooks/useStatusBar";
 import * as Sentry from "sentry-expo";
+import { FlipperTicTacToe } from "react-native-flipper";
 
 Sentry.init({
   //dsn: "https://908e7b35c4824794aecc2e070deccf59@o1261296.ingest.sentry.io/6438866",
@@ -90,6 +91,7 @@ const App = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ApolloProvider client={client}>
         <FlipperAsyncStorage />
+        {/* <FlipperTicTacToe /> */}
         <StatusBar hidden={hidden} backgroundColor={color} translucent={true} />
         <RootContainer />
       </ApolloProvider>

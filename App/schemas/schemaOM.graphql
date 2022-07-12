@@ -70,7 +70,7 @@ input CancelOrderItemRequest {
 
 input CartInput {
   buyerId: ID!
-  shippingAddressId: ID
+  shippingAddressId: ID!
   billingDetailsId: ID!
   useSalamiWallet: Boolean!
   cartItems: [CartItemInput]
@@ -198,6 +198,7 @@ type OrderItemDetailResponse {
   taxPercentage: Float
   inventoryLocation: String
   billingDetailsId: ID
+  shippingAddressId: ID
   latestEventStatus: OrderItemHistoryEventType!
   paymentStatus: OrderItemHistoryEventType
   shortName: String!

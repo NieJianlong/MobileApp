@@ -361,7 +361,7 @@ export type CartInput = {
   buyerId: Scalars['ID'];
   cartItems?: InputMaybe<Array<InputMaybe<CartItemInput>>>;
   paymentRetry?: InputMaybe<Scalars['Boolean']>;
-  shippingAddressId?: InputMaybe<Scalars['ID']>;
+  shippingAddressId: Scalars['ID'];
   useSalamiWallet: Scalars['Boolean'];
 };
 
@@ -1960,6 +1960,7 @@ export type OrderItemDetailResponse = {
   sellerId: Scalars['ID'];
   sellerLocation?: Maybe<SellerLocationPickupResponse>;
   sellerSku?: Maybe<Scalars['String']>;
+  shippingAddressId?: Maybe<Scalars['ID']>;
   shippingDate?: Maybe<Scalars['Date']>;
   shippingDetails?: Maybe<ShippingDetailsResponse>;
   shortName: Scalars['String'];

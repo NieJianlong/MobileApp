@@ -1,24 +1,21 @@
 import React, { Component, useEffect } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
+import { View, Text, ScrollView, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
-
-import {
-  Button,
-  BottomSheet,
-  BottomSheetBackground,
-} from "../../../Components";
-import CheckBox from "../Components/CheckBox";
-import SearchBox from "../Components/SearchBox";
+import { Button } from "../../../Components";
 import NavigationService from "../../../Navigation/NavigationService";
 import { Images } from "../../../Themes";
 import styles from "./styles";
 import { t } from "react-native-tailwindcss";
-import moment from "moment";
-import { useSearchBuyerOrdersQuery } from "../../../../generated/graphql";
+import {
+  OrderItemHistoryEventType,
+  useSearchBuyerOrdersQuery,
+} from "../../../../generated/graphql";
 import { useFocusEffect } from "@react-navigation/native";
 import useLoading from "../../../hooks/useLoading";
-import { isEmpty } from "lodash";
+import NoteBookTab from "../../../Components/NoteBookTab/NoteBookTab";
+import OrderItem from "./OrderItem";
+import { difference, groupBy } from "lodash";
 
 class Order extends Component {
   constructor(props) {
@@ -27,228 +24,75 @@ class Order extends Component {
       sortOption: 0,
       showFilterSheet: false,
       isSearching: false,
+      status: "unpaid",
     };
   }
 
-  toggleFilterSheet = () => {
-    this.setState({ showFilterSheet: !this.state.showFilterSheet }, () => {
-      if (this.state.showFilterSheet) {
-        this.filterSheet.snapTo(0);
-      } else {
-        this.filterSheet.snapTo(1);
-      }
-    });
-  };
-
-  renderFilterSheet() {
-    return (
-      <BottomSheet
-        customRef={(ref) => {
-          this.filterSheet = ref;
-        }}
-        onCloseEnd={() => this.setState({ showFilterSheet: false })}
-        // callbackNode={this.fall}
-        snapPoints={[vs(380), 0]}
-        initialSnap={this.state.showFilterSheet ? 0 : 1}
-        title={"Sort by"}
-      >
-        <View style={{ flex: 1 }}>
-          {sortOptions.map((i, index) => {
-            return (
-              <View key={index.toString()}>
-                <View style={{ height: vs(12) }} />
-                <CheckBox
-                  defaultValue={this.state.sortOption === index}
-                  onSwitch={(t) => this.setState({ sortOption: index })}
-                  label={i}
-                />
-              </View>
-            );
-          })}
-        </View>
-      </BottomSheet>
-    );
-  }
-
-  renderHeader() {
-    if (this.state.isSearching) {
-      return (
-        <View style={styles.header}>
-          <SearchBox
-            onPressBack={() => this.setState({ isSearching: false })}
-          />
-        </View>
-      );
-    } else {
-      return (
-        <View style={styles.header}>
-          <View style={styles.icSearch} />
-          <Image
-            source={Images.logo3}
-            style={styles.logo}
-            resizeMode={"contain"}
-          />
-          {/* {this.props.orderItems.length > 0 ? (
-            <TouchableOpacity
-              onPress={() => {
-                this.setState({ isSearching: true });
-              }}
-            >
-              <Image source={Images.search} style={styles.icSearch} />
-            </TouchableOpacity>
-          ) : (
-            <View style={styles.icSearch} />
-          )} */}
-          <View style={styles.icSearch} />
-        </View>
-      );
-    }
-  }
-
-  renderNoOrder() {
-    return (
-      <View>
-        <View style={styles.noOrderText}>
-          <Text style={styles.txt1}>
-            It looks like you haven't placed any order yet
-          </Text>
-          <Text style={styles.txt2}>
-            You can start exploring products right now!
-          </Text>
-        </View>
-        <View style={[t.pX6]}>
-          <Button
-            onPress={() => NavigationService.navigate("ExploreScreen")}
-            text={"EXPLORE PRODUCTS"}
-          />
-        </View>
-      </View>
-    );
-  }
-
-  renderFilter() {
-    return (
-      <TouchableOpacity
-        onPress={this.toggleFilterSheet}
-        style={styles.filterContainer}
-      >
-        <Image source={Images.arrow_left} style={styles.icArrow} />
-        <Text style={styles.txtFilter}>
-          {sortOptions[this.state.sortOption]}
-        </Text>
-      </TouchableOpacity>
-    );
-  }
-
-  renderOrderItem = (item, index) => {
-    let detail = "";
-    const statusText = item?.latestEventStatus?.replace(/_/g, " ");
-
-    detail =
-      statusText?.substring(0, 1) +
-      statusText?.substring(1, statusText.length).toLowerCase() +
-      " on " +
-      moment(item.orderDatetime).format("DD/MM/YYYY");
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          NavigationService.navigate("GroupInfoScreen", {
-            type: item.type,
-            item: item,
-          });
-        }}
-        disabled={item.isCompleted}
-        key={index.toString()}
-        style={[styles.itemContainer, item.isCompleted && { opacity: 0.5 }]}
-      >
-        <View style={styles.row}>
-          <Image
-            source={{ uri: item.mainImagePath }}
-            resizeMode="contain"
-            style={styles.itemAvatar}
-          />
-          <View style={styles.v2}>
-            <View style={styles.row}>
-              <Text style={styles.heading5Bold}>{item.shortName}</Text>
-
-              {/* {item.isAnnoucement && (
-                <View style={styles.annoucementContainer}>
-                  <Text style={styles.annoucementText}>Announcement</Text>
-                </View>
-              )} */}
-            </View>
-            <Text style={styles.txt3}>
-              {detail}
-              {/* {item.lastMessage.author}:{" "}
-              <Text style={{ color: Colors.grey60 }}>
-                {item.lastMessage.content}
-              </Text> */}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.v3}>
-          {item.isCompleted ? (
-            <Text style={styles.heading6Regular}>COMPLETED</Text>
-          ) : (
-            <Text style={styles.heading6Regular}>
-              {/* {moment(item.lastMessage.time).fromNow()} */}
-            </Text>
-          )}
-          {/* {item.unreadCount > 0 && (
-            <View style={styles.unreadContainer}>
-              <Text style={styles.unreadNumber}>{item.unreadCount}</Text>
-            </View>
-          )} */}
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  renderBody() {
-    if (this.state.isSearching) {
-    } else {
-      return (
-        <View style={styles.bodyContainer}>
-          {this.props.orderItems.length > 0 ? (
-            <ScrollView sshowsVerticalScrollIndicator={false}>
-              <View style={styles.v1}>
-                <Text style={styles.heading1Bold}>Orders</Text>
-                {/* {this.renderFilter()} */}
-              </View>
-              <View style={{ height: vs(15) }} />
-              {this.props.orderItems.map((item, index) =>
-                this.renderOrderItem(item, index)
-              )}
-            </ScrollView>
-          ) : (
-            this.renderNoOrder()
-          )}
-        </View>
-      );
-    }
-  }
-
   render() {
+    const unpaidItems = this.props.orderItems.filter((item) => {
+      return (
+        item?.latestEventStatus ===
+          OrderItemHistoryEventType.WaitingForPayment ||
+        item?.latestEventStatus === OrderItemHistoryEventType.FailedPayment
+      );
+    });
+    const results = groupBy(unpaidItems, "shippingAddressId");
+    const paidItems = difference(this.props.orderItems, unpaidItems);
+    debugger;
+    const orderItems = this.state.status === "unpaid" ? unpaidItems : paidItems;
     return (
       <View style={styles.container}>
         <SafeAreaView
           style={styles.safeArea}
           edges={["top", "right", "left", "bottom"]}
         >
-          {this.renderHeader()}
-          {this.renderBody()}
+          <View style={styles.header}>
+            <View style={styles.icSearch} />
+            <Image
+              source={Images.logo3}
+              style={styles.logo}
+              resizeMode={"contain"}
+            />
+            <View style={styles.icSearch} />
+          </View>
+          <View style={styles.bodyContainer}>
+            {orderItems.length > 0 ? (
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.v1}>
+                  <Text style={[t.textLg, t.mY4]}>Orders</Text>
+                  <NoteBookTab
+                    onSelect={(item) => {
+                      this.setState({
+                        status: item,
+                      });
+                    }}
+                  />
+                </View>
+                <View style={{ height: vs(15) }} />
+                {orderItems.map((item, index) => (
+                  <OrderItem item={item} />
+                ))}
+              </ScrollView>
+            ) : (
+              <View>
+                <View style={styles.noOrderText}>
+                  <Text style={styles.txt1}>
+                    It looks like you haven't placed any order yet
+                  </Text>
+                  <Text style={styles.txt2}>
+                    You can start exploring products right now!
+                  </Text>
+                </View>
+                <View style={[t.pX6]}>
+                  <Button
+                    onPress={() => NavigationService.navigate("ExploreScreen")}
+                    text={"EXPLORE PRODUCTS"}
+                  />
+                </View>
+              </View>
+            )}
+          </View>
         </SafeAreaView>
-        {/* background for bottom sheet */}
-        <BottomSheetBackground
-          visible={
-            this.state.showFilterSheet ||
-            this.state.showColorSheet ||
-            this.state.showAddToCartSheet
-          }
-          controller={this.fall}
-        />
-        {this.renderFilterSheet()}
       </View>
     );
   }
@@ -290,5 +134,3 @@ function OrderScreen() {
 }
 
 export default OrderScreen;
-
-const sortOptions = ["Not 100% slices product", "Completed"];

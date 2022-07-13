@@ -11,14 +11,14 @@ function NoteBookTab({
   onSelect: (id: string) => void;
 }) {
   const tabs = [
-    { title: "My Notebooks", id: "mine" },
-    { title: "Shared With Me", id: "shared" },
+    { title: "UnPaid Orders", id: "unpaid" },
+    { title: "Paid Orders", id: "paid" },
   ];
   const [selectItem, setSelectItem] = useState(tabs[0]);
 
   return (
     <View style={[t.flexRow, style]}>
-      {tabs.map((tab, index) => {
+      {tabs.map((tab) => {
         return (
           <View key={tab.id} style={[t.mR6]}>
             <TabItem

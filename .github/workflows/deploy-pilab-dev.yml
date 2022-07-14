@@ -106,8 +106,8 @@ jobs:
           SLACK_ICON: https://raw.githubusercontent.com/zhuchuanwu/publicImage/main/100.png
           SLACK_FOOTER: ${{ steps.androidUrl.outputs.releaseChannel }}
 
-          SLACK_TITLE: Salami Slicing Published
-          SLACK_USERNAME: Salami Slicing
+          SLACK_TITLE: Salami Slicing Seller Published
+          SLACK_USERNAME: Salami Slicing Seller
 
       - name: Echo Parse Asset URL
         run: echo ${{ steps.androidUrl.outputs.releaseChannel }}

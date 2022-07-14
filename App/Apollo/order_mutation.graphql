@@ -29,6 +29,9 @@ mutation CancelOrderItem($request: CancelOrderItemRequest) {
 mutation MarkOrderItemAsDelivered($request: OrderItemDeliveredRequest!) {
   markOrderItemAsDelivered(request: $request)
 }
+mutation MarkOrderReturnAsReceived($request: OrderReturnReceivedRequest!) {
+  markOrderReturnAsReceived(request: $request)
+}
 
 mutation SubmitOrderReturnRequest($request: OrderReturnRequest!) {
   submitOrderReturnRequest(request: $request) {

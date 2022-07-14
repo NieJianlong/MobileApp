@@ -4,6 +4,81 @@
 #     extraMessage
 #   }
 # }
+fragment SellerProfileFragment on SellerProfileResponse {
+  userId
+  sellerId
+  userName
+  firstName
+  lastName
+  email
+  phoneNumber
+  userType
+  createdAt
+  updatedAt
+  businessName
+  geoLocation
+  brandName
+  biography
+  govCompanyId
+  vstGstNumber
+  usersRating
+  sellerType
+  selectedCountry {
+    id
+    countryName
+  }
+  selectedSupportedLanguage {
+    id
+    language
+  }
+  escrowAccountId
+  avatarUrl
+  shortName
+  vatCode
+  sellerBillingDetails {
+    billingDetailsId
+    sellerId
+    accountName
+    bankName
+    bankAddress
+    internationalRoutingCode
+    domesticRoutingCode
+    ifscCode
+    accountNumber
+    createdAt
+    updatedAt
+  }
+  sellerContacts {
+    contactId
+    sellerId
+    contactName
+    contactEmail
+    contactPhoneNumber
+    supportEmail
+    supportPhoneNumber
+    createdAt
+    updatedAt
+  }
+  middleName
+  businessType
+  sellerValidationStatus
+  storeName
+  productsUpcAvailable
+  manufacturerBrandOwner
+  registeredTrademarksOwner
+  sellerName
+  nationalIdNumber
+  nationalIdNumberValidated
+  taxNumber
+  taxNumberValidated
+  vatCodeValidated
+  commChamberRegNum
+  commChamberRegNumValidated
+  storeShortName
+  registrationRejectedNotes
+  registrationRejectedReason
+  validationStatusChangedBy
+}
 mutation DeleteBuyerProfile($buyerId: ID!) {
   deleteBuyerProfile(buyerId: $buyerId)
 }
@@ -135,4 +210,14 @@ mutation ChangePassword(
     newPassword: $newPassword
     userId: $userId
   )
+}
+query GetSellerProfile($userProfileId: ID!) {
+  sellerProfileByUserId(userProfileId: $userProfileId) {
+    ...SellerProfileFragment
+  }
+}
+query GetSellerProfileWithSellerId($sellerId: ID!) {
+  sellerProfile(sellerId: $sellerId) {
+    ...SellerProfileFragment
+  }
 }

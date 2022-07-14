@@ -17,13 +17,13 @@ import styles from "./styles";
 import jwt_decode from "jwt-decode";
 import { useLazyQuery, useReactiveVar } from "@apollo/client";
 import * as storage from "../../Apollo/local-storage";
-import { useBuyerProfileByUserIdLazyQuery } from "../../../generated/graphql";
 import LottieView from "lottie-react-native";
 import { t } from "react-native-tailwindcss";
 import { StatusBar } from "expo-status-bar";
+import { useGetSellerProfileLazyQuery } from "../../../generated/graphql";
 
 export default function LaunchScreen() {
-  const [getBuyerId] = useBuyerProfileByUserIdLazyQuery({
+  const [getBuyerId] = useGetSellerProfileLazyQuery({
     variables: { userProfileId: global.userProfileId },
     context: {
       headers: {
@@ -31,30 +31,20 @@ export default function LaunchScreen() {
       },
     },
     onCompleted: (res) => {
+      debugger;
       //server often breakon，we should use a constant for testing
-      userProfileVar({
-        userId: res?.buyerProfileByUserId?.userId ?? "",
-        buyerId: res?.buyerProfileByUserId?.buyerId ?? "",
-        userName: res?.buyerProfileByUserId?.userName ?? "",
-        email: res?.buyerProfileByUserId?.email ?? "",
-        phone: res?.buyerProfileByUserId?.phoneNumber ?? "",
-        isAuth: true,
-        billingDetails: res?.buyerProfileByUserId?.billingDetails,
-        billingDetailsId:
-          res.buyerProfileByUserId?.billingDetails?.billingDetailsId,
-        firstName: res.buyerProfileByUserId?.firstName ?? "",
-        lastName: res.buyerProfileByUserId?.lastName ?? "",
-      });
-
-      const {
-        buyerProfileByUserId: { buyerId },
-      } = res;
-      global.buyerId = buyerId;
-      setTimeout(() => {
-        NavigationService.navigate("MainScreen", { screen: "ExploreScreen" });
-      }, 3000);
+      // const {
+      //   sellerProfileByUserId: { sellerId },
+      // } = res;
+      alert(JSON.stringify(res));
+      // global.buyerId = sellerId;
+      // NavigationService.navigate("MainScreen");
     },
-    onError: (res) => {},
+    onError: (res) => {
+      //server often breakon，we should use a constant for testing
+      global.buyerId = "9fcbb7cb-5354-489d-b358-d4e2bf386ff3";
+      NavigationService.navigate("MainScreen");
+    },
   });
 
   const autoSignIn = useCallback(async () => {
@@ -68,61 +58,39 @@ export default function LaunchScreen() {
       try {
         const { data } = await runTokenFlow({ username, password });
         let access_token = data.access_token;
+        if (access_token === "undefined") {
+          console.log("no access token");
+        }
+        userProfileVar({
+          ...JSON.parse(userData),
+          isAuth: true,
+        });
         let decoded = jwt_decode(access_token);
-        console.log("====================================");
-        console.log(decoded.realm_access.roles);
-        console.log("====================================");
-
         global.access_token = access_token;
         global.userProfileId = decoded.sub;
-        getBuyerId();
-
+        console.log("decoded====================================");
+        console.log(JSON.stringify(decoded));
+        console.log("====================================");
+        // getBuyerId();
+        NavigationService.navigate("MainScreen");
         setLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY, access_token);
       } catch (error) {
-        storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_NAME, "");
-        storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_PASSWORD, "");
-        const isLogedOut = await getLocalStorageValue(
-          storage.REGISTERED_USER_LOGOUT
-        );
-
-        if (isLogedOut) {
-          NavigationService.navigate("LoginScreen");
-          return;
-        }
-        const result = await checkBuyerIdExists();
-        if (result) {
-          setTimeout(() => {
-            NavigationService.navigate("MainScreen", {
-              screen: "ExploreScreen",
-            });
-          }, 3000);
-        } else {
-          setTimeout(() => {
-            //this.props.navigation.navigate('OnboardingScreen')
-            NavigationService.navigate("OnboardingScreen");
-          }, 4000);
-        }
+        NavigationService.navigate("OnboardingScreen");
       }
     } else {
-      const isLogedOut = await getLocalStorageValue(
-        storage.REGISTERED_USER_LOGOUT
-      );
-
-      if (isLogedOut) {
-        NavigationService.navigate("LoginScreen");
-        return;
-      }
       const result = await checkBuyerIdExists();
       if (result) {
-        setTimeout(() => {
-          NavigationService.navigate("MainScreen", { screen: "ExploreScreen" });
-        }, 3000);
+        NavigationService.navigate("MainScreen");
       } else {
         setTimeout(() => {
           //this.props.navigation.navigate('OnboardingScreen')
           NavigationService.navigate("OnboardingScreen");
-        }, 4000);
+        }, 2000);
       }
+      // setTimeout(() => {
+      //   //this.props.navigation.navigate('OnboardingScreen')
+      //   NavigationService.navigate("OnboardingScreen");
+      // }, 2000);
     }
   }, [getBuyerId]);
   /** for now only guests end up here */
@@ -143,8 +111,7 @@ export default function LaunchScreen() {
   //when app open,when can do auto login
   useEffect(() => {
     autoSignIn();
-  }, []);
-
+  }, [autoSignIn]);
   return (
     <LottieView
       source={require("./animation_icon.json")}

@@ -37,7 +37,7 @@ import UserInfoScreen from "../Containers/UserInfo";
 import UserEditProfileScreen from "../Containers/UserEditProfile";
 import DeleteAccountMessageScreen from "../Containers/DeleteAccountMessage";
 import AddNewAddressScreen from "../Containers/AddNewAddress";
-import NavigationService, { _navigator } from "./NavigationService";
+import NavigationService from "./NavigationService";
 import ChangePasswordScreen from "../Containers/ChangePassword";
 import AddPaymentMethodScreen from "../Containers/AddPaymentMethod";
 import AddCreditScreen from "../Containers/AddCredit";
@@ -82,16 +82,11 @@ import BillingDetails from "../Containers/BillingDetails";
 import ReturnsUnavailable from "../Containers/ReturnsUnavailable/ReturnsUnavailable";
 import ReturnInformation from "../Containers/Orders/ReturnInformation";
 import ReturnStatus from "../Containers/Orders/ReturnStatus/index";
-import LearnMore from "../Containers/LearnMore/index";
-import NavigationLeftButton from "../Components/NavigationLeftButton";
-import { t } from "react-native-tailwindcss";
-import { ApplicationStyles, Colors, Images } from "../Themes";
-import RegisterGuestBuyerToBuyerScreen from "../Containers/RegisterGuestBuyerToBuyer";
-import { Image, SafeAreaView, TouchableOpacity, View } from "react-native";
-import styles from "../Containers/Explore/styles";
-import colors from "../Themes/Colors";
-import useCurrentRoute from "../hooks/useCurrentRoute";
-import LogOutScreen from "../Containers/LogOut";
+import SellerScan from "../Containers/SellerScan";
+import Scanhelper from "../Containers/Scanhelper";
+
+import { View } from "react-native";
+
 // import ReturnInformation from "../..";
 const Stack = createStackNavigator();
 
@@ -100,10 +95,10 @@ const Tab = createBottomTabNavigator();
 function TabNav() {
   return (
     <Tab.Navigator tabBar={(props) => <TabBar {...props} />}>
-      <Tab.Screen name={"ExploreScreen"} component={ExploreScreen} />
-      <Tab.Screen name={"PackageScreen"} component={OrderScreen} />
+      <Tab.Screen name={"ExploreScreen"} component={SellerScan} />
+      {/* <Tab.Screen name={"PackageScreen"} component={OrderScreen} />
       <Tab.Screen name={"CartScreen"} component={ShoppingCartScreen} />
-      <Tab.Screen name={"FollowScreen"} component={WishlistScreen} />
+      <Tab.Screen name={"FollowScreen"} component={WishlistScreen} /> */}
       <Tab.Screen name={"MenuScreen"} component={UserCenter} />
     </Tab.Navigator>
   );
@@ -113,17 +108,7 @@ function PrimaryNav() {
   return (
     <Stack.Navigator
       initialRouteName={"LaunchScreen"}
-      mode={"card"}
-      // screenOptions={({ route, navigation }) => {
-      //   let cardStyleInterpolator = CardStyleInterpolators.forHorizontalIOS;
-      //   return {
-      //     headerLeft: ({ canGoBack }) => {
-      //       return canGoBack ? <NavigationLeftButton /> : null;
-      //     },
-      //     headerLeftContainerStyle: t.mL4,
-      //     cardStyleInterpolator: cardStyleInterpolator,
-      //   };
-      // }}
+      // headerMode={"none"}
       screenOptions={({ route, navigation }) => {
         let cardStyleInterpolator = CardStyleInterpolators.forHorizontalIOS;
         switch (route.name) {
@@ -134,18 +119,8 @@ function PrimaryNav() {
             break;
         }
         return {
-          headerLeft: ({ canGoBack }) => {
-            return canGoBack ? <NavigationLeftButton /> : null;
-          },
-          headerStyle: {
-            backgroundColor: Colors.background,
-            elevation: 0, // remove shadow on Android
-            shadowOpacity: 0, // remove shadow on iOS
-          },
-          // headerTransparent: true,
           // headerTintColor: "#21c064",
           // headerTitleStyle: styles.headerTitleStyle,
-          gestureEnabled: false,
           cardStyleInterpolator: cardStyleInterpolator,
         };
       }}
@@ -153,467 +128,159 @@ function PrimaryNav() {
       <Stack.Screen
         name={"LaunchScreen"}
         component={LaunchScreen}
-        screenOptions={{ gesturesEnabled: false }}
-        options={{ headerShown: false }}
+        options={{ gestureEnabled: false, headerShown: false }}
       />
-      <Stack.Screen
-        name={"RegisterGuestBuyerToBuyer"}
-        component={RegisterGuestBuyerToBuyerScreen}
-        screenOptions={{ gesturesEnabled: false }}
-        options={{ headerShown: true, title: "" }}
-      />
+
       <Stack.Screen
         name={"MainScreen"}
         component={TabNav}
-        options={{ headerShown: false }}
+        options={{
+          gestureEnabled: false,
+          headerShown: false,
+          headerBackTitle: "",
+          headerBackTitleVisible: false,
+          headerLeft: () => <View />,
+        }}
       />
       <Stack.Screen
         name={"OnboardingScreen"}
         component={OnboardingScreen}
-        options={{ headerShown: false }}
+        options={{ gestureEnabled: false, headerShown: false }}
       />
       <Stack.Screen
         name={"ProductDetailScreen"}
         component={ProductDetailScreen}
-        options={{
-          headerShown: false,
-        }}
       />
-      <Stack.Screen
-        name={"ReturnStatus"}
-        component={ReturnStatus}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
-      <Stack.Screen
-        name={"ReturnInformation"}
-        component={ReturnInformation}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
+      <Stack.Screen name={"ReturnStatus"} component={ReturnStatus} />
+      <Stack.Screen name={"ReturnInformation"} component={ReturnInformation} />
       <Stack.Screen
         name={"ProductGalleryScreen"}
         component={ProductGalleryScreen}
       />
-      <Stack.Screen
-        name={"ProductInfoScreen"}
-        component={ProductInfoScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
+      <Stack.Screen name={"ProductInfoScreen"} component={ProductInfoScreen} />
       <Stack.Screen
         name={"ReturnsUnavailable"}
         component={ReturnsUnavailable}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"ProductSearchScreen"}
         component={ProductSearchScreen}
-        options={{
-          headerShown: false,
-        }}
       />
       <Stack.Screen
         name={"EditCategoriesScreen"}
         component={EditCategoriesScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"ChooseCategoriesScreen"}
         component={ChooseCategoriesScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
-      <Stack.Screen
-        name={"RateOrderScreen"}
-        component={RateOrderScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
-      <Stack.Screen
-        name={"ReportScreen"}
-        component={ReportScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
+      <Stack.Screen name={"RateOrderScreen"} component={RateOrderScreen} />
+      <Stack.Screen name={"ReportScreen"} component={ReportScreen} />
       <Stack.Screen name={"OrderPlacedScreen"} component={OrderPlacedScreen} />
+      <Stack.Screen name={"OrderDetailScreen"} component={OrderDetailScreen} />
+      <Stack.Screen name={"RateSellerScreen"} component={RateSellerScreen} />
+      <Stack.Screen name={"SellerStoreScreen"} component={SellerStoreScreen} />
+      <Stack.Screen name={"InvoiceScreen"} component={InvoiceScreen} />
+      <Stack.Screen name={"GroupInfoScreen"} component={GroupInfoScreen} />
       <Stack.Screen
-        name={"OrderDetailScreen"}
-        component={OrderDetailScreen}
+        name={"Scanhelper"}
+        component={Scanhelper}
         options={{
+          gestureEnabled: false,
           headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
-      <Stack.Screen
-        name={"RateSellerScreen"}
-        component={RateSellerScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
-      <Stack.Screen
-        name={"SellerStoreScreen"}
-        component={SellerStoreScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
-      <Stack.Screen
-        name={"InvoiceScreen"}
-        component={InvoiceScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
-      <Stack.Screen
-        name={"GroupInfoScreen"}
-        component={GroupInfoScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "Group Info",
-          // headerStyle: {
-          //   backgroundColor: "transparent",
-          // },
-
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
+          headerBackTitle: "",
+          headerBackTitleVisible: false,
         }}
       />
       <Stack.Screen
         name={"LoginScreen"}
         component={LoginScreen}
         options={{
-          gesturesEnabled: false,
-          header: () => (
-            <View
-              style={[
-                t.bgWhite,
-                t.flexRow,
-                t.justifyBetween,
-                t.h24,
-                t.itemsEnd,
-              ]}
-            >
-              <View style={{ width: 36, height: 36 }} />
-              {/* <Image
-                source={Images.logo4}
-                style={[styles.logo, t.mT4]}
-                resizeMode={"contain"}
-              /> */}
-              <View style={{ width: 36, height: 36 }} />
-            </View>
-          ),
+          gestureEnabled: false,
+          headerShown: false,
+          headerBackTitle: "",
+          headerBackTitleVisible: false,
         }}
       />
-      <Stack.Screen
-        name={"LogOutScreen"}
-        component={LogOutScreen}
-        options={{
-          gesturesEnabled: false,
-          header: () => (
-            <View
-              style={[
-                t.bgWhite,
-                t.flexRow,
-                t.justifyBetween,
-                t.h24,
-                t.itemsEnd,
-              ]}
-            >
-              <View style={{ width: 36, height: 36 }} />
-              {/* <Image
-                source={Images.logo4}
-                style={[styles.logo, t.mT4]}
-                resizeMode={"contain"}
-              /> */}
-              <View style={{ width: 36, height: 36 }} />
-            </View>
-          ),
-        }}
-      />
-      <Stack.Screen
-        name={"RegisterScreen"}
-        component={RegisterScreen}
-        options={{
-          header: () => (
-            <View
-              style={[
-                t.bgWhite,
-                t.flexRow,
-                t.justifyBetween,
-                t.h24,
-                t.itemsEnd,
-                { backgroundColor: colors.background },
-              ]}
-            >
-              <NavigationLeftButton style={[t.mB2]} />
-              <Image
-                source={Images.logo4}
-                style={[styles.logo, t.mT4]}
-                resizeMode={"contain"}
-              />
-              <View style={{ width: 36, height: 36 }} />
-            </View>
-          ),
-        }}
-      />
-      <Stack.Screen
-        name={"LegalScreen"}
-        component={LegalScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
-      <Stack.Screen
-        name={"UserInfoScreen"}
-        component={UserInfoScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
+      <Stack.Screen name={"RegisterScreen"} component={RegisterScreen} />
+      <Stack.Screen name={"LegalScreen"} component={LegalScreen} />
+      <Stack.Screen name={"UserInfoScreen"} component={UserInfoScreen} />
       <Stack.Screen
         name={"UserEditProfileScreen"}
         component={UserEditProfileScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "Update your details",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"DeleteAccountMessageScreen"}
         component={DeleteAccountMessageScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"ChangePasswordScreen"}
         component={ChangePasswordScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
-        name={"OTPScreen"}
-        component={OTPScreen}
+        name={"SellerScan"}
+        component={SellerScan}
         options={{
+          gestureEnabled: false,
           headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
+          headerBackTitle: "",
+          headerBackTitleVisible: false,
+          headerLeft: () => <View />,
         }}
       />
+      <Stack.Screen name={"OTPScreen"} component={OTPScreen} />
       <Stack.Screen
         name={"AddNewAddressScreen"}
         component={AddNewAddressScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"ForgotPasswordScreen"}
         component={ForgotPasswordScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"AddPaymentMethodScreen"}
         component={AddPaymentMethodScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
-      <Stack.Screen
-        name={"AddCreditScreen"}
-        component={AddCreditScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
+      <Stack.Screen name={"AddCreditScreen"} component={AddCreditScreen} />
       <Stack.Screen
         name={"CreateNewPasswordScreen"}
         component={CreateNewPasswordScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"AddBillingDetailsScreen"}
         component={AddBillingDetailsScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"EditBillingDetailsScreen"}
         component={EditBillingDetailsScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"OneClickPurchaseScreen"}
         component={OneClickPurchaseScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"SelectDeliveryAddressScreen"}
         component={SelectDeliveryAddressScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"SalamiCreditScreen"}
         component={SalamiCreditScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen name={"UserCenter"} component={UserCenter} />
       <Stack.Screen
         name={"NotificationsScreen"}
         component={NotificationsScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
-      <Stack.Screen
-        name={"SettingScreen"}
-        component={SettingScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
+      <Stack.Screen name={"SettingScreen"} component={SettingScreen} />
       <Stack.Screen
         name={"SelectCountryOrLanguageScreen"}
         component={SelectCountryOrLanguageScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"CustomerSupportScreen"}
         component={CustomerSupportScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "Support",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
-      <Stack.Screen
-        name={"FeedbackScreen"}
-        component={FeedbackScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
+      <Stack.Screen name={"FeedbackScreen"} component={FeedbackScreen} />
       <Stack.Screen
         name={"ShoppingCartScreen"}
         component={ShoppingCartScreen}
@@ -621,72 +288,27 @@ function PrimaryNav() {
       <Stack.Screen
         name={"EditShoppingCartScreen"}
         component={EditShoppingCartScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
-      <Stack.Screen
-        name={Page_CheckoutAuth}
-        component={CheckoutAuthScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
+      <Stack.Screen name={Page_CheckoutAuth} component={CheckoutAuthScreen} />
       <Stack.Screen
         name={"CheckOutPersonalDetailsScreen"}
         component={CheckOutPersonalDetailsScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"CheckoutBillingDetailsScreen"}
         component={CheckoutBillingDetailsScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"AddCheckoutPaymentMethodScreen"}
         component={AddCheckoutPaymentMethodScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"CheckoutResumeScreen"}
         component={CheckoutResumeScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "Review your details",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"InSufficientSalamiCreditScreen"}
         component={InSufficientSalamiCreditScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"CheckoutPaymentCompletedScreen"}
@@ -695,35 +317,14 @@ function PrimaryNav() {
       <Stack.Screen
         name={"CheckoutPaymentCompletedGuestScreen"}
         component={CheckoutPaymentCompletedGuestScreen}
-        options={{
-          headerShown: false,
-        }}
       />
       <Stack.Screen name={"ChatScreen"} component={ChatScreen} />
       {/* <Stack.Screen
         name={"OrderGroupInfoScreen"}
         component={OrderGroupInfoScreen}
       /> */}
-      <Stack.Screen
-        name={"TrackOrderScreen"}
-        component={TrackOrderScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
-      <Stack.Screen
-        name={"CancelOrderScreen"}
-        component={CancelOrderScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
+      <Stack.Screen name={"TrackOrderScreen"} component={TrackOrderScreen} />
+      <Stack.Screen name={"CancelOrderScreen"} component={CancelOrderScreen} />
       <Stack.Screen
         name={"AskForReplacementScreen"}
         component={AskForReplacementScreen}
@@ -731,84 +332,26 @@ function PrimaryNav() {
       <Stack.Screen
         name={"ReturnProductStep3Screen"}
         component={ReturnProductStep3Screen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"ReturnProductStep2Screen"}
         component={ReturnProductStep2Screen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
       <Stack.Screen
         name={"ReturnProductStep1Screen"}
         component={ReturnProductStep1Screen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
-      <Stack.Screen
-        name={"RefundScreen"}
-        component={RefundScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
+      <Stack.Screen name={"RefundScreen"} component={RefundScreen} />
       <Stack.Screen
         name={"CancelOrderCompletedScreen"}
         component={CancelOrderCompletedScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
 
       <Stack.Screen
-        name={"LearnMoreScreen"}
-        component={LearnMore}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
-      <Stack.Screen
         name={Page_CheckoutGuestOrderDetail}
         component={CheckoutGuestOrderDetail}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
       />
-      <Stack.Screen
-        name={Page_BillingDetails}
-        component={BillingDetails}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "",
-          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
-        }}
-      />
+      <Stack.Screen name={Page_BillingDetails} component={BillingDetails} />
     </Stack.Navigator>
   );
 }
@@ -821,27 +364,16 @@ function PrimaryNav() {
 //     </LoginStack.Navigator>
 //   );
 // }
-
-function AppRouter(props) {
-  const { setCurrentRoute } = useCurrentRoute();
-  return (
-    <NavigationContainer
-      onStateChange={() => {
-        const routeName = _navigator?.getCurrentRoute()?.name;
-
-        setCurrentRoute({ currentPage: routeName });
-      }}
-      ref={(navigatorRef) => {
-        NavigationService.setTopLevelNavigator(navigatorRef);
-        // navigatorRef?.current?.addListener("state", (e) => {
-        //
-        //   const state = e.data.state; //works
-        // });
-      }}
-    >
-      <PrimaryNav />
-    </NavigationContainer>
-  );
+export default class AppRouter extends React.Component {
+  render() {
+    return (
+      <NavigationContainer
+        ref={(navigatorRef) => {
+          NavigationService.setTopLevelNavigator(navigatorRef);
+        }}
+      >
+        <PrimaryNav />
+      </NavigationContainer>
+    );
+  }
 }
-
-export default AppRouter;

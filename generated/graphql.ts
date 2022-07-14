@@ -4593,6 +4593,13 @@ export type MarkOrderItemAsDeliveredMutationVariables = Exact<{
 
 export type MarkOrderItemAsDeliveredMutation = { __typename?: 'Mutation', markOrderItemAsDelivered?: boolean | null | undefined };
 
+export type MarkOrderReturnAsReceivedMutationVariables = Exact<{
+  request: OrderReturnReceivedRequest;
+}>;
+
+
+export type MarkOrderReturnAsReceivedMutation = { __typename?: 'Mutation', markOrderReturnAsReceived?: boolean | null | undefined };
+
 export type SubmitOrderReturnRequestMutationVariables = Exact<{
   request: OrderReturnRequest;
 }>;
@@ -4820,6 +4827,8 @@ export type DeliveryAddressForGuestBuyerQueryVariables = Exact<{
 
 export type DeliveryAddressForGuestBuyerQuery = { __typename?: 'Query', deliveryAddressForGuestBuyer?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined };
 
+export type SellerProfileFragmentFragment = { __typename?: 'SellerProfileResponse', userId?: string | null | undefined, sellerId?: string | null | undefined, userName?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, userType?: UserType | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, businessName?: string | null | undefined, geoLocation?: string | null | undefined, brandName?: string | null | undefined, biography?: string | null | undefined, govCompanyId?: string | null | undefined, vstGstNumber?: string | null | undefined, usersRating?: string | null | undefined, sellerType?: SellerType | null | undefined, escrowAccountId?: string | null | undefined, avatarUrl?: string | null | undefined, shortName?: string | null | undefined, vatCode?: string | null | undefined, middleName?: string | null | undefined, businessType?: BusinessType | null | undefined, sellerValidationStatus?: SellerValidationStatus | null | undefined, storeName?: string | null | undefined, productsUpcAvailable?: boolean | null | undefined, manufacturerBrandOwner?: boolean | null | undefined, registeredTrademarksOwner?: boolean | null | undefined, sellerName?: string | null | undefined, nationalIdNumber?: string | null | undefined, nationalIdNumberValidated?: boolean | null | undefined, taxNumber?: string | null | undefined, taxNumberValidated?: boolean | null | undefined, vatCodeValidated?: boolean | null | undefined, commChamberRegNum?: string | null | undefined, commChamberRegNumValidated?: boolean | null | undefined, storeShortName?: string | null | undefined, registrationRejectedNotes?: string | null | undefined, registrationRejectedReason?: RegistrationRejectedReason | null | undefined, validationStatusChangedBy?: string | null | undefined, selectedCountry?: { __typename?: 'CountryResponse', id?: string | null | undefined, countryName?: string | null | undefined } | null | undefined, selectedSupportedLanguage?: { __typename?: 'SupportedLanguageResponse', id?: string | null | undefined, language?: string | null | undefined } | null | undefined, sellerBillingDetails?: { __typename?: 'SellerBillingDetailsResponse', billingDetailsId?: string | null | undefined, sellerId?: string | null | undefined, accountName?: string | null | undefined, bankName?: string | null | undefined, bankAddress?: string | null | undefined, internationalRoutingCode?: string | null | undefined, domesticRoutingCode?: string | null | undefined, ifscCode?: string | null | undefined, accountNumber?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined } | null | undefined, sellerContacts?: Array<{ __typename?: 'SellerContactResponse', contactId?: string | null | undefined, sellerId?: string | null | undefined, contactName?: string | null | undefined, contactEmail?: string | null | undefined, contactPhoneNumber?: string | null | undefined, supportEmail?: string | null | undefined, supportPhoneNumber?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined } | null | undefined> | null | undefined };
+
 export type DeleteBuyerProfileMutationVariables = Exact<{
   buyerId: Scalars['ID'];
 }>;
@@ -4958,6 +4967,20 @@ export type ChangePasswordMutationVariables = Exact<{
 
 
 export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword?: boolean | null | undefined };
+
+export type GetSellerProfileQueryVariables = Exact<{
+  userProfileId: Scalars['ID'];
+}>;
+
+
+export type GetSellerProfileQuery = { __typename?: 'Query', sellerProfileByUserId?: { __typename?: 'SellerProfileResponse', userId?: string | null | undefined, sellerId?: string | null | undefined, userName?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, userType?: UserType | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, businessName?: string | null | undefined, geoLocation?: string | null | undefined, brandName?: string | null | undefined, biography?: string | null | undefined, govCompanyId?: string | null | undefined, vstGstNumber?: string | null | undefined, usersRating?: string | null | undefined, sellerType?: SellerType | null | undefined, escrowAccountId?: string | null | undefined, avatarUrl?: string | null | undefined, shortName?: string | null | undefined, vatCode?: string | null | undefined, middleName?: string | null | undefined, businessType?: BusinessType | null | undefined, sellerValidationStatus?: SellerValidationStatus | null | undefined, storeName?: string | null | undefined, productsUpcAvailable?: boolean | null | undefined, manufacturerBrandOwner?: boolean | null | undefined, registeredTrademarksOwner?: boolean | null | undefined, sellerName?: string | null | undefined, nationalIdNumber?: string | null | undefined, nationalIdNumberValidated?: boolean | null | undefined, taxNumber?: string | null | undefined, taxNumberValidated?: boolean | null | undefined, vatCodeValidated?: boolean | null | undefined, commChamberRegNum?: string | null | undefined, commChamberRegNumValidated?: boolean | null | undefined, storeShortName?: string | null | undefined, registrationRejectedNotes?: string | null | undefined, registrationRejectedReason?: RegistrationRejectedReason | null | undefined, validationStatusChangedBy?: string | null | undefined, selectedCountry?: { __typename?: 'CountryResponse', id?: string | null | undefined, countryName?: string | null | undefined } | null | undefined, selectedSupportedLanguage?: { __typename?: 'SupportedLanguageResponse', id?: string | null | undefined, language?: string | null | undefined } | null | undefined, sellerBillingDetails?: { __typename?: 'SellerBillingDetailsResponse', billingDetailsId?: string | null | undefined, sellerId?: string | null | undefined, accountName?: string | null | undefined, bankName?: string | null | undefined, bankAddress?: string | null | undefined, internationalRoutingCode?: string | null | undefined, domesticRoutingCode?: string | null | undefined, ifscCode?: string | null | undefined, accountNumber?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined } | null | undefined, sellerContacts?: Array<{ __typename?: 'SellerContactResponse', contactId?: string | null | undefined, sellerId?: string | null | undefined, contactName?: string | null | undefined, contactEmail?: string | null | undefined, contactPhoneNumber?: string | null | undefined, supportEmail?: string | null | undefined, supportPhoneNumber?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined } | null | undefined> | null | undefined } | null | undefined };
+
+export type GetSellerProfileWithSellerIdQueryVariables = Exact<{
+  sellerId: Scalars['ID'];
+}>;
+
+
+export type GetSellerProfileWithSellerIdQuery = { __typename?: 'Query', sellerProfile?: { __typename?: 'SellerProfileResponse', userId?: string | null | undefined, sellerId?: string | null | undefined, userName?: string | null | undefined, firstName?: string | null | undefined, lastName?: string | null | undefined, email?: string | null | undefined, phoneNumber?: string | null | undefined, userType?: UserType | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined, businessName?: string | null | undefined, geoLocation?: string | null | undefined, brandName?: string | null | undefined, biography?: string | null | undefined, govCompanyId?: string | null | undefined, vstGstNumber?: string | null | undefined, usersRating?: string | null | undefined, sellerType?: SellerType | null | undefined, escrowAccountId?: string | null | undefined, avatarUrl?: string | null | undefined, shortName?: string | null | undefined, vatCode?: string | null | undefined, middleName?: string | null | undefined, businessType?: BusinessType | null | undefined, sellerValidationStatus?: SellerValidationStatus | null | undefined, storeName?: string | null | undefined, productsUpcAvailable?: boolean | null | undefined, manufacturerBrandOwner?: boolean | null | undefined, registeredTrademarksOwner?: boolean | null | undefined, sellerName?: string | null | undefined, nationalIdNumber?: string | null | undefined, nationalIdNumberValidated?: boolean | null | undefined, taxNumber?: string | null | undefined, taxNumberValidated?: boolean | null | undefined, vatCodeValidated?: boolean | null | undefined, commChamberRegNum?: string | null | undefined, commChamberRegNumValidated?: boolean | null | undefined, storeShortName?: string | null | undefined, registrationRejectedNotes?: string | null | undefined, registrationRejectedReason?: RegistrationRejectedReason | null | undefined, validationStatusChangedBy?: string | null | undefined, selectedCountry?: { __typename?: 'CountryResponse', id?: string | null | undefined, countryName?: string | null | undefined } | null | undefined, selectedSupportedLanguage?: { __typename?: 'SupportedLanguageResponse', id?: string | null | undefined, language?: string | null | undefined } | null | undefined, sellerBillingDetails?: { __typename?: 'SellerBillingDetailsResponse', billingDetailsId?: string | null | undefined, sellerId?: string | null | undefined, accountName?: string | null | undefined, bankName?: string | null | undefined, bankAddress?: string | null | undefined, internationalRoutingCode?: string | null | undefined, domesticRoutingCode?: string | null | undefined, ifscCode?: string | null | undefined, accountNumber?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined } | null | undefined, sellerContacts?: Array<{ __typename?: 'SellerContactResponse', contactId?: string | null | undefined, sellerId?: string | null | undefined, contactName?: string | null | undefined, contactEmail?: string | null | undefined, contactPhoneNumber?: string | null | undefined, supportEmail?: string | null | undefined, supportPhoneNumber?: string | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined } | null | undefined> | null | undefined } | null | undefined };
 
 export const OrderResponseFieldsFragmentDoc = gql`
     fragment OrderResponseFields on OrderResponse {
@@ -5474,6 +5497,83 @@ export const BuyerProfileResponseFieldsFragmentDoc = gql`
   walletId
 }
     ${BillingDetailsFieldsFragmentDoc}`;
+export const SellerProfileFragmentFragmentDoc = gql`
+    fragment SellerProfileFragment on SellerProfileResponse {
+  userId
+  sellerId
+  userName
+  firstName
+  lastName
+  email
+  phoneNumber
+  userType
+  createdAt
+  updatedAt
+  businessName
+  geoLocation
+  brandName
+  biography
+  govCompanyId
+  vstGstNumber
+  usersRating
+  sellerType
+  selectedCountry {
+    id
+    countryName
+  }
+  selectedSupportedLanguage {
+    id
+    language
+  }
+  escrowAccountId
+  avatarUrl
+  shortName
+  vatCode
+  sellerBillingDetails {
+    billingDetailsId
+    sellerId
+    accountName
+    bankName
+    bankAddress
+    internationalRoutingCode
+    domesticRoutingCode
+    ifscCode
+    accountNumber
+    createdAt
+    updatedAt
+  }
+  sellerContacts {
+    contactId
+    sellerId
+    contactName
+    contactEmail
+    contactPhoneNumber
+    supportEmail
+    supportPhoneNumber
+    createdAt
+    updatedAt
+  }
+  middleName
+  businessType
+  sellerValidationStatus
+  storeName
+  productsUpcAvailable
+  manufacturerBrandOwner
+  registeredTrademarksOwner
+  sellerName
+  nationalIdNumber
+  nationalIdNumberValidated
+  taxNumber
+  taxNumberValidated
+  vatCodeValidated
+  commChamberRegNum
+  commChamberRegNumValidated
+  storeShortName
+  registrationRejectedNotes
+  registrationRejectedReason
+  validationStatusChangedBy
+}
+    `;
 export const AddProductReviewDocument = gql`
     mutation AddProductReview($input: ProductReviewInput!) {
   addProductReview(input: $input) {
@@ -5765,6 +5865,37 @@ export function useMarkOrderItemAsDeliveredMutation(baseOptions?: Apollo.Mutatio
 export type MarkOrderItemAsDeliveredMutationHookResult = ReturnType<typeof useMarkOrderItemAsDeliveredMutation>;
 export type MarkOrderItemAsDeliveredMutationResult = Apollo.MutationResult<MarkOrderItemAsDeliveredMutation>;
 export type MarkOrderItemAsDeliveredMutationOptions = Apollo.BaseMutationOptions<MarkOrderItemAsDeliveredMutation, MarkOrderItemAsDeliveredMutationVariables>;
+export const MarkOrderReturnAsReceivedDocument = gql`
+    mutation MarkOrderReturnAsReceived($request: OrderReturnReceivedRequest!) {
+  markOrderReturnAsReceived(request: $request)
+}
+    `;
+export type MarkOrderReturnAsReceivedMutationFn = Apollo.MutationFunction<MarkOrderReturnAsReceivedMutation, MarkOrderReturnAsReceivedMutationVariables>;
+
+/**
+ * __useMarkOrderReturnAsReceivedMutation__
+ *
+ * To run a mutation, you first call `useMarkOrderReturnAsReceivedMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkOrderReturnAsReceivedMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [markOrderReturnAsReceivedMutation, { data, loading, error }] = useMarkOrderReturnAsReceivedMutation({
+ *   variables: {
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useMarkOrderReturnAsReceivedMutation(baseOptions?: Apollo.MutationHookOptions<MarkOrderReturnAsReceivedMutation, MarkOrderReturnAsReceivedMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MarkOrderReturnAsReceivedMutation, MarkOrderReturnAsReceivedMutationVariables>(MarkOrderReturnAsReceivedDocument, options);
+      }
+export type MarkOrderReturnAsReceivedMutationHookResult = ReturnType<typeof useMarkOrderReturnAsReceivedMutation>;
+export type MarkOrderReturnAsReceivedMutationResult = Apollo.MutationResult<MarkOrderReturnAsReceivedMutation>;
+export type MarkOrderReturnAsReceivedMutationOptions = Apollo.BaseMutationOptions<MarkOrderReturnAsReceivedMutation, MarkOrderReturnAsReceivedMutationVariables>;
 export const SubmitOrderReturnRequestDocument = gql`
     mutation SubmitOrderReturnRequest($request: OrderReturnRequest!) {
   submitOrderReturnRequest(request: $request) {
@@ -7436,3 +7567,73 @@ export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptio
 export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
+export const GetSellerProfileDocument = gql`
+    query GetSellerProfile($userProfileId: ID!) {
+  sellerProfileByUserId(userProfileId: $userProfileId) {
+    ...SellerProfileFragment
+  }
+}
+    ${SellerProfileFragmentFragmentDoc}`;
+
+/**
+ * __useGetSellerProfileQuery__
+ *
+ * To run a query within a React component, call `useGetSellerProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSellerProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSellerProfileQuery({
+ *   variables: {
+ *      userProfileId: // value for 'userProfileId'
+ *   },
+ * });
+ */
+export function useGetSellerProfileQuery(baseOptions: Apollo.QueryHookOptions<GetSellerProfileQuery, GetSellerProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSellerProfileQuery, GetSellerProfileQueryVariables>(GetSellerProfileDocument, options);
+      }
+export function useGetSellerProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSellerProfileQuery, GetSellerProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSellerProfileQuery, GetSellerProfileQueryVariables>(GetSellerProfileDocument, options);
+        }
+export type GetSellerProfileQueryHookResult = ReturnType<typeof useGetSellerProfileQuery>;
+export type GetSellerProfileLazyQueryHookResult = ReturnType<typeof useGetSellerProfileLazyQuery>;
+export type GetSellerProfileQueryResult = Apollo.QueryResult<GetSellerProfileQuery, GetSellerProfileQueryVariables>;
+export const GetSellerProfileWithSellerIdDocument = gql`
+    query GetSellerProfileWithSellerId($sellerId: ID!) {
+  sellerProfile(sellerId: $sellerId) {
+    ...SellerProfileFragment
+  }
+}
+    ${SellerProfileFragmentFragmentDoc}`;
+
+/**
+ * __useGetSellerProfileWithSellerIdQuery__
+ *
+ * To run a query within a React component, call `useGetSellerProfileWithSellerIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSellerProfileWithSellerIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSellerProfileWithSellerIdQuery({
+ *   variables: {
+ *      sellerId: // value for 'sellerId'
+ *   },
+ * });
+ */
+export function useGetSellerProfileWithSellerIdQuery(baseOptions: Apollo.QueryHookOptions<GetSellerProfileWithSellerIdQuery, GetSellerProfileWithSellerIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSellerProfileWithSellerIdQuery, GetSellerProfileWithSellerIdQueryVariables>(GetSellerProfileWithSellerIdDocument, options);
+      }
+export function useGetSellerProfileWithSellerIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSellerProfileWithSellerIdQuery, GetSellerProfileWithSellerIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSellerProfileWithSellerIdQuery, GetSellerProfileWithSellerIdQueryVariables>(GetSellerProfileWithSellerIdDocument, options);
+        }
+export type GetSellerProfileWithSellerIdQueryHookResult = ReturnType<typeof useGetSellerProfileWithSellerIdQuery>;
+export type GetSellerProfileWithSellerIdLazyQueryHookResult = ReturnType<typeof useGetSellerProfileWithSellerIdLazyQuery>;
+export type GetSellerProfileWithSellerIdQueryResult = Apollo.QueryResult<GetSellerProfileWithSellerIdQuery, GetSellerProfileWithSellerIdQueryVariables>;

@@ -6,7 +6,7 @@
  * @Description: User center header layout
  * @FilePath: /MobileApp/App/Containers/UserCenter/UserHeader.js
  */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScaledSheet, s, vs } from "react-native-size-matters";
@@ -17,17 +17,16 @@ import fonts from "../../Themes/Fonts";
 import colors from "../../Themes/Colors";
 import NavigationService from "../../Navigation/NavigationService";
 import images from "../../Themes/Images";
+import UserAvatar from "./UserAvatar";
 import { ApplicationStyles } from "../../Themes";
 import { userProfileVar } from "../../Apollo/cache";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useQuery } from "@apollo/client";
 import {
-  useBuyerProfileByUserIdQuery,
-  useBuyerProfileQuery,
-} from "../../../generated/graphql";
-import useLogin from "../../hooks/useLogin";
-import { isEmpty, trimStart } from "lodash";
-import { useReactiveVar } from "@apollo/client";
-import PubSub from "pubsub-js";
+  BUYER_PROFILE_BY_USERID,
+  FIND_BUYER_PROFILE,
+  FIND_USER_PROFILE,
+} from "../../Apollo/queries/queries_user";
+import { useFocusEffect } from "@react-navigation/native";
 
 /**
  * @description:The user header component, which contains basic user information
@@ -36,14 +35,11 @@ import PubSub from "pubsub-js";
  */
 function UserHeader(props) {
   const { needSafeArea, needEdit, islogin, setLogin } = props;
-  const navigation = useNavigation();
-  const userProfile = useReactiveVar(userProfileVar);
 
   const textTip = "You haven't add any personal \n details yet";
-  const { setLogin: setLoginAction } = useLogin();
   return (
     <View style={styles.headerContainer}>
-      {userProfile.isAuth ? (
+      {userProfileVar().isAuth ? (
         needSafeArea ? (
           <SafeAreaView style={styles.toppart}>
             <UserInfo />
@@ -59,11 +55,7 @@ function UserHeader(props) {
           <View style={styles.signbtn}>
             <Button
               onPress={() => {
-                NavigationService.navigate("LoginScreen");
-                // navigation.reset({
-                //   index: 0,
-                //   routes: [{ name: "OnboardingScreen" }],
-                // });
+                NavigationService.navigate("OnboardingScreen");
               }}
               text="SIGN IN"
             />
@@ -75,14 +67,14 @@ function UserHeader(props) {
 }
 
 function UserInfo() {
-  // useBuyerProfileByUserIdLazyQuery
-  const { loading, error, data, refetch } = useBuyerProfileByUserIdQuery({
-    variables: { userProfileId: global.userProfileId },
+  const { loading, error, data, refetch } = useQuery(FIND_BUYER_PROFILE, {
+    variables: { buyerId: global.buyerId },
     context: {
       headers: {
         isPrivate: true,
       },
     },
+    nextFetchPolicy: "network-only",
     onCompleted: (res) => {},
     onError: (res) => {},
   });
@@ -91,19 +83,9 @@ function UserInfo() {
       refetch && refetch();
     }, [refetch])
   );
-  useEffect(() => {
-    let refresh = PubSub.subscribe("refresh-buyer-profile", () => {
-      refetch();
-    });
-    return () => {
-      if (refresh) {
-        PubSub.unsubscribe(refresh);
-      }
-    };
-  }, []);
-
   return (
     <TouchableOpacity
+      disabled={true}
       onPress={() => {
         NavigationService.navigate("UserInfoScreen", {});
       }}
@@ -115,12 +97,11 @@ function UserInfo() {
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <Text style={ApplicationStyles.screen.heading3Bold}>
-              {data
-                ? `${data?.buyerProfileByUserId?.firstName} ${data?.buyerProfileByUserId?.lastName}`
-                : ""}
+              {data?.buyerProfile.userName}
             </Text>
 
             <TouchableOpacity
+              disabled={true}
               onPress={() => {
                 NavigationService.navigate(
                   "UserEditProfileScreen",
@@ -128,10 +109,10 @@ function UserInfo() {
                 );
               }}
             >
-              <Image
+              {/* <Image
                 style={styles.editImage}
                 source={images.userEditBtnImage}
-              ></Image>
+              ></Image> */}
             </TouchableOpacity>
           </View>
           <View style={styles.emailContainer}>
@@ -139,9 +120,7 @@ function UserInfo() {
               style={styles.email}
               source={require("../../Images/usercenter/email.png")}
             ></Image>
-            <Text style={styles.emailtext}>
-              {data?.buyerProfileByUserId.email}
-            </Text>
+            <Text style={styles.emailtext}>{data?.buyerProfile.email}</Text>
           </View>
           <View style={styles.emailContainer}>
             <Image
@@ -149,9 +128,7 @@ function UserInfo() {
               source={require("../../Images/usercenter/phone.png")}
             ></Image>
             <Text style={styles.emailtext}>
-              {isEmpty(data?.buyerProfileByUserId.phoneNumber)
-                ? ""
-                : data?.buyerProfileByUserId.phoneNumber.replace("+91", "")}
+              {data?.buyerProfile.phoneNumber}
             </Text>
           </View>
         </View>

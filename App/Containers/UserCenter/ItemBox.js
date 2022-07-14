@@ -20,10 +20,7 @@ function ItemBox(props) {
   return (
     <TouchableOpacity onPress={() => props.onPress()}>
       <View style={styles.container}>
-        {title !== "How SalamiSlicing works" && (
-          <Image style={styles.icon} source={icon} />
-        )}
-
+        <Image style={styles.icon} source={icon}></Image>
         <Text style={styles.itemText}>{title}</Text>
       </View>
     </TouchableOpacity>

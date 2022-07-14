@@ -7,7 +7,7 @@
  * @FilePath: /MobileApp/App/Containers/UserCenter/index.js
  */
 import React, { useCallback, useState, useEffect } from "react";
-import { View } from "react-native";
+import { View, StatusBar, TouchableOpacity, DevSettings } from "react-native";
 import { s, ScaledSheet, vs } from "react-native-size-matters";
 import Colors from "../../Themes/Colors";
 import Fonts from "../../Themes/Fonts";
@@ -21,13 +21,13 @@ import { userProfileVar } from "../../Apollo/cache";
 import { useCreateRazorOrder } from "../../hooks/razorOrder";
 import Share from "react-native-share";
 import { shareOptions } from "../Explore/Components/ShareOptionList";
+import { setLocalStorageEmpty } from "../../Apollo/local-storage";
+import { Button } from "react-native-paper";
 import { t } from "react-native-tailwindcss";
-import { isEmpty } from "lodash";
-import { useReactiveVar } from "@apollo/client";
 
 const salamiItem = [
   {
-    title: "Salami Wallet",
+    title: "Salami Credit",
     icon: images.userLogoImage,
     onPress: () => {
       NavigationService.navigate("SalamiCreditScreen");
@@ -35,13 +35,13 @@ const salamiItem = [
   },
 ];
 const items = [
-  // {
-  //   title: "Notifications",
-  //   icon: images.userIconImage,
-  //   onPress: () => {
-  //     NavigationService.navigate("NotificationsScreen");
-  //   },
-  // },
+  {
+    title: "Notifications",
+    icon: images.userIconImage,
+    onPress: () => {
+      NavigationService.navigate("NotificationsScreen");
+    },
+  },
   {
     title: "Settings",
     icon: images.userSettingImage,
@@ -56,26 +56,18 @@ const items = [
       NavigationService.navigate("CustomerSupportScreen");
     },
   },
-
+  {
+    title: "Feedback",
+    icon: images.userStarImage,
+    onPress: () => {
+      NavigationService.navigate("FeedbackScreen");
+    },
+  },
   {
     title: "Legal",
     icon: images.userDocImage,
     onPress: () => {
-      NavigationService.navigate("LegalScreen");
-    },
-  },
-  {
-    title: "How SalamiSlicing works",
-    icon: null,
-    onPress: () => {
-      NavigationService.navigate("LearnMoreScreen", { tab: 1 });
-    },
-  },
-  {
-    title: "",
-    icon: null,
-    onPress: () => {
-      // NavigationService.navigate("FeedbackScreen");
+      NavigationService.navigate("CustomerSupportScreen");
     },
   },
 ];
@@ -101,7 +93,6 @@ const buttons = [
 function UserCenter(props) {
   const [serviceItems, setServiceItems] = useState([]);
   const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
-  const userProfile = useReactiveVar(userProfileVar);
   // const { loading, error, data } = useQuery(BUYER_PROFILES, {
   //   context: { headers: { isPrivate: true } },
   //   onCompleted: (res) => {
@@ -113,39 +104,39 @@ function UserCenter(props) {
   // });
   //43aeaddd-de66-45bb-81aa-192f4f5e2b33
 
-  useEffect(() => {
-    if (userProfile.isAuth) {
-      setServiceItems([...salamiItem, ...items]);
-    } else {
-      setServiceItems(items);
-    }
-  }, [userProfile]);
+  // useEffect(() => {
+  //   if (userProfileVar().isAuth) {
+  //     setServiceItems([...salamiItem, ...items]);
+  //   } else {
+  //     setServiceItems(items);
+  //   }
+  // }, []);
   return (
     <View style={styles.container}>
+      <StatusBar
+        barStyle="dark-content"
+        translucent={false}
+        backgroundColor={colors.background}
+      />
       <View style={{ marginTop: vs(10) }}>
-        <UserHeader needSafeArea />
+        {/* <UserHeader needSafeArea /> */}
       </View>
 
       {/* All the items usercenter */}
-      <View style={[t.flexWrap, t.flexRow, t.justifyBetween, t.pX4]}>
-        {/*hide salami credit when user not sign in*/}
+      {/* <View style={styles.itemContainer}>
+       
         {serviceItems.map((item, i) => (
-          <View
-            key={i}
-            style={[
-              i === 5 ? t.opacity0 : t.opacity100,
-              isEmpty(item.title) ? t.opacity0 : t.opacity100,
-            ]}
-          >
+          <View key={i}>
             <ItemBox {...item} />
           </View>
         ))}
         {!userProfileVar().isAuth && (
           <View style={{ height: s(94), width: s(94) }} />
         )}
-      </View>
-      <View style={styles.buttonContainer}>
-        {/* {buttons.map((item, i) => (
+      </View> 
+    
+     <View style={styles.buttonContainer}>
+        {buttons.map((item, i) => (
           <View key={"button" + i} style={{ marginTop: 15 }}>
             <Button
               {...item}
@@ -154,7 +145,19 @@ function UserCenter(props) {
               // }}
             />
           </View>
-        ))} */}
+        ))}
+      </View> */}
+      <View style={[t.pX6, t.mT32]}>
+        <Button
+          mode="outlined"
+          onPress={async () => {
+            await setLocalStorageEmpty();
+            NavigationService.navigate("OnboardingScreen");
+            DevSettings.reload();
+          }}
+        >
+          Logout
+        </Button>
       </View>
     </View>
   );

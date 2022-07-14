@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
 import {
   View,
+  StatusBar,
   Image,
   TouchableOpacity,
   Platform,
-  useWindowDimensions,
-  Text,
 } from "react-native";
 import Video from "react-native-video";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import Button from "../../Components/Button";
 
-import { Colors, Fonts, Images } from "../../Themes";
+import { Colors, Images } from "../../Themes";
 import styles from "./styles";
 import { vs } from "react-native-size-matters";
 import NavigationService from "../../Navigation/NavigationService";
@@ -21,8 +20,6 @@ import * as aQM from "./gql/onboard_mutations";
 import * as storage from "../../Apollo/local-storage";
 
 import { AlertContext } from "../Root/GlobalContext";
-import { t } from "react-native-tailwindcss";
-import AppConfig from "../../Config/AppConfig";
 
 function OnboardingScreen(props) {
   const [bIdExists, setBIdExists] = useState(false);
@@ -57,18 +54,12 @@ function OnboardingScreen(props) {
     // lets check if a buyer id exists
     // first check for an existing buyer id
     let bid = await storage.getLocalStorageValue(storage.GUEST_BUYER_ID_KEY);
-
     if (bid) {
       console.log(
         `OnboardingScreen checkBuyerIdExists found a bid in local storage ${bid}`
       );
       global.buyerId = bid;
-      NavigationService.navigate("MainScreen", { screen: "ExploreScreen" });
       setBIdExists(true);
-    } else {
-      guestBuyerId({
-        variables: { request: BuyerProfileRequestForCreate },
-      });
     }
   };
 
@@ -78,17 +69,18 @@ function OnboardingScreen(props) {
       // unmount here
     };
   }, [props]);
-  const { width, height } = useWindowDimensions();
 
   /**
    * call back for the onCompleted CREATE_GUEST_BUYER mutation
    * update local storage and navigate
    */
   const onGetGuestBuyerId = async (data) => {
+    debugger;
     dispatch({ type: "hideloading" });
     let buyerId = data.createGuestBuyer.buyerId;
     await storage.setLocalStorageValue(storage.GUEST_BUYER_ID_KEY, buyerId);
     global.buyerId = buyerId;
+    NavigationService.navigate("MainScreen");
   };
 
   const togglePlayPauseVideo = () => {
@@ -96,6 +88,11 @@ function OnboardingScreen(props) {
   };
   return (
     <View style={styles.container}>
+      <StatusBar
+        barStyle="light-content"
+        translucent
+        backgroundColor={"rgba(0,0,0,0.0)"}
+      />
       <Video
         ref={(ref) => (player = ref)}
         source={require("../../../assets/video/video.mp4")}
@@ -120,76 +117,13 @@ function OnboardingScreen(props) {
               source={isPlaying ? Images.pause : Images.play}
             />
           </TouchableOpacity>
-          <View style={[t.flexRow, t.wFull, t.justifyCenter]}>
-            <Button
-              text={"Sign in"}
-              onPress={() => NavigationService.navigate("LoginScreen")}
-              style={[{ width: width / 2 - 60 }]}
-            />
-            <Text
-              style={[
-                t.textWhite,
-                t.mL6,
-                t.mT4,
-                {
-                  fontSize: AppConfig.fontSize,
-                  fontFamily: Fonts.semibold,
-                },
-              ]}
-            >
-              or
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                NavigationService.navigate("RegisterScreen");
-              }}
-            >
-              <Text
-                style={[
-                  t.textPrimary,
-                  t.mL6,
-                  t.mT4,
-                  {
-                    fontSize: AppConfig.fontSize,
-                    fontFamily: Fonts.semibold,
-                    textDecorationLine: "underline",
-                  },
-                ]}
-              >
-                Register
-              </Text>
-            </TouchableOpacity>
-          </View>
 
-          <View style={{ height: vs(32) }} />
           <Button
-            text={"Continue as guest"}
-            backgroundColor={"transparent"}
-            textColor={Colors.white}
-            onPress={async () => {
-              // call the CREATE_GUEST_BUYER mutation see onGetGuestBuyerId callback
-              let bid = await storage.getLocalStorageValue(
-                storage.GUEST_BUYER_ID_KEY
-              );
-              // if (bid) {
-              //   console.log(
-              //     `OnboardingScreen checkBuyerIdExists found a bid in local storage ${bid}`
-              //   );
-              if (bid) {
-                global.buyerId = bid;
-              }
-
-              NavigationService.navigate("MainScreen", {
-                screen: "ExploreScreen",
-              });
-              // } else {
-              //   dispatch({ type: "loading" });
-              //   guestBuyerId({
-              //     variables: { request: BuyerProfileRequestForCreate },
-              //   });
-              // }
-            }}
+            text={"SIGN IN"}
+            onPress={() => NavigationService.navigate("LoginScreen")}
           />
+
+          <View style={{ height: vs(12) }} />
         </View>
       </SafeAreaView>
     </View>

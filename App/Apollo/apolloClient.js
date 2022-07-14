@@ -97,6 +97,7 @@ const allAPIS = {
   CreateOrderFromCart: ORDER_PORT,
   GetOrderItemDetails: ORDER_PORT,
   ValidateBuyerHasAnyOrder: ORDER_PORT,
+  MarkOrderReturnAsReceived: ORDER_PORT,
   //Payment
   RazorpayCreateOrder: PAYMENT_PORT,
   RazorpayVerifyPaymentSignature: PAYMENT_PORT,

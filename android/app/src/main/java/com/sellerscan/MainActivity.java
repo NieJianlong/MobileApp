@@ -1,4 +1,4 @@
-package com.apolloBuyerSalamiSlicing;
+package com.sellerscan;
 
 import com.facebook.react.ReactActivity;
 

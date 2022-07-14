@@ -15,9 +15,9 @@
       ]
     },
     "scheme": "salami-slicing",
-    "name": "Salami Slicing",
+    "name": "Salami Slicing Seller",
     "owner": "salamislicing",
-    "slug": "SalamiSlicing",
+    "slug": "Salami-Slicing-Seller",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -50,7 +50,7 @@
         "android.permission.READ_CALENDAR",
         "android.permission.WRITE_CALENDAR"
       ],
-      "package": "com.apolloBuyerSalamiSlicing"
+      "package": "com.sellerscan"
     },
     "packagerOpts": {
       "config": "metro.config.js",

@@ -143,7 +143,7 @@ android {
         abortOnError false
     }
     defaultConfig {
-        applicationId "com.apolloBuyerSalamiSlicing"
+        applicationId "com.sellerscan"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         compileSdkVersion rootProject.ext.compileSdkVersion

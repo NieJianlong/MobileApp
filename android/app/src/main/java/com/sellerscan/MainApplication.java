@@ -1,10 +1,12 @@
-package com.apolloBuyerSalamiSlicing;
+package com.sellerscan;
 import android.content.res.Configuration;
 import expo.modules.ApplicationLifecycleDispatcher;
 import expo.modules.ReactNativeHostWrapper;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.apolloBuyerSalamiSlicing.BuildConfig;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 //import com.razorpay.rn.RazorpayPackage;

@@ -29,8 +29,9 @@ function Scanhelper() {
       NavigationService.goBack();
       alert("Success");
     },
-    onError: () => {
+    onError: (error) => {
       NavigationService.goBack();
+      alert(error.message);
       alert("Fail to mark order as deliver");
     },
   });

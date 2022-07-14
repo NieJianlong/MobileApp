@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "./styles";
-import { AppBar } from "../../../Components";
 import { Images } from "../../../Themes";
 import NavigationService from "../../../Navigation/NavigationService";
 import { useRoute } from "@react-navigation/core";

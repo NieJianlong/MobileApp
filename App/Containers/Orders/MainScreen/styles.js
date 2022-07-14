@@ -12,7 +12,6 @@ export default ScaledSheet.create({
     alignItems: "center",
   },
   safeArea: {
-    flex: 1,
     width: "100%",
   },
   bodyContainer: {

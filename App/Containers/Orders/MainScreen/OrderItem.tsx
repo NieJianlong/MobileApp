@@ -1,10 +1,18 @@
 import moment from "moment";
 import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native";
+import { color, t } from "react-native-tailwindcss";
 import NavigationService from "../../../Navigation/NavigationService";
 import styles from "./styles";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-function OrderItem({ item }) {
+function OrderItem({ item, canSelect, onSelect, selected }) {
   let detail = "";
   const statusText = item?.latestEventStatus?.replace(/_/g, " ");
   detail =
@@ -12,6 +20,7 @@ function OrderItem({ item }) {
     statusText?.substring(1, statusText.length).toLowerCase() +
     " on " +
     moment(item.orderDatetime).format("DD/MM/YYYY");
+  const { width } = useWindowDimensions();
   return (
     <TouchableOpacity
       onPress={() => {
@@ -31,21 +40,14 @@ function OrderItem({ item }) {
         />
         <View style={styles.v2}>
           <View style={styles.row}>
-            <Text style={styles.heading5Bold}>{item.shortName}</Text>
-
-            {/* {item.isAnnoucement && (
-                    <View style={styles.annoucementContainer}>
-                      <Text style={styles.annoucementText}>Announcement</Text>
-                    </View>
-                  )} */}
+            <Text
+              style={[styles.heading5Bold, { width: width - 100 }, t.pR2]}
+              numberOfLines={1}
+            >
+              {item.shortName}
+            </Text>
           </View>
-          <Text style={styles.txt3}>
-            {detail}
-            {/* {item.lastMessage.author}:{" "}
-                  <Text style={{ color: Colors.grey60 }}>
-                    {item.lastMessage.content}
-                  </Text> */}
-          </Text>
+          <Text style={styles.txt3}>{detail}</Text>
         </View>
       </View>
 
@@ -57,12 +59,36 @@ function OrderItem({ item }) {
             {/* {moment(item.lastMessage.time).fromNow()} */}
           </Text>
         )}
-        {/* {item.unreadCount > 0 && (
-                <View style={styles.unreadContainer}>
-                  <Text style={styles.unreadNumber}>{item.unreadCount}</Text>
-                </View>
-              )} */}
       </View>
+      {canSelect && (
+        <TouchableOpacity
+          onPress={onSelect}
+          style={[
+            t.absolute,
+            t.left0,
+            { marginLeft: width - 76 },
+            t.mT10,
+            t.p2,
+          ]}
+        >
+          {selected ? (
+            <MaterialCommunityIcons
+              name="checkbox-marked-circle"
+              size={24}
+              color={color.primary}
+            />
+          ) : (
+            <View
+              style={[
+                { width: 24, height: 24 },
+                t.border,
+                t.borderPrimary,
+                t.roundedFull,
+              ]}
+            />
+          )}
+        </TouchableOpacity>
+      )}
     </TouchableOpacity>
   );
 }

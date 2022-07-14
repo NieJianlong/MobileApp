@@ -5,7 +5,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { isIphoneX } from "react-native-iphone-x-helper";
 
 import { Colors, Images } from "../Themes";
-import useRealm from "../hooks/useRealm";
 import PubSub from "pubsub-js";
 import { t } from "react-native-tailwindcss";
 import { Badge } from "react-native-paper";
@@ -32,43 +31,7 @@ function TabBar(props) {
   };
 
   const { routes, index } = props.state;
-  const { realm } = useRealm();
-  const [mydatas, setMydatas] = useState(
-    realm
-      .objects("ShoppingCart")
-      .filtered("addressId == $0", localCartVar.deliverAddress)
-      .filtered("quantity > 0")
-      .filtered("isDraft == false")
-  );
-  useEffect(() => {
-    setMydatas(
-      realm
-        .objects("ShoppingCart")
-        .filtered("addressId == $0", localCartVar.deliverAddress)
-        .filtered("quantity > 0")
-        .filtered("isDraft == false")
-    );
-    let refresh = PubSub.subscribe("refresh-shoppingcart", () => {
-      setMydatas(
-        realm
-          .objects("ShoppingCart")
-          .filtered("addressId == $0", localCartVar.deliverAddress)
-          .filtered("quantity > 0")
-          .filtered("isDraft == false")
-      );
-    });
-    return () => {
-      PubSub.unsubscribe(refresh);
-    };
-  }, [localCartVar.deliverAddress, realm]);
-  const quantity = useMemo(() => {
-    let currentQuantity = 0;
-    for (let index = 0; index < mydatas.length; index++) {
-      const element = mydatas[index];
-      currentQuantity = currentQuantity + element.quantity;
-    }
-    return currentQuantity;
-  }, [mydatas]);
+
   // const quantity = useMemo(() => {
   //   let currentQuantity=0;
   //   for (let index = 0; index < mydatas.length; index++) {
@@ -100,11 +63,6 @@ function TabBar(props) {
                     isFocused && { tintColor: Colors.primary },
                   ]}
                 />
-                {route.name === "CartScreen" && quantity > 0 && (
-                  <View style={[t.absolute, t.top0, t.right0, t.mL5]}>
-                    <Badge>{quantity}</Badge>
-                  </View>
-                )}
               </TouchableOpacity>
             </View>
           );

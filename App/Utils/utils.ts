@@ -16,7 +16,6 @@ import useRealm from "../hooks/useRealm";
 import PubSub from "pubsub-js";
 import useOrderInfo from "../hooks/useOrderInfo";
 import useAlert from "../hooks/useAlert";
-import { Colors } from "../Themes";
 import useLoading from "../hooks/useLoading";
 export enum ComeFromType {
   checkout = "checkout",

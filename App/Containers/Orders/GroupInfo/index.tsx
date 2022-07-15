@@ -251,7 +251,7 @@ function GroupInfoScreen(props) {
               allItems: allItems,
               availbleList,
               billingDetailsId: finalData.billingDetailsId ?? "",
-              shippingAddressId: finalData?.deliveryAddress?.addressId ?? "",
+              shippingAddressId: finalData.shippingAddressId ?? "",
             });
           })}
         {(finalData?.latestEventStatus ===

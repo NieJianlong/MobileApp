@@ -61,7 +61,6 @@ export function usePaymentConfigration() {
 
   const { razorpayVerifyPaymentSignature } = useRazorVerifyPayment();
   const getPaymentConfigration = (orderId: string, amount: number) => {
-    debugger;
     const options = {
       description: "Wholesale Marketplace",
       image:
@@ -86,6 +85,7 @@ export function usePaymentConfigration() {
           razorpay_order_id: data.razorpay_order_id,
           razorpay_signature: data.razorpay_signature,
         });
+        debugger;
         razorpayVerifyPaymentSignature();
         dispatch({
           type: "changLoading",
@@ -102,7 +102,6 @@ export function usePaymentConfigration() {
         }
       })
       .catch((error) => {
-        debugger;
         dispatch({
           type: "changLoading",
           payload: false,

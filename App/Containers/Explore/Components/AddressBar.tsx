@@ -218,7 +218,7 @@ export default function AddressBar() {
         });
       }
       // getLocalStorageValue(global.buyerId + "Address").then((res) => {
-      //   debugger;
+      //
       // });
     });
     return () => {

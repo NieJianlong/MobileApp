@@ -1,31 +1,34 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  ScrollView,
   Image,
   SectionList,
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-import { vs } from "react-native-size-matters";
-import { Button } from "../../../Components";
-import NavigationService from "../../../Navigation/NavigationService";
 import { Images } from "../../../Themes";
 import styles from "./styles";
 import { color, t } from "react-native-tailwindcss";
 import {
   OrderItemHistoryEventType,
   ProductListingStatus,
+  useIsListingAvailableLazyQuery,
   useSearchBuyerOrdersQuery,
 } from "../../../../generated/graphql";
 import { useFocusEffect } from "@react-navigation/native";
 import useLoading from "../../../hooks/useLoading";
 import OrderItem from "./OrderItem";
-import { difference, groupBy, remove } from "lodash";
+import { difference, groupBy, remove, uniq } from "lodash";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { ComeFromType } from "../../../Utils/utils";
+import { ItemProps, useCreateOrder } from "../../../hooks/useCreateOrder";
+import useOrderInfo from "../../../hooks/useOrderInfo";
+import { useReactiveVar } from "@apollo/client";
+import { userProfileVar } from "../../../Apollo/cache";
 
 function Order(props) {
+  const userProfile = useReactiveVar(userProfileVar);
   const [selecteds, setSelecteds] = useState(
     props.orderItems.filter((item) => {
       return (
@@ -45,6 +48,11 @@ function Order(props) {
       item?.listingStatus === ProductListingStatus.Active
     );
   });
+  const [queryAvailble, { data: availbleList, loading }] =
+    useIsListingAvailableLazyQuery();
+  const { retryPayment } = useCreateOrder();
+  const { updateMoneyInfo } = useOrderInfo();
+  const { setLoading } = useLoading();
 
   const results = groupBy(unpaidItems, "shippingAddressId");
   const datas = Object.values(results);
@@ -122,7 +130,13 @@ function Order(props) {
             );
           }}
           renderSectionHeader={({ section: { title, data, status } }) => {
-            status ? (
+            const shippingAddressId = data[0].shippingAddressId;
+            const billingDetailsId = data[0].billingDetailsId;
+            const selectedItems = selecteds.filter(
+              (item) => item.shippingAddressId === shippingAddressId
+            );
+            const isSelected = selectedItems.length === data.length;
+            return status ? (
               <View
                 style={[
                   t.flexRow,
@@ -150,14 +164,105 @@ function Order(props) {
                       t.m2,
                       t.mR4,
                     ]}
+                    onPress={async () => {
+                      setLoading({ show: true });
+                      const isListingAvailableParams = data.map((item) => {
+                        return {
+                          listingId: item.listingId,
+                          variantId: item.variantId,
+                          quantity: item.quantity,
+                        };
+                      });
+                      const retryParams = data.map((item) => {
+                        return {
+                          listingId: item.listingId,
+                          variantId: item.variantId,
+                          quantity: item.quantity,
+                          replacedOrderItemId: item.orderItemId,
+                        };
+                      });
+                      const results = await queryAvailble({
+                        variables: { listings: isListingAvailableParams },
+                      });
+                      const isListingAvailable =
+                        results?.data?.isListingAvailable;
+
+                      const itemArray = [];
+                      const allItems: ItemProps[] = [];
+                      isListingAvailable?.map((item, index) => {
+                        if (item.isAvailable) {
+                          itemArray.push({
+                            listingId: item.listingId,
+                            variantId: item.variantId,
+                            quantity: isListingAvailableParams[index].quantity,
+                          });
+
+                          allItems.push({
+                            listingId: item.listingId ?? "",
+                            variantId: item.variantId ?? "",
+                            quantity: isListingAvailableParams[index].quantity,
+                            productDetails: item?.listing,
+                            variant: item.listing?.listingVariants?.find(
+                              (variantItem) =>
+                                variantItem?.variantId === item.variantId
+                            ),
+                          });
+                        }
+                      });
+
+                      global.billingDetails = {
+                        email: userProfile.email,
+                        phoneNumber: userProfile.phone ?? "",
+                        firstName: userProfile.firstName,
+                        lastName: userProfile.lastName,
+                      };
+                      const newInfo = {
+                        itemsForRequest: retryParams,
+                        allItems: allItems,
+                        comeFromType: ComeFromType.checkout,
+                        availbleList,
+                      };
+                      updateMoneyInfo(newInfo);
+                      retryPayment({
+                        isFromInSufficientSalamiCreditScreen: false,
+                        itemsForRequest: retryParams,
+                        allItems: allItems,
+                        availbleList: isListingAvailable ?? [],
+                        billingDetailsId: billingDetailsId ?? "",
+                        shippingAddressId: shippingAddressId ?? "",
+                      });
+
+                      setLoading({ show: false });
+                    }}
                   >
                     <Text style={[t.pX2, t.textPrimary]}>{title}</Text>
                   </TouchableOpacity>
-                  <MaterialCommunityIcons
-                    name="checkbox-marked-circle"
-                    size={24}
-                    color={color.primary}
-                  />
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (isSelected) {
+                        setSelecteds(uniq([...difference(selecteds, data)]));
+                      } else {
+                        setSelecteds(uniq([...selecteds, ...data]));
+                      }
+                    }}
+                  >
+                    {isSelected ? (
+                      <MaterialCommunityIcons
+                        name="checkbox-marked-circle"
+                        size={24}
+                        color={color.primary}
+                      />
+                    ) : (
+                      <View
+                        style={[
+                          { width: 24, height: 24 },
+                          t.border,
+                          t.borderPrimary,
+                          t.roundedFull,
+                        ]}
+                      />
+                    )}
+                  </TouchableOpacity>
                 </View>
               </View>
             ) : null;
@@ -193,24 +298,30 @@ function OrderScreen() {
         },
       },
     },
-
     context: {
       headers: {
         isPrivate: true,
       },
     },
   });
-  const { setLoading } = useLoading();
+  const { setLoading, loading: appLoading } = useLoading();
   useEffect(() => {
     setLoading({ show: loading });
   }, [loading, setLoading]);
   useFocusEffect(
     React.useCallback(() => {
-      refetch();
+      setLoading({ show: true });
+      refetch()
+        .then(() => {
+          setLoading({ show: false });
+        })
+        .catch(() => {
+          setLoading({ show: false });
+        });
     }, [refetch])
   );
 
-  return loading ? (
+  return appLoading.show ? (
     <View />
   ) : (
     <Order orderItems={data?.searchBuyerOrders?.content ?? []} />

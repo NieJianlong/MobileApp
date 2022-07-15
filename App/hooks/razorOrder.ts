@@ -30,7 +30,7 @@ export const useCreateRazorOrder = () => {
       },
       onCompleted: (res) => {},
       onError: (res) => {
-        alert(JSON.stringify(res.message));
+        alert("razorpay" + JSON.stringify(res.message));
       },
     });
   };

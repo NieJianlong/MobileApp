@@ -60,7 +60,7 @@ const UseBillingDetail = () => {
     },
     onError: (err) => {
       console.log("error-======", err);
-      alert(err.message);
+      alert("updateBilling" + err.message);
       return err;
     },
   });
@@ -133,14 +133,16 @@ const UseBillingDetail = () => {
       }
     } else {
       if (userProfile.isAuth) {
+        const requestUpdate = {
+          billingDetailsId: userProfile.billingDetailsId,
+          ...request,
+          ...request,
+          ...data,
+        };
+
         resultTemp1 = await updateBillingDetails({
           variables: {
-            request: {
-              billingDetailsId: userProfile.billingDetailsId,
-              ...request,
-              ...request,
-              ...data,
-            },
+            request: requestUpdate,
           },
         });
         result = resultTemp1?.data?.updateBillingDetails;

@@ -19,7 +19,7 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import useLoading from "../../../hooks/useLoading";
 import OrderItem from "./OrderItem";
-import { difference, groupBy, remove, uniq } from "lodash";
+import { difference, groupBy, isEmpty, remove, uniq } from "lodash";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ComeFromType } from "../../../Utils/utils";
 import { ItemProps, useCreateOrder } from "../../../hooks/useCreateOrder";
@@ -130,6 +130,9 @@ function Order(props) {
             );
           }}
           renderSectionHeader={({ section: { title, data, status } }) => {
+            if (isEmpty(data)) {
+              return null;
+            }
             const shippingAddressId = data[0].shippingAddressId;
             const billingDetailsId = data[0].billingDetailsId;
             const selectedItems = selecteds.filter(

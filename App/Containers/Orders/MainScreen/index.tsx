@@ -146,7 +146,6 @@ function Order(props) {
                   t.bgWhite,
                   t.mT2,
                   t.justifyBetween,
-
                   t.mX4,
                   t.border,
                   t.borderBlue500,
@@ -169,14 +168,21 @@ function Order(props) {
                     ]}
                     onPress={async () => {
                       setLoading({ show: true });
-                      const isListingAvailableParams = data.map((item) => {
-                        return {
-                          listingId: item.listingId,
-                          variantId: item.variantId,
-                          quantity: item.quantity,
-                        };
-                      });
-                      const retryParams = data.map((item) => {
+                      const shippingAddressId = data[0].shippingAddressId;
+                      const billingDetailsId = data[0].billingDetailsId;
+                      const selectedItems = selecteds.filter(
+                        (item) => item.shippingAddressId === shippingAddressId
+                      );
+                      const isListingAvailableParams = selectedItems.map(
+                        (item) => {
+                          return {
+                            listingId: item.listingId,
+                            variantId: item.variantId,
+                            quantity: item.quantity,
+                          };
+                        }
+                      );
+                      const retryParams = selectedItems.map((item) => {
                         return {
                           listingId: item.listingId,
                           variantId: item.variantId,

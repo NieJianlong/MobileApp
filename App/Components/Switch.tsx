@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -15,6 +15,11 @@ const TouchableOpacity =
 function Switch(props) {
   const [active, setActive] = useState(props.active || false);
   const { disabled, label, onSwitch } = props;
+
+  useEffect(() => {
+    setActive(props.active);
+  }, [props.active]);
+
   if (!disabled) {
     return (
       <View style={styles.row}>

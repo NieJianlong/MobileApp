@@ -16,7 +16,7 @@ function CancelOrderCompleted(props) {
     textTip: "Your order has been canceled",
     subTextTip:
       params.data.latestEventStatus === OrderItemHistoryEventType.Paid
-        ? "You will receive the refund money in 3-5 business days"
+        ? "You will receive the refund money in 5-7 business days"
         : "You can go on to browse other products",
     needButton: true,
     btnMsg: "CONTINUE EXPLORING",

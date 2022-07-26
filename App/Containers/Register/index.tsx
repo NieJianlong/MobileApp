@@ -532,7 +532,14 @@ function RegisterScreen(props) {
         <Controller
           control={control}
           rules={{
-            required: "Field is required.",
+            required: "Type your first name.",
+            validate: {
+              positive: (v) => {
+                if (v?.trim().length === 0)
+                  return "First name should not  only contain Spaces";
+                return true;
+              },
+            },
           }}
           render={({ field: { onChange, value } }) => (
             <TextInput
@@ -560,7 +567,14 @@ function RegisterScreen(props) {
         <Controller
           control={control}
           rules={{
-            required: "Field is required.",
+            required: "Type your last name.",
+            validate: {
+              positive: (v) => {
+                if (v?.trim().length === 0)
+                  return "Last name should not  only contain Spaces";
+                return true;
+              },
+            },
           }}
           render={({ field: { onChange, value } }) => (
             <TextInput

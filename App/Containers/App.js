@@ -11,6 +11,13 @@ import { StatusBar } from "expo-status-bar";
 import useStatusBar from "../hooks/useStatusBar";
 import * as Sentry from "sentry-expo";
 import { FlipperTicTacToe } from "react-native-flipper";
+import {
+  configureFonts,
+  DefaultTheme,
+  Portal,
+  Provider as PaperProvider,
+  Surface,
+} from "react-native-paper";
 
 Sentry.init({
   //dsn: "https://908e7b35c4824794aecc2e070deccf59@o1261296.ingest.sentry.io/6438866",
@@ -90,10 +97,16 @@ const App = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ApolloProvider client={client}>
-        <FlipperAsyncStorage />
-        {/* <FlipperTicTacToe /> */}
-        <StatusBar hidden={hidden} backgroundColor={color} translucent={true} />
-        <RootContainer />
+        <PaperProvider>
+          <FlipperAsyncStorage />
+          {/* <FlipperTicTacToe /> */}
+          <StatusBar
+            hidden={hidden}
+            backgroundColor={color}
+            translucent={true}
+          />
+          <RootContainer />
+        </PaperProvider>
       </ApolloProvider>
     </GestureHandlerRootView>
   );

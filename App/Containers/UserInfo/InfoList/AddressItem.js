@@ -33,6 +33,7 @@ import {
 } from "../../../../generated/graphql";
 import { userProfileVar } from "../../../Apollo/cache";
 import { mapGQLAddressToDelivery } from "../../Explore/gql/gql_mappers";
+import useActionAlert from "../../../hooks/useActionAlert";
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
 const TouchableWithoutFeedback =
@@ -43,6 +44,7 @@ const TouchableWithoutFeedback =
 export default function AddressItem({ item, refetch, isCheckout, onPress }) {
   const { dispatch } = useContext(AlertContext);
   const userProfile = useReactiveVar(userProfileVar);
+  const { setAlert } = useActionAlert();
   const variables = userProfile.isAuth
     ? { addressId: item.addressId }
     : { addressId: item.addressId, guestBuyerId: global.buyerId };
@@ -188,8 +190,30 @@ export default function AddressItem({ item, refetch, isCheckout, onPress }) {
 
             <TouchableOpacity
               onPress={() => {
-                dispatch({ type: "loading" });
-                deleteAddress();
+                setAlert({
+                  visible: true,
+                  message: "Would you like to delete this address.",
+                  color: colors.secondary00,
+                  title: "Delete Address",
+                  buttons: [
+                    // {
+                    //   text: "Cancel",
+                    //   style: [t.w16, t.h8, t.bgGray200],
+                    //   backgroundColor: colors.secondary00,
+                    //   onPress: () => {
+                    //     setAlert({ visible: false });
+                    //   },
+                    // },
+                    {
+                      text: "Delete",
+                      style: [t.w16, t.h8],
+                      onPress: () => {
+                        dispatch({ type: "loading" });
+                        deleteAddress();
+                      },
+                    },
+                  ],
+                });
               }}
             >
               <Image

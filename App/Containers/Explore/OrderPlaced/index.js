@@ -68,9 +68,7 @@ function OrderPlaced(props) {
           />
           <TouchableOpacity
             onPress={() => {
-              NavigationService.navigate(
-                params?.error ? "ExploreScreen" : "PackageScreen"
-              );
+              NavigationService.navigate("PackageScreen");
             }}
           >
             <Image source={Images.crossMedium} style={styles.icSearch} />
@@ -109,12 +107,20 @@ function OrderPlaced(props) {
   };
 
   const renderBody = () => {
+    let errorMessage = params?.error ? params?.error?.description : "";
+    debugger;
+    try {
+      errorMessage = params?.error?.description.includes("cancel")
+        ? "Payment processing cancelled, Please retry payment from My orders"
+        : "Payment processing failed, Please retry payment from My orders";
+    } catch (error) {}
+
     return (
       <ScrollView style={styles.body}>
         <View style={styles.textArea}>
           <Text style={styles.txt1}>
             {params?.error
-              ? params?.error.description
+              ? errorMessage
               : " Your order has been processed sucessfully"}
           </Text>
           <Text style={styles.txt2}>
@@ -145,7 +151,8 @@ function OrderPlaced(props) {
               </View>
             );
           })}
-          {renderChatOptions()}
+
+          {!params?.error && renderChatOptions()}
         </View>
       </ScrollView>
     );

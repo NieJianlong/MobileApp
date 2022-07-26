@@ -29,7 +29,7 @@ import useRegister from "../../hooks/useRegister";
 import RegisterScreen from "../Register";
 import { t } from "react-native-tailwindcss";
 import RegisterGuestBuyerToBuyerScreen from "../RegisterGuestBuyerToBuyer";
-import { Portal, Text } from "react-native-paper";
+import { Portal, Text, Modal as PaperModal } from "react-native-paper";
 import LoginModalForm from "../LoginModalForm";
 import { Colors, Images } from "../../Themes";
 import CheckoutPaymentCompletedGuest from "../CheckoutPaymentCompletedGuest";
@@ -43,6 +43,8 @@ import { localCartVar } from "../../Apollo/cache";
 import { useReactiveVar } from "@apollo/client";
 import { isEmpty } from "lodash";
 import useCurrentRoute from "../../hooks/useCurrentRoute";
+import useActionAlert from "../../hooks/useActionAlert";
+import AppAlert from "../../Components/AppAlert";
 
 const initialState = {
   alert: {
@@ -185,6 +187,8 @@ function RootContainer() {
     images,
     setImageViewer,
   } = useImageViewer();
+  const { visible: actionVisible } = useActionAlert();
+
   const { loginVisible } = useLogin();
   const { mapVisible } = useMapScreen();
   const { stopPermission } = useMapScreen();
@@ -319,6 +323,9 @@ function RootContainer() {
       <Modal visible={mapVisible} transparent={true}>
         <MapScreen stopPermission={stopPermission} />
       </Modal>
+
+      <AppAlert />
+
       <Modal visible={spinner || show} transparent={true}>
         <Spinner
           visible={spinner || show}

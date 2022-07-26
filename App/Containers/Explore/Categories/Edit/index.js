@@ -90,7 +90,7 @@ export default function EditCategoriesScreen() {
       return null;
     }
     return (
-      <TouchableOpacity style={styles.itemContainer} onLongPress={drag}>
+      <TouchableOpacity style={styles.itemContainer}>
         <TouchableOpacity
           onPress={() => {
             setRemoved([...removed, item]);
@@ -102,7 +102,7 @@ export default function EditCategoriesScreen() {
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={drag}>
-          <Image source={Images.move} style={styles.icMove} />
+          {/* <Image source={Images.move} style={styles.icMove} /> */}
         </TouchableOpacity>
       </TouchableOpacity>
     );
@@ -118,9 +118,9 @@ export default function EditCategoriesScreen() {
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item, index) => `draggable-item-${index}`}
-          onDragEnd={({ data }) => {
-            setCategoryData(data);
-          }}
+          // onDragEnd={({ data }) => {
+          //   setCategoryData(data);
+          // }}
         />
       </View>
       <TouchableOpacity

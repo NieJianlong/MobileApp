@@ -85,7 +85,6 @@ export function usePaymentConfigration() {
           razorpay_order_id: data.razorpay_order_id,
           razorpay_signature: data.razorpay_signature,
         });
-        debugger;
         razorpayVerifyPaymentSignature();
         dispatch({
           type: "changLoading",

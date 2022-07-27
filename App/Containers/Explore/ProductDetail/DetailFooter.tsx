@@ -106,8 +106,8 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   }, [currentVariant]);
   const disabled = useMemo(() => {
     return (
-      currentVariant?.itemsSold === currentVariant?.itemsAvailable ||
-      maximumValue < initQuanlity
+      currentVariant?.itemsAvailable - currentVariant?.itemsSold <
+        initQuanlity || maximumValue < initQuanlity
     );
   }, [currentVariant, initQuanlity, maximumValue]);
   const addToCart = () => {

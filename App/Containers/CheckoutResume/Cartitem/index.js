@@ -9,6 +9,7 @@ import images from "../../../Themes/Images";
 import colors from "../../../Themes/Colors";
 import fonts from "../../../Themes/Fonts";
 import BigNumber from "bignumber.js";
+import { isEmpty } from "lodash";
 // import { CartContext } from '../index';
 // import { AlertContext } from '../../Root/GlobalContext';
 
@@ -19,7 +20,16 @@ function index(props) {
     product: { product, variant },
     onPress,
   } = props;
-
+  let selectedVariant = "";
+  if (!isEmpty(variant?.options)) {
+    variant?.options.map((item) => {
+      selectedVariant = selectedVariant + item.key + ":" + item.value + ",";
+    });
+    selectedVariant.trimEnd(",");
+  }
+  if (selectedVariant.length > 34) {
+    selectedVariant = selectedVariant.substring(0, 34) + "...";
+  }
   return (
     <TouchableOpacity
       onPress={() =>
@@ -45,7 +55,7 @@ function index(props) {
                 { fontSize: s(12), fontWeight: "normal", color: colors.grey80 },
               ]}
             >
-              Selected product options goes here
+              {selectedVariant}
             </Text>
           </View>
         </View>

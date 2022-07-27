@@ -1,5 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Text, View, TouchableOpacity, Image, TextInput } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  useWindowDimensions,
+} from "react-native";
 import { s, ScaledSheet } from "react-native-size-matters";
 import { Fonts, Colors, ApplicationStyles } from "../../../Themes";
 import AppConfig from "../../../Config/AppConfig";
@@ -46,6 +53,7 @@ function Index(props) {
   if (selectedVariant.length > 34) {
     selectedVariant = selectedVariant.substring(0, 34) + "...";
   }
+  const { width, height } = useWindowDimensions();
   return (
     <TouchableOpacity
       // disabled={!availble}
@@ -66,7 +74,12 @@ function Index(props) {
         />
         <View style={styles.v2}>
           <View>
-            <Text style={styles.heading4Bold}>{product?.shortName}</Text>
+            <Text
+              style={[styles.heading4Bold, { width: width - 116 }]}
+              numberOfLines={2}
+            >
+              {product?.shortName}
+            </Text>
             <Text
               style={[
                 styles.heading4Bold,

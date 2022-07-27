@@ -100,9 +100,12 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   };
 
   const maximumValue = useMemo(() => {
-    return currentVariant?.itemsAvailable - currentVariant?.itemsSold > 1
-      ? currentVariant?.itemsAvailable - currentVariant?.itemsSold
-      : 100;
+    const left = currentVariant?.itemsAvailable - currentVariant?.itemsSold;
+    return left > 0 ? left : 0;
+    // return currentVariant?.itemsAvailable - currentVariant?.itemsSold >
+    //   initQuanlity
+    //   ? currentVariant?.itemsAvailable - currentVariant?.itemsSold
+    //   : initQuanlity;
   }, [currentVariant]);
   const disabled = useMemo(() => {
     return (
@@ -176,17 +179,18 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   return (
     <SafeAreaView style={styles.footerSafeArea} edges={["bottom"]}>
       <QuantitySelector
-        minQtyPerCart={initQuanlity}
+        minQtyPerCart={
+          initQuanlity > maximumValue ? maximumValue : initQuanlity
+        }
         minimumValue={1}
-        maximumValue={maximumValue < initQuanlity ? initQuanlity : maximumValue}
-        value={quantity}
+        maximumValue={maximumValue}
+        value={quantity > maximumValue ? maximumValue : quantity}
         onChange={(value) => {
           setQuantity(value);
         }}
       />
 
       <View style={{ height: vs(15) }} />
-
       <View style={styles.rowSpaceBetween}>
         <TouchableOpacity
           style={[styles.row, t.mR6]}

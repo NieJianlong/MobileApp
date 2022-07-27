@@ -107,7 +107,6 @@ class RateOrder extends Component {
           <Text style={styles.txtProductName}>
             {this.props.data?.shortName}
           </Text>
-
           <StarRating
             ratingMode
             onChange={(star) => {
@@ -116,60 +115,69 @@ class RateOrder extends Component {
             }}
           />
         </View>
-        <Controller
-          control={this.props.control}
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <OneLineTextInput
-              style={styles.reviewInput}
-              placeholder={"Write here title"}
-              textAlignVertical={"top"}
-              onChangeText={onChange}
-              value={value}
-            />
+        <View>
+          <Controller
+            control={this.props.control}
+            rules={{
+              required: "Title is required",
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <OneLineTextInput
+                style={styles.reviewInput}
+                placeholder={"Write here title"}
+                textAlignVertical={"top"}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="title"
+          />
+          {this.props.errors?.title && (
+            <Text style={[t.textRed900, t.mT1, t.mL4]}>
+              {this.props.errors?.title.message}
+            </Text>
           )}
-          name="title"
-        />
-        <Controller
-          control={this.props.control}
-          rules={{
-            required: true,
-            minLength: {
-              value: 5,
-              message: "Length must be 6 or more",
-            },
-            maxLength: {
-              value: 250,
-              message: "Length must be less than  250",
-            },
-            validate: {
-              positive: (v) => {
-                const v1 = trim(v);
-                if (v1.length === 0)
-                  return "Content should not contain Spaces only";
-                return true;
+        </View>
+        <View>
+          <Controller
+            control={this.props.control}
+            rules={{
+              required: "Content is required",
+              minLength: {
+                value: 5,
+                message: "Length must be 6 or more",
               },
-            },
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              style={[styles.reviewInput, t.h64, { borderRadius: 20 }]}
-              multiline
-              placeholder={"Write here your review"}
-              textAlignVertical={"top"}
-              onChangeText={onChange}
-              value={value}
-            />
+              maxLength: {
+                value: 250,
+                message: "Length must be less than  250",
+              },
+              validate: {
+                positive: (v) => {
+                  const v1 = trim(v);
+                  if (v1.length === 0)
+                    return "Content should not contain Spaces only";
+                  return true;
+                },
+              },
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={[styles.reviewInput, t.h64, { borderRadius: 20 }]}
+                multiline
+                placeholder={"Write here your review"}
+                textAlignVertical={"top"}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="description"
+          />
+          {this.props.errors?.description && (
+            <Text style={[t.textRed900, t.mT1, t.mL4]}>
+              {this.props.errors?.description.message}
+            </Text>
           )}
-          name="description"
-        />
-        {this.props.errors?.description && (
-          <Text style={[t.textRed900, t.mT1, t.mL4]}>
-            {this.props.errors?.description.message}
-          </Text>
-        )}
+        </View>
 
         {/* <View style={styles.center}>
           <Text style={styles.txt1}>Upload pictures to your review</Text>
@@ -344,21 +352,6 @@ function RateOrderScreen() {
       ),
     });
   }, [navigation, stars]);
-  // const onSubmit = (data) => {
-  //   addProductReview({
-  //     variables: {
-  //       input: {
-  //         ...data,
-  //         productId: params.product.productId,
-  //       },
-  //     },
-  //     context: {
-  //       headers: {
-  //         isPrivate: true,
-  //       },
-  //     },
-  //   });
-  // };
   return (
     <RateOrder
       data={params?.data}

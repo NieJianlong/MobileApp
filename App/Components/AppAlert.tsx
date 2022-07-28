@@ -13,13 +13,14 @@ import Button from "./Button";
 import { AntDesign } from "@expo/vector-icons";
 
 const AppAlert = () => {
-  const { visible, buttons, setAlert, title, message } = useActionAlert();
+  const { visible, buttons, setAlert, title, message, onDismiss } =
+    useActionAlert();
   const dissAlert = useCallback(() => {
     setAlert({ show: false, title: "", content: "", buttons: [] });
   }, []);
   const noButtons = isEmpty(buttons);
   const { width, height } = useWindowDimensions();
-  const isLandscape = width > height;
+
   return visible ? (
     <Portal>
       <Modal visible dismissable={false}>
@@ -45,7 +46,12 @@ const AppAlert = () => {
             >
               {title}
             </Text>
-            <TouchableOpacity onPress={dissAlert}>
+            <TouchableOpacity
+              onPress={() => {
+                dissAlert();
+                onDismiss && onDismiss();
+              }}
+            >
               <AntDesign name="close" size={24} color="black" />
             </TouchableOpacity>
           </View>
@@ -69,7 +75,6 @@ const AppAlert = () => {
                     style={[index !== buttons.length - 1 && t.mR4, item.style]}
                     text={item.text}
                     onPress={() => {
-                      dissAlert();
                       item.onPress?.();
                     }}
                   />

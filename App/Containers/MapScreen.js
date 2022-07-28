@@ -10,120 +10,117 @@ import {
   Alert,
   SafeAreaView,
   useWindowDimensions,
+  Platform,
+  AppState,
 } from "react-native";
 import Geocoder from "react-native-geocoding";
 import RNGooglePlaces from "react-native-google-places-api";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-
-import AdditionalInfoModal from "./AdditionalInfoModal";
 import LocationPin from "../../assets/location-pin.png";
 import { Button } from "../Components";
-import { Modal } from "react-native-paper";
+import { Modal, Portal } from "react-native-paper";
 import { t } from "react-native-tailwindcss";
-import useLoading from "../hooks/useLoading";
 import { AlertContext } from "./Root/GlobalContext";
 import AddLocationSheetContent from "./Explore/Components/AddLocationSheetContent";
 import useMapScreen from "../hooks/useMapScreen";
 import { ScaledSheet, vs } from "react-native-size-matters";
 import colors from "../Themes/Colors";
-import AsyncStorage from "@react-native-community/async-storage";
+import { request, PERMISSIONS, openSettings } from "react-native-permissions";
+import useActionAlert from "../hooks/useActionAlert";
+import useLoading from "../hooks/useLoading";
 
 Geocoder.init("AIzaSyBfDTs1ejBI3MIVhrPeXgpvDNkTovWkIuU");
 
 const MapScreen = (props) => {
   const mapRef = useRef();
   const [location, setLocation] = useState(null);
-  const [additionalInfoModal, setAdditionalInfoModal] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [additionalInfo, setAdditionalInfo] = useState({});
-  const { setLoading } = useLoading();
   const { dispatch } = useContext(AlertContext);
   const { setShowMap } = useMapScreen();
+  const { setLoading } = useLoading();
   const [isTapable, setIsTapable] = useState(true);
   const [changeIsPressed, setChangeIsPressed] = useState(false);
 
+  const { setAlert } = useActionAlert();
+
+  const handPermission = () => {
+    setAlert({
+      visible: true,
+      message:
+        "Permission to access location was denied.Please enable it in settings.",
+      color: colors.secondary00,
+      title: "Settings permissions",
+      onDismiss: () => {
+        setShowMap({ mapVisible: false, stopPermission: true });
+        dispatch({
+          type: "changSheetState",
+          payload: {
+            showSheet: true,
+            height: 600,
+            children: () => (
+              <AddLocationSheetContent
+                {...location}
+                locationDetails={location}
+              />
+            ),
+            sheetTitle: "",
+          },
+        });
+      },
+      buttons: [
+        {
+          text: "Go to Settings",
+          style: [t.w32, t.h8],
+          onPress: () => {
+            openSettings()
+              .then(() => {
+                handPermission2();
+              })
+              .catch(() => console.warn("cannot open settings"));
+          },
+        },
+      ],
+    });
+  };
+  const handPermission2 = () => {
+    if (Platform.OS === "ios") {
+      request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then((result) => {
+        if (result !== "granted") {
+          handPermission();
+        } else {
+          setAlert({ visible: false });
+          handleCenter();
+        }
+      });
+    }
+    if (Platform.OS === "android") {
+      request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
+        if (result !== "granted") {
+          console.log("====================================");
+          console.log("Permission not granted");
+          console.log("====================================");
+          handPermission();
+        } else {
+          console.log("====================================");
+          console.log("Permissiongranted");
+          console.log("====================================");
+          setAlert({ visible: false });
+          handleCenter();
+        }
+      });
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      const firstRun = await AsyncStorage.getItem("isFirstRun");
-      if (firstRun === null) {
-        const { status } = await Location.requestForegroundPermissionsAsync();
-        AsyncStorage.setItem("isFirstRun", 'true');
-        if (status !== "granted") {
-          Alert.alert("Permission to access location was denied");
-          setShowMap({ mapVisible: false, stopPermission: true });
-          dispatch({
-            type: "changSheetState",
-            payload: {
-              showSheet: true,
-              height: 600,
-              children: () => (
-                <AddLocationSheetContent
-                  {...location}
-                  locationDetails={location}
-                />
-              ),
-              sheetTitle: "",
-            },
-          });
-          return;
-        }
-      } else {
-        const checkPermission = await Location.getForegroundPermissionsAsync();
-        AsyncStorage.setItem("isFirstRun", 'true');
-        if (checkPermission.status !== "granted") {
-          Alert.alert("Check your location permissions in your phone settings");
-          setShowMap({ mapVisible: false, stopPermission: true });
-          dispatch({
-            type: "changSheetState",
-            payload: {
-              showSheet: true,
-              height: 600,
-              children: () => (
-                <AddLocationSheetContent
-                  {...location}
-                  locationDetails={location}
-                />
-              ),
-              sheetTitle: "",
-            },
-          });
-          return;
-        }
+    AppState.addEventListener("focus", (state) => {
+      if (state === "active") {
+        handPermission2();
       }
-
-      _getCurrentLocation();
-    })();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    });
   }, []);
 
-  const _getCurrentLocation = () => {
-    setLoading({ show: true });
-    setTimeout(() => {
-      RNGooglePlaces.getCurrentPlace(["placeID", "location", "name", "address"])
-        .then((results) => {
-          setLoading({ show: false });
-          // setLocation(
-          //   results && results[0] && { location: results[0].location, address: results[0].address }
-          // );
-
-
-          handleCenter(results[0].location);
-          // _onChangeRegion(results[0] && results[0].location);
-        })
-        .catch((error) => {
-          setLoading({ show: false });
-          setLocation({
-            location: {
-              longitude: 28.684166500711854,
-              latitude: 77.1772169293581,
-            },
-          });
-
-          console.log("Error", error.message);
-        });
-    }, 0);
-  };
+  useEffect(() => {
+    handPermission2();
+  }, []);
 
   const _openLocationModal = () => {
     RNGooglePlaces.openAutocompleteModal()
@@ -219,18 +216,28 @@ const MapScreen = (props) => {
     setIsTapable(false);
   };
 
-  const handleCenter = async (location) => {
-    console.log("seee theee location", location);
-    const { latitude, longitude, latitudeDelta, longitudeDelta } = location;
-
-    let loc = await Location.getCurrentPositionAsync({});
-    mapRef.current.animateToRegion({
-      latitude: loc.coords.latitude,// + 0.0006351,
-      longitude: loc.coords.longitude,// - 0.0002,
-      latitudeDelta: 0.01756674919514367,
-      longitudeDelta: 0.012099780142307281,
-    })
-  }
+  const handleCenter = async () => {
+    // console.log("seee theee location", location);
+    // setLoading({ show: true });
+    try {
+      let loc = await Location.getCurrentPositionAsync({});
+      mapRef.current.animateToRegion({
+        latitude: loc.coords.latitude, // + 0.0006351,
+        longitude: loc.coords.longitude, // - 0.0002,
+        latitudeDelta: 0.01756674919514367,
+        longitudeDelta: 0.012099780142307281,
+      });
+      // setLoading({ show: false });
+      console.log("====================================");
+      console.log("zheshi 怎么回事");
+      console.log("====================================");
+    } catch (error) {
+      // setLoading({ show: false });
+      console.log("====================================");
+      console.log("zheshi 怎么回事");
+      console.log("====================================");
+    }
+  };
 
   const INITIAL_REGION = location && {
     ...location.location,
@@ -240,82 +247,84 @@ const MapScreen = (props) => {
 
   const { width, height } = useWindowDimensions();
   return (
-    <View style={[{ width, height }, t.bgBlue300]}>
-      <View style={[styles.container]}>
-        <MapView
-          key={changeIsPressed ? JSON.stringify(location) : ""}
-          ref={mapRef}
-          showsUserLocation
-          userLocationUpdateInterval={2000}
-          style={styles.map}
-          provider={PROVIDER_GOOGLE}
-          initialRegion={INITIAL_REGION}
-          onRegionChangeComplete={_onChangeRegion}
-        >
-          {/* {location && <Marker coordinate={location.location} draggable />} */}
-        </MapView>
-        <View style={styles.customMarkerContainer}>
-          <View style={styles.textContainer}>
-            <Text style={styles.itemText}>
-              Your item will be delivered here
-            </Text>
+    <Portal>
+      <View style={[{ width, height }, t.bgBlue300]}>
+        <View style={[styles.container]}>
+          <MapView
+            key={changeIsPressed ? JSON.stringify(location) : ""}
+            ref={mapRef}
+            showsUserLocation
+            userLocationUpdateInterval={2000}
+            style={styles.map}
+            provider={PROVIDER_GOOGLE}
+            initialRegion={INITIAL_REGION}
+            onRegionChangeComplete={_onChangeRegion}
+          >
+            {/* {location && <Marker coordinate={location.location} draggable />} */}
+          </MapView>
+          <View style={styles.customMarkerContainer}>
+            <View style={styles.textContainer}>
+              <Text style={styles.itemText}>
+                Your item will be delivered here
+              </Text>
+            </View>
+            <View style={[styles.triangle, styles.arrowDown]}></View>
+            <View style={styles.mapCustomMarker}></View>
           </View>
-          <View style={[styles.triangle, styles.arrowDown]}></View>
-          <View style={styles.mapCustomMarker}></View>
+
+          {/* <View style={styles.centerPin} /> */}
         </View>
+        <View style={[{ width, height: 250 }, t.bgWhite, t.p4]}>
+          <Text>Select Delivery Location</Text>
+          <View style={[styles.locationInputContainer, t.mB6, t.mT6]}>
+            <Image source={LocationPin} style={styles.locationPinIcon} />
 
-        {/* <View style={styles.centerPin} /> */}
-      </View>
-      <View style={[{ width, height: 250 }, t.bgWhite, t.p4]}>
-        <Text>Select Delivery Location</Text>
-        <View style={[styles.locationInputContainer, t.mB6, t.mT6]}>
-          <Image source={LocationPin} style={styles.locationPinIcon} />
+            <View style={styles.locationInput}>
+              <Text numberOfLines={2} style={styles.input}>
+                {location && location.address}
+              </Text>
+            </View>
 
-          <View style={styles.locationInput}>
-            <Text numberOfLines={2} style={styles.input}>
-              {location && location.address}
-            </Text>
+            <TouchableOpacity
+              style={styles.changeButton}
+              onPress={_openLocationModal}
+            >
+              <Text style={styles.changeButtonText}>CHANGE</Text>
+            </TouchableOpacity>
           </View>
 
           <TouchableOpacity
-            style={styles.changeButton}
-            onPress={_openLocationModal}
+            style={[
+              t.bgPrimary,
+              t.h12,
+              { borderRadius: 16 },
+              t.itemsCenter,
+              t.justifyCenter,
+            ]}
+            disabled={isTapable}
+            onPress={() => {
+              setShowMap({ mapVisible: false });
+              dispatch({
+                type: "changSheetState",
+                payload: {
+                  showSheet: true,
+                  height: 600,
+                  children: () => (
+                    <AddLocationSheetContent
+                      {...location}
+                      locationDetails={location}
+                    />
+                  ),
+                  sheetTitle: "",
+                },
+              });
+            }}
           >
-            <Text style={styles.changeButtonText}>CHANGE</Text>
+            <Text style={[t.textWhite]}>Confirm Location</Text>
           </TouchableOpacity>
         </View>
-
-        <TouchableOpacity
-          style={[
-            t.bgPrimary,
-            t.h12,
-            { borderRadius: 16 },
-            t.itemsCenter,
-            t.justifyCenter,
-          ]}
-          disabled={isTapable}
-          onPress={() => {
-            setShowMap({ mapVisible: false });
-            dispatch({
-              type: "changSheetState",
-              payload: {
-                showSheet: true,
-                height: 600,
-                children: () => (
-                  <AddLocationSheetContent
-                    {...location}
-                    locationDetails={location}
-                  />
-                ),
-                sheetTitle: "",
-              },
-            });
-          }}
-        >
-          <Text style={[t.textWhite]}>Confirm Location</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </Portal>
   );
 };
 

@@ -43,7 +43,6 @@ import { localCartVar } from "../../Apollo/cache";
 import { useReactiveVar } from "@apollo/client";
 import { isEmpty } from "lodash";
 import useCurrentRoute from "../../hooks/useCurrentRoute";
-import useActionAlert from "../../hooks/useActionAlert";
 import AppAlert from "../../Components/AppAlert";
 
 const initialState = {
@@ -187,8 +186,6 @@ function RootContainer() {
     images,
     setImageViewer,
   } = useImageViewer();
-  const { visible: actionVisible } = useActionAlert();
-
   const { loginVisible } = useLogin();
   const { mapVisible } = useMapScreen();
   const { stopPermission } = useMapScreen();
@@ -320,11 +317,7 @@ function RootContainer() {
           onDismiss={alertDissmiss}
         />
       )}
-      <Modal visible={mapVisible} transparent={true}>
-        <MapScreen stopPermission={stopPermission} />
-      </Modal>
-
-      <AppAlert />
+      {mapVisible && <MapScreen stopPermission={stopPermission} />}
 
       <Modal visible={spinner || show} transparent={true}>
         <Spinner
@@ -333,6 +326,7 @@ function RootContainer() {
           textStyle={{ color: "white" }}
         />
       </Modal>
+      <AppAlert />
     </AlertContext.Provider>
   );
 }

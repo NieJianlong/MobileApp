@@ -208,6 +208,7 @@ export default function AddressItem({ item, refetch, isCheckout, onPress }) {
                       text: "Delete",
                       style: [t.w16, t.h8],
                       onPress: () => {
+                        setAlert({ visible: false });
                         dispatch({ type: "loading" });
                         deleteAddress();
                       },

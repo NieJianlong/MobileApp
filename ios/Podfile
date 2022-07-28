@@ -17,6 +17,12 @@ target 'apollo' do
 
   pod 'react-native-maps', path: rn_maps_path
   pod 'react-native-google-maps', path: rn_maps_path # <~~ if you need GoogleMaps support on iOS
+  
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  
+  pod 'Permission-LocationAccuracy', :path => "#{permissions_path}/LocationAccuracy"
+  pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways"
+  pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
 
   post_integrate do |installer|
     begin

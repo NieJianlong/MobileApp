@@ -108,7 +108,6 @@ function OrderPlaced(props) {
 
   const renderBody = () => {
     let errorMessage = params?.error ? params?.error?.description : "";
-    debugger;
     try {
       errorMessage = params?.error?.description.includes("cancel")
         ? "Payment processing cancelled, Please retry payment from My orders"

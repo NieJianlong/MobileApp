@@ -115,7 +115,7 @@ function RenameBox({ submit }: Props) {
                 : res.updateBuyerProfile?.email,
               password: password?.trim(),
               userId: res?.updateBuyerProfile?.userId,
-              hidebackButton: true,
+              // hidebackButton: true,
             });
           },
           onError: () => {
@@ -251,6 +251,7 @@ function RenameBox({ submit }: Props) {
                   placeholder={rename.palceHolder}
                   autoCapitalize="words"
                   returnKeyType={"next"}
+                  keyboardType={rename.keyboardType ?? "default"}
                   onChangeText={onChange}
                   value={value}
                   autoFocus={true}

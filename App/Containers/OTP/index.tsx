@@ -44,14 +44,19 @@ function OTPScreen(props) {
   const validationType = isValidEmail(params.phone)
     ? ValidationType.Email
     : ValidationType.Sms;
-  const navigation = useNavigation();
-  React.useLayoutEffect(() => {
-    if (params.hidebackButton) {
-      navigation.setOptions({
-        headerLeft: () => null,
-      });
-    }
-  }, [params.hidebackButton]);
+  // const navigation = useNavigation();
+  // React.useLayoutEffect(() => {
+  //   if (params.hidebackButton) {
+
+  //   }
+  //   navigation.setOptions({
+  //     headerLeft: () => (
+  //       <View style={[t.mR6]}>
+  //         <RightButton title="SAVE" onPress={handleSubmit(onSubmit)} />
+  //       </View>
+  //     ),
+  //   });
+  // }, [params.hidebackButton]);
   const { setLoading } = useLoading();
   const [count, setCount] = useState(60);
   const [allowToResendCode, setAllowToResendCode] = useState(true);

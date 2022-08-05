@@ -153,6 +153,7 @@ function UserEditProfile() {
                     controlName: "request.firstName",
                     palceHolder: "Type your first name",
                     title: "First Name",
+                    keyboardType: "default",
                     show: true,
                     rules: {
                       required: "Type your first name.",
@@ -222,6 +223,7 @@ function UserEditProfile() {
                     controlName: "request.lastName",
                     palceHolder: "Type your last name",
                     title: "Last Name",
+                    keyboardType: "default",
                     show: true,
                     rules: {
                       required: "Type your last name.",
@@ -291,6 +293,7 @@ function UserEditProfile() {
                     controlName: "request.email",
                     palceHolder: "Type your email",
                     title: "Email",
+                    keyboardType: "default",
                     show: true,
                     rules: {
                       required: "Field is required.",
@@ -358,6 +361,8 @@ function UserEditProfile() {
                   setRename({
                     defaultValue: value ?? "",
                     element: getFirstName,
+                    keyboardType:
+                      Platform.OS === "android" ? "phone-pad" : "number-pad",
                     controlName: "request.phoneNumber",
                     palceHolder: "Type your phone number",
                     title: "Phone number",

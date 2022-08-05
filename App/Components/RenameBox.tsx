@@ -71,7 +71,7 @@ function RenameBox({ submit }: Props) {
           },
         });
       }
-      debugger;
+
       if (
         !res.updateBuyerProfile?.phoneNumberVerified ||
         !res.updateBuyerProfile?.emailVerified
@@ -115,6 +115,7 @@ function RenameBox({ submit }: Props) {
                 : res.updateBuyerProfile?.email,
               password: password?.trim(),
               userId: res?.updateBuyerProfile?.userId,
+              hidebackButton: true,
             });
           },
           onError: () => {

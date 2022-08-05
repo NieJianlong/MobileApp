@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { isIphoneX } from "react-native-iphone-x-helper";
 import { vs } from "react-native-size-matters";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { AppBar, Button } from "../../Components";
 import { Colors } from "../../Themes";
 import styles from "./styles";
@@ -44,6 +44,14 @@ function OTPScreen(props) {
   const validationType = isValidEmail(params.phone)
     ? ValidationType.Email
     : ValidationType.Sms;
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    if (params.hidebackButton) {
+      navigation.setOptions({
+        headerLeft: () => null,
+      });
+    }
+  }, [params.hidebackButton]);
   const { setLoading } = useLoading();
   const [count, setCount] = useState(60);
   const [allowToResendCode, setAllowToResendCode] = useState(true);

@@ -215,6 +215,26 @@ function UserEditProfile() {
                 textAlignVertical={"center"}
               />
               <TouchableOpacity
+                onPress={() => {
+                  setRename({
+                    defaultValue: value ?? "",
+                    element: getFirstName,
+                    controlName: "request.lastName",
+                    palceHolder: "Type your last name",
+                    title: "Last Name",
+                    show: true,
+                    rules: {
+                      required: "Type your last name.",
+                      validate: {
+                        positive: (v) => {
+                          if (v?.trim().length === 0)
+                            return "Last name should not  only contain Spaces";
+                          return true;
+                        },
+                      },
+                    },
+                  });
+                }}
                 style={[
                   t.absolute,
 
@@ -264,6 +284,24 @@ function UserEditProfile() {
                 textAlignVertical={"center"}
               />
               <TouchableOpacity
+                onPress={() => {
+                  setRename({
+                    defaultValue: value ?? "",
+                    element: getFirstName,
+                    controlName: "request.email",
+                    palceHolder: "Type your email",
+                    title: "Email",
+                    show: true,
+                    rules: {
+                      required: "Field is required.",
+                      pattern: {
+                        value:
+                          /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
+                        message: "invalid email address",
+                      },
+                    },
+                  });
+                }}
                 style={[
                   t.absolute,
 
@@ -316,6 +354,23 @@ function UserEditProfile() {
                 textAlignVertical={"center"}
               />
               <TouchableOpacity
+                onPress={() => {
+                  setRename({
+                    defaultValue: value ?? "",
+                    element: getFirstName,
+                    controlName: "request.phoneNumber",
+                    palceHolder: "Type your phone number",
+                    title: "Phone number",
+                    show: true,
+                    rules: {
+                      required: "Field is required.",
+                      pattern: {
+                        value: /^[6-9]\d{9}$/,
+                        message: "Invalid phone number",
+                      },
+                    },
+                  });
+                }}
                 style={[
                   t.absolute,
 

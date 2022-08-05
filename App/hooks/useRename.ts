@@ -13,7 +13,7 @@ interface RenameProps {
   element: any;
   palceHolder: string;
   title: string;
-  userProfile: BuyerProfileResponse;
+  userProfile?: BuyerProfileResponse;
 }
 const useRename = () => {
   const [rename, setRename] = useState<RenameProps>({

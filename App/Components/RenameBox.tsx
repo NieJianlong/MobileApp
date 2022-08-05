@@ -22,7 +22,7 @@ import {
 import Button from "./Button";
 import useRename from "../hooks/useRename";
 import MaterialTextInput from "./MaterialTextInput";
-import { get } from "lodash";
+import { get, isEmpty } from "lodash";
 import PubSub from "pubsub-js";
 import { AlertContext } from "../Containers/Root/GlobalContext";
 import colors from "../Themes/Colors";
@@ -45,12 +45,13 @@ function RenameBox({ submit }: Props) {
     control,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<UpdateBuyerProfileMutationVariables>({
     defaultValues: {},
   });
   const [resendCode] = useSendOtpCodeMutation();
-  const [updateProfile, { data }] = useUpdateBuyerProfileMutation({
+  const [updateProfile] = useUpdateBuyerProfileMutation({
     onCompleted: (res) => {
       setRename({
         ...rename,
@@ -70,12 +71,24 @@ function RenameBox({ submit }: Props) {
           },
         });
       }
-      if (!res.updateBuyerProfile?.phoneNumberVerified) {
+      debugger;
+      if (
+        !res.updateBuyerProfile?.phoneNumberVerified ||
+        !res.updateBuyerProfile?.emailVerified
+      ) {
+        if (
+          isEmpty(getValues("request.email")) &&
+          isEmpty(getValues("request.phoneNumber"))
+        ) {
+          return;
+        }
         resendCode({
           variables: {
             sendCodeRequest: {
               userId: res?.updateBuyerProfile?.userId ?? "",
-              validationType: ValidationType.Sms,
+              validationType: getValues("request.phoneNumber")
+                ? ValidationType.Sms
+                : ValidationType.Email,
             },
           },
           context: {
@@ -97,7 +110,9 @@ function RenameBox({ submit }: Props) {
             );
             NavigationService.navigate("OTPScreen", {
               fromScreen: "RegisterScreen",
-              phone: res.updateBuyerProfile?.phoneNumber,
+              phone: getValues("request.phoneNumber")
+                ? res.updateBuyerProfile?.phoneNumber
+                : res.updateBuyerProfile?.email,
               password: password?.trim(),
               userId: res?.updateBuyerProfile?.userId,
             });

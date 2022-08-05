@@ -54,6 +54,10 @@ const allAPIS = {
   UpdatePaymentDetail: USER_PORT,
   SendOTPCode: USER_PORT,
   ValidateCode: USER_PORT,
+  SaveBuyerDevice: USER_PORT,
+  NotificationPreferencesByBuyerId: USER_PORT,
+  UpdateBuyerNotificationPreferences: USER_PORT,
+
   //product
   // ActiveProductListingsByStoreId: PRODUCT_PORT,  @Depreciated leave here for now as backend may decise roll back
   OnlineStoreByGeoCoordinates: PRODUCT_PORT,
@@ -129,7 +133,9 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     );
   }
 
-  if (networkError) console.log(`[Network error]: ${networkError}`);
+  if (networkError) {
+    console.log(`[Network error]: ${networkError}`);
+  }
 });
 
 const getClient = () => {

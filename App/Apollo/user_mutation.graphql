@@ -136,3 +136,21 @@ mutation ChangePassword(
     userId: $userId
   )
 }
+
+mutation SaveBuyerDevice($request: BuyerDeviceRequest!) {
+    saveBuyerDevice(request: $request) {
+      deviceId
+      buyerId
+    }
+  }
+
+mutation UpdateBuyerNotificationPreferences($preferences:[NotificationPreferenceRequest!]!){
+    updateBuyerNotificationPreferences(preferences:$preferences){
+        notificationPreferenceId,
+        referenceId,
+        notificationGroupType,
+        smsEnabled,
+        whatsappEnabled,
+        emailEnabled,
+    }
+}

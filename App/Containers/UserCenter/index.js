@@ -35,13 +35,13 @@ const salamiItem = [
   },
 ];
 const items = [
-  // {
-  //   title: "Notifications",
-  //   icon: images.userIconImage,
-  //   onPress: () => {
-  //     NavigationService.navigate("NotificationsScreen");
-  //   },
-  // },
+  {
+    title: "Notifications",
+    icon: images.userIconImage,
+    onPress: () => {
+      NavigationService.navigate("NotificationsScreen");
+    },
+  },
   {
     title: "Settings",
     icon: images.userSettingImage,

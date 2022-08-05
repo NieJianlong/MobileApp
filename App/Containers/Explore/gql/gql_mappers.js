@@ -154,6 +154,9 @@ export const mapGQLAddressToDelivery = (data, isfull) => {
   if (data?.pinCode) {
     address = address + " " + data.pinCode;
   }
+  if (data?.areaCode) {
+    address = address + " " + data.areaCode;
+  }
 
   if (address.length > 32 && !isfull) {
     address = address.substring(0, 30) + "...";

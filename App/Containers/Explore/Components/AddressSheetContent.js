@@ -122,7 +122,7 @@ export default function AddressSheetContent(props) {
           <View style={{ height: vs(20) }} />
           <Button
             onPress={() => {
-              NavigationService.navigate("LoginScreen");
+              NavigationService.navigate("LoginWithNavigationer");
               dispatch({
                 type: "changSheetState",
                 payload: {

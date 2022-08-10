@@ -12,6 +12,7 @@ import {
   useWindowDimensions,
   Platform,
   AppState,
+  Linking,
 } from "react-native";
 import Geocoder from "react-native-geocoding";
 import RNGooglePlaces from "react-native-google-places-api";
@@ -71,11 +72,17 @@ const MapScreen = (props) => {
           text: "Go to Settings",
           style: [t.w32, t.h8],
           onPress: () => {
-            openSettings()
+            Linking.openSettings()
               .then(() => {
                 handPermission2();
               })
-              .catch(() => console.warn("cannot open settings"));
+              .catch(() => {
+                openSettings()
+                  .then(() => {
+                    handPermission2();
+                  })
+                  .catch(() => console.warn("cannot open settings"));
+              });
           },
         },
       ],

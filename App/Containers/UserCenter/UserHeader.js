@@ -59,7 +59,7 @@ function UserHeader(props) {
           <View style={styles.signbtn}>
             <Button
               onPress={() => {
-                NavigationService.navigate("LoginScreen");
+                NavigationService.navigate("LoginWithNavigationer");
                 // navigation.reset({
                 //   index: 0,
                 //   routes: [{ name: "OnboardingScreen" }],

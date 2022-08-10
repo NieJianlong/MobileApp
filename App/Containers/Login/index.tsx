@@ -5,10 +5,7 @@ import {
   TouchableOpacity,
   Keyboard,
   useWindowDimensions,
-  FlatList,
-  Image,
 } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 

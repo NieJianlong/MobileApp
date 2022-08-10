@@ -3,12 +3,7 @@ import { View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import {
-  AppBar,
-  Switch,
-  RightButton,
-  MaterialTextInput,
-} from "../../Components";
+import { Switch, RightButton, MaterialTextInput } from "../../Components";
 import styles from "./styles";
 import colors from "../../Themes/Colors";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -148,6 +143,13 @@ function AddNewAddress() {
       showError: false,
       errorMessage: null,
       keyboardType: "default",
+      rules: {
+        required: "Please input home no.",
+        pattern: {
+          value: /^[0-9a-zA-z].*/,
+          message: "Invalid home no.",
+        },
+      },
       type: "normal",
       name: "building",
     },
@@ -156,6 +158,13 @@ function AddNewAddress() {
       showError: false,
       errorMessage: null,
       type: "normal",
+      rules: {
+        required: "Please input street name.",
+        pattern: {
+          value: /^[0-9a-zA-z].*/,
+          message: "Invalid street name.",
+        },
+      },
       name: "streetAddress1",
     },
 
@@ -164,6 +173,13 @@ function AddNewAddress() {
       showError: false,
       errorMessage: null,
       keyboardType: "default",
+      rules: {
+        required: "Please input city name.",
+        pattern: {
+          value: /^[0-9a-zA-z].*/,
+          message: "Invalid city name.",
+        },
+      },
       type: "normal",
       name: "townCity",
     },
@@ -172,6 +188,13 @@ function AddNewAddress() {
       showError: false,
       errorMessage: null,
       keyboardType: "decimal-pad",
+      rules: {
+        required: "Please input pin code.",
+        pattern: {
+          value: /^[1-9][0-9]{5}$/,
+          message: "Invalid pin code.",
+        },
+      },
       // type: "short",
       type: "normal",
       name: "pinCode",
@@ -180,6 +203,9 @@ function AddNewAddress() {
       placeholder: "State*",
       showError: false,
       errorMessage: null,
+      rules: {
+        required: true,
+      },
       keyboardType: "selector",
       type: "normal",
       name: "provinceState",
@@ -230,9 +256,7 @@ function AddNewAddress() {
                     <View>
                       <Controller
                         control={control}
-                        rules={{
-                          required: true,
-                        }}
+                        rules={item.rules}
                         render={({ field: { onChange, value } }) => (
                           <DropDownPicker
                             listMode="MODAL"
@@ -270,9 +294,7 @@ function AddNewAddress() {
                   ) : (
                     <Controller
                       control={control}
-                      rules={{
-                        required: true,
-                      }}
+                      rules={item.rules}
                       render={({ field: { onChange, onBlur, value } }) => (
                         <View>
                           <MaterialTextInput
@@ -284,7 +306,7 @@ function AddNewAddress() {
                           />
                           {lodash.get(errors, item.name) && (
                             <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
-                              This is required.
+                              {lodash.get(errors, item.name).message}
                             </Text>
                           )}
                         </View>

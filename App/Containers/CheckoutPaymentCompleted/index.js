@@ -10,7 +10,7 @@ import Inform from "./Inform";
 
 function CheckoutPaymentCompleted(props) {
   const data = {
-    textTip: "Your order has been \n processed sucessfully",
+    textTip: "Your order has been \n processed successfully",
     subTextTip:
       "Remember that you will not receive your order until the number of people required to make the purchase has been reached.",
     needButton: false,

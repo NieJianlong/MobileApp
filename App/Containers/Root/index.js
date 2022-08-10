@@ -25,20 +25,12 @@ import useImageViewer from "../../hooks/useImageViewer";
 import useLogin from "../../hooks/useLogin";
 import MapScreen from "../MapScreen";
 import useMapScreen from "../../hooks/useMapScreen";
-import useRegister from "../../hooks/useRegister";
-import RegisterScreen from "../Register";
 import { t } from "react-native-tailwindcss";
-import RegisterGuestBuyerToBuyerScreen from "../RegisterGuestBuyerToBuyer";
-import { Portal, Text, Modal as PaperModal } from "react-native-paper";
-import LoginModalForm from "../LoginModalForm";
+import { Text } from "react-native-paper";
 import { Colors, Images } from "../../Themes";
 import CheckoutPaymentCompletedGuest from "../CheckoutPaymentCompletedGuest";
 import useRegisterGuest from "../../hooks/useRegisterGuest";
-import { useValidateBuyerHasAnyOrderLazyQuery } from "../../../generated/graphql";
-import LoginScreen from "../Login";
-import NavigationService, {
-  _navigator,
-} from "../../Navigation/NavigationService";
+import NavigationService from "../../Navigation/NavigationService";
 import { localCartVar } from "../../Apollo/cache";
 import { useReactiveVar } from "@apollo/client";
 import { isEmpty } from "lodash";
@@ -292,10 +284,6 @@ function RootContainer() {
           </SafeAreaView>
         </View>
       </Modal>
-
-      {/* <Modal visible={true}>
-        <LoginModalForm />
-      </Modal> */}
 
       {/* {loginVisible && <LoginScreen />} */}
 

@@ -92,6 +92,7 @@ import styles from "../Containers/Explore/styles";
 import colors from "../Themes/Colors";
 import useCurrentRoute from "../hooks/useCurrentRoute";
 import LogOutScreen from "../Containers/LogOut";
+import LoginWithNavigationer from "../Containers/LoginWithNavigationer";
 // import ReturnInformation from "../..";
 const Stack = createStackNavigator();
 
@@ -349,6 +350,21 @@ function PrimaryNav() {
               <View style={{ width: 36, height: 36 }} />
             </View>
           ),
+        }}
+      />
+      <Stack.Screen
+        name={"LoginWithNavigationer"}
+        component={LoginWithNavigationer}
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          title: "",
+          headerStyle: {
+            backgroundColor: "white",
+            elevation: 0, // remove shadow on Android
+            shadowOpacity: 0, // remove shadow on iOS
+          },
+          headerTitleStyle: { ...ApplicationStyles.screen.heading5Regular },
         }}
       />
       <Stack.Screen

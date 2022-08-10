@@ -118,6 +118,24 @@ class ForgotPassword extends Component {
           <TextInput
             style={{ marginTop: vs(12) }}
             placeholder={"Email or phone number"}
+            onSubmitEditing={() => {
+              if (validateEmail(this.state.email)) {
+                /**
+                 * add router parameter here for Login screen to show EMS alert
+                 */
+                // this.props.navigation.navigate('LoginScreen')
+                this.props.onGetCode(this.state.email, true);
+                //NavigationService.navigate("LoginScreen", { showEms: true });
+              } else if (validatePhone(this.state.email)) {
+                /**
+                 * To-Do need clarity for OTP flow
+                 */
+                this.props.onGetCode(this.state.email, false);
+                // NavigationService.navigate("OTPScreen", {
+                //   fromScreen: "ForgotPasswordScreen",
+                // });
+              }
+            }}
             onChangeText={(text) => {
               this.setState({
                 email: text,

@@ -56,7 +56,6 @@
         "svg"
       ]
     },
-    "jsEngine": "jsc",
-    "plugins": ["sentry-expo"]
+    "jsEngine": "jsc"
   }
 }

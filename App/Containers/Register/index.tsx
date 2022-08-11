@@ -41,7 +41,6 @@ import {
   useRegisterBuyerMutation,
 } from "../../../generated/graphql";
 import { t } from "react-native-tailwindcss";
-import { trimStart } from "lodash";
 import useAlert from "../../hooks/useAlert";
 import useLoading from "../../hooks/useLoading";
 import useRegister from "../../hooks/useRegister";

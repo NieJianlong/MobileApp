@@ -13,14 +13,12 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { s } from "react-native-size-matters";
-import Carousel from "react-native-snap-carousel";
 import { Images, Colors } from "../../../Themes";
 import styles from "./styles";
 import NavigationService from "../../../Navigation/NavigationService";
 import { AlertContext } from "../../Root/GlobalContext";
 // import { shareOptions } from "../Components/ShareOptionList";
 import { shareOptionsDetails } from "../Components/ShareOptionList";
-import metrics from "../../../Themes/Metrics";
 import { useQuery, useReactiveVar } from "@apollo/client";
 
 import PubSub from "pubsub-js";
@@ -32,7 +30,6 @@ import {
   useDeleteListingFromWishlistMutation,
   useIsListingInWishlistQuery,
 } from "../../../../generated/graphql";
-import Share from "react-native-share";
 import useImageViewer from "../../../hooks/useImageViewer";
 import Swiper from "react-native-swiper";
 import ViewShot, { captureRef, captureScreen } from "react-native-view-shot";

@@ -52,7 +52,7 @@ function Review(props) {
           <Text style={[styles.txt, t.mL4, { color: Colors.secondary00 }]}>
             {totalRating === 0
               ? "0"
-              : (ratingDetail.fiveStar / totalRating) * 100}
+              : (ratingDetail.fiveStar / totalRating).toFixed(4) * 100}
             %
           </Text>
         </View>
@@ -70,7 +70,7 @@ function Review(props) {
           <Text style={[styles.txt, t.mL4, { color: Colors.secondary00 }]}>
             {totalRating === 0
               ? "0"
-              : (ratingDetail.fourStar / totalRating) * 100}
+              : (ratingDetail.fourStar / totalRating).toFixed(4) * 100}
             %
           </Text>
         </View>
@@ -88,7 +88,7 @@ function Review(props) {
           <Text style={[styles.txt, t.mL4, { color: Colors.secondary00 }]}>
             {totalRating === 0
               ? "0"
-              : (ratingDetail.threeStar / totalRating) * 100}
+              : (ratingDetail.threeStar / totalRating).toFixed(4) * 100}
             %
           </Text>
         </View>

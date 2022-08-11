@@ -65,7 +65,7 @@ function RenameBox({ submit }: Props) {
           type: "changAlertState",
           payload: {
             visible: true,
-            message: "You have successfully updated your ptofile.",
+            message: "You have successfully updated your profile.",
             color: colors.success,
             title: "Profile Changed!",
           },

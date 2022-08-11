@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs } from "react-native-size-matters";
@@ -12,19 +12,14 @@ import DetailFooter from "./DetailFooter";
 import ProductReview from "./ProductReview";
 import ProductInfo from "./ProductInfo";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
-import HeaderTabs from "./HeaderTabs";
 import metrics from "../../../Themes/Metrics";
 import {
   DeliveryOption,
   FilterType,
   useGetListingsQuery,
-  useGetProductByProductIdQuery,
 } from "../../../../generated/graphql";
 import ReturnPolicy from "./ReturnPolicy";
 import useLoading from "../../../hooks/useLoading";
-import RNFetchBlob from "rn-fetch-blob";
-import { shareOptionsDetails } from "../Components/ShareOptionList";
-import Share from "react-native-share";
 
 const Sections = range(0, 4);
 // Wrap the original ScrollView
@@ -35,34 +30,7 @@ function ProductDetail(props) {
     params: { product: oldProduct },
   } = useRoute();
   const { setLoading } = useLoading();
-  const [screenShot, setScreenshot] = useState();
 
-  // useEffect(() => {
-  //   captureScreen({
-  //     format: "jpg",
-  //     quality: 0.8,
-  //   }).then(
-  //     (uri) => {
-  //       console.log("Image saved to", uri);
-  //       setScreenshot(uri);
-  //     },
-  //     (error) => console.error("Oops, snapshot failed", error)
-  //   );
-  // }, []);
-  // const { data, loading } = useGetProductByProductIdQuery({
-  //   variables: { productId: oldProduct.productId },
-  //   onCompleted: () => {
-  //     setLoading({ show: false });
-  //   },
-  //   onError: () => {
-  //     setLoading({ show: false });
-  //   },
-  //   context: {
-  //     headers: {
-  //       isPrivate: true,
-  //     },
-  //   },
-  // });
   const {
     data: products,
     refetch,
@@ -137,8 +105,7 @@ function ProductDetail(props) {
 
   //control whether to show the hearder (display and navigation to sections)
   const [showHeaderTabs, setShowHeaderTabs] = useState(false);
-  //control whether to show the footer (display price and buy button)
-  const [showFooter, setShowFooter] = useState(false);
+
   //hold the section index
   const [tabIndex, setTabIndex] = useState(0);
   //hold the boolean to indicate if this product has been purchased by this user
@@ -165,10 +132,8 @@ function ProductDetail(props) {
     //control when to show footer and header
     if (y > threshold && !showHeaderTabs) {
       setShowHeaderTabs(true);
-      setShowFooter(false);
     } else if (y <= threshold && showHeaderTabs) {
       setShowHeaderTabs(false);
-      setShowFooter(false);
     }
     //detect which tab is showing
     if (y > 1430 && tabIndex === 0) {
@@ -184,21 +149,6 @@ function ProductDetail(props) {
     }
   };
 
-  //handle when users stop scrolling, show footer
-  const handleScrollEnd = (event) => {
-    console.log("handleScrollEnd");
-    setShowFooter(true);
-  };
-
-  console.log("seee the product", products?.getListings.content[0]);
-
-  const shareOptions = {
-    title: "Title",
-    message: "Message to share", // Note that according to the documentation at least one of "message" or "url" fields is required
-    url: "www.example.com",
-    subject: "Subject",
-  };
-
   return products ? (
     <View style={styles.container}>
       <SafeAreaView
@@ -208,7 +158,6 @@ function ProductDetail(props) {
         <CustomScrollView
           contentContainerStyle={{ paddingBottom: vs(150) }}
           onScroll={handleScroll}
-          onMomentumScrollEnd={handleScrollEnd}
           scrollEventThrottle={60}
           showsVerticalScrollIndicator={false}
         >
@@ -235,11 +184,7 @@ function ProductDetail(props) {
                 }}
               />
             )}
-            {/* need to add ProductVariants components */}
           </ScrollIntoView>
-          {/* <ScrollIntoView key={"section1"} ref={sectionsRefs[1]}>
-                <RelatedProducts productId={product.productId} />
-              </ScrollIntoView> */}
           <ScrollIntoView key={"section2"} ref={sectionsRefs[2]}>
             <StoreInfo
               tabIndex={tabIndex}
@@ -255,15 +200,6 @@ function ProductDetail(props) {
             />
           </ScrollIntoView>
         </CustomScrollView>
-
-        {/* {showHeaderTabs && (
-              <HeaderTabs
-                tabIndex={tabIndex}
-                setTabIndex={setTabIndex}
-                scrollSectionIntoView={scrollSectionIntoView}
-              />
-            )} */}
-
         <DetailFooter
           product={products?.getListings.content[0]}
           currentVariant={currentVariant}

@@ -127,9 +127,6 @@ export default function AddressItem({ item, refetch, isCheckout, onPress }) {
       },
     }
   );
-  // let addressDetail = `${item.houseNumber ?? ""} ${item.building ?? ""} ${
-  //   item.villageArea ?? ""
-  // } ${item.townCity} ${item.provinceState} ${item.country} ${item.pinCode}`;
 
   let addressDetail = mapGQLAddressToDelivery(item, true);
   return (

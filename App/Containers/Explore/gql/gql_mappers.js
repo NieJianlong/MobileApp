@@ -127,10 +127,13 @@ export const mapProductListingDTO = (data) => {
  *  pinCode  provinceState townCity villageArea houseNumber flat landMark
  */
 export const mapGQLAddressToDelivery = (data, isfull) => {
+  if (!data) {
+    return "";
+  }
   let address = "";
 
-  if (data.building) {
-    address = data.building;
+  if (data?.building) {
+    address = data?.building;
   }
   if (data?.streetAddress1) {
     address = address + " " + data.streetAddress1;

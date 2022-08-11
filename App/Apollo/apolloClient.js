@@ -1,10 +1,7 @@
 import { ApolloClient, HttpLink, ApolloLink, concat } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import globalCache from "./cache";
-/**
- * need fetch as we are not in a browser
- */
-import fetch from "cross-fetch";
+
 import AppConfig from "../Config/AppConfig";
 // const baseUrl = "http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com";
 //const baseUrl = "http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com";

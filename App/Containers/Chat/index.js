@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { GiftedChat } from "react-native-gifted-chat";
 import { View, SafeAreaView } from "react-native";
 import ChatHeader from "./ChatHeader";
 import colors from "../../Themes/Colors";
@@ -22,24 +21,24 @@ function Chat() {
     ]);
   }, []);
 
-  const onSend = useCallback((messages = []) => {
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, messages)
-    );
-  }, []);
+  // const onSend = useCallback((messages = []) => {
+  //   setMessages((previousMessages) =>
+  //     // GiftedChat.append(previousMessages, messages)
+  //   );
+  // }, []);
 
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView style={{ backgroundColor: "white" }}>
         <ChatHeader />
       </SafeAreaView>
-      <GiftedChat
+      {/* <GiftedChat
         messages={messages}
         onSend={(messages) => onSend(messages)}
         user={{
           _id: 1,
         }}
-      />
+      /> */}
     </View>
   );
 }

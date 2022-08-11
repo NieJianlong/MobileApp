@@ -240,8 +240,8 @@ function ProductItem(props) {
               <View style={styles.row}>
                 <Image source={Images.stock} style={styles.icStock} />
                 <Text style={styles.txtOrderNumber}>
-                  {product.noOfOrderedItems} sold out of{" "}
-                  {product.noOfItemsInStock}
+                  {product.noOfOrderedItems < 0 ? 0 : product.noOfOrderedItems}{" "}
+                  sold out of {product.noOfItemsInStock}
                 </Text>
               </View>
               <TouchableOpacity

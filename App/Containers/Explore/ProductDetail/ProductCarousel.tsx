@@ -195,7 +195,11 @@ export default function ProductCarousel({ product, onPress }) {
       options={{ format: "png", quality: 0.4, result: "base64" }}
     >
       <View style={styles.imagesContainer}>
-        <Swiper>
+        <Swiper
+          onIndexChanged={(index) => {
+            setPhotoIndex(index);
+          }}
+        >
           {product?.photoUrls?.map((item, index) => {
             return (
               <TouchableOpacity

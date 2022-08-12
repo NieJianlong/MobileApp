@@ -10,6 +10,7 @@ import colors from "../../../Themes/Colors";
 import fonts from "../../../Themes/Fonts";
 import BigNumber from "bignumber.js";
 import { isEmpty } from "lodash";
+import { t } from "react-native-tailwindcss";
 // import { CartContext } from '../index';
 // import { AlertContext } from '../../Root/GlobalContext';
 
@@ -37,26 +38,27 @@ function index(props) {
       }
       style={styles.productContainer}
     >
-      <View
-        style={[
-          styles.row,
-          { maxWidth: "66%", justifyContent: "space-between" },
-        ]}
-      >
-        <Image source={{ uri: product.photo }} style={styles.productImage} />
-        <View
-          style={[styles.v2, { maxWidth: "90%", justifyContent: "center" }]}
-        >
-          <View>
-            <Text style={[styles.heading5Bold]}>{product.shortName}</Text>
-            <Text
-              style={[
-                styles.heading4Bold,
-                { fontSize: s(12), fontWeight: "normal", color: colors.grey80 },
-              ]}
-            >
-              {selectedVariant}
-            </Text>
+      <View style={[styles.row, { justifyContent: "space-between" }]}>
+        <View style={[t.flexRow]}>
+          <Image source={{ uri: product.photo }} style={styles.productImage} />
+          <View
+            style={[styles.v2, { maxWidth: "90%", justifyContent: "center" }]}
+          >
+            <View>
+              <Text style={[styles.heading5Bold]}>{product.shortName}</Text>
+              <Text
+                style={[
+                  styles.heading4Bold,
+                  {
+                    fontSize: s(12),
+                    fontWeight: "normal",
+                    color: colors.grey80,
+                  },
+                ]}
+              >
+                {selectedVariant}
+              </Text>
+            </View>
           </View>
         </View>
         <View>

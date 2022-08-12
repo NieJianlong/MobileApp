@@ -85,7 +85,7 @@ function CheckoutGuestOrderDetail(props) {
 
   const onSubmit = async (data: BillingDetailsRequestForCreate) => {
     const data1 = { ...data, phoneNumber: "+91" + data.phoneNumber };
-    
+
     if (orderInfo.comeFromType === ComeFromType.checkout) {
       NavigationService.navigate("CheckoutResumeScreen", { data: data1 });
     } else {
@@ -178,7 +178,6 @@ function CheckoutGuestOrderDetail(props) {
                         placeholder="FirstName*"
                         style={{ marginTop: vs(18) }}
                         onChangeText={onChange}
-                        onBlur={onBlur}
                         value={value}
                       />
                       {get(errors, "firstName") && (
@@ -199,7 +198,7 @@ function CheckoutGuestOrderDetail(props) {
                     required: true,
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <View>
+                    <View style={[t.bgBlue200]}>
                       <MaterialTextInput
                         placeholder="LastName*"
                         style={{ marginTop: vs(18) }}

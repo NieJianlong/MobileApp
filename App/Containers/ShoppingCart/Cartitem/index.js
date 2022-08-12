@@ -55,72 +55,81 @@ function Index(props) {
   }
   const { width, height } = useWindowDimensions();
   return (
-    <TouchableOpacity
-      // disabled={!availble}
-      onPress={() =>
-        NavigationService.navigate("ProductDetailScreen", { product })
-      }
+    <View
       // { opacity: availble ? 1 : 0.6 }
       style={[styles.productContainer]}
     >
-      <View
-        style={[styles.row, { paddingHorizontal: AppConfig.paddingHorizontal }]}
+      <TouchableOpacity
+        onPress={() =>
+          NavigationService.navigate("ProductDetailScreen", { product })
+        }
       >
-        <Image
-          source={{
-            uri: product?.photoUrls ? product?.photoUrls[0] : defultUrl,
-          }}
-          style={[styles.productImage, t.mR2]}
-        />
-        <View style={styles.v2}>
-          <View>
-            <Text
-              style={[styles.heading4Bold, { width: width - 116 }]}
-              numberOfLines={2}
-            >
-              {product?.shortName}
-            </Text>
-            <Text
-              style={[
-                styles.heading4Bold,
-                { fontSize: s(12), fontWeight: "normal", color: colors.grey80 },
-              ]}
-            >
-              {selectedVariant}
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <View style={styles.v3}>
-              <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
-              <Text style={styles.txtRetailPrice}>
-                ₹
-                {BigNumber(
-                  variant ? variant?.retailPrice : product?.retailPrice
-                ).toFixed(2) + ""}
-              </Text>
-            </View>
-            <View style={styles.v3}>
-              <Text style={[styles.txtNoteBold, { color: Colors.black }]}>
-                WHOLE SALE PRICE
-              </Text>
-              <Text style={styles.txtWholesalePrice}>
-                ₹
-                {BigNumber(
-                  variant ? variant?.wholeSalePrice : product?.wholeSalePrice
-                ).toFixed(2) + ""}
-              </Text>
-            </View>
-
-            <View style={styles.percentOffContainer}>
+        <View
+          style={[
+            styles.row,
+            { paddingHorizontal: AppConfig.paddingHorizontal },
+          ]}
+        >
+          <Image
+            source={{
+              uri: product?.photoUrls ? product?.photoUrls[0] : defultUrl,
+            }}
+            style={[styles.productImage, t.mR2]}
+          />
+          <View style={styles.v2}>
+            <View>
               <Text
-                style={[styles.heading6Bold, { color: Colors.secondary00 }]}
+                style={[styles.heading4Bold, { width: width - 116 }]}
+                numberOfLines={2}
               >
-                {product?.percentOff}% OFF
+                {product?.shortName}
               </Text>
+              <Text
+                style={[
+                  styles.heading4Bold,
+                  {
+                    fontSize: s(12),
+                    fontWeight: "normal",
+                    color: colors.grey80,
+                  },
+                ]}
+              >
+                {selectedVariant}
+              </Text>
+            </View>
+            <View style={styles.row}>
+              <View style={styles.v3}>
+                <Text style={styles.txtNoteBold}>RETAIL PRICE</Text>
+                <Text style={styles.txtRetailPrice}>
+                  ₹
+                  {BigNumber(
+                    variant ? variant?.retailPrice : product?.retailPrice
+                  ).toFixed(2) + ""}
+                </Text>
+              </View>
+              <View style={styles.v3}>
+                <Text style={[styles.txtNoteBold, { color: Colors.black }]}>
+                  WHOLE SALE PRICE
+                </Text>
+                <Text style={styles.txtWholesalePrice}>
+                  ₹
+                  {BigNumber(
+                    variant ? variant?.wholeSalePrice : product?.wholeSalePrice
+                  ).toFixed(2) + ""}
+                </Text>
+              </View>
+
+              <View style={styles.percentOffContainer}>
+                <Text
+                  style={[styles.heading6Bold, { color: Colors.secondary00 }]}
+                >
+                  {product?.percentOff}% OFF
+                </Text>
+              </View>
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
 
       <View style={styles.v4}>
         <View style={styles.counter}>
@@ -282,7 +291,7 @@ function Index(props) {
           </TouchableOpacity>
         </View>
       )}
-    </TouchableOpacity>
+    </View>
   );
 }
 

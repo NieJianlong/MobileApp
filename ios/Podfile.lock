@@ -409,8 +409,6 @@ PODS:
     - glog
   - react-native-flipper (0.142.0):
     - React-Core
-  - react-native-get-random-values (1.7.2):
-    - React-Core
   - react-native-google-maps (0.31.0):
     - Google-Maps-iOS-Utils (= 4.1.0)
     - GoogleMaps (= 3.1.0)
@@ -419,8 +417,6 @@ PODS:
     - GoogleMaps (~> 3.1.0)
     - GooglePlaces (~> 3.1.0)
     - React
-  - react-native-html-to-pdf (0.12.0):
-    - React-Core
   - react-native-maps (0.31.0):
     - React-Core
   - react-native-pager-view (5.4.11):
@@ -616,10 +612,8 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-flipper (from `../node_modules/react-native-flipper`)
-  - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-google-places (from `../node_modules/react-native-google-places-api`)
-  - react-native-html-to-pdf (from `../node_modules/react-native-html-to-pdf`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-razorpay (from `../node_modules/react-native-razorpay`)
@@ -762,14 +756,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-flipper:
     :path: "../node_modules/react-native-flipper"
-  react-native-get-random-values:
-    :path: "../node_modules/react-native-get-random-values"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
   react-native-google-places:
     :path: "../node_modules/react-native-google-places-api"
-  react-native-html-to-pdf:
-    :path: "../node_modules/react-native-html-to-pdf"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
   react-native-pager-view:
@@ -845,7 +835,7 @@ SPEC CHECKSUMS:
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  DoubleConversion: 831926d9b8bf8166fd87886c4abab286c2422662
+  DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   EXApplication: 54fe5bd6268d697771645e8f1aef8b806a65247a
   EXConstants: 88bf79622fbd9b476c96d8ec57fe97ca44fe8e3c
   EXDevice: aa5e1edbf350481a948c3258b750dd11e6e4579e
@@ -874,7 +864,7 @@ SPEC CHECKSUMS:
   FlipperKit: 2685e108cd61d4224effc3c2d013512b2a503f63
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
-  glog: 5337263514dd6f09803962437687240c5dc39aa4
+  glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
   Google-Maps-iOS-Utils: 3343332b18dfd5be8f1f44edd7d481ace3da4d9a
   GoogleAppMeasurement: 5d69e04287fc2c10cc43724bfa4bf31fc12c3dff
   GoogleMaps: 5c13302e6fe6bb6e686b267196586b91cd594225
@@ -890,7 +880,7 @@ SPEC CHECKSUMS:
   Permission-LocationWhenInUse: 51aa065819cd582517e98e89b564e2465a4a83c6
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   razorpay-pod: 3ec6fe82e7d5927013cfbbef81a880188c86b077
-  RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
+  RCT-Folly: b9d9fe1fc70114b751c076104e52f3b1b5e5a95a
   RCTRequired: 4bf86c70714490bca4bf2696148638284622644b
   RCTTypeSafety: c475a7059eb77935fa53d2c17db299893f057d5d
   React: f64af14e3f2c50f6f2c91a5fd250e4ff1b3c3459
@@ -903,10 +893,8 @@ SPEC CHECKSUMS:
   React-jsinspector: d0374f7509d407d2264168b6d0fad0b54e300b85
   React-logger: 933f80c97c633ee8965d609876848148e3fef438
   react-native-flipper: 6504d02aadad2cce9083b6437fc1927f8e2083bb
-  react-native-get-random-values: 30b3f74ca34e30e2e480de48e4add2706a40ac8f
   react-native-google-maps: d3d25cdcceada68b4a21cb207b0ac4deec8e8740
   react-native-google-places: 61605083aaa25f7a51b18f52b879513e1399217f
-  react-native-html-to-pdf: 4c5c6e26819fe202971061594058877aa9b25265
   react-native-maps: b47dc75c161fd0460dc4985f5f897c20a885ac30
   react-native-pager-view: 7f00d63688f7df9fad86dfb0154814419cc5eb8d
   react-native-razorpay: 6796178680164b4716b9cbdacdda5da98781fb0a

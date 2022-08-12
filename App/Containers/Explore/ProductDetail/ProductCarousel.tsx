@@ -38,6 +38,7 @@ import RNFetchBlob from "rn-fetch-blob";
 import useLoading from "../../../hooks/useLoading";
 import useAlert from "../../../hooks/useAlert";
 import colors from "../../../Themes/Colors";
+import preventDoublePress from "../../../Utils/preventDoublePress";
 
 //render product images
 export default function ProductCarousel({ product, onPress }) {
@@ -46,7 +47,7 @@ export default function ProductCarousel({ product, onPress }) {
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
-  const { setLoading } = useLoading();
+  const { setLoading, loading } = useLoading();
   const { setAlert } = useAlert();
   const [mydatas, setMydatas] = useState(
     realm
@@ -57,7 +58,7 @@ export default function ProductCarousel({ product, onPress }) {
   );
   const { width } = useWindowDimensions();
   const viewShotRef = useRef(null);
-  const [screenShot, setScreenshot] = useState();
+  const [disabled, setDisabled] = useState(false);
 
   // useEffect(() => {
   //   viewShotRef.current.capture().then((uri) => {
@@ -104,8 +105,10 @@ export default function ProductCarousel({ product, onPress }) {
     onCompleted: (res) => {
       refetch();
       setLoading({ show: false });
+      setDisabled(false);
     },
     onError: (res) => {
+      setDisabled(false);
       setLoading({ show: false });
       setAlert({
         visible: true,
@@ -126,9 +129,11 @@ export default function ProductCarousel({ product, onPress }) {
     },
     onCompleted: (res) => {
       refetch();
+      setDisabled(false);
       setLoading({ show: false });
     },
     onError: (res) => {
+      setDisabled(false);
       setLoading({ show: false });
       setAlert({
         visible: true,
@@ -149,6 +154,7 @@ export default function ProductCarousel({ product, onPress }) {
     setPhotoIndex(index);
   }, []);
   const onLikeProduct = useCallback(() => {
+    setDisabled(true);
     setLoading({ show: true });
     data?.isListingInWishlist ? deleteFromWishList() : addToWishList();
   }, [addToWishList, data?.isListingInWishlist, deleteFromWishList]);
@@ -251,7 +257,11 @@ export default function ProductCarousel({ product, onPress }) {
           </TouchableOpacity>
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity
-              onPress={onLikeProduct}
+              disabled={disabled}
+              onPress={() => {
+                preventDoublePress.reponTime = 2500;
+                preventDoublePress.onPress(() => onLikeProduct());
+              }}
               style={styles.btnRoundContainer}
             >
               <Image

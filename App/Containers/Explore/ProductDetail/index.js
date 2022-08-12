@@ -170,7 +170,6 @@ function ProductDetail(props) {
               pickUp={pickUp}
               onSetPickUp={onSetPickUp}
             />
-
             <ReturnPolicy
               returnPolices={products?.getListings.content[0].returnPolicies}
             />

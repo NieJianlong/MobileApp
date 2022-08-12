@@ -9,6 +9,8 @@ import fonts from "../../../Themes/Fonts";
 import { ApplicationStyles } from "../../../Themes";
 import { localCartVar, userProfileVar } from "../../../Apollo/cache";
 import { useReactiveVar } from "@apollo/client";
+import { mapGQLAddressToDelivery } from "../../Explore/gql/gql_mappers";
+import { t } from "react-native-tailwindcss";
 
 function index(props) {
   console.log("props======", props);
@@ -25,11 +27,7 @@ function index(props) {
     {
       icon: images.userDeliverytoImage,
       title: "Deliver to:",
-      subtitle: `${fname}, ${towncity}, ${
-        localCart?.callBackAddress?.streetAddress1 || ""
-      } ${localCart?.callBackAddress?.streetAddress2 || ""} ${
-        props?.billingAddressDetail?.billingAddress?.streetAddress3 || ""
-      }`,
+      subtitle: mapGQLAddressToDelivery(localCart?.callBackAddress, true),
       subtitle1: `India, ${provinceState}`,
       type: "delivery",
     },
@@ -38,38 +36,25 @@ function index(props) {
     <View>
       {datas.map((item, index) => {
         return (
-          <View
-            key={`header${index}`}
-            style={[styles.item, { height: vs(80) }]}
-          >
-            <View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
+          <View key={`header${index}`} style={[styles.item, t.pY4]}>
+            <View style={[t.wFull]}>
+              <View style={[t.flexRow, t.itemsCenter, t.wFull]}>
                 <Image style={styles.paytypeIcon} source={item.icon} />
                 <Text style={ApplicationStyles.screen.heading5Bold}>
                   {item.title}
                 </Text>
               </View>
-              <View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  {item.type == "Payment" && (
-                    <Image style={styles.paytypeIcon} source={item.subtitle1} />
-                  )}
-                  <Text style={styles.itemSubTitle}>{item.subtitle}</Text>
-                </View>
 
-                {item.type != "Payment" && (
-                  <Text style={styles.itemSubTitle}>{item.subtitle1}</Text>
+              <View style={[t.flexRow, t.itemsCenter, t.wFull]}>
+                {item.type == "Payment" && (
+                  <Image style={styles.paytypeIcon} source={item.subtitle1} />
                 )}
+                <Text
+                  numberOfLines={10}
+                  style={[styles.itemSubTitle, t.flex1, t.wFull, t.mT2]}
+                >
+                  {item.subtitle}
+                </Text>
               </View>
             </View>
 
@@ -94,9 +79,9 @@ const styles = ScaledSheet.create({
     marginTop: "15@vs",
     backgroundColor: colors.white,
     borderRadius: "16@s",
-    height: "122@vs",
+
     paddingHorizontal: AppConfig.paddingHorizontal,
-    alignItems: "center",
+
     flexDirection: "row",
     justifyContent: "space-between",
   },

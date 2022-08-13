@@ -66,7 +66,8 @@ export function usePaymentConfigration() {
       image:
         "https://raw.githubusercontent.com/zhuchuanwu/publicImage/main/App-Icon.png",
       currency: "INR",
-      key: "rzp_test_AAkNOAMQXtr8LJ", //"rzp_test_I8X2v4LgupMLv0",
+      // key: "rzp_test_AAkNOAMQXtr8LJ", //(production)
+      key: "rzp_test_I8X2v4LgupMLv0", //(dev)
       name: "Salami Slicing",
       amount: amount,
       order_id: orderId, //Replace this with an order_id created using Orders API.
@@ -101,6 +102,7 @@ export function usePaymentConfigration() {
         }
       })
       .catch((error) => {
+        debugger;
         dispatch({
           type: "changLoading",
           payload: false,

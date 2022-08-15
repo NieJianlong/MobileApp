@@ -11,7 +11,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { View, Text, Image } from "react-native";
 import { t } from "react-native-tailwindcss";
-
 import Accordion from "react-native-collapsible/Accordion";
 import ColorItem from "./ColorItem";
 import { ScrollView } from "react-native-gesture-handler";

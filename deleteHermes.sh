@@ -10,4 +10,4 @@ num=`echo $orig | sed "s/\([^0-9]*\)\([0-9]*\)/\2/"`;
 echo $text $num
 export finalText=`echo $text$(($num + 1))`
 echo $text $num $finalText
-sed -i "" "s/versionCode 7/${finalText}/g" ./android/app/build.gradle
+sed -i "" "s/versionCode ${num}/${finalText}/g" ./android/app/build.gradle

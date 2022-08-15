@@ -129,6 +129,18 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 android {
     def buildConfig = rootProject.extensions.getByName("ext")
 
+
+    if (versionPropsFile.canRead()) {
+        versionProps.load(new FileInputStream(versionPropsFile))
+    }
+    else {
+        versionProps['VERSION_CODE']='0'
+    }
+
+    def code = versionProps['VERSION_CODE'].toInteger() + 1
+
+    versionProps['VERSION_CODE']=code.toString()
+    versionProps.store(versionPropsFile.newWriter(), null)
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -149,7 +161,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         compileSdkVersion rootProject.ext.compileSdkVersion
         vectorDrawables.useSupportLibrary = true
-        versionCode 7
+        versionCode code
         versionName "1.0"
         multiDexEnabled true
     }

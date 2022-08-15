@@ -19,7 +19,8 @@
     "production": {
       "android": {
         "image": "latest",
-        "buildType": "apk"
+        "buildType": "apk",
+        "autoIncrement": "versionCode"
       },
       "releaseChannel": "production"
     }

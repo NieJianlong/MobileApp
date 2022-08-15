@@ -7,7 +7,7 @@
  * @FilePath: /MobileApp/App/Containers/UserCenter/index.js
  */
 import React, { useCallback, useState, useEffect } from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import { s, ScaledSheet, vs } from "react-native-size-matters";
 import Colors from "../../Themes/Colors";
 import Fonts from "../../Themes/Fonts";
@@ -24,6 +24,7 @@ import { shareOptions } from "../Explore/Components/ShareOptionList";
 import { t } from "react-native-tailwindcss";
 import { isEmpty } from "lodash";
 import { useReactiveVar } from "@apollo/client";
+import DeviceInfo from "react-native-device-info";
 
 const salamiItem = [
   {
@@ -121,7 +122,7 @@ function UserCenter(props) {
     }
   }, [userProfile]);
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <View style={{ marginTop: vs(10) }}>
         <UserHeader needSafeArea />
       </View>
@@ -156,6 +157,10 @@ function UserCenter(props) {
           </View>
         ))} */}
       </View>
+      <Text style={[t.wFull, t.textCenter]}>
+        version:
+        {DeviceInfo.getVersion() + "(" + DeviceInfo.getBuildNumber() + ")"}
+      </Text>
     </View>
   );
 }

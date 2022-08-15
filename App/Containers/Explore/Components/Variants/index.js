@@ -20,7 +20,6 @@ import images from "../../../../Themes/Images";
 import useRealm from "../../../../hooks/useRealm";
 import { useQuery } from "@apollo/client";
 import { GET_LOCAL_CART } from "../../../../Apollo/cache";
-import "react-native-get-random-values";
 import { nanoid } from "nanoid";
 import PubSub from "pubsub-js";
 class AccordionView extends React.Component {

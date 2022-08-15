@@ -13,6 +13,12 @@
 @import GooglePlaces;
 @import GoogleMaps;
 
+@interface AppDelegate () <RCTBridgeDelegate>
+ 
+@property (nonatomic, strong) NSDictionary *launchOptions;
+ 
+@end
+
 static void InitializeFlipper(UIApplication *application) {
   FlipperClient *client = [FlipperClient sharedClient];
   SKDescriptorMapper *layoutDescriptorMapper = [[SKDescriptorMapper alloc] initWithDefaults];
@@ -33,25 +39,42 @@ static void InitializeFlipper(UIApplication *application) {
   InitializeFlipper(application);
 #endif
 
-  RCTBridge *bridge = [self.reactDelegate createBridgeWithDelegate:self launchOptions:launchOptions];
-  RCTRootView *rootView = [self.reactDelegate createRootViewWithBridge:bridge
-                                                   moduleName:@"apollo"
-                                            initialProperties:nil];
+  self.launchOptions = launchOptions;
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    #ifdef DEBUG
+      [self initializeReactNativeApp];
+    #else
+      EXUpdatesAppController *controller = [EXUpdatesAppController sharedInstance];
+      controller.delegate = self;
+      [controller startAndShowLaunchScreen:self.window];
+    #endif
+   
 
-  rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
-
-  self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-  UIViewController *rootViewController = [self.reactDelegate createRootViewController];
-  rootViewController.view = rootView;
-  self.window.rootViewController = rootViewController;
-  [self.window makeKeyAndVisible];
+  
   [GMSPlacesClient provideAPIKey:@"AIzaSyBfDTs1ejBI3MIVhrPeXgpvDNkTovWkIuU"];
 
   [GMSServices provideAPIKey:@"AIzaSyCSmWyca_Q7CihE_noGCpku0QkHz7Hl274"]; 
   [super application:application didFinishLaunchingWithOptions:launchOptions];
   return YES;
 }
-
+- (RCTBridge *)initializeReactNativeApp
+{
+  RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:self.launchOptions];
+  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge moduleName:@"main" initialProperties:nil];
+  id rootViewBackgroundColor = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"RCTRootViewBackgroundColor"];
+  if (rootViewBackgroundColor != nil) {
+    rootView.backgroundColor = [UIColor whiteColor];
+  }
+ 
+  UIViewController *rootViewController = [UIViewController new];
+  rootViewController.view = rootView;
+  self.window.rootViewController = rootViewController;
+  [self.window makeKeyAndVisible];
+  return bridge;
+ }
+- (void)appController:(EXUpdatesAppController *)appController didStartWithSuccess:(BOOL)success {
+  appController.bridge = [self initializeReactNativeApp];
+}
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
 #if DEBUG

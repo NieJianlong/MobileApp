@@ -59,7 +59,6 @@
     "react-native-flipper-apollo-devtools": "^0.0.2",
     "react-native-geocoding": "^0.5.0",
     "react-native-gesture-handler": "^2.1.0",
-    "react-native-get-random-values": "^1.8.0",
     "react-native-google-places-api": "^1.0.2",
     "react-native-head-tab-view": "3.0.4",
     "react-native-image-crop-picker": "^0.36.4",

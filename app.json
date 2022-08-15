@@ -9,6 +9,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "sdkVersion": "45.0.0",
     "updates": {
       "fallbackToCacheTimeout": 0
     },

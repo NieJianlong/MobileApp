@@ -6,7 +6,7 @@
     "name": "Salami Slicing",
     "owner": "salamislicing",
     "slug": "SalamiSlicing",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "sdkVersion": "45.0.0",

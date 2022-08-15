@@ -10,6 +10,11 @@ import { StatusBar } from "expo-status-bar";
 import useStatusBar from "../hooks/useStatusBar";
 import { Provider as PaperProvider } from "react-native-paper";
 import * as Sentry from "@sentry/react-native";
+import * as Updates from "expo-updates";
+import useAlert from "../hooks/useAlert";
+import useActionAlert from "../hooks/useActionAlert";
+import useLoading from "../hooks/useLoading";
+import colors from "../Themes/Colors";
 
 Sentry.init({
   dsn: "https://f78da4265e8748798f55bb5aa00757e6@o1285889.ingest.sentry.io/6500559",
@@ -17,6 +22,9 @@ Sentry.init({
 
 const App = () => {
   const { hidden, color, setStatusBar } = useStatusBar();
+  const { setAlert } = useActionAlert();
+  const { setAlert: setToast } = useAlert();
+  const { setLoading } = useLoading();
   useEffect(() => {
     async function prepare() {
       setStatusBar({ hidden: true, color: color });
@@ -33,6 +41,62 @@ const App = () => {
     }
 
     prepare();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const update = await Updates.checkForUpdateAsync();
+        if (update.isAvailable) {
+          setAlert({
+            title: "Update Available!",
+            content:
+              "You need to update this app. The version you are using does not include the latest security features.",
+            buttons: [
+              {
+                title: "Get Latest Update",
+                onPress: async () => {
+                  try {
+                    setLoading({ show: true });
+                    await Updates.fetchUpdateAsync();
+                    setLoading({ show: false });
+                    setToast({
+                      color: colors.success,
+                      title: "Update successful!",
+                      visible: true,
+                      onDismiss: () => {
+                        setAlert({ visible: false });
+                      },
+                    });
+
+                    setTimeout(async () => {
+                      await Updates.reloadAsync();
+                    }, 2500);
+                  } catch (error) {
+                    setToast({
+                      color: colors.success,
+                      title: "Unable to update.",
+                      visible: true,
+                      onDismiss: () => {
+                        setAlert({ visible: false });
+                      },
+                    });
+                  }
+
+                  // // NOTIFY USER HERE
+                },
+              },
+            ],
+            show: true,
+          });
+        }
+      } catch (e) {
+        // HANDLE ERROR HERE
+      }
+    };
+    setInterval(() => {
+      fetchData();
+    }, 60 * 1000);
   }, []);
 
   // const realm = useRealm();

@@ -159,7 +159,7 @@ function UserCenter(props) {
       </View>
       <Text style={[t.wFull, t.textCenter]}>
         version:
-        {DeviceInfo.getVersion() + "(" + DeviceInfo.getBuildNumber() + ")"}
+        {DeviceInfo.getVersion()}
       </Text>
     </View>
   );

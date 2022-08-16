@@ -157,10 +157,10 @@ function UserCenter(props) {
           </View>
         ))} */}
       </View>
-      <Text style={[t.wFull, t.textCenter]}>
+      {/* <Text style={[t.wFull, t.textCenter]}>
         version:
         {DeviceInfo.getVersion()}
-      </Text>
+      </Text> */}
     </View>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import AddressBar from "../Components/AddressBar";
 import ExploreHeader from "../Components/ExploreHeader";
 import ProductList from "../Components/ProductList/ProductList";
@@ -25,6 +25,7 @@ import {
 } from "../../../../generated/graphql";
 import { ActivityIndicator } from "react-native-paper";
 import { useFocusEffect } from "@react-navigation/native";
+import { Alert } from "../../../Components";
 
 export default function Index(props) {
   const { textToSearch = "" } = props;

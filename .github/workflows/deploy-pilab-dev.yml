@@ -50,21 +50,21 @@ jobs:
       - name: Gen Graphql
         run: yarn gen:gql
 
-      # - name: Expo updates
-      #   run: expo publish --release-channel production
+      - name: Expo updates
+        run: expo publish --release-channel production
 
-      - name: Expo Publish
-        run: |
-          eas build -p android --non-interactive --json > buildLogAndroid.json
-          sed -i 's/\[//g' buildLogAndroid.json
-          sed -i 's/\]//g' buildLogAndroid.json
-          cat buildLogAndroid.json
+      # - name: Expo Publish
+      #   run: |
+      #     eas build -p android --non-interactive --json > buildLogAndroid.json
+      #     sed -i 's/\[//g' buildLogAndroid.json
+      #     sed -i 's/\]//g' buildLogAndroid.json
+      #     cat buildLogAndroid.json
 
-      - name: Parse Asset URL
-        id: androidUrl
-        run: |
-          result=$(cat buildLogAndroid.json  | sed 's/,/\n/g' | grep 'buildUrl' | sed 's/"buildUrl": "//g' | sed 's/"//g' | sed -e 's/^[ ]*//g' | sed -e 's/[ ]*$//g')
-          echo "::set-output name=releaseChannel::$result"
+      # - name: Parse Asset URL
+      #   id: androidUrl
+      #   run: |
+      #     result=$(cat buildLogAndroid.json  | sed 's/,/\n/g' | grep 'buildUrl' | sed 's/"buildUrl": "//g' | sed 's/"//g' | sed -e 's/^[ ]*//g' | sed -e 's/[ ]*$//g')
+      #     echo "::set-output name=releaseChannel::$result"
 
       - uses: actions/checkout@v2
       - name: Slack Notification

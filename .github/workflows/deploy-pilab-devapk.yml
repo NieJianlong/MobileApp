@@ -74,18 +74,19 @@ jobs:
       #   id: date
       #   run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
 
-      # - name: Expo Publish
-      #   run: |
-      #     eas build -p android --non-interactive --json > buildLogAndroid.json
-      #     sed -i 's/\[//g' buildLogAndroid.json
-      #     sed -i 's/\]//g' buildLogAndroid.json
-      #     cat buildLogAndroid.json
+      - name: Expo Publish
+        run: |
+          eas build -p android --non-interactive --json > buildLogAndroid.json
+          sed -i 's/\[//g' buildLogAndroid.json
+          sed -i 's/\]//g' buildLogAndroid.json
+          cat buildLogAndroid.json
 
-      # - name: Parse Asset URL
-      #   id: androidUrl
-      #   run: |
-      #     result=$(cat buildLogAndroid.json  | sed 's/,/\n/g' | grep 'buildUrl' | sed 's/"buildUrl": "//g' | sed 's/"//g' | sed -e 's/^[ ]*//g' | sed -e 's/[ ]*$//g')
-      #     echo "::set-output name=releaseChannel::$result"
+      - name: Parse Asset URL
+        id: androidUrl
+        run: |
+          result=$(cat buildLogAndroid.json  | sed 's/,/\n/g' | grep 'buildUrl' | sed 's/"buildUrl": "//g' | sed 's/"//g' | sed -e 's/^[ ]*//g' | sed -e 's/[ ]*$//g')
+          echo "::set-output name=releaseChannel::$result"
+
       # - name: Parse Asset URL
       #   id: androidUrl
       #   uses: sergeysova/jq-action@v2
@@ -109,8 +110,8 @@ jobs:
           SLACK_TITLE: Salami Slicing Updated
           SLACK_USERNAME: Salami Slicing
 
-      # - name: Echo Parse Asset URL
-      #   run: echo ${{ steps.androidUrl.outputs.releaseChannel }}
+      - name: Echo Parse Asset URL
+        run: echo ${{ steps.androidUrl.outputs.releaseChannel }}
 
       # - name: Find Comment
       #   uses: peter-evans/find-comment@v1

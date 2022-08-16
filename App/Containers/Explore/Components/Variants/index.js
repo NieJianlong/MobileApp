@@ -126,6 +126,16 @@ const ProductVariants = ({ product, variants, onChange, currentVariant }) => {
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
+  function makeid(length) {
+    var result = "";
+    var characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
 
   const info = useMemo(() => {
     return realm
@@ -139,7 +149,7 @@ const ProductVariants = ({ product, variants, onChange, currentVariant }) => {
       realm.write(() => {
         if (!info) {
           realm.create("ShoppingCart", {
-            id: nanoid(),
+            id: makeid(36),
             quantity: 0,
             variantId: currentVariant ? currentVariant.variantId : "",
             variant: currentVariant,

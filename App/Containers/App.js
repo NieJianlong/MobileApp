@@ -47,6 +47,7 @@ const App = () => {
     const fetchData = async () => {
       try {
         const update = await Updates.checkForUpdateAsync();
+
         if (update.isAvailable) {
           setAlert({
             title: "Update Available!",
@@ -91,6 +92,9 @@ const App = () => {
           });
         }
       } catch (e) {
+        console.log("====================================");
+        console.log(e);
+        console.log("====================================");
         // HANDLE ERROR HERE
       }
     };

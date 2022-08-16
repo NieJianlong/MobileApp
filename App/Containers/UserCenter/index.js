@@ -25,6 +25,7 @@ import { t } from "react-native-tailwindcss";
 import { isEmpty } from "lodash";
 import { useReactiveVar } from "@apollo/client";
 import DeviceInfo from "react-native-device-info";
+import { buildNumber } from "../../updates";
 
 const salamiItem = [
   {
@@ -159,7 +160,7 @@ function UserCenter(props) {
       </View>
       <Text style={[t.wFull, t.textCenter]}>
         version:
-        {DeviceInfo.getVersion()}
+        {`${DeviceInfo.getVersion()}(${buildNumber})`}
       </Text>
     </View>
   );

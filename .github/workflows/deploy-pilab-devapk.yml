@@ -1,9 +1,9 @@
 # PR to dev/main, run tests and create review
-name: Deploy Pilab Dev
+name: Deploy Pilab Devapk
 on:
   push:
     branches:
-      - develop_0819
+      - develop_0811
       - sellerScan
 
 jobs:

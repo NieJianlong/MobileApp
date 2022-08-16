@@ -1,0 +1,10 @@
+ query NotificationPreferencesByBuyerId($buyerId: ID!) {
+    notificationPreferencesByBuyerId(buyerId: $buyerId) {
+      notificationPreferenceId,
+      referenceId,
+      notificationGroupType,
+      smsEnabled,
+      whatsappEnabled,
+      emailEnabled,
+    }
+  }

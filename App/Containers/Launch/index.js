@@ -18,9 +18,11 @@ import jwt_decode from "jwt-decode";
 import { useLazyQuery, useReactiveVar } from "@apollo/client";
 import * as storage from "../../Apollo/local-storage";
 import { useBuyerProfileByUserIdLazyQuery } from "../../../generated/graphql";
+import { useSaveBuyerDeviceMutation } from "../../../generated/graphql";
 import LottieView from "lottie-react-native";
 import { t } from "react-native-tailwindcss";
 import { StatusBar } from "expo-status-bar";
+import DeviceInfo from "react-native-device-info";
 
 export default function LaunchScreen() {
   const [getBuyerId] = useBuyerProfileByUserIdLazyQuery({
@@ -55,6 +57,28 @@ export default function LaunchScreen() {
       }, 3000);
     },
     onError: (res) => {},
+  });
+
+  const deviceId = DeviceInfo.getUniqueId();
+
+  const [SaveBuyer] = useSaveBuyerDeviceMutation({
+    variables: {
+      request: {
+        deviceId: deviceId,
+        buyerId: global.buyerId,
+      },
+    },
+    context: {
+      headers: {
+        isPrivate: true,
+      },
+    },
+    onCompleted: (res) => {
+      console.log("SaveBuyer Response", res);
+    },
+    onError: (err) => {
+      console.log("SaveBuyer error", err);
+    },
   });
 
   const autoSignIn = useCallback(async () => {
@@ -143,7 +167,14 @@ export default function LaunchScreen() {
   //when app open,when can do auto login
   useEffect(() => {
     autoSignIn();
+    console.log("inside the use effect====");
   }, []);
+
+  useEffect(() => {
+    if (global.buyerId !== undefined) {
+      SaveBuyer();
+    }
+  }, [global.buyerId]);
 
   return (
     <LottieView

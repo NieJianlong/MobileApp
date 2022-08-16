@@ -245,6 +245,17 @@ export type BuyerDetailsResponse = {
   phoneNumber?: Maybe<Scalars['String']>;
 };
 
+export type BuyerDeviceRequest = {
+  buyerId: Scalars['ID'];
+  deviceId: Scalars['String'];
+};
+
+export type BuyerDeviceResponse = {
+  __typename?: 'BuyerDeviceResponse';
+  buyerId: Scalars['ID'];
+  deviceId: Scalars['String'];
+};
+
 export type BuyerListingResponse = {
   __typename?: 'BuyerListingResponse';
   content: Array<Maybe<ProductListingView>>;
@@ -902,6 +913,7 @@ export type Mutation = {
   registerSeller?: Maybe<SellerProfileResponse>;
   rejectProduct: Product;
   rejectSellerValidation?: Maybe<GenericResponse>;
+  saveBuyerDevice: BuyerDeviceResponse;
   saveListingCollectionPoint: CollectionPoint;
   saveListingCourierDeliveryDetails: CourierDeliveryDetails;
   saveListingSellerDirectDelivery: SellerDirectDeliveryResponse;
@@ -920,6 +932,7 @@ export type Mutation = {
   updateAddressForGuestBuyer?: Maybe<AddressResponse>;
   updateBillingDetails?: Maybe<BillingDetailsResponse>;
   updateBillingDetailsForGuestBuyer?: Maybe<BillingDetailsResponse>;
+  updateBuyerNotificationPreferences?: Maybe<Array<Maybe<NotificationPreferenceResponse>>>;
   updateBuyerProfile?: Maybe<BuyerProfileResponse>;
   updateChat?: Maybe<ChatResponse>;
   updateChatMessage?: Maybe<ChatMessageResponse>;
@@ -941,6 +954,7 @@ export type Mutation = {
   updateProductStatus: Product;
   updateSellerBillingDetails?: Maybe<SellerBillingDetailsResponse>;
   updateSellerContact?: Maybe<SellerContactResponse>;
+  updateSellerNotificationPreferences?: Maybe<Array<Maybe<NotificationPreferenceResponse>>>;
   updateSellerProfile?: Maybe<SellerProfileResponse>;
   updateSellerToOnlineStore?: Maybe<SellerToOnlineStoreResponse>;
   updateShareInformation?: Maybe<ShareInformationResponse>;
@@ -1543,6 +1557,12 @@ export type MutationRejectSellerValidationArgs = {
 
 
 /** MUTATIONS */
+export type MutationSaveBuyerDeviceArgs = {
+  request: BuyerDeviceRequest;
+};
+
+
+/** MUTATIONS */
 export type MutationSaveListingCollectionPointArgs = {
   input: CollectionPointInput;
 };
@@ -1652,6 +1672,12 @@ export type MutationUpdateBillingDetailsArgs = {
 /** MUTATIONS */
 export type MutationUpdateBillingDetailsForGuestBuyerArgs = {
   request: BillingDetailsRequest;
+};
+
+
+/** MUTATIONS */
+export type MutationUpdateBuyerNotificationPreferencesArgs = {
+  preferences: Array<NotificationPreferenceRequest>;
 };
 
 
@@ -1783,6 +1809,12 @@ export type MutationUpdateSellerContactArgs = {
 
 
 /** MUTATIONS */
+export type MutationUpdateSellerNotificationPreferencesArgs = {
+  preferences: Array<NotificationPreferenceRequest>;
+};
+
+
+/** MUTATIONS */
 export type MutationUpdateSellerProfileArgs = {
   request: SellerProfileRequest;
 };
@@ -1829,6 +1861,33 @@ export type MutationUseRefundSalamiCreditArgs = {
 /** MUTATIONS */
 export type MutationValidateCodeArgs = {
   request: ValidateCodeRequest;
+};
+
+export enum NotificationGroupType {
+  Account = 'ACCOUNT',
+  Listing = 'LISTING',
+  Order = 'ORDER',
+  Product = 'PRODUCT',
+  Promotion = 'PROMOTION',
+  Undefined = 'UNDEFINED'
+}
+
+export type NotificationPreferenceRequest = {
+  emailEnabled: Scalars['Boolean'];
+  notificationPreferenceId: Scalars['ID'];
+  referenceId: Scalars['ID'];
+  smsEnabled: Scalars['Boolean'];
+  whatsappEnabled: Scalars['Boolean'];
+};
+
+export type NotificationPreferenceResponse = {
+  __typename?: 'NotificationPreferenceResponse';
+  emailEnabled?: Maybe<Scalars['Boolean']>;
+  notificationGroupType?: Maybe<NotificationGroupType>;
+  notificationPreferenceId?: Maybe<Scalars['ID']>;
+  referenceId?: Maybe<Scalars['ID']>;
+  smsEnabled?: Maybe<Scalars['Boolean']>;
+  whatsappEnabled?: Maybe<Scalars['Boolean']>;
 };
 
 export type NotificationRequest = {
@@ -2554,6 +2613,7 @@ export type Query = {
   billingDetailsByBuyerId?: Maybe<Array<Maybe<BillingDetailsResponse>>>;
   billingDetailsByGuestBuyerId?: Maybe<Array<Maybe<BillingDetailsResponse>>>;
   billingDetailsById?: Maybe<BillingDetailsResponse>;
+  buyerDevicesByBuyerId?: Maybe<Array<Maybe<BuyerDeviceResponse>>>;
   buyerHasVerifiedPhoneNumber?: Maybe<Scalars['Boolean']>;
   buyerProfile?: Maybe<BuyerProfileResponse>;
   buyerProfileBasicDetails: BuyerProfileBasicDetailsResponse;
@@ -2631,6 +2691,8 @@ export type Query = {
   isListingAvailable: Array<IsListingAvailableResponse>;
   isListingInWishlist: Scalars['Boolean'];
   notificationById?: Maybe<NotificationResponse>;
+  notificationPreferencesByBuyerId?: Maybe<Array<Maybe<NotificationPreferenceResponse>>>;
+  notificationPreferencesBySellerId?: Maybe<Array<Maybe<NotificationPreferenceResponse>>>;
   notifications?: Maybe<Array<Maybe<NotificationResponse>>>;
   oneClickBuy?: Maybe<OneClickBuyResponse>;
   onlineStoreByGeoCoordinates: StoreResponse;
@@ -2697,6 +2759,12 @@ export type QueryBillingDetailsByGuestBuyerIdArgs = {
 /** QUERIES */
 export type QueryBillingDetailsByIdArgs = {
   billingDetailsId: Scalars['ID'];
+};
+
+
+/** QUERIES */
+export type QueryBuyerDevicesByBuyerIdArgs = {
+  buyerId: Scalars['ID'];
 };
 
 
@@ -3059,6 +3127,18 @@ export type QueryIsListingInWishlistArgs = {
 /** QUERIES */
 export type QueryNotificationByIdArgs = {
   notificationId: Scalars['ID'];
+};
+
+
+/** QUERIES */
+export type QueryNotificationPreferencesByBuyerIdArgs = {
+  buyerId: Scalars['ID'];
+};
+
+
+/** QUERIES */
+export type QueryNotificationPreferencesBySellerIdArgs = {
+  sellerId: Scalars['ID'];
 };
 
 
@@ -4626,6 +4706,13 @@ export type GetBuyerSalamiWalletBalanceQueryVariables = Exact<{ [key: string]: n
 
 export type GetBuyerSalamiWalletBalanceQuery = { __typename?: 'Query', getBuyerSalamiWalletBalance?: { __typename?: 'SalamiWalletResponse', walletId?: string | null | undefined, buyerId?: string | null | undefined, walletBalance?: number | null | undefined, giftBalance?: number | null | undefined } | null | undefined };
 
+export type NotificationPreferencesByBuyerIdQueryVariables = Exact<{
+  buyerId: Scalars['ID'];
+}>;
+
+
+export type NotificationPreferencesByBuyerIdQuery = { __typename?: 'Query', notificationPreferencesByBuyerId?: Array<{ __typename?: 'NotificationPreferenceResponse', notificationPreferenceId?: string | null | undefined, referenceId?: string | null | undefined, notificationGroupType?: NotificationGroupType | null | undefined, smsEnabled?: boolean | null | undefined, whatsappEnabled?: boolean | null | undefined, emailEnabled?: boolean | null | undefined } | null | undefined> | null | undefined };
+
 export type CollectionPointFragment = { __typename?: 'CollectionPointPickupResponse', collectionPointId?: string | null | undefined, microHubId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, openingHours?: Array<string | null | undefined> | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined };
 
 export type SellerLocationFragment = { __typename?: 'SellerLocationPickupResponse', collectionPointId?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, townCity?: string | null | undefined, country?: string | null | undefined, provinceState?: string | null | undefined, areaCode?: string | null | undefined, contactNumber?: string | null | undefined, contactPerson?: string | null | undefined, collectionDate?: any | null | undefined };
@@ -4958,6 +5045,20 @@ export type ChangePasswordMutationVariables = Exact<{
 
 
 export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword?: boolean | null | undefined };
+
+export type SaveBuyerDeviceMutationVariables = Exact<{
+  request: BuyerDeviceRequest;
+}>;
+
+
+export type SaveBuyerDeviceMutation = { __typename?: 'Mutation', saveBuyerDevice: { __typename?: 'BuyerDeviceResponse', deviceId: string, buyerId: string } };
+
+export type UpdateBuyerNotificationPreferencesMutationVariables = Exact<{
+  preferences: Array<NotificationPreferenceRequest> | NotificationPreferenceRequest;
+}>;
+
+
+export type UpdateBuyerNotificationPreferencesMutation = { __typename?: 'Mutation', updateBuyerNotificationPreferences?: Array<{ __typename?: 'NotificationPreferenceResponse', notificationPreferenceId?: string | null | undefined, referenceId?: string | null | undefined, notificationGroupType?: NotificationGroupType | null | undefined, smsEnabled?: boolean | null | undefined, whatsappEnabled?: boolean | null | undefined, emailEnabled?: boolean | null | undefined } | null | undefined> | null | undefined };
 
 export const OrderResponseFieldsFragmentDoc = gql`
     fragment OrderResponseFields on OrderResponse {
@@ -5979,6 +6080,46 @@ export function useGetBuyerSalamiWalletBalanceLazyQuery(baseOptions?: Apollo.Laz
 export type GetBuyerSalamiWalletBalanceQueryHookResult = ReturnType<typeof useGetBuyerSalamiWalletBalanceQuery>;
 export type GetBuyerSalamiWalletBalanceLazyQueryHookResult = ReturnType<typeof useGetBuyerSalamiWalletBalanceLazyQuery>;
 export type GetBuyerSalamiWalletBalanceQueryResult = Apollo.QueryResult<GetBuyerSalamiWalletBalanceQuery, GetBuyerSalamiWalletBalanceQueryVariables>;
+export const NotificationPreferencesByBuyerIdDocument = gql`
+    query NotificationPreferencesByBuyerId($buyerId: ID!) {
+  notificationPreferencesByBuyerId(buyerId: $buyerId) {
+    notificationPreferenceId
+    referenceId
+    notificationGroupType
+    smsEnabled
+    whatsappEnabled
+    emailEnabled
+  }
+}
+    `;
+
+/**
+ * __useNotificationPreferencesByBuyerIdQuery__
+ *
+ * To run a query within a React component, call `useNotificationPreferencesByBuyerIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNotificationPreferencesByBuyerIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNotificationPreferencesByBuyerIdQuery({
+ *   variables: {
+ *      buyerId: // value for 'buyerId'
+ *   },
+ * });
+ */
+export function useNotificationPreferencesByBuyerIdQuery(baseOptions: Apollo.QueryHookOptions<NotificationPreferencesByBuyerIdQuery, NotificationPreferencesByBuyerIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<NotificationPreferencesByBuyerIdQuery, NotificationPreferencesByBuyerIdQueryVariables>(NotificationPreferencesByBuyerIdDocument, options);
+      }
+export function useNotificationPreferencesByBuyerIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NotificationPreferencesByBuyerIdQuery, NotificationPreferencesByBuyerIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<NotificationPreferencesByBuyerIdQuery, NotificationPreferencesByBuyerIdQueryVariables>(NotificationPreferencesByBuyerIdDocument, options);
+        }
+export type NotificationPreferencesByBuyerIdQueryHookResult = ReturnType<typeof useNotificationPreferencesByBuyerIdQuery>;
+export type NotificationPreferencesByBuyerIdLazyQueryHookResult = ReturnType<typeof useNotificationPreferencesByBuyerIdLazyQuery>;
+export type NotificationPreferencesByBuyerIdQueryResult = Apollo.QueryResult<NotificationPreferencesByBuyerIdQuery, NotificationPreferencesByBuyerIdQueryVariables>;
 export const SearchBuyerOrdersDocument = gql`
     query SearchBuyerOrders($options: BuyerOrderOption!) {
   searchBuyerOrders(options: $options) {
@@ -7436,3 +7577,75 @@ export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptio
 export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
+export const SaveBuyerDeviceDocument = gql`
+    mutation SaveBuyerDevice($request: BuyerDeviceRequest!) {
+  saveBuyerDevice(request: $request) {
+    deviceId
+    buyerId
+  }
+}
+    `;
+export type SaveBuyerDeviceMutationFn = Apollo.MutationFunction<SaveBuyerDeviceMutation, SaveBuyerDeviceMutationVariables>;
+
+/**
+ * __useSaveBuyerDeviceMutation__
+ *
+ * To run a mutation, you first call `useSaveBuyerDeviceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveBuyerDeviceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveBuyerDeviceMutation, { data, loading, error }] = useSaveBuyerDeviceMutation({
+ *   variables: {
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useSaveBuyerDeviceMutation(baseOptions?: Apollo.MutationHookOptions<SaveBuyerDeviceMutation, SaveBuyerDeviceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SaveBuyerDeviceMutation, SaveBuyerDeviceMutationVariables>(SaveBuyerDeviceDocument, options);
+      }
+export type SaveBuyerDeviceMutationHookResult = ReturnType<typeof useSaveBuyerDeviceMutation>;
+export type SaveBuyerDeviceMutationResult = Apollo.MutationResult<SaveBuyerDeviceMutation>;
+export type SaveBuyerDeviceMutationOptions = Apollo.BaseMutationOptions<SaveBuyerDeviceMutation, SaveBuyerDeviceMutationVariables>;
+export const UpdateBuyerNotificationPreferencesDocument = gql`
+    mutation UpdateBuyerNotificationPreferences($preferences: [NotificationPreferenceRequest!]!) {
+  updateBuyerNotificationPreferences(preferences: $preferences) {
+    notificationPreferenceId
+    referenceId
+    notificationGroupType
+    smsEnabled
+    whatsappEnabled
+    emailEnabled
+  }
+}
+    `;
+export type UpdateBuyerNotificationPreferencesMutationFn = Apollo.MutationFunction<UpdateBuyerNotificationPreferencesMutation, UpdateBuyerNotificationPreferencesMutationVariables>;
+
+/**
+ * __useUpdateBuyerNotificationPreferencesMutation__
+ *
+ * To run a mutation, you first call `useUpdateBuyerNotificationPreferencesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBuyerNotificationPreferencesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBuyerNotificationPreferencesMutation, { data, loading, error }] = useUpdateBuyerNotificationPreferencesMutation({
+ *   variables: {
+ *      preferences: // value for 'preferences'
+ *   },
+ * });
+ */
+export function useUpdateBuyerNotificationPreferencesMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBuyerNotificationPreferencesMutation, UpdateBuyerNotificationPreferencesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateBuyerNotificationPreferencesMutation, UpdateBuyerNotificationPreferencesMutationVariables>(UpdateBuyerNotificationPreferencesDocument, options);
+      }
+export type UpdateBuyerNotificationPreferencesMutationHookResult = ReturnType<typeof useUpdateBuyerNotificationPreferencesMutation>;
+export type UpdateBuyerNotificationPreferencesMutationResult = Apollo.MutationResult<UpdateBuyerNotificationPreferencesMutation>;
+export type UpdateBuyerNotificationPreferencesMutationOptions = Apollo.BaseMutationOptions<UpdateBuyerNotificationPreferencesMutation, UpdateBuyerNotificationPreferencesMutationVariables>;

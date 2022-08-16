@@ -486,8 +486,9 @@ function LoginScreen(props) {
                 },
                 validate: {
                   positive: (v) => {
-                    if (v.indexOf(" ") !== -1)
+                    if (v.indexOf(" ") !== -1) {
                       return "Passwords should not contain Spaces";
+                    }
                     return true;
                   },
                 },

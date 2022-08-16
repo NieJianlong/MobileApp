@@ -471,6 +471,9 @@ type Mutation {
   rejectSellerValidation(sellerId: ID!, rejectReason: RegistrationRejectedReason!, rejectNote: String): GenericResponse
   validateCode(request: ValidateCodeRequest!): ValidateCodeResponse
   sendOTPCode(sendCodeRequest: SendCodeRequest!): SendCodeResponse
+  saveBuyerDevice(request: BuyerDeviceRequest!): BuyerDeviceResponse!
+  updateBuyerNotificationPreferences(preferences: [NotificationPreferenceRequest!]!): [NotificationPreferenceResponse]
+  updateSellerNotificationPreferences(preferences: [NotificationPreferenceRequest!]!): [NotificationPreferenceResponse]
 }
 
 input NotificationRequest {
@@ -586,6 +589,33 @@ enum PreferenceType {
   UNDEFINED
 }
 
+type NotificationPreferenceResponse {
+    notificationPreferenceId: ID
+    referenceId: ID
+    notificationGroupType: NotificationGroupType
+    smsEnabled: Boolean
+    whatsappEnabled: Boolean
+    emailEnabled: Boolean
+}
+
+type BuyerDeviceResponse {
+    deviceId: String!
+    buyerId: ID!
+}
+
+input NotificationPreferenceRequest {
+    notificationPreferenceId: ID!
+    referenceId: ID!
+    smsEnabled: Boolean!
+    whatsappEnabled: Boolean!
+    emailEnabled: Boolean!
+}
+
+input BuyerDeviceRequest {
+    deviceId: String!
+    buyerId: ID!
+}
+
 type Query {
   buyerProfiles: [BuyerProfileResponse]
   buyerProfile(buyerId: ID!): BuyerProfileResponse
@@ -663,6 +693,9 @@ type Query {
   sellerBillingDetailsForSeller(sellerId: ID!): SellerBillingDetailsResponse
   getSellerDocumentKeys(sellerId: ID!): [SellerDocumentResponse]
   getHowToVideoLink: GenericResponse
+  buyerDevicesByBuyerId(buyerId: ID!): [BuyerDeviceResponse]
+  notificationPreferencesByBuyerId(buyerId: ID!): [NotificationPreferenceResponse]
+  notificationPreferencesBySellerId(sellerId: ID!): [NotificationPreferenceResponse]
 }
 
 type ReduceWalletResponse {
@@ -678,6 +711,10 @@ enum RegistrationRejectedReason {
   NO_TAX_NUMBER_CARD_SUPPLIED
   FALSE_INFORMATION
   OFFENSIVE_SHOP_OR_SELLER_NAME
+}
+
+enum NotificationGroupType {
+    UNDEFINED, ACCOUNT, ORDER, PRODUCT, LISTING, PROMOTION
 }
 
 type SalamiWalletGiftTransactionResponse {
@@ -1178,4 +1215,3 @@ type WishListResponse {
   createdAt: DateTime
   updatedAt: DateTime
 }
-

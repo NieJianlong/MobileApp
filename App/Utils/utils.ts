@@ -66,8 +66,7 @@ export function usePaymentConfigration() {
       image:
         "https://raw.githubusercontent.com/zhuchuanwu/publicImage/main/App-Icon.png",
       currency: "INR",
-      key: "rzp_test_AAkNOAMQXtr8LJ", //(production)
-      // key: "rzp_test_I8X2v4LgupMLv0", //(dev)
+      key: "rzp_live_EoCHDwKrN5JeCt",
       name: "Salami Slicing",
       amount: amount,
       order_id: orderId, //Replace this with an order_id created using Orders API.

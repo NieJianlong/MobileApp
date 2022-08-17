@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import React, { useState } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
@@ -20,7 +21,7 @@ function DescriptionText(props) {
       onPress={() => setActive(!active)}
       style={style}
     >
-      {text && (
+      {!isEmpty(text) && (
         <Text style={styles.text}>
           {active ? text : newContent}
 

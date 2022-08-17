@@ -147,21 +147,11 @@ function UserCenter(props) {
         )}
       </View>
       <View style={styles.buttonContainer}>
-        {/* {buttons.map((item, i) => (
-          <View key={"button" + i} style={{ marginTop: 15 }}>
-            <Button
-              {...item}
-              // onPress={() => {
-              //   razorpayCreateOrder();
-              // }}
-            />
-          </View>
-        ))} */}
+        <Text style={[t.wFull, t.textCenter]}>
+          version:
+          {`${DeviceInfo.getVersion()}(${buildNumber})`}
+        </Text>
       </View>
-      <Text style={[t.wFull, t.textCenter]}>
-        version:
-        {`${DeviceInfo.getVersion()}(${buildNumber})`}
-      </Text>
     </View>
   );
 }

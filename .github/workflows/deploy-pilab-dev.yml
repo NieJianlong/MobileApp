@@ -3,7 +3,7 @@ name: Deploy Pilab Dev
 on:
   push:
     branches:
-      - development
+      - development1
       - sellerScan
 
 jobs:
@@ -73,7 +73,7 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_LINK_NAMES: true
           SLACK_ICON: https://raw.githubusercontent.com/zhuchuanwu/publicImage/main/100.png
-          SLACK_FOOTER: the latest version for android 1.0.1(${{ steps.androidUrl.outputs.releaseChannel }})
+          SLACK_FOOTER: the latest version for android 1.0.1 - ${{ steps.androidUrl.outputs.releaseChannel }}
 
           SLACK_TITLE: Salami Slicing Updated
           SLACK_USERNAME: Salami Slicing

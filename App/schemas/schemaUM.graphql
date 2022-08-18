@@ -136,11 +136,24 @@ enum BusinessType {
   INDIVIDUAL_SELLER
 }
 
+input BuyerDeviceRequest {
+  deviceId: String!
+  buyerId: ID!
+}
+
+type BuyerDeviceResponse {
+  deviceId: String!
+  buyerId: ID!
+}
+
 type BuyerProfileBasicDetailsResponse {
   buyerId: ID
   firstName: String
   lastName: String
   phoneNumber: String
+  email: String
+  emailVerified: Boolean
+  phoneNumberVerified: Boolean
 }
 
 input BuyerProfileRequest {
@@ -389,6 +402,7 @@ type Mutation {
   deleteBuyerProfile(buyerId: ID!): Boolean
   updateBuyerProfile(request: BuyerProfileRequest!): BuyerProfileResponse
   createGuestBuyer: BuyerProfileResponse
+  saveBuyerDevice(request: BuyerDeviceRequest!): BuyerDeviceResponse!
   addRefundSalamiCredit(buyerId: ID!, refundAmount: Float!): Float
   useRefundSalamiCredit(buyerId: ID!, amount: Float!): Float
   addBonusSalamiCredit(buyerId: ID!, amount: Float!, bonusSalamiCreditExpire: DateTime): Float
@@ -471,9 +485,34 @@ type Mutation {
   rejectSellerValidation(sellerId: ID!, rejectReason: RegistrationRejectedReason!, rejectNote: String): GenericResponse
   validateCode(request: ValidateCodeRequest!): ValidateCodeResponse
   sendOTPCode(sendCodeRequest: SendCodeRequest!): SendCodeResponse
-  saveBuyerDevice(request: BuyerDeviceRequest!): BuyerDeviceResponse!
   updateBuyerNotificationPreferences(preferences: [NotificationPreferenceRequest!]!): [NotificationPreferenceResponse]
   updateSellerNotificationPreferences(preferences: [NotificationPreferenceRequest!]!): [NotificationPreferenceResponse]
+}
+
+enum NotificationGroupType {
+  UNDEFINED
+  ACCOUNT
+  ORDER
+  PRODUCT
+  LISTING
+  PROMOTION
+}
+
+input NotificationPreferenceRequest {
+  notificationPreferenceId: ID!
+  referenceId: ID!
+  smsEnabled: Boolean!
+  whatsappEnabled: Boolean!
+  emailEnabled: Boolean!
+}
+
+type NotificationPreferenceResponse {
+  notificationPreferenceId: ID
+  referenceId: ID
+  notificationGroupType: NotificationGroupType
+  smsEnabled: Boolean
+  whatsappEnabled: Boolean
+  emailEnabled: Boolean
 }
 
 input NotificationRequest {
@@ -589,33 +628,6 @@ enum PreferenceType {
   UNDEFINED
 }
 
-type NotificationPreferenceResponse {
-    notificationPreferenceId: ID
-    referenceId: ID
-    notificationGroupType: NotificationGroupType
-    smsEnabled: Boolean
-    whatsappEnabled: Boolean
-    emailEnabled: Boolean
-}
-
-type BuyerDeviceResponse {
-    deviceId: String!
-    buyerId: ID!
-}
-
-input NotificationPreferenceRequest {
-    notificationPreferenceId: ID!
-    referenceId: ID!
-    smsEnabled: Boolean!
-    whatsappEnabled: Boolean!
-    emailEnabled: Boolean!
-}
-
-input BuyerDeviceRequest {
-    deviceId: String!
-    buyerId: ID!
-}
-
 type Query {
   buyerProfiles: [BuyerProfileResponse]
   buyerProfile(buyerId: ID!): BuyerProfileResponse
@@ -624,6 +636,7 @@ type Query {
   buyerProfileByUserId(userProfileId: ID!): BuyerProfileResponse
   getRefundSalamiCredit(buyerId: ID!): Float
   buyerProfileBasicDetails(buyerId: ID!): BuyerProfileBasicDetailsResponse!
+  buyerDevicesByBuyerId(buyerId: ID!): [BuyerDeviceResponse]
   getBuyerSalamiWalletBalance: SalamiWalletResponse
   sellerProfilesPaginated(pageable: SellerProfilePageable): SellerProfileResponsePaginated!
   sellerProfile(sellerId: ID!): SellerProfileResponse
@@ -693,7 +706,6 @@ type Query {
   sellerBillingDetailsForSeller(sellerId: ID!): SellerBillingDetailsResponse
   getSellerDocumentKeys(sellerId: ID!): [SellerDocumentResponse]
   getHowToVideoLink: GenericResponse
-  buyerDevicesByBuyerId(buyerId: ID!): [BuyerDeviceResponse]
   notificationPreferencesByBuyerId(buyerId: ID!): [NotificationPreferenceResponse]
   notificationPreferencesBySellerId(sellerId: ID!): [NotificationPreferenceResponse]
 }
@@ -711,10 +723,6 @@ enum RegistrationRejectedReason {
   NO_TAX_NUMBER_CARD_SUPPLIED
   FALSE_INFORMATION
   OFFENSIVE_SHOP_OR_SELLER_NAME
-}
-
-enum NotificationGroupType {
-    UNDEFINED, ACCOUNT, ORDER, PRODUCT, LISTING, PROMOTION
 }
 
 type SalamiWalletGiftTransactionResponse {
@@ -830,7 +838,10 @@ type SellerProfileBasicDetailsResponse {
   firstName: String
   lastName: String
   storeName: String
+  email: String
+  emailVerified: Boolean
   phoneNumber: String
+  phoneNumberVerified: Boolean
 }
 
 input SellerProfilePageable {
@@ -1215,3 +1226,4 @@ type WishListResponse {
   createdAt: DateTime
   updatedAt: DateTime
 }
+

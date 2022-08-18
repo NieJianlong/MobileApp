@@ -11,7 +11,7 @@ import {
   FIND_BUYER_ADDRESS_BY_ID_AND_TPYE,
   FIND_GUEST_ADDRESS_BY_ID_AND_TPYE,
 } from "../../../Apollo/queries/queries_user";
-import { userProfileVar } from "../../../Apollo/cache";
+import { localCartVar, userProfileVar } from "../../../Apollo/cache";
 import {
   getLocalStorageValue,
   setLocalStorageValue,
@@ -27,6 +27,7 @@ export default function AddressSheetContent(props) {
   const { dispatch, actionSheet } = useContext(AlertContext);
   const { width, height: windowHeight } = useWindowDimensions();
   const userProfileVarReactive = useReactiveVar(userProfileVar);
+  const localCartVarReactive = useReactiveVar(localCartVar);
   const { setShowMap } = useMapScreen();
   const { setAlert } = useAlert();
   const isAuth = useMemo(
@@ -101,6 +102,7 @@ export default function AddressSheetContent(props) {
           //如果当前选中的被删除，怎需要重新获取
           if (result.addressId === item.addressId) {
             await setLocalStorageValue(global.buyerId + "Address", "");
+            localCartVarReactive.callBackAddress = {};
             PubSub.publish("refresh-address", "");
           }
         }

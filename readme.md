@@ -81,10 +81,10 @@ cd ~/Downloads/genymotion/
 npx react-native start --port=5555
 npx react-native run-android --port=5555
 
-get-graphql-schema https://dev-api.salamislicing.in/pm/graphql > ./App/schemas/schemaPM.graphql
+get-graphql-schema https://stage-api.salamislicing.in/pm/graphql > ./App/schemas/schemaPM.graphql
 
-get-graphql-schema https://dev-api.salamislicing.in/um/graphql > ./App/schemas/schemaUM.graphql
+get-graphql-schema https://stage-api.salamislicing.in/um/graphql > ./App/schemas/schemaUM.graphql
 
-get-graphql-schema https://dev-api.salamislicing.in/om/graphql > ./App/schemas/schemaOM.graphql
+get-graphql-schema https://stage-api.salamislicing.in/om/graphql > ./App/schemas/schemaOM.graphql
 
-get-graphql-schema https://dev-api.salamislicing.in/pay/graphql > ./App/schemas/schemaPayM.graphql
+get-graphql-schema https://stage-api.salamislicing.in/pay/graphql > ./App/schemas/schemaPayM.graphql

@@ -319,6 +319,7 @@ type Mutation {
   deleteListingFromWishlist(buyerId: ID!, listingId: ID!): Boolean!
   reduceSoldQuantity(input: VariantSoldQuantityInput!): Boolean!
   incrementSoldQuantity(input: VariantSoldQuantityInput!): Boolean!
+  processListingAddresses: Boolean!
   createProduct(productCreateInput: ProductCreateInput!): Product!
   updateProduct(input: ProductUpdateInput!): SellerProductDetailView!
   updateProductPriceAndQuantity(input: ProductPriceAndQuantityUpdateInput!): SellerProductDetailView!

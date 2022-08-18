@@ -101,7 +101,6 @@ export function usePaymentConfigration() {
         }
       })
       .catch((error) => {
-        debugger;
         dispatch({
           type: "changLoading",
           payload: false,

@@ -26,6 +26,9 @@ import { ItemProps, useCreateOrder } from "../../../hooks/useCreateOrder";
 import useOrderInfo from "../../../hooks/useOrderInfo";
 import { useReactiveVar } from "@apollo/client";
 import { userProfileVar } from "../../../Apollo/cache";
+import { observer } from "mobx-react";
+import { useAppStore } from "../../../mobx";
+import { TabbarItem } from "../../../Navigation/TabBar";
 
 function Order(props) {
   const userProfile = useReactiveVar(userProfileVar);
@@ -329,16 +332,19 @@ function OrderScreen() {
         });
     }, [refetch])
   );
+  const { router } = useAppStore();
   useEffect(() => {
     const timer = setInterval(() => {
       try {
-        refetch();
+        if (router === TabbarItem.PackageScreen) {
+          refetch();
+        }
       } catch (error) {}
     }, 2000);
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  }, [router]);
 
   return appLoading.show ? (
     <View />
@@ -347,4 +353,4 @@ function OrderScreen() {
   );
 }
 
-export default OrderScreen;
+export default observer(OrderScreen);

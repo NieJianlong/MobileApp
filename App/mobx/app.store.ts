@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { makePersistable } from "mobx-persist-store";
 import AsyncStorage from "@react-native-community/async-storage";
+import { TabbarItem } from "../Navigation/TabBar";
 
 interface AlertButtonProps {
   title: string;
@@ -9,11 +10,6 @@ interface ICurrentRouteprops {
   currentPage?: string;
 }
 
-interface ShareBoxprops {
-  show: boolean;
-  type: "file" | "noteBook" | "taggedNoteBook";
-  isUploading: boolean;
-}
 interface AppAlert {
   show: boolean;
   title: string;
@@ -37,15 +33,15 @@ export default class AppStore {
   constructor() {
     // 建议使用这种方式，自动识别类型，不需要再加前缀
     makeAutoObservable(this);
-    makePersistable(this, {
-      name: "appStore",
-      properties: ["currentUserInfo"],
-      storage: AsyncStorage,
-      expireIn: 86400000 * 30,
-      stringify: true,
-    });
+    // makePersistable(this, {
+    //   name: "appStore",
+    //   properties: ["currentUserInfo"],
+    //   storage: AsyncStorage,
+    //   expireIn: 86400000 * 30,
+    //   stringify: true,
+    // });
   }
-
+  router: TabbarItem = TabbarItem.ExploreScreen;
   isLogout: boolean = false;
   permissions: Array<string> = [];
   alert: AppAlert = {
@@ -61,18 +57,8 @@ export default class AppStore {
     show: false,
     position: "center",
   };
-
-  showNoteBook: boolean = false;
-  showFileDetail: boolean = false;
-  showNoteDetail: boolean = false;
-
-  showFileSelector: boolean = false;
-
-  updatePerssions = async () => {
-    // const results = await factory.get("/users/permissions");
-    // if (results.status === 200) {
-    //   this.permissions = results.data;
-    // }
+  updateRoute = (route: TabbarItem) => {
+    this.router = route;
   };
 }
 

@@ -15,6 +15,13 @@ import useAlert from "../hooks/useAlert";
 import useActionAlert from "../hooks/useActionAlert";
 import useLoading from "../hooks/useLoading";
 import colors from "../Themes/Colors";
+import mainStore from "../mobx/mainStore";
+import { observer, Provider } from "mobx-react";
+import { spy } from "mobx";
+import { createMobxDebugger } from "mobx-flipper";
+if (__DEV__) {
+  spy(createMobxDebugger(mainStore));
+}
 
 Sentry.init({
   dsn: "https://f78da4265e8748798f55bb5aa00757e6@o1285889.ingest.sentry.io/6500559",
@@ -147,18 +154,20 @@ const App = () => {
   enableFlipperApolloDevtools(client);
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ApolloProvider client={client}>
-        <PaperProvider>
-          <FlipperAsyncStorage />
-          {/* <FlipperTicTacToe /> */}
-          <StatusBar
-            hidden={hidden}
-            backgroundColor={color}
-            translucent={true}
-          />
-          <RootContainer />
-        </PaperProvider>
-      </ApolloProvider>
+      <Provider {...mainStore}>
+        <ApolloProvider client={client}>
+          <PaperProvider>
+            <FlipperAsyncStorage />
+            {/* <FlipperTicTacToe /> */}
+            <StatusBar
+              hidden={hidden}
+              backgroundColor={color}
+              translucent={true}
+            />
+            <RootContainer />
+          </PaperProvider>
+        </ApolloProvider>
+      </Provider>
     </GestureHandlerRootView>
   );
 };

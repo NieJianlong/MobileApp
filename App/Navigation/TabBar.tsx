@@ -11,11 +11,20 @@ import { t } from "react-native-tailwindcss";
 import { Badge } from "react-native-paper";
 import { useQuery } from "@apollo/client";
 import { GET_LOCAL_CART } from "../Apollo/cache";
+import { useAppStore } from "../mobx";
+export enum TabbarItem {
+  "ExploreScreen" = "ExploreScreen",
+  "PackageScreen" = "PackageScreen",
+  "CartScreen" = "CartScreen",
+  "FollowScreen" = "FollowScreen",
+  "MenuScreen" = "MenuScreen",
+}
 
 function TabBar(props) {
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
+  const { updateRoute } = useAppStore();
   const getIconSource = (routeName, isFocused) => {
     switch (routeName) {
       case "ExploreScreen":
@@ -83,6 +92,7 @@ function TabBar(props) {
         {routes.map((route, idx) => {
           const isFocused = idx === index;
           const onPress = () => {
+            updateRoute(route.name as TabbarItem);
             props.navigation.navigate(route.name);
           };
 

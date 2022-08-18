@@ -329,6 +329,16 @@ function OrderScreen() {
         });
     }, [refetch])
   );
+  useEffect(() => {
+    const timer = setInterval(() => {
+      try {
+        refetch();
+      } catch (error) {}
+    }, 2000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
   return appLoading.show ? (
     <View />

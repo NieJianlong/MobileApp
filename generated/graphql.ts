@@ -282,9 +282,12 @@ export type BuyerOrderResponse = {
 export type BuyerProfileBasicDetailsResponse = {
   __typename?: 'BuyerProfileBasicDetailsResponse';
   buyerId?: Maybe<Scalars['ID']>;
+  email?: Maybe<Scalars['String']>;
+  emailVerified?: Maybe<Scalars['Boolean']>;
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
   phoneNumber?: Maybe<Scalars['String']>;
+  phoneNumberVerified?: Maybe<Scalars['Boolean']>;
 };
 
 export type BuyerProfileRequest = {
@@ -898,6 +901,7 @@ export type Mutation = {
   incrementSoldQuantity: Scalars['Boolean'];
   markOrderItemAsDelivered?: Maybe<Scalars['Boolean']>;
   markOrderReturnAsReceived?: Maybe<Scalars['Boolean']>;
+  processListingAddresses: Scalars['Boolean'];
   processOrderPaymentStatus: ProcessOrderPaymentStatusResponse;
   processPaymentRefundStatus: ProcessRefundStatusResponse;
   processUnmatchedGatewayOrders: ProcessUnmatchedOrderResponse;
@@ -3992,9 +3996,12 @@ export type SellerProductVariant = {
 
 export type SellerProfileBasicDetailsResponse = {
   __typename?: 'SellerProfileBasicDetailsResponse';
+  email?: Maybe<Scalars['String']>;
+  emailVerified?: Maybe<Scalars['Boolean']>;
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
   phoneNumber?: Maybe<Scalars['String']>;
+  phoneNumberVerified?: Maybe<Scalars['Boolean']>;
   sellerId?: Maybe<Scalars['ID']>;
   storeName?: Maybe<Scalars['String']>;
 };

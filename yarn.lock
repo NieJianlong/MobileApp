@@ -8493,6 +8493,55 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-1.0.4.tgz"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
+mobx-action-flipper@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/mobx-action-flipper/-/mobx-action-flipper-1.1.0.tgz#6fc51796157d2a4e11af6e72f147cea8af5b79c7"
+  integrity sha512-kw73EHcVmp4hg2qUx3+A2gn6d+EZ0dsP50EfQvGztIGWB+tl8vshjWxqLk2OSoHFisCKdAOhKyLT2Dvm4V6e1w==
+  dependencies:
+    mobx "^6.3.0"
+    react-native-flipper "^0.87.0"
+
+mobx-flipper@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/mobx-flipper/-/mobx-flipper-1.2.3.tgz#9ccf521211a8cec49848ffbad60fcd3741f7f276"
+  integrity sha512-aHmctCN6jOYfnGu2X7A36/lwpv0Wa67oskBPkWNREhnaRJ6nH5AKFTt/kw0SuL8Y0LdKtjWO8WqoZVXVyD9I1A==
+  dependencies:
+    mobx "^6.3.0"
+    mobx-state-tree "^5.0.1"
+    react-native-flipper "^0.87.0"
+
+mobx-persist-store@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/mobx-persist-store/-/mobx-persist-store-1.0.6.tgz#23e45332f638945d147e7158d0761843616a75cb"
+  integrity sha512-GOV1/0H2bMQhsJKpwRrR74c+B7wl9sOSwMeq7ed1PPsIanW/aYVj0RaQDqVOTYKJfeLV9wNGnWk0EATWprNluw==
+
+mobx-react-lite@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/mobx-react-lite/-/mobx-react-lite-3.4.0.tgz#d59156a96889cdadad751e5e4dab95f28926dfff"
+  integrity sha512-bRuZp3C0itgLKHu/VNxi66DN/XVkQG7xtoBVWxpvC5FhAqbOCP21+nPhULjnzEqd7xBMybp6KwytdUpZKEgpIQ==
+
+mobx-react@^7.5.1:
+  version "7.5.2"
+  resolved "https://registry.yarnpkg.com/mobx-react/-/mobx-react-7.5.2.tgz#362d6dc7271698caf3b56229c3c68fb0b30e682e"
+  integrity sha512-NP44ONwSqTy+3KlD7y9k7xbsuGD+8mgUj3IeI65SbxF1IOB42/j9TbosgUEDn//CCuU6OmQ7k9oiu9eSpRBHnw==
+  dependencies:
+    mobx-react-lite "^3.4.0"
+
+mobx-state-tree@^5.0.1:
+  version "5.1.6"
+  resolved "https://registry.yarnpkg.com/mobx-state-tree/-/mobx-state-tree-5.1.6.tgz#b4c444d1c385ae736440739a93c8e6e1169eecee"
+  integrity sha512-t4YNI3taTvDTMCyjA/bmX90HpPUMJEHX1OvyJqbfR6iOIWkJk+JbWc1aozIZxh2M5VA8xtHGnzu/2YGzSPUpJQ==
+
+mobx-utils@^6.0.5:
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/mobx-utils/-/mobx-utils-6.0.5.tgz#0cce9afb07fbba1fb559f959f8cea1f44baa7252"
+  integrity sha512-QOduwicYedD4mwYZRl8+c3BalljFDcubg+PUGqBkn8tOuBoj2q7GhjXBP6JXM9J+Zh+2mePK8IoToeLfqr3Z/w==
+
+mobx@^6.3.0, mobx@^6.6.1:
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/mobx/-/mobx-6.6.1.tgz#70ee6aa82f25aeb7e7d522bd621207434e509318"
+  integrity sha512-7su3UZv5JF+ohLr2opabjbUAERfXstMY+wiBtey8yNAPoB8H187RaQXuhFjNkH8aE4iHbDWnhDFZw0+5ic4nGQ==
+
 moment@^2.29.1:
   version "2.29.1"
   resolved "https://registry.npmjs.org/moment/-/moment-2.29.1.tgz"
@@ -9728,6 +9777,11 @@ react-native-flipper@^0.142.0:
   version "0.142.0"
   resolved "https://registry.npmjs.org/react-native-flipper/-/react-native-flipper-0.142.0.tgz"
   integrity sha512-R9WB+0ihIYNEUQ3H7zOf7Gc4aUC6LXE8NF6Sx4aVVsIqRGEfBP30/X/jl/hU3z9K1D1DBE86sL/6fpDbAdy8Kw==
+
+react-native-flipper@^0.87.0:
+  version "0.87.0"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.87.0.tgz#7442994a5dd3fadd64b78293835af36bcf7fa891"
+  integrity sha512-WCi0j/4gRxYbEizVHN9kNWKx7m/sBajxXXhhTQBmhNLywSData+za62e5XtTGTnHoS8bDC5ev65PKAA7ncM9Lg==
 
 react-native-geocoding@^0.5.0:
   version "0.5.0"

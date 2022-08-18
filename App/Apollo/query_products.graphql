@@ -316,3 +316,14 @@ query IsListingAvailable($listings: [IsListingAvailableInput!]!) {
     ...IsListingAvailableField
   }
 }
+query GetShowcaseListings($options: PageableOptions) {
+  getShowcaseListings(options: $options) {
+    content {
+      ...ProductListingViewField
+    }
+    pageNo
+    pageSize
+    totalPages
+    totalElements
+  }
+}

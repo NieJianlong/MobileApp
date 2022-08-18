@@ -22,12 +22,17 @@ import colors from "../../../../Themes/Colors";
 import { client } from "../../../../Apollo/apolloClient";
 import {
   GetListingsDocument,
+  GetShowcaseListingsDocument,
   SortDirection,
   SortType,
   useGetListingsLazyQuery,
+  useGetShowcaseListingsLazyQuery,
 } from "../../../../../generated/graphql";
 import { shareOptions } from "../ShareOptionList";
 import { t } from "react-native-tailwindcss";
+import { isEmpty } from "lodash";
+import { localCartVar } from "../../../../Apollo/cache";
+import { useReactiveVar } from "@apollo/client";
 const pageSize = 20;
 
 const sortOptions = [
@@ -52,6 +57,7 @@ const HFlatList = HPageViewHoc(FlatList);
 /*explore productlist component */
 export default function ProductList(props) {
   const Container = props.isNeedTabbar ? HFlatList : FlatList;
+  const localCart = useReactiveVar(localCartVar);
   // if show it as row
   const { dispatch } = useContext(AlertContext);
   const [page, setPage] = useState(0);
@@ -63,7 +69,8 @@ export default function ProductList(props) {
   const { width, height } = useWindowDimensions();
   const [isRereshing, setIsRereshing] = useState(false);
   const [showProductAsRows, setShowProductAsRows] = useState(true);
-  const [isCalled, setIsCalled] = useState(false);
+
+  const [shouldUseshowCase, setShouldUseshowCase] = useState(false);
   const toggleShareSheet = useCallback(() => {
     Share.open(shareOptions);
     // dispatch({
@@ -90,6 +97,38 @@ export default function ProductList(props) {
       pageSize,
     };
   }, [filter, filterParams, sortItem]);
+  const pageOptions = useMemo(() => {
+    return {
+      sortBy: sortItem.sortType,
+      sortDirection: sortItem.sortDirection,
+      pageSize,
+    };
+  }, [sortItem]);
+  const [
+    getshowCases,
+    {
+      loading: loading1,
+      error: error1,
+      data: data1,
+      refetch: refetch1,
+      fetchMore1,
+    },
+  ] = useGetShowcaseListingsLazyQuery({
+    context: {
+      headers: {
+        isPrivate: global.access_token ? true : false,
+      },
+    },
+    onError: () => {
+      setServerData([]);
+    },
+    onCompleted: async (res) => {
+      setNoMore(false);
+      if (res && shouldUseshowCase) {
+        setServerData(res.getShowcaseListings.content);
+      }
+    },
+  });
 
   const [queryListings, { loading, error, data, refetch, fetchMore }] =
     useGetListingsLazyQuery({
@@ -101,25 +140,32 @@ export default function ProductList(props) {
       onError: () => {
         setServerData([]);
       },
-      onCompleted: (res) => {
-        // map data from server for now
-        // add missing fields for product review
-        // update for name changes in data from server
+      onCompleted: async (res) => {
         setNoMore(false);
-        if (res && isCalled === false) {
+        if (res) {
           setServerData(res.getListings.content);
+          if (isEmpty(res.getListings.content)) {
+            setShouldUseshowCase(true);
+          } else {
+            setShouldUseshowCase(false);
+          }
         }
-        setIsCalled(true);
       },
     });
   useEffect(() => {
-    setIsCalled(false);
-    queryListings({
-      variables: {
-        searchOptions: searchOptions,
-      },
-    });
-  }, [searchOptions]);
+    if (shouldUseshowCase) {
+      getshowCases({ variables: { options: pageOptions } });
+    } else {
+      queryListings({
+        variables: {
+          searchOptions: searchOptions,
+        },
+      });
+    }
+  }, [searchOptions, shouldUseshowCase]);
+  useEffect(() => {
+    setShouldUseshowCase(false);
+  }, [localCart.deliverAddress]);
 
   //Pull up the load layout
   const LoadMoreView = useMemo(
@@ -154,6 +200,15 @@ export default function ProductList(props) {
             option={sortItem}
             refresh={(item) => {
               setSortItem(item);
+              if (shouldUseshowCase) {
+                setServerData([]);
+                queryListings({
+                  variables: {
+                    searchOptions: searchOptions,
+                  },
+                });
+              }
+              setShouldUseshowCase(false);
               // const newFilter = {
               //   filter: filter,
               //   filterParams: filterParams,
@@ -181,38 +236,61 @@ export default function ProductList(props) {
         ListFooterComponent={loadingMore ? LoadMoreView : null}
         onStartRefresh={() => {
           setIsRereshing(true);
-          refetch &&
-            refetch().then((res) => {
-              setServerData(res.data.getListings.content);
-              setIsRereshing(false);
-              setNoMore(false);
-              setPage(0);
-            });
+          if (shouldUseshowCase) {
+            refetch1 &&
+              refetch1().then((res) => {
+                setServerData(res.data.getShowcaseListings.content);
+                setIsRereshing(false);
+                setNoMore(false);
+                setPage(0);
+              });
+          } else {
+            refetch &&
+              refetch().then((res) => {
+                setServerData(res.data.getListings.content);
+                setIsRereshing(false);
+                setNoMore(false);
+                setPage(0);
+              });
+          }
         }}
         isRefreshing={isRereshing}
         onEndReached={async () => {
-          console.log("get more data" + noMore);
-          if (noMore) {
+          debugger;
+          if (noMore && !shouldUseshowCase) {
             return;
           }
-          if (page + 1 >= data?.getListings?.totalPages) {
+          if (
+            page + 1 >=
+            (shouldUseshowCase
+              ? data1.getShowcaseListings.totalPages
+              : data?.getListings?.totalPages)
+          ) {
             return;
           }
           setLoadingMore(true);
+          const vars = shouldUseshowCase
+            ? { options: { ...pageOptions, pageNo: page + 1 } }
+            : {
+                searchOptions: { ...searchOptions, pageNo: page + 1 },
+              };
           const moreData = await client.query({
-            query: GetListingsDocument,
-            variables: {
-              searchOptions: { ...searchOptions, pageNo: page + 1 },
-            },
+            query: shouldUseshowCase
+              ? GetShowcaseListingsDocument
+              : GetListingsDocument,
+            variables: vars,
             context: {
               headers: {
                 isPrivate: false,
               },
             },
           });
-          setServerData([...serverData, ...moreData.data.getListings.content]);
+          const datas = shouldUseshowCase
+            ? moreData.data.getShowcaseListings
+            : moreData.data.getListings;
+          setServerData([...serverData, ...datas.content]);
           setLoadingMore(false);
-          if (moreData.data.getListings.length < pageSize) {
+          if (datas.length < pageSize) {
             setNoMore(true);
           } else {
             setNoMore(false);

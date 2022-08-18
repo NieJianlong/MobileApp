@@ -80,6 +80,7 @@ const allAPIS = {
   AddReportReview: PRODUCT_PORT,
   IncrementHelpfulCount: PRODUCT_PORT,
   GetProductByProductId: PRODUCT_PORT,
+  GetShowcaseListings: PRODUCT_PORT,
 
   // Cart
   CreateCart: CART_PORT,

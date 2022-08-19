@@ -12,12 +12,11 @@ import colors from "../../../Themes/Colors";
 import PubSub from "pubsub-js";
 import { useQuery } from "@apollo/client";
 import { GET_LOCAL_CART } from "../../../Apollo/cache";
-import { nanoid } from "nanoid";
 import BigNumber from "bignumber.js";
 import NavigationService from "../../../Navigation/NavigationService";
 import { useCreateOrder } from "../../../hooks/useCreateOrder";
 import { DeliveryOption } from "../../../../generated/graphql";
-import { ComeFromType } from "../../../Utils/utils";
+import { ComeFromType, makeid } from "../../../Utils/utils";
 import { t } from "react-native-tailwindcss";
 import useOrderInfo from "../../../hooks/useOrderInfo";
 import { Page_CheckoutGuestOrderDetail } from "../../../Navigation/const";
@@ -113,7 +112,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     );
   }, [currentVariant, initQuanlity, maximumValue]);
   const addToCart = () => {
-    const shoppingCartId = nanoid();
+    const shoppingCartId = makeid(36);
 
     // if (isEmpty(currentVariant.defaultVariant)) {
     //   currentVariant.defaultVariant = false;

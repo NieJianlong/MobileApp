@@ -19,8 +19,8 @@ import images from "../../../../Themes/Images";
 import useRealm from "../../../../hooks/useRealm";
 import { useQuery } from "@apollo/client";
 import { GET_LOCAL_CART } from "../../../../Apollo/cache";
-import { nanoid } from "nanoid";
 import PubSub from "pubsub-js";
+import { makeid } from "../../../../Utils/utils";
 class AccordionView extends React.Component {
   state = {
     activeSections: [],
@@ -126,16 +126,6 @@ const ProductVariants = ({ product, variants, onChange, currentVariant }) => {
   const {
     data: { localCartVar },
   } = useQuery(GET_LOCAL_CART);
-  function makeid(length) {
-    var result = "";
-    var characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  }
 
   const info = useMemo(() => {
     return realm

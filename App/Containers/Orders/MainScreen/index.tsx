@@ -6,6 +6,7 @@ import {
   SectionList,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from "react-native";
 import { Images } from "../../../Themes";
 import styles from "./styles";
@@ -75,11 +76,14 @@ function Order(props) {
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        <View style={styles.header}>
+        <View style={[styles.header, Platform.OS === "android" && t.h24]}>
           <View style={styles.icSearch} />
           <Image
             source={Images.logo3}
-            style={styles.logo}
+            style={[
+              styles.logo,
+              Platform.OS === "android" ? { marginTop: 40 } : {},
+            ]}
             resizeMode={"contain"}
           />
           <View style={styles.icSearch} />

@@ -3,7 +3,7 @@ name: Deploy Pilab Dev
 on:
   push:
     branches:
-      - development1
+      - development
       - sellerScan
 
 jobs:

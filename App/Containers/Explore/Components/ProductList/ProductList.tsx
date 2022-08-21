@@ -256,7 +256,6 @@ export default function ProductList(props) {
         }}
         isRefreshing={isRereshing}
         onEndReached={async () => {
-          debugger;
           if (noMore && !shouldUseshowCase) {
             return;
           }

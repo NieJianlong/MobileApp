@@ -62,6 +62,7 @@ function ChangePassword(props) {
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<MutationChangePasswordArgs & { psw: string }>({
     defaultValues: {
@@ -123,6 +124,8 @@ function ChangePassword(props) {
       ),
     });
   }, [navigation]);
+  const password = watch("newPassword", "");
+
   return (
     <View style={styles.container}>
       <View style={styles.bodyContainer}>
@@ -135,7 +138,19 @@ function ChangePassword(props) {
           <Controller
             control={control}
             rules={{
-              required: true,
+              required: "Please input your password.",
+              minLength: {
+                value: 8,
+                message: "Length must be 8 or more",
+              },
+              validate: {
+                positive: (v) => {
+                  if (v.indexOf(" ") !== -1) {
+                    return "Passwords should not contain Spaces";
+                  }
+                  return true;
+                },
+              },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <View>
@@ -157,7 +172,19 @@ function ChangePassword(props) {
           <Controller
             control={control}
             rules={{
-              required: true,
+              required: "Please input your password.",
+              minLength: {
+                value: 8,
+                message: "Length must be 8 or more",
+              },
+              validate: {
+                positive: (v) => {
+                  if (v.indexOf(" ") !== -1) {
+                    return "Passwords should not contain Spaces";
+                  }
+                  return true;
+                },
+              },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <View>
@@ -169,7 +196,7 @@ function ChangePassword(props) {
                 />
                 {get(errors, "newPassword") && (
                   <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
-                    This is required.
+                    {get(errors, "newPassword")?.message}
                   </Text>
                 )}
               </View>
@@ -179,7 +206,22 @@ function ChangePassword(props) {
           <Controller
             control={control}
             rules={{
-              required: true,
+              required: "Please input your password.",
+              minLength: {
+                value: 8,
+                message: "Length must be 8 or more",
+              },
+              validate: {
+                positive: (v) => {
+                  if (v.indexOf(" ") !== -1) {
+                    return "Passwords should not contain Spaces";
+                  }
+                  if (password !== v) {
+                    return "The passwords do not match";
+                  }
+                  return true;
+                },
+              },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <View>
@@ -191,7 +233,7 @@ function ChangePassword(props) {
                 />
                 {get(errors, "psw") && (
                   <Text style={[{ color: "red" }, t.mL2, t.mT1]}>
-                    This is required.
+                    {get(errors, "psw")?.message}
                   </Text>
                 )}
               </View>

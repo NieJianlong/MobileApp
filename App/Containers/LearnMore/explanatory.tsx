@@ -1,11 +1,13 @@
 import React, { useRef, useState, useContext } from "react";
-import { View, Text } from "react-native";
+import { View, Text, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { vs, s } from "react-native-size-matters";
 import { AppBar, BottomSheet, Button } from "../../Components";
 import styles from "./explanatorystyle";
 import colors from "../../Themes/Colors";
 import Video from "react-native-video";
+import { t } from "react-native-tailwindcss";
+import { ActivityIndicator } from "react-native-paper";
 const Explanatory = () => {
   return (
     <View style={styles.container}>
@@ -13,26 +15,52 @@ const Explanatory = () => {
         style={styles.safeArea}
         edges={["top", "right", "left", "bottom"]}
       >
-        {listHeader()}
+        {ListHeader()}
       </SafeAreaView>
     </View>
   );
 };
-function listHeader() {
+function ListHeader() {
+  const { width, height } = useWindowDimensions();
+  const [loading, setLoading] = useState(true);
+
   return (
     <View style={styles.bodyContainer}>
       <View style={styles.tipContainer}>
-        <Video
-          // ref={(ref) => (player = ref)}
-          source={require("../../../assets/video/video.mp4")}
-          style={{
-            width: "100%",
-            height: "40%",
-          }}
-          resizeMode={"cover"}
-          repeat
-          muted
-        />
+        <View
+          style={[
+            {
+              width: width - 32,
+              height: 0.58 * (width - 32),
+            },
+            t.justifyCenter,
+            t.itemsCenter,
+          ]}
+        >
+          <Video
+            // ref={(ref) => (player = ref)}
+            source={{
+              uri: "https://staticfiles.salamislicing.in/salamislicing.mp4",
+            }}
+            onLoad={() => {
+              setLoading(false);
+            }}
+            onLoadStart={() => {
+              setLoading(true);
+            }}
+            style={[t.wFull, t.hFull]}
+            resizeMode={"stretch"}
+            controls={true}
+            repeat
+          />
+          {loading && (
+            <ActivityIndicator
+              animating={true}
+              color={"red"}
+              style={[t.absolute]}
+            />
+          )}
+        </View>
         <View style={styles.content}>
           <Text style={[styles.balanceTipTxt, { fontSize: s(24) }]}>
             How our social purchasing

@@ -4,7 +4,6 @@ import {
   View,
   TouchableOpacity,
   Image,
-  TextInput,
   useWindowDimensions,
 } from "react-native";
 import { s, ScaledSheet } from "react-native-size-matters";
@@ -27,6 +26,7 @@ import BigNumber from "bignumber.js";
 import { t } from "react-native-tailwindcss";
 import useAlert from "../../../hooks/useAlert";
 import { isEmpty } from "lodash";
+import { TextInput } from "react-native-paper";
 const defultUrl =
   "https://bizweb.dktcdn.net/100/116/615/products/12promax.png?v=1602751668000";
 function Index(props) {
@@ -174,7 +174,12 @@ function Index(props) {
               }
             />
           </TouchableOpacity>
-          <TextInput style={styles.cartinput} value={quantity + ""} />
+          <TextInput
+            mode="flat"
+            underlineColor="transparent"
+            style={[styles.cartinput, { borderRadius: 0 }]}
+            value={quantity + ""}
+          />
           <TouchableOpacity
             // disabled={variant?.itemsAvailable - variant?.itemsSold <= quantity}
             onPress={() => {
@@ -298,8 +303,8 @@ function Index(props) {
 const styles = ScaledSheet.create({
   ...ApplicationStyles.screen,
   counter: {
-    height: "32@s",
     width: "96@s",
+    height: "32@s",
     borderRadius: "40@s",
     borderColor: "#DDDFE3",
     borderWidth: 1,
@@ -329,11 +334,14 @@ const styles = ScaledSheet.create({
   },
   cartinput: {
     width: "32@s",
-    height: "32@s",
+    height: "30@s",
     backgroundColor: "white",
     textAlign: "center",
     borderWidth: 1,
+    fontSize: 13,
     borderColor: "#DDDFE3",
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
   },
   row: {
     flexDirection: "row",

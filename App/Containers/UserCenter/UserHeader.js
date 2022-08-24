@@ -39,7 +39,7 @@ function UserHeader(props) {
   const navigation = useNavigation();
   const userProfile = useReactiveVar(userProfileVar);
 
-  const textTip = "You haven't add any personal \n details yet";
+  const textTip = "You haven't added any personal \n details yet";
   const { setLogin: setLoginAction } = useLogin();
   return (
     <View style={styles.headerContainer}>

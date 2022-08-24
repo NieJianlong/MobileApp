@@ -246,12 +246,19 @@ export default function ProductList(props) {
               });
           } else {
             refetch &&
-              refetch().then((res) => {
-                setServerData(res.data.getListings.content);
-                setIsRereshing(false);
-                setNoMore(false);
-                setPage(0);
-              });
+              refetch()
+                .then((res) => {
+                  setServerData(res.data.getListings.content);
+                  setIsRereshing(false);
+                  setNoMore(false);
+                  setPage(0);
+                })
+                .catch(() => {
+                  setServerData([]);
+                  setIsRereshing(false);
+                  setNoMore(false);
+                  setPage(0);
+                });
           }
         }}
         isRefreshing={isRereshing}

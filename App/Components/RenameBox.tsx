@@ -138,7 +138,7 @@ function RenameBox({ submit }: Props) {
           visible: true,
           message: err.message,
           color: colors.error,
-          title: "Faild",
+          title: "Failed",
         },
       });
     },

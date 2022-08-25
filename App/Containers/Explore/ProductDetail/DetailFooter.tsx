@@ -36,7 +36,17 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     .filtered("product.listingId == $0", product.listingId)
     .filtered("addressId == $0", localCartVar.deliverAddress)
     .filtered("variant.variantId == $0", currentVariant?.variantId)[0];
+  let queryItems2 = realm
+    .objects("ShoppingCart")
+    .filtered("addressId == $0", localCartVar.deliverAddress)
+    .filtered("listingId == $0", product.listingId)
+    .filtered("variantId == $0", currentVariant ? currentVariant.variantId : "")
+    .filtered("quantity > 0")
+    .filtered("isDraft == false");
   // const [cartInfo, setCartInfo] = useState(info);
+  console.log("====================================");
+  console.log(info);
+  console.log("====================================");
   const initQuanlity =
     product.minQtyPerCart !== null ? product.minQtyPerCart : 1;
   //
@@ -112,6 +122,20 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
     );
   }, [currentVariant, initQuanlity, maximumValue]);
   const addToCart = () => {
+    const queryItems1 = realm
+      .objects("ShoppingCart")
+      .filtered("addressId == $0", localCartVar.deliverAddress)
+      .filtered("listingId == $0", product.listingId)
+      .filtered(
+        "variantId == $0",
+        currentVariant ? currentVariant.variantId : ""
+      )
+      .filtered("quantity > 0")
+      .filtered("isDraft == false");
+    if (!isEmpty(queryItems1)) {
+      NavigationService.navigate("CartScreen");
+      return;
+    }
     const shoppingCartId = makeid(36);
 
     // if (isEmpty(currentVariant.defaultVariant)) {
@@ -203,7 +227,7 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
               disabled ? t.opacity50 : t.opacity100,
             ]}
           >
-            ADD TO CART
+            {isEmpty(queryItems2) ? "ADD TO CART" : "GO TO CART"}
           </Text>
         </TouchableOpacity>
 

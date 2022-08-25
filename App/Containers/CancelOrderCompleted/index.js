@@ -13,7 +13,7 @@ import { t } from "react-native-tailwindcss";
 function CancelOrderCompleted(props) {
   const { params } = useRoute();
   const data = {
-    textTip: "Your order has been canceled",
+    textTip: "Your order has been cancelled",
     subTextTip:
       params.data.latestEventStatus === OrderItemHistoryEventType.Paid
         ? "You will receive the refund money in 5-7 business days"

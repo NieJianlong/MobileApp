@@ -112,7 +112,7 @@ function RegisterGuestBuyerToBuyerForm({
         setAlert({
           visible: true,
           message: res.message,
-          title: "Register Failded",
+          title: "Register Failed",
           color: Colors.error,
           onDismiss: () => {
             setAlert({ visible: false });

@@ -28,9 +28,7 @@ function Header({ orderNumber }: HeaderProps) {
         >
           Order
         </Text> */}
-        <Text
-          style={[ApplicationStyles.screen.heading4Bold, { fontSize: s(16) }]}
-        >
+        <Text style={[ApplicationStyles.screen.heading4Bold, { fontSize: 14 }]}>
           {orderNumber}
         </Text>
       </View>
@@ -42,7 +40,7 @@ function Header({ orderNumber }: HeaderProps) {
         <Text
           style={[
             ApplicationStyles.screen.heading3Bold,
-            { fontSize: s(14), color: colors.primary },
+            { fontSize: 14, color: colors.primary },
           ]}
         >
           GET HELP

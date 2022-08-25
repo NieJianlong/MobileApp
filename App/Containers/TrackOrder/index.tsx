@@ -35,8 +35,6 @@ function TrackOrder(props) {
     params: { type, data },
   } = useRoute();
 
-
-
   const {
     data: trackData,
     loading,
@@ -55,7 +53,6 @@ function TrackOrder(props) {
     React.useCallback(() => {
       refetch();
     }, [refetch])
-
   );
 
   const toggleShareSheet = () => {
@@ -145,126 +142,127 @@ function TrackOrder(props) {
   }, [navigation, type]);
   return (
     <ViewShot
-    style={{
-      flex: 1,
-      backgroundColor: colors.background,
-      position: "absolute",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-    }}
+      style={{
+        flex: 1,
+        backgroundColor: colors.background,
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+      }}
       ref={viewShotRef}
       options={{ format: "png", quality: 0.4, result: "base64" }}
     >
+      <ScrollView contentContainerStyle={{ paddingBottom: vs(64) }}>
+        <View
+          style={{
+            alignItems: "center",
+            height: vs(100),
+            justifyContent: "center",
+          }}
+        >
+          <Text
+            style={[ApplicationStyles.screen.txtRegular, { fontSize: s(14) }]}
+          >
+            {`Estimated ${type === "track" ? "delivery" : "return"} date`}
+          </Text>
+          <View style={{ height: 10, width: "100%" }} />
 
-        <ScrollView contentContainerStyle={{ paddingBottom: vs(64) }}>
+          {data.deliveryOption === DeliveryOption.CollectionPointPickup && (
+            <Text
+              style={[
+                ApplicationStyles.screen.heading2Bold,
+                { fontSize: 16, paddingTop: 10 },
+              ]}
+            >
+              {moment(
+                trackData?.trackOrderItem.collectionPoint.collectionDate ?? ""
+              ).format("DD MMM YYYY")}
+            </Text>
+          )}
+          {data.deliveryOption === DeliveryOption.SellerDirectDelivery && (
+            <Text
+              style={[
+                ApplicationStyles.screen.heading2Bold,
+                { fontSize: s(32), paddingTop: 10 },
+              ]}
+            >
+              {moment(
+                trackData?.trackOrderItem.sellerDirectDelivery.deliveryDate ??
+                  ""
+              ).format("DD MMM YYYY")}
+            </Text>
+          )}
+          {data.deliveryOption === DeliveryOption.SellerLocationPickup && (
+            <Text
+              style={[
+                ApplicationStyles.screen.heading2Bold,
+                { fontSize: s(32), paddingTop: 10 },
+              ]}
+            >
+              {moment(
+                trackData?.trackOrderItem.sellerLocation.collectionDate ?? ""
+              ).format("DD MMM YYYY")}
+            </Text>
+          )}
+        </View>
+        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
           <View
             style={{
-              alignItems: "center",
-              height: vs(100),
-              justifyContent: "center",
+              backgroundColor: "white",
+              borderRadius: s(16),
+              flex: 1,
             }}
           >
-            <Text
-              style={[ApplicationStyles.screen.txtRegular, { fontSize: s(14) }]}
-            >
-              {`Estimated ${type === "track" ? "delivery" : "return"} date`}
+            <Header orderNumber={data.orderNumber} />
+            {data.deliveryOption === DeliveryOption.CourierDelivery && (
+              <Trackers type={type} />
+            )}
+            {(data.deliveryOption === DeliveryOption.CollectionPointPickup ||
+              data.deliveryOption === DeliveryOption.SellerDirectDelivery ||
+              data.deliveryOption === DeliveryOption.SellerLocationPickup) &&
+              (!isEmpty(trackData?.trackOrderItem.qrCodeAsBase64) ? (
+                <Qrcode uri={trackData?.trackOrderItem.qrCodeAsBase64} />
+              ) : (
+                <Trackers events={events} />
+              ))}
+            {!isEmpty(trackData?.trackOrderItem.qrCodeAsBase64) && (
+              <Footer onPress={toggleShareSheet} />
+            )}
+          </View>
+        </View>
+        {data.deliveryOption === DeliveryOption.SellerDirectDelivery && (
+          <View style={[t.p4]}>
+            <Text style={[t.fontBold, t.textGray800]}>
+              Please note returns are not allowed for this item
             </Text>
-            <View style={{ height: 10, width: "100%" }} />
-
-            {data.deliveryOption === DeliveryOption.CollectionPointPickup && (
-              <Text
-                style={[
-                  ApplicationStyles.screen.heading2Bold,
-                  { fontSize: s(20), paddingTop: 10 },
-                ]}
-              >
-                {moment(
-                  trackData?.trackOrderItem.collectionPoint.collectionDate ?? ""
-                ).format("DD MMM YYYY")}
+            <View style={[t.flexRow, t.itemsCenter, t.mT4]}>
+              <View style={[t.w2, t.h2, t.roundedFull, t.bgGray600, t.mR2]} />
+              <Text>
+                Upon delivery, there is the chance to inspect the item and
+                either accept or reject it
               </Text>
-            )}
-            {data.deliveryOption === DeliveryOption.SellerDirectDelivery && (
-              <Text
-                style={[
-                  ApplicationStyles.screen.heading2Bold,
-                  { fontSize: s(32), paddingTop: 10 },
-                ]}
-              >
-                {moment(
-                  trackData?.trackOrderItem.sellerDirectDelivery.deliveryDate ??
-                    ""
-                ).format("DD MMM YYYY")}
+            </View>
+            <View style={[t.flexRow, t.itemsCenter, t.mT4]}>
+              <View style={[t.w2, t.h2, t.roundedFull, t.bgGray600, t.mR2]} />
+              <Text style={[t.textGray600, t.fontBold]}>
+                Please check the item carefully before accepting the delivery to
+                make sure you are happy with your purchase
               </Text>
-            )}
-            {data.deliveryOption === DeliveryOption.SellerLocationPickup && (
-              <Text
-                style={[
-                  ApplicationStyles.screen.heading2Bold,
-                  { fontSize: s(32), paddingTop: 10 },
-                ]}
-              >
-                {moment(
-                  trackData?.trackOrderItem.sellerLocation.collectionDate ?? ""
-                ).format("DD MMM YYYY")}
-              </Text>
-            )}
-          </View>
-          <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-            <View
-              style={{
-                backgroundColor: "white",
-                borderRadius: s(16),
-                flex: 1,
-              }}
-            >
-              <Header orderNumber={data.orderNumber} />
-              {data.deliveryOption === DeliveryOption.CourierDelivery && (
-                <Trackers type={type} />
-              )}
-              {(data.deliveryOption === DeliveryOption.CollectionPointPickup ||
-                data.deliveryOption === DeliveryOption.SellerDirectDelivery ||
-                data.deliveryOption === DeliveryOption.SellerLocationPickup) &&
-                (!isEmpty(trackData?.trackOrderItem.qrCodeAsBase64) ? (
-                  <Qrcode uri={trackData?.trackOrderItem.qrCodeAsBase64} />
-                ) : (
-                  <Trackers events={events} />
-                ))}
-              {!isEmpty(trackData?.trackOrderItem.qrCodeAsBase64) && <Footer onPress={toggleShareSheet}/>}
             </View>
           </View>
-          {data.deliveryOption === DeliveryOption.SellerDirectDelivery && (
-            <View style={[t.p4]}>
-              <Text style={[t.fontBold, t.textGray800]}>
-                Please note returns are not allowed for this item
-              </Text>
-              <View style={[t.flexRow, t.itemsCenter, t.mT4]}>
-                <View style={[t.w2, t.h2, t.roundedFull, t.bgGray600, t.mR2]} />
-                <Text>
-                  Upon delivery, there is the chance to inspect the item and
-                  either accept or reject it
-                </Text>
-              </View>
-              <View style={[t.flexRow, t.itemsCenter, t.mT4]}>
-                <View style={[t.w2, t.h2, t.roundedFull, t.bgGray600, t.mR2]} />
-                <Text style={[t.textGray600, t.fontBold]}>
-                  Please check the item carefully before accepting the delivery
-                  to make sure you are happy with your purchase
-                </Text>
-              </View>
-            </View>
+        )}
+        {(data.deliveryOption === DeliveryOption.CollectionPointPickup ||
+          data.deliveryOption === DeliveryOption.SellerLocationPickup) &&
+          !isEmpty(trackData?.trackOrderItem.qrCodeAsBase64) && (
+            <PickInfo
+              deliveryOption={data.deliveryOption}
+              sellerLocation={data.sellerLocation}
+              collectionPoint={data.collectionPoint}
+            />
           )}
-          {(data.deliveryOption === DeliveryOption.CollectionPointPickup ||
-            data.deliveryOption === DeliveryOption.SellerLocationPickup) &&
-            !isEmpty(trackData?.trackOrderItem.qrCodeAsBase64) && (
-              <PickInfo
-                deliveryOption={data.deliveryOption}
-                sellerLocation={data.sellerLocation}
-                collectionPoint={data.collectionPoint}
-              />
-            )}
-        </ScrollView>
+      </ScrollView>
     </ViewShot>
   );
 }

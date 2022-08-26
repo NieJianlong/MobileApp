@@ -449,7 +449,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.haier.haiervip2app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vk.salami;
 				PRODUCT_NAME = apollo;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "apollo-Bridging-Header.h";

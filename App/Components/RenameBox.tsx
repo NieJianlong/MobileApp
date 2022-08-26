@@ -130,7 +130,6 @@ function RenameBox({ submit }: Props) {
     },
     onError: (err) => {
       setRename({ ...rename, show: false });
-      console.log("=====Res edit err========", err);
       dispatch({ type: "hideloading" });
       dispatch({
         type: "changAlertState",

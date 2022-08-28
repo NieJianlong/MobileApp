@@ -35,6 +35,7 @@ import { t } from "react-native-tailwindcss";
 import useLogin from "../../hooks/useLogin";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/native";
+import { trim } from "lodash";
 
 function LoginScreen(props) {
   // refs
@@ -486,7 +487,7 @@ function LoginScreen(props) {
                 },
                 validate: {
                   positive: (v) => {
-                    if (v.indexOf(" ") !== -1) {
+                    if (trim(v).indexOf(" ") !== -1) {
                       return "Passwords should not contain Spaces";
                     }
                     return true;

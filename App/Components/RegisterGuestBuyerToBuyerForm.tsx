@@ -29,6 +29,7 @@ import PasswordInput from "./PasswordInput";
 import useRegisterGuest from "../hooks/useRegisterGuest";
 import Button1 from "./Button1";
 import useAlert from "../hooks/useAlert";
+import { trim } from "lodash";
 export interface RegisterGuestBuyerToBuyerFormProps {
   style?: StyleProp<TextStyle>;
 }
@@ -156,7 +157,7 @@ function RegisterGuestBuyerToBuyerForm({
                 },
                 validate: {
                   positive: (v) => {
-                    if (v.indexOf(" ") !== -1)
+                    if (trim(v).indexOf(" ") !== -1)
                       return "Passwords should not contain Spaces";
                     return true;
                   },

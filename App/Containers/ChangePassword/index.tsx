@@ -15,7 +15,7 @@ import {
   useChangePasswordMutation,
   MutationChangePasswordArgs,
 } from "../../../generated/graphql";
-import { get } from "lodash";
+import { get, trim } from "lodash";
 import useLoading from "../../hooks/useLoading";
 function ChangePassword(props) {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -145,7 +145,7 @@ function ChangePassword(props) {
               },
               validate: {
                 positive: (v) => {
-                  if (v.indexOf(" ") !== -1) {
+                  if (trim(v).indexOf(" ") !== -1) {
                     return "Passwords should not contain Spaces";
                   }
                   return true;
@@ -179,7 +179,7 @@ function ChangePassword(props) {
               },
               validate: {
                 positive: (v) => {
-                  if (v.indexOf(" ") !== -1) {
+                  if (trim(v).indexOf(" ") !== -1) {
                     return "Passwords should not contain Spaces";
                   }
                   return true;
@@ -213,7 +213,7 @@ function ChangePassword(props) {
               },
               validate: {
                 positive: (v) => {
-                  if (v.indexOf(" ") !== -1) {
+                  if (trim(v).indexOf(" ") !== -1) {
                     return "Passwords should not contain Spaces";
                   }
                   if (password !== v) {

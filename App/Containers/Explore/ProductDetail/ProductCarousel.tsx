@@ -5,13 +5,7 @@ import React, {
   useContext,
   useEffect,
 } from "react";
-import {
-  View,
-  Image,
-  TouchableOpacity,
-  Text,
-  useWindowDimensions,
-} from "react-native";
+import { View, Image, Text, useWindowDimensions } from "react-native";
 import { s } from "react-native-size-matters";
 import { Images, Colors } from "../../../Themes";
 import styles from "./styles";
@@ -39,6 +33,7 @@ import useLoading from "../../../hooks/useLoading";
 import useAlert from "../../../hooks/useAlert";
 import colors from "../../../Themes/Colors";
 import preventDoublePress from "../../../Utils/preventDoublePress";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 //render product images
 export default function ProductCarousel({ product, onPress }) {

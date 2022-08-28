@@ -6,5 +6,5 @@
 @interface AppDelegate : EXAppDelegateWrapper <RCTBridgeDelegate, EXUpdatesAppControllerDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
-
+@property (nonatomic, strong) NSDictionary *launchOptions;
 @end

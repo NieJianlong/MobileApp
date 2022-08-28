@@ -207,6 +207,8 @@ PODS:
     - RNPermissions
   - Permission-LocationWhenInUse (3.6.0):
     - RNPermissions
+  - Permission-Notifications (3.6.0):
+    - RNPermissions
   - PromisesObjC (2.1.1)
   - razorpay-pod (1.2.8)
   - RCT-Folly (2021.06.28.00-v2):
@@ -592,11 +594,13 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Google-Maps-iOS-Utils
   - GoogleAppMeasurement
+  - GoogleMaps
   - GoogleUtilities
   - lottie-react-native (from `../node_modules/lottie-react-native`)
   - Permission-LocationAccuracy (from `../node_modules/react-native-permissions/ios/LocationAccuracy`)
   - Permission-LocationAlways (from `../node_modules/react-native-permissions/ios/LocationAlways`)
   - Permission-LocationWhenInUse (from `../node_modules/react-native-permissions/ios/LocationWhenInUse`)
+  - Permission-Notifications (from `../node_modules/react-native-permissions/ios/Notifications`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -730,6 +734,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-permissions/ios/LocationAlways"
   Permission-LocationWhenInUse:
     :path: "../node_modules/react-native-permissions/ios/LocationWhenInUse"
+  Permission-Notifications:
+    :path: "../node_modules/react-native-permissions/ios/Notifications"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -835,7 +841,7 @@ SPEC CHECKSUMS:
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
+  DoubleConversion: 831926d9b8bf8166fd87886c4abab286c2422662
   EXApplication: 54fe5bd6268d697771645e8f1aef8b806a65247a
   EXConstants: 88bf79622fbd9b476c96d8ec57fe97ca44fe8e3c
   EXDevice: aa5e1edbf350481a948c3258b750dd11e6e4579e
@@ -864,7 +870,7 @@ SPEC CHECKSUMS:
   FlipperKit: 2685e108cd61d4224effc3c2d013512b2a503f63
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
-  glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
+  glog: 5337263514dd6f09803962437687240c5dc39aa4
   Google-Maps-iOS-Utils: 3343332b18dfd5be8f1f44edd7d481ace3da4d9a
   GoogleAppMeasurement: 5d69e04287fc2c10cc43724bfa4bf31fc12c3dff
   GoogleMaps: 5c13302e6fe6bb6e686b267196586b91cd594225
@@ -878,9 +884,10 @@ SPEC CHECKSUMS:
   Permission-LocationAccuracy: 13cbce13607e0738f1339447b4c5f51aa2c2b597
   Permission-LocationAlways: 6b9874937f2092664dd71fbc53a10f7f0adfff51
   Permission-LocationWhenInUse: 51aa065819cd582517e98e89b564e2465a4a83c6
+  Permission-Notifications: 7f2a467ab97a130a847519705340830d52cfc5f0
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   razorpay-pod: 3ec6fe82e7d5927013cfbbef81a880188c86b077
-  RCT-Folly: b9d9fe1fc70114b751c076104e52f3b1b5e5a95a
+  RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
   RCTRequired: 4bf86c70714490bca4bf2696148638284622644b
   RCTTypeSafety: c475a7059eb77935fa53d2c17db299893f057d5d
   React: f64af14e3f2c50f6f2c91a5fd250e4ff1b3c3459
@@ -934,6 +941,6 @@ SPEC CHECKSUMS:
   Yoga: e7dc4e71caba6472ff48ad7d234389b91dadc280
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 4d93dfc0b3d3c80ca13d092cfcf70d011c24d79b
+PODFILE CHECKSUM: bff4cd333fa73b54a9a297d20c7b25bfa48ea94c
 
 COCOAPODS: 1.11.3

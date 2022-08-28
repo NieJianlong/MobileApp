@@ -5,7 +5,22 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '12.0'
 
 target 'apollo' do
+  $static_framework = []
   use_expo_modules!
+  config = use_native_modules!
+  use_react_native!(
+    :path => config["reactNativePath"],
+    :hermes_enabled => false
+  )
+  $static_framework += [
+     'react-native-maps',
+     'react-native-google-maps',
+     'Google-Maps-iOS-Utils',
+     'GoogleMaps',
+     'RNPermissions',
+     'Permission-LocationWhenInUse',
+     'Permission-Notifications',
+   ]
   pod 'react-native-google-places', :path => '../node_modules/react-native-google-places-api'
 
   pod 'Google-Maps-iOS-Utils'
@@ -17,13 +32,14 @@ target 'apollo' do
 
   pod 'react-native-maps', path: rn_maps_path
   pod 'react-native-google-maps', path: rn_maps_path # <~~ if you need GoogleMaps support on iOS
-  
+  pod 'GoogleMaps'
   permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications"
   
   pod 'Permission-LocationAccuracy', :path => "#{permissions_path}/LocationAccuracy"
   pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways"
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
-
+ 
   post_integrate do |installer|
     begin
       expo_patch_react_imports!(installer)
@@ -31,12 +47,9 @@ target 'apollo' do
       Pod::UI.warn e
     end
   end
-  config = use_native_modules!
+  
 
-  use_react_native!(
-    :path => config["reactNativePath"],
-    :hermes_enabled => false
-  )
+ 
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
   # target 'apolloTests' do
@@ -51,16 +64,38 @@ target 'apollo' do
   # you should disable these next few lines.
   # use_flipper!({ 'Flipper' => '0.98.0','Flipper-Folly' => '2.6'  })
   use_flipper!({ 'Flipper-Folly' => '2.6.9', 'Flipper' => '0.100.0' })
-  post_install do |installer|
-      installer.pods_project.targets.each do |target|
-        target.build_configurations.each do |config|
-          config.build_settings["ONLY_ACTIVE_ARCH"] = "NO"
-          config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
-        end
+  # ****** THIS IS THE MAGIC ******
+  pre_install do |installer|
+      Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+          installer.pod_targets.each do |pod|
+              if $static_framework.include?(pod.name)
+                  def pod.build_type;
+                  Pod::BuildType.static_library # >= 1.9
+              end
+          end
       end
   end
-end
 
+  post_install do |installer|
+    #  if !ENV['IS_CI']
+    #    flipper_post_install(installer)
+    #  end
+
+   # This is also important AND MUST BE IN SAME ORDER
+    react_native_post_install(installer)
+    installer.pods_project.targets.each do |target|
+      if target.name == 'RCT-Folly'
+        target.build_configurations.each do |config|
+          config.build_settings['HEADER_SEARCH_PATHS'] = "$(inherited) ${PODS_ROOT}/fmt/include"
+        end
+      end
+    end
+    #   __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    installer.pods_project.build_configurations.each do |config|
+      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+    end
+  end
+end
 # target 'apollo-tvOS' do
   # Pods for apollo-tvOS
 

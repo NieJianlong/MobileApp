@@ -15,7 +15,7 @@
 
 @interface AppDelegate () <RCTBridgeDelegate>
  
-@property (nonatomic, strong) NSDictionary *launchOptions;
+
  
 @end
 
@@ -39,7 +39,7 @@ static void InitializeFlipper(UIApplication *application) {
   InitializeFlipper(application);
 #endif
 
-  self.launchOptions = launchOptions;
+    self.launchOptions = launchOptions;
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     #ifdef DEBUG
       [self initializeReactNativeApp];

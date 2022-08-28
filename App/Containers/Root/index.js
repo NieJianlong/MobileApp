@@ -182,6 +182,35 @@ function RootContainer() {
   const { mapVisible } = useMapScreen();
   const { stopPermission } = useMapScreen();
   const { width, height: windowHeight } = useWindowDimensions();
+  _saveImage = (uri) => {
+    let promise = CameraRoll.saveToCameraRoll(uri);
+
+    promise
+      .then(function (result) {
+        Alert.alert(
+          "Success",
+          "Image Saved to Photo Gallery",
+          [
+            {
+              text: "OK",
+            },
+          ],
+          { cancelable: false }
+        );
+      })
+      .catch(function (error) {
+        Alert.alert(
+          "Error Saving Image",
+          error,
+          [
+            {
+              text: "OK",
+            },
+          ],
+          { cancelable: false }
+        );
+      });
+  };
   return (
     <AlertContext.Provider value={{ dispatch, actionSheet }}>
       <View style={{ flex: 1 }}>
@@ -262,6 +291,7 @@ function RootContainer() {
           <ImageViewer
             imageUrls={images}
             backgroundColor={Colors.white}
+            // onSave={(uri) => this._saveImage(uri)}
             onClick={() => {
               setImageViewer({ visible: false, images: [] });
             }}

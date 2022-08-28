@@ -3,7 +3,7 @@ name: Deploy Pilab Devapk
 on:
   push:
     branches:
-      - development
+      - development1
       - sellerScan
 
 jobs:

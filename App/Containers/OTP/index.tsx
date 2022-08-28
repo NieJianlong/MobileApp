@@ -26,6 +26,7 @@ import { AlertContext } from "../Root/GlobalContext";
 import {
   useBuyerProfileByUserIdLazyQuery,
   useForgotPasswordStep1SendNotificationEmailMutation,
+  useForgotPasswordStep1SendNotificationSmsMutation,
   useForgotPasswordStep2VerifyTokenSmsMutation,
   useSendOtpCodeMutation,
   useValidateCodeMutation,
@@ -102,8 +103,12 @@ function OTPScreen(props) {
   const [resetPasswordStep2] = useMutation(ForgotPasswordStep2VerifyTokenEmail);
   const [resetPasswordStep2Sms] =
     useForgotPasswordStep2VerifyTokenSmsMutation();
+
   const [forgetPasswordResendCode] =
     useForgotPasswordStep1SendNotificationEmailMutation();
+  const [forgetPasswordResendCodePhone] =
+    useForgotPasswordStep1SendNotificationSmsMutation();
+
   const [resendCode] = useSendOtpCodeMutation();
   let [keyboardHeight, setKeyboardHeight] = useState(0);
   let [onFocus, setOnFocus] = useState(1);
@@ -358,39 +363,69 @@ function OTPScreen(props) {
             setLoading({ show: true });
 
             if (params.fromScreen === "ForgotPasswordScreen") {
-              forgetPasswordResendCode({
-                variables: { email: params?.phone ?? "" },
-                onCompleted: (res) => {
-                  setLoading({ show: false });
-                  setCount(60);
-                  setAllowToResendCode(true);
-                  dispatch({
-                    type: "changAlertState",
-                    payload: {
-                      visible: true,
-                      message: `A validation code has been sent to ${params?.phone}`,
-                      color: colors.success,
-                    },
-                  });
-                },
-                onError: () => {
-                  setLoading({ show: false });
-                  dispatch({
-                    type: "changAlertState",
-                    payload: {
-                      visible: true,
-                      message: "Resend validation code failed",
-                      color: colors.primary,
-                    },
-                  });
-                },
-              });
+              if (isValidEmail(params?.phone?.trim())) {
+                forgetPasswordResendCode({
+                  variables: { email: params?.phone?.trim() ?? "" },
+                  onCompleted: (res) => {
+                    setLoading({ show: false });
+                    setCount(60);
+                    setAllowToResendCode(true);
+                    dispatch({
+                      type: "changAlertState",
+                      payload: {
+                        visible: true,
+                        message: `A validation code has been sent to ${params?.phone}`,
+                        color: colors.success,
+                      },
+                    });
+                  },
+                  onError: () => {
+                    setLoading({ show: false });
+                    dispatch({
+                      type: "changAlertState",
+                      payload: {
+                        visible: true,
+                        message: "Resend validation code failed",
+                        color: colors.primary,
+                      },
+                    });
+                  },
+                });
+              } else {
+                forgetPasswordResendCodePhone({
+                  variables: { sms: params?.phone?.trim() ?? "" },
+                  onCompleted: (res) => {
+                    setLoading({ show: false });
+                    setCount(60);
+                    setAllowToResendCode(true);
+                    dispatch({
+                      type: "changAlertState",
+                      payload: {
+                        visible: true,
+                        message: `A validation code has been sent to ${params?.phone}`,
+                        color: colors.success,
+                      },
+                    });
+                  },
+                  onError: () => {
+                    setLoading({ show: false });
+                    dispatch({
+                      type: "changAlertState",
+                      payload: {
+                        visible: true,
+                        message: "Resend validation code failed",
+                        color: colors.primary,
+                      },
+                    });
+                  },
+                });
+              }
             } else {
               resendCode({
                 variables: {
                   sendCodeRequest: {
                     userId: params.userId,
-                    validationType: isValidEmail(params.phone)
+                    validationType: isValidEmail(params?.phone?.trim())
                       ? ValidationType.Email
                       : ValidationType.Sms,
                   },

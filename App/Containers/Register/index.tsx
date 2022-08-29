@@ -331,7 +331,7 @@ function RegisterScreen(props) {
         variables: {
           request: {
             firstName: data.firstName?.trim(),
-            lastName: data.firstName?.trim(),
+            lastName: data.lastName?.trim(),
             email: data.email.trim(),
             password: data.password,
             phoneNumber: "+91" + getValues("phoneNumber"),
@@ -631,8 +631,9 @@ function RegisterScreen(props) {
                 //     setShowEmailList(true);
                 //   }
                 // }
-
-                fetchUserIdentity();
+                if (Platform.OS === "android") {
+                  fetchUserIdentity();
+                }
               }}
               textAlignVertical={"center"}
             />

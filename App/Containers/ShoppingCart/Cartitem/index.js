@@ -176,6 +176,7 @@ function Index(props) {
           </TouchableOpacity>
           <TextInput
             mode="flat"
+            disabled={true}
             underlineColor="transparent"
             style={[styles.cartinput, { borderRadius: 0 }]}
             value={quantity + ""}

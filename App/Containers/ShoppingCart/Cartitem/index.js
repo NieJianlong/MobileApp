@@ -304,7 +304,6 @@ function Index(props) {
 const styles = ScaledSheet.create({
   ...ApplicationStyles.screen,
   counter: {
-    width: "96@s",
     height: "32@s",
     borderRadius: "40@s",
     borderColor: "#DDDFE3",
@@ -334,7 +333,6 @@ const styles = ScaledSheet.create({
     color: colors.grey80,
   },
   cartinput: {
-    width: "32@s",
     height: "30@s",
     backgroundColor: "white",
     textAlign: "center",

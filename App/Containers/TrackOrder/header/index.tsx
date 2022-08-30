@@ -5,6 +5,7 @@ import colors from "../../../Themes/Colors";
 import AppConfig from "../../../Config/AppConfig";
 import { ApplicationStyles } from "../../../Themes";
 import NavigationService from "../../../Navigation/NavigationService";
+import { t } from "react-native-tailwindcss";
 interface HeaderProps {
   orderNumber: string;
 }
@@ -29,7 +30,14 @@ function Header({ orderNumber }: HeaderProps) {
         >
           Order
         </Text> */}
-        <Text style={[ApplicationStyles.screen.heading4Bold, { fontSize: 14 }]}>
+        <Text
+          style={[
+            ApplicationStyles.screen.heading4Bold,
+            { fontSize: 13 },
+            t.pR2,
+          ]}
+          numberOfLines={2}
+        >
           {orderNumber}
         </Text>
       </View>

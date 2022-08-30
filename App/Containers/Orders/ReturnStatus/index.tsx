@@ -190,7 +190,7 @@ function ReturnStatus(props) {
                 flex: 1,
               }}
             >
-              <Header orderNumber={data.orderNumber} />
+              <Header orderNumber={data.orderItemNumber} />
               {lastEvent?.eventType !== ReturnEventType.WaitingBuyerReturn ? (
                 <Trackers events={events} />
               ) : (

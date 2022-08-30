@@ -50,6 +50,7 @@ fragment OrderItemDetailField on OrderItemDetailResponse {
   orderReturnId
   orderDiscount
   orderServiceFees
+  orderItemNumber
   totalSavings
   orderTotal
   buyerId

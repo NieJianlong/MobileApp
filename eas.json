@@ -6,7 +6,7 @@
     "development": {
       "distribution": "internal",
       "android": {
-        "gradleCommand": ":app:assembleDebug",
+        "image": "latest",
         "buildType": "apk"
       },
       "ios": {
@@ -14,7 +14,15 @@
       }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "releaseChannel": "stage"
+    },
+    "note-dev": {
+      "android": {
+        "image": "latest",
+        "buildType": "apk"
+      },
+      "releaseChannel": "stage"
     },
     "production": {
       "android": {

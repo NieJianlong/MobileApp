@@ -31,7 +31,6 @@ export default function LaunchScreen() {
       },
     },
     onCompleted: (res) => {
-      debugger;
       //server often breakon，we should use a constant for testing
       // const {
       //   sellerProfileByUserId: { sellerId },

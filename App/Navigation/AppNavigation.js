@@ -84,6 +84,7 @@ import ReturnInformation from "../Containers/Orders/ReturnInformation";
 import ReturnStatus from "../Containers/Orders/ReturnStatus/index";
 import SellerScan from "../Containers/SellerScan";
 import Scanhelper from "../Containers/Scanhelper";
+import ManualOperation from "../Containers/ManualOperation";
 
 import { View } from "react-native";
 
@@ -185,6 +186,16 @@ function PrimaryNav() {
       <Stack.Screen
         name={"Scanhelper"}
         component={Scanhelper}
+        options={{
+          gestureEnabled: false,
+          headerShown: true,
+          headerBackTitle: "",
+          headerBackTitleVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name={"ManualOperation"}
+        component={ManualOperation}
         options={{
           gestureEnabled: false,
           headerShown: true,

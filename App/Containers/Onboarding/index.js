@@ -75,7 +75,6 @@ function OnboardingScreen(props) {
    * update local storage and navigate
    */
   const onGetGuestBuyerId = async (data) => {
-    debugger;
     dispatch({ type: "hideloading" });
     let buyerId = data.createGuestBuyer.buyerId;
     await storage.setLocalStorageValue(storage.GUEST_BUYER_ID_KEY, buyerId);

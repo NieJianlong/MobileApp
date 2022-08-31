@@ -217,9 +217,6 @@ export default function AddressBar() {
           PubSub.publish("refresh-address", "");
         });
       }
-      // getLocalStorageValue(global.buyerId + "Address").then((res) => {
-      //   debugger;
-      // });
     });
     return () => {
       if (refresh) {

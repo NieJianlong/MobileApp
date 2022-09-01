@@ -226,12 +226,17 @@ function ProductItem(props) {
                     ? "Delivery Date:"
                     : "Order closes on:"}
                 </Text>
-                <Text style={styles.heading6Regular}>
-                  {product.deliveryOption ===
-                  DeliveryOption.SellerDirectDelivery
-                    ? product.announcementDeliveryDate
-                    : product.openUntil}
-                </Text>
+                {product.showcase && (
+                  <Text style={[styles.heading6Regular, t.bgBlack]}></Text>
+                )}
+                {!product.showcase && (
+                  <Text style={styles.heading6Regular}>
+                    {product.deliveryOption ===
+                    DeliveryOption.SellerDirectDelivery
+                      ? product.announcementDeliveryDate
+                      : product.openUntil}
+                  </Text>
+                )}
               </View>
               <Progress
                 maximumValue={isMissing ? "100" : product.noOfItemsInStock}

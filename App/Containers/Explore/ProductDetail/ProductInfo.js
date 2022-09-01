@@ -156,13 +156,16 @@ export default function ProductInfo({
         <View style={[styles.v4, t.flexRow, t.justifyBetween, t.pR8]}>
           <View style={{ marginRight: s(10) }}>
             {/* <Text style={styles.heading6Regular}>Order closes on:</Text> */}
-            {!showcase && (
-              <Text style={styles.heading6Regular}>
-                {product.deliveryOption === DeliveryOption.SellerDirectDelivery
-                  ? "Delivery Date:"
-                  : "Order closes on:"}
-              </Text>
+
+            <Text style={styles.heading6Regular}>
+              {product.deliveryOption === DeliveryOption.SellerDirectDelivery
+                ? "Delivery Date:"
+                : "Order closes on:"}
+            </Text>
+            {showcase && (
+              <Text style={(styles.heading6Regular, t.bgBlack)}></Text>
             )}
+
             {!showcase && (
               <Text style={styles.heading6Regular}>
                 {product.deliveryOption === DeliveryOption.SellerDirectDelivery

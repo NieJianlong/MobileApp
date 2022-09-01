@@ -186,13 +186,24 @@ function GroupInfoScreen(props) {
             });
           })}
         {/* when order status is uncompleted,user can cancel the order */}
-        {finalData?.listingStatus === ProductListingStatus.Active &&
+        {/* {finalData?.listingStatus === ProductListingStatus.Active &&
           (finalData?.latestEventStatus ===
             OrderItemHistoryEventType.WaitingForPayment ||
             finalData?.latestEventStatus ===
               OrderItemHistoryEventType.AuthorizedPayment ||
             finalData?.latestEventStatus ===
               OrderItemHistoryEventType.FailedPayment ||
+            finalData?.latestEventStatus === OrderItemHistoryEventType.Paid) &&
+          renderAction(Images.orderCancelImage, "Cancel order", () =>
+            NavigationService.navigate("CancelOrderScreen", {
+              orderItemId: data.orderItemId,
+              data: orderData?.getOrderItemDetails,
+              product: product?.getListings?.content[0],
+            })
+          )} */}
+        {finalData?.listingStatus === ProductListingStatus.Active &&
+          (finalData?.latestEventStatus ===
+            OrderItemHistoryEventType.AuthorizedPayment ||
             finalData?.latestEventStatus === OrderItemHistoryEventType.Paid) &&
           renderAction(Images.orderCancelImage, "Cancel order", () =>
             NavigationService.navigate("CancelOrderScreen", {

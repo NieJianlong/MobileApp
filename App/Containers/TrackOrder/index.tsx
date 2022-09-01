@@ -215,7 +215,7 @@ function TrackOrder(props) {
               flex: 1,
             }}
           >
-            <Header orderNumber={data.orderNumber} />
+            <Header orderNumber={data.orderItemNumber} />
             {data.deliveryOption === DeliveryOption.CourierDelivery && (
               <Trackers type={type} />
             )}

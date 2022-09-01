@@ -5,7 +5,7 @@ const AppConfig = {
   fontSize: s(15),
   paddingHorizontal: s(15),
   baseUrl: Updates.releaseChannel.startsWith("prod")
-    ? "https://api.salamislicing.in"
+    ? "https://api.salamislicing.in/"
     : "https://stage-api.salamislicing.in/",
   // baseUrl: "http://ec2-18-117-210-203.us-east-2.compute.amazonaws.com",
   // baseUrl: "https://dev-api.salamislicing.in/",

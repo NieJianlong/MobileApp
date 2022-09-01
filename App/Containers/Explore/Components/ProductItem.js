@@ -53,9 +53,10 @@ function ProductItem(props) {
       (error) => console.error("Oops, snapshot failed", error)
     );
   }, []);
-  const isMissing =
-    product.status === ProductListingStatus.Accepted ||
-    product.status === ProductListingStatus.Successful;
+  // const isMissing =
+  //   product.status === ProductListingStatus.Accepted ||
+  //   product.status === ProductListingStatus.Successful;
+  const isMissing = false;
   if (size === "M" || size === "L") {
     return (
       <TouchableOpacity
@@ -76,6 +77,7 @@ function ProductItem(props) {
 
           NavigationService.navigate("ProductDetailScreen", {
             product: product,
+            showcase: product.showcase,
           });
         }}
         disabled={isMissing}

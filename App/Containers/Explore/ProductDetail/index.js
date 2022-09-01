@@ -169,6 +169,7 @@ function ProductDetail(props) {
               scrollSectionIntoView={scrollSectionIntoView}
               pickUp={pickUp}
               onSetPickUp={onSetPickUp}
+              showcase={oldProduct.showcase}
             />
             <ReturnPolicy
               returnPolices={products?.getListings.content[0].returnPolicies}
@@ -203,6 +204,7 @@ function ProductDetail(props) {
           product={products?.getListings.content[0]}
           currentVariant={currentVariant}
           pickUp={pickUp}
+          showcase={oldProduct.showcase}
         />
       </SafeAreaView>
     </View>

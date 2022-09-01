@@ -563,6 +563,7 @@ type ProductListingView {
   courierShippingFeeTax: Float
   announcementDeliveryDate: Date
   pickupAddress: AddressView
+  showcase: Boolean
 }
 
 input ProductPageable {

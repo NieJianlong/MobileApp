@@ -29,6 +29,7 @@ export default function ProductInfo({
   scrollSectionIntoView,
   pickUp,
   onSetPickUp,
+  showcase,
 }) {
   const { dispatch } = useContext(AlertContext);
   const togglePickupFromSellerSheet = useCallback(
@@ -155,16 +156,20 @@ export default function ProductInfo({
         <View style={[styles.v4, t.flexRow, t.justifyBetween, t.pR8]}>
           <View style={{ marginRight: s(10) }}>
             {/* <Text style={styles.heading6Regular}>Order closes on:</Text> */}
-            <Text style={styles.heading6Regular}>
-              {product.deliveryOption === DeliveryOption.SellerDirectDelivery
-                ? "Delivery Date:"
-                : "Order closes on:"}
-            </Text>
-            <Text style={styles.heading6Regular}>
-              {product.deliveryOption === DeliveryOption.SellerDirectDelivery
-                ? product.announcementDeliveryDate
-                : product.openUntil}
-            </Text>
+            {!showcase && (
+              <Text style={styles.heading6Regular}>
+                {product.deliveryOption === DeliveryOption.SellerDirectDelivery
+                  ? "Delivery Date:"
+                  : "Order closes on:"}
+              </Text>
+            )}
+            {!showcase && (
+              <Text style={styles.heading6Regular}>
+                {product.deliveryOption === DeliveryOption.SellerDirectDelivery
+                  ? product.announcementDeliveryDate
+                  : product.openUntil}
+              </Text>
+            )}
           </View>
           <Progress
             maximumValue={isMissing ? "100" : product.noOfItemsInStock}
@@ -174,8 +179,10 @@ export default function ProductInfo({
           />
           <View style={[styles.row]}>
             <Image source={Images.stock} style={styles.icStock} />
+
             <Text style={styles.txtOrderNumber}>
-              {product.noOfOrderedItems}/{product.noOfItemsInStock}
+              {showcase ? product.noOfItemsInStock : product.noOfOrderedItems}/
+              {product.noOfItemsInStock}
             </Text>
           </View>
           <TouchableOpacity

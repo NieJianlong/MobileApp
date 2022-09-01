@@ -22,7 +22,12 @@ import useOrderInfo from "../../../hooks/useOrderInfo";
 import { Page_CheckoutGuestOrderDetail } from "../../../Navigation/const";
 import { isEmpty } from "lodash";
 import useAlert from "../../../hooks/useAlert";
-export default function DetailFooter({ product, currentVariant, pickUp }) {
+export default function DetailFooter({
+  product,
+  currentVariant,
+  pickUp,
+  showcase,
+}) {
   const { dispatch } = useContext(AlertContext);
   const { realm } = useRealm();
   const {
@@ -118,7 +123,9 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
   const disabled = useMemo(() => {
     return (
       currentVariant?.itemsAvailable - currentVariant?.itemsSold <
-        initQuanlity || maximumValue < initQuanlity
+        initQuanlity ||
+      maximumValue < initQuanlity ||
+      showcase
     );
   }, [currentVariant, initQuanlity, maximumValue]);
   const addToCart = () => {
@@ -243,7 +250,11 @@ export default function DetailFooter({ product, currentVariant, pickUp }) {
         >
           <Text style={[styles.txtBold, { color: Colors.white }]}>
             {disabled
-              ? `${product?.noOfOrderedItems}/${product?.noOfItemsInStock} sold`
+              ? `${
+                  showcase
+                    ? product?.noOfItemsInStock
+                    : product?.noOfOrderedItems
+                }/${product?.noOfItemsInStock} sold`
               : "BUY NOW"}
           </Text>
 

@@ -55,9 +55,9 @@ jobs:
       - name: Gen Graphql
         run: yarn gen:gql
 
-      - name: Expo Publish
-        run: |
-          eas build -p ios --non-interactive --json
+      # - name: Expo Publish
+      #   run: |
+      #     eas build -p ios --non-interactive --json
 
       - name: Expo Publish
         run: |

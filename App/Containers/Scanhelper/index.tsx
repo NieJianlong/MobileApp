@@ -8,6 +8,7 @@ import {
   useMarkOrderReturnAsReceivedMutation,
 } from "../../../generated/graphql";
 import { ActivityIndicator } from "react-native-paper";
+import { observer } from "mobx-react";
 
 function Scanhelper() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -147,4 +148,4 @@ function Scanhelper() {
   // />
 }
 
-export default Scanhelper;
+export default observer(Scanhelper);

@@ -1,14 +1,15 @@
 import { ApolloClient, HttpLink, ApolloLink, concat } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import globalCache from "./cache";
-/**
+/**j
  * need fetch as we are not in a browser
  */
 import fetch from "cross-fetch";
 import AppConfig from "../Config/AppConfig";
+import { appStore } from "../mobx/app.store";
 // const baseUrl = "http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com";
 //const baseUrl = "http://ec2-18-189-169-167.us-east-2.compute.amazonaws.com";
-const baseUrl = AppConfig.baseUrl;
+const baseUrl = appStore.mode.url;
 /**
  * Keycloak              --> 8080
  * IAM                   --> 8081
@@ -117,7 +118,7 @@ const customFetch = (uri, options) => {
 
   return fetch(newUri, options);
 };
-const httpLink = new HttpLink({ uri: baseUrl, fetch: customFetch });
+const httpLink = new HttpLink({ uri: appStore.mode.url, fetch: customFetch });
 const publicHeaders = {
   "Content-Type": "application/json",
   Accept: "application/json",

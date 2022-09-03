@@ -11,6 +11,7 @@ import { Controller, useForm } from "react-hook-form";
 import { t } from "react-native-tailwindcss";
 import { ActivityIndicator, Button, TextInput } from "react-native-paper";
 import { useRoute } from "@react-navigation/native";
+import { observer } from "mobx-react";
 
 function ManualOperation() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -156,4 +157,4 @@ function ManualOperation() {
   );
 }
 
-export default ManualOperation;
+export default observer(ManualOperation);

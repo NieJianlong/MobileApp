@@ -25,7 +25,6 @@ import {
 } from "../../../../generated/graphql";
 import { ActivityIndicator } from "react-native-paper";
 import { useFocusEffect } from "@react-navigation/native";
-import { Alert } from "../../../Components";
 
 export default function Index(props) {
   const { textToSearch = "" } = props;

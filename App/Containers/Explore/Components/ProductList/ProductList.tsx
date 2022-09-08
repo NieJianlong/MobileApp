@@ -53,7 +53,6 @@ export default function ProductList(props) {
   const [serverData, setServerData] = useState([]);
   const { isAnnouncement, index, filter, filterParams } = props;
   const [loadingMore, setLoadingMore] = useState(false);
-  const [myFilter, seMyFilter] = useState("");
   const [sortItem, setSortItem] = useState(sortOptions[1]);
   const { width, height } = useWindowDimensions();
   const [isRereshing, setIsRereshing] = useState(false);
@@ -63,14 +62,48 @@ export default function ProductList(props) {
   }, []);
   const searchOptions = useMemo(() => {
     return {
-      filter: isEmpty(myFilter) ? filter : myFilter,
+      filter: filter,
       filterParams: filterParams,
       sortBy: sortItem.sortType,
       sortDirection: sortItem.sortDirection,
       pageSize,
     };
-  }, [filter, filterParams, sortItem, myFilter]);
+  }, [filter, filterParams, sortItem]);
 
+  const showCaseSearchOptions = useMemo(() => {
+    let newFilter = filter;
+    if (filter === "ACTIVE_BY_ADDRESS_ID_AND_ANNOUNCEMENT") {
+      newFilter = "SHOWCASE_BY_ANNOUNCEMENT";
+    }
+    if (filter === "ACTIVE_BY_ADDRESS_ID") {
+      newFilter = "SHOWCASE";
+    }
+    if (filter === "ACTIVE_BY_ADDRESS_ID_AND_CATEGORY") {
+      newFilter = "SHOWCASE_BY_CATEGORY";
+    }
+    return {
+      filter: newFilter,
+      filterParams: filterParams,
+      sortBy: sortItem.sortType,
+      sortDirection: sortItem.sortDirection,
+      pageSize,
+    };
+  }, [filter, filterParams, sortItem]);
+  const onCompleted = (res) => {
+    setNoMore(false);
+    if (res) {
+      setServerData(res.getListings.content);
+      console.log(localCart.deliverAddress);
+      console.log(searchOptions.filterParams);
+      if (isEmpty(res.getListings.content)) {
+        queryListings({
+          variables: {
+            searchOptions: showCaseSearchOptions,
+          },
+        });
+      }
+    }
+  };
   const [queryListings, { loading, error, data, refetch, called, fetchMore }] =
     useGetListingsLazyQuery({
       context: {
@@ -81,43 +114,8 @@ export default function ProductList(props) {
       onError: () => {
         setServerData([]);
       },
-      onCompleted: async (res) => {
-        setNoMore(false);
-        if (res) {
-          setServerData(res.getListings.content);
-          console.log(localCart.deliverAddress);
-          console.log(searchOptions.filterParams);
-          if (isEmpty(res.getListings.content)) {
-            if (
-              searchOptions.filter === "ACTIVE_BY_ADDRESS_ID_AND_ANNOUNCEMENT"
-            ) {
-              // seMyFilter("SHOWCASE_BY_ANNOUNCEMENT");
-            }
-            if (searchOptions.filter === "ACTIVE_BY_ADDRESS_ID") {
-              // seMyFilter("SHOWCASE");
-            }
-            if (searchOptions.filter === "ACTIVE_BY_ADDRESS_ID_AND_CATEGORY") {
-              // seMyFilter("SHOWCASE_BY_CATEGORY");
-            }
-          }
-        }
-      },
+      onCompleted: onCompleted,
     });
-  useEffect(() => {
-    if (!isEmpty(localCart.deliverAddress)) {
-      queryListings({
-        variables: {
-          searchOptions: {
-            filter: filter,
-            filterParams: filterParams,
-            sortBy: sortItem.sortType,
-            sortDirection: sortItem.sortDirection,
-            pageSize,
-          },
-        },
-      });
-    }
-  }, [localCart.deliverAddress]);
   useEffect(() => {
     if (!isEmpty(localCart.deliverAddress)) {
       queryListings({
@@ -205,9 +203,17 @@ export default function ProductList(props) {
             return;
           }
           setLoadingMore(true);
-          const vars = {
+          let vars = {
             searchOptions: { ...searchOptions, pageNo: page + 1 },
           };
+          if (!isEmpty(data?.getListings?.content)) {
+            const item = data?.getListings?.content[0];
+            if (item?.showcase === true) {
+              vars = {
+                searchOptions: { ...showCaseSearchOptions, pageNo: page + 1 },
+              };
+            }
+          }
           const moreData = await client.query({
             query: GetListingsDocument,
             variables: vars,

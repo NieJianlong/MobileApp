@@ -199,6 +199,9 @@ enum FilterType {
   ACTIVE_BY_ADDRESS_ID_AND_FULL_TEXT_SEARCH
   ACTIVE_BY_ADDRESS_ID_AND_SHARE_LIST
   ACTIVE_BY_ADDRESS_ID
+  SHOWCASE
+  SHOWCASE_BY_CATEGORY
+  SHOWCASE_BY_ANNOUNCEMENT
 }
 
 type FindReviewResponse {
@@ -363,13 +366,6 @@ type OptionValue {
 input OptionValueInput {
   optionId: ID!
   optionValueId: ID!
-}
-
-input PageableOptions {
-  sortBy: SortType
-  sortDirection: SortDirection
-  pageNo: Int
-  pageSize: Int
 }
 
 type PolicyNameView {
@@ -707,7 +703,7 @@ type Query {
   isListingAvailable(listings: [IsListingAvailableInput!]!): [IsListingAvailableResponse!]!
   getBuyerWishlistListing(options: WishlistOption!): BuyerListingResponse!
   isListingInWishlist(buyerId: ID!, listingId: ID!): Boolean!
-  getShowcaseListings(options: PageableOptions): BuyerListingResponse!
+  getShowcaseListings(options: SearchOptions): BuyerListingResponse!
   getProducts(pageable: ProductPageable): ProductResponse!
   getProductByProductId(productId: String!): SellerProductDetailView!
   getShareInformationByProductId(productId: String): [ShareInformation]

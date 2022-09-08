@@ -154,7 +154,16 @@ export default function ProductList(props) {
     });
   useEffect(() => {
     if (shouldUseshowCase) {
-      getshowCases({ variables: { options: pageOptions } });
+      if (searchOptions.filter === "ACTIVE_BY_ADDRESS_ID_AND_ANNOUNCEMENT") {
+        searchOptions.filter = "SHOWCASE_BY_ANNOUNCEMENT";
+      }
+      if (searchOptions.filter === "ACTIVE_BY_ADDRESS_ID") {
+        searchOptions.filter = "SHOWCASE";
+      }
+      if (searchOptions.filter === "ACTIVE_BY_ADDRESS_ID_AND_CATEGORY") {
+        searchOptions.filter = "SHOWCASE_BY_CATEGORY";
+      }
+      getshowCases({ variables: { options: searchOptions } });
     } else {
       queryListings({
         variables: {

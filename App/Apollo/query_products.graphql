@@ -317,7 +317,7 @@ query IsListingAvailable($listings: [IsListingAvailableInput!]!) {
     ...IsListingAvailableField
   }
 }
-query GetShowcaseListings($options: PageableOptions) {
+query GetShowcaseListings($options: SearchOptions) {
   getShowcaseListings(options: $options) {
     content {
       ...ProductListingViewField

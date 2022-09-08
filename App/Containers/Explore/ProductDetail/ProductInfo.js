@@ -163,7 +163,7 @@ export default function ProductInfo({
                 : "Order closes on:"}
             </Text>
             {showcase && (
-              <Text style={(styles.heading6Regular, t.bgBlack)}></Text>
+              <Text style={(styles.heading6Regular, t.bgGray500)}></Text>
             )}
 
             {!showcase && (
@@ -264,7 +264,7 @@ export default function ProductInfo({
             product?.highlightBullets.map((bul, index) => (
               <View key={index} style={[styles.row, t.itemsCenter]}>
                 <View
-                  style={[t.w1, t.h1, t.roundedFull, t.bgBlack, t.mR4, t.mT1]}
+                  style={[t.w1, t.h1, t.roundedFull, t.bgGray700, t.mR4, t.mT1]}
                 />
                 <Text style={styles.txtRegular}>{trim(bul)}</Text>
               </View>

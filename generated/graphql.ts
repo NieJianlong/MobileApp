@@ -652,6 +652,9 @@ export enum FilterType {
   ByListingId = 'BY_LISTING_ID',
   BySeller = 'BY_SELLER',
   ByStoreId = 'BY_STORE_ID',
+  Showcase = 'SHOWCASE',
+  ShowcaseByAnnouncement = 'SHOWCASE_BY_ANNOUNCEMENT',
+  ShowcaseByCategory = 'SHOWCASE_BY_CATEGORY',
   Undefined = 'UNDEFINED'
 }
 
@@ -2167,13 +2170,6 @@ export type PageOption = {
   pageSize: Scalars['Int'];
 };
 
-export type PageableOptions = {
-  pageNo?: InputMaybe<Scalars['Int']>;
-  pageSize?: InputMaybe<Scalars['Int']>;
-  sortBy?: InputMaybe<SortType>;
-  sortDirection?: InputMaybe<SortDirection>;
-};
-
 export type PaymentDetailRequest = {
   buyerId: Scalars['ID'];
   isDefaultPaymentType?: InputMaybe<Scalars['Boolean']>;
@@ -3081,7 +3077,7 @@ export type QueryGetShareInformationByProductIdArgs = {
 
 /** QUERIES */
 export type QueryGetShowcaseListingsArgs = {
-  options?: InputMaybe<PageableOptions>;
+  options?: InputMaybe<SearchOptions>;
 };
 
 
@@ -4842,7 +4838,7 @@ export type IsListingAvailableQueryVariables = Exact<{
 export type IsListingAvailableQuery = { __typename?: 'Query', isListingAvailable: Array<{ __typename?: 'IsListingAvailableResponse', listingId?: string | null | undefined, variantId?: string | null | undefined, isAvailable?: boolean | null | undefined, reason?: string | null | undefined, listing?: { __typename?: 'ProductListingView', photo?: string | null | undefined, photoUrls?: Array<string | null | undefined> | null | undefined, shortName?: string | null | undefined, numberOfStars?: number | null | undefined, numberOfReviews?: number | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, salePercentage?: number | null | undefined, percentOff?: number | null | undefined, showcase?: boolean | null | undefined, amountSaved?: number | null | undefined, openUntil?: string | null | undefined, noOfOrderedItems?: number | null | undefined, noOfItemsInStock?: number | null | undefined, description?: string | null | undefined, technicalDetails?: string | null | undefined, highlightBullets?: Array<string | null | undefined> | null | undefined, relatedProducts?: string | null | undefined, listingId?: string | null | undefined, productId?: string | null | undefined, storeId?: string | null | undefined, storeName?: string | null | undefined, status?: string | null | undefined, rating?: number | null | undefined, closedDate?: string | null | undefined, productListingType?: string | null | undefined, progressBarValue?: number | null | undefined, numberOfItemsAvailable?: number | null | undefined, qtyAvailable?: number | null | undefined, minQtyPerCart?: number | null | undefined, minSoldQuantity?: number | null | undefined, itemSold?: number | null | undefined, createOn?: string | null | undefined, returnAddressId?: string | null | undefined, longName?: string | null | undefined, announcementId?: string | null | undefined, sellerId?: string | null | undefined, deliveryOption?: DeliveryOption | null | undefined, courierName?: string | null | undefined, courierShippingFee?: number | null | undefined, courierShippingFeeTax?: number | null | undefined, announcementDeliveryDate?: any | null | undefined, seller?: { __typename?: 'SellerView', id?: string | null | undefined, brandName?: string | null | undefined, avatarUrl?: string | null | undefined, usersRating?: number | null | undefined, name?: string | null | undefined, description?: string | null | undefined, ratingCount?: number | null | undefined } | null | undefined, returnPolicies?: Array<{ __typename?: 'ProductReturnPolicyView', id?: string | null | undefined, productId?: string | null | undefined, name?: string | null | undefined, description?: string | null | undefined, value?: string | null | undefined } | null | undefined> | null | undefined, listingVariants?: Array<{ __typename?: 'ListingVariantView', listingId: string, variantId?: string | null | undefined, productId?: string | null | undefined, defaultVariant?: boolean | null | undefined, retailPrice?: number | null | undefined, wholeSalePrice?: number | null | undefined, fullPath?: string | null | undefined, itemsInStock?: number | null | undefined, itemsAvailable?: number | null | undefined, itemsSold?: number | null | undefined, isAvailable?: boolean | null | undefined, options?: Array<{ __typename?: 'KeyValuePair', key: string, value: string } | null | undefined> | null | undefined } | null | undefined> | null | undefined, reviews?: Array<{ __typename?: 'ReviewView', id?: string | null | undefined, productId?: string | null | undefined, sellerId?: string | null | undefined, title?: string | null | undefined, description?: string | null | undefined, ratingVote?: number | null | undefined, helpfulCount?: number | null | undefined, postedBy?: string | null | undefined, postedByName?: string | null | undefined } | null | undefined> | null | undefined, returnAddress?: { __typename?: 'AddressView', addressId?: string | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, landmark?: string | null | undefined, pinCode?: string | null | undefined, addressFloor?: string | null | undefined } | null | undefined, ratingDetail?: { __typename?: 'RatingDetail', zeroStar?: number | null | undefined, oneStar?: number | null | undefined, twoStar?: number | null | undefined, threeStar?: number | null | undefined, fourStar?: number | null | undefined, fiveStar?: number | null | undefined, sixAndMoreStar?: number | null | undefined } | null | undefined, categories?: Array<{ __typename?: 'ProductCategoryView', categoryId?: string | null | undefined, productId?: string | null | undefined, name?: string | null | undefined, description?: string | null | undefined } | null | undefined> | null | undefined, images?: Array<{ __typename?: 'Images', id: string, referenceId?: string | null | undefined, imageName?: string | null | undefined, imageType?: ImageType | null | undefined, description?: string | null | undefined, fullPath?: string | null | undefined } | null | undefined> | null | undefined, pickupAddress?: { __typename?: 'AddressView', addressId?: string | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, landmark?: string | null | undefined, pinCode?: string | null | undefined, addressFloor?: string | null | undefined } | null | undefined } | null | undefined }> };
 
 export type GetShowcaseListingsQueryVariables = Exact<{
-  options?: InputMaybe<PageableOptions>;
+  options?: InputMaybe<SearchOptions>;
 }>;
 
 
@@ -6605,7 +6601,7 @@ export type IsListingAvailableQueryHookResult = ReturnType<typeof useIsListingAv
 export type IsListingAvailableLazyQueryHookResult = ReturnType<typeof useIsListingAvailableLazyQuery>;
 export type IsListingAvailableQueryResult = Apollo.QueryResult<IsListingAvailableQuery, IsListingAvailableQueryVariables>;
 export const GetShowcaseListingsDocument = gql`
-    query GetShowcaseListings($options: PageableOptions) {
+    query GetShowcaseListings($options: SearchOptions) {
   getShowcaseListings(options: $options) {
     content {
       ...ProductListingViewField

@@ -50,7 +50,7 @@ function ReturnPolicy({ returnPolices }: ReturnPolicyProps) {
             return (
               <View key={index} style={[styles.row, t.itemsCenter]}>
                 <View
-                  style={[t.w1, t.h1, t.roundedFull, t.bgBlack, t.mR4, t.mT1]}
+                  style={[t.w1, t.h1, t.roundedFull, t.bgGray700, t.mR4, t.mT1]}
                 />
                 <Text style={styles.txtRegular}> {title.value}</Text>
               </View>

@@ -227,7 +227,7 @@ function ProductItem(props) {
                     : "Order closes on:"}
                 </Text>
                 {product.showcase && (
-                  <Text style={[styles.heading6Regular, t.bgBlack]}></Text>
+                  <Text style={[styles.heading6Regular, t.bgGray500]}></Text>
                 )}
                 {!product.showcase && (
                   <Text style={styles.heading6Regular}>

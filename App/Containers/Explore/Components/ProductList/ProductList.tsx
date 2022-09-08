@@ -54,6 +54,7 @@ export default function ProductList(props) {
   const [serverData, setServerData] = useState([]);
   const { isAnnouncement, index, filter, filterParams } = props;
   const [loadingMore, setLoadingMore] = useState(false);
+  const [myFilter, seMyFilter] = useState("");
   const [sortItem, setSortItem] = useState(sortOptions[1]);
   const { width, height } = useWindowDimensions();
   const [isRereshing, setIsRereshing] = useState(false);
@@ -63,13 +64,13 @@ export default function ProductList(props) {
   }, []);
   const searchOptions = useMemo(() => {
     return {
-      filter: filter,
+      filter: isEmpty(myFilter) ? filter : myFilter,
       filterParams: filterParams,
       sortBy: sortItem.sortType,
       sortDirection: sortItem.sortDirection,
       pageSize,
     };
-  }, [filter, filterParams, sortItem]);
+  }, [filter, filterParams, sortItem, myFilter]);
 
   const [queryListings, { loading, error, data, refetch, fetchMore }] =
     useGetListingsLazyQuery({
@@ -89,26 +90,27 @@ export default function ProductList(props) {
             if (
               searchOptions.filter === "ACTIVE_BY_ADDRESS_ID_AND_ANNOUNCEMENT"
             ) {
-              searchOptions.filter = "SHOWCASE_BY_ANNOUNCEMENT";
+              seMyFilter("SHOWCASE_BY_ANNOUNCEMENT");
             }
             if (searchOptions.filter === "ACTIVE_BY_ADDRESS_ID") {
-              searchOptions.filter = "SHOWCASE";
+              seMyFilter("SHOWCASE");
             }
             if (searchOptions.filter === "ACTIVE_BY_ADDRESS_ID_AND_CATEGORY") {
-              searchOptions.filter = "SHOWCASE_BY_CATEGORY";
+              seMyFilter("SHOWCASE_BY_CATEGORY");
             }
           }
         }
       },
     });
   useEffect(() => {
+    debugger;
     queryListings({
       variables: {
         searchOptions: searchOptions,
       },
     });
     // }
-  }, [searchOptions]);
+  }, [searchOptions, myFilter]);
 
   //Pull up the load layout
   const LoadMoreView = useMemo(

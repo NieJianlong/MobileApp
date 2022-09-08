@@ -14,7 +14,6 @@ import colors from "../../../../Themes/Colors";
 import { client } from "../../../../Apollo/apolloClient";
 import {
   GetListingsDocument,
-  GetShowcaseListingsDocument,
   SortDirection,
   SortType,
   useGetListingsLazyQuery,
@@ -47,9 +46,9 @@ const HFlatList = HPageViewHoc(FlatList);
 
 /*explore productlist component */
 export default function ProductList(props) {
-  debugger;
   const Container = props.isNeedTabbar ? HFlatList : FlatList;
   const [page, setPage] = useState(0);
+  const localCart = useReactiveVar(localCartVar);
   const [noMore, setNoMore] = useState(false);
   const [serverData, setServerData] = useState([]);
   const { isAnnouncement, index, filter, filterParams } = props;
@@ -72,7 +71,7 @@ export default function ProductList(props) {
     };
   }, [filter, filterParams, sortItem, myFilter]);
 
-  const [queryListings, { loading, error, data, refetch, fetchMore }] =
+  const [queryListings, { loading, error, data, refetch, called, fetchMore }] =
     useGetListingsLazyQuery({
       context: {
         headers: {
@@ -86,31 +85,49 @@ export default function ProductList(props) {
         setNoMore(false);
         if (res) {
           setServerData(res.getListings.content);
+          console.log(localCart.deliverAddress);
+          console.log(searchOptions.filterParams);
           if (isEmpty(res.getListings.content)) {
             if (
               searchOptions.filter === "ACTIVE_BY_ADDRESS_ID_AND_ANNOUNCEMENT"
             ) {
-              seMyFilter("SHOWCASE_BY_ANNOUNCEMENT");
+              // seMyFilter("SHOWCASE_BY_ANNOUNCEMENT");
             }
             if (searchOptions.filter === "ACTIVE_BY_ADDRESS_ID") {
-              seMyFilter("SHOWCASE");
+              // seMyFilter("SHOWCASE");
             }
             if (searchOptions.filter === "ACTIVE_BY_ADDRESS_ID_AND_CATEGORY") {
-              seMyFilter("SHOWCASE_BY_CATEGORY");
+              // seMyFilter("SHOWCASE_BY_CATEGORY");
             }
           }
         }
       },
     });
   useEffect(() => {
-    debugger;
-    queryListings({
-      variables: {
-        searchOptions: searchOptions,
-      },
-    });
+    if (!isEmpty(localCart.deliverAddress)) {
+      queryListings({
+        variables: {
+          searchOptions: {
+            filter: filter,
+            filterParams: filterParams,
+            sortBy: sortItem.sortType,
+            sortDirection: sortItem.sortDirection,
+            pageSize,
+          },
+        },
+      });
+    }
+  }, [localCart.deliverAddress]);
+  useEffect(() => {
+    if (!isEmpty(localCart.deliverAddress)) {
+      queryListings({
+        variables: {
+          searchOptions: searchOptions,
+        },
+      });
+    }
     // }
-  }, [searchOptions, myFilter]);
+  }, [searchOptions, localCart.deliverAddress]);
 
   //Pull up the load layout
   const LoadMoreView = useMemo(
@@ -146,7 +163,6 @@ export default function ProductList(props) {
             refresh={(item) => {
               setSortItem(item);
               setPage(0);
-
               setServerData([]);
               queryListings({
                 variables: {

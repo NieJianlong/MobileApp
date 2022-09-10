@@ -406,7 +406,7 @@
 				CODE_SIGN_ENTITLEMENTS = apollo/apollo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 8H2U34A8WZ;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
@@ -443,7 +443,7 @@
 				CODE_SIGN_ENTITLEMENTS = apollo/apollo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 8H2U34A8WZ;
 				EXCLUDED_ARCHS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;

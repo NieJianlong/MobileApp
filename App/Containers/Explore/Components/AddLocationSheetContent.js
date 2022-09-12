@@ -25,12 +25,12 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { t } from "react-native-tailwindcss";
 import { Controller, useForm } from "react-hook-form";
 import lodash, { isNumber } from "lodash";
-import { GetStatesByCountryId } from "../gql/explore_queries";
 import NavigationService from "../../../Navigation/NavigationService";
 import { setLocalStorageValue } from "../../../Apollo/local-storage";
 import { Images } from "../../../Themes";
 import useMapScreen from "../../../hooks/useMapScreen";
 import useRefreshData from "../../../hooks/useRefreshData";
+import data from "../../AddNewAddress/Provinces";
 
 const TouchableOpacity =
   Platform.OS === "ios" ? RNTouchableOpacity : GHTouchableOpacity;
@@ -41,9 +41,6 @@ function AddLocationSheetContent(props) {
   const { setRefreshaddress } = useRefreshData();
   const { setShowMap } = useMapScreen();
   const { stopPermission } = useMapScreen();
-  const { data } = useQuery(GetStatesByCountryId, {
-    variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
-  });
 
   const userProfileVarReactive = useReactiveVar(userProfileVar);
   const isAuth = useMemo(
@@ -78,38 +75,11 @@ function AddLocationSheetContent(props) {
   } = useForm();
   useEffect(() => {
     if (count < 4) {
-      if (data) {
-        setValue("provinceState", props.state?.trim());
-        setValue("townCity", props.city?.trim());
-        setValue("pinCode", props.post_code?.trim());
-        setValue("streetAddress1", props.street?.trim());
-        setValue("building", props.houseNo?.trim());
-      }
-    } else {
-      if (data) {
-        setValue("provinceState", props.state?.trim());
-        setValue("townCity", props.city ? props.city?.trim() : city?.trim());
-        setValue(
-          "pinCode",
-          props.post_code
-            ? props.post_code?.trim()
-            : hasNumber.test(postalCode)
-            ? postalCode?.trim()
-            : props.post_code?.trim()
-        );
-        setValue(
-          "streetAddress1",
-          props.street ? props.street?.trim() : street?.trim()
-        );
-        setValue(
-          "building",
-          props.houseNo
-            ? props.houseNo
-            : hasNumber.test(houseNumber)
-            ? houseNumber
-            : props.houseNo
-        );
-      }
+      setValue("provinceState", props.state?.trim());
+      setValue("townCity", props.city?.trim());
+      setValue("pinCode", props.post_code?.trim());
+      setValue("streetAddress1", props.street?.trim());
+      setValue("building", props.houseNo?.trim());
     }
   }, [data, props]);
   const [open, setOpen] = useState(false);
@@ -177,14 +147,13 @@ function AddLocationSheetContent(props) {
   const [showInfo, setShowInfo] = useState(false);
   const items = useMemo(() => {
     if (data) {
-      const allProvinces = data.getStatesByCountryId;
-      return allProvinces.map((item) => ({
+      return data.map((item) => ({
         label: item.stateName,
         value: item.stateName,
       }));
     }
     return [];
-  }, [data]);
+  }, []);
   const { dispatch } = useContext(AlertContext);
   const inputs = [
     {

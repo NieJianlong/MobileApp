@@ -14,7 +14,6 @@ import { Controller, useForm } from "react-hook-form";
 import DropDownPicker from "react-native-dropdown-picker";
 import lodash, { isEmpty } from "lodash";
 import { t } from "react-native-tailwindcss";
-import { GetStatesByCountryId } from "../Explore/gql/explore_queries";
 import NavigationService from "../../Navigation/NavigationService";
 import {
   AddressRequestForCreate,
@@ -23,6 +22,7 @@ import {
 } from "../../../generated/graphql";
 import { userProfileVar } from "../../Apollo/cache";
 import PubSub from "pubsub-js";
+import data from "./Provinces";
 
 function AddNewAddress() {
   const { dispatch } = useContext(AlertContext);
@@ -41,9 +41,6 @@ function AddNewAddress() {
       pinCode: currentAddress?.pinCode,
       provinceState: currentAddress?.provinceState,
     },
-  });
-  const { data } = useQuery(GetStatesByCountryId, {
-    variables: { countryId: "123e4567-e89b-12d3-a456-556642440000" },
   });
 
   const [open, setOpen] = useState(false);
@@ -213,14 +210,13 @@ function AddNewAddress() {
   ];
   const items = useMemo(() => {
     if (data) {
-      const allProvinces = data.getStatesByCountryId;
-      return allProvinces.map((item) => ({
+      return data.map((item) => ({
         label: item.stateName,
         value: item.stateName,
       }));
     }
     return [];
-  }, [data]);
+  }, []);
   const navigation = useNavigation();
   React.useLayoutEffect(() => {
     navigation.setOptions({

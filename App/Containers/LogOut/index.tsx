@@ -401,7 +401,7 @@ function LogOutScreen(props) {
                 // },
                 validate: {
                   positive: (v) => {
-                    let ret = validator.loginDifferentiator(v);
+                    let ret = validator.loginDifferentiator(v.trim());
                     if (ret.isValid) {
                       return true;
                     }

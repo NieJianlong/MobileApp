@@ -52,6 +52,7 @@ import { useNavigation } from "@react-navigation/native";
 import NavigationLeftButton from "../../Components/NavigationLeftButton";
 import images from "../../Themes/Images";
 import { s } from "react-native-size-matters";
+import { trim } from "lodash";
 
 function RegisterScreen(props) {
   const { dispatch } = useContext(AlertContext);
@@ -334,7 +335,7 @@ function RegisterScreen(props) {
             lastName: data.lastName?.trim(),
             email: data.email.trim(),
             password: data.password,
-            phoneNumber: "+91" + getValues("phoneNumber"),
+            phoneNumber: "+91" + getValues("phoneNumber").trim(),
           },
         },
       });
@@ -534,7 +535,7 @@ function RegisterScreen(props) {
             required: "Type your first name.",
             validate: {
               positive: (v) => {
-                if (v?.trim().length === 0)
+                if (trim(v).length === 0)
                   return "First name should not  only contain Spaces";
                 return true;
               },
@@ -569,7 +570,7 @@ function RegisterScreen(props) {
             required: "Type your last name.",
             validate: {
               positive: (v) => {
-                if (v?.trim().length === 0)
+                if (trim(v).length === 0)
                   return "Last name should not  only contain Spaces";
                 return true;
               },
@@ -600,10 +601,17 @@ function RegisterScreen(props) {
           control={control}
           rules={{
             required: "Field is required.",
-            pattern: {
-              value:
-                /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
-              message: "invalid email address",
+            validate: {
+              positive: (v) => {
+                let ret =
+                  /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/.test(
+                    trim(v)
+                  );
+                if (ret) {
+                  return true;
+                }
+                return "Invalid email";
+              },
             },
           }}
           render={({ field: { onChange, value } }) => (
@@ -651,10 +659,19 @@ function RegisterScreen(props) {
           control={control}
           rules={{
             required: "Field is required.",
-            pattern: {
-              value: /^[6-9]\d{9}$/,
-              message: "Invalid phone number",
+            validate: {
+              positive: (v) => {
+                let ret = /^[6-9]\d{9}$/.test(trim(v));
+                if (ret) {
+                  return true;
+                }
+                return "Invalid phone number";
+              },
             },
+            // pattern: {
+            //   value: /^[6-9]\d{9}$/,
+            //   message: "Invalid phone number",
+            // },
           }}
           render={({ field: { onChange, value } }) => (
             <TextInput

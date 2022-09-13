@@ -6,7 +6,8 @@
     "development": {
       "distribution": "internal",
       "android": {
-        "image": "latest"
+        "image": "latest",
+        "buildType": "apk"
       },
       "ios": {
         "buildConfiguration": "Debug"

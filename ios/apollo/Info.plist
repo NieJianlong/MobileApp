@@ -45,9 +45,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>We need to use camera to take your progress photo</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>RNGPDemos needs your location to show you places</string>
+	<string>SalamiSlicing needs your location to show you places</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>SalamiSlicing needs your location to show you places</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to use your microphone to launch RNCamera </string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

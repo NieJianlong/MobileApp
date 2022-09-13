@@ -25,7 +25,8 @@
     },
     "production": {
       "android": {
-        "image": "latest"
+        "image": "latest",
+        "buildType": "apk"
       },
       "releaseChannel": "production"
     }

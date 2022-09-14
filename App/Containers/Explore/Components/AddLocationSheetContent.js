@@ -75,11 +75,38 @@ function AddLocationSheetContent(props) {
   } = useForm();
   useEffect(() => {
     if (count < 4) {
-      setValue("provinceState", props.state?.trim());
-      setValue("townCity", props.city?.trim());
-      setValue("pinCode", props.post_code?.trim());
-      setValue("streetAddress1", props.street?.trim());
-      setValue("building", props.houseNo?.trim());
+      if (data) {
+        setValue("provinceState", props.state?.trim());
+        setValue("townCity", props.city?.trim());
+        setValue("pinCode", props.post_code?.trim());
+        setValue("streetAddress1", props.street?.trim());
+        setValue("building", props.houseNo?.trim());
+      }
+    } else {
+      if (data) {
+        setValue("provinceState", props.state?.trim());
+        setValue("townCity", props.city ? props.city?.trim() : city?.trim());
+        setValue(
+          "pinCode",
+          props.post_code
+            ? props.post_code?.trim()
+            : hasNumber.test(postalCode)
+            ? postalCode?.trim()
+            : props.post_code?.trim()
+        );
+        setValue(
+          "streetAddress1",
+          props.street ? props.street?.trim() : street?.trim()
+        );
+        setValue(
+          "building",
+          props.houseNo
+            ? props.houseNo
+            : hasNumber.test(houseNumber)
+            ? houseNumber
+            : props.houseNo
+        );
+      }
     }
   }, [data, props]);
   const [open, setOpen] = useState(false);

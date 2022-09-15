@@ -238,6 +238,7 @@ function OTPScreen(props) {
     if (Platform.OS === "android") {
       RNOtpVerify.getHash()
         .then((hash) => {
+          alert(hash);
           console.log("hash====================================");
           console.log(hash);
           console.log("====================================");

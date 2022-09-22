@@ -246,10 +246,11 @@ const MapScreen = (props) => {
     }
   };
 
-  const INITIAL_REGION = location && {
-    ...location.location,
-    latitudeDelta: 0.01756674919514367,
-    longitudeDelta: 0.012099780142307281,
+  const INITIAL_REGION = {
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
   };
 
   const { width, height } = useWindowDimensions();
@@ -262,13 +263,18 @@ const MapScreen = (props) => {
             ref={mapRef}
             showsUserLocation
             userLocationUpdateInterval={2000}
-            style={styles.map}
-            provider={PROVIDER_GOOGLE}
+            style={{
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              position: "absolute",
+            }}
+            provider={Platform.OS === "android" ? PROVIDER_GOOGLE : null}
             initialRegion={INITIAL_REGION}
             onRegionChangeComplete={_onChangeRegion}
-          >
-            {/* {location && <Marker coordinate={location.location} draggable />} */}
-          </MapView>
+          />
+
           <View style={styles.customMarkerContainer}>
             <View style={styles.textContainer}>
               <Text style={styles.itemText}>

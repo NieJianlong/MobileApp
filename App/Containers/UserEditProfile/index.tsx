@@ -344,7 +344,7 @@ function UserEditProfile() {
           render={({ field: { onChange, value } }) => (
             <View>
               <MaterialTextInput
-                style={[t.mT4]}
+                style={[t.mT4, t.textGray500]}
                 editable={false}
                 placeholder={"Type your phone number"}
                 autoCapitalize="words"

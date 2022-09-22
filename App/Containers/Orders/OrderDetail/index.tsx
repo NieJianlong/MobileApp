@@ -195,7 +195,7 @@ function OrderDetailScreen(props) {
   const navigation = useNavigation();
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      title: params?.data.orderNumber,
+      title: params?.data.orderItemNumber,
     });
   }, [navigation]);
   return <OrderDetail data={params?.data} product={params.product} />;

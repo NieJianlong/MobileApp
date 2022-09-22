@@ -2,7 +2,6 @@ import React, { Component, useEffect, useMemo, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "./styles";
-import { AppBar } from "../../../../Components";
 import NavigationService from "../../../../Navigation/NavigationService";
 import { useMutation, useQuery } from "@apollo/client";
 import * as aQM from "../../gql/explore_queries";

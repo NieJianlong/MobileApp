@@ -3,7 +3,6 @@ import { ApplicationStyles, Colors, Fonts } from "../../Themes";
 import { isIphoneX } from "react-native-iphone-x-helper";
 import AppConfig from "../../Config/AppConfig";
 import colors from "../../Themes/Colors";
-import fonts from "../../Themes/Fonts";
 
 export default ScaledSheet.create({
   ...ApplicationStyles.screen,

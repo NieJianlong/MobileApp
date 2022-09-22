@@ -54,7 +54,7 @@ class Invoice extends Component {
     return (
       <View style={styles.sectionContainer}>
         <View>
-          <Text style={styles.txtOrder}>{order.orderNumber}</Text>
+          <Text style={styles.txtOrder}>{order.orderItemNumber}</Text>
           <View style={{ height: vs(10) }} />
           <Text
             style={styles.txtName}

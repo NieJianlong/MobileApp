@@ -346,7 +346,6 @@ function OTPScreen(props) {
             setField5(text);
             if (text.length > 0) {
               Keyboard.dismiss();
-              field5Input.focus();
             }
           }}
         />
@@ -549,7 +548,12 @@ function OTPScreen(props) {
   };
 
   return (
-    <View style={[styles.container, t.pX8]}>
+    <View
+      style={[styles.container, t.pX8]}
+      onTouchEnd={() => {
+        Keyboard.dismiss();
+      }}
+    >
       <View style={styles.bodyContainer}>
         <Text style={styles.heading2Bold}>{`Validate your ${
           isEmail ? "email" : "phone no"

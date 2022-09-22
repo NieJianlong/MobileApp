@@ -93,14 +93,10 @@ export default function LaunchScreen() {
         const { data } = await runTokenFlow({ username, password });
         let access_token = data.access_token;
         let decoded = jwt_decode(access_token);
-        console.log("====================================");
-        console.log(decoded.realm_access.roles);
-        console.log("====================================");
 
         global.access_token = access_token;
         global.userProfileId = decoded.sub;
         getBuyerId();
-
         setLocalStorageValue(LOCAL_STORAGE_TOKEN_KEY, access_token);
       } catch (error) {
         storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_NAME, "");

@@ -17,7 +17,7 @@ import {
   StarRating,
   TextInput as OneLineTextInput,
 } from "../../../Components";
-import { Images } from "../../../Themes";
+import { Colors, Images } from "../../../Themes";
 import NavigationService from "../../../Navigation/NavigationService";
 import { s } from "react-native-size-matters";
 import {
@@ -310,6 +310,18 @@ function RateOrderScreen() {
           <TouchableOpacity
             onPress={() => {
               handleSubmit((data) => {
+                if (stars === 0) {
+                  setAlert({
+                    visible: true,
+                    message: "",
+                    title: "Please give rating",
+                    color: Colors.error,
+                    onDismiss: () => {
+                      setAlert({ visible: false });
+                    },
+                  });
+                  return;
+                }
                 setLoading({ show: true });
                 if (params.title) {
                   addSellerReview({

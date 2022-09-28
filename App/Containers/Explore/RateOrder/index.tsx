@@ -314,7 +314,7 @@ function RateOrderScreen() {
                   setAlert({
                     visible: true,
                     message: "",
-                    title: "Please give rating",
+                    title: "Please choose rating",
                     color: Colors.error,
                     onDismiss: () => {
                       setAlert({ visible: false });

@@ -256,7 +256,7 @@ const MapScreen = (props) => {
   const { width, height } = useWindowDimensions();
   return (
     <Portal>
-      <View style={[{ width, height }, t.bgBlue300]}>
+      <View style={[{ width, height }, t.bgBlue300, t.absolute]}>
         <View style={[styles.container]}>
           <MapView
             key={changeIsPressed ? JSON.stringify(location) : ""}
@@ -287,7 +287,15 @@ const MapScreen = (props) => {
 
           {/* <View style={styles.centerPin} /> */}
         </View>
-        <View style={[{ width, height: 250 }, t.bgWhite, t.p4]}>
+        <View
+          style={[
+            { width, height: 250, marginTop: height - 250 },
+            t.bgWhite,
+            t.p4,
+            t.absolute,
+            t.bottom0,
+          ]}
+        >
           <Text>Select Delivery Location</Text>
           <View style={[styles.locationInputContainer, t.mB6, t.mT6]}>
             <Image source={LocationPin} style={styles.locationPinIcon} />

@@ -20,6 +20,8 @@ import UseBillingDetail from "./useBillingDetail";
 import useOrderInfo from "./useOrderInfo";
 import useAlert from "./useAlert";
 import { Colors } from "../Themes";
+import useRealm from "./useRealm";
+import PubSub from "pubsub-js";
 export interface ItemProps {
   listingId: string;
   quantity: number;
@@ -44,6 +46,7 @@ export const useCreateOrder = () => {
   const { orderInfo, setOrderInfo } = useOrderInfo();
   const getPaymentConfigration = usePaymentConfigration();
   const { razorpayCreateOrder } = useCreateRazorOrder();
+  const { realm } = useRealm();
   const [getBuyerSalamiWalletBalance] = useGetBuyerSalamiWalletBalanceLazyQuery(
     {
       context: {
@@ -53,7 +56,33 @@ export const useCreateOrder = () => {
       },
     }
   );
-
+  const [mydatas, setMydatas] = useState(
+    realm
+      .objects("ShoppingCart")
+      .filtered("addressId == $0", localCart.deliverAddress)
+      .filtered("quantity > 0")
+      .filtered("isDraft == false")
+  );
+  const clearData = () => {
+    let index = mydatas.length - 1;
+    while (index >= 0) {
+      if (mydatas[index]) {
+        if (
+          mydatas[index].variant.itemsAvailable !==
+          mydatas[index].variant.itemsSold
+        ) {
+          realm.write(() => {
+            realm.delete(mydatas[index]);
+            PubSub.publish("refresh-shoppingcart");
+          });
+          console.log("IN if condition");
+        } else {
+          console.log("IN else condition");
+        }
+      }
+      index--;
+    }
+  };
   const moneyInfo = ({
     data,
     walletBalance = 0,
@@ -207,6 +236,7 @@ export const useCreateOrder = () => {
       onCompleted: (res) => {
         if (info.orderType === OrderType.sufficient) {
           setLoading({ show: false });
+          clearData();
           if (res?.createOrderFromCart?.orderId) {
             NavigationService.navigate("OrderPlacedScreen");
           }

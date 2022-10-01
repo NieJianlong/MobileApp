@@ -79,13 +79,14 @@ export function usePaymentConfigration() {
     };
 
     RazorpayCheckout.open(options)
-      .then((data) => {
+      .then(async (data) => {
         razorOrderPaymentVar({
           razorpay_payment_id: data.razorpay_payment_id,
           razorpay_order_id: data.razorpay_order_id,
           razorpay_signature: data.razorpay_signature,
         });
-        razorpayVerifyPaymentSignature();
+
+        await razorpayVerifyPaymentSignature();
         dispatch({
           type: "changLoading",
           payload: false,

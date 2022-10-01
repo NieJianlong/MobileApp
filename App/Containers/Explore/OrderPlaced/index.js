@@ -22,6 +22,7 @@ import ViewShot, { captureRef } from "react-native-view-shot";
 import RNFetchBlob from "rn-fetch-blob";
 import { shareOptionsDetails } from "../Components/ShareOptionList";
 import colors from "../../../Themes/Colors";
+import { isEmpty } from "lodash";
 const url = "";
 const title = "";
 const message = "";
@@ -107,7 +108,13 @@ function OrderPlaced(props) {
   };
 
   const renderBody = () => {
-    let errorMessage = params?.error ? params?.error?.description : "";
+    let errorMessage = params?.error
+      ? params?.error?.description
+      : "Payment processing failed, Please retry payment from My orders";
+    if (isEmpty(errorMessage)) {
+      errorMessage =
+        "Payment processing failed, Please retry payment from My orders";
+    }
     try {
       errorMessage = params?.error?.description.includes("cancel")
         ? "Payment processing cancelled, Please retry payment from My orders"

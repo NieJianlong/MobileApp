@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useMutation, useReactiveVar } from "@apollo/client";
 import { razorOrderPaymentVar, userProfileVar } from "../Apollo/cache";
 import { RAZOR_VERIFY } from "./gql";
+import NavigationService from "../Navigation/NavigationService";
 
 export const useRazorVerifyPayment = () => {
   const userProfile = useReactiveVar(userProfileVar);
@@ -12,7 +13,7 @@ export const useRazorVerifyPayment = () => {
     useMutation(RAZOR_VERIFY, {
       variables: {
         request: {
-          razorpayPaymentId: razorOrderPayment.razorpay_payment_id,
+          razorpayPaymentId: "dsds",
           razorpayOrderId: razorOrderPayment.razorpay_order_id,
           razorpaySignature: razorOrderPayment.razorpay_signature,
         },
@@ -24,7 +25,8 @@ export const useRazorVerifyPayment = () => {
       },
       onCompleted: (res) => {},
       onError: (res) => {
-        alert(JSON.stringify(res.message));
+        // alert(JSON.stringify(res.message));
+        NavigationService.navigate("OrderPlacedScreen", { error: res.message });
       },
     });
 

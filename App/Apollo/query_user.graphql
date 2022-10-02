@@ -125,8 +125,17 @@ query DeliveryAddressForBuyer($buyerId: ID!) {
     ...AddressOrderFiled
   }
 }
-query DeliveryAddressForGuestBuyer($buyerId: ID!) {
-  deliveryAddressForGuestBuyer(buyerId: $buyerId) {
-    ...AddressOrderFiled
+fragment NotificationFields on NotificationResponse {
+  notificationId
+  text
+  notificationStatus
+  buyerId
+  dateTime
+  createdAt
+  updatedAt
+}
+query NotificationsByBuyerId($buyerId: ID!) {
+  notificationsByBuyerId(buyerId: $buyerId) {
+    ...NotificationFields
   }
 }

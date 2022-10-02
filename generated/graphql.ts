@@ -877,6 +877,7 @@ export type Mutation = {
   deleteDeliveryAddressToOnlineStore?: Maybe<Scalars['Boolean']>;
   deleteListingFromWishlist: Scalars['Boolean'];
   deleteNotification?: Maybe<Scalars['Boolean']>;
+  deleteNotificationByBuyerId?: Maybe<Scalars['Int']>;
   deleteOption: Scalars['Boolean'];
   deleteOptionValue: Scalars['Boolean'];
   deleteOrderItems: Scalars['Boolean'];
@@ -1309,6 +1310,12 @@ export type MutationDeleteListingFromWishlistArgs = {
 /** MUTATIONS */
 export type MutationDeleteNotificationArgs = {
   notificationId: Scalars['ID'];
+};
+
+
+/** MUTATIONS */
+export type MutationDeleteNotificationByBuyerIdArgs = {
+  buyerId: Scalars['ID'];
 };
 
 
@@ -2695,6 +2702,7 @@ export type Query = {
   notificationPreferencesByBuyerId?: Maybe<Array<Maybe<NotificationPreferenceResponse>>>;
   notificationPreferencesBySellerId?: Maybe<Array<Maybe<NotificationPreferenceResponse>>>;
   notifications?: Maybe<Array<Maybe<NotificationResponse>>>;
+  notificationsByBuyerId?: Maybe<Array<Maybe<NotificationResponse>>>;
   oneClickBuy?: Maybe<OneClickBuyResponse>;
   onlineStoreByGeoCoordinates: StoreResponse;
   onlineStoresForSeller?: Maybe<Array<Maybe<SellerToOnlineStoreResponse>>>;
@@ -3140,6 +3148,12 @@ export type QueryNotificationPreferencesByBuyerIdArgs = {
 /** QUERIES */
 export type QueryNotificationPreferencesBySellerIdArgs = {
   sellerId: Scalars['ID'];
+};
+
+
+/** QUERIES */
+export type QueryNotificationsByBuyerIdArgs = {
+  buyerId: Scalars['ID'];
 };
 
 
@@ -4911,12 +4925,14 @@ export type DeliveryAddressForBuyerQueryVariables = Exact<{
 
 export type DeliveryAddressForBuyerQuery = { __typename?: 'Query', deliveryAddressForBuyer?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined };
 
-export type DeliveryAddressForGuestBuyerQueryVariables = Exact<{
+export type NotificationFieldsFragment = { __typename?: 'NotificationResponse', notificationId?: string | null | undefined, text?: string | null | undefined, notificationStatus?: NotificationStatus | null | undefined, buyerId?: string | null | undefined, dateTime?: any | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined };
+
+export type NotificationsByBuyerIdQueryVariables = Exact<{
   buyerId: Scalars['ID'];
 }>;
 
 
-export type DeliveryAddressForGuestBuyerQuery = { __typename?: 'Query', deliveryAddressForGuestBuyer?: { __typename?: 'AddressResponse', addressId: string, addressType?: AddressType | null | undefined, flat?: string | null | undefined, block?: string | null | undefined, building?: string | null | undefined, houseNumber?: string | null | undefined, streetAddress1?: string | null | undefined, streetAddress2?: string | null | undefined, streetAddress3?: string | null | undefined, townCity?: string | null | undefined, villageArea?: string | null | undefined, district?: string | null | undefined, provinceState?: string | null | undefined, country?: string | null | undefined, areaCode?: string | null | undefined, pinCode?: string | null | undefined } | null | undefined };
+export type NotificationsByBuyerIdQuery = { __typename?: 'Query', notificationsByBuyerId?: Array<{ __typename?: 'NotificationResponse', notificationId?: string | null | undefined, text?: string | null | undefined, notificationStatus?: NotificationStatus | null | undefined, buyerId?: string | null | undefined, dateTime?: any | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined } | null | undefined> | null | undefined };
 
 export type DeleteBuyerProfileMutationVariables = Exact<{
   buyerId: Scalars['ID'];
@@ -5588,6 +5604,17 @@ export const BuyerProfileResponseFieldsFragmentDoc = gql`
   walletId
 }
     ${BillingDetailsFieldsFragmentDoc}`;
+export const NotificationFieldsFragmentDoc = gql`
+    fragment NotificationFields on NotificationResponse {
+  notificationId
+  text
+  notificationStatus
+  buyerId
+  dateTime
+  createdAt
+  updatedAt
+}
+    `;
 export const AddProductReviewDocument = gql`
     mutation AddProductReview($input: ProductReviewInput!) {
   addProductReview(input: $input) {
@@ -6955,41 +6982,41 @@ export function useDeliveryAddressForBuyerLazyQuery(baseOptions?: Apollo.LazyQue
 export type DeliveryAddressForBuyerQueryHookResult = ReturnType<typeof useDeliveryAddressForBuyerQuery>;
 export type DeliveryAddressForBuyerLazyQueryHookResult = ReturnType<typeof useDeliveryAddressForBuyerLazyQuery>;
 export type DeliveryAddressForBuyerQueryResult = Apollo.QueryResult<DeliveryAddressForBuyerQuery, DeliveryAddressForBuyerQueryVariables>;
-export const DeliveryAddressForGuestBuyerDocument = gql`
-    query DeliveryAddressForGuestBuyer($buyerId: ID!) {
-  deliveryAddressForGuestBuyer(buyerId: $buyerId) {
-    ...AddressOrderFiled
+export const NotificationsByBuyerIdDocument = gql`
+    query NotificationsByBuyerId($buyerId: ID!) {
+  notificationsByBuyerId(buyerId: $buyerId) {
+    ...NotificationFields
   }
 }
-    ${AddressOrderFiledFragmentDoc}`;
+    ${NotificationFieldsFragmentDoc}`;
 
 /**
- * __useDeliveryAddressForGuestBuyerQuery__
+ * __useNotificationsByBuyerIdQuery__
  *
- * To run a query within a React component, call `useDeliveryAddressForGuestBuyerQuery` and pass it any options that fit your needs.
- * When your component renders, `useDeliveryAddressForGuestBuyerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useNotificationsByBuyerIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNotificationsByBuyerIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDeliveryAddressForGuestBuyerQuery({
+ * const { data, loading, error } = useNotificationsByBuyerIdQuery({
  *   variables: {
  *      buyerId: // value for 'buyerId'
  *   },
  * });
  */
-export function useDeliveryAddressForGuestBuyerQuery(baseOptions: Apollo.QueryHookOptions<DeliveryAddressForGuestBuyerQuery, DeliveryAddressForGuestBuyerQueryVariables>) {
+export function useNotificationsByBuyerIdQuery(baseOptions: Apollo.QueryHookOptions<NotificationsByBuyerIdQuery, NotificationsByBuyerIdQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<DeliveryAddressForGuestBuyerQuery, DeliveryAddressForGuestBuyerQueryVariables>(DeliveryAddressForGuestBuyerDocument, options);
+        return Apollo.useQuery<NotificationsByBuyerIdQuery, NotificationsByBuyerIdQueryVariables>(NotificationsByBuyerIdDocument, options);
       }
-export function useDeliveryAddressForGuestBuyerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DeliveryAddressForGuestBuyerQuery, DeliveryAddressForGuestBuyerQueryVariables>) {
+export function useNotificationsByBuyerIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NotificationsByBuyerIdQuery, NotificationsByBuyerIdQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<DeliveryAddressForGuestBuyerQuery, DeliveryAddressForGuestBuyerQueryVariables>(DeliveryAddressForGuestBuyerDocument, options);
+          return Apollo.useLazyQuery<NotificationsByBuyerIdQuery, NotificationsByBuyerIdQueryVariables>(NotificationsByBuyerIdDocument, options);
         }
-export type DeliveryAddressForGuestBuyerQueryHookResult = ReturnType<typeof useDeliveryAddressForGuestBuyerQuery>;
-export type DeliveryAddressForGuestBuyerLazyQueryHookResult = ReturnType<typeof useDeliveryAddressForGuestBuyerLazyQuery>;
-export type DeliveryAddressForGuestBuyerQueryResult = Apollo.QueryResult<DeliveryAddressForGuestBuyerQuery, DeliveryAddressForGuestBuyerQueryVariables>;
+export type NotificationsByBuyerIdQueryHookResult = ReturnType<typeof useNotificationsByBuyerIdQuery>;
+export type NotificationsByBuyerIdLazyQueryHookResult = ReturnType<typeof useNotificationsByBuyerIdLazyQuery>;
+export type NotificationsByBuyerIdQueryResult = Apollo.QueryResult<NotificationsByBuyerIdQuery, NotificationsByBuyerIdQueryVariables>;
 export const DeleteBuyerProfileDocument = gql`
     mutation DeleteBuyerProfile($buyerId: ID!) {
   deleteBuyerProfile(buyerId: $buyerId)

@@ -433,6 +433,7 @@ type Mutation {
   createNotification(request: NotificationRequestForCreate!): NotificationResponse
   deleteNotification(notificationId: ID!): Boolean
   updateNotification(request: NotificationRequest!): NotificationResponse
+  deleteNotificationByBuyerId(buyerId: ID!): Int
   createPreference(request: PreferenceRequestForCreate!): PreferenceResponse
   deletePreference(preferenceId: ID!): Boolean
   updatePreference(request: PreferenceRequest!): PreferenceResponse
@@ -669,6 +670,7 @@ type Query {
   wishLists: [WishListResponse]
   wishListById(wishListId: ID!): WishListResponse
   notifications: [NotificationResponse]
+  notificationsByBuyerId(buyerId: ID!): [NotificationResponse]
   notificationById(notificationId: ID!): NotificationResponse
   billingDetails: [BillingDetailsResponse]
   billingDetailsById(billingDetailsId: ID!): BillingDetailsResponse

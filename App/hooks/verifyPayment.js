@@ -13,7 +13,7 @@ export const useRazorVerifyPayment = () => {
     useMutation(RAZOR_VERIFY, {
       variables: {
         request: {
-          razorpayPaymentId: "dsds",
+          razorpayPaymentId: razorOrderPayment.razorpay_payment_id,
           razorpayOrderId: razorOrderPayment.razorpay_order_id,
           razorpaySignature: razorOrderPayment.razorpay_signature,
         },

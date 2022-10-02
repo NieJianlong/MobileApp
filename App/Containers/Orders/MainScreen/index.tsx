@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Platform,
+  useWindowDimensions,
 } from "react-native";
 import { Images } from "../../../Themes";
 import styles from "./styles";
@@ -33,6 +34,8 @@ import { TabbarItem } from "../../../Navigation/TabBar";
 
 function Order(props) {
   const userProfile = useReactiveVar(userProfileVar);
+  const { width } = useWindowDimensions();
+  const [selected, setSelected] = useState("retry");
   const [selecteds, setSelecteds] = useState(
     props.orderItems.filter((item) => {
       return (
@@ -69,7 +72,15 @@ function Order(props) {
     };
   });
   const paidItems = difference(props.orderItems, unpaidItems);
-  sections.push({ title: "", data: paidItems, status: false, id: "ignored" });
+  // sections.push({ title: "", data: paidItems, status: false, id: "ignored" });
+  const currentData = useMemo(() => {
+    if (selected === "retry") {
+      return sections;
+    }
+    if (selected === "paid") {
+      return [{ title: "", data: paidItems, status: false, id: "ignored" }];
+    }
+  }, [selected, sections]);
   return (
     <View style={[styles.container]}>
       <SafeAreaView
@@ -88,14 +99,55 @@ function Order(props) {
           />
           <View style={styles.icSearch} />
         </View>
-        <View style={styles.v1}>
+        {/* <View style={styles.v1}>
           <Text style={[t.textLg, t.mY4]}>Orders</Text>
+        </View> */}
+        <View style={[t.flexRow, t.justifyBetween]}>
+          <TouchableOpacity
+            style={[t.justifyCenter, t.itemsCenter, t.flex1]}
+            onPress={() => {
+              setSelected("retry");
+            }}
+          >
+            <Text
+              style={[
+                t.textLg,
+                t.mY4,
+                selected === "retry" ? t.textPrimary : t.textGray500,
+              ]}
+            >
+              Can Retry Orders
+            </Text>
+            {selected === "retry" && (
+              <View style={[{ height: 2, width: width / 4 }, t.bgPrimary]} />
+            )}
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[t.justifyCenter, t.itemsCenter, t.flex1]}
+            onPress={() => {
+              setSelected("paid");
+            }}
+          >
+            <Text
+              style={[
+                t.textLg,
+                t.mY4,
+                selected === "paid" ? t.textPrimary : t.textGray500,
+              ]}
+            >
+              Paid Orders
+            </Text>
+            {selected === "paid" && (
+              <View style={[{ height: 2, width: width / 4 }, t.bgPrimary]} />
+            )}
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
 
       <View style={styles.bodyContainer}>
         <SectionList
-          sections={sections}
+          sections={currentData}
           keyExtractor={(item, index) => item + index}
           renderItem={({ item, section: { title, data, status } }) => {
             const isSelected =

@@ -5087,6 +5087,13 @@ export type UpdateBuyerNotificationPreferencesMutationVariables = Exact<{
 
 export type UpdateBuyerNotificationPreferencesMutation = { __typename?: 'Mutation', updateBuyerNotificationPreferences?: Array<{ __typename?: 'NotificationPreferenceResponse', notificationPreferenceId?: string | null | undefined, referenceId?: string | null | undefined, notificationGroupType?: NotificationGroupType | null | undefined, smsEnabled?: boolean | null | undefined, whatsappEnabled?: boolean | null | undefined, emailEnabled?: boolean | null | undefined } | null | undefined> | null | undefined };
 
+export type UpdateNotificationMutationVariables = Exact<{
+  request: NotificationRequest;
+}>;
+
+
+export type UpdateNotificationMutation = { __typename?: 'Mutation', updateNotification?: { __typename?: 'NotificationResponse', notificationId?: string | null | undefined, text?: string | null | undefined, notificationStatus?: NotificationStatus | null | undefined, buyerId?: string | null | undefined, dateTime?: any | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined } | null | undefined };
+
 export const OrderResponseFieldsFragmentDoc = gql`
     fragment OrderResponseFields on OrderResponse {
   orderId
@@ -7730,3 +7737,36 @@ export function useUpdateBuyerNotificationPreferencesMutation(baseOptions?: Apol
 export type UpdateBuyerNotificationPreferencesMutationHookResult = ReturnType<typeof useUpdateBuyerNotificationPreferencesMutation>;
 export type UpdateBuyerNotificationPreferencesMutationResult = Apollo.MutationResult<UpdateBuyerNotificationPreferencesMutation>;
 export type UpdateBuyerNotificationPreferencesMutationOptions = Apollo.BaseMutationOptions<UpdateBuyerNotificationPreferencesMutation, UpdateBuyerNotificationPreferencesMutationVariables>;
+export const UpdateNotificationDocument = gql`
+    mutation UpdateNotification($request: NotificationRequest!) {
+  updateNotification(request: $request) {
+    ...NotificationFields
+  }
+}
+    ${NotificationFieldsFragmentDoc}`;
+export type UpdateNotificationMutationFn = Apollo.MutationFunction<UpdateNotificationMutation, UpdateNotificationMutationVariables>;
+
+/**
+ * __useUpdateNotificationMutation__
+ *
+ * To run a mutation, you first call `useUpdateNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateNotificationMutation, { data, loading, error }] = useUpdateNotificationMutation({
+ *   variables: {
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useUpdateNotificationMutation(baseOptions?: Apollo.MutationHookOptions<UpdateNotificationMutation, UpdateNotificationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateNotificationMutation, UpdateNotificationMutationVariables>(UpdateNotificationDocument, options);
+      }
+export type UpdateNotificationMutationHookResult = ReturnType<typeof useUpdateNotificationMutation>;
+export type UpdateNotificationMutationResult = Apollo.MutationResult<UpdateNotificationMutation>;
+export type UpdateNotificationMutationOptions = Apollo.BaseMutationOptions<UpdateNotificationMutation, UpdateNotificationMutationVariables>;

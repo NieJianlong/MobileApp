@@ -17,7 +17,12 @@ import colors from "../../Themes/Colors";
 import AppConfig from "../../Config/AppConfig";
 import { useNavigation } from "@react-navigation/native";
 import { t } from "react-native-tailwindcss";
-import { useNotificationsByBuyerIdQuery } from "../../../generated/graphql";
+import {
+  NotificationResponse,
+  NotificationStatus,
+  useNotificationsByBuyerIdQuery,
+  useUpdateNotificationMutation,
+} from "../../../generated/graphql";
 import moment from "moment";
 import useAlert from "../../hooks/useAlert";
 import useActionAlert from "../../hooks/useActionAlert";
@@ -70,7 +75,7 @@ function Notifications(props) {
   const { width, height } = useWindowDimensions();
   const { setAlert } = useActionAlert();
 
-  const { data, error } = useNotificationsByBuyerIdQuery({
+  const { data, error, refetch } = useNotificationsByBuyerIdQuery({
     variables: {
       buyerId: global.buyerId,
     },
@@ -80,6 +85,30 @@ function Notifications(props) {
       },
     },
   });
+  const [updateNotification] = useUpdateNotificationMutation({
+    onCompleted: (res) => {},
+    onError: (error) => {},
+  });
+  const updateNotifications = async (item: NotificationResponse) => {
+    try {
+      updateNotification({
+        variables: {
+          request: {
+            notificationId: item.notificationId,
+            notificationStatus: NotificationStatus.Read,
+            buyerId: global.buyerId,
+          },
+        },
+        context: {
+          headers: {
+            isPrivate: global.access_token,
+          },
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   React.useLayoutEffect(() => {
     // navigation.setOptions({
     //   headerRight: () => (
@@ -118,6 +147,8 @@ function Notifications(props) {
           return (
             <TouchableOpacity
               onPress={() => {
+                updateNotifications(item);
+                refetch();
                 setAlert({
                   visible: true,
                   message: item?.text,
@@ -130,7 +161,7 @@ function Notifications(props) {
                   backgroundColor: "white",
                   paddingHorizontal: AppConfig.paddingHorizontal,
                   marginTop: s(8),
-                  opacity: item.readed ? 0.7 : 1,
+                  opacity: item.notificationStatus === "UNREAD" ? 1 : 1,
                 }}
               >
                 <View
@@ -150,9 +181,10 @@ function Notifications(props) {
                       style={[
                         styles.dot,
                         {
-                          backgroundColor: item.readed
-                            ? "transparent"
-                            : colors.primary,
+                          backgroundColor:
+                            item.notificationStatus === "UNREAD"
+                              ? colors.primary
+                              : "transparent",
                         },
                       ]}
                     ></View>

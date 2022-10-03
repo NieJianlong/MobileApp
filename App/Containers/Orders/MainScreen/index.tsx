@@ -81,6 +81,11 @@ function Order(props) {
       return [{ title: "", data: paidItems, status: false, id: "ignored" }];
     }
   }, [selected, sections]);
+  useEffect(() => {
+    if (isEmpty(results)) {
+      setSelected("paid");
+    }
+  }, [results]);
   return (
     <View style={[styles.container]}>
       <SafeAreaView
@@ -103,28 +108,30 @@ function Order(props) {
           <Text style={[t.textLg, t.mY4]}>Orders</Text>
         </View> */}
         <View style={[t.flexRow, t.justifyBetween]}>
-          <TouchableOpacity
-            style={[t.justifyCenter, t.itemsCenter, t.flex1]}
-            onPress={() => {
-              setSelected("retry");
-            }}
-          >
-            <Text
-              style={[
-                t.textLg,
-                t.mY4,
-                selected === "retry" ? t.textPrimary : t.textGray500,
-              ]}
+          {!isEmpty(results) && (
+            <TouchableOpacity
+              style={[t.justifyCenter, t.itemsCenter, t.flex1]}
+              onPress={() => {
+                setSelected("retry");
+              }}
             >
-              Can Retry Orders
-            </Text>
-            {selected === "retry" && (
-              <View style={[{ height: 2, width: width / 4 }, t.bgPrimary]} />
-            )}
-          </TouchableOpacity>
+              <Text
+                style={[
+                  t.textLg,
+                  t.mY4,
+                  selected === "retry" ? t.textPrimary : t.textGray500,
+                ]}
+              >
+                Retry Orders
+              </Text>
+              {selected === "retry" && (
+                <View style={[{ height: 2, width: width / 4 }, t.bgPrimary]} />
+              )}
+            </TouchableOpacity>
+          )}
 
           <TouchableOpacity
-            style={[t.justifyCenter, t.itemsCenter, t.flex1]}
+            style={[isEmpty(results) ? t.itemsStart : t.itemsCenter, t.flex1]}
             onPress={() => {
               setSelected("paid");
             }}
@@ -133,12 +140,15 @@ function Order(props) {
               style={[
                 t.textLg,
                 t.mY4,
-                selected === "paid" ? t.textPrimary : t.textGray500,
+                isEmpty(results) ? t.mL4 : {},
+                selected === "paid" && !isEmpty(results)
+                  ? t.textPrimary
+                  : t.textGray500,
               ]}
             >
-              Paid Orders
+              Orders
             </Text>
-            {selected === "paid" && (
+            {selected === "paid" && !isEmpty(results) && (
               <View style={[{ height: 2, width: width / 4 }, t.bgPrimary]} />
             )}
           </TouchableOpacity>

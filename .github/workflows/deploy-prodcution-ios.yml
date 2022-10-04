@@ -57,6 +57,10 @@ jobs:
       # - name: Expo Publish
       #   run: |
       #     eas build -p ios --non-interactive --json
+      - name: Config Pilab
+        run: |
+          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/configPilab.sh"
+          "${{ format('{0}/.github/workflows/configPilab.sh', github.workspace) }}"
 
       - name: Expo Publish
         run: |

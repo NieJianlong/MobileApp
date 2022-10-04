@@ -30,6 +30,7 @@ import { AlertContext } from "../Root/GlobalContext";
 import colors from "../../Themes/Colors";
 import GetBillingDetail from "../../hooks/billingDetails";
 import { useGetSellerProfileWithSellerIdLazyQuery } from "../../../generated/graphql";
+import { trim } from "lodash";
 
 function LoginScreen(props) {
   // refs
@@ -75,8 +76,8 @@ function LoginScreen(props) {
       // we are good so we can test for email or phone
       if (ret.isEmail) {
         let loginRequest = {
-          username: loginInput,
-          password: psswd,
+          username: trim(loginInput),
+          password: trim(psswd),
         };
         // console.log(profile.data.userProfileVar.email)// to-do remove
         dispatch({

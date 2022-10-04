@@ -42,7 +42,7 @@ const App = () => {
       } catch (e) {
         console.warn(e);
       } finally {
-        // Tell the application to render
+        
         setStatusBar({ hidden: false, color: "#CC0000" });
       }
     }

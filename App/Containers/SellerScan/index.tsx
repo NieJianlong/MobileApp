@@ -49,7 +49,7 @@ function SellerScan() {
         <Text style={[t.textBlack, t.mT2]}>{`Current Mode is:`}</Text>
         <Text style={[t.textBlack, t.text2xl, t.mL2]}>{`${mode.title}`}</Text>
       </View>
-      <Button
+      {/* <Button
         mode="contained"
         style={[t.mT6]}
         color="blue"
@@ -58,7 +58,7 @@ function SellerScan() {
         }}
       >
         Switch to {mode.title === "Stage" ? "Production" : "Stage"} Mode
-      </Button>
+      </Button> */}
     </View>
   );
 }

@@ -6,8 +6,7 @@
     "development": {
       "distribution": "internal",
       "android": {
-        "gradleCommand": ":app:assembleDebug",
-        "buildType": "apk"
+        "gradleCommand": ":app:assembleDebug"
       },
       "ios": {
         "buildConfiguration": "Debug"
@@ -18,8 +17,7 @@
     },
     "production": {
       "android": {
-        "image": "latest",
-        "buildType": "apk"
+        "image": "latest"
       },
 
       "releaseChannel": "production"

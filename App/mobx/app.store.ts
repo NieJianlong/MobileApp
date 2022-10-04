@@ -43,8 +43,8 @@ export default class AppStore {
     });
   }
   mode: { url: string; title: string } = {
-    url: "https://stage-api.salamislicing.in/",
-    title: "Stage",
+    url: "https://api.salamislicing.in/",
+    title: "Production",
   };
   router: TabbarItem = TabbarItem.ExploreScreen;
   isLogout: boolean = false;
@@ -63,15 +63,15 @@ export default class AppStore {
     position: "center",
   };
   switchMode = () => {
-    if (this.mode.url === "https://stage-api.salamislicing.in/") {
+    if (this.mode.url === "https://api.salamislicing.in/") {
       this.mode = {
         url: "https://api.salamislicing.in/",
         title: "Production",
       };
     } else {
       this.mode = {
-        url: "https://stage-api.salamislicing.in/",
-        title: "Stage",
+        url: "https://api.salamislicing.in/",
+        title: "Production",
       };
     }
   };

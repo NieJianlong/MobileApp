@@ -256,95 +256,97 @@ const MapScreen = (props) => {
   const { width, height } = useWindowDimensions();
   return (
     <Portal>
-      <View style={[{ width, height }, t.bgBlue300, t.absolute]}>
-        <View style={[styles.container]}>
-          <MapView
-            key={changeIsPressed ? JSON.stringify(location) : ""}
-            ref={mapRef}
-            showsUserLocation
-            userLocationUpdateInterval={2000}
-            style={{
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0,
-              position: "absolute",
-            }}
-            provider={Platform.OS === "android" ? PROVIDER_GOOGLE : null}
-            initialRegion={INITIAL_REGION}
-            onRegionChangeComplete={_onChangeRegion}
-          />
+      <Modal visible={true} dismissable={false}>
+        <View style={[{ width, height }, t.bgBlue300, t.absolute]}>
+          <View style={[styles.container]}>
+            <MapView
+              key={changeIsPressed ? JSON.stringify(location) : ""}
+              ref={mapRef}
+              showsUserLocation
+              userLocationUpdateInterval={2000}
+              style={{
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                position: "absolute",
+              }}
+              provider={Platform.OS === "android" ? PROVIDER_GOOGLE : null}
+              initialRegion={INITIAL_REGION}
+              onRegionChangeComplete={_onChangeRegion}
+            />
 
-          <View style={styles.customMarkerContainer}>
-            <View style={styles.textContainer}>
-              <Text style={styles.itemText}>
-                Your item will be delivered here
-              </Text>
+            <View style={styles.customMarkerContainer}>
+              <View style={styles.textContainer}>
+                <Text style={styles.itemText}>
+                  Your item will be delivered here
+                </Text>
+              </View>
+              <View style={[styles.triangle, styles.arrowDown]}></View>
+              <View style={styles.mapCustomMarker}></View>
             </View>
-            <View style={[styles.triangle, styles.arrowDown]}></View>
-            <View style={styles.mapCustomMarker}></View>
+
+            {/* <View style={styles.centerPin} /> */}
           </View>
+          <View
+            style={[
+              { width, height: 250, marginTop: height - 250 },
+              t.bgWhite,
+              t.p4,
+              t.absolute,
+              t.bottom0,
+            ]}
+          >
+            <Text>Select Delivery Location</Text>
+            <View style={[styles.locationInputContainer, t.mB6, t.mT6]}>
+              <Image source={LocationPin} style={styles.locationPinIcon} />
 
-          {/* <View style={styles.centerPin} /> */}
-        </View>
-        <View
-          style={[
-            { width, height: 250, marginTop: height - 250 },
-            t.bgWhite,
-            t.p4,
-            t.absolute,
-            t.bottom0,
-          ]}
-        >
-          <Text>Select Delivery Location</Text>
-          <View style={[styles.locationInputContainer, t.mB6, t.mT6]}>
-            <Image source={LocationPin} style={styles.locationPinIcon} />
+              <View style={styles.locationInput}>
+                <Text numberOfLines={2} style={styles.input}>
+                  {location && location.address}
+                </Text>
+              </View>
 
-            <View style={styles.locationInput}>
-              <Text numberOfLines={2} style={styles.input}>
-                {location && location.address}
-              </Text>
+              <TouchableOpacity
+                style={styles.changeButton}
+                onPress={_openLocationModal}
+              >
+                <Text style={styles.changeButtonText}>CHANGE</Text>
+              </TouchableOpacity>
             </View>
 
             <TouchableOpacity
-              style={styles.changeButton}
-              onPress={_openLocationModal}
+              style={[
+                t.bgPrimary,
+                t.h12,
+                { borderRadius: 16 },
+                t.itemsCenter,
+                t.justifyCenter,
+              ]}
+              disabled={isTapable}
+              onPress={() => {
+                setShowMap({ mapVisible: false });
+                dispatch({
+                  type: "changSheetState",
+                  payload: {
+                    showSheet: true,
+                    height: 600,
+                    children: () => (
+                      <AddLocationSheetContent
+                        {...location}
+                        locationDetails={location}
+                      />
+                    ),
+                    sheetTitle: "",
+                  },
+                });
+              }}
             >
-              <Text style={styles.changeButtonText}>CHANGE</Text>
+              <Text style={[t.textWhite]}>Confirm Location</Text>
             </TouchableOpacity>
           </View>
-
-          <TouchableOpacity
-            style={[
-              t.bgPrimary,
-              t.h12,
-              { borderRadius: 16 },
-              t.itemsCenter,
-              t.justifyCenter,
-            ]}
-            disabled={isTapable}
-            onPress={() => {
-              setShowMap({ mapVisible: false });
-              dispatch({
-                type: "changSheetState",
-                payload: {
-                  showSheet: true,
-                  height: 600,
-                  children: () => (
-                    <AddLocationSheetContent
-                      {...location}
-                      locationDetails={location}
-                    />
-                  ),
-                  sheetTitle: "",
-                },
-              });
-            }}
-          >
-            <Text style={[t.textWhite]}>Confirm Location</Text>
-          </TouchableOpacity>
         </View>
-      </View>
+      </Modal>
     </Portal>
   );
 };

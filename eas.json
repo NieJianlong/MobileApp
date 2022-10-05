@@ -19,13 +19,16 @@
     },
     "note-dev": {
       "android": {
-        "image": "latest"
+        "image": "latest",
+        "buildType": "apk"
+
       },
       "releaseChannel": "stage"
     },
     "production": {
       "android": {
-        "image": "latest"
+        "image": "latest",
+        "buildType": "apk"
       },
       "releaseChannel": "production"
     }

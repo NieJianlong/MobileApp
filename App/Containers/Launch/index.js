@@ -23,6 +23,7 @@ import LottieView from "lottie-react-native";
 import { t } from "react-native-tailwindcss";
 import { StatusBar } from "expo-status-bar";
 import DeviceInfo from "react-native-device-info";
+import { isEmpty } from "lodash";
 
 export default function LaunchScreen() {
   const [getBuyerId] = useBuyerProfileByUserIdLazyQuery({
@@ -167,10 +168,10 @@ export default function LaunchScreen() {
   }, []);
 
   useEffect(() => {
-    if (global.buyerId !== undefined) {
-      SaveBuyer();
+    if (global.buyerId !== undefined && !isEmpty(global.access_token)) {
+      !global.access_token && SaveBuyer();
     }
-  }, [global.buyerId]);
+  }, [global.buyerId, global.access_token]);
 
   return (
     <LottieView

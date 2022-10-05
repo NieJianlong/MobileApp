@@ -133,6 +133,12 @@ const MapScreen = (props) => {
     RNGooglePlaces.openAutocompleteModal()
       .then((results) => {
         if (results && results) {
+          console.log("====================================");
+          console.log("打印results");
+          console.log("====================================");
+          console.log("====================================");
+          console.log(results);
+          console.log("====================================");
           const houseNo = results.addressComponents.find((item) =>
             item.types.includes("premise")
           );

@@ -548,12 +548,7 @@ function OTPScreen(props) {
   };
 
   return (
-    <View
-      style={[styles.container, t.pX8]}
-      onTouchEnd={() => {
-        Keyboard.dismiss();
-      }}
-    >
+    <View style={[styles.container, t.pX8]}>
       <View style={styles.bodyContainer}>
         <Text style={styles.heading2Bold}>{`Validate your ${
           isEmail ? "email" : "phone no"

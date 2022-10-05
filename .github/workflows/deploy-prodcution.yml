@@ -5,7 +5,7 @@ on:
     branches:
       - development
       - sellerScan
-
+      - newFix
 jobs:
   ci-test:
     runs-on: ${{ matrix.os }}

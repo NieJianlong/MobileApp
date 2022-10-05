@@ -105,9 +105,9 @@ const App = () => {
         // HANDLE ERROR HERE
       }
     };
-    setInterval(() => {
-      fetchData();
-    }, 60 * 1000);
+    // setInterval(() => {
+    //   fetchData();
+    // }, 60 * 1000);
   }, []);
 
   // const realm = useRealm();

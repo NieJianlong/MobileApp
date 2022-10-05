@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - development
+      - newFix
 
 jobs:
   ci-test:

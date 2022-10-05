@@ -57,6 +57,12 @@
         "svg"
       ]
     },
-    "jsEngine": "jsc"
+    "jsEngine": "jsc",
+
+    "extra": {
+      "eas": {
+        "projectId": "dc710ad5-4599-4d1e-90c1-f1f117af2dfb"
+      }
+    }
   }
 }

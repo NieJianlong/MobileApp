@@ -10,10 +10,6 @@ import styles from "../styles";
 import { AlertContext } from "../../Root/GlobalContext";
 import { Images } from "../../../Themes";
 import AddressSheetContent from "./AddressSheetContent";
-/**
- * queries for address
- */
-import * as aQM from "../gql/explore_queries";
 import * as gqlMappers from "../gql/gql_mappers";
 import { localCartVar, userProfileVar } from "../../../Apollo/cache";
 import { useQuery, useReactiveVar } from "@apollo/client";

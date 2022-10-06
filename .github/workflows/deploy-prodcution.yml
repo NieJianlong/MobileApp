@@ -61,7 +61,7 @@ jobs:
 
       - name: Expo Publish
         run: |
-          eas build -p android --non-interactive --json > buildLogAndroid.json
+          eas build -p android --non-interactive --no-wait --json > buildLogAndroid.json
           sed -i 's/\[//g' buildLogAndroid.json
           sed -i 's/\]//g' buildLogAndroid.json
           cat buildLogAndroid.json

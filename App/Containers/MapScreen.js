@@ -29,6 +29,7 @@ import colors from "../Themes/Colors";
 import { request, PERMISSIONS, openSettings } from "react-native-permissions";
 import useActionAlert from "../hooks/useActionAlert";
 import useLoading from "../hooks/useLoading";
+import Geolocation from "@react-native-community/geolocation";
 
 Geocoder.init("AIzaSyBfDTs1ejBI3MIVhrPeXgpvDNkTovWkIuU");
 
@@ -39,7 +40,6 @@ const MapScreen = (props) => {
   const { setShowMap } = useMapScreen();
   const { setLoading } = useLoading();
   const [isTapable, setIsTapable] = useState(true);
-  const [changeIsPressed, setChangeIsPressed] = useState(false);
 
   const { setAlert } = useActionAlert();
 
@@ -77,11 +77,11 @@ const MapScreen = (props) => {
                 handPermission2();
               })
               .catch(() => {
-                openSettings()
-                  .then(() => {
-                    handPermission2();
-                  })
-                  .catch(() => console.warn("cannot open settings"));
+                // openSettings()
+                //   .then(() => {
+                //     handPermission2();
+                //   })
+                //   .catch(() => console.warn("cannot open settings"));
               });
           },
         },
@@ -175,11 +175,11 @@ const MapScreen = (props) => {
               longitude: results?.location?.longitude,
             },
           };
-          setChangeIsPressed(true);
+
           setIsTapable(false);
           setLocation(newLocation);
         }
-        setChangeIsPressed(false);
+
         // setLocation({ location: place.location, address: place.address });
       })
       .catch((error) => console.log(error.message)); // error is a Javascript Error object
@@ -225,27 +225,28 @@ const MapScreen = (props) => {
       });
     }
 
-    setChangeIsPressed(false);
     setIsTapable(false);
   };
 
   const handleCenter = async () => {
     // console.log("seee theee location", location);
-    // setLoading({ show: true });
+    setLoading({ show: true });
+    console.log("开始定位");
     try {
-      let loc = await Location.getCurrentPositionAsync({});
-      mapRef.current.animateToRegion({
-        latitude: loc.coords.latitude, // + 0.0006351,
-        longitude: loc.coords.longitude, // - 0.0002,
-        latitudeDelta: 0.01756674919514367,
-        longitudeDelta: 0.012099780142307281,
+      Geolocation.getCurrentPosition((loc) => {
+        mapRef.current.animateToRegion({
+          latitude: loc.coords.latitude, // + 0.0006351,
+          longitude: loc.coords.longitude, // - 0.0002,
+          latitudeDelta: 0.01756674919514367,
+          longitudeDelta: 0.012099780142307281,
+        });
+        setLoading({ show: false });
+        console.log("====================================");
+        console.log("zheshi 怎么回事");
+        console.log("====================================");
       });
-      // setLoading({ show: false });
-      console.log("====================================");
-      console.log("zheshi 怎么回事");
-      console.log("====================================");
     } catch (error) {
-      // setLoading({ show: false });
+      setLoading({ show: false });
       console.log("====================================");
       console.log("zheshi 怎么回事");
       console.log("====================================");
@@ -258,101 +259,111 @@ const MapScreen = (props) => {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.animateToRegion(
+        {
+          latitude: location.location.latitude,
+          longitude: location.location.longitude,
+          latitudeDelta: 0.01756674919514367,
+          longitudeDelta: 0.012099780142307281,
+        },
+        1000
+      );
+    }
+  }, [location]);
 
   const { width, height } = useWindowDimensions();
   return (
     <Portal>
-      <Modal visible={true} dismissable={false}>
-        <View style={[{ width, height }, t.bgBlue300, t.absolute]}>
-          <View style={[styles.container]}>
-            <MapView
-              key={changeIsPressed ? JSON.stringify(location) : ""}
-              ref={mapRef}
-              showsUserLocation
-              userLocationUpdateInterval={2000}
-              style={{
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0,
-                position: "absolute",
-              }}
-              provider={Platform.OS === "android" ? PROVIDER_GOOGLE : null}
-              initialRegion={INITIAL_REGION}
-              onRegionChangeComplete={_onChangeRegion}
-            />
+      <View style={[{ width, height }, t.bgBlue300, t.absolute]}>
+        <View style={[styles.container]}>
+          <MapView
+            ref={mapRef}
+            showsUserLocation
+            userLocationUpdateInterval={2000}
+            style={{
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              position: "absolute",
+            }}
+            provider={Platform.OS === "android" ? PROVIDER_GOOGLE : null}
+            initialRegion={INITIAL_REGION}
+            onRegionChangeComplete={_onChangeRegion}
+          />
 
-            <View style={styles.customMarkerContainer}>
-              <View style={styles.textContainer}>
-                <Text style={styles.itemText}>
-                  Your item will be delivered here
-                </Text>
-              </View>
-              <View style={[styles.triangle, styles.arrowDown]}></View>
-              <View style={styles.mapCustomMarker}></View>
+          <View style={styles.customMarkerContainer}>
+            <View style={styles.textContainer}>
+              <Text style={styles.itemText}>
+                Your item will be delivered here
+              </Text>
             </View>
-
-            {/* <View style={styles.centerPin} /> */}
+            <View style={[styles.triangle, styles.arrowDown]}></View>
+            <View style={styles.mapCustomMarker}></View>
           </View>
-          <View
-            style={[
-              { width, height: 250, marginTop: height - 250 },
-              t.bgWhite,
-              t.p4,
-              t.absolute,
-              t.bottom0,
-            ]}
-          >
-            <Text>Select Delivery Location</Text>
-            <View style={[styles.locationInputContainer, t.mB6, t.mT6]}>
-              <Image source={LocationPin} style={styles.locationPinIcon} />
 
-              <View style={styles.locationInput}>
-                <Text numberOfLines={2} style={styles.input}>
-                  {location && location.address}
-                </Text>
-              </View>
+          {/* <View style={styles.centerPin} /> */}
+        </View>
+        <View
+          style={[
+            { width, height: 250, marginTop: height - 250 },
+            t.bgWhite,
+            t.p4,
+            t.absolute,
+            t.bottom0,
+          ]}
+        >
+          <Text>Select Delivery Location</Text>
+          <View style={[styles.locationInputContainer, t.mB6, t.mT6]}>
+            <Image source={LocationPin} style={styles.locationPinIcon} />
 
-              <TouchableOpacity
-                style={styles.changeButton}
-                onPress={_openLocationModal}
-              >
-                <Text style={styles.changeButtonText}>CHANGE</Text>
-              </TouchableOpacity>
+            <View style={styles.locationInput}>
+              <Text numberOfLines={2} style={styles.input}>
+                {location && location.address}
+              </Text>
             </View>
 
             <TouchableOpacity
-              style={[
-                t.bgPrimary,
-                t.h12,
-                { borderRadius: 16 },
-                t.itemsCenter,
-                t.justifyCenter,
-              ]}
-              disabled={isTapable}
-              onPress={() => {
-                setShowMap({ mapVisible: false });
-                dispatch({
-                  type: "changSheetState",
-                  payload: {
-                    showSheet: true,
-                    height: 600,
-                    children: () => (
-                      <AddLocationSheetContent
-                        {...location}
-                        locationDetails={location}
-                      />
-                    ),
-                    sheetTitle: "",
-                  },
-                });
-              }}
+              style={styles.changeButton}
+              onPress={_openLocationModal}
             >
-              <Text style={[t.textWhite]}>Confirm Location</Text>
+              <Text style={styles.changeButtonText}>CHANGE</Text>
             </TouchableOpacity>
           </View>
+
+          <TouchableOpacity
+            style={[
+              t.bgPrimary,
+              t.h12,
+              { borderRadius: 16 },
+              t.itemsCenter,
+              t.justifyCenter,
+            ]}
+            disabled={isTapable}
+            onPress={() => {
+              setShowMap({ mapVisible: false });
+              dispatch({
+                type: "changSheetState",
+                payload: {
+                  showSheet: true,
+                  height: 600,
+                  children: () => (
+                    <AddLocationSheetContent
+                      {...location}
+                      locationDetails={location}
+                    />
+                  ),
+                  sheetTitle: "",
+                },
+              });
+            }}
+          >
+            <Text style={[t.textWhite]}>Confirm Location</Text>
+          </TouchableOpacity>
         </View>
-      </Modal>
+      </View>
     </Portal>
   );
 };

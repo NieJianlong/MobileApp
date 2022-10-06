@@ -1,5 +1,5 @@
 import React, { useContext, useCallback, useMemo, useEffect } from "react";
-import { useWindowDimensions, View } from "react-native";
+import { BackHandler, useWindowDimensions, View } from "react-native";
 import { vs } from "react-native-size-matters";
 import { Button } from "../../../Components";
 import { Colors, Images } from "../../../Themes";
@@ -94,6 +94,22 @@ export default function AddressSheetContent(props) {
     //   },
     // });
   }, []);
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", function () {
+      if (!isEmpty(localCartVarReactive.deliverAddress)) {
+        dispatch({
+          type: "changSheetState",
+          payload: {
+            showSheet: false,
+          },
+        });
+        setShowMap({ mapVisible: false, stopPermission: true });
+      }
+
+      return true;
+    });
+  }, [localCartVarReactive]);
+
   useEffect(() => {
     let refresh = PubSub.subscribe("delete-address", (name, item) => {
       getLocalStorageValue(global.buyerId + "Address").then(async (res) => {

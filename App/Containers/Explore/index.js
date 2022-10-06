@@ -26,7 +26,7 @@ function Explore(props) {
   ] = useState(false);
   const [validateBuyerHasAnyOrder] = useValidateBuyerHasAnyOrderLazyQuery({
     onCompleted: (res) => {
-      if (res.validateBuyerHasAnyOrder) {
+      if (res?.validateBuyerHasAnyOrder) {
         setRegister({ visibleRegister: res.validateBuyerHasAnyOrder });
       }
     },

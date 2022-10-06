@@ -21,11 +21,16 @@ import { spy } from "mobx";
 import { createMobxDebugger } from "mobx-flipper";
 if (__DEV__) {
   spy(createMobxDebugger(mainStore));
+  Sentry.init({
+    dsn: "https://f78da4265e8748798f55bb5aa00757e6@o1285889.ingest.sentry.io/6500559",
+    environment: "dev",
+  });
+} else {
+  Sentry.init({
+    dsn: "https://f78da4265e8748798f55bb5aa00757e6@o1285889.ingest.sentry.io/6500559",
+    environment: Updates.releaseChannel,
+  });
 }
-
-Sentry.init({
-  dsn: "https://f78da4265e8748798f55bb5aa00757e6@o1285889.ingest.sentry.io/6500559",
-});
 
 const App = () => {
   const { hidden, color, setStatusBar } = useStatusBar();

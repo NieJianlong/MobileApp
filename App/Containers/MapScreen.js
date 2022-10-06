@@ -39,7 +39,6 @@ const MapScreen = (props) => {
   const { dispatch } = useContext(AlertContext);
   const { setShowMap } = useMapScreen();
   const { setLoading } = useLoading();
-  const [isTapable, setIsTapable] = useState(true);
 
   const { setAlert } = useActionAlert();
 
@@ -176,7 +175,6 @@ const MapScreen = (props) => {
             },
           };
 
-          setIsTapable(false);
           setLocation(newLocation);
         }
 
@@ -224,8 +222,6 @@ const MapScreen = (props) => {
         location: { latitude: region.latitude, longitude: region.longitude },
       });
     }
-
-    setIsTapable(false);
   };
 
   const handleCenter = async () => {
@@ -341,7 +337,6 @@ const MapScreen = (props) => {
               t.itemsCenter,
               t.justifyCenter,
             ]}
-            disabled={isTapable}
             onPress={() => {
               setShowMap({ mapVisible: false });
               dispatch({

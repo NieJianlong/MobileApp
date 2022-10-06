@@ -413,6 +413,8 @@ PODS:
     - glog
   - react-native-flipper (0.142.0):
     - React-Core
+  - react-native-geolocation (3.0.1):
+    - React-Core
   - react-native-google-maps (0.31.0):
     - Google-Maps-iOS-Utils (= 4.1.0)
     - GoogleMaps (= 3.1.0)
@@ -619,6 +621,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-flipper (from `../node_modules/react-native-flipper`)
+  - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-google-places (from `../node_modules/react-native-google-places-api`)
   - react-native-maps (from `../node_modules/react-native-maps`)
@@ -767,6 +770,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-flipper:
     :path: "../node_modules/react-native-flipper"
+  react-native-geolocation:
+    :path: "../node_modules/@react-native-community/geolocation"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
   react-native-google-places:
@@ -906,6 +911,7 @@ SPEC CHECKSUMS:
   React-jsinspector: d0374f7509d407d2264168b6d0fad0b54e300b85
   React-logger: 933f80c97c633ee8965d609876848148e3fef438
   react-native-flipper: 6504d02aadad2cce9083b6437fc1927f8e2083bb
+  react-native-geolocation: b80a44fb11e18eff64a68984092aacf3528580c3
   react-native-google-maps: d3d25cdcceada68b4a21cb207b0ac4deec8e8740
   react-native-google-places: 61605083aaa25f7a51b18f52b879513e1399217f
   react-native-maps: b47dc75c161fd0460dc4985f5f897c20a885ac30

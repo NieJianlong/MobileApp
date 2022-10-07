@@ -3,14 +3,11 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   FlatList,
   Animated,
   useWindowDimensions,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { s } from "react-native-size-matters";
-import { AppBar, RightButton } from "../../Components";
 import { Colors } from "../../Themes";
 import styles from "./styles";
 import colors from "../../Themes/Colors";
@@ -24,54 +21,13 @@ import {
   useUpdateNotificationMutation,
 } from "../../../generated/graphql";
 import moment from "moment";
-import useAlert from "../../hooks/useAlert";
 import useActionAlert from "../../hooks/useActionAlert";
 import { isEmpty } from "lodash";
-
-const invitedUsers = [
-  {
-    email: "Notification Title",
-    msg: "Notification description",
-    avatar: "https://measure.3vyd.com/uPic/Grey 32.png",
-    readed: false,
-  },
-  {
-    email: "Notification Title",
-    msg: "Notification description",
-    avatar: "https://measure.3vyd.com/uPic/Grey 32.png",
-    readed: false,
-  },
-  {
-    email: "Notification Title",
-    msg: "Notification description",
-    avatar: "https://measure.3vyd.com/uPic/Grey 32.png",
-    readed: false,
-  },
-  {
-    email: "Notification Title",
-    msg: "Notification description",
-    avatar: "https://measure.3vyd.com/uPic/Grey 32.png",
-    readed: true,
-  },
-  {
-    email: "Notification Title",
-    msg: "Notification description",
-    avatar: "https://measure.3vyd.com/uPic/Grey 32.png",
-    readed: true,
-  },
-  {
-    email: "Notification Title",
-    msg: "Notification description",
-    avatar: "https://measure.3vyd.com/uPic/Grey 32.png",
-    readed: true,
-  },
-];
 
 function Notifications(props) {
   fall = new Animated.Value(0);
 
   const sheetEl = useRef(null);
-  const [clearAll, setClearAll] = useState(false);
   const navigation = useNavigation();
   const { width, height } = useWindowDimensions();
   const { setAlert } = useActionAlert();

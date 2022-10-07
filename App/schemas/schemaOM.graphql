@@ -1,0 +1,565 @@
+"""Exposes a URL that specifies the behaviour of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behaviour of this scalar."""
+  url: String!
+) on SCALAR
+
+type AddressResponse {
+  addressId: ID!
+  addressType: AddressType
+  flat: String
+  block: String
+  building: String
+  houseNumber: String
+  streetAddress1: String
+  streetAddress2: String
+  streetAddress3: String
+  townCity: String
+  villageArea: String
+  district: String
+  provinceState: String
+  country: String
+  areaCode: String
+  landmark: String
+  pinCode: String
+  isDefault: Boolean
+  addressFloor: String
+}
+
+enum AddressType {
+  UNDEFINED
+  SHIPPING
+  BILLING
+  BUSINESS
+  PICK_UP
+  RETURN
+  COLLECTION_POINT
+}
+
+type BuyerDetailsResponse {
+  buyerId: ID!
+  firstName: String
+  lastName: String
+  phoneNumber: String
+}
+
+input BuyerOrderOption {
+  searchString: String
+  pageOption: PageOption!
+}
+
+type BuyerOrderResponse {
+  content: [OrderItemDetailResponse!]!
+  pageNo: Int!
+  pageSize: Int!
+  totalPages: Int!
+  totalElements: Int!
+}
+
+enum CancellationReason {
+  MISTAKE_ORDER
+  NOT_ABLE_TO_WAIT_FOR_LISTING_COMPLETION
+  PRODUCT_NOT_REQUIRED
+}
+
+input CancelOrderItemRequest {
+  orderItemId: String!
+  reason: CancellationReason!
+  message: String
+}
+
+input CartInput {
+  buyerId: ID!
+  shippingAddressId: ID!
+  billingDetailsId: ID!
+  useSalamiWallet: Boolean!
+  cartItems: [CartItemInput]
+  paymentRetry: Boolean
+}
+
+input CartItemInput {
+  listingId: ID!
+  quantity: Int
+  variantId: ID
+  replacedOrderItemId: ID
+}
+
+type CollectionPointPickupResponse {
+  collectionPointId: ID
+  microHubId: ID
+  streetAddress1: String
+  streetAddress2: String
+  townCity: String
+  country: String
+  provinceState: String
+  areaCode: String
+  openingHours: [String]
+  contactNumber: String
+  contactPerson: String
+  collectionDate: Date
+}
+
+"""SCALARS"""
+scalar Date
+
+scalar DateTime
+
+input DeleteOrderItemsRequest {
+  buyerId: ID!
+  orderItemIds: [ID!]!
+}
+
+enum DeliveryOption {
+  UNDEFINED
+  COURIER_DELIVERY
+  SELLER_DIRECT_DELIVERY
+  COLLECTION_POINT_PICKUP
+  SELLER_LOCATION_PICKUP
+}
+
+type InvoiceItem {
+  invoiceId: ID!
+  orderItemId: ID!
+  invoiceNumber: String
+  description: String
+  unitPrice: Float
+  quantity: Int
+  netAmount: Float
+  taxRate: Float
+  taxType: String
+  taxAmount: Float
+  totalAmount: Float
+}
+
+type InvoiceResponse {
+  orderId: ID!
+  invoices: [InvoiceItem]!
+}
+
+enum ListingOrderFilterType {
+  NONE
+  LISTING_ID
+}
+
+input ListingOrderOptions {
+  filterType: ListingOrderFilterType!
+  listingId: ID
+  pageOption: PageOption!
+}
+
+"""MUTATIONS"""
+type Mutation {
+  createOrderFromCart(request: CartInput!): OrderResponse
+  updateOrderPaymentStatus(request: UpdateOrderPaymentStatusRequest!): Boolean!
+  updateOrderRefundStatus(request: UpdateOrderRefundStatusRequest!): Boolean!
+  cancelOrderItem(request: CancelOrderItemRequest): Boolean
+  cancelOrderItemByListingId(listingId: ID!): Boolean
+  deleteOrderItems(request: DeleteOrderItemsRequest!): Boolean!
+  markOrderItemAsDelivered(request: OrderItemDeliveredRequest!): Boolean
+  submitOrderReturnRequest(request: OrderReturnRequest!): OrderReturnResponse
+  approveOrRejectOrderReturnRequest(request: OrderReturnEventRequest!): Boolean
+  markOrderReturnAsReceived(request: OrderReturnReceivedRequest!): Boolean
+}
+
+enum OrderDateFilterType {
+  CUSTOM
+  LAST_7_DAYS
+  LAST_30_DAYS
+  LAST_YEAR
+}
+
+input OrderDateParameter {
+  orderDateFilterType: OrderDateFilterType!
+  startDate: Date
+  endDate: Date
+}
+
+input OrderItemDeliveredRequest {
+  orderItemId: String!
+  buyerId: String!
+}
+
+type OrderItemDetailResponse {
+  orderId: ID!
+  orderNumber: String!
+  orderDatetime: DateTime!
+  orderSubTotal: Float!
+  orderDiscount: Float!
+  orderServiceFees: Float!
+  orderShippingFees: Float!
+  totalSavings: Float!
+  orderTotal: Float!
+  buyerId: ID!
+  orderItemId: ID!
+  orderItemNumber: String
+  quantity: Int!
+  itemPrice: Float!
+  itemDiscount: Float!
+  taxPercentage: Float
+  inventoryLocation: String
+  billingDetailsId: ID
+  shippingAddressId: ID
+  latestEventStatus: OrderItemHistoryEventType!
+  paymentStatus: OrderItemHistoryEventType
+  shortName: String!
+  longName: String
+  mainImagePath: String
+  productId: ID!
+  productNumber: String
+  sellerId: ID!
+  vendorSku: String
+  sellerSku: String
+  variantId: ID
+  priceId: ID
+  retailPrice: Float
+  wholeSalePrice: Float
+  listingId: ID!
+  listingNumber: String
+  listingStatus: ProductListingStatus!
+  storeId: ID!
+  deliveryOption: DeliveryOption!
+  deliveryDate: Date
+  shippingDate: Date
+  deliveryAddress: AddressResponse
+  pickupAddress: AddressResponse
+  orderReturnId: ID
+
+  """returned only for query: getOrderItemDetails"""
+  buyer: BuyerDetailsResponse
+  shippingDetails: ShippingDetailsResponse
+  collectionPoint: CollectionPointPickupResponse
+  sellerLocation: SellerLocationPickupResponse
+  sellerDirectDelivery: SellerDirectDeliveryResponse
+  itemReturnPolicy: ValidateReturnPolicyResponse
+}
+
+enum OrderItemHistoryEventType {
+  WAITING_FOR_PAYMENT
+  PAID
+  CREATED_PAYMENT
+  FAILED_PAYMENT
+  AUTHORIZED_PAYMENT
+  WAITING_FOR_SHIPMENT
+  COURIER_DELIVERY
+  SELLER_DELIVERY
+  DELIVERED
+  SELLER_COLLECTION_POINT
+  COLLECTED
+  BUYER_RETURNED
+  REFUND_REQUEST
+  REFUND_COMPLETE
+  REPLACEMENT_REQUEST
+  REPLACEMENT_COMPLETE
+  CANCELED_BY_BUYER
+  CANCELED_BY_SELLER
+}
+
+type OrderItemHistoryResponse {
+  eventId: ID!
+  eventDateTime: DateTime!
+  eventType: OrderItemHistoryEventType!
+  notes: String
+}
+
+type OrderItemResponse {
+  orderItemId: ID
+  orderItemNumber: String
+  listingId: ID
+  variantId: ID
+  sellerId: ID
+  quantity: Int
+  itemPrice: Float
+  taxPercentage: Float
+  inventoryLocation: String
+}
+
+type OrderPaymentDetailsResponse {
+  balanceToPay: Float
+  usedGiftAmount: Float
+  usedWalletAmount: Float
+}
+
+"""TYPES"""
+type OrderResponse {
+  orderId: ID
+  buyerId: ID
+  orderNumber: String
+  subTotal: Float
+  discount: Float
+  serviceFees: Float
+  shippingFees: Float
+  taxes: Float
+  totalSavings: Float
+  orderTotal: Float
+  orderItems: [OrderItemResponse]
+  paymentDetails: OrderPaymentDetailsResponse
+}
+
+input OrderReturnEventRequest {
+  orderReturnId: ID!
+  event: ReturnEventType
+  notes: String
+}
+
+type OrderReturnEventResponse {
+  returnId: ID!
+  eventDateTime: DateTime!
+  eventType: ReturnEventType!
+  notes: String
+}
+
+enum OrderReturnFilterType {
+  NONE
+  RETURN_STATUS
+}
+
+input OrderReturnOptions {
+  filterType: OrderReturnFilterType!
+  returnStatus: ReturnEventType
+  pageOption: PageOption!
+}
+
+"""INPUTS"""
+input OrderReturnReceivedRequest {
+  orderReturnId: ID!
+  buyerId: ID!
+}
+
+input OrderReturnRequest {
+  buyerId: ID!
+  orderItemId: ID!
+  quantity: Int!
+  returnOption: ReturnOption!
+  message: String
+  returnReasonPolicyId: ID
+}
+
+type OrderReturnResponse {
+  orderReturnId: ID!
+  deadline: Date
+  latestEventStatus: ReturnEventType!
+  returnOption: ReturnOption!
+  returnLabel: String
+  returnAddress: AddressResponse
+  deliveryOption: DeliveryOption!
+  collectionPoint: CollectionPointPickupResponse
+  sellerLocation: SellerLocationPickupResponse
+  qrCodeAsBase64: String
+}
+
+type OrderReturnStatusResponse {
+  orderReturnId: ID!
+  deadline: Date
+  events: [OrderReturnEventResponse]
+}
+
+input PageOption {
+  pageNumber: Int!
+  pageSize: Int!
+}
+
+enum ProductListingStatus {
+  UNDEFINED
+  DRAFT
+  HIDDEN
+  ACTIVE
+  SUCCESSFUL
+  ACCEPTED
+  REJECTED
+  OPEN
+  CLOSED
+  SUSPENDED
+  RETIRED
+}
+
+"""QUERIES"""
+type Query {
+  searchBuyerOrders(options: BuyerOrderOption!): BuyerOrderResponse!
+  validateBuyerHasAnyOrder(buyerId: ID!): Boolean!
+  getSellerOrders(options: SellerOrderOption!): SellerOrderResponse!
+  getSellerListingOrders(options: ListingOrderOptions!): SellerListingOrderResponse!
+  getOrderItemDetails(orderItemId: ID!): OrderItemDetailResponse!
+  trackOrderItem(orderItemId: ID!): TrackOrderItemResponse!
+  getOrderReturn(orderReturnId: String!): OrderReturnResponse!
+  getOrderReturnStatus(orderReturnId: String!): OrderReturnStatusResponse!
+  getSellerOrderReturns(options: OrderReturnOptions!): SellerOrderReturnResponse!
+  getInvoices(orderId: String): InvoiceResponse!
+}
+
+enum ReturnEventType {
+  REGISTERED
+  WAITING_SELLER_APPROVAL
+  WAITING_BUYER_RETURN
+  SELLER_RECEIVED
+  SELLER_APPROVED
+  SELLER_DENIED
+  SELLER_FULFILLED
+  REPLACEMENT_COMPLETE
+  REFUND_COMPLETE
+  CLOSED
+}
+
+enum ReturnOption {
+  GET_REFUND
+  GET_REPLACEMENT
+}
+
+type SellerDirectDeliveryResponse {
+  announcementId: ID
+  deliveryDate: Date
+}
+
+type SellerListingOrder {
+  shortName: String!
+  longName: String
+  mainImagePath: String
+  productId: ID!
+  productNumber: String
+  sellerId: ID!
+  retailPrice: Float!
+  wholeSalePrice: Float!
+  defaultVariantId: ID!
+  defaultVariantPriceId: ID!
+  listingId: ID!
+  listingNumber: String
+  listingStatus: ProductListingStatus!
+  storeId: ID!
+  total: Int!
+  delivered: Int!
+  returns: Int!
+}
+
+type SellerListingOrderResponse {
+  content: [SellerListingOrder!]!
+  pageNo: Int!
+  pageSize: Int!
+  totalPages: Int!
+  totalElements: Int!
+}
+
+type SellerLocationPickupResponse {
+  collectionPointId: ID
+  streetAddress1: String
+  streetAddress2: String
+  townCity: String
+  country: String
+  provinceState: String
+  areaCode: String
+  contactNumber: String
+  contactPerson: String
+  collectionDate: Date
+}
+
+enum SellerOrderFilterType {
+  NONE
+  EVENT_STATUS
+  ORDER_DATE
+  ORDER_NUMBER
+  LISTING_ID
+}
+
+input SellerOrderOption {
+  filterType: SellerOrderFilterType!
+  orderDate: OrderDateParameter
+  eventStatus: OrderItemHistoryEventType
+  orderNumber: String
+  listingId: ID
+  pageOption: PageOption!
+}
+
+type SellerOrderResponse {
+  content: [OrderItemDetailResponse!]!
+  pageNo: Int!
+  pageSize: Int!
+  totalPages: Int!
+  totalElements: Int!
+}
+
+type SellerOrderReturn {
+  returnId: ID
+  returnOption: ReturnOption
+  orderItemId: ID
+  orderItemNumber: String
+  orderId: ID
+  orderNumber: String
+  listingId: ID
+  listingNumber: String
+  itemPrice: Float
+  productId: ID
+  productNumber: String
+  shortName: String
+  longName: String
+  mainImagePath: String
+  returnReason: String
+  returnRequest: ReturnEventType
+  returnStatus: ReturnEventType
+}
+
+type SellerOrderReturnResponse {
+  content: [SellerOrderReturn!]!
+  pageNo: Int!
+  pageSize: Int!
+  totalPages: Int!
+  totalElements: Int!
+}
+
+type ShippingDetailsResponse {
+  shippingStatus: ShippingStatus
+  shippingDate: Date
+  carrier: String
+  carrierUrl: String
+  trackingNumber: String
+  expectedDeliveryDate: Date
+  shippingInstructions: String
+  deliveryDate: Date
+  failedDeliveryReason: String
+  events: [ShippingEventResponse]
+}
+
+type ShippingEventResponse {
+  eventType: String
+  eventDateTime: DateTime
+}
+
+"""ENUMS"""
+enum ShippingStatus {
+  UNDEFINED
+  WAITING_FOR_SHIPPING
+  SHIPPED
+  ON_ROUTE
+  OUT_FOR_DELIVERY
+  DELIVERED
+  DELIVERY_FAILED
+}
+
+type TrackOrderItemResponse {
+  orderItemId: ID!
+  orderItemNumber: String
+  deliveryOption: DeliveryOption!
+  latestEventStatus: OrderItemHistoryEventType!
+  orderNumber: String!
+  sellerBusinessName: String!
+  dateDelivered: DateTime
+  events: [OrderItemHistoryResponse!]
+  shippingDetails: ShippingDetailsResponse
+  collectionPoint: CollectionPointPickupResponse
+  sellerLocation: SellerLocationPickupResponse
+  sellerDirectDelivery: SellerDirectDeliveryResponse
+  qrCodeAsBase64: String
+}
+
+input UpdateOrderPaymentStatusRequest {
+  orderId: ID!
+  paymentStatus: OrderItemHistoryEventType!
+}
+
+input UpdateOrderRefundStatusRequest {
+  refundReferenceId: ID!
+  refundStatus: String!
+}
+
+type ValidateReturnPolicyResponse {
+  isReturnAllowed: Boolean!
+  reason: String
+}
+

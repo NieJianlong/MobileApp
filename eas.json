@@ -1,0 +1,36 @@
+{
+  "cli": {
+    "version": ">= 0.45.1"
+  },
+  "build": {
+    "development": {
+      "distribution": "internal",
+      "android": {
+        "image": "latest",
+        "buildType": "apk"
+      },
+      "ios": {
+        "buildConfiguration": "Debug"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "releaseChannel": "stage"
+    },
+    "note-dev": {
+      "android": {
+        "image": "latest"
+      },
+      "releaseChannel": "stage"
+    },
+    "production": {
+      "android": {
+        "image": "latest"
+      },
+      "releaseChannel": "production"
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

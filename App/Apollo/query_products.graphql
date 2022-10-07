@@ -1,0 +1,330 @@
+fragment IsListingAvailableField on IsListingAvailableResponse {
+  listingId
+  variantId
+  isAvailable
+  reason
+  listing {
+    ...ProductListingViewField
+  }
+}
+fragment KeyValuePairField on KeyValuePair {
+  key
+  value
+}
+fragment ProductReturnPolicyField on ProductReturnPolicy {
+  returnPolicyId
+  name
+  value
+}
+fragment ImagesField on Images {
+  id
+  referenceId
+  imageName
+  imageType
+  description
+  fullPath
+}
+
+fragment ProductCategoryViewField on ProductCategoryView {
+  categoryId
+  productId
+  name
+  description
+}
+
+fragment RatingDetailField on RatingDetail {
+  zeroStar
+  oneStar
+  twoStar
+  threeStar
+  fourStar
+  fiveStar
+  sixAndMoreStar
+}
+
+fragment AddressField on AddressView {
+  addressId
+  flat
+  block
+  building
+  houseNumber
+  streetAddress1
+  streetAddress2
+  streetAddress3
+  townCity
+  villageArea
+  district
+  provinceState
+  country
+  areaCode
+  landmark
+  pinCode
+  addressFloor
+}
+fragment ReviewViewField on ReviewView {
+  id
+  productId
+  sellerId
+  title
+  description
+  ratingVote
+  helpfulCount
+  postedBy
+  postedByName
+}
+fragment ListingVariantViewField on ListingVariantView {
+  listingId
+  variantId
+  productId
+  defaultVariant
+  retailPrice
+  wholeSalePrice
+  fullPath
+  itemsInStock
+  itemsAvailable
+  itemsSold
+  options {
+    ...KeyValuePairField
+  }
+  isAvailable
+}
+fragment ProductReturnPolicyViewField on ProductReturnPolicyView {
+  id
+  productId
+  name
+  description
+  value
+}
+fragment SellerViewField on SellerView {
+  id
+  brandName
+  avatarUrl
+  usersRating
+  name
+  description
+  ratingCount
+}
+
+fragment SellerProductPriceField on SellerProductPrice {
+  priceId
+  currency
+  retailPrice
+  wholeSalePrice
+  salePercentage
+  totalQuantityPrice
+  taxPercentage
+}
+
+fragment SellerProductImageField on SellerProductImage {
+  photoUrl
+  imageName
+  description
+  imageType
+}
+fragment SellerReturnPolicyField on SellerReturnPolicy {
+  returnAddress {
+    ...AddressField
+  }
+  returnLabel {
+    ...SellerProductImageField
+  }
+  policies {
+    ...ProductReturnPolicyField
+  }
+}
+fragment SellerProductVariantField on SellerProductVariant {
+  variantId
+  priceId
+  photoUrl
+  itemsInStock
+  defaultVariant
+  retailPrice
+  wholeSalePrice
+  options {
+    optionId
+    valueId
+    name
+    value
+  }
+}
+# type SellerReturnPolicy {
+#   returnAddress,
+#   returnLabel: SellerProductImage
+#   policies: [KeyValuePair]
+# }
+fragment SellerProductDetailViewField on SellerProductDetailView {
+  productId
+  shortName
+  longName
+  description
+  mainPhotoUrl
+  vendorSku
+  sellerSku
+  brand
+  productType
+  productStatus
+  vendorName
+  price {
+    ...SellerProductPriceField
+  }
+  images {
+    ...SellerProductImageField
+  }
+  variants {
+    ...SellerProductVariantField
+  }
+  categories {
+    categoryId
+    name
+    description
+  }
+  itemsInStock
+  returnPolicy {
+    ...SellerReturnPolicyField
+  }
+}
+
+fragment ProductListingViewField on ProductListingView {
+  photo
+  photoUrls
+  shortName
+  numberOfStars
+  numberOfReviews
+  retailPrice
+  wholeSalePrice
+  salePercentage
+  percentOff
+  showcase
+  # deliveryFee
+  amountSaved
+  # pickUpFromSeller
+  openUntil
+  noOfOrderedItems
+  noOfItemsInStock
+  description
+  technicalDetails
+  highlightBullets
+  seller {
+    ...SellerViewField
+  }
+  returnPolicies {
+    ...ProductReturnPolicyViewField
+  }
+  listingVariants {
+    ...ListingVariantViewField
+  }
+  relatedProducts
+  reviews {
+    ...ReviewViewField
+  }
+
+  listingId
+  productId
+  storeId
+  storeName
+  status
+  rating
+  closedDate
+  # deliveryDate
+  productListingType
+  # shippingMethodsAvailable
+  progressBarValue
+  numberOfItemsAvailable
+  # minQuantityPerCart
+  # maxQuantityPerCart
+  qtyAvailable
+  minQtyPerCart
+  minSoldQuantity
+  itemSold
+  createOn
+  # collectionPointAddressId
+  # collectionPointAddress{
+  #   ...AddressField
+  # }
+  returnAddressId
+  returnAddress {
+    ...AddressField
+  }
+  longName
+  ratingDetail {
+    ...RatingDetailField
+  }
+  announcementId
+  sellerId
+  categories {
+    ...ProductCategoryViewField
+  }
+  images {
+    ...ImagesField
+  }
+  deliveryOption
+  courierName
+  courierShippingFee
+  courierShippingFeeTax
+  announcementDeliveryDate
+  pickupAddress {
+    ...AddressField
+  }
+}
+
+query GetListings($searchOptions: SearchOptions) {
+  getListings(searchOptions: $searchOptions) {
+    content {
+      ...ProductListingViewField
+    }
+    pageNo
+    pageSize
+    totalPages
+    totalElements
+  }
+}
+query GetRelatedProducts($productId: ID!) {
+  getRelatedProducts(productId: $productId) {
+    ...SellerProductDetailViewField
+  }
+}
+query IsListingInWishlist($buyerId: ID!, $listingId: ID!) {
+  isListingInWishlist(buyerId: $buyerId, listingId: $listingId)
+}
+
+query GetBuyerWishlistListing($options: WishlistOption!) {
+  getBuyerWishlistListing(options: $options) {
+    content {
+      ...ProductListingViewField
+    }
+    pageNo
+    pageSize
+    totalPages
+    totalElements
+  }
+}
+
+query GetProductByProductId($productId: String!) {
+  getProductByProductId(productId: $productId) {
+    ...SellerProductDetailViewField
+  }
+}
+
+query GetPreferredCategories($buyerId: ID!) {
+  getPreferredCategories(buyerId: $buyerId) {
+    categoryId
+    name
+    description
+  }
+}
+query IsListingAvailable($listings: [IsListingAvailableInput!]!) {
+  isListingAvailable(listings: $listings) {
+    ...IsListingAvailableField
+  }
+}
+query GetShowcaseListings($options: SearchOptions) {
+  getShowcaseListings(options: $options) {
+    content {
+      ...ProductListingViewField
+    }
+    pageNo
+    pageSize
+    totalPages
+    totalElements
+  }
+}

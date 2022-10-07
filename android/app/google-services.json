@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1010624388537",
+    "project_id": "salamislicing-d4e9b",
+    "storage_bucket": "salamislicing-d4e9b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010624388537:android:3376de3eb7a6e82044ea68",
+        "android_client_info": {
+          "package_name": "com.apolloBuyerSalamiSlicing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1010624388537-3k5dbe7khg0rlnqds0vcisd703do8ic8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_CDG_2v2ZgkeqcpdICPxGH82gIbBO_UM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1010624388537-3k5dbe7khg0rlnqds0vcisd703do8ic8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,68 @@
+{
+  "name": "Salami Slicing",
+  "displayName": "Salami Slicing",
+  "expo": {
+    "scheme": "salami-slicing",
+    "name": "Salami Slicing",
+    "owner": "salamislicing",
+    "slug": "SalamiSlicing",
+    "version": "1.0.1",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "sdkVersion": "45.0.0",
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.vk.salami",
+      "buildNumber": "1.0.0",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Allow The Salami to access your photos",
+        "NSCameraUsageDescription": "Allow Salami to access your camera",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone",
+        "NSRemindersUsageDescription": "Allow Salami to access your calender events",
+        "NSCalendarsUsageDescription": "Allow The salami to access your calender events"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_CALENDAR",
+        "android.permission.WRITE_CALENDAR"
+      ],
+      "package": "com.apolloBuyerSalamiSlicing"
+    },
+    "packagerOpts": {
+      "config": "metro.config.js",
+      "sourceExts": [
+        "expo.ts",
+        "expo.tsx",
+        "expo.js",
+        "expo.jsx",
+        "ts",
+        "tsx",
+        "js",
+        "jsx",
+        "json",
+        "wasm",
+        "svg"
+      ]
+    },
+    "jsEngine": "jsc",
+
+    "extra": {
+      "eas": {
+        "projectId": "dc710ad5-4599-4d1e-90c1-f1f117af2dfb"
+      }
+    }
+  }
+}

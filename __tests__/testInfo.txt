@@ -1,0 +1,19 @@
+
+really simple testing
+
+new to Jest start here https://jestjs.io/docs/getting-started
+
+must run from root dir
+
+node yarn jest -help
+
+node yarn jest -t '<test descriptor>'
+
+eg yarn jest -t 'test register user'
+
+we can seperate concerns v_tests.js will be validation tests ect .....
+
+
+test on device
+adb -s D1AGAD1780433834 reverse tcp:8081 tcp:8081
+

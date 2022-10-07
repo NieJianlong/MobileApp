@@ -1,0 +1,86 @@
+# PR to dev/main, run tests and create review
+name: CI Pull Request
+
+on:
+  pull_request:
+    #    branches-ignore:
+    #      - 'main'
+    paths:
+      - "src/**"
+
+jobs:
+  ci-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [14]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Gen Token
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.REPO_READ_TOKEN }}" > ~/.npmrc
+
+      - name: Install
+        run: yarn install
+
+      # - name: Lint
+      #   run: yarn lint
+
+      # - name: Build
+      #   run: yarn build
+
+      # - name: Test
+      #   run: yarn test
+
+  review:
+    needs: [ci-test]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [14]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: expo/expo-github-action@v5
+        with:
+          expo-version: 4.x
+          expo-token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Gen Token
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.REPO_READ_TOKEN }}" > ~/.npmrc
+
+      - name: Install
+        run: yarn install
+
+      # - name: Expo Publish Review
+      #   run: expo publish --release-channel=pr-${{ github.event.number }}
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v1
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: This is a QR code for access to the preview app.
+
+      - name: Comment Review QR code
+        if: steps.fc.outputs.comment-id == ''
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            :lock: This is a QR code for access to the preview app.
+            :iphone: Scan a code with your device.
+            ![QR Code](https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=exp://exp.host/@cavalry-collective/Hodlnaut?release-channel=pr-${{ github.event.number }})
+          reactions: rocket

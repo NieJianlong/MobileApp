@@ -1,0 +1,163 @@
+# mutation ResendVerificationCodeInEmail($emailAddress: String!) {
+#   resendVerificationCodeInEmail(emailAddress: $emailAddress) {
+#     status
+#     extraMessage
+#   }
+# }
+mutation DeleteBuyerProfile($buyerId: ID!) {
+  deleteBuyerProfile(buyerId: $buyerId)
+}
+
+mutation SendOTPCode($sendCodeRequest: SendCodeRequest!) {
+  sendOTPCode(sendCodeRequest: $sendCodeRequest) {
+    status
+    message
+  }
+}
+
+mutation ValidateCode($request: ValidateCodeRequest!) {
+  validateCode(request: $request) {
+    status
+    message
+  }
+}
+
+mutation ForgotPasswordStep1SendNotificationEmail($email: String!) {
+  forgotPasswordStep1SendNotificationEmail(email: $email) {
+    email
+    phoneNumber
+    message
+  }
+}
+
+mutation ForgotPasswordStep1SendNotificationSms($sms: String!) {
+  forgotPasswordStep1SendNotificationSms(sms: $sms) {
+    email
+    phoneNumber
+    message
+  }
+}
+# resendVerificationCodeInSms(phoneNumber: String!): ResendCodeResponse
+# mutation ResendVerificationCodeInSms($phoneNumber: String!) {
+#   resendVerificationCodeInSms(phoneNumber: $phoneNumber) {
+#     status
+#     extraMessage
+#   }
+# }
+mutation RegisterBuyer($request: BuyerProfileRequestForCreate!) {
+  registerBuyer(request: $request) {
+    buyerId
+    userId
+  }
+}
+mutation RegisterGuestBuyerToBuyer($request: GuestBuyerProfileRequest!) {
+  registerGuestBuyerToBuyer(request: $request) {
+    ...BuyerProfileResponseFields
+  }
+}
+mutation UpdateBillingDetails($request: BillingDetailsRequest!) {
+  updateBillingDetails(request: $request) {
+    ...BillingDetailsFields
+  }
+}
+
+mutation CreateBillingDetails($request: BillingDetailsRequestForCreate!) {
+  createBillingDetails(request: $request) {
+    ...BillingDetailsFields
+  }
+}
+
+mutation CreateBillingDetailsForGuestBuyer(
+  $request: BillingDetailsRequestForCreate!
+) {
+  createBillingDetailsForGuestBuyer(request: $request) {
+    ...BillingDetailsFields
+  }
+}
+
+mutation UpdateBillingDetailsForGuestBuyer($request: BillingDetailsRequest!) {
+  updateBillingDetailsForGuestBuyer(request: $request) {
+    ...BillingDetailsFields
+  }
+}
+
+mutation ForgotPasswordStep2VerifyTokenSms($sms: String!, $tokenCode: String) {
+  forgotPasswordStep2VerifyTokenSms(sms: $sms, tokenCode: $tokenCode) {
+    message
+    actionToken
+  }
+}
+
+mutation ForgotPasswordStep3ChangeBySms(
+  $actionTokenValue: String!
+  $newPassword: String!
+  $confirmPassword: String!
+) {
+  forgotPasswordStep3ChangeBySms(
+    actionTokenValue: $actionTokenValue
+    newPassword: $newPassword
+    confirmPassword: $confirmPassword
+  ) {
+    message
+  }
+}
+mutation UpdateBuyerProfile($request: BuyerProfileRequest!) {
+  updateBuyerProfile(request: $request) {
+    ...BuyerProfileResponseFields
+  }
+}
+mutation UpdateAddress($request: AddressRequest!) {
+  updateAddress(request: $request) {
+    ...AddressOrderFiled
+  }
+}
+mutation UpdateAddressForGuestBuyer($request: AddressRequest!) {
+  updateAddressForGuestBuyer(request: $request) {
+    ...AddressOrderFiled
+  }
+}
+mutation DeleteAddress($addressId: ID!) {
+  deleteAddress(addressId: $addressId)
+}
+mutation DeleteAddressForGuestBuyer($addressId: ID!, $guestBuyerId: ID!) {
+  deleteAddressForGuestBuyer(addressId: $addressId, guestBuyerId: $guestBuyerId)
+}
+# deleteAddressForGuestBuyer(addressId: ID!, guestBuyerId: ID!): Boolean
+#  updateAddressForGuestBuyer(request: AddressRequest!): AddressResponse
+
+mutation ChangePassword(
+  $oldPassword: String!
+  $newPassword: String!
+  $userId: ID!
+) {
+  changePassword(
+    oldPassword: $oldPassword
+    newPassword: $newPassword
+    userId: $userId
+  )
+}
+
+mutation SaveBuyerDevice($request: BuyerDeviceRequest!) {
+  saveBuyerDevice(request: $request) {
+    deviceId
+    buyerId
+  }
+}
+
+mutation UpdateBuyerNotificationPreferences(
+  $preferences: [NotificationPreferenceRequest!]!
+) {
+  updateBuyerNotificationPreferences(preferences: $preferences) {
+    notificationPreferenceId
+    referenceId
+    notificationGroupType
+    smsEnabled
+    whatsappEnabled
+    emailEnabled
+  }
+}
+mutation UpdateNotification($request: NotificationRequest!) {
+  updateNotification(request: $request) {
+    ...NotificationFields
+  }
+}

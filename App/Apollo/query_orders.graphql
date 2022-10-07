@@ -1,0 +1,252 @@
+fragment CollectionPoint on CollectionPointPickupResponse {
+  collectionPointId
+  microHubId
+  streetAddress1
+  streetAddress2
+  townCity
+  country
+  provinceState
+  areaCode
+  openingHours
+  contactNumber
+  contactPerson
+}
+fragment SellerLocation on SellerLocationPickupResponse {
+  collectionPointId
+  streetAddress1
+  streetAddress2
+  townCity
+  country
+  provinceState
+  areaCode
+  contactNumber
+  contactPerson
+  collectionDate
+}
+fragment AddressOrderFiled on AddressResponse {
+  addressId
+  addressType
+  flat
+  block
+  building
+  houseNumber
+  streetAddress1
+  streetAddress2
+  streetAddress3
+  townCity
+  villageArea
+  district
+  provinceState
+  country
+  areaCode
+  pinCode
+}
+
+fragment OrderItemDetailField on OrderItemDetailResponse {
+  orderId
+  orderNumber
+  orderDatetime
+  orderSubTotal
+  orderReturnId
+  orderDiscount
+  orderServiceFees
+  orderItemNumber
+  totalSavings
+  orderTotal
+  buyerId
+  billingDetailsId
+  shippingAddressId
+  orderItemId
+  quantity
+  itemPrice
+  itemDiscount
+  latestEventStatus
+  billingDetailsId
+  paymentStatus
+  shortName
+  longName
+  mainImagePath
+  productId
+  sellerId
+  vendorSku
+  sellerSku
+  variantId
+  priceId
+  retailPrice
+  wholeSalePrice
+  listingId
+  listingStatus
+  storeId
+  deliveryOption
+  deliveryDate
+  shippingDate
+  deliveryAddress {
+    ...AddressOrderFiled
+  }
+  pickupAddress {
+    ...AddressOrderFiled
+  }
+  buyer {
+    buyerId
+    firstName
+    lastName
+    phoneNumber
+  }
+  shippingDetails {
+    shippingStatus
+    shippingDate
+    carrier
+    carrierUrl
+    trackingNumber
+    expectedDeliveryDate
+    shippingInstructions
+    deliveryDate
+    failedDeliveryReason
+    events {
+      eventType
+      eventDateTime
+    }
+  }
+  collectionPoint {
+    ...CollectionPoint
+  }
+  sellerLocation {
+    ...SellerLocation
+  }
+  sellerDirectDelivery {
+    announcementId
+    deliveryDate
+  }
+  itemReturnPolicy {
+    isReturnAllowed
+    reason
+  }
+}
+
+# fragment SimpleOrderItemViewField on SimpleOrderItemView {
+#   orderItemId
+#   listingId
+#   quantity
+#   latestStatus
+#   sellerId
+#   variantId
+#   variantOptions
+#   shortName
+#   photo
+#   itemPrice
+#   discount
+# }
+# fragment OrderViewField on OrderView {
+#   orderId
+#   orderNumber
+#   orderDatetime
+#   deliveryAddress
+#   billingAddress
+#   subTotal
+#   serviceFees
+#   shippingFees
+#   totalSavings
+#   orderTotal
+#   orderItems {
+#     ...SimpleOrderItemViewField
+#   }
+# }
+# query GetBuyerOrders($buyerId:ID!,$searchString:String!) {
+#   getBuyerOrders(buyerId: $buyerId,searchString:$searchString) {
+#    ...OrderViewField
+#   }
+# }
+
+query SearchBuyerOrders($options: BuyerOrderOption!) {
+  searchBuyerOrders(options: $options) {
+    content {
+      ...OrderItemDetailField
+    }
+    pageNo
+    pageSize
+    totalPages
+    totalElements
+  }
+}
+query GetOrderReturnStatus($orderReturnId: String!) {
+  getOrderReturnStatus(orderReturnId: $orderReturnId) {
+    deadline
+    orderReturnId
+    events {
+      returnId
+      eventDateTime
+      eventType
+      notes
+    }
+  }
+}
+query GetOrderItemDetails($orderItemId: ID!) {
+  getOrderItemDetails(orderItemId: $orderItemId) {
+    ...OrderItemDetailField
+  }
+}
+
+query TrackOrderItem($orderItemId: ID!) {
+  trackOrderItem(orderItemId: $orderItemId) {
+    orderItemId
+    deliveryOption
+    latestEventStatus
+    orderNumber
+    # sellerBusinessName
+
+    dateDelivered
+    events {
+      eventId
+      eventDateTime
+      eventType
+      notes
+    }
+    shippingDetails {
+      shippingStatus
+      shippingDate
+      carrier
+      carrierUrl
+      trackingNumber
+      expectedDeliveryDate
+      shippingInstructions
+      deliveryDate
+      failedDeliveryReason
+      events {
+        eventType
+        eventDateTime
+      }
+    }
+    collectionPoint {
+      collectionPointId
+      microHubId
+      streetAddress1
+      streetAddress2
+      townCity
+      country
+      provinceState
+      areaCode
+      openingHours
+      contactNumber
+      contactPerson
+      collectionDate
+    }
+    sellerLocation {
+      collectionPointId
+      streetAddress1
+      streetAddress2
+      townCity
+      country
+      provinceState
+      areaCode
+      contactNumber
+      contactPerson
+      collectionDate
+    }
+
+    sellerDirectDelivery {
+      announcementId
+      deliveryDate
+    }
+    qrCodeAsBase64
+  }
+}

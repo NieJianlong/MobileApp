@@ -1,0 +1,146 @@
+fragment BillingDetailsFields on BillingDetailsResponse {
+  billingDetailsId
+  buyerId
+  firstName
+  lastName
+  companyName
+  email
+  phoneNumber
+  billingAddress {
+    addressId
+    addressType
+    flat
+    block
+    building
+    houseNumber
+    streetAddress1
+    streetAddress2
+    streetAddress3
+    townCity
+    villageArea
+    district
+    provinceState
+    country
+    areaCode
+    pinCode
+  }
+  taxCode
+  createdAt
+  updatedAt
+}
+
+fragment BuyerProfileResponseFields on BuyerProfileResponse {
+  userId
+  buyerId
+  userName
+  firstName
+  lastName
+  email
+  phoneNumber
+  emailVerified
+  phoneNumberVerified
+  userType
+  createdAt
+  updatedAt
+  oneClickPurchaseOn
+  guestBuyer
+  geoLocation
+  country
+  languages
+  currencies
+  applicationSettings
+  categoryPreferences
+  productPreferences
+  sellerPreferences
+  billingDetails {
+    ...BillingDetailsFields
+  }
+  refundSalamiCredit
+  bonusSalamiCredit
+  bonusSalamiCreditExpire
+  walletId
+}
+
+query BuyerProfileByUserId($userProfileId: ID!) {
+  buyerProfileByUserId(userProfileId: $userProfileId) {
+    ...BuyerProfileResponseFields
+  }
+}
+query UserHasVerifiedPhoneNumber($userId: ID!) {
+  userHasVerifiedPhoneNumber(userId: $userId)
+}
+query BuyerProfile($buyerId: ID!) {
+  buyerProfile(buyerId: $buyerId) {
+    ...BuyerProfileResponseFields
+  }
+}
+query GetBuyerSalamiWalletBalance {
+  getBuyerSalamiWalletBalance {
+    walletId
+    buyerId
+    walletBalance
+    giftBalance
+  }
+}
+query ValidateBuyerHasAnyOrder($buyerId: ID!) {
+  validateBuyerHasAnyOrder(buyerId: $buyerId)
+}
+
+query SellerProfileBasicDetails($sellerId: ID!) {
+  sellerProfileBasicDetails(sellerId: $sellerId) {
+    sellerId
+    firstName
+    lastName
+    storeName
+  }
+}
+
+query GetBuyerSalamiWalletBalance {
+  getBuyerSalamiWalletBalance {
+    walletId
+    buyerId
+    walletBalance
+    giftBalance
+  }
+}
+
+query BillingDetailsByGuestBuyerId($guestBuyerId: ID!) {
+  billingDetailsByGuestBuyerId(guestBuyerId: $guestBuyerId) {
+    ...BillingDetailsFields
+  }
+}
+
+query GetGuestBuyerDefaultAddressByBuyerId($buyerId: ID!) {
+  getGuestBuyerDefaultAddressByBuyerId(buyerId: $buyerId) {
+    ...AddressOrderFiled
+  }
+}
+query GetBuyerDefaultAddressByBuyerId($buyerId: ID!) {
+  getBuyerDefaultAddressByBuyerId(buyerId: $buyerId) {
+    ...AddressOrderFiled
+  }
+}
+query DeliveryAddressForBuyer($buyerId: ID!) {
+  deliveryAddressForBuyer(buyerId: $buyerId) {
+    ...AddressOrderFiled
+  }
+}
+query DeliveryAddressForGuestBuyer($buyerId: ID!) {
+  deliveryAddressForGuestBuyer(buyerId: $buyerId) {
+    ...AddressOrderFiled
+  }
+}
+fragment NotificationFields on NotificationResponse {
+  notificationId
+  text
+  notificationStatus
+  buyerId
+  dateTime
+  createdAt
+  updatedAt
+}
+query NotificationsByBuyerId($buyerId: ID!) {
+  notificationsByBuyerId(buyerId: $buyerId) {
+    ...NotificationFields
+  }
+}

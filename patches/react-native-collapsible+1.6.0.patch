@@ -1,0 +1,30 @@
+diff --git a/node_modules/react-native-collapsible/Accordion.js b/node_modules/react-native-collapsible/Accordion.js
+index b89f78a..09ecb49 100644
+--- a/node_modules/react-native-collapsible/Accordion.js
++++ b/node_modules/react-native-collapsible/Accordion.js
+@@ -1,5 +1,5 @@
+ import React, { Component } from 'react';
+-import { View, TouchableHighlight, FlatList } from 'react-native';
++import { View, TouchableHighlight, FlatList, TouchableOpacity } from 'react-native';
+ import Collapsible from './Collapsible';
+ 
+ const COLLAPSIBLE_PROPS = [
+@@ -67,16 +67,15 @@ export default class Accordion extends Component {
+ 
+         {expandFromBottom && renderCollapsible(section, key)}
+ 
+-        <Touchable
++        <TouchableOpacity
+           onPress={() => this._toggleSection(key)}
+-          underlayColor={underlayColor}
+           {...touchableProps}
+           accessibilityState={{
+             expanded: activeSections.includes(key),
+           }}
+         >
+           {renderHeader(section, key, activeSections.includes(key), sections)}
+-        </Touchable>
++        </TouchableOpacity>
+ 
+         {!expandFromBottom && renderCollapsible(section, key)}
+ 

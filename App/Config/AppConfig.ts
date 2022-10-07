@@ -7,7 +7,7 @@ let url = Updates.releaseChannel.startsWith("prod")
   : "https://stage-api.salamislicing.in/";
 if (Platform.OS === "ios") {
   if (__DEV__) {
-    url = "https://stage-api.salamislicing.in/";
+    url = "https://api.salamislicing.in/";
   } else {
     url = "https://api.salamislicing.in/";
   }

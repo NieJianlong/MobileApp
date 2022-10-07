@@ -83,15 +83,5 @@ function Setting(props) {
     </View>
   );
 }
-function listHeader(setShowSheet) {
-  return (
-    <View style={styles.bodyContainer}>
-      <Text style={styles.heading2Bold}>Setting</Text>
-      {/* <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
-        {`You have 3 unread notifications`}
-      </Text> */}
-    </View>
-  );
-}
 
 export default Setting;

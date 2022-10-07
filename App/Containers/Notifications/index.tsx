@@ -26,6 +26,7 @@ import {
 import moment from "moment";
 import useAlert from "../../hooks/useAlert";
 import useActionAlert from "../../hooks/useActionAlert";
+import { isEmpty } from "lodash";
 
 const invitedUsers = [
   {
@@ -97,6 +98,8 @@ function Notifications(props) {
             notificationId: item.notificationId,
             notificationStatus: NotificationStatus.Read,
             buyerId: global.buyerId,
+            text: item.text,
+            dateTime: item.dateTime,
           },
         },
         context: {
@@ -124,7 +127,11 @@ function Notifications(props) {
     //   ),
     // });
   }, [navigation]);
+  const allNotifications = data?.notificationsByBuyerId;
 
+  const unreadNotifications = allNotifications?.filter((item) => {
+    return item.notificationStatus === "UNREAD";
+  });
   return (
     <View style={styles.container}>
       <FlatList
@@ -135,9 +142,7 @@ function Notifications(props) {
               <Text style={styles.heading2Bold}>Notifications</Text>
               <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
                 {`You have ${
-                  data?.notificationsByBuyerId?.filter((item) => {
-                    return item.notificationStatus === "UNREAD";
-                  }).length
+                  isEmpty(unreadNotifications) ? 0 : unreadNotifications?.length
                 } unread notifications`}
               </Text>
             </View>
@@ -229,16 +234,6 @@ function Notifications(props) {
         }}
         keyExtractor={(item, index) => `list${index}`}
       />
-    </View>
-  );
-}
-function listHeader(setShowSheet) {
-  return (
-    <View style={styles.bodyContainer}>
-      <Text style={styles.heading2Bold}>Notifications</Text>
-      <Text style={[styles.heading4Regular, { color: Colors.grey80 }]}>
-        {`You have 3 unread notifications`}
-      </Text>
     </View>
   );
 }

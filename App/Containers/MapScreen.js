@@ -184,6 +184,9 @@ const MapScreen = (props) => {
   };
 
   const _onChangeRegion = async (region) => {
+    console.log("====================================");
+    console.log("位置开始移动");
+    console.log("====================================");
     const { results } = await Geocoder.from({
       latitude: region.latitude,
       longitude: region.longitude,
@@ -277,7 +280,9 @@ const MapScreen = (props) => {
           <MapView
             ref={mapRef}
             showsUserLocation
+            pitchEnabled
             userLocationUpdateInterval={2000}
+            scrollDuringRotateOrZoomEnabled={false}
             style={{
               left: 0,
               right: 0,

@@ -434,6 +434,7 @@ type Mutation {
   deleteNotification(notificationId: ID!): Boolean
   updateNotification(request: NotificationRequest!): NotificationResponse
   deleteNotificationByBuyerId(buyerId: ID!): Int
+  updateNotificationStatus(notificationId: ID!, status: NotificationStatus!): NotificationResponse
   createPreference(request: PreferenceRequestForCreate!): PreferenceResponse
   deletePreference(preferenceId: ID!): Boolean
   updatePreference(request: PreferenceRequest!): PreferenceResponse

@@ -3,7 +3,7 @@ name: Deploy Production IOS
 on:
   push:
     branches:
-      - development
+      - main
 
 jobs:
   ci-test:

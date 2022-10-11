@@ -560,6 +560,7 @@ type ProductListingView {
   announcementDeliveryDate: Date
   pickupAddress: AddressView
   showcase: Boolean
+  missed: Boolean
 }
 
 input ProductPageable {

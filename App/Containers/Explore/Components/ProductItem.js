@@ -22,6 +22,9 @@ import { TouchableOpacity as GHTouchableOpacity } from "react-native-gesture-han
 import Share from "react-native-share";
 import { shareOptionsDetails } from "./ShareOptionList";
 import ViewShot, { captureRef, captureScreen } from "react-native-view-shot";
+import CloseDate from "./CloseDate";
+import ProgressC from "./Progress";
+import SoldOrders from "./SoldOrders";
 const defultUrl = "";
 
 const TouchableOpacity =
@@ -219,38 +222,9 @@ function ProductItem(props) {
         <View>
           {!notShowBottom ? (
             <View style={[styles.v4, t.justifyBetween]}>
-              <View>
-                <Text style={styles.txtOrderClose}>
-                  {product.deliveryOption ===
-                  DeliveryOption.SellerDirectDelivery
-                    ? "Delivery Date:"
-                    : "Order closes on:"}
-                </Text>
-                {product.showcase && (
-                  <Text style={[styles.heading6Regular, t.bgGray500]}></Text>
-                )}
-                {!product.showcase && (
-                  <Text style={styles.heading6Regular}>
-                    {product.deliveryOption ===
-                    DeliveryOption.SellerDirectDelivery
-                      ? product.announcementDeliveryDate
-                      : product.openUntil}
-                  </Text>
-                )}
-              </View>
-              <Progress
-                maximumValue={isMissing ? "100" : product.noOfItemsInStock}
-                currentValue={isMissing ? "100" : product.noOfOrderedItems}
-                barWidth={s(60)}
-                barHeight={vs(6)}
-              />
-              <View style={styles.row}>
-                <Image source={Images.stock} style={styles.icStock} />
-                <Text style={styles.txtOrderNumber}>
-                  {product.noOfOrderedItems < 0 ? 0 : product.noOfOrderedItems}{" "}
-                  sold out of {product.noOfItemsInStock}
-                </Text>
-              </View>
+              <CloseDate product={product} />
+              <ProgressC product={product} />
+              <SoldOrders product={product} />
               <TouchableOpacity
                 onPress={() => NavigationService.navigate("LearnMoreScreen")}
               >

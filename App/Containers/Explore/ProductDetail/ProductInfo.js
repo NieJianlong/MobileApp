@@ -22,6 +22,9 @@ import {
 import PubSub from "pubsub-js";
 import { t } from "react-native-tailwindcss";
 import { trim } from "lodash";
+import CloseDate from "../Components/CloseDate";
+import ProgressC from "../Components/Progress";
+import SoldOrders from "../Components/SoldOrders";
 
 export default function ProductInfo({
   product,
@@ -155,39 +158,10 @@ export default function ProductInfo({
 
         <View style={[styles.v4, t.flexRow, t.justifyBetween, t.pR8]}>
           <View style={{ marginRight: s(10) }}>
-            {/* <Text style={styles.heading6Regular}>Order closes on:</Text> */}
-
-            <Text style={styles.heading6Regular}>
-              {product.deliveryOption === DeliveryOption.SellerDirectDelivery
-                ? "Delivery Date:"
-                : "Order closes on:"}
-            </Text>
-            {showcase && (
-              <Text style={(styles.heading6Regular, t.bgGray500)}></Text>
-            )}
-
-            {!showcase && (
-              <Text style={styles.heading6Regular}>
-                {product.deliveryOption === DeliveryOption.SellerDirectDelivery
-                  ? product.announcementDeliveryDate
-                  : product.openUntil}
-              </Text>
-            )}
+            <CloseDate product={product} />
           </View>
-          <Progress
-            maximumValue={isMissing ? "100" : product.noOfItemsInStock}
-            currentValue={isMissing ? "100" : product.noOfOrderedItems}
-            barWidth={s(65)}
-            barHeight={vs(6)}
-          />
-          <View style={[styles.row]}>
-            <Image source={Images.stock} style={styles.icStock} />
-
-            <Text style={styles.txtOrderNumber}>
-              {showcase ? product.noOfItemsInStock : product.noOfOrderedItems}/
-              {product.noOfItemsInStock}
-            </Text>
-          </View>
+          <ProgressC product={product} />
+          <SoldOrders product={product} isPD={true} />
           <TouchableOpacity
             onPress={() => NavigationService.navigate("LearnMoreScreen")}
           >

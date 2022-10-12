@@ -1,5 +1,6 @@
 import React from "react";
 import { Image, Text, View } from "react-native";
+import { t } from "react-native-tailwindcss";
 import { DeliveryOption } from "../../../../generated/graphql";
 import { Images } from "../../../Themes";
 import styles from "../styles";

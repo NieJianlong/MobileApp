@@ -9,7 +9,14 @@ const url = "";
 const title = "";
 const message = "Please check this out.";
 const icon = "data:<data_type>/<file_extension>;base64,<base64_data>";
-
+const url1 =
+  Platform.OS === "android"
+    ? "https://play.google.com/store/apps/details?id=com.apolloBuyerSalamiSlicing"
+    : "https://apps.apple.com/in/app/salamislicing/id1642298534";
+const url2 =
+  Platform.OS === "android"
+    ? "https://tinyurl.com/35bwbad8"
+    : "tinyurl.com/yxn38pnb";
 export const shareOptionsDetails = (productLink, product) => {
   const shareOptions = Platform.select({
     ios: {
@@ -58,7 +65,11 @@ export const shareOptionsDetails = (productLink, product) => {
     },
     default: {
       title: "",
-      message: `${product.longName}${"\n\n"}Retail Price: ${product.retailPrice} ${'\n'}Whole Sale Price: ${product.wholeSalePrice}${"\n\n"}Please check this deal of the day! ${"\n"} ${product.photo}`,
+      message: `${product.longName}${"\n\n"}Retail Price: ${
+        product.retailPrice
+      } ${"\n"}Whole Sale Price: ${
+        product.wholeSalePrice
+      }${"\n\n"}Please check this deal of the day! ${"\n"} ${url2}`,
       url: "data:image/png;base64," + productLink,
       subject: "",
     },

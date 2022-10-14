@@ -241,6 +241,10 @@ function LoginScreen(props) {
                     title: "This is not a buyer account",
                   },
                 });
+                dispatch({
+                  type: "changLoading",
+                  payload: false,
+                });
                 return;
               }
               // phone_number_verified

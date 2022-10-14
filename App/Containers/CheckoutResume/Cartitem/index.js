@@ -42,7 +42,7 @@ function index(props) {
         <View style={[t.flexRow]}>
           <Image source={{ uri: product.photo }} style={styles.productImage} />
           <View
-            style={[styles.v2, { maxWidth: "90%", justifyContent: "center" }]}
+            style={[styles.v2, { maxWidth: "90%", justifyContent: "center" },t.mL4]}
           >
             <View>
               <Text style={[styles.heading5Bold]}>{product.shortName}</Text>

@@ -4,12 +4,9 @@ import AppConfig from "../../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../../Themes/Fonts";
 import colors from "../../../Themes/Colors";
-
-import NavigationService from "../../../Navigation/NavigationService";
 import { Switch } from "../../../Components";
 import {
   useNotificationPreferencesByBuyerIdQuery,
-  useSaveBuyerDeviceMutation,
   useUpdateBuyerNotificationPreferencesMutation,
 } from "../../../../generated/graphql";
 import Login from "../../Login";
@@ -122,7 +119,6 @@ function index(props) {
       delete copyObj.key;
       return copyObj;
     });
-
 
     UpdateBuyerNotificationPreferences({
       variables: {

@@ -537,7 +537,7 @@ function RegisterScreen(props) {
               positive: (v) => {
                 let ret = /[a-zA-Z]/.test(trim(v));
                 if (!ret) {
-                  return "Type invalid first name.";
+                  return "Please enter valid name.";
                 }
 
                 if (trim(v).length === 0)
@@ -577,7 +577,7 @@ function RegisterScreen(props) {
               positive: (v) => {
                 let ret = /[a-zA-Z]/.test(trim(v));
                 if (!ret) {
-                  return "Type invalid last name.";
+                  return "Please enter valid name.";
                 }
                 if (trim(v).length === 0)
                   return "Last name should not  only contain Spaces";

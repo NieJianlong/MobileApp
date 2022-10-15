@@ -138,7 +138,10 @@ function RootContainer() {
       if (currentRoute === undefined) {
         return true;
       }
-      if (currentRoute?.currentPage !== "LoginScreeen") {
+      if (
+        currentRoute?.currentPage !== "LoginScreeen" ||
+        currentRoute?.currentPage !== "LogOutScreen"
+      ) {
         NavigationService.goBack();
         /**
          * When true is returned the event will not be bubbled up

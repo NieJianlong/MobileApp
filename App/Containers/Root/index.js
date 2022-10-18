@@ -116,7 +116,7 @@ function RootContainer() {
     if (visible) {
       setTimeout(() => {
         dispatch({ type: "changAlertState", payload: { visible: false } });
-      }, 2100);
+      }, 4100);
     }
   }, [visible]);
 

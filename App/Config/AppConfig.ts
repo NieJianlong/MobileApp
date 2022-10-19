@@ -2,14 +2,14 @@ import { s } from "react-native-size-matters";
 import * as Updates from "expo-updates";
 import DeviceInfo from "react-native-device-info";
 import { Platform } from "react-native";
-let url = Updates.releaseChannel.startsWith("prod")
-  ? "https://api.salamislicing.in/"
-  : "https://stage-api.salamislicing.in/";
+const stageUrl = "https://stage-api.salamislicing.in/";
+const prodUrl = "https://api.salamislicing.in/";
+let url = Updates.releaseChannel.startsWith("prod") ? prodUrl : stageUrl;
 if (Platform.OS === "ios") {
   if (__DEV__) {
-    url = "https://api.salamislicing.in/";
+    url = stageUrl;
   } else {
-    url = "https://api.salamislicing.in/";
+    url = prodUrl;
   }
 }
 

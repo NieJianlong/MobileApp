@@ -174,7 +174,12 @@ const MapScreen = (props) => {
               longitude: results?.location?.longitude,
             },
           };
-
+          mapRef.current.animateToRegion({
+            latitude: results?.location?.latitude,
+            longitude: results?.location?.longitude,
+            latitudeDelta: 0.01756674919514367,
+            longitudeDelta: 0.012099780142307281,
+          });
           setLocation(newLocation);
         }
 
@@ -192,6 +197,9 @@ const MapScreen = (props) => {
       longitude: region.longitude,
     });
 
+    console.log("====================================");
+    console.log(results);
+    console.log("====================================");
     if (results && results[0]) {
       const houseNo = results[0].address_components.find((item) =>
         item.types.includes("premise")
@@ -258,19 +266,19 @@ const MapScreen = (props) => {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
-  useEffect(() => {
-    if (mapRef.current) {
-      mapRef.current.animateToRegion(
-        {
-          latitude: location.location.latitude,
-          longitude: location.location.longitude,
-          latitudeDelta: 0.01756674919514367,
-          longitudeDelta: 0.012099780142307281,
-        },
-        1000
-      );
-    }
-  }, [location]);
+  // useEffect(() => {
+  //   if (mapRef.current) {
+  //     mapRef.current.animateToRegion(
+  //       {
+  //         latitude: location.location.latitude,
+  //         longitude: location.location.longitude,
+  //         latitudeDelta: 0.01756674919514367,
+  //         longitudeDelta: 0.012099780142307281,
+  //       },
+  //       1000
+  //     );
+  //   }
+  // }, [location]);
 
   const { width, height } = useWindowDimensions();
   return (
@@ -282,7 +290,7 @@ const MapScreen = (props) => {
             showsUserLocation
             pitchEnabled
             userLocationUpdateInterval={2000}
-            scrollDuringRotateOrZoomEnabled={false}
+            // scrollDuringRotateOrZoomEnabled={false}
             style={{
               left: 0,
               right: 0,

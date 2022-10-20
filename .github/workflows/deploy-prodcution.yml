@@ -91,7 +91,7 @@ jobs:
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
         env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_WEBHOOK: https://hooks.slack.com/services/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
           SLACK_LINK_NAMES: true
           SLACK_ICON: https://raw.githubusercontent.com/zhuchuanwu/publicImage/main/production.png
           SLACK_FOOTER: ${{ steps.androidUrl.outputs.releaseChannel }}

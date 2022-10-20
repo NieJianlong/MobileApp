@@ -1,9 +1,10 @@
-import { s } from "react-native-size-matters";
+export const stageUrl = "https://stage-api.salamislicing.in/";
+export const prodUrl = "https://api.salamislicing.in/";
 
 const AppConfig = {
-  fontSize: s(15),
-  paddingHorizontal: s(15),
-  baseUrl: "https://api.salamislicing.in/",
+  fontSize: 15,
+  paddingHorizontal: 15,
+  baseUrl: stageUrl,
 
   // baseUrl: "http://ec2-18-117-210-203.us-east-2.compute.amazonaws.com",
   // baseUrl: "https://dev-api.salamislicing.in/",

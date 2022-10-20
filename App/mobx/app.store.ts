@@ -3,6 +3,7 @@ import { TabbarItem } from "../Navigation/TabBar";
 import { makePersistable } from "mobx-persist-store";
 import AsyncStorage from "@react-native-community/async-storage";
 import RNRestart from "react-native-restart";
+import AppConfig, { prodUrl, stageUrl } from "../Config/AppConfig";
 
 interface AlertButtonProps {
   title: string;
@@ -43,8 +44,8 @@ export default class AppStore {
     });
   }
   mode: { url: string; title: string } = {
-    url: "https://api.salamislicing.in/",
-    title: "Production",
+    url: AppConfig.baseUrl,
+    title: "Stage",
   };
   router: TabbarItem = TabbarItem.ExploreScreen;
   isLogout: boolean = false;
@@ -63,15 +64,15 @@ export default class AppStore {
     position: "center",
   };
   switchMode = () => {
-    if (this.mode.url === "https://api.salamislicing.in/") {
+    if (this.mode.url === prodUrl) {
       this.mode = {
-        url: "https://api.salamislicing.in/",
+        url: prodUrl,
         title: "Production",
       };
     } else {
       this.mode = {
-        url: "https://api.salamislicing.in/",
-        title: "Production",
+        url: stageUrl,
+        title: "Stage",
       };
     }
   };

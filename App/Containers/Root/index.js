@@ -110,6 +110,7 @@ function RootContainer() {
     title: alertTitle,
     color: alertColor,
     onDismiss: alertDissmiss,
+    setAlert,
   } = useAlert();
   const { show } = useLoading();
   useEffect(() => {
@@ -119,6 +120,14 @@ function RootContainer() {
       }, 4100);
     }
   }, [visible]);
+  useEffect(() => {
+    if (alertShow) {
+      setTimeout(() => {
+        setAlert({ visible: false });
+        // dispatch({ type: "changAlertState", payload: { visible: false } });
+      }, 3000);
+    }
+  }, [alertShow]);
 
   useEffect(() => {
     BackHandler.addEventListener("hardwareBackPress", function () {

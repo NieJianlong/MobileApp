@@ -28,6 +28,12 @@ export default function AlertComponent({
       duration: 1000,
     }).start();
   }, [fadeAnim]);
+  const fadeOut = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 1000,
+    }).start();
+  };
   // alert(visible);
   return (
     <Animated.View
@@ -46,7 +52,7 @@ export default function AlertComponent({
               <TouchableOpacity
                 onPress={() => {
                   onDismiss && onDismiss();
-                  this.fadeOut();
+                  fadeOut();
                 }}
               >
                 <Image style={styles.icClose} source={Images.crossMedium} />
@@ -64,7 +70,7 @@ export default function AlertComponent({
               <TouchableOpacity
                 onPress={() => {
                   onDismiss && onDismiss();
-                  this.fadeOut();
+                  fadeOut();
                 }}
               >
                 <Image style={styles.icClose} source={Images.crossMedium} />

@@ -281,10 +281,18 @@ const MapScreen = (props) => {
   // }, [location]);
 
   const { width, height } = useWindowDimensions();
+  const customHeight = Platform.OS === "android" ? height : height;
   return (
     <Portal>
-      <View style={[{ width, height }, t.bgBlue300, t.absolute]}>
-        <View style={[styles.container]}>
+      <View style={[{ width, height: customHeight }, t.bgWhite]}>
+        <View
+          style={[
+            { height: customHeight - 250 },
+            t.bgWhite,
+            t.itemsCenter,
+            t.justifyCenter,
+          ]}
+        >
           <MapView
             ref={mapRef}
             showsUserLocation
@@ -315,15 +323,7 @@ const MapScreen = (props) => {
 
           {/* <View style={styles.centerPin} /> */}
         </View>
-        <View
-          style={[
-            { width, height: 250, marginTop: height - 250 },
-            t.bgWhite,
-            t.p4,
-            t.absolute,
-            t.bottom0,
-          ]}
-        >
+        <View style={[{ width, height: 250 }, t.bgWhite, t.p4]}>
           <Text>Select Delivery Location</Text>
           <View style={[styles.locationInputContainer, t.mB6, t.mT6]}>
             <Image source={LocationPin} style={styles.locationPinIcon} />
@@ -419,7 +419,6 @@ const styles = ScaledSheet.create({
     borderRadius: "20@s",
   },
   container: {
-    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",

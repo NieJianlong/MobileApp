@@ -1,5 +1,12 @@
 import React, { useContext } from "react";
-import { Text, View, TouchableOpacity, Image, TextInput } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  useWindowDimensions,
+} from "react-native";
 import { s, ScaledSheet, vs } from "react-native-size-matters";
 import { Fonts, Colors, ApplicationStyles, Images } from "../../../Themes";
 import AppConfig from "../../../Config/AppConfig";
@@ -31,6 +38,7 @@ function index(props) {
   if (selectedVariant.length > 34) {
     selectedVariant = selectedVariant.substring(0, 34) + "...";
   }
+  const { width } = useWindowDimensions();
   return (
     <TouchableOpacity
       onPress={() =>
@@ -41,11 +49,11 @@ function index(props) {
       <View style={[styles.row, { justifyContent: "space-between" }]}>
         <View style={[t.flexRow]}>
           <Image source={{ uri: product.photo }} style={styles.productImage} />
-          <View
-            style={[styles.v2, { maxWidth: "90%", justifyContent: "center" },t.mL4]}
-          >
+          <View style={[styles.v2, { justifyContent: "center" }, t.mL4]}>
             <View>
-              <Text style={[styles.heading5Bold]}>{product.shortName}</Text>
+              <Text style={[styles.heading5Bold, { width: width - 200 }]}>
+                {product.shortName}
+              </Text>
               <Text
                 style={[
                   styles.heading4Bold,

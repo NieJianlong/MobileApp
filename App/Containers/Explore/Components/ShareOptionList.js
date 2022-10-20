@@ -65,9 +65,9 @@ export const shareOptionsDetails = (productLink, product) => {
     },
     default: {
       title: "",
-      message: `${product.longName}${"\n\n"}Retail Price: ${
+      message: `${product.longName}${"\n\n"}Retail Price: ₹${
         product.retailPrice
-      } ${"\n"}Whole Sale Price: ${
+      } ${"\n"}Whole Sale Price:₹${
         product.wholeSalePrice
       }${"\n\n"}Please check this deal of the day! ${"\n"} ${url2}`,
       url: "data:image/png;base64," + productLink,

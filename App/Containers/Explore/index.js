@@ -64,13 +64,13 @@ function Explore(props) {
     }
   }, [showAccountActivatedSuccessfullyAlert]);
   const navigation = useNavigation();
-  React.useEffect(
-    () =>
-      navigation.addListener("beforeRemove", (e) => {
-        e.preventDefault();
-      }),
-    [navigation]
-  );
+  // React.useEffect(
+  //   () =>
+  //     navigation.addListener("beforeRemove", (e) => {
+  //       e.preventDefault();
+  //     }),
+  //   [navigation]
+  // );
   useFocusEffect(
     React.useCallback(() => {
       setStatusBar({ hidden: false });

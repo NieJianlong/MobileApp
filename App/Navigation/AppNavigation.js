@@ -87,7 +87,13 @@ import NavigationLeftButton from "../Components/NavigationLeftButton";
 import { t } from "react-native-tailwindcss";
 import { ApplicationStyles, Colors, Images } from "../Themes";
 import RegisterGuestBuyerToBuyerScreen from "../Containers/RegisterGuestBuyerToBuyer";
-import { Image, SafeAreaView, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Image,
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import styles from "../Containers/Explore/styles";
 import colors from "../Themes/Colors";
 import useCurrentRoute from "../hooks/useCurrentRoute";
@@ -844,8 +850,9 @@ function AppRouter(props) {
     <NavigationContainer
       onStateChange={() => {
         const routeName = _navigator?.getCurrentRoute()?.name;
-
-        setCurrentRoute({ currentPage: routeName });
+        if (routeName) {
+          setCurrentRoute({ currentPage: routeName });
+        }
       }}
       ref={(navigatorRef) => {
         NavigationService.setTopLevelNavigator(navigatorRef);

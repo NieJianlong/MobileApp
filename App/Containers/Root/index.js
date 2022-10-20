@@ -11,6 +11,7 @@ import {
   useWindowDimensions,
   Platform,
   PermissionsAndroid,
+  Alert as RNAlert,
 } from "react-native";
 import { Alert, BottomSheet } from "../../Components";
 import AppNavigation from "../../Navigation/AppNavigation";
@@ -30,7 +31,9 @@ import { Text } from "react-native-paper";
 import { Colors, Images } from "../../Themes";
 import CheckoutPaymentCompletedGuest from "../CheckoutPaymentCompletedGuest";
 import useRegisterGuest from "../../hooks/useRegisterGuest";
-import NavigationService from "../../Navigation/NavigationService";
+import NavigationService, {
+  _navigator,
+} from "../../Navigation/NavigationService";
 import { localCartVar } from "../../Apollo/cache";
 import { useReactiveVar } from "@apollo/client";
 import { isEmpty } from "lodash";
@@ -131,6 +134,7 @@ function RootContainer() {
 
   useEffect(() => {
     BackHandler.addEventListener("hardwareBackPress", function () {
+      const currentPage = _navigator?.getCurrentRoute()?.name;
       if (!isEmpty(localCart.deliverAddress)) {
         dispatch({
           type: "changSheetState",
@@ -144,21 +148,25 @@ function RootContainer() {
         });
         setShowMap({ mapVisible: false, stopPermission: true });
       }
-      if (currentRoute === undefined) {
+      if (currentPage === undefined) {
         return true;
       }
-      if (
-        currentRoute?.currentPage !== "LoginScreeen" ||
-        currentRoute?.currentPage !== "LogOutScreen"
-      ) {
-        NavigationService.goBack();
-        /**
-         * When true is returned the event will not be bubbled up
-         * & no other back action will execute
-         */
+      if (currentPage === "ExploreScreen") {
+        RNAlert.alert("Hold on!", "Are you sure you want to exit App?", [
+          {
+            text: "Cancel",
+            onPress: () => null,
+            style: "cancel",
+          },
+          { text: "YES", onPress: () => BackHandler.exitApp() },
+        ]);
         return true;
       }
-      return true;
+      if (currentPage === "LoginScreeen" || currentPage === "LogOutScreen") {
+        return true;
+      }
+
+      return false;
     });
 
     const requestLocationPermission = async () => {
@@ -199,7 +207,7 @@ function RootContainer() {
 
     promise
       .then(function (result) {
-        Alert.alert(
+        RNAlert.alert(
           "Success",
           "Image Saved to Photo Gallery",
           [
@@ -211,7 +219,7 @@ function RootContainer() {
         );
       })
       .catch(function (error) {
-        Alert.alert(
+        RNAlert.alert(
           "Error Saving Image",
           error,
           [

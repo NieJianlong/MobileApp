@@ -54,7 +54,7 @@ function SellerScan() {
         style={[t.mT6]}
         color="blue"
         onPress={() => {
-          switchMode();
+          //switchMode();
         }}
       >
         Switch to {mode.title === "Stage" ? "Production" : "Stage"} Mode

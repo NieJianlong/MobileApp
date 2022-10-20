@@ -46,7 +46,7 @@ jobs:
         with:
           expo-version: latest
           eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
+          token: bgvuglGxd5viQ_eFIMqy0b8x6uNXqbSewwO63MPR
 
       - name: Install
         run: yarn install

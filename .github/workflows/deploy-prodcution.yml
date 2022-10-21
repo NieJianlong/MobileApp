@@ -98,7 +98,6 @@ jobs:
 
           SLACK_TITLE: Salami Slicing Updated -- Production
           SLACK_USERNAME: Salami Slicing
-
       - name: Echo Parse Asset URL
         run: echo ${{ steps.androidUrl.outputs.releaseChannel }}
 

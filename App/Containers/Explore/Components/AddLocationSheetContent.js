@@ -74,6 +74,7 @@ function AddLocationSheetContent(props) {
     formState: { errors },
   } = useForm();
   useEffect(() => {
+    debugger;
     if (count < 4) {
       if (data) {
         setValue("provinceState", props.state?.trim());

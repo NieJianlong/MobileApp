@@ -4,6 +4,12 @@ directive @specifiedBy(
   url: String!
 ) on SCALAR
 
+input AccountContactSupportRequest {
+  userId: ID!
+  problemReason: ProblemReason!
+  message: String!
+}
+
 input AddressRequest {
   addressId: ID!
   flat: String
@@ -489,6 +495,7 @@ type Mutation {
   sendOTPCode(sendCodeRequest: SendCodeRequest!): SendCodeResponse
   updateBuyerNotificationPreferences(preferences: [NotificationPreferenceRequest!]!): [NotificationPreferenceResponse]
   updateSellerNotificationPreferences(preferences: [NotificationPreferenceRequest!]!): [NotificationPreferenceResponse]
+  submitAccountContactSupport(request: AccountContactSupportRequest!): Boolean!
 }
 
 enum NotificationGroupType {
@@ -627,6 +634,10 @@ enum PreferenceType {
   CATEGORY
   SELLER
   PRODUCT
+  UNDEFINED
+}
+
+enum ProblemReason {
   UNDEFINED
 }
 

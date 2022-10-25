@@ -331,6 +331,7 @@ type Mutation {
   disableProduct(productId: ID!): Product!
   rejectProduct(productId: ID!): Product!
   acceptProduct(productId: ID!): Product!
+  increaseInventory(input: VariantInventoryInput!): Boolean!
   addRequestForProduct(input: RequestForProductInput!): RequestForProductResponse!
   addShareInformation(input: ShareInformationInput!): ShareInformation!
   addProductReview(input: ProductReviewInput!): AddReviewResponse!
@@ -1200,6 +1201,12 @@ enum StoreSort {
   CREATED
   CITY
   DATE
+}
+
+input VariantInventoryInput {
+  productId: ID!
+  variantId: ID
+  quantity: Int!
 }
 
 type VariantOptionResponse {

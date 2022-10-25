@@ -195,8 +195,8 @@ const MapScreen = (props) => {
     console.log("位置开始移动");
     console.log("====================================");
     const { results } = await Geocoder.from({
-      latitude: region.latitude,
-      longitude: region.longitude,
+      latitude: 17.4671569,
+      longitude: 78.3967226,
     });
 
     console.log("====================================");

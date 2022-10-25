@@ -2,24 +2,87 @@ import React, { useContext, useState, useCallback } from "react";
 import {
   View,
   Text,
-  SafeAreaView,
   TextInput as RNTextInput,
   Linking,
   TouchableOpacity,
+  Image,
 } from "react-native";
-import AppConfig from "../../Config/AppConfig";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
 import colors from "../../Themes/Colors";
-import { AppBar, RightButton, Selector, TextInput } from "../../Components";
-import NavigationService from "../../Navigation/NavigationService";
 import { AlertContext } from "../Root/GlobalContext";
 import { t } from "react-native-tailwindcss";
+import AppConfig from "../../Config/AppConfig";
+import { Button, RightButton, Selector } from "../../Components";
+import { useNavigation } from "@react-navigation/native";
+import { Images } from "../../Themes";
+import TextTip from "../../Components/EmptyReminder";
 
 function CustomerSupport(props) {
   const { dispatch } = useContext(AlertContext);
-  const [mstate, setMstate] = useState("AAA");
-
+  const [mstate, setMstate] = useState("UNDEFINED");
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={[t.mR6]}>
+          <RightButton
+            title="SUBMIT"
+            onPress={() => {
+              dispatch({
+                type: "changSheetState",
+                payload: {
+                  showSheet: true,
+                  height: 380,
+                  children: () => {
+                    return (
+                      <View
+                        style={{
+                          flex: 1,
+                          alignItems: "center",
+                        }}
+                      >
+                        <Image
+                          style={{
+                            marginTop: 20,
+                            height: s(113),
+                            width: s(113),
+                            resizeMode: "contain",
+                          }}
+                          source={Images.userFacebookImage}
+                        />
+                        <View
+                          style={{
+                            // marginLeft: -AppConfig.paddingHorizontal,
+                            flex: 1,
+                          }}
+                        >
+                          <TextTip
+                            textTip="Thanks for submitting!"
+                            // subTextTip="Would you mind rating us in the App Store / Google Play?"
+                            needButton
+                            btnMsg="SURE!"
+                            onPress={() => {
+                              dispatch({
+                                type: "changSheetState",
+                                payload: {
+                                  showSheet: false,
+                                },
+                              });
+                            }}
+                          />
+                        </View>
+                      </View>
+                    );
+                  },
+                },
+              });
+            }}
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View
       style={{
@@ -32,7 +95,7 @@ function CustomerSupport(props) {
         bottom: 0,
       }}
     >
-      <View style={[t.itemsCenter, t.pT12]}>
+      {/* <View style={[t.itemsCenter, t.pT12]}>
         <Text style={[t.textXl, t.pX4, t.mB6]}>
           Please send queries to below email address. In case of Order issues,
           please include Order no, Product information, buyer register phone no
@@ -50,33 +113,36 @@ function CustomerSupport(props) {
         >
           <Text style={[t.textXl]}>support@SalamiSlicing.in</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
 
-      {/* <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-          <Text
-            style={{
-              fontSize: s(24),
+      <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+        <Text
+          style={[
+            {
+              fontSize: s(20),
               fontFamily: fonts.primary,
-              color: colors.black, vablio
-              fontWeight: "bold",
-            }}
-          >
-            How may we help you?
-          </Text>
-        </View>
-        <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
-          <Selector
-            style={{ marginVertical: vs(10) }}
-            placeholder={"Problem reason goes here"}
-            value={mstate}
-            data={["AAA", "BBB", "CCC"]}
-            onValueChange={(text) => setMstate(text)}
-          />
+              color: colors.black,
+            },
+            t.fontSemibold,
+          ]}
+        >
+          How may we help you?
+        </Text>
+      </View>
+      <View style={{ paddingHorizontal: AppConfig.paddingHorizontal }}>
+        <Selector
+          style={{ marginVertical: vs(10) }}
+          placeholder={"Problem reason goes here"}
+          value={mstate}
+          data={["UNDEFINED"]}
+          onValueChange={(text) => setMstate(text)}
+        />
 
-          <RNTextInput
-            multiline={true}
-            placeholder="Message"
-            style={{
+        <RNTextInput
+          multiline={true}
+          placeholder="Message"
+          style={[
+            {
               marginTop: vs(16),
               textAlignVertical: "top",
               height: vs(160),
@@ -90,9 +156,11 @@ function CustomerSupport(props) {
               justifyContent: "flex-start",
               padding: s(14),
               paddingVertical: s(20),
-            }}
-          />
-        </View> */}
+            },
+            t.pT6,
+          ]}
+        />
+      </View>
     </View>
   );
 }

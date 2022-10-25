@@ -159,6 +159,13 @@ type Mutation {
   submitOrderReturnRequest(request: OrderReturnRequest!): OrderReturnResponse
   approveOrRejectOrderReturnRequest(request: OrderReturnEventRequest!): Boolean
   markOrderReturnAsReceived(request: OrderReturnReceivedRequest!): Boolean
+  submitOrderContactSupport(request: OrderContactSupportRequest!): Boolean!
+}
+
+input OrderContactSupportRequest {
+  orderItemId: ID!
+  problemReason: ProblemReason!
+  message: String!
 }
 
 enum OrderDateFilterType {
@@ -358,6 +365,10 @@ input PageOption {
   pageSize: Int!
 }
 
+enum ProblemReason {
+  UNDEFINED
+}
+
 enum ProductListingStatus {
   UNDEFINED
   DRAFT
@@ -540,6 +551,7 @@ type TrackOrderItemResponse {
   orderNumber: String!
   sellerBusinessName: String!
   dateDelivered: DateTime
+  estimatedDeliveryDate: Date
   events: [OrderItemHistoryResponse!]
   shippingDetails: ShippingDetailsResponse
   collectionPoint: CollectionPointPickupResponse

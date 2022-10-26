@@ -3,8 +3,7 @@ name: Deploy Production
 on:
   push:
     branches:
-      - development
-      - sellerScan
+      - main
 jobs:
   ci-test:
     runs-on: ${{ matrix.os }}

@@ -142,7 +142,6 @@ const MapScreen = (props) => {
           //   item.types.includes("premise")
           // );
           const houseNo = results.addressComponents[0];
-          debugger;
           const street = results.addressComponents.find(
             (item) =>
               item.types.includes("neighborhood") ||

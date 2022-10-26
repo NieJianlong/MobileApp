@@ -3,7 +3,7 @@ name: Deploy Production
 on:
   push:
     branches:
-      - main
+      - new_version
 jobs:
   ci-test:
     runs-on: ${{ matrix.os }}

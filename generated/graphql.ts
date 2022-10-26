@@ -20,6 +20,12 @@ export type Scalars = {
   FileUpload: any;
 };
 
+export type AccountContactSupportRequest = {
+  message: Scalars['String'];
+  problemReason: ProblemReason;
+  userId: Scalars['ID'];
+};
+
 export type AddReviewResponse = {
   __typename?: 'AddReviewResponse';
   description?: Maybe<Scalars['String']>;
@@ -901,6 +907,7 @@ export type Mutation = {
   forgotPasswordStep3ChangeByEmail?: Maybe<ForgotPasswordStep3Response>;
   forgotPasswordStep3ChangeBySms?: Maybe<ForgotPasswordStep3Response>;
   grantGiftPromotion?: Maybe<SalamiWalletGiftTransactionResponse>;
+  increaseInventory: Scalars['Boolean'];
   incrementHelpfulCount?: Maybe<Scalars['Int']>;
   incrementSoldQuantity: Scalars['Boolean'];
   markOrderItemAsDelivered?: Maybe<Scalars['Boolean']>;
@@ -935,6 +942,8 @@ export type Mutation = {
   setEscrowAccountToSeller?: Maybe<SellerProfileResponse>;
   setSupportedLanguageForUser?: Maybe<SupportedLanguageResponse>;
   setWalletToBuyer?: Maybe<BuyerProfileResponse>;
+  submitAccountContactSupport: Scalars['Boolean'];
+  submitOrderContactSupport: Scalars['Boolean'];
   submitOrderReturnRequest?: Maybe<OrderReturnResponse>;
   updateAddress?: Maybe<AddressResponse>;
   updateAddressForGuestBuyer?: Maybe<AddressResponse>;
@@ -1469,6 +1478,12 @@ export type MutationGrantGiftPromotionArgs = {
 
 
 /** MUTATIONS */
+export type MutationIncreaseInventoryArgs = {
+  input: VariantInventoryInput;
+};
+
+
+/** MUTATIONS */
 export type MutationIncrementHelpfulCountArgs = {
   reviewId: Scalars['String'];
 };
@@ -1657,6 +1672,18 @@ export type MutationSetSupportedLanguageForUserArgs = {
 export type MutationSetWalletToBuyerArgs = {
   buyerId: Scalars['ID'];
   walletId: Scalars['ID'];
+};
+
+
+/** MUTATIONS */
+export type MutationSubmitAccountContactSupportArgs = {
+  request: AccountContactSupportRequest;
+};
+
+
+/** MUTATIONS */
+export type MutationSubmitOrderContactSupportArgs = {
+  request: OrderContactSupportRequest;
 };
 
 
@@ -1981,6 +2008,12 @@ export type OptionValueInput = {
   optionValueId: Scalars['ID'];
 };
 
+export type OrderContactSupportRequest = {
+  message: Scalars['String'];
+  orderItemId: Scalars['ID'];
+  problemReason: ProblemReason;
+};
+
 export enum OrderDateFilterType {
   Custom = 'CUSTOM',
   Last_7Days = 'LAST_7_DAYS',
@@ -2294,6 +2327,10 @@ export type Price = {
   totalQuantityPrice?: Maybe<Scalars['Float']>;
   wholeSalePrice?: Maybe<Scalars['Float']>;
 };
+
+export enum ProblemReason {
+  Undefined = 'UNDEFINED'
+}
 
 export type ProcessOrderPaymentStatusResponse = {
   __typename?: 'ProcessOrderPaymentStatusResponse';
@@ -4484,6 +4521,7 @@ export type TrackOrderItemResponse = {
   collectionPoint?: Maybe<CollectionPointPickupResponse>;
   dateDelivered?: Maybe<Scalars['DateTime']>;
   deliveryOption: DeliveryOption;
+  estimatedDeliveryDate?: Maybe<Scalars['Date']>;
   events?: Maybe<Array<OrderItemHistoryResponse>>;
   latestEventStatus: OrderItemHistoryEventType;
   orderItemId: Scalars['ID'];
@@ -4561,6 +4599,12 @@ export enum ValidationType {
   Email = 'EMAIL',
   Sms = 'SMS'
 }
+
+export type VariantInventoryInput = {
+  productId: Scalars['ID'];
+  quantity: Scalars['Int'];
+  variantId?: InputMaybe<Scalars['ID']>;
+};
 
 export type VariantOptionResponse = {
   __typename?: 'VariantOptionResponse';
@@ -5109,6 +5153,20 @@ export type UpdateNotificationMutationVariables = Exact<{
 
 
 export type UpdateNotificationMutation = { __typename?: 'Mutation', updateNotification?: { __typename?: 'NotificationResponse', notificationId?: string | null | undefined, text?: string | null | undefined, notificationStatus?: NotificationStatus | null | undefined, buyerId?: string | null | undefined, dateTime?: any | null | undefined, createdAt?: any | null | undefined, updatedAt?: any | null | undefined } | null | undefined };
+
+export type SubmitAccountContactSupportMutationVariables = Exact<{
+  request: AccountContactSupportRequest;
+}>;
+
+
+export type SubmitAccountContactSupportMutation = { __typename?: 'Mutation', submitAccountContactSupport: boolean };
+
+export type SubmitOrderContactSupportMutationVariables = Exact<{
+  request: OrderContactSupportRequest;
+}>;
+
+
+export type SubmitOrderContactSupportMutation = { __typename?: 'Mutation', submitOrderContactSupport: boolean };
 
 export const OrderResponseFieldsFragmentDoc = gql`
     fragment OrderResponseFields on OrderResponse {
@@ -7822,3 +7880,65 @@ export function useUpdateNotificationMutation(baseOptions?: Apollo.MutationHookO
 export type UpdateNotificationMutationHookResult = ReturnType<typeof useUpdateNotificationMutation>;
 export type UpdateNotificationMutationResult = Apollo.MutationResult<UpdateNotificationMutation>;
 export type UpdateNotificationMutationOptions = Apollo.BaseMutationOptions<UpdateNotificationMutation, UpdateNotificationMutationVariables>;
+export const SubmitAccountContactSupportDocument = gql`
+    mutation SubmitAccountContactSupport($request: AccountContactSupportRequest!) {
+  submitAccountContactSupport(request: $request)
+}
+    `;
+export type SubmitAccountContactSupportMutationFn = Apollo.MutationFunction<SubmitAccountContactSupportMutation, SubmitAccountContactSupportMutationVariables>;
+
+/**
+ * __useSubmitAccountContactSupportMutation__
+ *
+ * To run a mutation, you first call `useSubmitAccountContactSupportMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubmitAccountContactSupportMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [submitAccountContactSupportMutation, { data, loading, error }] = useSubmitAccountContactSupportMutation({
+ *   variables: {
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useSubmitAccountContactSupportMutation(baseOptions?: Apollo.MutationHookOptions<SubmitAccountContactSupportMutation, SubmitAccountContactSupportMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SubmitAccountContactSupportMutation, SubmitAccountContactSupportMutationVariables>(SubmitAccountContactSupportDocument, options);
+      }
+export type SubmitAccountContactSupportMutationHookResult = ReturnType<typeof useSubmitAccountContactSupportMutation>;
+export type SubmitAccountContactSupportMutationResult = Apollo.MutationResult<SubmitAccountContactSupportMutation>;
+export type SubmitAccountContactSupportMutationOptions = Apollo.BaseMutationOptions<SubmitAccountContactSupportMutation, SubmitAccountContactSupportMutationVariables>;
+export const SubmitOrderContactSupportDocument = gql`
+    mutation SubmitOrderContactSupport($request: OrderContactSupportRequest!) {
+  submitOrderContactSupport(request: $request)
+}
+    `;
+export type SubmitOrderContactSupportMutationFn = Apollo.MutationFunction<SubmitOrderContactSupportMutation, SubmitOrderContactSupportMutationVariables>;
+
+/**
+ * __useSubmitOrderContactSupportMutation__
+ *
+ * To run a mutation, you first call `useSubmitOrderContactSupportMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubmitOrderContactSupportMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [submitOrderContactSupportMutation, { data, loading, error }] = useSubmitOrderContactSupportMutation({
+ *   variables: {
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useSubmitOrderContactSupportMutation(baseOptions?: Apollo.MutationHookOptions<SubmitOrderContactSupportMutation, SubmitOrderContactSupportMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SubmitOrderContactSupportMutation, SubmitOrderContactSupportMutationVariables>(SubmitOrderContactSupportDocument, options);
+      }
+export type SubmitOrderContactSupportMutationHookResult = ReturnType<typeof useSubmitOrderContactSupportMutation>;
+export type SubmitOrderContactSupportMutationResult = Apollo.MutationResult<SubmitOrderContactSupportMutation>;
+export type SubmitOrderContactSupportMutationOptions = Apollo.BaseMutationOptions<SubmitOrderContactSupportMutation, SubmitOrderContactSupportMutationVariables>;

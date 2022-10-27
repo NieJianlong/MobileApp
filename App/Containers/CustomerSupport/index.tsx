@@ -6,6 +6,7 @@ import {
   Linking,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
 import { vs, s, ScaledSheet } from "react-native-size-matters";
 import fonts from "../../Themes/Fonts";
@@ -14,12 +15,14 @@ import { AlertContext } from "../Root/GlobalContext";
 import { t } from "react-native-tailwindcss";
 import AppConfig from "../../Config/AppConfig";
 import { Button, RightButton, Selector } from "../../Components";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Images } from "../../Themes";
 import TextTip from "../../Components/EmptyReminder";
 import {
   useSubmitAccountContactSupportMutation,
   MutationSubmitAccountContactSupportArgs,
+  ProblemReason,
+  useSubmitOrderContactSupportMutation,
 } from "../../../generated/graphql";
 import { Controller, useForm } from "react-hook-form";
 import { isEmpty, trim } from "lodash";
@@ -30,8 +33,29 @@ import NavigationService from "../../Navigation/NavigationService";
 import { userProfileVar } from "../../Apollo/cache";
 import { useReactiveVar } from "@apollo/client";
 function CustomerSupport(props) {
+  const { params } = useRoute();
+  // alert(JSON.stringify(params));
+  const accountItems = [
+    "Mobile app issues",
+    "Website issues",
+    "Order related issues",
+  ];
+  const orderItems = [
+    "Item not delivered yet",
+    "Item damaged",
+    "Item is defective or does not work",
+    "Wrong item was sent",
+    "Product and delivery box both damaged",
+    "Missing parts or accessories",
+    "Performance or quality not adequate",
+    "Missed estimated delivery date",
+    "About refunds or replacement",
+    "Other",
+  ];
   const { dispatch } = useContext(AlertContext);
-  const [mstate, setMstate] = useState("UNDEFINED");
+  const [mstate, setMstate] = useState(
+    isEmpty(params) ? "Mobile app issues" : "Item not delivered yet"
+  );
   const navigation = useNavigation();
   const { setLoading } = useLoading();
   const { setAlert } = useAlert();
@@ -44,85 +68,123 @@ function CustomerSupport(props) {
     formState: { errors },
   } = useForm<MutationSubmitAccountContactSupportArgs>();
   const [submitSupporting] = useSubmitAccountContactSupportMutation();
+  const [submitOrderSupporting] = useSubmitOrderContactSupportMutation();
   const onSubmit = (data: MutationSubmitAccountContactSupportArgs) => {
     setLoading({ show: true });
-    submitSupporting({
-      context: {
-        headers: {
-          isPrivate: userProfile.isAuth,
-        },
-      },
-      variables: {
-        request: {
-          userId: global.userProfileId,
-          problemReason: "UNDEFINED",
-          message: data.request.message,
-        },
-      },
-      onCompleted: (data) => {
-        setLoading({ show: false });
-        NavigationService.goBack();
-        setAlert({
-          color: colors.success,
-          title: "Thanks for submitting!",
-          visible: true,
-          onDismiss: () => {
-            setAlert({ visible: false });
+    let reason = isEmpty(params)
+      ? ProblemReason.MobileAppIssues
+      : ProblemReason.ItemNotDeliveredYet;
+    if (data.request.problemReason === "Website issues") {
+      reason = ProblemReason.WebsiteIssues;
+    }
+    if (data.request.problemReason === "Order related issues") {
+      reason = ProblemReason.OrderRelatedIssues;
+    }
+    // const orderItems = [
+    //   "Item not delivered yet",
+    //   "Item damaged",
+    //   "Item is defective or does not work",
+    //   "Wrong item was sent",
+    //   "Product and delivery box both damaged",
+    //   "Missing parts or accessories",
+    //   "Performance or quality not adequate",
+    //   "Missed estimated delivery date",
+    //   "About refunds or replacement",
+    //   "Other",
+    // ];
+    if (data.request.problemReason === "Item not delivered yet") {
+      reason = ProblemReason.ItemNotDeliveredYet;
+    }
+    if (data.request.problemReason === "Item damaged") {
+      reason = ProblemReason.ItemDamaged;
+    }
+    if (data.request.problemReason === "Item is defective or does not work") {
+      reason = ProblemReason.ItemIsDefectiveOrDoesNotWork;
+    }
+    if (data.request.problemReason === "Wrong item was sent") {
+      reason = ProblemReason.WrongItemWasSent;
+    }
+    if (
+      data.request.problemReason === "Product and delivery box both damaged"
+    ) {
+      reason = ProblemReason.ProductAndDeliveryBoxBothDamaged;
+    }
+    if (data.request.problemReason === "Missing parts or accessories") {
+      reason = ProblemReason.MissingPartsOrAccessories;
+    }
+    if (data.request.problemReason === "Performance or quality not adequate") {
+      reason = ProblemReason.PerformanceOrQualityNotAdequate;
+    }
+    if (data.request.problemReason === "Missed estimated delivery date") {
+      reason = ProblemReason.MissedEstimatedDeliveryDate;
+    }
+    if (data.request.problemReason === "About refunds or replacement") {
+      reason = ProblemReason.AboutRefundsOrReplacement;
+    }
+    if (data.request.problemReason === "Other") {
+      reason = ProblemReason.Other;
+    }
+    if (isEmpty(params)) {
+      submitSupporting({
+        context: {
+          headers: {
+            isPrivate: userProfile.isAuth,
           },
-        });
-        // dispatch({
-        //   type: "changSheetState",
-        //   payload: {
-        //     showSheet: true,
-        //     height: 380,
-        //     children: () => {
-        //       return (
-        //         <View
-        //           style={{
-        //             flex: 1,
-        //             alignItems: "center",
-        //           }}
-        //         >
-        //           <Image
-        //             style={{
-        //               marginTop: 20,
-        //               height: s(113),
-        //               width: s(113),
-        //               resizeMode: "contain",
-        //             }}
-        //             source={Images.userFacebookImage}
-        //           />
-        //           <View
-        //             style={{
-        //               // marginLeft: -AppConfig.paddingHorizontal,
-        //               flex: 1,
-        //             }}
-        //           >
-        //             <TextTip
-        //               textTip="Thanks for submitting!"
-        //               // subTextTip="Would you mind rating us in the App Store / Google Play?"
-        //               needButton
-        //               btnMsg="SURE!"
-        //               onPress={() => {
-        //                 dispatch({
-        //                   type: "changSheetState",
-        //                   payload: {
-        //                     showSheet: false,
-        //                   },
-        //                 });
-        //               }}
-        //             />
-        //           </View>
-        //         </View>
-        //       );
-        //     },
-        //   },
-        // });
-      },
-      onError: (error) => {
-        setLoading({ show: false });
-      },
-    });
+        },
+        variables: {
+          request: {
+            userId: global.userProfileId,
+            problemReason: reason,
+            message: data.request.message,
+          },
+        },
+        onCompleted: (data) => {
+          setLoading({ show: false });
+          NavigationService.goBack();
+          setAlert({
+            color: colors.success,
+            title: "Thanks for submitting!",
+            visible: true,
+            onDismiss: () => {
+              setAlert({ visible: false });
+            },
+          });
+        },
+        onError: (error) => {
+          setLoading({ show: false });
+        },
+      });
+    } else {
+      submitOrderSupporting({
+        context: {
+          headers: {
+            isPrivate: userProfile.isAuth,
+          },
+        },
+        variables: {
+          request: {
+            problemReason: reason,
+            message: data.request.message,
+            orderItemId: params.orderItemId,
+          },
+        },
+        onCompleted: (data) => {
+          setLoading({ show: false });
+          NavigationService.goBack();
+          setAlert({
+            color: colors.success,
+            title: "Thanks for submitting!",
+            visible: true,
+            onDismiss: () => {
+              setAlert({ visible: false });
+            },
+          });
+        },
+        onError: (error) => {
+          setLoading({ show: false });
+        },
+      });
+    }
   };
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -190,7 +252,7 @@ function CustomerSupport(props) {
           style={{ marginVertical: vs(10) }}
           placeholder={"Problem reason goes here"}
           value={mstate}
-          data={["UNDEFINED"]}
+          data={isEmpty(params) ? accountItems : orderItems}
           onValueChange={(text) => setMstate(text)}
         />
         <Controller

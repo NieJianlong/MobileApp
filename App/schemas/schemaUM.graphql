@@ -638,7 +638,9 @@ enum PreferenceType {
 }
 
 enum ProblemReason {
-  UNDEFINED
+  MOBILE_APP_ISSUES
+  WEBSITE_ISSUES
+  ORDER_RELATED_ISSUES
 }
 
 type Query {

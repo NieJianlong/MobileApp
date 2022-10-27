@@ -2329,7 +2329,19 @@ export type Price = {
 };
 
 export enum ProblemReason {
-  Undefined = 'UNDEFINED'
+  AboutRefundsOrReplacement = 'ABOUT_REFUNDS_OR_REPLACEMENT',
+  ItemDamaged = 'ITEM_DAMAGED',
+  ItemIsDefectiveOrDoesNotWork = 'ITEM_IS_DEFECTIVE_OR_DOES_NOT_WORK',
+  ItemNotDeliveredYet = 'ITEM_NOT_DELIVERED_YET',
+  MissedEstimatedDeliveryDate = 'MISSED_ESTIMATED_DELIVERY_DATE',
+  MissingPartsOrAccessories = 'MISSING_PARTS_OR_ACCESSORIES',
+  MobileAppIssues = 'MOBILE_APP_ISSUES',
+  OrderRelatedIssues = 'ORDER_RELATED_ISSUES',
+  Other = 'OTHER',
+  PerformanceOrQualityNotAdequate = 'PERFORMANCE_OR_QUALITY_NOT_ADEQUATE',
+  ProductAndDeliveryBoxBothDamaged = 'PRODUCT_AND_DELIVERY_BOX_BOTH_DAMAGED',
+  WebsiteIssues = 'WEBSITE_ISSUES',
+  WrongItemWasSent = 'WRONG_ITEM_WAS_SENT'
 }
 
 export type ProcessOrderPaymentStatusResponse = {

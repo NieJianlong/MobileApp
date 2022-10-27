@@ -145,6 +145,7 @@ function ReturnStatus(props) {
       title: type === "track" ? "Track Order" : "Order return status",
     });
   }, [navigation]);
+  debugger;
   return (
     <ViewShot
       style={{

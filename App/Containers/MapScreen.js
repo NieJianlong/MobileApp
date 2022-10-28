@@ -30,6 +30,7 @@ import { request, PERMISSIONS, openSettings } from "react-native-permissions";
 import useActionAlert from "../hooks/useActionAlert";
 import useLoading from "../hooks/useLoading";
 import Geolocation from "@react-native-community/geolocation";
+import { isEmpty, trim } from "lodash";
 
 Geocoder.init("AIzaSyBfDTs1ejBI3MIVhrPeXgpvDNkTovWkIuU");
 
@@ -194,20 +195,44 @@ const MapScreen = (props) => {
     console.log("位置开始移动");
     console.log("====================================");
     const { results } = await Geocoder.from({
-      latitude: region.latitude,
-      longitude: region.longitude,
+      latitude: 17.3893791,
+      longitude: 78.3756455,
     });
 
-    console.log("====================================");
-    console.log(results);
-    console.log("====================================");
+    //https://developers.google.com/maps/documentation/geocoding/requests-geocoding
     if (results && results[0]) {
-      const houseNo = results[0].address_components.find((item) =>
-        item.types.includes("premise")
-      );
+      const disAddress = results[0];
+      // const isPremise = disAddress.types.includes("premise");
+      const houseNos =
+        disAddress.address_components.filter((item) =>
+          item.types.includes("premise")
+        ) ?? [];
+      const streetNos =
+        disAddress.address_components.filter((item) =>
+          item.types.includes("street_number")
+        ) ?? [];
+      const routes =
+        disAddress.address_components.filter((item) =>
+          item.types.includes("route")
+        ) ?? [];
+      const flatResults = [...houseNos, ...streetNos, ...routes];
+      let finalName = flatResults.map((i) => i.long_name).join(",");
+      finalName = finalName.replace(/,,/g, ",").replace(/undefind,/g, "");
+      finalName = trim(finalName, ",");
       const street = results[0].address_components.find((item) =>
         item.types.includes("neighborhood")
       );
+      const street1 = results[0].address_components.find((item) =>
+        item.types.includes("sublocality_level_2")
+      );
+      const street2 = results[0].address_components.find((item) =>
+        item.types.includes("sublocality_level_1")
+      );
+      let streetName = `${street?.long_name ?? ""},${
+        street1?.long_name ?? ""
+      },${street2?.long_name ?? ""}`;
+      streetName = streetName.replace(/,,/g, ",").replace(/undefind,/g, "");
+      streetName = trim(streetName, ",");
       const city = results[0].address_components.find((item) =>
         item.types.includes("locality")
       );
@@ -227,8 +252,8 @@ const MapScreen = (props) => {
         address: address || "",
         city: city ? city.long_name : "",
         state: state ? state.long_name : "",
-        street: street ? street.long_name : "",
-        houseNo: houseNo ? houseNo.long_name : "",
+        street: streetName,
+        houseNo: finalName ?? "",
         country: country ? country.long_name : "",
         post_code: post_code ? post_code.long_name : "",
         location: { latitude: region.latitude, longitude: region.longitude },
@@ -262,8 +287,8 @@ const MapScreen = (props) => {
   };
 
   const INITIAL_REGION = {
-    latitude: 37.78825,
-    longitude: -122.4324,
+    latitude: 17.4690959,
+    longitude: 78.4086231,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };

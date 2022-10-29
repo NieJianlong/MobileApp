@@ -27,7 +27,7 @@ import QRCode from "react-native-qrcode-svg";
 import { t } from "react-native-tailwindcss";
 import PickInfo from "../../../Components/PickInfo";
 import { useNavigation } from "@react-navigation/native";
-import ViewShot, { captureRef, captureScreen } from "react-native-view-shot";
+import ViewShot, { captureRef } from "react-native-view-shot";
 import Share from "react-native-share";
 const url = "";
 const title = "";
@@ -40,7 +40,7 @@ function ReturnStatus(props) {
     params: { type, data },
   } = useRoute();
   const { width } = useWindowDimensions();
-  const { data: trackData, loading } = useGetOrderReturnStatusQuery({
+  const { data: trackData } = useGetOrderReturnStatusQuery({
     variables: {
       orderReturnId: data.orderReturnId,
     },

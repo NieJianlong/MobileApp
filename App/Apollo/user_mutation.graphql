@@ -161,3 +161,9 @@ mutation UpdateNotification($request: NotificationRequest!) {
     ...NotificationFields
   }
 }
+mutation SubmitAccountContactSupport($request: AccountContactSupportRequest!) {
+  submitAccountContactSupport(request: $request)
+}
+mutation SubmitOrderContactSupport($request: OrderContactSupportRequest!) {
+  submitOrderContactSupport(request: $request)
+}

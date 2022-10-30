@@ -52,10 +52,13 @@ function DeleteAccountMessage(props) {
         isPrivate: true,
       },
     },
-    onCompleted: () => {
-      storage.setLocalStorageEmpty();
-      storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_NAME, "");
-      storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_PASSWORD, "");
+    onCompleted: async () => {
+      await storage.setLocalStorageEmpty();
+      await storage.setLocalStorageValue(storage.LOCAL_STORAGE_USER_NAME, "");
+      await storage.setLocalStorageValue(
+        storage.LOCAL_STORAGE_USER_PASSWORD,
+        ""
+      );
       userProfileVar({
         billingDetails: "",
         billingDetailsId: "",
@@ -66,13 +69,17 @@ function DeleteAccountMessage(props) {
         isAuth: false,
       });
 
-      // navigation.reset({
-      //   index: 0,
-      //   routes: [{ name: "LoginScreen" }],
+      await storage.setLocalStorageValue(
+        storage.REGISTERED_USER_LOGOUT,
+        "true"
+      );
+      // guestBuyerId();
+      // userProfileVar({
+      //   ...userProfileVarReactive,
+      //   isAuth: false,
       // });
-      // DevSettings.reload();
+      NavigationService.navigate("LogOutScreen");
 
-      NavigationService.navigate("LoginScreen");
       // NavigationService.navigate("OnboardingScreen");
     },
     onError: (err) => {

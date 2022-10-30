@@ -9,7 +9,7 @@ import RegisterGuestBuyerToBuyerForm from "../../Components/RegisterGuestBuyerTo
 
 function CheckoutPaymentCompletedGuest() {
   const data = {
-    textTip: "Your order has been processed sucessfully",
+    textTip: "Your order has been processed successfully",
     subTextTip:
       "Remember that you will receive your order once the required number of orders is reached",
     needButton: false,

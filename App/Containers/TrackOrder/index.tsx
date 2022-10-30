@@ -140,6 +140,11 @@ function TrackOrder(props) {
       title: type === "track" ? "Track Order" : "Order return status",
     });
   }, [navigation, type]);
+  const isOption1 =
+    trackData?.trackOrderItem.deliveryOption === DeliveryOption.CourierDelivery;
+  const date = isOption1
+    ? trackData?.trackOrderItem.estimatedDeliveryDate
+    : trackData?.trackOrderItem.collectionPoint.collectionDate;
   return (
     <ViewShot
       style={{
@@ -168,7 +173,18 @@ function TrackOrder(props) {
             {`Estimated ${type === "track" ? "delivery" : "return"} date`}
           </Text>
           <View style={{ height: 10, width: "100%" }} />
-
+          {data.deliveryOption === DeliveryOption.CourierDelivery && (
+            <Text
+              style={[
+                ApplicationStyles.screen.heading2Bold,
+                { fontSize: 18, paddingTop: 10 },
+              ]}
+            >
+              {moment(
+                trackData?.trackOrderItem.estimatedDeliveryDate ?? ""
+              ).format("DD MMM YYYY")}
+            </Text>
+          )}
           {data.deliveryOption === DeliveryOption.CollectionPointPickup && (
             <Text
               style={[

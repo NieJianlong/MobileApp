@@ -195,6 +195,7 @@ fragment ProductListingViewField on ProductListingView {
   salePercentage
   percentOff
   showcase
+  missed
   # deliveryFee
   amountSaved
   # pickUpFromSeller

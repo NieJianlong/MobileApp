@@ -1,112 +1,87 @@
-import React, { Component } from "react";
-import { Text, View, Image, TouchableOpacity, Animated } from "react-native";
+import React, { Component, useEffect, useRef } from "react";
+import {
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Animated,
+  Alert,
+} from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import AppConfig from "../Config/AppConfig";
 import { Images, Fonts, Colors, ApplicationStyles } from "../Themes";
 
-//alert component
-class AlertComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      fadeAnim: new Animated.Value(0),
-    };
-  }
-
-  componentDidMount() {
-    this.fadeIn();
-  }
-
-  //fade in animation
-  fadeIn = () => {
-    // Will change fadeAnim value to 1 in 5 seconds
-    Animated.timing(this.state.fadeAnim, {
+export default function AlertComponent({
+  color,
+  message,
+  title,
+  visible,
+  onDismiss,
+  action,
+}) {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 2000,
-      useNativeDriver: true,
+      duration: 1000,
     }).start();
-    setTimeout(() => {
-      this.props.onDismiss && this.props.onDismiss();
-      this.fadeOut();
-    }, 5000);
-  };
-
-  //fade out animation
-  fadeOut = () => {
-    // Will change fadeAnim value to 0 in 5 seconds
-    Animated.timing(this.state.fadeAnim, {
+  }, [fadeAnim]);
+  const fadeOut = () => {
+    Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 2000,
-      useNativeDriver: true,
+      duration: 1000,
     }).start();
-    this.props.onDismiss && this.props.onDismiss();
   };
+  // alert(visible);
+  return (
+    <Animated.View
+      useNativeDriver={true}
+      style={[styles.container, { opacity: fadeAnim }]}
+    >
+      <SafeAreaView
+        edges={["top", "left", "right"]}
+        style={styles.safeAreaView}
+      >
+        <View style={[styles.line, { backgroundColor: color }]} />
+        {title ? (
+          <View style={styles.contentContainer}>
+            <View style={styles.row}>
+              <Text style={[styles.txtTitle, { color: color }]}>{title}</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  onDismiss && onDismiss();
+                  fadeOut();
+                }}
+              >
+                <Image style={styles.icClose} source={Images.crossMedium} />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.txtMsg}>{message}</Text>
 
-  render() {
-    const { message, title, color, visible, onDismiss, action } = this.props;
+            {action && <View style={styles.actionContainer}>{action()}</View>}
+          </View>
+        ) : (
+          <View style={styles.contentContainer}>
+            <View style={styles.row}>
+              <Text style={styles.txtTitle}>{message}</Text>
 
-    if (visible) {
-      return (
-        <Animated.View
-          useNativeDriver={true}
-          style={[styles.container, { opacity: this.state.fadeAnim }]}
-        >
-          <SafeAreaView
-            edges={["top", "left", "right"]}
-            style={styles.safeAreaView}
-          >
-            <View style={[styles.line, { backgroundColor: color }]} />
-            {title ? (
-              <View style={styles.contentContainer}>
-                <View style={styles.row}>
-                  <Text style={[styles.txtTitle, { color: color }]}>
-                    {title}
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      onDismiss && onDismiss();
-                      this.fadeOut();
-                    }}
-                  >
-                    <Image style={styles.icClose} source={Images.crossMedium} />
-                  </TouchableOpacity>
-                </View>
-                <Text style={styles.txtMsg}>{message}</Text>
-
-                {action && (
-                  <View style={styles.actionContainer}>{action()}</View>
-                )}
-              </View>
-            ) : (
-              <View style={styles.contentContainer}>
-                <View style={styles.row}>
-                  <Text style={styles.txtTitle}>{message}</Text>
-
-                  <TouchableOpacity
-                    onPress={() => {
-                      onDismiss && onDismiss();
-                      this.fadeOut();
-                    }}
-                  >
-                    <Image style={styles.icClose} source={Images.crossMedium} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
-          </SafeAreaView>
-        </Animated.View>
-      );
-    } else return null;
-  }
+              <TouchableOpacity
+                onPress={() => {
+                  onDismiss && onDismiss();
+                  fadeOut();
+                }}
+              >
+                <Image style={styles.icClose} source={Images.crossMedium} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      </SafeAreaView>
+    </Animated.View>
+  );
 }
-
-function Alert(props) {
-  return <AlertComponent {...props} />;
-}
-
-export default Alert;
 
 const styles = ScaledSheet.create({
   container: {

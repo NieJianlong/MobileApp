@@ -224,7 +224,7 @@ export default function DetailFooter({
         <TouchableOpacity
           style={[styles.row, t.mR6]}
           onPress={toggleAddToCartSheet}
-          disabled={disabled}
+          disabled={disabled || product.missed}
         >
           <Image source={Images.cartMed} style={styles.icCart} />
           <Text
@@ -244,14 +244,14 @@ export default function DetailFooter({
             styles.btnBuyNow,
             t.flexGrow,
             t.justifyAround,
-            disabled ? t.opacity50 : t.opacity100,
+            disabled || product.missed ? t.opacity50 : t.opacity100,
           ]}
-          disabled={disabled}
+          disabled={disabled || product.missed}
         >
           <Text style={[styles.txtBold, { color: Colors.white }]}>
             {disabled
               ? `${
-                  showcase
+                  showcase || product.missed
                     ? product?.noOfItemsInStock
                     : product?.noOfOrderedItems
                 }/${product?.noOfItemsInStock} sold`

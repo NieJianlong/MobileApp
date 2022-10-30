@@ -55,7 +55,7 @@ const images = {
   mastercard: require("../Images/mastercard.png"),
 
   userDocImage: require("../Images/usercenter/Document.png"),
-  userIconImage: require("../Images/usercenter/Icon.png"),
+  userIconImage: require("../Images/usercenter/bellicon.png"),
   userLogoImage: require("../Images/usercenter/Logo.png"),
   userMediumImage: require("../Images/usercenter/Medium.png"),
   userSettingImage: require("../Images/usercenter/setting.png"),

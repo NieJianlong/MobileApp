@@ -26,6 +26,7 @@ import { isEmpty } from "lodash";
 import { useReactiveVar } from "@apollo/client";
 import DeviceInfo from "react-native-device-info";
 import { buildNumber } from "../../updates";
+import { useNotificationsByBuyerIdQuery } from "../../../generated/graphql";
 
 const salamiItem = [
   {
@@ -104,6 +105,21 @@ function UserCenter(props) {
   const [serviceItems, setServiceItems] = useState([]);
   const { razorpayCreateOrder, razorOrder } = useCreateRazorOrder();
   const userProfile = useReactiveVar(userProfileVar);
+  const { data, error, refetch } = useNotificationsByBuyerIdQuery({
+    variables: {
+      buyerId: global.buyerId,
+    },
+    context: {
+      headers: {
+        isPrivate: global.access_token,
+      },
+    },
+  });
+  const allNotifications = data?.notificationsByBuyerId;
+
+  const unreadNotifications = allNotifications?.filter((item) => {
+    return item.notificationStatus === "UNREAD";
+  });
   // const { loading, error, data } = useQuery(BUYER_PROFILES, {
   //   context: { headers: { isPrivate: true } },
   //   onCompleted: (res) => {
@@ -140,6 +156,20 @@ function UserCenter(props) {
             ]}
           >
             <ItemBox {...item} />
+            {item.title === "Notifications" &&
+              !isEmpty(unreadNotifications) && (
+                <View
+                  style={[
+                    t.w3,
+                    t.h3,
+                    t.roundedFull,
+                    t.bgRed500,
+                    t.absolute,
+
+                    { marginTop: 65, marginLeft: 65 },
+                  ]}
+                />
+              )}
           </View>
         ))}
         {!userProfileVar().isAuth && (

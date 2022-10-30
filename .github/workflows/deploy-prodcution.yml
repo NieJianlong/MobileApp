@@ -3,8 +3,8 @@ name: Deploy Production
 on:
   push:
     branches:
-      - development
-      - sellerScan
+      - main
+
 jobs:
   ci-test:
     runs-on: ${{ matrix.os }}
@@ -58,9 +58,14 @@ jobs:
       #   run: |
       #     eas build -p ios --non-interactive --json
 
+      - name: Config Pilab
+        run: |
+          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/configPilab.sh"
+          "${{ format('{0}/.github/workflows/configPilab.sh', github.workspace) }}"
+
       - name: Expo Publish
         run: |
-          eas build -p android --non-interactive --no-wait --json > buildLogAndroid.json
+          eas build -p android --non-interactive --profile note-dev --json > buildLogAndroid.json
           sed -i 's/\[//g' buildLogAndroid.json
           sed -i 's/\]//g' buildLogAndroid.json
           cat buildLogAndroid.json
@@ -93,7 +98,6 @@ jobs:
 
           SLACK_TITLE: Salami Slicing Updated -- Production
           SLACK_USERNAME: Salami Slicing
-
       - name: Echo Parse Asset URL
         run: echo ${{ steps.androidUrl.outputs.releaseChannel }}
 

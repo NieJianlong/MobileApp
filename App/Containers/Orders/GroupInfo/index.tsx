@@ -20,6 +20,8 @@ import { userProfileVar } from "../../../Apollo/cache";
 import { useReactiveVar } from "@apollo/client";
 import useOrderInfo from "../../../hooks/useOrderInfo";
 import { ComeFromType } from "../../../Utils/utils";
+import { EvilIcons } from "@expo/vector-icons";
+import { t } from "react-native-tailwindcss";
 
 function GroupInfoScreen(props) {
   const { params } = useRoute();
@@ -102,6 +104,24 @@ function GroupInfoScreen(props) {
             style={styles.actionIcon}
           />
           <Text style={styles.heading5Bold}>{text}</Text>
+        </View>
+        <Image source={Images.arrow_left} style={styles.icArrow} />
+      </TouchableOpacity>
+    );
+  }
+  function renderSupportAction() {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          NavigationService.navigate("CustomerSupportScreen", {
+            orderItemId: data.orderItemId,
+          });
+        }}
+        style={styles.actionContainer}
+      >
+        <View style={styles.row}>
+          <EvilIcons name="question" size={30} color={"#BBC0C6"} />
+          <Text style={[styles.heading5Bold, t.mL1]}>Contact support</Text>
         </View>
         <Image source={Images.arrow_left} style={styles.icArrow} />
       </TouchableOpacity>
@@ -275,6 +295,7 @@ function GroupInfoScreen(props) {
               data: orderData?.getOrderItemDetails,
             })
           )}
+        {renderSupportAction()}
       </View>
     );
   }

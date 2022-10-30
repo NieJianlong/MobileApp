@@ -535,8 +535,13 @@ function RegisterScreen(props) {
             required: "Type your first name.",
             validate: {
               positive: (v) => {
+                let ret = /[a-zA-Z]/.test(trim(v));
+                if (!ret) {
+                  return "Please enter valid name.";
+                }
+
                 if (trim(v).length === 0)
-                  return "First name should not  only contain Spaces";
+                  return "First name should not only contain Spaces";
                 return true;
               },
             },
@@ -570,6 +575,10 @@ function RegisterScreen(props) {
             required: "Type your last name.",
             validate: {
               positive: (v) => {
+                let ret = /[a-zA-Z]/.test(trim(v));
+                if (!ret) {
+                  return "Please enter valid name.";
+                }
                 if (trim(v).length === 0)
                   return "Last name should not  only contain Spaces";
                 return true;

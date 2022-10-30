@@ -192,6 +192,7 @@ query TrackOrderItem($orderItemId: ID!) {
     deliveryOption
     latestEventStatus
     orderNumber
+    estimatedDeliveryDate
     # sellerBusinessName
 
     dateDelivered

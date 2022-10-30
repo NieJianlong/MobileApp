@@ -198,7 +198,7 @@ function CheckoutGuestOrderDetail(props) {
                     required: true,
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <View style={[t.bgBlue200]}>
+                    <View>
                       <MaterialTextInput
                         placeholder="LastName*"
                         style={{ marginTop: vs(18) }}

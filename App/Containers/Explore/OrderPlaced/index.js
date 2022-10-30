@@ -127,7 +127,7 @@ function OrderPlaced(props) {
           <Text style={styles.txt1}>
             {params?.error
               ? errorMessage
-              : " Your order has been processed sucessfully"}
+              : " Your order has been processed successfully"}
           </Text>
           <Text style={styles.txt2}>
             {params?.error

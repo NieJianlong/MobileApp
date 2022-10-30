@@ -67,7 +67,7 @@ function CheckoutResume(props) {
               <Text style={ApplicationStyles.screen.heading4Bold}>
                 {"Your order"}
               </Text>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   NavigationService.goBack();
                 }}
@@ -76,7 +76,7 @@ function CheckoutResume(props) {
                   style={styles.editImage}
                   source={images.userAddressEditImage}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View>
               {orderInfo.allItems.map((item, index) => {

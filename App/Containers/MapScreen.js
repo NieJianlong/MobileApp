@@ -30,6 +30,7 @@ import { request, PERMISSIONS, openSettings } from "react-native-permissions";
 import useActionAlert from "../hooks/useActionAlert";
 import useLoading from "../hooks/useLoading";
 import Geolocation from "@react-native-community/geolocation";
+import { isEmpty, trim } from "lodash";
 
 Geocoder.init("AIzaSyBfDTs1ejBI3MIVhrPeXgpvDNkTovWkIuU");
 
@@ -138,9 +139,10 @@ const MapScreen = (props) => {
           console.log("====================================");
           console.log(results);
           console.log("====================================");
-          const houseNo = results.addressComponents.find((item) =>
-            item.types.includes("premise")
-          );
+          // const houseNo = results.addressComponents.find((item) =>
+          //   item.types.includes("premise")
+          // );
+          const houseNo = results.addressComponents[0];
           const street = results.addressComponents.find(
             (item) =>
               item.types.includes("neighborhood") ||
@@ -174,7 +176,12 @@ const MapScreen = (props) => {
               longitude: results?.location?.longitude,
             },
           };
-
+          mapRef.current.animateToRegion({
+            latitude: results?.location?.latitude,
+            longitude: results?.location?.longitude,
+            latitudeDelta: 0.01756674919514367,
+            longitudeDelta: 0.012099780142307281,
+          });
           setLocation(newLocation);
         }
 
@@ -188,17 +195,44 @@ const MapScreen = (props) => {
     console.log("位置开始移动");
     console.log("====================================");
     const { results } = await Geocoder.from({
-      latitude: region.latitude,
-      longitude: region.longitude,
+      latitude: 17.3893791,
+      longitude: 78.3756455,
     });
 
+    //https://developers.google.com/maps/documentation/geocoding/requests-geocoding
     if (results && results[0]) {
-      const houseNo = results[0].address_components.find((item) =>
-        item.types.includes("premise")
-      );
+      const disAddress = results[0];
+      // const isPremise = disAddress.types.includes("premise");
+      const houseNos =
+        disAddress.address_components.filter((item) =>
+          item.types.includes("premise")
+        ) ?? [];
+      const streetNos =
+        disAddress.address_components.filter((item) =>
+          item.types.includes("street_number")
+        ) ?? [];
+      const routes =
+        disAddress.address_components.filter((item) =>
+          item.types.includes("route")
+        ) ?? [];
+      const flatResults = [...houseNos, ...streetNos, ...routes];
+      let finalName = flatResults.map((i) => i.long_name).join(",");
+      finalName = finalName.replace(/,,/g, ",").replace(/undefind,/g, "");
+      finalName = trim(finalName, ",");
       const street = results[0].address_components.find((item) =>
         item.types.includes("neighborhood")
       );
+      const street1 = results[0].address_components.find((item) =>
+        item.types.includes("sublocality_level_2")
+      );
+      const street2 = results[0].address_components.find((item) =>
+        item.types.includes("sublocality_level_1")
+      );
+      let streetName = `${street?.long_name ?? ""},${
+        street1?.long_name ?? ""
+      },${street2?.long_name ?? ""}`;
+      streetName = streetName.replace(/,,/g, ",").replace(/undefind,/g, "");
+      streetName = trim(streetName, ",");
       const city = results[0].address_components.find((item) =>
         item.types.includes("locality")
       );
@@ -218,8 +252,8 @@ const MapScreen = (props) => {
         address: address || "",
         city: city ? city.long_name : "",
         state: state ? state.long_name : "",
-        street: street ? street.long_name : "",
-        houseNo: houseNo ? houseNo.long_name : "",
+        street: streetName,
+        houseNo: finalName ?? "",
         country: country ? country.long_name : "",
         post_code: post_code ? post_code.long_name : "",
         location: { latitude: region.latitude, longitude: region.longitude },
@@ -253,36 +287,44 @@ const MapScreen = (props) => {
   };
 
   const INITIAL_REGION = {
-    latitude: 37.78825,
-    longitude: -122.4324,
+    latitude: 17.4690959,
+    longitude: 78.4086231,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
-  useEffect(() => {
-    if (mapRef.current) {
-      mapRef.current.animateToRegion(
-        {
-          latitude: location.location.latitude,
-          longitude: location.location.longitude,
-          latitudeDelta: 0.01756674919514367,
-          longitudeDelta: 0.012099780142307281,
-        },
-        1000
-      );
-    }
-  }, [location]);
+  // useEffect(() => {
+  //   if (mapRef.current) {
+  //     mapRef.current.animateToRegion(
+  //       {
+  //         latitude: location.location.latitude,
+  //         longitude: location.location.longitude,
+  //         latitudeDelta: 0.01756674919514367,
+  //         longitudeDelta: 0.012099780142307281,
+  //       },
+  //       1000
+  //     );
+  //   }
+  // }, [location]);
 
   const { width, height } = useWindowDimensions();
+  const customHeight = Platform.OS === "android" ? height : height;
   return (
     <Portal>
-      <View style={[{ width, height }, t.bgBlue300, t.absolute]}>
-        <View style={[styles.container]}>
+      <View style={[{ width, height: customHeight }, t.bgWhite]}>
+        <View
+          style={[
+            { height: customHeight - 250 },
+            t.bgWhite,
+            t.itemsCenter,
+            t.justifyCenter,
+          ]}
+        >
           <MapView
             ref={mapRef}
             showsUserLocation
             pitchEnabled
             userLocationUpdateInterval={2000}
-            scrollDuringRotateOrZoomEnabled={false}
+            // scrollDuringRotateOrZoomEnabled={false}
             style={{
               left: 0,
               right: 0,
@@ -307,15 +349,7 @@ const MapScreen = (props) => {
 
           {/* <View style={styles.centerPin} /> */}
         </View>
-        <View
-          style={[
-            { width, height: 250, marginTop: height - 250 },
-            t.bgWhite,
-            t.p4,
-            t.absolute,
-            t.bottom0,
-          ]}
-        >
+        <View style={[{ width, height: 250 }, t.bgWhite, t.p4]}>
           <Text>Select Delivery Location</Text>
           <View style={[styles.locationInputContainer, t.mB6, t.mT6]}>
             <Image source={LocationPin} style={styles.locationPinIcon} />
@@ -411,7 +445,6 @@ const styles = ScaledSheet.create({
     borderRadius: "20@s",
   },
   container: {
-    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",

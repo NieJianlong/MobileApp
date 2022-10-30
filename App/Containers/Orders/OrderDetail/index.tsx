@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, Text, Image, ScrollView } from "react-native";
 import styles from "./styles";
 import { Images } from "../../../Themes";
-import { vs } from "react-native-size-matters";
+import { s, vs } from "react-native-size-matters";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { DeliveryOption } from "../../../../generated/graphql";
 import { t } from "react-native-tailwindcss";
@@ -123,8 +123,12 @@ class OrderDetail extends Component {
               <Text style={styles.productDetail}>{optionString}</Text>
             </View>
           </View>
-
-          <Text style={styles.txtPrice}>₹{price}</Text>
+          <View>
+            <Text style={[styles.txtPrice, t.textRight]}>₹{price}</Text>
+            <Text style={[{ fontSize: s(14) }, t.textBlack, t.mT2]}>
+              units:{order.quantity}
+            </Text>
+          </View>
         </View>
       </View>
     );

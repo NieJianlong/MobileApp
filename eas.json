@@ -19,8 +19,7 @@
     },
     "note-dev": {
       "android": {
-        "image": "latest",
-        "buildType": "apk"
+        "image": "latest"
       },
       "releaseChannel": "stage"
     },

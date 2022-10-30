@@ -9797,7 +9797,7 @@ react-native-gesture-handler@^2.1.0:
 
 react-native-google-places-api@^1.0.2:
   version "1.0.2"
-  resolved "https://registry.npmjs.org/react-native-google-places-api/-/react-native-google-places-api-1.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/react-native-google-places-api/-/react-native-google-places-api-1.0.2.tgz#8fc5c9a7273767599b48b68087e61dd5a42338dc"
   integrity sha512-FqQ4SJF4NMFMJ/7YsdTzAyvVLV1ARqBNnAYT6Ie8/Vm+TzV/nYcBPOZIQkElypmSGESph4zAlxhCbFzpE8b1zA==
 
 react-native-head-tab-view@3.0.4:

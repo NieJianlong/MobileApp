@@ -344,7 +344,7 @@ function UserEditProfile() {
           render={({ field: { onChange, value } }) => (
             <View>
               <MaterialTextInput
-                style={[t.mT4, t.textGray500]}
+                style={[t.mT4]}
                 editable={false}
                 placeholder={"Type your phone number"}
                 autoCapitalize="words"
@@ -358,23 +358,23 @@ function UserEditProfile() {
               />
               <TouchableOpacity
                 onPress={() => {
-                  // setRename({
-                  //   defaultValue: value ?? "",
-                  //   element: getFirstName,
-                  //   keyboardType:
-                  //     Platform.OS === "android" ? "phone-pad" : "number-pad",
-                  //   controlName: "request.phoneNumber",
-                  //   palceHolder: "Type your phone number",
-                  //   title: "Phone number",
-                  //   show: true,
-                  //   rules: {
-                  //     required: "Field is required.",
-                  //     pattern: {
-                  //       value: /^[6-9]\d{9}$/,
-                  //       message: "Invalid phone number",
-                  //     },
-                  //   },
-                  // });
+                  setRename({
+                    defaultValue: value ?? "",
+                    element: getFirstName,
+                    keyboardType:
+                      Platform.OS === "android" ? "phone-pad" : "number-pad",
+                    controlName: "request.phoneNumber",
+                    palceHolder: "Type your phone number",
+                    title: "Phone number",
+                    show: true,
+                    rules: {
+                      required: "Field is required.",
+                      pattern: {
+                        value: /^[6-9]\d{9}$/,
+                        message: "Invalid phone number",
+                      },
+                    },
+                  });
                 }}
                 style={[
                   t.absolute,
@@ -385,7 +385,7 @@ function UserEditProfile() {
                   t.w16,
                 ]}
               >
-                {/* <Text style={[t.mT1, { color: "red" }]}>EDIT</Text> */}
+                <Text style={[t.mT1, { color: "red" }]}>EDIT</Text>
               </TouchableOpacity>
             </View>
           )}

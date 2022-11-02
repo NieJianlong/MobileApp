@@ -31,6 +31,7 @@ input AddressRequest {
   pinCode: String
   addressType: AddressType
   referenceId: String!
+  geocode: GeocodingRequest
 }
 
 input AddressRequestForCreate {
@@ -53,6 +54,7 @@ input AddressRequestForCreate {
   pinCode: String
   addressType: AddressType
   referenceId: String!
+  geocode: GeocodingRequest
 }
 
 input AddressRequestToGetCoordinates {
@@ -387,6 +389,12 @@ type ForgotPasswordStep3Response {
 type GenericResponse {
   status: Boolean
   message: String
+}
+
+input GeocodingRequest {
+  latitude: Float
+  longitude: Float
+  placeId: String
 }
 
 input GuestBuyerProfileRequest {

@@ -142,9 +142,7 @@ function TrackOrder(props) {
   }, [navigation, type]);
   const isOption1 =
     trackData?.trackOrderItem.deliveryOption === DeliveryOption.CourierDelivery;
-  const date = isOption1
-    ? trackData?.trackOrderItem.estimatedDeliveryDate
-    : trackData?.trackOrderItem.collectionPoint.collectionDate;
+
   return (
     <ViewShot
       style={{
